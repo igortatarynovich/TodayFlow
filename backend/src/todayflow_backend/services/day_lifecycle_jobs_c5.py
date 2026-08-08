@@ -198,25 +198,40 @@ def prewarm_assemble_user_day(
             logger.warning("prewarm_assemble failed user=%s date=%s: %s", user.id, local_date, exc)
             story_status = "error"
 
-    # Activity-window copy for Поток дня (Kimi) — independent of story rebuild.
+    # Activity-window copy for Поток дня (Kimi) — own short-lived session so the
+    # job transaction is not held across Nebius (~15s) and GET /day-facts stays fast.
     try:
+        db.commit()
+    except Exception:
+        try:
+            db.rollback()
+        except Exception:
+            pass
+
+    try:
+        from todayflow_backend.db.session import SessionLocal
         from todayflow_backend.services.day_flow_windows_kimi_v1 import (
             ensure_day_flow_windows_for_user,
         )
 
-        flow_status = ensure_day_flow_windows_for_user(
-            db,
-            user=user,
-            local_date=local_date,
-            timezone_name=timezone_name,
-            locale=locale,
-        )
-        logger.info(
-            "prewarm day_flow_windows user=%s date=%s status=%s",
-            user.id,
-            local_date,
-            flow_status,
-        )
+        flow_db = SessionLocal()
+        try:
+            flow_user = flow_db.query(User).filter(User.id == int(user.id)).one()
+            flow_status = ensure_day_flow_windows_for_user(
+                flow_db,
+                user=flow_user,
+                local_date=local_date,
+                timezone_name=timezone_name,
+                locale=locale,
+            )
+            logger.info(
+                "prewarm day_flow_windows user=%s date=%s status=%s",
+                user.id,
+                local_date,
+                flow_status,
+            )
+        finally:
+            flow_db.close()
     except Exception as flow_exc:
         logger.warning(
             "prewarm day_flow_windows failed user=%s date=%s: %s",

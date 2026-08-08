@@ -78,8 +78,8 @@ export type DayFactsResponse = {
 };
 
 const TTL_MS = 60_000;
-/** Cold assemble can exceed 8s; short timeout left the story pane spinning forever. */
-const FETCH_TIMEOUT_MS = 25_000;
+/** Slot GET should be sub-second; keep headroom without a 25s spinner. */
+const FETCH_TIMEOUT_MS = 12_000;
 const cache = new Map<string, { at: number; data: DayFactsResponse }>();
 const inFlight = new Map<string, Promise<DayFactsResponse>>();
 

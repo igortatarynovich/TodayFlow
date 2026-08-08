@@ -387,6 +387,8 @@ def ensure_day_flow_windows_for_user(
             logger.warning("day_flow_windows skip nested loop user=%s", user_id)
             return "skipped_loop"
         glance_rows, activations, moon_phase = asyncio.run(_compute())
+        # Glance/natal used db inside asyncio.run — release before further work.
+        _release_db_transaction(db)
     except Exception:
         logger.exception("day_flow_windows glance failed user=%s date=%s", user_id, local_date)
         return "error"
@@ -401,6 +403,7 @@ def ensure_day_flow_windows_for_user(
     if cached and validate_windows_payload(
         cached, allowed_ids={str(r.get("driver_id") or "") for r in glance_rows}
     ):
+        _release_db_transaction(db)
         return "cache_hit"
 
     profile_light: dict[str, Any] = {}
@@ -425,19 +428,52 @@ def ensure_day_flow_windows_for_user(
         moon_phase=moon_phase,
         profile_light=profile_light,
     )
+
+    # Critical: end the DB transaction BEFORE Nebius/Kimi. Holding the session
+    # across ~15s LLM starves the pool → GET /today/day-facts waits ~15–20s.
+    _release_db_transaction(db)
+
     payload, model = call_day_flow_windows_kimi(user_payload, allowed_ids=allowed)
     if not payload:
         return "llm_miss"
-    persist_day_flow_windows(
-        db,
-        user_id=user_id,
-        local_date=local_date,
-        fingerprint=fp,
-        payload=payload,
-        model=model,
-    )
+
+    # Persist on a fresh short session so we never re-borrow the caller's
+    # connection for long — and so a dead caller session cannot block writes.
+    from todayflow_backend.db.session import SessionLocal
+
+    persist_db = SessionLocal()
+    try:
+        persist_day_flow_windows(
+            persist_db,
+            user_id=user_id,
+            local_date=local_date,
+            fingerprint=fp,
+            payload=payload,
+            model=model,
+        )
+        persist_db.commit()
+    except Exception:
+        logger.debug("day_flow_windows persist failed", exc_info=True)
+        try:
+            persist_db.rollback()
+        except Exception:
+            pass
+        return "persist_fail"
+    finally:
+        persist_db.close()
+    return "generated"
+
+
+def _release_db_transaction(db: Session) -> None:
+    """Return the pooled connection before long non-DB work (LLM)."""
     try:
         db.commit()
     except Exception:
-        logger.debug("day_flow_windows commit failed", exc_info=True)
-    return "generated"
+        try:
+            db.rollback()
+        except Exception:
+            pass
+    try:
+        db.expire_all()
+    except Exception:
+        pass

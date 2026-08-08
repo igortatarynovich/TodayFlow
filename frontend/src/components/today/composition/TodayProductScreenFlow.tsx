@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
 import { joinClass } from "@/design-system/utils/joinClass";
@@ -20,6 +20,7 @@ import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
 import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TapResponseCode } from "@/lib/todayTapWidget";
+import { fetchDayFacts } from "@/lib/todayDayFacts";
 
 export type TodayProductScreenFlowProps = {
   dateISO: string;
@@ -137,6 +138,14 @@ export function TodayProductScreenFlow({
 }: TodayProductScreenFlowProps) {
   const themeText = (dayTexture || "").trim() || null;
   const go = (index: number) => onIndexChange(index, { reason: "select" });
+
+  // Warm day-facts as soon as the date is known (not only when Energy mounts).
+  useEffect(() => {
+    if (!dateISO) return;
+    void fetchDayFacts(dateISO).catch(() => {
+      /* pane owns failure UI */
+    });
+  }, [dateISO]);
 
   const energyNextIndex = showSymbols ? todayScreenFlowSymbolsIndex() : todayScreenFlowAttributesIndex(false);
   const energyNextTitle = showSymbols ? copy.storyNext.symbols : copy.storyNext.attributes;
