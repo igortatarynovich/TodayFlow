@@ -1,8 +1,19 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-05
+Last updated: 2026-08-08
 Owner: Product + Engineering
 Status: Active working document
+
+**DONE (CODE, 2026-08-08):** **Stop day invent hardcodes** — FE Поток дня = pure `glance_timeline` only (no Утро/Вечер/Ночь bank); BE `_SCENE_BEATS` retired from runtime (scenes = native LLM only); projector no filler do/avoid/evening; unavailable/not_ready shells = honest «Не удалось загрузить.» / lifecycle status, not DOMAIN_FALLBACKS calm invent. Canon: WAVE2 §4 · B5 · AGENTS transport rule.
+
+## Architecture impact — stop day invent hardcodes (2026-08-08)
+
+- **SoT before:** FE `todayStoryDayFlow` invented morning/day/evening/night; BE `_SCENE_BEATS` + heal filled expect/trap/do/avoid on deterministic/serve; projector appended filler do/avoid/evening; unavailable contract used DOMAIN_FALLBACKS calm prose.
+- **SoT after:** Поток дня = glance_timeline rows only; meaning scenes = native LLM C1 only; no scenes → facts_only_unavailable; unavailable shell = «Не удалось загрузить.»; not_ready domains absent.
+- **Public contract changed?** semantics — empty meaning / honest unavailable instead of invented calm; do/avoid may be length 1
+- **Migration required?** no version bump; next prewarm/native rebuild; old bank caches heal clears templates without refill
+- **Canon updated?** tracker + aligns WAVE2 §4 / B5 (no invent)
+- **Backward compatible?** yes for field presence; clients that expected always-filled arc/domains see honest empty/unavailable
 
 **DONE (LIVE, 2026-08-05):** **Profile UX pack** — full identity body (no dupe/collapse); drop portrait_why honesty; unclipped tension; house person-theses; natal decode = one-shot holistic story (persist by fingerprint, no re-generate CTA); canary users 1/2 `trialing`. Canon: PROFILE_NATAL_DECODE_DEPTH_V1 one-shot.
 

@@ -142,7 +142,7 @@ def test_interpretation_no_domains_without_topic():
         ritual_context={},
     )
     assert interp["domains_present"] == []
-    assert set(interp["domains_absent"]) == {"relationships", "money_work", "family"}
+    assert set(interp["domains_absent"]) >= {"relationships", "work", "money", "energy"}
 
 
 def test_validate_day_story_v1_green_on_fallback():
@@ -168,12 +168,13 @@ def test_day_story_to_today_contract_marks_absent_domains():
     assert contract["contract_version"] == "today_contract_v1"
     assert contract["generation_id"] == "42"
     assert contract["day_story"]["interpretation_status"] == "unavailable"
-    # Meaning slots stay empty; navigational shell uses meta fallbacks so GET /today/contract validates.
+    # Meaning slots stay empty; navigational shell uses honest unavailable copy (no calm invent).
     assert contract["day_story"]["expect"] == ""
-    assert str(contract.get("primary_action") or "").strip()
-    assert str(contract["personal_growth"].get("development_point") or "").strip()
+    assert contract.get("primary_action") == "Не удалось загрузить."
+    assert contract["personal_growth"].get("development_point") == "Не удалось загрузить."
+    assert contract["global_context"].get("period") == "Не удалось загрузить."
     assert validate_today_contract_v1(contract) == []
-    for did in ("money_work", "relationships", "family"):
+    for did in ("work", "money", "relationships", "energy"):
         assert contract["domains"][did].get("evidence_status") == "absent"
     assert contract["day_story"]["trace"]["confidence"] is not None
     assert "story_limitations" in contract["progress"]

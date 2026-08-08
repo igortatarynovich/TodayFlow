@@ -177,10 +177,6 @@ export function TodayEnergyFlowFrame({
   energyLine,
   energyCause,
   dateISO,
-  prioritize,
-  avoid,
-  moveDo,
-  moveAvoid,
   onGoNext,
   nextTitle = copy.storyNext.symbols,
   nextHint = copy.storyNext.symbolsHint,
@@ -188,10 +184,6 @@ export function TodayEnergyFlowFrame({
   energyLine: string | null;
   energyCause: string | null;
   dateISO: string;
-  prioritize?: string | null;
-  avoid?: string | null;
-  moveDo?: string | null;
-  moveAvoid?: string | null;
   onGoNext: () => void;
   nextTitle?: string;
   nextHint?: string;
@@ -238,18 +230,9 @@ export function TodayEnergyFlowFrame({
             <div className={styles.flowBlock}>
               <header className={styles.flowHeader}>
                 <p className={styles.eyebrowOnArt}>Поток дня</p>
-                <p className={styles.flowLeadOnArt}>
-                  Утро, окна дня, вечер и отдых — как пройти сутки целиком.
-                </p>
+                <p className={styles.flowLeadOnArt}>Точные окна дня по небу — без выдуманного каркаса.</p>
               </header>
-              <TodayStoryDayFlowPane
-                dateISO={dateISO}
-                energyLine={energy}
-                prioritize={prioritize}
-                avoid={avoid}
-                moveDo={moveDo}
-                moveAvoid={moveAvoid}
-              />
+              <TodayStoryDayFlowPane dateISO={dateISO} />
             </div>
           </div>
           <StoryNextAnchor title={nextTitle} hint={nextHint} onNext={onGoNext} />
@@ -259,21 +242,7 @@ export function TodayEnergyFlowFrame({
   );
 }
 
-function TodayStoryDayFlowPane({
-  dateISO,
-  energyLine,
-  prioritize,
-  avoid,
-  moveDo,
-  moveAvoid,
-}: {
-  dateISO: string;
-  energyLine: string | null;
-  prioritize?: string | null;
-  avoid?: string | null;
-  moveDo?: string | null;
-  moveAvoid?: string | null;
-}) {
+function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
   const [windows, setWindows] = useState<GlanceTimelineItem[] | null>(null);
   const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -319,15 +288,23 @@ function TodayStoryDayFlowPane({
     );
   }
 
-  // Unavailable / empty windows: still show morning→evening→night from day signals.
-  const points = buildStoryDayFlow({
-    energyLine,
-    prioritize,
-    avoid,
-    moveDo,
-    moveAvoid,
-    glanceWindows: failure ? [] : windows,
-  });
+  if (failure === "unavailable") {
+    return (
+      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-failure="unavailable" role="status">
+        <p className={styles.flowFail}>{todaySlotFailureCopy("unavailable")}</p>
+      </div>
+    );
+  }
+
+  // Pure glance_timeline only — no invented Утро/Вечер/Ночь (WAVE2 §4).
+  const points = buildStoryDayFlow({ glanceWindows: windows });
+  if (points.length === 0) {
+    return (
+      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-failure="unavailable" role="status">
+        <p className={styles.flowFail}>{todaySlotFailureCopy("unavailable")}</p>
+      </div>
+    );
+  }
 
   return <StoryDayFlowList points={points} />;
 }

@@ -171,10 +171,6 @@ export function TodayProductScreenFlow({
               energyLine={energyLine}
               energyCause={energyCause}
               dateISO={dateISO}
-              prioritize={dailyFocus?.prioritize}
-              avoid={dailyFocus?.avoid}
-              moveDo={moveDo}
-              moveAvoid={moveAvoid}
               onGoNext={() => go(energyNextIndex)}
               nextTitle={energyNextTitle}
               nextHint={energyNextHint}

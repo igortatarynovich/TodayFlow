@@ -58,8 +58,8 @@ def _minimal_morning(target_date: date, *, celestial_events: dict[str, Any] | No
         energy_level=5,
         focus_areas=[],
         daily_recommendations={
-            "what_to_do": "Выбери один ясный результат к вечеру и сделай по нему первый короткий шаг.",
-            "what_to_avoid": "Не отдавай маршрут дня чужой срочности.",
+            "what_to_do": "",
+            "what_to_avoid": "",
             "key_focus": "general",
         },
         ritual_completed=False,

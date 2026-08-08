@@ -19,12 +19,14 @@ from typing import Any
 
 from todayflow_backend.services.day_scenario_v1 import (
     PRODUCT_SPHERE_IDS,
+    _TEMPLATE_OPP_RE,
+    _TEMPLATE_WHAT_MARKERS,
     _month_from_ritual_or_today,
     build_interpretive_chorus_v1,
     build_scenario_conflict_v1,
     build_scenario_props_v1,
-    build_scenario_scenes_v1,
     chorus_seed_paste_needs_heal_v1,
+    empty_props_v1,
     invented_bank_short_name_needs_heal_v1,
     is_calendar_driver_row,
     is_calendar_kitchen_fact,
@@ -280,12 +282,12 @@ def _heal_template_scene_copy(
     *,
     person_name: str | None = None,
 ) -> dict[str, Any]:
-    """Rewrite force-paste scene/props/chorus templates and bank short_name on serve.
+    """Strip force-paste / bank templates on serve — never refill from sphere bank.
 
     Cached ``generation_logs`` from before seed-kill still store old chorus bridges
-    («подталкивает день к сюжету», «окрашивает прохождение», bank A|B titles).
-    Heal on project so GET/cache-hit does not resurrect them into Symbols.
+    and template scene lines. Heal clears bad copy; empty meaning → B5 unavailable.
     """
+    _ = person_name
     scenes = scen.get("scenes")
     conflict = _as_dict(scen.get("conflict"))
     chorus = _as_dict(scen.get("chorus"))
@@ -308,7 +310,6 @@ def _heal_template_scene_copy(
     if not (scenes_need or short_needs or props_need or chorus_need or bank_short_needs):
         return scen
     if not conflict or not foundation:
-        # Still heal short_name in place when possible
         if short_needs and conflict and not bank_short_needs:
             healed_min = dict(scen)
             c = dict(conflict)
@@ -316,12 +317,7 @@ def _heal_template_scene_copy(
             healed_min["conflict"] = c
             return healed_min
         return scen
-    prior = [s for s in (scenes or []) if isinstance(s, dict)]
-    domains: list[str] = []
-    for s in prior:
-        wire = _SPHERE_TO_WIRE.get(str(s.get("sphere") or ""))
-        if wire and wire not in domains:
-            domains.append(wire)
+
     healed = dict(scen)
     c = dict(conflict)
     if bank_short_needs:
@@ -338,7 +334,6 @@ def _heal_template_scene_copy(
             day_thesis=day_thesis if day_thesis.get("family") or day_thesis.get("mode") else None,
             interpretation={"day_thesis": day_thesis} if day_thesis else None,
         )
-        # Preserve evidence/driver ids from the stored nest when rebuild empties them.
         if c.get("driver_ids") and not rebuilt_conflict.get("driver_ids"):
             rebuilt_conflict["driver_ids"] = list(c.get("driver_ids") or [])
         if c.get("why_arose") and not rebuilt_conflict.get("why_arose"):
@@ -351,38 +346,65 @@ def _heal_template_scene_copy(
         c["short_name"] = clean_short
     healed["conflict"] = c
 
-    active_chorus = chorus
     if chorus_need:
-        active_chorus = build_interpretive_chorus_v1(
+        healed["chorus"] = build_interpretive_chorus_v1(
             foundation=foundation,
             conflict_label=str(c.get("short_name") or ""),
-            interpretation={"domains_present": domains} if domains else None,
+            interpretation=None,
         )
-        healed["chorus"] = active_chorus
 
-    if scenes_need or props_need or chorus_need or bank_short_needs:
-        new_scenes = build_scenario_scenes_v1(
-            conflict=c,
-            chorus=active_chorus,
-            foundation=foundation,
-            interpretation={"domains_present": domains} if domains else None,
-            max_scenes=max(len(prior), 3) if prior else 3,
-            person_name=person_name,
-        )
-        healed["scenes"] = new_scenes
+    if scenes_need:
+        # Clear template-tainted meaning — do not invent replacement bank prose.
+        cleaned: list[dict[str, Any]] = []
+        for sc in (scenes or []):
+            if not isinstance(sc, dict):
+                continue
+            row = dict(sc)
+            opp = str(row.get("opportunity") or "")
+            what = str(row.get("what_happens") or "")
+            if _TEMPLATE_OPP_RE.match(opp.strip()) or any(m in what for m in _TEMPLATE_WHAT_MARKERS):
+                row["opportunity"] = ""
+                row["what_happens"] = ""
+                row["trap"] = ""
+                row["recommended_action"] = ""
+                row["do_not"] = ""
+                row["domestic_example"] = ""
+                row["why"] = ""
+            serves = str(row.get("serves_conflict") or "").strip()
+            if serves and serves != "тон дня":
+                row["serves_conflict"] = "тон дня"
+            cleaned.append(row)
+        # Drop rows with no meaning left
+        meaningful = [
+            r
+            for r in cleaned
+            if any(
+                str(r.get(k) or "").strip()
+                for k in ("what_happens", "opportunity", "trap", "recommended_action")
+            )
+        ]
+        healed["scenes"] = meaningful
+        props_need = True
+
+    if props_need:
         from todayflow_backend.services.today_domain_verdicts_v1 import (
             day_favorable_from_activations,
         )
 
-        healed["props"] = build_scenario_props_v1(
-            conflict=c,
-            scenes=new_scenes,
-            chorus=active_chorus,
-            day_favorable=day_favorable_from_activations(
-                foundation.get("personal_natal_activations") or []
-            ),
-            target_month=_month_from_ritual_or_today(None, foundation),
-        )
+        active_scenes = _as_list(healed.get("scenes"))
+        active_chorus = _as_dict(healed.get("chorus")) or chorus
+        if not active_scenes:
+            healed["props"] = empty_props_v1()
+        else:
+            healed["props"] = build_scenario_props_v1(
+                conflict=c,
+                scenes=active_scenes,
+                chorus=active_chorus,
+                day_favorable=day_favorable_from_activations(
+                    foundation.get("personal_natal_activations") or []
+                ),
+                target_month=_month_from_ritual_or_today(None, foundation),
+            )
     return healed
 
 
@@ -442,6 +464,14 @@ def project_day_scenario_onto_day_story_v1(
     origin_conflict = _origin_conflict_id(conflict)
     driver_ids = list(conflict.get("driver_ids") or [])[:5]
 
+    def _scene_has_meaning(sc: dict[str, Any] | None) -> bool:
+        if not isinstance(sc, dict):
+            return False
+        return any(
+            str(sc.get(k) or "").strip()
+            for k in ("what_happens", "opportunity", "trap", "recommended_action", "do_not")
+        )
+
     editorial = dict(_as_dict(base.get("editorial")))
     editorial["projection_map"] = PROJECTION_MAP
     editorial["legacy_non_sot"] = list(LEGACY_NON_SOT)
@@ -457,7 +487,7 @@ def project_day_scenario_onto_day_story_v1(
     }
     base["interpretive_chorus"] = _chorus_public(chorus)
 
-    if hard or not primary:
+    if hard or not primary or not _scene_has_meaning(primary):
         _strip_meaning_slots(base)
         # Keep factual lead from foundation drivers only (not editorial story)
         facts = [
@@ -623,9 +653,7 @@ def project_day_scenario_onto_day_story_v1(
         alt = _clip(scenes[1].get("recommended_action"), 240)
         if alt and alt not in do_list:
             do_list.append(alt)
-    if len(do_list) == 1:
-        # v3.1 seed-kill: no opposing_forces quote as filler do-line
-        do_list.append(_clip("Заметить момент автопилота и не усилить его.", 240))
+    # No filler do-line invent when only one real action exists.
     base["do"] = do_list
     base["today_move"] = _clip(do_list[0] if do_list else do_text, 200)
     base["primary_action"] = _clip(do_list[0] if do_list else do_text, 200)
@@ -634,16 +662,16 @@ def project_day_scenario_onto_day_story_v1(
     avoid_text = _clip(primary.get("do_not"), 240)
     if avoid_text:
         avoid_list.append(avoid_text)
-    # v3.1: generic avoid — never paste force_a / short_name into day_story avoid
-    avoid_list.append(
-        _clip("Не усиливать привычный автопилот ради ложной гармонии.", 240)
-    )
+    # Only scene-derived avoid — never invent a second autopilot line.
     base["avoid"] = avoid_list[:3]
 
-    base["evening_closure"] = _clip(
-        "Если удержали тон дня — к вечеру яснее, где выбрали осознанно.",
-        280,
-    )
+    # evening_closure — only when scenario props carry it; never invent closure prose.
+    base["evening_closure"] = ""
+    raw_evening = props.get("evening_payoff") or props.get("evening_closure")
+    if isinstance(raw_evening, str) and raw_evening.strip():
+        base["evening_closure"] = _clip(raw_evening, 280)
+    elif isinstance(raw_evening, dict) and raw_evening.get("text"):
+        base["evening_closure"] = _clip(raw_evening.get("text"), 280)
 
     # Provenance for primary slots (editorial nest for capture packs)
     editorial["slot_provenance"] = {

@@ -178,15 +178,19 @@ def resolve_user_ready_time(db, *, user_id: int) -> str:
 
 
 def build_day_not_ready_contract(*, lifecycle: dict[str, Any], locale: str = "ru") -> dict[str, Any]:
-    """Minimal today_contract_v1 shell — no day_story plot before ready_at."""
-    from todayflow_backend.services.today_contract_fallbacks_v1 import DOMAIN_FALLBACKS_V1
+    """Minimal today_contract_v1 shell — no day_story plot before ready_at.
 
-    meta = DOMAIN_FALLBACKS_V1["_meta"]
-    _ = meta
+    Domains stay absent/empty — lifecycle status copy only, no DOMAIN_FALLBACKS invent.
+    """
     domains = {
-        key: dict(val)
-        for key, val in DOMAIN_FALLBACKS_V1.items()
-        if key != "_meta"
+        key: {
+            "status": "",
+            "opportunity": "",
+            "risk": "",
+            "action": "",
+            "evidence_status": "absent",
+        }
+        for key in ("relationships", "work", "money", "energy")
     }
     if (locale or "").lower().startswith("en"):
         primary = f"Your day will be ready at {lifecycle.get('ready_time') or DEFAULT_READY_TIME}."

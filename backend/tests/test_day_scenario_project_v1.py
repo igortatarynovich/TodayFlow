@@ -11,7 +11,7 @@ from todayflow_backend.services.day_scenario_project_v1 import (
     PROJECTION_VERSION,
     project_day_scenario_onto_day_story_v1,
 )
-from todayflow_backend.services.day_scenario_v1 import build_day_scenario_v1
+from todayflow_backend.services.day_scenario_v1 import build_day_scenario_v1, build_scenario_props_v1
 from todayflow_backend.services.day_story_interpretation_v1 import build_day_story_interpretation_v1
 from todayflow_backend.services.day_story_v1 import (
     build_day_story_fallback_v1,
@@ -19,6 +19,63 @@ from todayflow_backend.services.day_story_v1 import (
     validate_day_story_v1,
 )
 from todayflow_backend.services.day_thesis_v1 import build_day_thesis_v1
+
+
+def _native_like_scenes(scenario: dict, *, person_name: str | None = None) -> list[dict]:
+    """Stand-in for C1 native LLM scenes (deterministic bank retired from runtime)."""
+    who = f"{person_name}, " if person_name else ""
+    drivers = list((scenario.get("conflict") or {}).get("driver_ids") or [])
+    return [
+        {
+            "scene_id": "scene.relationships",
+            "sphere": "relationships",
+            "sphere_label_ru": "Отношения",
+            "role_in_story": "primary",
+            "what_happens": f"{who}в близком контакте сегодня важна одна честная фраза.",
+            "why": "",
+            "opportunity": "Одна фраза вслух — без сглаживания.",
+            "trap": "Снова сгладить ради тишины.",
+            "recommended_action": "Назови одну вещь прямо.",
+            "do_not": "Не делай вид, что всё нормально.",
+            "domestic_example": "Короткий разговор без сглаживания.",
+            "evidence_references": drivers,
+            "chorus_references": ["conflict"],
+            "confidence": 0.7,
+            "serves_conflict": "тон дня",
+        },
+        {
+            "scene_id": "scene.communication",
+            "sphere": "communication",
+            "sphere_label_ru": "Общение",
+            "role_in_story": "secondary",
+            "what_happens": f"{who}в сообщениях сегодня скорость спорит с ясностью.",
+            "why": "",
+            "opportunity": "Сначала смысл — потом отправить.",
+            "trap": "Ответить быстро и потерять суть.",
+            "recommended_action": "Перечитай одно сообщение до отправки.",
+            "do_not": "Не ускоряй ответ ради чужого спокойствия.",
+            "domestic_example": "Одно сообщение без спешки.",
+            "evidence_references": drivers,
+            "chorus_references": ["conflict"],
+            "confidence": 0.6,
+            "serves_conflict": "тон дня",
+        },
+    ]
+
+
+def _with_native_scenes(scenario: dict, *, person_name: str | None = None) -> dict:
+    out = dict(scenario)
+    scenes = _native_like_scenes(out, person_name=person_name)
+    out["scenes"] = scenes
+    out["props"] = build_scenario_props_v1(
+        conflict=out.get("conflict") or {},
+        scenes=scenes,
+        chorus=out.get("chorus") or {},
+        day_favorable=False,
+    )
+    out["ready"] = True
+    out["generation_source"] = "native_llm_c1_test_fixture"
+    return out
 
 
 def _pack():
@@ -65,11 +122,13 @@ def _scenario_and_fallback():
         target_date=date(2026, 7, 24),
         birth_date=date(1990, 3, 15),
     )
-    scenario = build_day_scenario_v1(
-        interpretation=interp,
-        day_events_pack=pack,
-        day_thesis=thesis,
-        ritual_context=ritual,
+    scenario = _with_native_scenes(
+        build_day_scenario_v1(
+            interpretation=interp,
+            day_events_pack=pack,
+            day_thesis=thesis,
+            ritual_context=ritual,
+        )
     )
     story = build_day_story_fallback_v1(
         day_engine_brief={"anchor_summary": "Ось.", "do_hint": "Шаг.", "avoid_hint": "Стоп."},

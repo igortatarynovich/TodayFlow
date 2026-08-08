@@ -2,19 +2,12 @@ import { buildStoryDayFlow } from "@/lib/todayStoryDayFlow";
 import type { GlanceTimelineItem } from "@/lib/todayGlanceTimeline";
 
 describe("todayStoryDayFlow", () => {
-  it("always frames the day with morning, evening, and night rest", () => {
-    const points = buildStoryDayFlow({
-      energyLine: "Фаза луны минус энергия — спад честный.",
-    });
-    expect(points[0]?.phase).toBe("Утро");
-    expect(points[0]?.body).toMatch(/тяжёл|медленн/i);
-    expect(points[points.length - 2]?.phase).toBe("Вечер");
-    expect(points[points.length - 2]?.body).toMatch(/итог|благодарност/i);
-    expect(points[points.length - 1]?.phase).toBe("Ночь");
-    expect(points[points.length - 1]?.body).toMatch(/отдых|отпускан/i);
+  it("returns empty when no glance windows (no invented phases)", () => {
+    expect(buildStoryDayFlow({})).toEqual([]);
+    expect(buildStoryDayFlow({ glanceWindows: [] })).toEqual([]);
   });
 
-  it("inserts real glance windows between morning and evening", () => {
+  it("renders only real glance windows with label_short as body", () => {
     const windows: GlanceTimelineItem[] = [
       {
         time_local: "2026-08-05T16:15:00",
@@ -29,22 +22,31 @@ describe("todayStoryDayFlow", () => {
         driver_id: "b",
       },
     ];
-    const points = buildStoryDayFlow({
-      energyLine: "Ровный темп",
-      glanceWindows: windows,
-    });
-    expect(points.map((p) => p.phase)).toEqual(["Утро", "04:45", "16:15", "Вечер", "Ночь"]);
-    expect(points[1]?.body).toMatch(/Короткие задачи/i);
-    expect(points[1]?.timed).toBe(true);
-    expect(points[2]?.body).toMatch(/Диалоги/i);
+    const points = buildStoryDayFlow({ glanceWindows: windows });
+    expect(points.map((p) => p.phase)).toEqual(["04:45", "16:15"]);
+    expect(points[0]?.body).toBe("Короткие задачи");
+    expect(points[0]?.timed).toBe(true);
+    expect(points[1]?.body).toBe("Диалоги и письма");
+    expect(points.every((p) => p.timed)).toBe(true);
   });
 
-  it("falls back to day tasks/dialogues when no timed windows", () => {
-    const points = buildStoryDayFlow({
-      prioritize: "Закрыть один важный разговор",
-      avoid: "Не ввязываться в острые споры",
-    });
-    expect(points.some((p) => /Задачи:/i.test(p.body))).toBe(true);
-    expect(points.some((p) => p.phase === "Диалоги" && p.valence === "caution")).toBe(true);
+  it("drops rows without label_short (no invent filler)", () => {
+    const windows: GlanceTimelineItem[] = [
+      {
+        time_local: "2026-08-05T10:00:00",
+        label_short: "",
+        valence: "caution",
+        driver_id: "empty",
+      },
+      {
+        time_local: "2026-08-05T12:00:00",
+        label_short: "Пауза",
+        valence: "caution",
+        driver_id: "ok",
+      },
+    ];
+    const points = buildStoryDayFlow({ glanceWindows: windows });
+    expect(points).toHaveLength(1);
+    expect(points[0]?.body).toBe("Пауза");
   });
 });
