@@ -15,7 +15,7 @@ import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TapResponseCode } from "@/lib/todayTapWidget";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
-import { fetchDayFacts } from "@/lib/todayDayFacts";
+import { fetchDayFacts, clearDayFactsCache } from "@/lib/todayDayFacts";
 import type { GlanceTimelineItem } from "@/lib/todayGlanceTimeline";
 import { buildStoryDayFlow, type StoryDayFlowPoint } from "@/lib/todayStoryDayFlow";
 import {
@@ -25,6 +25,7 @@ import {
 import { findStoryBlockInStep, scrollStoryBlockIntoStep } from "@/lib/todayStoryScroll";
 import {
   todaySlotFailureCopy,
+  todaySlotFailureFromError,
   type TodaySlotLoadFailure,
 } from "@/lib/todaySlotAvailability";
 import styles from "@/components/today/composition/TodayStoryDeckFrames.module.css";
@@ -230,7 +231,6 @@ export function TodayEnergyFlowFrame({
             <div className={styles.flowBlock}>
               <header className={styles.flowHeader}>
                 <p className={styles.eyebrowOnArt}>Поток дня</p>
-                <p className={styles.flowLeadOnArt}>Точные окна дня по небу — без выдуманного каркаса.</p>
               </header>
               <TodayStoryDayFlowPane dateISO={dateISO} />
             </div>
@@ -246,6 +246,7 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
   const [windows, setWindows] = useState<GlanceTimelineItem[] | null>(null);
   const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [reloadNonce, setReloadNonce] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -263,16 +264,30 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
         }
         setLoaded(true);
       })
-      .catch(() => {
+      .catch((err: unknown) => {
         if (cancelled) return;
-        setFailure("no_connection");
+        const kind = todaySlotFailureFromError(err);
+        if (kind == null) {
+          // Abort / remount — keep loading until a live attempt settles.
+          return;
+        }
+        setFailure(kind);
         setWindows([]);
         setLoaded(true);
       });
     return () => {
       cancelled = true;
     };
-  }, [dateISO]);
+  }, [dateISO, reloadNonce]);
+
+  useEffect(() => {
+    const onAuth = () => {
+      clearDayFactsCache();
+      setReloadNonce((n) => n + 1);
+    };
+    window.addEventListener("auth:update", onAuth);
+    return () => window.removeEventListener("auth:update", onAuth);
+  }, []);
 
   if (!loaded) {
     return (
@@ -284,6 +299,17 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
     return (
       <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-failure="no_connection" role="status">
         <p className={styles.flowFail}>{todaySlotFailureCopy("no_connection")}</p>
+        <button
+          type="button"
+          className={styles.flowRetry}
+          data-testid="today-day-flow-retry"
+          onClick={() => {
+            clearDayFactsCache();
+            setReloadNonce((n) => n + 1);
+          }}
+        >
+          Повторить
+        </button>
       </div>
     );
   }
@@ -292,17 +318,27 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
     return (
       <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-failure="unavailable" role="status">
         <p className={styles.flowFail}>{todaySlotFailureCopy("unavailable")}</p>
+        <button
+          type="button"
+          className={styles.flowRetry}
+          data-testid="today-day-flow-retry"
+          onClick={() => {
+            clearDayFactsCache();
+            setReloadNonce((n) => n + 1);
+          }}
+        >
+          Повторить
+        </button>
       </div>
     );
   }
 
   // Pure glance_timeline only — no invented Утро/Вечер/Ночь (WAVE2 §4).
+  // Empty windows → empty UI (no invented “no windows” prose).
   const points = buildStoryDayFlow({ glanceWindows: windows });
   if (points.length === 0) {
     return (
-      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-failure="unavailable" role="status">
-        <p className={styles.flowFail}>{todaySlotFailureCopy("unavailable")}</p>
-      </div>
+      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-empty="true" role="status" />
     );
   }
 

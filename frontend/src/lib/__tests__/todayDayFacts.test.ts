@@ -53,7 +53,10 @@ describe("fetchDayFacts", () => {
     const b = fetchDayFacts("2026-07-30");
     const [ra, rb] = await Promise.all([a, b]);
     expect(getJsonMock).toHaveBeenCalledTimes(1);
-    expect(getJsonMock).toHaveBeenCalledWith("/today/day-facts?local_date=2026-07-30");
+    expect(getJsonMock).toHaveBeenCalledWith(
+      "/today/day-facts?local_date=2026-07-30",
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    );
     expect(ra.id).toBe("2:2026-07-30");
     expect(rb.glance_timeline).toHaveLength(1);
   });

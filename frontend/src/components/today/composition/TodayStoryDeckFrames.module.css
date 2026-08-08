@@ -577,15 +577,6 @@
   text-align: center;
 }
 
-.flowLeadOnArt {
-  margin: 0;
-  max-width: 28ch;
-  font-size: 0.98rem;
-  line-height: 1.45;
-  color: rgba(255, 248, 240, 0.78);
-  text-align: center;
-}
-
 .colorHero {
   padding-top: 0.25rem;
 }
@@ -615,6 +606,23 @@
   line-height: 1.45;
   text-align: center;
   color: rgba(255, 248, 240, 0.78);
+}
+
+.flowRetry {
+  display: block;
+  margin: 0.55rem auto 0;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid color-mix(in srgb, #fff 28%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, #fff 10%, transparent);
+  color: rgba(255, 248, 240, 0.92);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.flowRetry:hover {
+  background: color-mix(in srgb, #fff 18%, transparent);
 }
 
 .dayFlow {
