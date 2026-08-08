@@ -327,6 +327,49 @@
   width: 100%;
 }
 
+.cascadeCard {
+  width: min(100%, 22rem);
+  margin-top: 0.75rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 16px;
+  background: rgba(255, 252, 248, 0.92);
+  border: 1px solid rgba(198, 166, 119, 0.28);
+  box-shadow: 0 6px 16px rgba(60, 40, 28, 0.06);
+  text-align: left;
+  animation: ritualCascadeIn 0.28s ease-out both;
+}
+
+.cascadeEyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ritual-gold, #8b6a3e);
+}
+
+.cascadeBody {
+  margin: 0.4rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--ritual-ink-soft, #6b5d4d);
+}
+
+@keyframes ritualCascadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-reduce="true"] .cascadeCard {
+  animation: none;
+}
+
 .revealPrimaryCta {
   appearance: none;
   border: 1px solid rgba(139, 106, 62, 0.45);

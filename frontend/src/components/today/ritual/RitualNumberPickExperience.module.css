@@ -121,6 +121,61 @@
   text-align: center;
 }
 
+.cascade {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.cascadeCard {
+  padding: 0.9rem 0.95rem;
+  border-radius: 18px;
+  background: rgba(255, 252, 248, 0.92);
+  border: 1px solid rgba(214, 168, 122, 0.2);
+  box-shadow: 0 6px 18px rgba(90, 52, 44, 0.05);
+  text-align: center;
+  animation: cascadeIn 0.28s ease-out both;
+}
+
+.cascadeEyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--day-accent-soft, #9c7e52);
+}
+
+.cascadeBody {
+  margin: 0.4rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #3d3228;
+  text-align: left;
+}
+
+.valueTitle {
+  margin: 0.45rem 0 0;
+  font-size: 0.9rem;
+  color: #5f4930;
+}
+
+@keyframes cascadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-reduce="true"] .cascadeCard {
+  animation: none;
+}
+
 .revealMeaning {
   margin: 0.75rem 0 0;
   max-width: 18rem;
@@ -136,6 +191,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
   background: radial-gradient(circle, rgba(255, 220, 200, 0.55) 0%, rgba(255, 249, 245, 0.2) 62%, transparent 72%);
   border: 1px solid rgba(214, 142, 122, 0.25);
   animation: haloIn 0.28s ease-out both;

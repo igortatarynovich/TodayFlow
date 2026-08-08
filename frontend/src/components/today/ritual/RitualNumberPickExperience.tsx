@@ -4,12 +4,18 @@ import type { CSSProperties } from "react";
 import { useCallback, useRef, useState } from "react";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { pulseDayPhaseRevealFlash } from "@/lib/dayPhaseAtmosphere";
+import { ritualRevealCtaReady, useRitualRevealStages } from "@/lib/ritualRevealCascade";
 import styles from "./RitualNumberPickExperience.module.css";
 
 type Props = {
   /** Уже известное число дня (если есть в morning после reveal). */
   systemDisplay: string;
-  numberMeaning?: string;
+  /** Title under the digit (e.g. Управленец). */
+  numberTitle?: string | null;
+  /** «Значение» body. */
+  numberMeaning?: string | null;
+  /** «Опора дня» body — bridge / personal, never invent. */
+  daySupport?: string | null;
   /** symbol — рубашки без цифр; digit — декоративные 1–6. */
   tileMode?: "symbol" | "digit";
   reduceMotion: boolean;
@@ -17,7 +23,12 @@ type Props = {
    * Resolve the system day number on first tile pick (server reveal).
    * Must return a displayable digit string — never "—".
    */
-  onRevealRequest?: () => Promise<{ display: string; meaning?: string | null }>;
+  onRevealRequest?: () => Promise<{
+    display: string;
+    title?: string | null;
+    meaning?: string | null;
+    support?: string | null;
+  }>;
   onComplete: () => void;
 };
 
@@ -45,7 +56,9 @@ function isDisplayableNumber(value: string | null | undefined): boolean {
 
 export function RitualNumberPickExperience({
   systemDisplay,
-  numberMeaning,
+  numberTitle = null,
+  numberMeaning = null,
+  daySupport = null,
   tileMode = "digit",
   reduceMotion,
   onRevealRequest,
@@ -54,9 +67,21 @@ export function RitualNumberPickExperience({
   const [revealed, setRevealed] = useState(false);
   const [resolving, setResolving] = useState(false);
   const [display, setDisplay] = useState(systemDisplay);
+  const [title, setTitle] = useState(numberTitle);
   const [meaning, setMeaning] = useState(numberMeaning);
+  const [support, setSupport] = useState(daySupport);
   const [resolveError, setResolveError] = useState(false);
   const doneRef = useRef(false);
+  const { showMeaning, showContext } = useRitualRevealStages(revealed, reduceMotion);
+
+  const hasMeaning = Boolean(String(meaning ?? "").trim());
+  const hasSupport = Boolean(String(support ?? "").trim());
+  const ctaReady = ritualRevealCtaReady({
+    showMeaning,
+    showContext,
+    hasMeaning,
+    hasContext: hasSupport,
+  });
 
   const finish = useCallback(() => {
     if (doneRef.current) return;
@@ -68,22 +93,39 @@ export function RitualNumberPickExperience({
     if (revealed || resolving) return;
     vibrate(12, !reduceMotion);
 
-    const show = (value: string, nextMeaning?: string | null) => {
-      setDisplay(value);
-      if (nextMeaning) setMeaning(nextMeaning);
+    const show = (payload: {
+      value: string;
+      nextTitle?: string | null;
+      nextMeaning?: string | null;
+      nextSupport?: string | null;
+    }) => {
+      setDisplay(payload.value);
+      if (payload.nextTitle) setTitle(payload.nextTitle);
+      if (payload.nextMeaning) setMeaning(payload.nextMeaning);
+      if (payload.nextSupport) setSupport(payload.nextSupport);
       setRevealed(true);
       if (!reduceMotion) pulseDayPhaseRevealFlash();
       vibrate(14, !reduceMotion);
     };
 
     if (isDisplayableNumber(systemDisplay) && !onRevealRequest) {
-      show(systemDisplay, numberMeaning);
+      show({
+        value: systemDisplay,
+        nextTitle: numberTitle,
+        nextMeaning: numberMeaning,
+        nextSupport: daySupport,
+      });
       return;
     }
 
     if (!onRevealRequest) {
       if (isDisplayableNumber(systemDisplay)) {
-        show(systemDisplay, numberMeaning);
+        show({
+          value: systemDisplay,
+          nextTitle: numberTitle,
+          nextMeaning: numberMeaning,
+          nextSupport: daySupport,
+        });
       } else {
         setResolveError(true);
       }
@@ -99,7 +141,12 @@ export function RitualNumberPickExperience({
           setResolveError(true);
           return;
         }
-        show(value, result.meaning ?? numberMeaning);
+        show({
+          value,
+          nextTitle: result.title ?? numberTitle,
+          nextMeaning: result.meaning ?? numberMeaning,
+          nextSupport: result.support ?? daySupport,
+        });
       })
       .catch(() => {
         setResolveError(true);
@@ -110,25 +157,48 @@ export function RitualNumberPickExperience({
   };
 
   const onConfirm = () => {
-    if (!revealed || doneRef.current) return;
+    if (!revealed || !ctaReady || doneRef.current) return;
     vibrate(18, !reduceMotion);
     finish();
   };
 
   if (revealed) {
     return (
-      <div className={styles.wrap} data-reduce={reduceMotion ? "true" : undefined}>
-        <div className={styles.reveal}>
-          <div className={styles.halo}>
-            <span className={styles.bigNum}>{display}</span>
+      <div
+        className={styles.wrap}
+        data-testid="ritual-number-reveal"
+        data-reduce={reduceMotion ? "true" : undefined}
+      >
+        <div className={styles.cascade}>
+          <div className={styles.cascadeCard} data-testid="ritual-number-value">
+            <div className={styles.halo}>
+              <span className={styles.bigNum}>{display}</span>
+            </div>
+            {title ? <p className={styles.valueTitle}>{title}</p> : null}
           </div>
-          {meaning ? <p className={styles.revealMeaning}>{meaning}</p> : null}
+
+          {hasMeaning && showMeaning ? (
+            <div className={styles.cascadeCard} data-testid="ritual-number-meaning">
+              <p className={styles.cascadeEyebrow}>Значение</p>
+              <p className={styles.cascadeBody}>{meaning}</p>
+            </div>
+          ) : null}
+
+          {hasSupport && showContext ? (
+            <div className={styles.cascadeCard} data-testid="ritual-number-support">
+              <p className={styles.cascadeEyebrow}>{RITUAL_COPY.dayEngineBriefEyebrow}</p>
+              <p className={styles.cascadeBody}>{support}</p>
+            </div>
+          ) : null}
         </div>
-        <div className={styles.revealActions}>
-          <button type="button" className={styles.revealPrimaryCta} onClick={onConfirm}>
-            {RITUAL_COPY.numberRevealDoneCta}
-          </button>
-        </div>
+
+        {ctaReady ? (
+          <div className={styles.revealActions}>
+            <button type="button" className={styles.revealPrimaryCta} onClick={onConfirm}>
+              {RITUAL_COPY.numberRevealDoneCta}
+            </button>
+          </div>
+        ) : null}
       </div>
     );
   }

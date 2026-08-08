@@ -17,6 +17,7 @@ import type { TarotCard } from "@/lib/types";
 import { postJson } from "@/lib/api";
 import { TAROT_DECK_INDICES } from "@/components/today/todayTarotDraw";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
+import { ritualRevealCtaReady, useRitualRevealStages } from "@/lib/ritualRevealCascade";
 import styles from "./RitualTarotPickExperience.module.css";
 
 type Phase = "idle" | "deck" | "reveal";
@@ -27,6 +28,10 @@ type Props = {
   resumeCommittedId: number | null;
   cardTitleRu: string;
   tagLabels: string[];
+  /** «Значение» — base meaning / legacy body. */
+  meaningText?: string | null;
+  /** «Для тебя сегодня» — personal/bridge, optionally with number cross-ref. */
+  personalTodayText?: string | null;
   onCommitMain: (id: number) => void;
   /** PR1: face visible — отдельный `tarot_revealed` event. */
   onRevealed?: (id: number) => void;
@@ -70,6 +75,8 @@ export function RitualTarotPickExperience({
   resumeCommittedId,
   cardTitleRu,
   tagLabels,
+  meaningText = null,
+  personalTodayText = null,
   onCommitMain,
   onRevealed,
   onContinue,
@@ -93,6 +100,16 @@ export function RitualTarotPickExperience({
   const continueRef = useRef(false);
   const mountedInRevealRef = useRef(resumeCommittedId != null);
   const [cardFlipped, setCardFlipped] = useState(() => resumeCommittedId != null);
+  const revealActive = phase === "reveal" && cardFlipped;
+  const { showMeaning, showContext } = useRitualRevealStages(revealActive, reduceMotion);
+  const hasMeaning = Boolean(String(meaningText ?? "").trim());
+  const hasPersonal = Boolean(String(personalTodayText ?? "").trim());
+  const ctaReady = ritualRevealCtaReady({
+    showMeaning,
+    showContext,
+    hasMeaning,
+    hasContext: hasPersonal,
+  });
 
   const back = tarotCardBackPicture();
   const face = tarotCardFacePicture(effectiveId) ?? back;
@@ -164,7 +181,7 @@ export function RitualTarotPickExperience({
   }, [anchorCardId, onCommitMain, onRevealed, reduceMotion]);
 
   const onContinueClick = () => {
-    if (continueRef.current) return;
+    if (!ctaReady || continueRef.current) return;
     continueRef.current = true;
     vibrate(16, !reduceMotion);
     onContinue();
@@ -187,7 +204,11 @@ export function RitualTarotPickExperience({
 
   if (phase === "reveal") {
     return (
-      <div className={styles.wrap} data-reduce={reduceMotion ? "true" : undefined}>
+      <div
+        className={styles.wrap}
+        data-testid="ritual-tarot-reveal"
+        data-reduce={reduceMotion ? "true" : undefined}
+      >
         <div className={styles.scene}>
           <p className={styles.revealScreenTitle}>{RITUAL_COPY.tarotRevealScreenTitle}</p>
           <div className={styles.revealStage}>
@@ -211,11 +232,28 @@ export function RitualTarotPickExperience({
               ) : null}
             </div>
           </MotionReveal>
-          <div className={styles.revealCtaRow}>
-            <button type="button" className={styles.revealPrimaryCta} onClick={onContinueClick}>
-              {RITUAL_COPY.tarotRevealContinueCta}
-            </button>
-          </div>
+
+          {hasMeaning && showMeaning ? (
+            <div className={styles.cascadeCard} data-testid="ritual-tarot-meaning">
+              <p className={styles.cascadeEyebrow}>Значение</p>
+              <p className={styles.cascadeBody}>{meaningText}</p>
+            </div>
+          ) : null}
+
+          {hasPersonal && showContext ? (
+            <div className={styles.cascadeCard} data-testid="ritual-tarot-personal">
+              <p className={styles.cascadeEyebrow}>Для тебя сегодня</p>
+              <p className={styles.cascadeBody}>{personalTodayText}</p>
+            </div>
+          ) : null}
+
+          {ctaReady ? (
+            <div className={styles.revealCtaRow}>
+              <button type="button" className={styles.revealPrimaryCta} onClick={onContinueClick}>
+                {RITUAL_COPY.tarotRevealContinueCta}
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { TodayContractDepthLayerV1, TodayDepthTopicId } from "@/lib/todayContract";
 import { fetchTodayNarrativeCached } from "@/lib/todayNarrativeCache";
 import { narrativeString, narrativeStringArray } from "@/lib/todayNarrativeApi";
@@ -11,6 +11,10 @@ type Props = {
   dateISO: string;
   depthLayer: TodayContractDepthLayerV1;
   guideGenerationId?: number | null;
+  /** Prefer this topic when CTA lands here (must be in menu). */
+  preferredTopic?: TodayDepthTopicId | string | null;
+  /** When true, auto-fetch preferredTopic once per topic value. */
+  autoPickPreferred?: boolean;
 };
 
 function formatDeepenPayload(payload: Record<string, unknown> | null | undefined): string {
@@ -27,13 +31,20 @@ function formatDeepenPayload(payload: Record<string, unknown> | null | undefined
   return chunks.join("\n\n").trim();
 }
 
-export function TodayDepthLayerSection({ dateISO, depthLayer, guideGenerationId = null }: Props) {
+export function TodayDepthLayerSection({
+  dateISO,
+  depthLayer,
+  guideGenerationId = null,
+  preferredTopic = null,
+  autoPickPreferred = false,
+}: Props) {
   const menu = Array.isArray(depthLayer.menu) ? depthLayer.menu : [];
   const canGenerate = Boolean(depthLayer.can_generate);
   const [activeTopic, setActiveTopic] = useState<TodayDepthTopicId | null>(null);
   const [loading, setLoading] = useState(false);
   const [resultText, setResultText] = useState<string | null>(null);
   const [isCta, setIsCta] = useState(false);
+  const autoPickedRef = useRef<string | null>(null);
 
   const onPick = useCallback(
     async (topic: TodayDepthTopicId) => {
@@ -73,6 +84,16 @@ export function TodayDepthLayerSection({ dateISO, depthLayer, guideGenerationId 
     },
     [canGenerate, dateISO, guideGenerationId],
   );
+
+  useEffect(() => {
+    if (!autoPickPreferred || !preferredTopic || menu.length === 0) return;
+    const topic = String(preferredTopic).trim();
+    if (!topic || autoPickedRef.current === topic) return;
+    const inMenu = menu.some((row) => String(row.topic) === topic);
+    if (!inMenu) return;
+    autoPickedRef.current = topic;
+    void onPick(topic as TodayDepthTopicId);
+  }, [autoPickPreferred, preferredTopic, menu, onPick]);
 
   if (menu.length === 0) return null;
 

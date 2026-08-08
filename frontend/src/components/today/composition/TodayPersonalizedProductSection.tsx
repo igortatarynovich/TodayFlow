@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { DsButton, DsCallout, DsQuote } from "@/design-system";
+import { DsTextField } from "@/design-system/primitives/DsForm";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
@@ -16,7 +17,7 @@ import {
 import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import type { TodayPromiseSuggestion } from "@/lib/todayDayDialogue";
-import type { TodayContractV1 } from "@/lib/todayContract";
+import type { TodayContractV1, TodayDepthTopicId } from "@/lib/todayContract";
 import type { TodayStrengthenTool } from "@/lib/todayCompositionModel";
 import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import type { TodaySkyCard } from "@/lib/todayDaySpine";
@@ -25,6 +26,9 @@ import type { TodayDayStoryViewModel } from "@/lib/todayDayStoryModel";
 import type { CoreProfile } from "@/lib/types";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
+import { TodayDepthLayerSection } from "@/components/today/composition/TodayDepthLayerSection";
+import { TodayPracticeGiftBlock } from "@/components/today/composition/TodayPracticeGiftBlock";
+import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import { domainIconForChapterId } from "@/lib/todayReadingDomainIcon";
@@ -45,6 +49,8 @@ import {
   todaySlotFailureCopy,
   type TodaySlotLoadFailure,
 } from "@/lib/todaySlotAvailability";
+import { readingSphereChapterId } from "@/lib/todayFocusDeepen";
+import type { TodayProgressRow } from "@/lib/todayGrowthTrackers";
 import styles from "@/components/today/composition/TodayPersonalizedProductSection.module.css";
 
 export type TodayPersonalActFilter = "reading" | "move" | "response" | "all";
@@ -87,6 +93,9 @@ type Props = {
   dateISO?: string;
   /** Deep-link from Glance sphere token — scroll/highlight matching Reading card */
   focusSphere?: string | null;
+  progressRows?: TodayProgressRow[];
+  preferredDepthTopic?: TodayDepthTopicId | string | null;
+  autoPickDepthTopic?: boolean;
   /** Transport / degraded — never leave Reading/Move/Response silently empty */
   contentFailure?: TodaySlotLoadFailure | null;
   tapResponse?: "avoided_trap" | "fell_into_trap" | "not_applicable" | "skipped" | null;
@@ -147,6 +156,9 @@ export function TodayPersonalizedProductSection({
   morningRitualData = null,
   dateISO = "",
   focusSphere = null,
+  progressRows = [],
+  preferredDepthTopic = null,
+  autoPickDepthTopic = false,
   contentFailure = null,
   tapResponse = null,
   onTapRecorded,
@@ -191,13 +203,16 @@ export function TodayPersonalizedProductSection({
 
   useEffect(() => {
     if (!focusSphere || actFilter === "move" || actFilter === "response") return;
-    const id = `today-narrative-sphere-${focusSphere}`;
-    const el = document.querySelector(`[data-testid="today-narrative-block-${id}"], [data-testid="today-narrative-${id}"]`);
+    const chapterId = readingSphereChapterId(focusSphere);
+    if (!chapterId) return;
+    const el = document.querySelector(
+      `[data-testid="today-narrative-block-${chapterId}"], [data-testid="today-narrative-${chapterId}"]`,
+    );
     if (el && "scrollIntoView" in el) {
       (el as HTMLElement).scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-    // Deep-link from Glance opens opportunity/trap for that sphere
-    setExpandedSphereIds((prev) => ({ ...prev, [`sphere-${focusSphere}`]: true, [focusSphere]: true }));
+    // Deep-link from Glance / focus deepen opens opportunity/trap for that sphere
+    setExpandedSphereIds((prev) => ({ ...prev, [chapterId]: true }));
   }, [focusSphere, actFilter]);
 
   const completedCount =
@@ -496,6 +511,17 @@ export function TodayPersonalizedProductSection({
           ) : null}
         </TodayScreenBlockStack>
         ) : null}
+
+        {contract.depth_layer &&
+        Array.isArray(contract.depth_layer.menu) &&
+        contract.depth_layer.menu.length > 0 ? (
+          <TodayDepthLayerSection
+            dateISO={dateISO}
+            depthLayer={contract.depth_layer}
+            preferredTopic={preferredDepthTopic}
+            autoPickPreferred={autoPickDepthTopic}
+          />
+        ) : null}
       </ProductJourneyScene>
   );
 
@@ -573,13 +599,13 @@ export function TodayPersonalizedProductSection({
           ) : null}
           {goalDraftOpen ? (
             <div className={styles.customGoalForm} data-testid="today-entity-daily-goal">
-              <input
+              <DsTextField
                 id="day-goal-input-product"
-                className={styles.goalInput}
+                label={copy.goalPrompt}
                 value={goalDraft}
-                onChange={(event) => onGoalDraftChange(event.target.value)}
+                onChange={onGoalDraftChange}
                 maxLength={200}
-                placeholder="Своими словами — из того, что уже звучит в дне"
+                placeholder={copy.goalPlaceholder}
               />
               <DsButton type="button" variant="primary" onClick={onSaveGoal}>
                 {copy.goalSave}
@@ -592,7 +618,7 @@ export function TodayPersonalizedProductSection({
               data-testid="today-zone-promise-open"
               onClick={onOpenGoalDraft}
             >
-              {dayGoal ? "Изменить своими словами…" : "+ Своя цель"}
+              {dayGoal ? copy.editOwnPromise : copy.writeOwnPromise}
             </button>
           )}
         </TodayScreenBlock>
@@ -638,33 +664,16 @@ export function TodayPersonalizedProductSection({
             ) : null}
 
             {supportSlot === "practice" && practiceTool ? (
-              <div className={styles.practiceRow}>
-                <span
-                  className={practiceCompleted ? styles.practiceCheckDone : styles.practiceCheck}
-                  aria-hidden
-                />
-                <div className={styles.practiceBody}>
-                  <p className={styles.practiceTitle}>{practiceTool.title}</p>
-                  {practiceTool.duration ? <p className={styles.practiceMeta}>{practiceTool.duration}</p> : null}
-                  {practiceRec?.reason && practiceRec.kind === "practice" ? (
-                    <p className={styles.practiceMeta}>{practiceRec.reason}</p>
-                  ) : null}
-                  {!practiceCompleted ? (
-                    <DsButton
-                      type="button"
-                      variant="secondary"
-                      className={styles.practiceAction}
-                      data-testid="today-tool-practice"
-                      disabled={practiceCompleting}
-                      onClick={() => void onPracticeAction()}
-                    >
-                      {practiceStarted ? copy.practiceComplete : copy.practiceStart}
-                    </DsButton>
-                  ) : (
-                    <p className={styles.practiceMeta}>{copy.practiceCompleted}</p>
-                  )}
-                </div>
-              </div>
+              <TodayPracticeGiftBlock
+                title={practiceTool.title}
+                detail={practiceTool.detail}
+                duration={practiceTool.duration}
+                reason={practiceRec?.kind === "practice" ? practiceRec.reason : null}
+                practiceStarted={practiceStarted}
+                practiceCompleted={practiceCompleted}
+                practiceCompleting={practiceCompleting}
+                onPracticeAction={onPracticeAction}
+              />
             ) : null}
 
             {supportSlot === "affirmation" && affirmationTool ? (
@@ -750,11 +759,13 @@ export function TodayPersonalizedProductSection({
               </div>
             ))}
 
-            <p className={styles.practiceMeta} style={{ marginTop: "0.75rem" }}>
-              <Link href="/practices" data-testid="today-setup-practices-link">
-                {copy.setupPracticesLink} →
-              </Link>
-            </p>
+            {supportSlot !== "practice" ? (
+              <p className={styles.practiceMeta} style={{ marginTop: "0.75rem" }}>
+                <Link href="/practices" data-testid="today-setup-practices-link">
+                  {copy.setupPracticesLink} →
+                </Link>
+              </p>
+            ) : null}
           </TodayScreenBlock>
         ) : (
           <TodayScreenBlock eyebrow="Практики и опоры" testId="today-zone-strengthen-empty">
@@ -765,6 +776,7 @@ export function TodayPersonalizedProductSection({
             </p>
           </TodayScreenBlock>
         )}
+        {progressRows.length > 0 ? <TodayProgressTracker rows={progressRows} /> : null}
           </TodayScreenBlockStack>
         )}
       </ProductJourneyScene>

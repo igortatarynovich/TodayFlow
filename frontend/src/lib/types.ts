@@ -644,6 +644,7 @@ export type MeaningEventType =
   | "first_synthesis_viewed"
   | "mood_selected"
   | "head_topic_selected"
+  | "focus_deepen_open"
   | "sphere_opened"
   | "sphere_feedback"
   | "action_option_selected"

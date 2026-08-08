@@ -10,7 +10,7 @@ import { TodayDayContinuityEveningClose } from "@/components/today/experience/To
 import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
-import { TodayProductScreenFlow, todayScreenFlowAttributesIndex, todayScreenFlowPracticeIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
+import { TodayProductScreenFlow, todayScreenFlowAttributesIndex, todayScreenFlowPracticeIndex, todayScreenFlowReadingIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import {
   resolveScreenFlowEntryIndex,
@@ -25,7 +25,7 @@ import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel }
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
 import { anchorTarotTags, RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
-import { isDayNotReady, type TodayContractV1 } from "@/lib/todayContract";
+import { isDayNotReady, type TodayContractV1, type TodayDepthTopicId } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
 import { tarotCardFacePicture, tarotCardFaceSrc, resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import {
@@ -105,6 +105,7 @@ import {
 } from "@/lib/tarotDeepenEvents";
 import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
 import { DsButton, DsRitualGate, DsRitualGateSection } from "@/design-system";
+import { DsTextField } from "@/design-system/primitives/DsForm";
 import { joinClass } from "@/design-system/utils/joinClass";
 import ds from "@/design-system/primitives/dsPrimitives.module.css";
 import { getJson, postJson } from "@/lib/api";
@@ -115,7 +116,10 @@ import {
   loadTodayGrowthTrackers,
   markAsceticCompletedToday,
   markHabitCompletedToday,
+  type TodayProgressRow,
 } from "@/lib/todayGrowthTrackers";
+import { canOfferFocusDeepen, resolveFocusDeepenTarget } from "@/lib/todayFocusDeepen";
+import { formatRitualTarotPersonalToday, pickRitualHookLine } from "@/lib/ritualRevealCopy";
 
 type Props = {
   variant?: TodayCompositionVariant;
@@ -212,6 +216,10 @@ export function TodayCompositionSurface(props: Props) {
   const [practiceCompleting, setPracticeCompleting] = useState(false);
   const [activeHabit, setActiveHabit] = useState<{ id: number; name: string } | null>(null);
   const [activeAscetic, setActiveAscetic] = useState<{ id: number; title: string } | null>(null);
+  const [progressRows, setProgressRows] = useState<TodayProgressRow[]>([]);
+  const [readingFocusSphere, setReadingFocusSphere] = useState<string | null>(null);
+  const [preferredDepthTopic, setPreferredDepthTopic] = useState<TodayDepthTopicId | string | null>(null);
+  const [autoPickDepthTopic, setAutoPickDepthTopic] = useState(false);
   const [habitMarking, setHabitMarking] = useState(false);
   const [asceticMarking, setAsceticMarking] = useState(false);
   const [ritualPickOpen, setRitualPickOpen] = useState<"tarot" | "number" | null>(null);
@@ -669,10 +677,34 @@ export function TodayCompositionSurface(props: Props) {
     };
   }, [hydrated, dateISO]);
 
+  const refreshGrowthTrackers = useCallback(async () => {
+    if (!isAuthenticated) {
+      setActiveHabit(null);
+      setActiveAscetic(null);
+      setProgressRows([]);
+      return;
+    }
+    const trackers = await loadTodayGrowthTrackers(dateISO);
+    setActiveHabit(trackers.habit);
+    setActiveAscetic(trackers.ascetic);
+    setProgressRows(trackers.progressRows);
+    const patch: Parameters<typeof saveDayEngagement>[1] = {};
+    if (trackers.habitDoneToday && trackers.habit) {
+      patch.habitMarkedId = trackers.habit.id;
+    }
+    if (trackers.asceticDoneToday && trackers.ascetic) {
+      patch.asceticMarkedId = trackers.ascetic.id;
+    }
+    if (Object.keys(patch).length > 0) {
+      persistEngagement(patch);
+    }
+  }, [dateISO, isAuthenticated, persistEngagement]);
+
   useEffect(() => {
     if (!hydrated || !isAuthenticated) {
       setActiveHabit(null);
       setActiveAscetic(null);
+      setProgressRows([]);
       return;
     }
     let cancelled = false;
@@ -680,6 +712,7 @@ export function TodayCompositionSurface(props: Props) {
       if (cancelled) return;
       setActiveHabit(trackers.habit);
       setActiveAscetic(trackers.ascetic);
+      setProgressRows(trackers.progressRows);
       const patch: Parameters<typeof saveDayEngagement>[1] = {};
       if (trackers.habitDoneToday && trackers.habit) {
         patch.habitMarkedId = trackers.habit.id;
@@ -906,9 +939,18 @@ export function TodayCompositionSurface(props: Props) {
     }
     return {
       display,
-      meaning: view.number?.title ?? props.numerologyMeaning ?? null,
+      title: view.number?.title ?? null,
+      meaning: view.number?.hook_reveal?.base?.meaning ?? view.number?.summary ?? props.numerologyMeaning ?? null,
+      support: pickRitualHookLine(view.number?.hook_reveal, story.numberImpact?.body ?? null),
     };
-  }, [dateISO, isAuthenticated, persistEngagement, props.numerologyMeaning, props.onSymbolRevealResult]);
+  }, [
+    dateISO,
+    isAuthenticated,
+    persistEngagement,
+    props.numerologyMeaning,
+    props.onSymbolRevealResult,
+    story.numberImpact?.body,
+  ]);
 
   const onInterpretationConfirm = useCallback(
     (
@@ -1073,6 +1115,7 @@ export function TodayCompositionSurface(props: Props) {
       setHabitMarking(true);
       await markHabitCompletedToday(activeHabit.id, dateISO);
       persistEngagement({ habitMarkedId: activeHabit.id });
+      void refreshGrowthTrackers();
       trackMeaningEvent({
         event_type: "habit_completed",
         event_source: "today",
@@ -1091,6 +1134,7 @@ export function TodayCompositionSurface(props: Props) {
     engagement.habitMarkedId,
     habitMarking,
     persistEngagement,
+    refreshGrowthTrackers,
     trackMeaningEvent,
   ]);
 
@@ -1100,6 +1144,7 @@ export function TodayCompositionSurface(props: Props) {
       setAsceticMarking(true);
       await markAsceticCompletedToday(activeAscetic.id, dateISO);
       persistEngagement({ asceticMarkedId: activeAscetic.id });
+      void refreshGrowthTrackers();
       trackMeaningEvent({
         event_type: "ascetic_step_done",
         event_source: "today",
@@ -1118,6 +1163,7 @@ export function TodayCompositionSurface(props: Props) {
     dateISO,
     engagement.asceticMarkedId,
     persistEngagement,
+    refreshGrowthTrackers,
     trackMeaningEvent,
   ]);
 
@@ -1136,6 +1182,103 @@ export function TodayCompositionSurface(props: Props) {
   const plotBeats = useMemo(() => buildPlotStoryBeats(props.contract), [props.contract]);
   const energyLineDisplay = glanceEnergy?.effect || pulseDisplay;
   const energyCauseDisplay = glanceEnergy?.cause || null;
+
+  const depthMenuTopics = useMemo(() => {
+    const menu = props.contract.depth_layer?.menu;
+    if (!Array.isArray(menu)) return [] as string[];
+    return menu.map((row) => String(row.topic || "").trim()).filter(Boolean);
+  }, [props.contract.depth_layer?.menu]);
+
+  const showFocusDeepenCta = canOfferFocusDeepen({
+    hasReading: useProductPersonalized,
+    depthMenuTopics,
+    focusTopicId: engagement.focusTopicId,
+  });
+
+  const onFocusDeepen = useCallback(() => {
+    const target = resolveFocusDeepenTarget(engagement.focusTopicId, depthMenuTopics);
+    setReadingFocusSphere(target.readingSphere);
+    setPreferredDepthTopic(target.depthTopic);
+    setAutoPickDepthTopic(Boolean(target.depthTopic));
+    if (useProductPersonalized) {
+      setScreenFlowIndex(todayScreenFlowReadingIndex(showSymbolsAct));
+    } else {
+      document
+        .querySelector('[data-testid="today-depth-layer"]')
+        ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    trackMeaningEvent({
+      event_type: "focus_deepen_open",
+      event_source: "today",
+      local_date: dateISO,
+      payload: {
+        focus_topic_id: target.focusTopicId,
+        reading_sphere: target.readingSphere,
+        depth_topic: target.depthTopic,
+        surface: "today_day_dialogue_v1",
+      },
+      refreshRings: false,
+    });
+  }, [
+    dateISO,
+    depthMenuTopics,
+    engagement.focusTopicId,
+    showSymbolsAct,
+    trackMeaningEvent,
+    useProductPersonalized,
+  ]);
+
+  const ritualTarotMeaningText = useMemo(
+    () =>
+      symbolHooksView?.card?.hook_reveal?.base?.meaning ??
+      props.cardMeaning ??
+      story.tarotImpact?.body ??
+      null,
+    [props.cardMeaning, story.tarotImpact?.body, symbolHooksView?.card?.hook_reveal?.base?.meaning],
+  );
+
+  const ritualTarotPersonalText = useMemo(() => {
+    const hook = symbolHooksView?.card?.hook_reveal;
+    const personalLine =
+      String(hook?.bridge_to_day ?? "").trim() ||
+      String(hook?.personal_angle ?? "").trim() ||
+      null;
+    return formatRitualTarotPersonalToday({
+      personalLine,
+      dayNumber: engagement.numberValue || props.numerologyValue,
+      dayNumberTitle: symbolHooksView?.number?.title ?? null,
+    });
+  }, [
+    engagement.numberValue,
+    props.numerologyValue,
+    symbolHooksView?.card?.hook_reveal,
+    symbolHooksView?.number?.title,
+  ]);
+
+  const ritualNumberMeaningText = useMemo(
+    () =>
+      symbolHooksView?.number?.hook_reveal?.base?.meaning ??
+      symbolHooksView?.number?.summary ??
+      props.numerologyMeaning ??
+      story.numberImpact?.body ??
+      null,
+    [
+      props.numerologyMeaning,
+      story.numberImpact?.body,
+      symbolHooksView?.number?.hook_reveal?.base?.meaning,
+      symbolHooksView?.number?.summary,
+    ],
+  );
+
+  const ritualNumberSupportText = useMemo(
+    () => pickRitualHookLine(symbolHooksView?.number?.hook_reveal, story.numberImpact?.body ?? null),
+    [story.numberImpact?.body, symbolHooksView?.number?.hook_reveal],
+  );
+
+  const ritualNumberTitle = useMemo(
+    () => symbolHooksView?.number?.title ?? story.numberImpact?.headline ?? null,
+    [story.numberImpact?.headline, symbolHooksView?.number?.title],
+  );
 
   if (eveningMode && continuityRecord && !dayClosed) {
     if (useProductFoundation) {
@@ -1223,6 +1366,8 @@ export function TodayCompositionSurface(props: Props) {
       morningMoodCapturedAtMs={engagement.morningMoodCapturedAtMs}
       focusTopicId={engagement.focusTopicId}
       focusTopicCapturedAtMs={engagement.focusTopicCapturedAtMs}
+      showDeepenCta={showFocusDeepenCta}
+      onDeepenTopic={showFocusDeepenCta ? onFocusDeepen : undefined}
       onSelectMood={(id) => {
         persistEngagement({ morningMoodId: id, morningMoodCapturedAtMs: Date.now() });
         clearCompactUserModelCache(dateISO);
@@ -1470,6 +1615,8 @@ export function TodayCompositionSurface(props: Props) {
       resumeCommittedId={tarotPendingId ?? tarotPickedId}
       cardTitleRu={getTodayTarotCardRu(anchorTarotId)?.nameRu ?? props.cardName}
       tagLabels={compositionTarotTags}
+      meaningText={ritualTarotMeaningText}
+      personalTodayText={ritualTarotPersonalText}
       onCommitMain={onTarotCommit}
       onRevealed={onTarotRevealed}
       onContinue={onTarotContinue}
@@ -1485,7 +1632,9 @@ export function TodayCompositionSurface(props: Props) {
   const numberPickExperience = (
     <RitualNumberPickExperience
       systemDisplay={props.numerologyValue}
-      numberMeaning={props.numerologyMeaning ?? undefined}
+      numberTitle={ritualNumberTitle}
+      numberMeaning={ritualNumberMeaningText}
+      daySupport={ritualNumberSupportText}
       tileMode="symbol"
       reduceMotion={reduceMotion}
       onRevealRequest={onNumberRevealRequest}
@@ -1775,6 +1924,78 @@ export function TodayCompositionSurface(props: Props) {
 
   );
 
+  const personalizedProps = {
+    embeddedInWebDashboard,
+    story,
+    contract: props.contract,
+    strengthenTools,
+    promiseSuggestions,
+    dayGoal: engagement.dayGoal,
+    practiceCompleted: engagement.practiceCompleted,
+    practiceStarted: engagement.practiceStarted,
+    affirmationRead: engagement.affirmationRead,
+    practiceCompleting,
+    activeHabit,
+    activeAscetic,
+    habitMarked:
+      engagement.habitMarkedId != null &&
+      activeHabit != null &&
+      engagement.habitMarkedId === activeHabit.id,
+    asceticMarked:
+      engagement.asceticMarkedId != null &&
+      activeAscetic != null &&
+      engagement.asceticMarkedId === activeAscetic.id,
+    habitMarking,
+    asceticMarking,
+    goalDraftOpen,
+    goalDraft,
+    coreProfile: props.coreProfile,
+    skyCards: story.skyCards,
+    colorGuide: story.colorGuide,
+    morningRitualData: props.morningRitualData,
+    dateISO,
+    tapResponse: engagement.tapResponse,
+    progressRows,
+    focusSphere: readingFocusSphere,
+    preferredDepthTopic,
+    autoPickDepthTopic,
+    onTapRecorded: (response: "avoided_trap" | "fell_into_trap" | "not_applicable" | "skipped") => {
+      persistEngagement({ tapResponse: response });
+    },
+    tarotDeepenHref:
+      engagement.tarotPickedId != null
+        ? buildTarotDeepenHref({
+            cardId: engagement.tarotPickedId,
+            orientation: engagement.tarotOrientation ?? "upright",
+            source: "today" as const,
+          })
+        : null,
+    onPickPromise: (text: string) => {
+      persistEngagement({ dayGoal: text });
+      trackMeaningEvent({
+        event_type: "action_option_selected",
+        event_source: "today",
+        local_date: dateISO,
+        payload: {
+          action: "day_promise_set",
+          promise_text: text.slice(0, 200),
+          surface: "today_day_story_v3",
+        },
+        refreshRings: false,
+      });
+    },
+    onOpenGoalDraft: () => {
+      setGoalDraft(engagement.dayGoal ?? "");
+      setGoalDraftOpen(true);
+    },
+    onGoalDraftChange: setGoalDraft,
+    onSaveGoal,
+    onPracticeAction: () => void onPracticeAction(),
+    onAffirmationDone,
+    onHabitMark: () => void onHabitMark(),
+    onAsceticMark: () => void onAsceticMark(),
+  };
+
   return (
     <>
       <div
@@ -1811,73 +2032,7 @@ export function TodayCompositionSurface(props: Props) {
         {dayStoryFoundation}
 
         {!useProductFoundation && useProductPersonalized ? (
-          <TodayPersonalizedProductSection
-            embeddedInWebDashboard={embeddedInWebDashboard}
-            story={story}
-            contract={props.contract}
-            strengthenTools={strengthenTools}
-            promiseSuggestions={promiseSuggestions}
-            dayGoal={engagement.dayGoal}
-            practiceCompleted={engagement.practiceCompleted}
-            practiceStarted={engagement.practiceStarted}
-            affirmationRead={engagement.affirmationRead}
-            practiceCompleting={practiceCompleting}
-            activeHabit={activeHabit}
-            activeAscetic={activeAscetic}
-            habitMarked={
-              engagement.habitMarkedId != null &&
-              activeHabit != null &&
-              engagement.habitMarkedId === activeHabit.id
-            }
-            asceticMarked={
-              engagement.asceticMarkedId != null &&
-              activeAscetic != null &&
-              engagement.asceticMarkedId === activeAscetic.id
-            }
-            habitMarking={habitMarking}
-            asceticMarking={asceticMarking}
-            goalDraftOpen={goalDraftOpen}
-            goalDraft={goalDraft}
-            coreProfile={props.coreProfile}
-            skyCards={story.skyCards}
-            colorGuide={story.colorGuide}
-            morningRitualData={props.morningRitualData}
-            dateISO={dateISO}
-            tapResponse={engagement.tapResponse}
-            onTapRecorded={(response) => {
-              persistEngagement({ tapResponse: response });
-            }}
-            tarotDeepenHref={
-              engagement.tarotPickedId != null
-                ? buildTarotDeepenHref({
-                    cardId: engagement.tarotPickedId,
-                    orientation: engagement.tarotOrientation ?? "upright",
-                    source: "today",
-                  })
-                : null
-            }
-            onPickPromise={(text) => {
-              persistEngagement({ dayGoal: text });
-              trackMeaningEvent({
-                event_type: "action_option_selected",
-                event_source: "today",
-                local_date: dateISO,
-                payload: {
-                  action: "day_promise_set",
-                  promise_text: text.slice(0, 200),
-                  surface: "today_day_story_v3",
-                },
-                refreshRings: false,
-              });
-            }}
-            onOpenGoalDraft={() => setGoalDraftOpen(true)}
-            onGoalDraftChange={setGoalDraft}
-            onSaveGoal={onSaveGoal}
-            onPracticeAction={() => void onPracticeAction()}
-            onAffirmationDone={onAffirmationDone}
-            onHabitMark={() => void onHabitMark()}
-            onAsceticMark={() => void onAsceticMark()}
-          />
+          <TodayPersonalizedProductSection {...personalizedProps} />
         ) : null}
 
         {/* First-today / non-foundation: opened symbols stay after spine (legacy path). */}
@@ -1962,6 +2117,8 @@ export function TodayCompositionSurface(props: Props) {
             dateISO={dateISO}
             depthLayer={props.contract.depth_layer}
             guideGenerationId={props.guideGenerationId ?? null}
+            preferredTopic={preferredDepthTopic}
+            autoPickPreferred={autoPickDepthTopic}
           />
         ) : null}
 
@@ -2132,23 +2289,29 @@ export function TodayCompositionSurface(props: Props) {
             </div>
             {goalDraftOpen ? (
               <div className={styles.goalForm} data-testid="today-entity-daily-goal">
-                <label className={styles.toolLabel} htmlFor="day-goal-input">
-                  {copy.goalPrompt}
-                </label>
-                <input
+                <DsTextField
                   id="day-goal-input"
-                  className={styles.goalInput}
+                  label={copy.goalPrompt}
                   value={goalDraft}
-                  onChange={(e) => setGoalDraft(e.target.value)}
+                  onChange={setGoalDraft}
                   maxLength={200}
+                  placeholder={copy.goalPlaceholder}
                 />
                 <DsButton type="button" variant="primary" onClick={onSaveGoal}>
                   {copy.goalSave}
                 </DsButton>
               </div>
             ) : (
-              <DsButton type="button" variant="secondary" className={styles.promiseCustom} onClick={() => setGoalDraftOpen(true)}>
-                Написать своё
+              <DsButton
+                type="button"
+                variant="secondary"
+                className={styles.promiseCustom}
+                onClick={() => {
+                  setGoalDraft(engagement.dayGoal ?? "");
+                  setGoalDraftOpen(true);
+                }}
+              >
+                {engagement.dayGoal ? copy.editOwnPromise : copy.writeOwnPromise}
               </DsButton>
             )}
             {engagement.dayGoal ? (

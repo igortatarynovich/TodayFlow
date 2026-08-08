@@ -12,11 +12,15 @@ jest.mock("@/hooks/useMeaningRuntime", () => ({
   useMeaningRuntime: () => ({ trackMeaningEvent: jest.fn() }),
 }));
 
-jest.mock("@/lib/api", () => ({
-  getJson: jest.fn().mockRejectedValue(new Error("no auth")),
-  postJson: jest.fn(),
-  getStoredAccessToken: jest.fn(() => null),
-}));
+jest.mock("@/lib/api", () => {
+  const actual = jest.requireActual<typeof import("@/lib/api")>("@/lib/api");
+  return {
+    ...actual,
+    getJson: jest.fn().mockRejectedValue(new Error("no auth")),
+    postJson: jest.fn(),
+    getStoredAccessToken: jest.fn(() => null),
+  };
+});
 
 jest.mock("@/lib/todayDayGreeting", () => ({
   ...jest.requireActual("@/lib/todayDayGreeting"),

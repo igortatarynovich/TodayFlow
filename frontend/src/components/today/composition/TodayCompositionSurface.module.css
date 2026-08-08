@@ -2033,6 +2033,28 @@
   cursor: pointer;
 }
 
+.focusChipActive {
+  composes: focusChip;
+  border-color: color-mix(in srgb, var(--day-accent-soft, #9c7e52) 70%, var(--tdp-border));
+  background: color-mix(in srgb, var(--day-accent-soft, #9c7e52) 16%, var(--tdp-warm));
+  font-weight: 600;
+}
+
+.deepenTopicLink {
+  display: inline-flex;
+  margin-top: 0.75rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--day-accent-soft, var(--tdp-accent, #9c7e52));
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
 .moodChip {
   display: flex;
   align-items: center;

@@ -7,6 +7,7 @@ import {
   shouldAskMorningFocus,
   shouldAskMorningMood,
 } from "@/lib/todayDayDialogue";
+import { FOCUS_DEEPEN_CTA_LABEL } from "@/lib/todayFocusDeepen";
 import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
 
 type Props = {
@@ -17,6 +18,9 @@ type Props = {
   focusTopicCapturedAtMs?: number | null;
   onSelectMood: (id: string) => void;
   onSelectFocus: (id: string) => void;
+  /** Handoff CTA → Reading / depth_layer (no new screen). */
+  showDeepenCta?: boolean;
+  onDeepenTopic?: () => void;
 };
 
 /**
@@ -31,10 +35,13 @@ export function TodayDayDialogueMorning({
   focusTopicCapturedAtMs,
   onSelectMood,
   onSelectFocus,
+  showDeepenCta = false,
+  onDeepenTopic,
 }: Props) {
   const askFocus = shouldAskMorningFocus({ dateISO, focusTopicId, focusTopicCapturedAtMs });
   const askMood = shouldAskMorningMood({ dateISO, morningMoodId, morningMoodCapturedAtMs });
-  if (!askFocus && !askMood) return null;
+  const deepenOnly = !askFocus && !askMood && showDeepenCta && Boolean(onDeepenTopic);
+  if (!askFocus && !askMood && !deepenOnly) return null;
 
   return (
     <section className={styles.dialogueCard} data-testid="today-zone-dialogue-morning">
@@ -47,14 +54,27 @@ export function TodayDayDialogueMorning({
               <button
                 key={t.id}
                 type="button"
-                className={styles.focusChip}
+                className={
+                  focusTopicId === t.id ? `${styles.focusChip} ${styles.focusChipActive}` : styles.focusChip
+                }
                 data-testid={`today-focus-${t.id}`}
+                data-selected={focusTopicId === t.id ? "true" : "false"}
                 onClick={() => onSelectFocus(t.id)}
               >
                 {t.label}
               </button>
             ))}
           </div>
+          {showDeepenCta && onDeepenTopic ? (
+            <button
+              type="button"
+              className={styles.deepenTopicLink}
+              data-testid="today-focus-deepen-cta"
+              onClick={onDeepenTopic}
+            >
+              {FOCUS_DEEPEN_CTA_LABEL}
+            </button>
+          ) : null}
         </div>
       ) : null}
       {askMood ? (
@@ -74,6 +94,18 @@ export function TodayDayDialogueMorning({
               </button>
             ))}
           </div>
+        </div>
+      ) : null}
+      {deepenOnly ? (
+        <div className={styles.dialogueBlock}>
+          <button
+            type="button"
+            className={styles.deepenTopicLink}
+            data-testid="today-focus-deepen-cta"
+            onClick={onDeepenTopic}
+          >
+            {FOCUS_DEEPEN_CTA_LABEL}
+          </button>
         </div>
       ) : null}
     </section>
