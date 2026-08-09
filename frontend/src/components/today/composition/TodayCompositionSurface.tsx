@@ -1311,6 +1311,29 @@ export function TodayCompositionSurface(props: Props) {
     [story.numberImpact?.headline, symbolHooksView?.number?.title],
   );
 
+  const makeYoursOccupied = useMemo(
+    () =>
+      makeYoursOccupiedFromProgress(
+        progressRows.map((r) => r.kind),
+        {
+          // Goal slot mirrors Promise until weekly-goal streak SoT exists.
+          goal: Boolean(engagement.dayGoal?.trim()),
+        },
+      ),
+    [progressRows, engagement.dayGoal],
+  );
+
+  const makeYoursProposals = useMemo(
+    () =>
+      buildMakeYoursProposals({
+        contract: props.contract,
+        occupied: makeYoursOccupied,
+        dayGoal: engagement.dayGoal,
+        promiseSuggestion: promiseSuggestions[0]?.text ?? null,
+      }),
+    [props.contract, makeYoursOccupied, engagement.dayGoal, promiseSuggestions],
+  );
+
   if (eveningMode && continuityRecord && !dayClosed) {
     if (useProductFoundation) {
       return (
@@ -1737,29 +1760,6 @@ export function TodayCompositionSurface(props: Props) {
         </p>
       ) : null}
     </div>
-  );
-
-  const makeYoursOccupied = useMemo(
-    () =>
-      makeYoursOccupiedFromProgress(
-        progressRows.map((r) => r.kind),
-        {
-          // Goal slot mirrors Promise until weekly-goal streak SoT exists.
-          goal: Boolean(engagement.dayGoal?.trim()),
-        },
-      ),
-    [progressRows, engagement.dayGoal],
-  );
-
-  const makeYoursProposals = useMemo(
-    () =>
-      buildMakeYoursProposals({
-        contract: props.contract,
-        occupied: makeYoursOccupied,
-        dayGoal: engagement.dayGoal,
-        promiseSuggestion: promiseSuggestions[0]?.text ?? null,
-      }),
-    [props.contract, makeYoursOccupied, engagement.dayGoal, promiseSuggestions],
   );
 
   const handoffMakeYoursBody = (
