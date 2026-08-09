@@ -132,18 +132,18 @@ export function buildTodayPromiseSuggestions(input: {
   doItems?: string[] | null;
 }): TodayPromiseSuggestion[] {
   const out: TodayPromiseSuggestion[] = [];
-  const seen = new Set<string>();
+  const seen: string[] = [];
 
   const push = (id: string, text: string) => {
     const normalized = text.replace(/\s+/g, " ").trim();
     if (!normalized) return;
     const key = promiseDedupeKey(normalized);
-    if (!key || seen.has(key)) return;
+    if (!key || seen.includes(key)) return;
     // Near-duplicate: same first 48 chars after soft punctuation strip.
     for (const prev of seen) {
       if (key.startsWith(prev.slice(0, 48)) || prev.startsWith(key.slice(0, 48))) return;
     }
-    seen.add(key);
+    seen.push(key);
     out.push({ id, text: normalized.length <= 120 ? normalized : `${normalized.slice(0, 117)}…` });
   };
 
