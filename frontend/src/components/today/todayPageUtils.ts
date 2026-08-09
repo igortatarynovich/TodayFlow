@@ -319,6 +319,12 @@ export type MorningRitualData = {
       totem?: { id?: string; name?: string; emoji?: string; story_ru?: string };
     };
   } | null;
+  /** Morning priorities / do-avoid cues from today core (welcome activity tags SoT). */
+  daily_recommendations?: {
+    priorities?: string[];
+    what_to_do?: string;
+    what_to_avoid?: string;
+  } | null;
   daily_horoscope?: {
     headline?: string;
     profile_prism?: string;
