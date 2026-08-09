@@ -78,19 +78,22 @@ export type DayFactsResponse = {
 };
 
 const TTL_MS = 60_000;
-/** Slot GET should be sub-second; keep headroom without a 25s spinner. */
-const FETCH_TIMEOUT_MS = 12_000;
+/** Cold day-facts assemble can exceed 12s; timeout was painted as «Нет соединения.» */
+const FETCH_TIMEOUT_MS = 28_000;
 const cache = new Map<string, { at: number; data: DayFactsResponse }>();
 const inFlight = new Map<string, Promise<DayFactsResponse>>();
+/** Bump so stale .finally cannot delete a newer in-flight promise after clearDayFactsCache. */
+let fetchGeneration = 0;
 
 function cacheKey(dateISO: string): string {
   return dateISO || "__today__";
 }
 
-/** Drop client day-facts cache (tests / day rollover). */
+/** Drop client day-facts cache (tests / day rollover / auth). */
 export function clearDayFactsCache(): void {
   cache.clear();
   inFlight.clear();
+  fetchGeneration += 1;
 }
 
 export async function fetchDayFacts(dateISO: string): Promise<DayFactsResponse> {
@@ -101,6 +104,7 @@ export async function fetchDayFacts(dateISO: string): Promise<DayFactsResponse> 
   const pending = inFlight.get(key);
   if (pending) return pending;
 
+  const gen = fetchGeneration;
   const q = dateISO ? `?local_date=${encodeURIComponent(dateISO)}` : "";
   const controller = new AbortController();
   const timeoutId = setTimeout(() => {
@@ -122,7 +126,9 @@ export async function fetchDayFacts(dateISO: string): Promise<DayFactsResponse> 
     })
     .finally(() => {
       clearTimeout(timeoutId);
-      inFlight.delete(key);
+      if (gen === fetchGeneration) {
+        inFlight.delete(key);
+      }
     });
 
   inFlight.set(key, promise);

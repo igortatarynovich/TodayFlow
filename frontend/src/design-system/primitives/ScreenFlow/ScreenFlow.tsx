@@ -73,6 +73,15 @@ export type ScreenFlowProps = {
   showChrome?: boolean;
   /** Prev/Next text buttons — optional per SCREEN_FLOW_V1 §1.4; Today product keeps false. */
   showStepControls?: boolean;
+  /**
+   * Dot cluster sizes for steps after `dotStartIndex` (e.g. handoff [3,6,2]).
+   * Sum must equal `count - dotStartIndex`.
+   */
+  dotClusters?: number[];
+  /** Skip leading steps in the dot rail (handoff Welcome has no dots). */
+  dotStartIndex?: number;
+  /** Frame-anchored ←/→ arrows (handoff). */
+  showFrameArrows?: boolean;
 };
 
 const FAILURE_COPY: Record<"failed" | "degraded", string> = {
@@ -80,7 +89,8 @@ const FAILURE_COPY: Record<"failed" | "degraded", string> = {
   degraded: "Не удалось загрузить.",
 };
 
-const SWIPE_THRESHOLD_PX = 48;
+/** Handoff SoT: pointer delta > 60px (design_handoff_today_flow README). */
+const SWIPE_THRESHOLD_PX = 60;
 
 export function ScreenFlowStep({
   id,
@@ -157,6 +167,9 @@ export function ScreenFlow({
   testId = "screen-flow",
   showChrome = true,
   showStepControls = false,
+  dotClusters,
+  dotStartIndex = 0,
+  showFrameArrows = false,
 }: ScreenFlowProps) {
   const reduceMotion = usePrefersReducedMotion();
   const liveId = useId();
@@ -272,22 +285,77 @@ export function ScreenFlow({
         <div
           className={styles.chrome}
           data-controls={showStepControls ? "true" : "false"}
+          data-frame-arrows={showFrameArrows ? "true" : "false"}
         >
-          <div className={styles.dots} role="tablist" aria-label="Шаги">
-            {steps.map((step, i) => (
-              <button
-                key={step.props.id}
-                type="button"
-                role="tab"
-                aria-selected={i === clamped}
-                className={i === clamped ? styles.dotActive : styles.dot}
-                data-testid={`screen-flow-dot-${i}`}
-                onClick={() => goTo(i, "select")}
-              >
-                <span className={styles.srOnly}>{step.props.label}</span>
-              </button>
-            ))}
+          {showFrameArrows ? (
+            <button
+              type="button"
+              className={styles.frameArrow}
+              data-testid="screen-flow-frame-prev"
+              disabled={clamped <= 0}
+              aria-label="Назад"
+              onClick={() => goTo(clamped - 1, "prev")}
+            >
+              ←
+            </button>
+          ) : null}
+          <div className={styles.dots} role="tablist" aria-label="Шаги" data-testid="screen-flow-dots">
+            {(() => {
+              const startIdx = Math.max(0, Math.min(dotStartIndex, count));
+              const railCount = Math.max(0, count - startIdx);
+              const clusterSizes =
+                Array.isArray(dotClusters) &&
+                dotClusters.length > 0 &&
+                dotClusters.reduce((a, b) => a + b, 0) === railCount
+                  ? dotClusters
+                  : railCount > 0
+                    ? [railCount]
+                    : [];
+              let offset = 0;
+              return clusterSizes.map((size, clusterIdx) => {
+                const start = startIdx + offset;
+                offset += size;
+                return (
+                  <span
+                    key={`cluster-${clusterIdx}`}
+                    className={styles.dotCluster}
+                    data-cluster={clusterIdx}
+                  >
+                    {Array.from({ length: size }, (_, j) => {
+                      const i = start + j;
+                      const step = steps[i];
+                      if (!step) return null;
+                      return (
+                        <button
+                          key={step.props.id}
+                          type="button"
+                          role="tab"
+                          aria-selected={i === clamped}
+                          className={i === clamped ? styles.dotActive : styles.dot}
+                          data-testid={`screen-flow-dot-${i}`}
+                          onClick={() => goTo(i, "select")}
+                        >
+                          <span className={styles.srOnly}>{step.props.label}</span>
+                        </button>
+                      );
+                    })}
+                  </span>
+                );
+              });
+            })()}
           </div>
+          {showFrameArrows ? (
+            <button
+              type="button"
+              className={styles.frameArrow}
+              data-testid="screen-flow-frame-next"
+              disabled={clamped >= count - 1}
+              aria-label="Далее"
+              onClick={() => goTo(clamped + 1, "next")}
+            >
+              →
+            </button>
+          ) : null}
           {showStepControls ? (
             <div className={styles.controls}>
               <button

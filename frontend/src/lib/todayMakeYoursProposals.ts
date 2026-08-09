@@ -1,13 +1,12 @@
 /**
  * Make yours — proposals when a growth slot is empty.
- * Signals only from day contract / engagement / catalogs — no invent on empty.
+ * Practices live on their own ScreenFlow step / `/practices` — not here.
  * Canon: docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md
  */
 
 import type { TodayContractV1 } from "@/lib/todayContract";
 
 export type MakeYoursCategoryId =
-  | "practice"
   | "ascetic"
   | "affirmation"
   | "mantra"
@@ -26,7 +25,6 @@ export type MakeYoursProposal = {
 export type MakeYoursOccupied = Partial<Record<MakeYoursCategoryId, boolean>>;
 
 const CATEGORY_LABEL: Record<MakeYoursCategoryId, string> = {
-  practice: "Практика",
   ascetic: "Аскеза",
   affirmation: "Аффирмация",
   mantra: "Мантра",
@@ -38,18 +36,10 @@ function clean(text: string | null | undefined): string {
   return (text ?? "").replace(/\s+/g, " ").trim();
 }
 
-function firstDo(contract: TodayContractV1 | null | undefined): string | null {
-  const doItems = contract?.day_story?.do;
-  if (!Array.isArray(doItems)) return null;
-  for (const row of doItems) {
-    const t = clean(typeof row === "string" ? row : null);
-    if (t) return t;
-  }
-  return null;
-}
-
 /**
  * Build propose cards for empty categories only.
+ * Never invent affirmation/habit from the same day `do`/`today_move` line —
+ * those cards come from real catalogs via inline pick on the step.
  * Occupied slots are omitted (tracker owns them).
  */
 export function buildMakeYoursProposals(input: {
@@ -63,8 +53,6 @@ export function buildMakeYoursProposals(input: {
   const recKind = clean(rec?.kind).toLowerCase();
   const recText = clean(rec?.text);
   const recReason = clean(rec?.reason) || null;
-  const doLine = firstDo(input.contract);
-  const move = clean(input.contract?.day_story?.today_move) || doLine;
   const primary = clean(input.contract?.primary_action);
   const growth = clean(input.contract?.personal_growth?.development_point);
 
@@ -74,69 +62,33 @@ export function buildMakeYoursProposals(input: {
     out.push(p);
   };
 
-  if (!input.occupied.practice) {
-    if (recKind === "practice" && recText) {
-      push({
-        categoryId: "practice",
-        categoryLabel: CATEGORY_LABEL.practice,
-        title: recText,
-        reason: recReason,
-        href: "/practices",
-        ctaLabel: "Открыть практики",
-      });
-    } else if (move) {
-      push({
-        categoryId: "practice",
-        categoryLabel: CATEGORY_LABEL.practice,
-        title: move.length > 80 ? `${move.slice(0, 77)}…` : move,
-        reason: "Из опоры дня",
-        href: "/practices",
-        ctaLabel: "Выбрать практику",
-      });
-    }
+  if (!input.occupied.ascetic && recKind === "ascetic" && recText) {
+    push({
+      categoryId: "ascetic",
+      categoryLabel: CATEGORY_LABEL.ascetic,
+      title: recText,
+      reason: recReason,
+      href: "/tracking/calendar?create=ascetic",
+      ctaLabel: "Выбрать аскезу",
+    });
   }
 
-  if (!input.occupied.ascetic) {
-    if (recKind === "ascetic" && recText) {
-      push({
-        categoryId: "ascetic",
-        categoryLabel: CATEGORY_LABEL.ascetic,
-        title: recText,
-        reason: recReason,
-        href: "/tracking/calendar?create=ascetic",
-        ctaLabel: "Поставить аскезу",
-      });
-    }
+  if (
+    !input.occupied.affirmation &&
+    (recKind === "affirmation" || recKind === "promise") &&
+    recText
+  ) {
+    push({
+      categoryId: "affirmation",
+      categoryLabel: CATEGORY_LABEL.affirmation,
+      title: recText,
+      reason: recReason,
+      href: "/affirmations",
+      ctaLabel: "Выбрать аффирмацию",
+    });
   }
 
-  if (!input.occupied.affirmation) {
-    if ((recKind === "affirmation" || recKind === "promise") && recText) {
-      push({
-        categoryId: "affirmation",
-        categoryLabel: CATEGORY_LABEL.affirmation,
-        title: recText,
-        reason: recReason,
-        href: "/affirmations",
-        ctaLabel: "К аффирмациям",
-      });
-    }
-  }
-
-  // Mantra: no day signal SoT yet — omit propose (catalog only via empty footer link).
-
-  if (!input.occupied.habit) {
-    const habitTitle = move || primary || growth;
-    if (habitTitle) {
-      push({
-        categoryId: "habit",
-        categoryLabel: CATEGORY_LABEL.habit,
-        title: habitTitle.length > 80 ? `${habitTitle.slice(0, 77)}…` : habitTitle,
-        reason: "Можно закрепить как привычку",
-        href: "/tracking/calendar?create=habit",
-        ctaLabel: "Поставить привычку",
-      });
-    }
-  }
+  // Habit / mantra: catalog-only via inline picker — no invent from day move.
 
   if (!input.occupied.goal) {
     const goalTitle = clean(input.dayGoal) || clean(input.promiseSuggestion) || primary || growth;
@@ -163,7 +115,7 @@ export function makeYoursOccupiedFromProgress(
   for (const kind of kinds) {
     if (kind === "habit") occupied.habit = true;
     if (kind === "ascetic") occupied.ascetic = true;
-    if (kind === "practice") occupied.practice = true;
+    // practice progress is tracked on the Practice step, not Make yours.
   }
   if (extras?.goal) occupied.goal = true;
   if (extras?.affirmation) occupied.affirmation = true;

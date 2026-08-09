@@ -17,7 +17,7 @@ function stubContract(partial: Partial<TodayContractV1["day_story"]> & { primary
 }
 
 describe("buildMakeYoursProposals", () => {
-  it("proposes practice from practice_recommendation when empty", () => {
+  it("does not propose practice (practices have their own step)", () => {
     const proposals = buildMakeYoursProposals({
       contract: stubContract({
         practice_recommendation: {
@@ -25,22 +25,42 @@ describe("buildMakeYoursProposals", () => {
           text: "Дыхание 4-7-8",
           reason: "Снизить темп",
         },
+        do: ["Сделай паузу в 15 минут"],
+        today_move: "Сделай паузу в 15 минут",
       }),
       occupied: {},
     });
-    expect(proposals.find((p) => p.categoryId === "practice")?.title).toBe("Дыхание 4-7-8");
+    expect(proposals.some((p) => (p as { categoryId: string }).categoryId === "practice")).toBe(
+      false,
+    );
+    expect(proposals.some((p) => p.categoryId === "habit")).toBe(false);
+    expect(proposals.some((p) => p.categoryId === "affirmation")).toBe(false);
   });
 
-  it("skips occupied practice and does not invent mantra", () => {
+  it("proposes ascetic from practice_recommendation when empty", () => {
+    const proposals = buildMakeYoursProposals({
+      contract: stubContract({
+        practice_recommendation: {
+          kind: "ascetic",
+          text: "Без сахара",
+          reason: "Снять шум",
+        },
+      }),
+      occupied: {},
+    });
+    expect(proposals.find((p) => p.categoryId === "ascetic")?.title).toBe("Без сахара");
+  });
+
+  it("does not invent mantra or habit from day move", () => {
     const proposals = buildMakeYoursProposals({
       contract: stubContract({
         do: ["Короткая прогулка"],
-        practice_recommendation: { kind: "practice", text: "Йога", reason: null },
+        today_move: "Короткая прогулка",
       }),
-      occupied: { practice: true, habit: true },
+      occupied: {},
     });
-    expect(proposals.some((p) => p.categoryId === "practice")).toBe(false);
     expect(proposals.some((p) => p.categoryId === "mantra")).toBe(false);
+    expect(proposals.some((p) => p.categoryId === "habit")).toBe(false);
   });
 
   it("proposes goal from dayGoal without inventing when signals empty", () => {
@@ -60,10 +80,9 @@ describe("buildMakeYoursProposals", () => {
 });
 
 describe("makeYoursOccupiedFromProgress", () => {
-  it("maps progress kinds and extras", () => {
+  it("maps habit/ascetic and extras; ignores practice kind for Make yours", () => {
     expect(makeYoursOccupiedFromProgress(["habit", "practice"], { goal: true })).toEqual({
       habit: true,
-      practice: true,
       goal: true,
     });
   });

@@ -4,7 +4,7 @@
  */
 "use client";
 
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import {
@@ -164,64 +164,71 @@ export function TodayGreetingFrame({
 }) {
   const showGlass = moodPills.length > 0 || Boolean(reasonLine) || activityTags.length > 0;
   return (
-    <div className={styles.greetingOnAtmosphere} data-testid="today-frame-greeting" data-frame-art="atmosphere">
-      <div className={styles.greetingStack} data-story-block="greeting-hero">
-        <div className={styles.greetingCopy}>
-          <DsEyebrow>{salutation}</DsEyebrow>
-          <DsDisplayTitle as="h2" size="md" className={styles.greetingHeadlineDs}>
-            {loading ? copy.loadingDay : headline || "Сегодня — твой день"}
-          </DsDisplayTitle>
-          <DsBody size="sm" tone="secondary">
-            {dateLabel}
-          </DsBody>
-        </div>
+    <div
+      className={immersiveClass("photo", styles.frame)}
+      data-testid="today-frame-greeting"
+      data-frame-art="greeting"
+    >
+      <ImmersiveArtPlane role="greeting" testId="today-frame-art-greeting" />
+      <div className={styles.immersiveContent}>
+        <div className={styles.greetingStack} data-story-block="greeting-hero">
+          <div className={styles.greetingCopy}>
+            <DsEyebrow onDark>{salutation}</DsEyebrow>
+            <DsDisplayTitle as="h2" size="md" className={styles.greetingHeadlineOnArt}>
+              {loading ? copy.loadingDay : headline || "Сегодня — твой день"}
+            </DsDisplayTitle>
+            <DsBody size="sm" onDark>
+              {dateLabel}
+            </DsBody>
+          </div>
 
-        {showGlass ? (
-          <DsGlassCard testId="today-welcome-glass" className={styles.welcomeGlassDs}>
-            {(moodPills.length > 0 || reasonLine) && (
-              <div className={styles.welcomeGlassTop}>
-                <span className={styles.welcomeMoon} aria-hidden>
-                  ◐
-                </span>
-                <div className={styles.welcomeGlassMain}>
-                  {moodPills.length > 0 ? (
-                    <DsChipGroup
-                      options={moodPills.map((label) => ({ label }))}
-                      variant="solid"
-                      columns={3}
-                      testId="today-welcome-moods"
-                    />
-                  ) : null}
-                  {reasonLine ? (
-                    <DsBody size="sm" className={styles.welcomeReasonDs}>
-                      <span data-testid="today-welcome-reason">{reasonLine}</span>
-                    </DsBody>
-                  ) : null}
+          {showGlass ? (
+            <DsGlassCard testId="today-welcome-glass" className={styles.welcomeGlassDs}>
+              {(moodPills.length > 0 || reasonLine) && (
+                <div className={styles.welcomeGlassTop}>
+                  <span className={styles.welcomeMoon} aria-hidden>
+                    ◐
+                  </span>
+                  <div className={styles.welcomeGlassMain}>
+                    {moodPills.length > 0 ? (
+                      <DsChipGroup
+                        options={moodPills.map((label) => ({ label }))}
+                        variant="solid"
+                        columns={3}
+                        testId="today-welcome-moods"
+                      />
+                    ) : null}
+                    {reasonLine ? (
+                      <DsBody size="sm" className={styles.welcomeReasonDs}>
+                        <span data-testid="today-welcome-reason">{reasonLine}</span>
+                      </DsBody>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-            )}
-            {activityTags.length > 0 ? (
-              <div className={styles.welcomeTagRow}>
-                <DsChipGroup
-                  options={activityTags.map((label) => ({ label }))}
-                  variant="outline"
-                  columns={3}
-                  testId="today-welcome-tags"
-                />
-              </div>
-            ) : null}
-          </DsGlassCard>
-        ) : null}
+              )}
+              {activityTags.length > 0 ? (
+                <div className={styles.welcomeTagRow}>
+                  <DsChipGroup
+                    options={activityTags.map((label) => ({ label }))}
+                    variant="outline"
+                    columns={3}
+                    testId="today-welcome-tags"
+                  />
+                </div>
+              ) : null}
+            </DsGlassCard>
+          ) : null}
 
-        <button type="button" className={styles.startCtaOnAtmosphere} data-testid="today-greeting-start" onClick={onStart}>
-          <span className={styles.startArrow} aria-hidden>
-            →
-          </span>
-          <span className={styles.startCtaText}>
-            <span className={styles.startCtaLabelOnAtmosphere}>Начать день</span>
-            <span className={styles.startHintOnAtmosphere}>{startHint}</span>
-          </span>
-        </button>
+          <button type="button" className={styles.startCtaOnArt} data-testid="today-greeting-start" onClick={onStart}>
+            <span className={styles.startArrow} aria-hidden>
+              →
+            </span>
+            <span className={styles.startCtaText}>
+              <span className={styles.startCtaLabelOnArt}>Начать день</span>
+              <span className={styles.startHintOnArt}>{startHint}</span>
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -234,6 +241,7 @@ export function TodayEnergyFlowFrame({
   onGoNext,
   nextTitle = copy.storyNext.symbols,
   nextHint = copy.storyNext.symbolsHint,
+  active = true,
 }: {
   energyLine: string | null;
   energyCause: string | null;
@@ -241,32 +249,30 @@ export function TodayEnergyFlowFrame({
   onGoNext: () => void;
   nextTitle?: string;
   nextHint?: string;
+  /** Only fetch day-flow when this ScreenFlow step is active. */
+  active?: boolean;
 }) {
   const energy = (energyLine || "").trim() || null;
   const cause = (energyCause || "").trim() || null;
+  // Handoff hybrid: Поток дня sits on Day Atmosphere — no ImmersiveArtPlane energy photo.
   return (
-    <div
-      className={immersiveClass("energy", styles.frame)}
-      data-testid="today-frame-energy-flow"
-      data-frame-art="energy"
-    >
-      <ImmersiveArtPlane role="energy" testId="today-frame-art-energy" />
-      <div className={`${styles.immersiveContent} ${styles.storyScroll}`} data-story-scroll="pane">
+    <div className={styles.frame} data-testid="today-frame-energy-flow" data-frame-art="atmosphere">
+      <div className={styles.storyScroll} data-story-scroll="pane">
         <section className={`${styles.storyPane} ${styles.storyPaneLift}`} data-story-block="energy-hero">
           <div className={styles.storyPaneBody}>
             <div className={styles.centerStack}>
-              <p className={styles.eyebrowOnArt}>{copy.pulseLabel}</p>
+              <p className={styles.eyebrow}>{copy.pulseLabel}</p>
               {energy ? (
-                <h2 className={styles.energyPrimaryOnArt} data-testid="today-glance-energy-text">
+                <h2 className={styles.energyPrimary} data-testid="today-glance-energy-text">
                   {energy}
                 </h2>
               ) : (
-                <p className={styles.mutedOnArt} data-testid="today-energy-empty">
+                <p className={styles.muted} data-testid="today-energy-empty">
                   Энергия дня сегодня без отдельной формулировки.
                 </p>
               )}
               {cause ? (
-                <p className={styles.detailOnArt} data-testid="today-glance-energy-cause">
+                <p className={styles.detail} data-testid="today-glance-energy-cause">
                   {cause}
                 </p>
               ) : null}
@@ -283,9 +289,9 @@ export function TodayEnergyFlowFrame({
           <div className={styles.storyPaneBody}>
             <div className={styles.flowBlock}>
               <header className={styles.flowHeader}>
-                <p className={styles.eyebrowOnArt}>Поток дня</p>
+                <p className={styles.eyebrow}>Поток дня</p>
               </header>
-              <TodayStoryDayFlowPane dateISO={dateISO} />
+              <TodayStoryDayFlowPane dateISO={dateISO} active={active} />
             </div>
           </div>
           <StoryNextAnchor title={nextTitle} hint={nextHint} onNext={onGoNext} />
@@ -295,13 +301,15 @@ export function TodayEnergyFlowFrame({
   );
 }
 
-function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
+function TodayStoryDayFlowPane({ dateISO, active = true }: { dateISO: string; active?: boolean }) {
   const [windows, setWindows] = useState<GlanceTimelineItem[] | null>(null);
   const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [reloadNonce, setReloadNonce] = useState(0);
+  const autoRetried = useRef(false);
 
   useEffect(() => {
+    if (!active) return;
     let cancelled = false;
     setLoaded(false);
     setFailure(null);
@@ -316,12 +324,19 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
           setWindows(data.glance_timeline ?? []);
         }
         setLoaded(true);
+        autoRetried.current = false;
       })
       .catch((err: unknown) => {
         if (cancelled) return;
         const kind = todaySlotFailureFromError(err);
         if (kind == null) {
-          // Abort / remount — keep loading until a live attempt settles.
+          return;
+        }
+        // One silent retry after cold timeout / flaky transport before painting failure.
+        if (!autoRetried.current && (kind === "unavailable" || kind === "no_connection")) {
+          autoRetried.current = true;
+          clearDayFactsCache();
+          setReloadNonce((n) => n + 1);
           return;
         }
         setFailure(kind);
@@ -331,7 +346,11 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
     return () => {
       cancelled = true;
     };
-  }, [dateISO, reloadNonce]);
+  }, [dateISO, reloadNonce, active]);
+
+  useEffect(() => {
+    autoRetried.current = false;
+  }, [dateISO]);
 
   useEffect(() => {
     const onAuth = () => {
@@ -344,17 +363,17 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
 
   if (!loaded) {
     return (
-      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-loading="true" aria-busy />
+      <div className={styles.flowPane} data-testid="today-story-day-flow" data-loading="true" aria-busy />
     );
   }
 
   if (failure === "no_connection") {
     return (
-      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-failure="no_connection" role="status">
-        <p className={styles.flowFail}>{todaySlotFailureCopy("no_connection")}</p>
+      <div className={styles.flowPane} data-testid="today-story-day-flow" data-failure="no_connection" role="status">
+        <p className={styles.flowFailInk}>{todaySlotFailureCopy("no_connection")}</p>
         <button
           type="button"
-          className={styles.flowRetry}
+          className={styles.flowRetryInk}
           data-testid="today-day-flow-retry"
           onClick={() => {
             clearDayFactsCache();
@@ -369,11 +388,11 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
 
   if (failure === "unavailable") {
     return (
-      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-failure="unavailable" role="status">
-        <p className={styles.flowFail}>{todaySlotFailureCopy("unavailable")}</p>
+      <div className={styles.flowPane} data-testid="today-story-day-flow" data-failure="unavailable" role="status">
+        <p className={styles.flowFailInk}>{todaySlotFailureCopy("unavailable")}</p>
         <button
           type="button"
-          className={styles.flowRetry}
+          className={styles.flowRetryInk}
           data-testid="today-day-flow-retry"
           onClick={() => {
             clearDayFactsCache();
@@ -386,12 +405,12 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
     );
   }
 
-  // Pure glance_timeline only — no invented Утро/Вечер/Ночь (WAVE2 §4).
+  // Pure glance_timeline only — bookends УТРО/ВЕЧЕР are chrome labels (WAVE2 §4).
   // Empty windows → empty UI (no invented “no windows” prose).
   const points = buildStoryDayFlow({ glanceWindows: windows });
   if (points.length === 0) {
     return (
-      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-empty="true" role="status" />
+      <div className={styles.flowPane} data-testid="today-story-day-flow" data-empty="true" role="status" />
     );
   }
 
@@ -410,7 +429,7 @@ function StoryDayFlowList({ points }: { points: StoryDayFlowPoint[] }) {
         </div>
         <div className={styles.dayFlowCopy}>
           <div className={styles.dayFlowHeadRow}>
-            <p className={styles.dayFlowPhase}>Утро</p>
+            <p className={styles.dayFlowPhase}>УТРО</p>
             <span className={styles.dayFlowCue}>Старт</span>
           </div>
         </div>
@@ -474,7 +493,7 @@ function StoryDayFlowList({ points }: { points: StoryDayFlowPoint[] }) {
         </div>
         <div className={styles.dayFlowCopy}>
           <div className={styles.dayFlowHeadRow}>
-            <p className={styles.dayFlowPhase}>Вечер</p>
+            <p className={styles.dayFlowPhase}>ВЕЧЕР</p>
             <span className={styles.dayFlowCue}>итог</span>
           </div>
         </div>
@@ -796,13 +815,25 @@ export function TodayCloseFrame({
   tapResponse,
   onTapRecorded,
   onOpenEvening,
+  dayPromise = null,
+  onPickOutcome,
 }: {
   contract: TodayContractV1;
   dateISO: string;
   tapResponse?: TapResponseCode | null;
   onTapRecorded?: (response: TapResponseCode) => void;
   onOpenEvening: () => void;
+  dayPromise?: string | null;
+  /** Inline handoff outcomes → continuity / ritual_feedback path. */
+  onPickOutcome?: (outcome: "done" | "partial" | "not_done") => void;
 }) {
+  const [outcome, setOutcome] = useState<"done" | "partial" | "not_done" | null>(null);
+  const outcomes: { id: "done" | "partial" | "not_done"; label: string }[] = [
+    { id: "done", label: "Получилось" },
+    { id: "partial", label: "Частично" },
+    { id: "not_done", label: "Не получилось" },
+  ];
+
   return (
     <div
       className={`${styles.frame} ${styles.storyScroll}`}
@@ -815,6 +846,29 @@ export function TodayCloseFrame({
         data-testid="today-slot-tap-wrap"
       >
         <div className={styles.storyPaneBody}>
+          {dayPromise ? (
+            <p className={styles.detail} data-testid="today-close-promise-line">
+              {dayPromise}
+            </p>
+          ) : null}
+          {onPickOutcome ? (
+            <div className={styles.closeOutcomes} data-testid="today-close-outcomes">
+              {outcomes.map((row) => (
+                <button
+                  key={row.id}
+                  type="button"
+                  className={outcome === row.id ? styles.closeOutcomeActive : styles.closeOutcome}
+                  data-testid={`today-close-outcome-${row.id}`}
+                  onClick={() => {
+                    setOutcome(row.id);
+                    onPickOutcome(row.id);
+                  }}
+                >
+                  {row.label}
+                </button>
+              ))}
+            </div>
+          ) : null}
           <div className={styles.responseWrap}>
             <TodayTapWidget
               contract={contract}

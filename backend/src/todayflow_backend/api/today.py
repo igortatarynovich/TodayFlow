@@ -772,6 +772,43 @@ class TodayContractDayAtmosphereV1(BaseModel):
     time_phase: str = "day"
 
 
+class TodayContractWelcomeGlassV1(BaseModel):
+    """Handoff welcome glass — mood tags / lunar reason / do[] chips (Wave B1)."""
+
+    mood_tags: list[str] = Field(default_factory=list)
+    reason: str | None = None
+    good_for: list[str] = Field(default_factory=list)
+
+
+class TodayContractProgressRowV1(BaseModel):
+    """One growth tracker row — not story progress nest."""
+
+    id: str
+    kind: str = Field(description="habit | ascetic | practice")
+    kind_label: str
+    name: str
+    streak_days: int = 0
+    days_bool: list[bool] = Field(default_factory=list)
+
+
+class TodayContractTodayProgressV1(BaseModel):
+    """Unified habit/ascetic/practice DTO (Wave B1) — distinct from story `progress`."""
+
+    rows: list[TodayContractProgressRowV1] = Field(default_factory=list)
+
+
+class TodayContractColorGuideV1(BaseModel):
+    """Color-of-day guide rows for FE — fill-empty from scenario/talisman/catalog."""
+
+    name: str
+    intensity: str | None = None
+    clothing: str | None = None
+    accessory: str | None = None
+    amount: str | None = None
+    avoid: str | None = None
+    avoid_why: str | None = None
+
+
 class TodayContractV1Response(BaseModel):
     """P0.1 — Model B wire contract; legacy Today fields are not exposed."""
 
@@ -785,6 +822,9 @@ class TodayContractV1Response(BaseModel):
     day_story: TodayContractDayStoryV1 | None = None
     day_atmosphere: TodayContractDayAtmosphereV1 | None = None
     depth_layer: TodayContractDepthLayerV1 | None = None
+    welcome_glass: TodayContractWelcomeGlassV1 | None = None
+    today_progress: TodayContractTodayProgressV1 | None = None
+    color_guide: TodayContractColorGuideV1 | None = None
 
 
 def _attach_depth_layer_offer(contract: dict[str, Any], *, user: User, db, locale: str) -> dict[str, Any]:
@@ -854,9 +894,22 @@ async def get_today_contract(
         target_date=target_date_obj,
         closed=bool(dc_for_lifecycle and dc_for_lifecycle.evening_completed),
     )
+    def _finalize_contract(raw: dict[str, Any], *, morning_obj: Any | None = None) -> TodayContractV1Response:
+        from todayflow_backend.services.today_contract_nests_b1_v1 import attach_b1_nests_to_contract
+
+        with_depth = _attach_depth_layer_offer(raw, user=user, db=db, locale=locale)
+        with_nests = attach_b1_nests_to_contract(
+            with_depth,
+            morning=morning_obj,
+            db=db,
+            user=user,
+            target_date=target_date_obj,
+        )
+        return TodayContractV1Response(**with_nests)
+
     if day_lifecycle.get("status") == DAY_STATUS_NOT_READY:
         shell = build_day_not_ready_contract(lifecycle=day_lifecycle, locale=locale)
-        return TodayContractV1Response(**_attach_depth_layer_offer(shell, user=user, db=db, locale=locale))
+        return _finalize_contract(shell)
 
     morning = await get_morning_ritual_cached(
         request=request,
@@ -906,9 +959,7 @@ async def get_today_contract(
                     enqueue_exc,
                 )
             shell = build_day_assembling_contract(lifecycle=day_lifecycle, locale=locale)
-            return TodayContractV1Response(
-                **_attach_depth_layer_offer(shell, user=user, db=db, locale=locale)
-            )
+            return _finalize_contract(shell, morning_obj=morning)
         logger.error("GET /today/contract assembly failed: %s", exc)
         raise HTTPException(status_code=500, detail="today_contract_v1 assembly failed") from exc
 
@@ -920,9 +971,7 @@ async def get_today_contract(
     except Exception:
         pass
     _ = gen_log_id
-    return TodayContractV1Response(
-        **_attach_depth_layer_offer(contract, user=user, db=db, locale=locale)
-    )
+    return _finalize_contract(contract, morning_obj=morning)
 
 
 class TodayStoryRefreshPayload(BaseModel):

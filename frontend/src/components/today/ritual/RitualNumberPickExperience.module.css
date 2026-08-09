@@ -91,6 +91,14 @@
   animation-delay: calc(var(--ni, 0) * 55ms);
 }
 
+.numBtn[data-blank="true"] {
+  font-size: 0;
+  color: transparent;
+  background: color-mix(in srgb, var(--tf-ds-glass-surface, #fffaf4) 92%, #e8d4b8);
+  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 45%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 4px 12px rgba(90, 52, 44, 0.08);
+}
+
 @keyframes numPopIn {
   to {
     opacity: 1;

@@ -33,16 +33,16 @@ describe("todaySlotAvailability", () => {
     expect(todaySlotFailureFromError(new TypeError("Failed to fetch"))).toBe("no_connection");
   });
 
-  it("maps client timeouts to no_connection (not silent abort)", () => {
+  it("maps client timeouts to unavailable (slow assemble ≠ lost connection)", () => {
     expect(
       todaySlotFailureFromError(new DOMException("Request timed out.", "TimeoutError")),
-    ).toBe("no_connection");
+    ).toBe("unavailable");
     expect(
       todaySlotFailureFromError(new ApiError("Request timed out.", 0, "/today/day-facts")),
-    ).toBe("no_connection");
+    ).toBe("unavailable");
     expect(
       todaySlotFailureFromError(new DOMException("Request timed out.", "AbortError")),
-    ).toBe("no_connection");
+    ).toBe("unavailable");
   });
 
   it("ignores remount AbortError so callers do not paint false no_connection", () => {

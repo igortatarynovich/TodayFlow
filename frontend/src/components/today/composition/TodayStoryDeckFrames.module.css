@@ -430,6 +430,39 @@
   margin: 0;
 }
 
+.greetingHeadlineOnArt {
+  max-width: 16ch;
+  margin: 0;
+  color: rgba(255, 248, 240, 0.96);
+}
+
+.startCtaOnArt {
+  margin-top: var(--tf-ds-space-2);
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--tf-ds-space-3);
+  padding: var(--tf-ds-space-1) 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: rgba(255, 248, 240, 0.96);
+}
+
+.startCtaLabelOnArt {
+  font-size: var(--tf-type-body-md, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: rgba(255, 248, 240, 0.96);
+}
+
+.startHintOnArt {
+  font-size: var(--tf-type-caption, 0.75rem);
+  color: rgba(255, 248, 240, 0.68);
+}
+
 .welcomeGlassDs {
   width: 100%;
 }
@@ -688,6 +721,59 @@
 
 .flowBlock {
   text-align: left;
+}
+
+.flowPane {
+  margin-top: 0.15rem;
+  padding: 0.35rem 0.15rem;
+  color: var(--tf-ink, #2a2520);
+}
+
+.closeOutcomes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.65rem 0 0.85rem;
+}
+
+.closeOutcome,
+.closeOutcomeActive {
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--tf-ds-border-ink, rgba(60, 45, 30, 0.16));
+  background: var(--tf-ds-glass-surface, rgba(255, 252, 248, 0.92));
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.closeOutcomeActive {
+  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 70%, transparent);
+  background: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 18%, #fff);
+}
+
+.flowFailInk {
+  margin: 0;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
+.flowRetryInk {
+  display: block;
+  margin: 0.55rem auto 0;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--tf-ds-border-ink, rgba(60, 45, 30, 0.2));
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tf-ink, #2a2520);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
 }
 
 .flowOnArt {

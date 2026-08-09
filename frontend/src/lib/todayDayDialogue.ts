@@ -97,6 +97,18 @@ export const TODAY_FOCUS_TOPICS: TodayFocusTopic[] = [
   { id: "other", label: "Другое" },
 ];
 
+/** Handoff Priority — 6 two-line cards (label + sub). Ids stay in TODAY_FOCUS_TOPICS. */
+export type TodayFocusPriorityCard = TodayFocusTopic & { sub: string };
+
+export const TODAY_FOCUS_PRIORITY_CARDS: TodayFocusPriorityCard[] = [
+  { id: "work", label: "Работа", sub: "Одно решение и проверка" },
+  { id: "money", label: "Деньги", sub: "Риск, цифра, выбор" },
+  { id: "relations", label: "Отношения", sub: "Формулировка и граница" },
+  { id: "family", label: "Семья", sub: "Близкий круг сегодня" },
+  { id: "health", label: "Тело", sub: "Энергия и восстановление" },
+  { id: "growth", label: "Рост", sub: "Один ясный шаг к себе" },
+];
+
 /** Legacy static chips — do not surface in production UI (empty affirmation formulas). */
 export const TODAY_PROMISE_SUGGESTIONS: TodayPromiseSuggestion[] = [];
 

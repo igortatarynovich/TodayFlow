@@ -27,6 +27,7 @@ import type { CoreProfile } from "@/lib/types";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayDepthLayerSection } from "@/components/today/composition/TodayDepthLayerSection";
+import { pickTodayDepthMenu } from "@/lib/todayDepthMenuToday";
 import { TodayPracticeGiftBlock } from "@/components/today/composition/TodayPracticeGiftBlock";
 import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
@@ -517,7 +518,10 @@ export function TodayPersonalizedProductSection({
         contract.depth_layer.menu.length > 0 ? (
           <TodayDepthLayerSection
             dateISO={dateISO}
-            depthLayer={contract.depth_layer}
+            depthLayer={{
+              ...contract.depth_layer,
+              menu: pickTodayDepthMenu(contract.depth_layer.menu, contract),
+            }}
             preferredTopic={preferredDepthTopic}
             autoPickPreferred={autoPickDepthTopic}
           />

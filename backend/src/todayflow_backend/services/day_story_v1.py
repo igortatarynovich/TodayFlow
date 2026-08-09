@@ -1054,6 +1054,17 @@ def day_story_to_today_contract_v1(
         atmosphere = day_atmosphere_from_story(story)
         if atmosphere is not None:
             contract["day_atmosphere"] = atmosphere
+    # Wave B1 presentation nests (welcome_glass / color_guide). today_progress needs auth db.
+    try:
+        from todayflow_backend.services.today_contract_nests_b1_v1 import (
+            attach_color_guide_to_contract,
+            attach_welcome_glass_to_contract,
+        )
+
+        attach_welcome_glass_to_contract(contract, morning=None)
+        attach_color_guide_to_contract(contract, target_date=None)
+    except Exception:
+        pass
     if unavailable:
         # Shell only — do not invent domain meaning; skip quality-gate fallback fill.
         return contract

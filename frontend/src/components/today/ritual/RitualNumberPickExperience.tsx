@@ -34,7 +34,8 @@ type Props = {
   alreadyConfirmed?: boolean;
 };
 
-const NUMBER_TILE_SYMBOLS = ["✦", "○", "●", "◇", "◆", "✧"] as const;
+/** Handoff closed state: 9 unlabeled circular slots (ritual gesture, not a real pick). */
+const RING_SLOT_COUNT = 9;
 
 function vibrate(pattern: number | number[], allow: boolean) {
   if (!allow) return;
@@ -61,7 +62,7 @@ export function RitualNumberPickExperience({
   numberTitle = null,
   numberMeaning = null,
   daySupport = null,
-  tileMode = "digit",
+  tileMode: _tileMode = "digit",
   reduceMotion,
   onRevealRequest,
   onComplete,
@@ -230,23 +231,23 @@ export function RitualNumberPickExperience({
   return (
     <div className={styles.wrap} data-testid="ritual-number-pick-flower" data-reduce={reduceMotion ? "true" : undefined}>
       <div className={styles.flower} aria-hidden />
-      <div className={styles.ring}>
-        {[1, 2, 3, 4, 5, 6].map((n, i) => {
-          const ang = -Math.PI / 2 + (i * Math.PI * 2) / 6;
+      <div className={styles.ring} data-slots={RING_SLOT_COUNT}>
+        {Array.from({ length: RING_SLOT_COUNT }, (_, i) => {
+          const ang = -Math.PI / 2 + (i * Math.PI * 2) / RING_SLOT_COUNT;
           const x = CX + R * Math.cos(ang) - 23;
           const y = CY + R * Math.sin(ang) - 23;
           return (
             <button
-              key={n}
+              key={i}
               type="button"
               className={styles.numBtn}
+              data-blank="true"
               style={{ left: x, top: y, "--ni": i } as CSSProperties}
               onClick={onPick}
               disabled={resolving}
               aria-busy={resolving || undefined}
-            >
-              {tileMode === "symbol" ? NUMBER_TILE_SYMBOLS[i] : n}
-            </button>
+              aria-label="Открыть число дня"
+            />
           );
         })}
       </div>

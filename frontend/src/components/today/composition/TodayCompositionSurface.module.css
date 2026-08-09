@@ -2079,6 +2079,100 @@
   margin-top: 0.75rem;
 }
 
+.priorityCardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+.priorityCard,
+.priorityCardActive {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  text-align: left;
+  padding: 0.75rem 0.85rem;
+  min-height: 4.25rem;
+  border-radius: 16px;
+  border: 1px solid var(--tdp-border, rgba(60, 45, 30, 0.16));
+  background: var(--tf-ds-glass-surface, rgba(255, 252, 248, 0.92));
+  color: var(--tdp-ink, #2a2520);
+  font: inherit;
+  cursor: pointer;
+}
+
+.priorityCardActive {
+  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 70%, transparent);
+  box-shadow: 0 8px 18px rgba(105, 76, 38, 0.08);
+}
+
+.priorityCardLabel {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.priorityCardSub {
+  font-size: 0.78rem;
+  line-height: 1.35;
+  opacity: 0.72;
+}
+
+.focusTwoCards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0.65rem 0 0.85rem;
+}
+
+.focusTwoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: left;
+}
+
+.focusTwoCardEyebrow {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.focusTwoCardBody {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.closeOutcomeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.75rem 0 0.35rem;
+}
+
+.closeOutcomeChip,
+.closeOutcomeChipActive {
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--tdp-border, rgba(60, 45, 30, 0.16));
+  background: var(--tf-ds-glass-surface, rgba(255, 252, 248, 0.92));
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.closeOutcomeChipActive {
+  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 70%, transparent);
+  background: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 18%, #fff);
+}
+
 .promiseGrid {
   display: flex;
   flex-direction: column;

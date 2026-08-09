@@ -2,7 +2,7 @@
 
 import {
   TODAY_DAY_DIALOGUE_COPY,
-  TODAY_FOCUS_TOPICS,
+  TODAY_FOCUS_PRIORITY_CARDS,
   TODAY_MORNING_MOODS,
   shouldAskMorningFocus,
   shouldAskMorningMood,
@@ -25,7 +25,7 @@ type Props = {
 
 /**
  * Morning dialogue: focus first (day lens), mood second (writes mood_selected / PIM).
- * Mood is demoted — never competes with pulse / card / number for first viewport attention.
+ * Priority = 6 two-line cards (handoff). Mood demoted below.
  */
 export function TodayDayDialogueMorning({
   dateISO,
@@ -48,19 +48,22 @@ export function TodayDayDialogueMorning({
       {askFocus ? (
         <div className={styles.dialogueBlock}>
           <h2 className={styles.dialogueTitle}>{TODAY_DAY_DIALOGUE_COPY.focusTitle}</h2>
-          <div className={styles.focusGrid} role="group" aria-label="Главный фокус">
-            {TODAY_FOCUS_TOPICS.map((t) => (
+          <div className={styles.priorityCardGrid} role="group" aria-label="Главный фокус">
+            {TODAY_FOCUS_PRIORITY_CARDS.map((t) => (
               <button
                 key={t.id}
                 type="button"
                 className={
-                  focusTopicId === t.id ? `${styles.focusChip} ${styles.focusChipActive}` : styles.focusChip
+                  focusTopicId === t.id
+                    ? `${styles.priorityCard} ${styles.priorityCardActive}`
+                    : styles.priorityCard
                 }
                 data-testid={`today-focus-${t.id}`}
                 data-selected={focusTopicId === t.id ? "true" : "false"}
                 onClick={() => onSelectFocus(t.id)}
               >
-                {t.label}
+                <span className={styles.priorityCardLabel}>{t.label}</span>
+                <span className={styles.priorityCardSub}>{t.sub}</span>
               </button>
             ))}
           </div>

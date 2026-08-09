@@ -6,11 +6,24 @@
 
 ---
 
+## 0. Frame → background (handoff hybrid)
+
+| ScreenFlow step | Background |
+|-----------------|------------|
+| Welcome | `ImmersiveArtPlane` photo (`role=greeting`) + glass on photo |
+| Priority · Promise · Make yours | Day Atmosphere wash only |
+| Поток дня (energy + timeline) | Day Atmosphere wash only — **no** energy photo plane |
+| Number · Card · Color · Focus · Recap · Close | Day Atmosphere wash only |
+| Practice gift | `ImmersiveArtPlane` photo (`role=practice`) |
+
+Atmosphere tokens (`--day-*` / ink / glass) apply on **all** steps. Handoff SoT: `docs/design/design_handoff_today_flow/README.md`.
+
+---
+
 ## 1. Priority (product note)
 
-Handoff prototype step «Приоритет» = **6 two-line cards** (label + sub-label, 2-col, single-select).  
-Live product = **`TODAY_FOCUS_TOPICS`** (8 single-line chips) in morning dialogue — SoT for focus id remains engagement `focusTopicId` + meaning `head_topic_selected`.  
-Layout upgrade to 6 two-line cards is **FE-only** and optional; meaning contract unchanged.
+Handoff = **6 two-line cards** (label + sub-label, 2-col, single-select) from a closed map of `TODAY_FOCUS_TOPICS`.  
+SoT for focus id remains engagement `focusTopicId` + meaning `head_topic_selected`. Layout = FE presentation.
 
 ---
 
@@ -27,7 +40,7 @@ UI: 2 mood pills · 1 reason line · ≤3 activity («good for») chips · CTA.
 
 **Not used as SoT for glass:** vibe_strokes, interpretive_chorus prose (those feed energy/plot frames). Chorus may later feed reason **only** if lunar empty — product decision TBD; current rule = lunar-only for reason.
 
-**Backend gap (P0, tracked):** optional nest `welcome_glass: { mood_tags, reason, good_for }` on `/today/contract` so FE stops mapping. Until then FE compose above is SoT.
+**Backend (P0, shipped):** nest `welcome_glass: { mood_tags, reason, good_for }` on `/today/contract`. FE compose above remains until FE reads the nest.
 
 ---
 
@@ -43,28 +56,29 @@ UI: 2 mood pills · 1 reason line · ≤3 activity («good for») chips · CTA.
 
 **Not yet in progressRows:** affirmations, mantras, weekly goals — shown as **propose** cards on Make yours until they have streak/history SoT equivalent.
 
-**Backend gap (P0):** unified `today_progress` DTO (3–6 rows + `bool[7]`) — FE composer remains until that ships.
+**Backend (P0, shipped):** unified `today_progress: { rows: [{ id, kind, kind_label, name, streak_days, days_bool[7] }] }` on `/today/contract` (distinct from story `progress`). FE composer remains until FE reads the nest.
 
 ---
 
 ## 4. Make yours — product rules
 
-Categories (user): **практики · аскезы · аффирмации · мантры · привычки · цели**.
+Categories on this step: **аскезы · аффирмации · мантры · привычки · цели**.  
+**Практики сюда не входят** — у них свой ScreenFlow-шаг / страница `/practices`.
 
 1. **If user already has** an active entity in that family → show it in **Твой прогресс** (tracker) when streak/dots exist; otherwise show as «стоит» row without inventing history.
-2. **If missing** → **propose set/create** from day + user signals (table below). CTA deep-links existing create/catalog surfaces — no fake entities.
-3. Day promise stays on **Promise** step; Make yours may mirror a goal propose from the same day signals.
+2. **If missing** → **inline pick from real catalogs on this step** (habits/goals templates · `/practices/asceticisms` · `/practices/affirmations` · `/reference/mantras`). CTA may still deep-link calendar/library; **do not** send the user away just to choose.
+3. **Never invent** affirmation/habit body from the same `day_story.do` / `today_move` line (that produced duplicate cards). Day `practice_recommendation` may label an ascetic/affirmation propose only when kind matches.
+4. Day promise stays on **Promise** step; Make yours may mirror a goal propose from the same day signals.
 
-| Empty slot | Propose from (existing only) | Action |
-|------------|------------------------------|--------|
-| Practice | `day_story.practice_recommendation` if kind practice · else `/practices/current` title | Link `/practices` or gift practice step |
-| Ascetic | `practice_recommendation` kind ascetic · else ascetic catalog filters | Link `/tracking/calendar?create=ascetic` or Practices ascetics |
-| Affirmation | `practice_recommendation` kind affirmation · text | Link `/affirmations` or Практика XOR slot |
-| Mantra | Skip invent; link `/affirmations` / reference mantras only if API returns rows | Link catalog |
-| Habit | Soft title from `today_move` / first `do` / habit templates — **as propose label**, create via wizard | `?create=habit` / calendar wizard |
-| Goal | `buildTodayPromiseSuggestions` / `primary_action` / weekly-goal templates | Promise step or `/tracking/calendar?create=goal` |
+| Empty slot | Propose / pick from | Action on this step |
+|------------|---------------------|---------------------|
+| Ascetic | `practice_recommendation` kind ascetic · else `/practices/asceticisms` | Inline list → `POST /tracking/ascetic-contracts` |
+| Affirmation | `practice_recommendation` kind affirmation · else `/practices/affirmations` | Inline list → `POST /tracking/progress` |
+| Mantra | `/reference/mantras` only (no invent) | Inline list · no fake tracker SoT yet |
+| Habit | Habit template catalog only (not day move prose) | Inline list → `POST /habits` |
+| Goal | Promise / `primary_action` / goal templates | Inline list → `POST /tracking/weekly-goals` |
 
-Honest empty: if no signal and no entity → short links to Практики / Календарь without invented calm rows or mechanism labels («Предложить из дня» и т.п. — запрещены).
+Honest empty: if no signal and no entity → short links to Календарь / Аффирмации without invented calm rows or mechanism labels.
 
 ---
 

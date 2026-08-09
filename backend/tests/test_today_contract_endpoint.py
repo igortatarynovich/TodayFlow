@@ -118,10 +118,39 @@ def test_get_today_contract_has_no_legacy_keys(client: TestClient):
     top_keys = set(body.keys())
     assert not top_keys & _FORBIDDEN_TOP_KEYS
 
-    body_without_day_story = {k: v for k, v in body.items() if k != "day_story"}
+    # Wave B1 nests may include nested "reason" under welcome_glass — exclude from legacy scan.
+    body_without_day_story = {
+        k: v for k, v in body.items() if k not in {"day_story", "welcome_glass"}
+    }
     serialized = json.dumps(body_without_day_story, ensure_ascii=False).lower()
     for forbidden in ("todayheadline", "todaydetail", '"insight"', '"watch"', '"reason"', '"spheres"'):
         assert forbidden not in serialized
+
+
+def test_get_today_contract_includes_b1_nests(client: TestClient):
+    headers = _auth_headers(client)
+    response = client.get("/today/contract", headers=headers)
+    assert response.status_code == 200, response.text
+    body = response.json()
+
+    glass = body.get("welcome_glass")
+    assert isinstance(glass, dict)
+    assert isinstance(glass.get("mood_tags"), list)
+    assert "reason" in glass
+    assert isinstance(glass.get("good_for"), list)
+
+    progress = body.get("today_progress")
+    assert isinstance(progress, dict)
+    assert isinstance(progress.get("rows"), list)
+    for row in progress["rows"]:
+        assert row.get("kind") in {"habit", "ascetic", "practice"}
+        assert isinstance(row.get("days_bool"), list)
+        assert len(row["days_bool"]) == 7
+
+    # color_guide may be null when day has no color name yet
+    assert "color_guide" in body
+    if body["color_guide"] is not None:
+        assert body["color_guide"].get("name")
 
 
 def test_get_today_contract_rejects_invalid_target_date(client: TestClient):

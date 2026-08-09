@@ -108,6 +108,7 @@ import {
 } from "@/lib/tarotDeepenEvents";
 import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
 import { DsButton, DsRitualGate, DsRitualGateSection } from "@/design-system";
+import { DsGlassCard } from "@/design-system/patterns/DsRitual";
 import { DsTextField } from "@/design-system/primitives/DsForm";
 import { joinClass } from "@/design-system/utils/joinClass";
 import ds from "@/design-system/primitives/dsPrimitives.module.css";
@@ -121,6 +122,8 @@ import {
   markHabitCompletedToday,
   type TodayProgressRow,
 } from "@/lib/todayGrowthTrackers";
+import { shiftDateISO } from "@/lib/moodMapModel";
+import { resolveTodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import { canOfferFocusDeepen, resolveFocusDeepenTarget } from "@/lib/todayFocusDeepen";
 import { formatRitualTarotPersonalToday, pickRitualHookLine } from "@/lib/ritualRevealCopy";
 import { buildHandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
@@ -129,6 +132,7 @@ import {
   buildMakeYoursProposals,
   makeYoursOccupiedFromProgress,
 } from "@/lib/todayMakeYoursProposals";
+import { pickTodayDepthMenu } from "@/lib/todayDepthMenuToday";
 
 type Props = {
   variant?: TodayCompositionVariant;
@@ -1197,6 +1201,14 @@ export function TodayCompositionSurface(props: Props) {
   const energyCauseDisplay = glanceEnergy?.cause || null;
 
   const welcomeGlass = useMemo(() => {
+    const nest = props.contract.welcome_glass;
+    if (nest && (nest.mood_tags?.length || nest.reason || nest.good_for?.length)) {
+      return {
+        moodPills: (nest.mood_tags ?? []).slice(0, 2),
+        reasonLine: nest.reason?.trim() || null,
+        activityTags: (nest.good_for ?? []).slice(0, 3),
+      };
+    }
     const lunarRaw = props.morningRitualData?.celestial_events?.lunar_phase as
       | { name?: string; themes?: string; guidance?: string; phase_name?: string }
       | undefined;
@@ -1214,11 +1226,41 @@ export function TodayCompositionSurface(props: Props) {
     });
   }, [props.contract, props.morningRitualData]);
 
+  const progressRowsFromContract = useMemo((): TodayProgressRow[] | null => {
+    const nest = props.contract.today_progress;
+    if (!nest || !Array.isArray(nest.rows) || nest.rows.length === 0) return null;
+    return nest.rows.map((row) => {
+      const daysBool = Array.isArray(row.days_bool) ? row.days_bool.slice(0, 7) : [];
+      while (daysBool.length < 7) daysBool.push(false);
+      const window = daysBool.map((completed, i) => ({
+        dateISO: shiftDateISO(dateISO, i - (daysBool.length - 1)),
+        completed: Boolean(completed),
+        isFuture: false,
+      }));
+      return {
+        id: row.id,
+        kind: (row.kind === "ascetic" || row.kind === "practice" ? row.kind : "habit") as TodayProgressRow["kind"],
+        kindLabel: row.kind_label || row.kind,
+        name: row.name,
+        streakDays: Number(row.streak_days) || 0,
+        days: window,
+      };
+    });
+  }, [props.contract.today_progress, dateISO]);
+
   const depthMenuTopics = useMemo(() => {
     const menu = props.contract.depth_layer?.menu;
     if (!Array.isArray(menu)) return [] as string[];
     return menu.map((row) => String(row.topic || "").trim()).filter(Boolean);
   }, [props.contract.depth_layer?.menu]);
+
+  const todayDepthLayerForFocus = useMemo(() => {
+    const layer = props.contract.depth_layer;
+    if (!layer || !Array.isArray(layer.menu) || layer.menu.length === 0) return null;
+    const menu = pickTodayDepthMenu(layer.menu, props.contract);
+    if (!menu.length) return null;
+    return { ...layer, menu };
+  }, [props.contract]);
 
   const showFocusDeepenCta = canOfferFocusDeepen({
     hasReading: useProductPersonalized,
@@ -1314,13 +1356,13 @@ export function TodayCompositionSurface(props: Props) {
   const makeYoursOccupied = useMemo(
     () =>
       makeYoursOccupiedFromProgress(
-        progressRows.map((r) => r.kind),
+        (progressRowsFromContract ?? progressRows).map((r) => r.kind),
         {
           // Goal slot mirrors Promise until weekly-goal streak SoT exists.
           goal: Boolean(engagement.dayGoal?.trim()),
         },
       ),
-    [progressRows, engagement.dayGoal],
+    [progressRowsFromContract, progressRows, engagement.dayGoal],
   );
 
   const makeYoursProposals = useMemo(
@@ -1819,15 +1861,50 @@ export function TodayCompositionSurface(props: Props) {
     </div>
   );
 
+  const displayProgressRows = progressRowsFromContract ?? progressRows;
+
   const handoffMakeYoursBody = (
     <TodayMakeYoursBlock
-      progressRows={progressRows}
+      dateISO={dateISO}
+      progressRows={displayProgressRows}
       proposals={makeYoursProposals}
       occupiedCategoryIds={Object.keys(makeYoursOccupied).filter(
         (id) => makeYoursOccupied[id as keyof typeof makeYoursOccupied],
       )}
+      onChanged={() => void refreshGrowthTrackers()}
     />
   );
+
+  const handoffColorGuide =
+    (() => {
+      const nest = props.contract.color_guide;
+      if (nest?.name) {
+        return resolveTodayDayColorGuide({
+          name: nest.name,
+          scenario: {
+            name: nest.name,
+            intensity: nest.intensity,
+            clothing: nest.clothing,
+            accessory: nest.accessory,
+            benefit: nest.intensity,
+            note: null,
+            avoidColor: nest.avoid,
+            avoidWhy: nest.avoid_why,
+          },
+          api: nest.amount
+            ? {
+                name: nest.name,
+                amount_ru: nest.amount,
+                clothing_ru: nest.clothing ?? undefined,
+                accessory_ru: nest.accessory ?? undefined,
+                avoid_color_ru: nest.avoid ?? undefined,
+                avoid_why_ru: nest.avoid_why ?? undefined,
+              }
+            : null,
+        });
+      }
+      return story.colorGuide;
+    })();
 
   const handoffPracticeBody =
     supportSlot === "practice" && practiceTool ? (
@@ -1843,8 +1920,8 @@ export function TodayCompositionSurface(props: Props) {
       />
     ) : null;
 
-  const handoffColorBody = story.colorGuide ? (
-    <TodayDayColorGuideSection guide={story.colorGuide} />
+  const handoffColorBody = handoffColorGuide ? (
+    <TodayDayColorGuideSection guide={handoffColorGuide} />
   ) : (
     <p className={styles.actionsLead}>Сегодня без отдельного цвета.</p>
   );
@@ -1856,26 +1933,24 @@ export function TodayCompositionSurface(props: Props) {
           {glanceDailyFocus.title}
         </p>
       ) : null}
-      {glanceDailyFocus?.prioritize ? (
-        <p className={styles.actionsLead} data-testid="today-handoff-focus-prioritize">
-          {glanceDailyFocus.prioritize.length > 110
-            ? `${glanceDailyFocus.prioritize.slice(0, 107)}…`
-            : glanceDailyFocus.prioritize}
-        </p>
-      ) : null}
-      {glanceDailyFocus?.avoid ? (
-        <p className={styles.actionsLead} data-testid="today-handoff-focus-avoid">
-          {glanceDailyFocus.avoid.length > 90
-            ? `${glanceDailyFocus.avoid.slice(0, 87)}…`
-            : glanceDailyFocus.avoid}
-        </p>
-      ) : null}
-      {props.contract.depth_layer &&
-      Array.isArray(props.contract.depth_layer.menu) &&
-      props.contract.depth_layer.menu.length > 0 ? (
+      <div className={styles.focusTwoCards}>
+        {glanceDailyFocus?.prioritize ? (
+          <DsGlassCard className={styles.focusTwoCard} testId="today-handoff-focus-prioritize">
+            <p className={styles.focusTwoCardEyebrow}>В приоритете</p>
+            <p className={styles.focusTwoCardBody}>{glanceDailyFocus.prioritize}</p>
+          </DsGlassCard>
+        ) : null}
+        {glanceDailyFocus?.avoid ? (
+          <DsGlassCard className={styles.focusTwoCard} testId="today-handoff-focus-avoid">
+            <p className={styles.focusTwoCardEyebrow}>Лучше избегать</p>
+            <p className={styles.focusTwoCardBody}>{glanceDailyFocus.avoid}</p>
+          </DsGlassCard>
+        ) : null}
+      </div>
+      {todayDepthLayerForFocus ? (
         <TodayDepthLayerSection
           dateISO={dateISO}
-          depthLayer={props.contract.depth_layer}
+          depthLayer={todayDepthLayerForFocus}
           preferredTopic={preferredDepthTopic}
           autoPickPreferred={false}
           isActive={screenFlowIndex === todayHandoffIndices(showSymbolsAct).focus}
@@ -2074,7 +2149,7 @@ export function TodayCompositionSurface(props: Props) {
       energyLine={energyLineDisplay}
       energyCause={energyCauseDisplay}
       themeLoading={themeLoading}
-      colorGuide={story.colorGuide}
+      colorGuide={handoffColorGuide}
       moveDo={moveIfThen?.do ?? null}
       moveAvoid={moveIfThen?.avoid ?? null}
       plotSlot={plotNarrativeSection}
@@ -2107,6 +2182,8 @@ export function TodayCompositionSurface(props: Props) {
       tapResponse={engagement.tapResponse}
       onTapRecorded={(response) => persistEngagement({ tapResponse: response })}
       onOpenEvening={onOpenEvening}
+      dayPromise={engagement.dayGoal}
+      onCloseOutcome={(outcome) => onSubmitEveningClose(outcome, null, "")}
       activeIndex={screenFlowIndex}
       onIndexChange={onScreenFlowIndexChange}
       embeddedInWebDashboard={embeddedInWebDashboard}
@@ -2302,12 +2379,10 @@ export function TodayCompositionSurface(props: Props) {
         {!useProductFoundation &&
         !useProductPersonalized &&
         !isDayNotReady(props.contract) &&
-        props.contract.depth_layer &&
-        Array.isArray(props.contract.depth_layer.menu) &&
-        props.contract.depth_layer.menu.length > 0 ? (
+        todayDepthLayerForFocus ? (
           <TodayDepthLayerSection
             dateISO={dateISO}
-            depthLayer={props.contract.depth_layer}
+            depthLayer={todayDepthLayerForFocus}
             guideGenerationId={props.guideGenerationId ?? null}
             preferredTopic={preferredDepthTopic}
             autoPickPreferred={autoPickDepthTopic}

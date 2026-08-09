@@ -17,30 +17,43 @@ type Props = {
   isActive?: boolean;
 };
 
-function formatDeepenPayload(payload: Record<string, unknown> | null | undefined): string {
+/** Short deepen: title + one why line — not the full LLM sheet. */
+function formatDeepenBrief(payload: Record<string, unknown> | null | undefined): string {
   if (!payload) return "";
   const title = narrativeString(payload.title);
   const body = narrativeString(payload.body);
   const bullets = narrativeStringArray(payload.bullets, []);
   const closing = narrativeString(payload.closing_line);
+
+  const why =
+    (body ? firstSentences(body, 2) : null) ||
+    (bullets[0] ? firstSentences(bullets[0], 1) : null) ||
+    (closing ? firstSentences(closing, 1) : null);
+
   const chunks: string[] = [];
   if (title) chunks.push(title);
-  if (body) chunks.push(body);
-  if (bullets.length) chunks.push(bullets.map((b) => `• ${b}`).join("\n"));
-  if (closing) chunks.push(closing);
+  if (why && why !== title) chunks.push(why);
   return chunks.join("\n\n").trim();
+}
+
+function firstSentences(text: string, max: number): string {
+  const cleaned = text.replace(/\s+/g, " ").trim();
+  if (!cleaned) return "";
+  const parts = cleaned.split(/(?<=[.!?…])\s+/).filter(Boolean);
+  const take = parts.slice(0, Math.max(1, max)).join(" ");
+  if (take.length <= 280) return take;
+  return `${take.slice(0, 277).trimEnd()}…`;
 }
 
 function shortLabel(label: string, value?: string | null): string {
   const base = label.replace(/\s+/g, " ").trim();
   if (!value) return base.length > 42 ? `${base.slice(0, 40)}…` : base;
-  // Prefer short chip: label only (value opens in overlay).
   const head = base.split(/[—–-]/)[0]?.trim() || base;
   return head.length > 28 ? `${head.slice(0, 26)}…` : head;
 }
 
 /**
- * Depth topics as compact chips; detail opens as overlay (1 screen = 1 theme).
+ * Depth topics as compact chips; detail opens as a short panel (not a second essay).
  */
 export function TodayDepthLayerSection({
   dateISO,
@@ -53,7 +66,7 @@ export function TodayDepthLayerSection({
   const menu = Array.isArray(depthLayer.menu) ? depthLayer.menu : [];
   const canGenerate = Boolean(depthLayer.can_generate);
   const [activeTopic, setActiveTopic] = useState<TodayDepthTopicId | null>(null);
-  const [overlayOpen, setOverlayOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [resultText, setResultText] = useState<string | null>(null);
   const [isCta, setIsCta] = useState(false);
@@ -62,7 +75,7 @@ export function TodayDepthLayerSection({
   const onPick = useCallback(
     async (topic: TodayDepthTopicId) => {
       setActiveTopic(topic);
-      setOverlayOpen(true);
+      setPanelOpen(true);
       setLoading(true);
       setResultText(null);
       setIsCta(false);
@@ -74,7 +87,7 @@ export function TodayDepthLayerSection({
             deepen_topic: topic,
             parent_generation_id: guideGenerationId ?? undefined,
           },
-          { force: true },
+          { force: false },
         );
         const meta = r.payload?.depth_layer;
         const access =
@@ -82,7 +95,7 @@ export function TodayDepthLayerSection({
             ? String((meta as { access?: unknown }).access || "")
             : "";
         setIsCta(access === "cta" || !canGenerate);
-        const text = formatDeepenPayload(r.payload);
+        const text = formatDeepenBrief(r.payload);
         setResultText(
           text ||
             (canGenerate
@@ -110,17 +123,8 @@ export function TodayDepthLayerSection({
   }, [autoPickPreferred, preferredTopic, menu, onPick]);
 
   useEffect(() => {
-    if (!overlayOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOverlayOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [overlayOpen]);
-
-  useEffect(() => {
     if (!isActive) {
-      setOverlayOpen(false);
+      setPanelOpen(false);
       setLoading(false);
     }
   }, [isActive]);
@@ -137,7 +141,7 @@ export function TodayDepthLayerSection({
       <div className={styles.chips} role="list">
         {menu.map((row) => {
           const topic = row.topic as TodayDepthTopicId;
-          const selected = activeTopic === topic && overlayOpen;
+          const selected = activeTopic === topic && panelOpen;
           return (
             <button
               key={topic}
@@ -154,49 +158,35 @@ export function TodayDepthLayerSection({
         })}
       </div>
 
-      {overlayOpen ? (
-        <div
-          className={styles.overlay}
-          role="dialog"
-          aria-modal="true"
-          aria-label={activeLabel || "Разбор"}
-          data-testid="today-depth-layer-overlay"
-        >
-          <button
-            type="button"
-            className={styles.overlayScrim}
-            aria-label="Закрыть"
-            onClick={() => setOverlayOpen(false)}
-          />
-          <div className={styles.overlayPanel}>
-            <div className={styles.overlayHead}>
-              <p className={styles.overlayTitle}>{activeLabel}</p>
-              <button
-                type="button"
-                className={styles.overlayClose}
-                onClick={() => setOverlayOpen(false)}
-              >
-                Закрыть
-              </button>
-            </div>
-            {loading ? <p className={styles.status}>…</p> : null}
-            {resultText ? (
-              <div
-                className={isCta ? styles.resultCta : styles.result}
-                data-testid="today-depth-layer-result"
-              >
-                <p className={styles.resultBody}>{resultText}</p>
-                {isCta ? (
-                  <Link
-                    href={depthLayer.subscribe_path || "/account/subscriptions"}
-                    className={styles.subscribeLink}
-                  >
-                    Подписка и trial
-                  </Link>
-                ) : null}
-              </div>
-            ) : null}
+      {panelOpen ? (
+        <div className={styles.briefPanel} data-testid="today-depth-layer-overlay">
+          <div className={styles.briefHead}>
+            <p className={styles.overlayTitle}>{activeLabel}</p>
+            <button
+              type="button"
+              className={styles.overlayClose}
+              onClick={() => setPanelOpen(false)}
+            >
+              Закрыть
+            </button>
           </div>
+          {loading ? <p className={styles.status}>…</p> : null}
+          {resultText ? (
+            <div
+              className={isCta ? styles.resultCta : styles.result}
+              data-testid="today-depth-layer-result"
+            >
+              <p className={styles.resultBody}>{resultText}</p>
+              {isCta ? (
+                <Link
+                  href={depthLayer.subscribe_path || "/account/subscriptions"}
+                  className={styles.subscribeLink}
+                >
+                  Подписка и trial
+                </Link>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       ) : null}
     </section>

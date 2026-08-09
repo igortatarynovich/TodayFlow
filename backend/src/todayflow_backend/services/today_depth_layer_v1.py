@@ -28,8 +28,9 @@ DEPTH_LAYER_TOPICS: tuple[str, ...] = (
     "full_day",
 )
 
-# First ship menu (chips). full_day stays API-valid but not a chip.
-DEPTH_LAYER_MENU_V1: tuple[str, ...] = ("money", "intimacy", "love", "career")
+# First ship catalog (chips available to rank). full_day stays API-valid but not a chip.
+# Presentation filters to today's strongest/weakest — FE `pickTodayDepthMenu`.
+DEPTH_LAYER_MENU_V1: tuple[str, ...] = ("money", "intimacy", "love", "career", "family")
 
 
 def normalize_depth_topic(raw: str | None) -> str:

@@ -44,7 +44,7 @@ export function todaySlotFailureFromError(error: unknown): TodaySlotLoadFailure 
   // fetchDayFacts aborts with TimeoutError / "Request timed out." — that is a
   // visible failure. isRequestAborted() also matches those; check timeout first
   // or the pane stays data-loading forever.
-  if (isTimeoutLike(error)) return "no_connection";
+  if (isTimeoutLike(error)) return "unavailable";
   if (isRequestAborted(error)) return null;
   if (error instanceof ApiError) {
     if (error.status === 0) return "no_connection";

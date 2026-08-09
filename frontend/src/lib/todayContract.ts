@@ -711,6 +711,40 @@ export type DayAtmosphereContractWire = {
   time_phase?: string;
 };
 
+/** Wave B1 — welcome glass nest (mood / lunar reason / do chips). */
+export type TodayContractWelcomeGlassV1 = {
+  mood_tags: string[];
+  reason: string | null;
+  good_for: string[];
+};
+
+export type TodayContractProgressKind = "habit" | "ascetic" | "practice";
+
+/** Wave B1 — unified growth rows; do not confuse with story `progress`. */
+export type TodayContractTodayProgressRowV1 = {
+  id: string;
+  kind: TodayContractProgressKind | string;
+  kind_label: string;
+  name: string;
+  streak_days: number;
+  days_bool: boolean[];
+};
+
+export type TodayContractTodayProgressV1 = {
+  rows: TodayContractTodayProgressRowV1[];
+};
+
+/** Wave B1 — color guide rows for FE (fill-empty from scenario/talisman/catalog). */
+export type TodayContractColorGuideV1 = {
+  name: string;
+  intensity?: string | null;
+  clothing?: string | null;
+  accessory?: string | null;
+  amount?: string | null;
+  avoid?: string | null;
+  avoid_why?: string | null;
+};
+
 export type TodayContractV1 = {
   contract_version: typeof TODAY_CONTRACT_V1 | string;
   global_context: { period: string };
@@ -723,6 +757,9 @@ export type TodayContractV1 = {
   /** Closed Day Atmosphere config from BE (FOUNDATION_UI §11–§12). */
   day_atmosphere?: DayAtmosphereContractWire | null;
   depth_layer?: TodayContractDepthLayerV1 | null;
+  welcome_glass?: TodayContractWelcomeGlassV1 | null;
+  today_progress?: TodayContractTodayProgressV1 | null;
+  color_guide?: TodayContractColorGuideV1 | null;
 };
 
 export const DAY_ATMOSPHERE_ENGINE_EVENT = "todayflow:day-atmosphere";

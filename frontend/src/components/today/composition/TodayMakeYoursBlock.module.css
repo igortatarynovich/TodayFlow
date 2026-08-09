@@ -4,6 +4,55 @@
   gap: 1rem;
 }
 
+.accordionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.accordionCard,
+.accordionOpen {
+  border-radius: 16px;
+  border: 1px solid var(--tf-ds-border-ink, rgba(60, 45, 30, 0.16));
+  background: var(--tf-ds-glass-surface, rgba(255, 252, 248, 0.92));
+  overflow: hidden;
+}
+
+.accordionOpen {
+  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 55%, transparent);
+}
+
+.accordionHead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  width: 100%;
+  padding: 0.85rem 0.95rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.accordionTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.accordionSub {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  opacity: 0.72;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .proposeList {
   display: flex;
   flex-direction: column;
@@ -44,6 +93,108 @@
 }
 
 .empty a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.pickPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.75rem 0.15rem 0.25rem;
+}
+
+.pickLead {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.pickHint {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  opacity: 0.78;
+}
+
+.pickStatus {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.pickList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.pickItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 0.15rem 0.65rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 0.8rem;
+  border-radius: 14px;
+  border: 1px solid var(--tf-ds-border-ink, rgba(60, 45, 30, 0.16));
+  background: var(--tf-ds-glass-surface, rgba(255, 252, 248, 0.92));
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.pickItem:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.pickTitle {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.pickMeta {
+  grid-column: 1;
+  grid-row: 2;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  opacity: 0.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pickCta {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+.pickCancel {
+  align-self: flex-start;
+  margin-top: 0.15rem;
+  padding: 0.35rem 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 2px;
 }

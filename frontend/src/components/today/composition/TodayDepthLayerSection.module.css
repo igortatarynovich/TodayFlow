@@ -94,6 +94,23 @@
   margin-bottom: 0.75rem;
 }
 
+.briefPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.75rem 0.85rem 0.9rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--tf-border, #e8e2d6) 90%, transparent);
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.briefHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .overlayTitle {
   margin: 0;
   font-family: var(--tf-font-display, "Instrument Serif", Georgia, serif);

@@ -4,16 +4,27 @@ Last updated: 2026-08-09
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (CODE, 2026-08-09):** **Make yours + Welcome/Progress SoT** — canon `docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md`; `TodayMakeYoursBlock` (6 categories · tracker · day proposes); welcome activity tags from `day_story.do` → morning priorities; Priority = product chips (handoff 6 two-line = optional FE); Number/Card = live ring/deck. Backend `welcome_glass` + `today_progress` DTO still open.
+**DONE (CODE, 2026-08-09):** **Wave B1 P0 nests on `/today/contract`** — `welcome_glass` · `today_progress` · `color_guide`. Canon: `docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md`.
+
+## Architecture impact — Wave B1 contract nests (2026-08-09)
+
+- **SoT before:** Welcome glass = FE `buildHandoffWelcomeGlass`; progress tracker = FE `loadTodayGrowthTrackers` (N endpoints); color guide = FE `resolveTodayDayColorGuide` from morning/scenario.
+- **SoT after:** BE nests on GET `/today/contract`: `welcome_glass` (visual_mode map + lunar reason + `do[]` ≤18), `today_progress.rows[]` (habit|ascetic|practice + `days_bool[7]` — **not** story `progress`), `color_guide` (props.color / talisman / catalog fill-empty). FE may compose until wired; no invent.
+- **Public contract changed?** yes — additive optional top-level nests `welcome_glass`, `today_progress`, `color_guide`
+- **Migration required?** no — optional fields; old clients ignore
+- **Canon updated?** yes — tracker + `TODAY_MAKE_YOURS_AND_WELCOME_SOT.md` backend gap closed
+- **Backward compatible?** yes
+
+**DONE (CODE, 2026-08-09):** **Today handoff → 100% (F1+B1+F2)** — hybrid bg (Welcome+Practice photo; Atmosphere elsewhere); ScreenFlow 3-cluster dots + frame arrows + swipe 60; Priority 6 two-line; Make yours accordion (no practice); Focus two glass cards; Close inline outcomes; Number 9 blank ring; FE prefers `welcome_glass` / `today_progress` / `color_guide`. Handoff: `docs/design/design_handoff_today_flow/`.
 
 ## Architecture impact — Make yours / Welcome signal map (2026-08-09)
 
 - **SoT before:** Make yours = progress-only or empty copy; welcome activity tags = morning priorities only (ad-hoc); progress = FE `loadTodayGrowthTrackers` undocumented.
-- **SoT after:** Make yours = occupied → tracker · empty → propose from contract signals only (no invent mantra); welcome activity = do[] then priorities; progress composer documented as interim SoT until BE DTO.
-- **Public contract changed?** no (compose only)
+- **SoT after:** Make yours = occupied → tracker · empty → **inline catalog pick** (no practice; no invent from `do`/`today_move`); welcome activity = do[] then priorities; greeting art = ImmersiveArtPlane `greeting` photo; Focus deepen menu = `pickTodayDepthMenu` from day scenes (catalog includes family); Поток дня timeout maps to «Не удалось загрузить.» not false «Нет соединения.»
+- **Public contract changed?** additive catalog chip `family` in `depth_layer.menu` (BE); FE filters chips by day magnitude
 - **Migration required?** no
 - **Canon updated?** yes — `docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md` · SCENARIO_V3 Make yours row
-- **Backward compatible?** yes
+- **Backward compatible?** yes — extra menu topic; clients that dump all chips still work
 
 **IN PROGRESS (CODE, 2026-08-09):** **DS Ritual port from docs/design handoff** — `--tf-ds-glass-*` tokens; `DsGlassCard` / `DsChipGroup` / `DsHabitStreakRow` / `DsMoodBackground`; Welcome + progress on DS (Day Atmosphere SoT, no private welcome hex). Continue pixel-pass remaining handoff steps off page CSS.
 

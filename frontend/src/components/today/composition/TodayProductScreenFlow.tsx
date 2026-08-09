@@ -73,6 +73,8 @@ export type TodayProductScreenFlowProps = {
   tapResponse?: TapResponseCode | null;
   onTapRecorded?: (response: TapResponseCode) => void;
   onOpenEvening: () => void;
+  dayPromise?: string | null;
+  onCloseOutcome?: (outcome: "done" | "partial" | "not_done") => void;
   activeIndex: number;
   onIndexChange: (index: number, meta: { reason: ScreenFlowChangeReason }) => void;
   embeddedInWebDashboard?: boolean;
@@ -222,6 +224,8 @@ export function TodayProductScreenFlow({
   tapResponse = null,
   onTapRecorded,
   onOpenEvening,
+  dayPromise = null,
+  onCloseOutcome,
   activeIndex,
   onIndexChange,
   embeddedInWebDashboard = false,
@@ -231,6 +235,9 @@ export function TodayProductScreenFlow({
   const go = (index: number) => onIndexChange(index, { reason: "select" });
   const idx = todayHandoffIndices(showSymbols);
   const showChrome = activeIndex > 0;
+  // Handoff: Welcome excluded from dots; clusters = setup · story · end.
+  // With symbols: 3 + 6 + 2; without number/card: 3 + 4 + 2.
+  const handoffDotClusters = showSymbols ? [3, 6, 2] : [3, 4, 2];
 
   useEffect(() => {
     if (!dateISO) return;
@@ -252,6 +259,9 @@ export function TodayProductScreenFlow({
         onIndexChange={onIndexChange}
         axis={TODAY_SCREEN_FLOW_AXIS}
         showChrome={showChrome}
+        showFrameArrows={showChrome}
+        dotStartIndex={1}
+        dotClusters={showPersonalized ? handoffDotClusters : undefined}
         className={joinClass(flowStyles.screenFlowStory, sfStyles.storyBleed)}
         testId="today-screen-flow"
       >
@@ -312,6 +322,7 @@ export function TodayProductScreenFlow({
                 energyLine={energyLine}
                 energyCause={energyCause}
                 dateISO={dateISO}
+                active={activeIndex === idx.dayFlow}
                 onGoNext={() => go(showSymbols ? idx.number : idx.color)}
                 nextTitle={showSymbols ? copy.storyNext.number : copy.storyNext.color}
                 nextHint={showSymbols ? copy.storyNext.numberHint : copy.storyNext.colorHint}
@@ -428,6 +439,8 @@ export function TodayProductScreenFlow({
                 tapResponse={tapResponse}
                 onTapRecorded={onTapRecorded}
                 onOpenEvening={onOpenEvening}
+                dayPromise={dayPromise}
+                onPickOutcome={onCloseOutcome}
               />
             </ScreenFlowStep>
           </>
