@@ -23,7 +23,7 @@ describe("buildTodayPromiseSuggestions", () => {
     expect(suggestions).toEqual([]);
   });
 
-  it("prefers today_move then primary then growth then do items", () => {
+  it("prefers today_move XOR primary, then growth then do items", () => {
     const suggestions = buildTodayPromiseSuggestions({
       todayMove: "Одна ясная линия до обеда",
       primaryAction: "Закрой задачу",
@@ -31,11 +31,15 @@ describe("buildTodayPromiseSuggestions", () => {
       doItems: ["Напиши список", "Сделай паузу", "Позвони другу"],
     });
 
-    expect(suggestions.map((s) => s.id)).toEqual([
-      "today_move",
-      "contract_primary",
-      "development",
-      "do_0",
-    ]);
+    expect(suggestions.map((s) => s.id)).toEqual(["today_move", "development", "do_0"]);
+    expect(suggestions.some((s) => s.id === "contract_primary")).toBe(false);
+  });
+
+  it("fuzzy-dedupes near-identical lines", () => {
+    const suggestions = buildTodayPromiseSuggestions({
+      todayMove: "Сделай паузу в 15 минут без телефона",
+      doItems: ["Сделай паузу в 15 минут без телефона и задач"],
+    });
+    expect(suggestions).toHaveLength(1);
   });
 });

@@ -10,7 +10,7 @@ import { TodayDayContinuityEveningClose } from "@/components/today/experience/To
 import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
-import { TodayProductScreenFlow, todayScreenFlowAttributesIndex, todayScreenFlowPracticeIndex, todayScreenFlowReadingIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
+import { TodayProductScreenFlow, todayHandoffIndices, todayScreenFlowAttributesIndex, todayScreenFlowPracticeIndex, todayScreenFlowReadingIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import {
   resolveScreenFlowEntryIndex,
@@ -83,6 +83,7 @@ import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStory
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayPracticeGiftBlock } from "@/components/today/composition/TodayPracticeGiftBlock";
 import { TodayMakeYoursBlock } from "@/components/today/composition/TodayMakeYoursBlock";
+import { TodayRecapAchievements } from "@/components/today/composition/TodayRecapAchievements";
 import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
 import { StoryBlockCue, StoryNextAnchor } from "@/components/today/composition/TodayStoryDeckFrames";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
@@ -92,7 +93,7 @@ import { buildGlanceEnergyFromChorus } from "@/lib/todayGlanceEnergy";
 import { buildPlotConflictNarrative, buildPlotStoryBeats } from "@/lib/todayPlotNarrative";
 import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
 import { TodayDepthLayerSection } from "@/components/today/composition/TodayDepthLayerSection";
-import { buildTodayPromiseSuggestions, isLowEnergyMood } from "@/lib/todayDayDialogue";
+import { buildTodayPromiseSuggestions, focusTopicLabel, isLowEnergyMood, shouldAskMorningFocus, shouldAskMorningMood } from "@/lib/todayDayDialogue";
 import {
   buildInterpretationConfirmPayload,
   type InterpretationResonance,
@@ -919,10 +920,8 @@ export function TodayCompositionSurface(props: Props) {
     persistEngagement({ tarotPickedId: id, tarotPickedName: drawn?.nameRu ?? props.cardName });
     setTarotPendingId(null);
     setRitualPickOpen(null);
-    if (!engagement.numberConfirmed) {
-      setRitualPickOpen("number");
-    }
-  }, [anchorTarotId, dateISO, engagement.numberConfirmed, engagement.tarotPickedId, persistEngagement, props.cardName, tarotPendingId]);
+    // ScreenFlow order is Number → Card; do not reopen number after card.
+  }, [anchorTarotId, dateISO, engagement.tarotPickedId, persistEngagement, props.cardName, tarotPendingId]);
 
   const onNumberComplete = useCallback(() => {
     persistEngagement({ numberConfirmed: true });
@@ -1047,6 +1046,8 @@ export function TodayCompositionSurface(props: Props) {
       setPracticeCompleting(true);
       await postJson(`/practices/${recommendedPractice.id}/complete`, {});
       persistEngagement({ practiceCompleted: true });
+      const trackers = await loadTodayGrowthTrackers(dateISO);
+      setProgressRows(trackers.progressRows);
       trackMeaningEvent({
         event_type: "practice_completed",
         event_source: "today",
@@ -1089,9 +1090,8 @@ export function TodayCompositionSurface(props: Props) {
         refreshRings: false,
       });
       if (recommendedPractice?.id) {
-        void onPracticeAction();
         if (typeof window !== "undefined") {
-          window.location.assign(`/practices/${recommendedPractice.id}?run=1`);
+          window.location.assign(`/practices/${recommendedPractice.id}`);
         }
         return;
       }
@@ -1413,39 +1413,56 @@ export function TodayCompositionSurface(props: Props) {
     );
   }
 
-  const morningDialogue = (
-    <TodayDayDialogueMorning
-      dateISO={dateISO}
-      morningMoodId={engagement.morningMoodId}
-      morningMoodCapturedAtMs={engagement.morningMoodCapturedAtMs}
-      focusTopicId={engagement.focusTopicId}
-      focusTopicCapturedAtMs={engagement.focusTopicCapturedAtMs}
-      showDeepenCta={showFocusDeepenCta}
-      onDeepenTopic={showFocusDeepenCta ? onFocusDeepen : undefined}
-      onSelectMood={(id) => {
-        persistEngagement({ morningMoodId: id, morningMoodCapturedAtMs: Date.now() });
-        clearCompactUserModelCache(dateISO);
-        trackMeaningEvent({
-          event_type: "mood_selected",
-          event_source: "today",
-          local_date: dateISO,
-          payload: { mood_id: id, surface: "today_day_dialogue_v1" },
-          refreshRings: false,
-        });
-      }}
-      onSelectFocus={(id) => {
-        persistEngagement({ focusTopicId: id, focusTopicCapturedAtMs: Date.now() });
-        clearCompactUserModelCache(dateISO);
-        trackMeaningEvent({
-          event_type: "head_topic_selected",
-          event_source: "today",
-          local_date: dateISO,
-          payload: { topic_id: id, head_topic: id, surface: "today_day_dialogue_v1" },
-          refreshRings: false,
-        });
-      }}
-    />
-  );
+  const askMorningFocus = shouldAskMorningFocus({
+    dateISO,
+    focusTopicId: engagement.focusTopicId,
+    focusTopicCapturedAtMs: engagement.focusTopicCapturedAtMs,
+  });
+  const askMorningMood = shouldAskMorningMood({
+    dateISO,
+    morningMoodId: engagement.morningMoodId,
+    morningMoodCapturedAtMs: engagement.morningMoodCapturedAtMs,
+  });
+  const morningDialogue =
+    askMorningFocus || askMorningMood ? (
+      <TodayDayDialogueMorning
+        dateISO={dateISO}
+        morningMoodId={engagement.morningMoodId}
+        morningMoodCapturedAtMs={engagement.morningMoodCapturedAtMs}
+        focusTopicId={engagement.focusTopicId}
+        focusTopicCapturedAtMs={engagement.focusTopicCapturedAtMs}
+        showDeepenCta={false}
+        onSelectMood={(id) => {
+          persistEngagement({ morningMoodId: id, morningMoodCapturedAtMs: Date.now() });
+          clearCompactUserModelCache(dateISO);
+          trackMeaningEvent({
+            event_type: "mood_selected",
+            event_source: "today",
+            local_date: dateISO,
+            payload: { mood_id: id, surface: "today_day_dialogue_v1" },
+            refreshRings: false,
+          });
+        }}
+        onSelectFocus={(id) => {
+          persistEngagement({ focusTopicId: id, focusTopicCapturedAtMs: Date.now() });
+          clearCompactUserModelCache(dateISO);
+          trackMeaningEvent({
+            event_type: "head_topic_selected",
+            event_source: "today",
+            local_date: dateISO,
+            payload: { topic_id: id, head_topic: id, surface: "today_day_dialogue_v1" },
+            refreshRings: false,
+          });
+          if (useProductPersonalized) {
+            setScreenFlowIndex(todayHandoffIndices(showSymbolsAct).promise);
+          }
+        }}
+      />
+    ) : focusTopicLabel(engagement.focusTopicId) ? (
+      <p className={styles.promiseChosen} data-testid="today-priority-chosen">
+        {focusTopicLabel(engagement.focusTopicId)}
+      </p>
+    ) : null;
 
   const greetingParts = splitSalutation(story.greeting.salutation);
   // Glance expect/trap only when personalized narrative is not showing the same slots.
@@ -1678,14 +1695,12 @@ export function TodayCompositionSurface(props: Props) {
       startAtGrid
       allowSkipAnimation={false}
       gridSize={12}
-      gridLead={RITUAL_COPY.experiencePickCardEyebrow}
-      gridSub={RITUAL_COPY.experienceTarotGridSub}
     />
   );
 
   const numberPickExperience = (
     <RitualNumberPickExperience
-      systemDisplay={props.numerologyValue}
+      systemDisplay={engagement.numberValue || props.numerologyValue}
       numberTitle={ritualNumberTitle}
       numberMeaning={ritualNumberMeaningText}
       daySupport={ritualNumberSupportText}
@@ -1693,12 +1708,12 @@ export function TodayCompositionSurface(props: Props) {
       reduceMotion={reduceMotion}
       onRevealRequest={onNumberRevealRequest}
       onComplete={onNumberComplete}
+      alreadyConfirmed={Boolean(engagement.numberConfirmed)}
     />
   );
 
   const handoffPromiseBody = (
     <div data-testid="today-handoff-promise">
-      {!engagement.dayGoal ? <p className={styles.promiseUnsetHint}>{copy.promiseUnsetHint}</p> : null}
       <div className={styles.promiseGrid}>
         {promiseSuggestions.map((s) => (
           <button
@@ -1754,11 +1769,6 @@ export function TodayCompositionSurface(props: Props) {
           {engagement.dayGoal ? copy.editOwnPromise : copy.writeOwnPromise}
         </DsButton>
       )}
-      {engagement.dayGoal ? (
-        <p className={styles.promiseChosen} data-testid="today-promise-chosen">
-          Твоё обещание: {engagement.dayGoal}
-        </p>
-      ) : null}
     </div>
   );
 
@@ -1778,6 +1788,7 @@ export function TodayCompositionSurface(props: Props) {
         title={practiceTool.title}
         detail={practiceTool.detail ?? null}
         duration={practiceTool.duration ?? null}
+        practiceId={recommendedPractice?.id ?? null}
         practiceStarted={engagement.practiceStarted}
         practiceCompleted={engagement.practiceCompleted}
         practiceCompleting={practiceCompleting}
@@ -1788,7 +1799,7 @@ export function TodayCompositionSurface(props: Props) {
   const handoffColorBody = story.colorGuide ? (
     <TodayDayColorGuideSection guide={story.colorGuide} />
   ) : (
-    <p className={styles.actionsLead}>Сегодня без отдельного цвета — держи опору из фокуса.</p>
+    <p className={styles.actionsLead}>Сегодня без отдельного цвета.</p>
   );
 
   const handoffFocusBody = (
@@ -1800,16 +1811,17 @@ export function TodayCompositionSurface(props: Props) {
       ) : null}
       {glanceDailyFocus?.prioritize ? (
         <p className={styles.actionsLead} data-testid="today-handoff-focus-prioritize">
-          В приоритете: {glanceDailyFocus.prioritize}
+          {glanceDailyFocus.prioritize.length > 110
+            ? `${glanceDailyFocus.prioritize.slice(0, 107)}…`
+            : glanceDailyFocus.prioritize}
         </p>
       ) : null}
       {glanceDailyFocus?.avoid ? (
         <p className={styles.actionsLead} data-testid="today-handoff-focus-avoid">
-          Избегать: {glanceDailyFocus.avoid}
+          {glanceDailyFocus.avoid.length > 90
+            ? `${glanceDailyFocus.avoid.slice(0, 87)}…`
+            : glanceDailyFocus.avoid}
         </p>
-      ) : null}
-      {!glanceDailyFocus?.title && !glanceDailyFocus?.prioritize && !glanceDailyFocus?.avoid ? (
-        <p className={styles.actionsLead}>Сегодня без острого фокуса — иди от обещания.</p>
       ) : null}
       {props.contract.depth_layer &&
       Array.isArray(props.contract.depth_layer.menu) &&
@@ -1818,32 +1830,59 @@ export function TodayCompositionSurface(props: Props) {
           dateISO={dateISO}
           depthLayer={props.contract.depth_layer}
           preferredTopic={preferredDepthTopic}
-          autoPickPreferred={autoPickDepthTopic}
+          autoPickPreferred={false}
         />
       ) : null}
     </div>
   );
 
   const handoffRecapBody = (
-    <ul className={styles.whyStoryBody} data-testid="today-handoff-recap">
-      <li>
-        Приоритет:{" "}
-        {engagement.focusTopicId
-          ? engagement.focusTopicId
-          : "ещё не выбран"}
-      </li>
-      <li>Обещание: {engagement.dayGoal?.trim() || "ещё не задано"}</li>
-      <li>
-        Практика:{" "}
-        {engagement.practiceCompleted
-          ? "сделана"
-          : engagement.practiceStarted
-            ? "начата"
-            : supportSlot === "practice"
-              ? "ждёт"
-              : "не на сегодня"}
-      </li>
-    </ul>
+    <TodayRecapAchievements
+      items={[
+        {
+          id: "priority",
+          label: "Приоритет",
+          value: focusTopicLabel(engagement.focusTopicId) || "—",
+          done: Boolean(engagement.focusTopicId),
+        },
+        {
+          id: "promise",
+          label: "Обещание",
+          value: engagement.dayGoal?.trim()
+            ? engagement.dayGoal.trim().length > 80
+              ? `${engagement.dayGoal.trim().slice(0, 77)}…`
+              : engagement.dayGoal.trim()
+            : "—",
+          done: Boolean(engagement.dayGoal?.trim()),
+        },
+        {
+          id: "practice",
+          label: "Практика",
+          value: engagement.practiceCompleted
+            ? "Сделана"
+            : engagement.practiceStarted
+              ? "В процессе"
+              : supportSlot === "practice"
+                ? practiceTool?.title || "Ждёт"
+                : "—",
+          done: Boolean(engagement.practiceCompleted),
+        },
+        {
+          id: "number",
+          label: "Число",
+          value: engagement.numberConfirmed
+            ? engagement.numberValue || props.numerologyValue || "Открыто"
+            : "—",
+          done: Boolean(engagement.numberConfirmed),
+        },
+        {
+          id: "card",
+          label: "Карта",
+          value: engagement.tarotPickedName || "—",
+          done: Boolean(engagement.tarotPickedName),
+        },
+      ]}
+    />
   );
 
   const ritualTarotImpactStage =

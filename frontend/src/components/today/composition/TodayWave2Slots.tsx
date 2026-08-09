@@ -489,11 +489,10 @@ export function TodayTapWidget({
       data-tap-attention={attention ? "true" : "false"}
       data-tap-answered={answered ? "true" : "false"}
     >
-      <p className={styles.tapLabel}>{copy.journey.tapQuestion}</p>
       <p className={styles.tapPrompt} data-testid="today-tap-prompt">
         {prompt.promptedText}
       </p>
-      <div className={styles.tapRow} role="group" aria-label={copy.journey.tapQuestion}>
+      <div className={styles.tapRow} role="group" aria-label={prompt.promptedText}>
         <DsButton
           variant="secondary"
           size="sm"

@@ -275,35 +275,32 @@ export function TodayProductScreenFlow({
               <SlotStep
                 testId="today-frame-priority"
                 eyebrow={copy.storyNext.priority}
-                title="Что сейчас ближе?"
+                title={morningDialogue ? "Что сейчас ближе?" : undefined}
                 nextTitle={copy.storyNext.promise}
-                nextHint={copy.storyNext.promiseHint}
                 onNext={() => go(idx.promise)}
               >
                 {morningDialogue}
               </SlotStep>
             </ScreenFlowStep>
 
-            <ScreenFlowStep id="promise" label={copy.storyNext.promise} scrollable={false}>
+            <ScreenFlowStep id="promise" label={copy.storyNext.promise} scrollable>
               <SlotStep
                 testId="today-frame-promise"
                 eyebrow={copy.storyNext.promise}
                 title={copy.promiseTitle}
                 nextTitle={copy.storyNext.makeYours}
-                nextHint={copy.storyNext.makeYoursHint}
                 onNext={() => go(idx.makeYours)}
               >
                 {promiseBody}
               </SlotStep>
             </ScreenFlowStep>
 
-            <ScreenFlowStep id="make_yours" label={copy.storyNext.makeYours} scrollable={false}>
+            <ScreenFlowStep id="make_yours" label={copy.storyNext.makeYours} scrollable>
               <SlotStep
                 testId="today-frame-make-yours"
                 eyebrow={copy.journey.moveTitle}
                 title={copy.storyNext.makeYours}
                 nextTitle={copy.storyNext.dayFlow}
-                nextHint={copy.storyNext.dayFlowHint}
                 onNext={() => go(idx.dayFlow)}
               >
                 {makeYoursBody}
@@ -333,7 +330,6 @@ export function TodayProductScreenFlow({
                     <div className={flowStyles.slotFooter}>
                       <StoryNextAnchor
                         title={copy.storyNext.card}
-                        hint={copy.storyNext.cardHint}
                         onNext={() => go(idx.card)}
                       />
                     </div>
@@ -350,7 +346,6 @@ export function TodayProductScreenFlow({
                     <div className={flowStyles.slotFooter}>
                       <StoryNextAnchor
                         title={copy.storyNext.color}
-                        hint={copy.storyNext.colorHint}
                         onNext={() => go(idx.color)}
                       />
                     </div>
@@ -371,12 +366,11 @@ export function TodayProductScreenFlow({
               </SlotStep>
             </ScreenFlowStep>
 
-            <ScreenFlowStep id="focus" label={copy.storyNext.focus} scrollable={false}>
+            <ScreenFlowStep id="focus" label={copy.storyNext.focus} scrollable>
               <SlotStep
                 testId="today-frame-focus"
                 eyebrow={copy.storyNext.focus}
                 nextTitle={copy.storyNext.practice}
-                nextHint={copy.storyNext.practiceHint}
                 onNext={() => go(idx.practice)}
               >
                 {focusBody}

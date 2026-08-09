@@ -18,9 +18,11 @@ export function TodayProgressTracker({ rows, title = "Твой прогресс"
 
   return (
     <TodayScreenBlock testId="today-zone-progress">
-      <DsSectionTitle as="p" className={styles.title}>
-        {title}
-      </DsSectionTitle>
+      {title ? (
+        <DsSectionTitle as="p" className={styles.title}>
+          {title}
+        </DsSectionTitle>
+      ) : null}
       <ul className={styles.list}>
         {rows.map((row, index) => (
           <li key={row.id} className={styles.rowItem}>

@@ -11,6 +11,7 @@ type Props = {
   detail?: string | null;
   duration?: string | null;
   reason?: string | null;
+  practiceId?: string | null;
   practiceStarted: boolean;
   practiceCompleted: boolean;
   practiceCompleting?: boolean;
@@ -25,14 +26,15 @@ function startCtaLabel(duration: string | null | undefined): string {
 }
 
 /**
- * Move «Практика дня» — gift framing (handoff UX), not a checklist row.
- * Photo from story practice art; logic stays on existing start/complete engagement.
+ * Move «Практика дня» — gift framing.
+ * Primary CTA opens practice page; timer starts only when user presses start there.
  */
 export function TodayPracticeGiftBlock({
   title,
   detail = null,
   duration = null,
   reason = null,
+  practiceId = null,
   practiceStarted,
   practiceCompleted,
   practiceCompleting = false,
@@ -41,6 +43,7 @@ export function TodayPracticeGiftBlock({
 }: Props) {
   const photoSrc = resolveTodayStoryFrameArt("practice");
   const instructions = String(detail || reason || "").trim() || null;
+  const practiceHref = practiceId ? `/practices/${practiceId}` : setupHref;
 
   return (
     <section className={styles.root} data-testid="today-zone-practice-gift">
@@ -58,40 +61,35 @@ export function TodayPracticeGiftBlock({
           <p className={styles.confirmed} data-testid="today-practice-gift-done">
             {copy.practiceCompleted}
           </p>
-        ) : practiceStarted ? (
+        ) : (
           <div className={styles.actions}>
-            <p className={styles.started} data-testid="today-practice-gift-started">
-              {copy.practiceGiftStarted}
-            </p>
             <DsButton
-              type="button"
+              href={practiceHref}
               variant="primary"
               className={styles.cta}
               data-testid="today-tool-practice"
-              disabled={practiceCompleting}
-              onClick={() => void onPracticeAction()}
             >
-              {copy.practiceComplete}
+              {startCtaLabel(duration)}
             </DsButton>
+            {practiceStarted ? (
+              <DsButton
+                type="button"
+                variant="secondary"
+                className={styles.cta}
+                data-testid="today-tool-practice-complete"
+                disabled={practiceCompleting}
+                onClick={() => void onPracticeAction()}
+              >
+                {copy.practiceComplete}
+              </DsButton>
+            ) : null}
+            <p className={styles.setup}>
+              <Link href={setupHref} data-testid="today-setup-practices-link">
+                {copy.setupPracticesLink} →
+              </Link>
+            </p>
           </div>
-        ) : (
-          <DsButton
-            type="button"
-            variant="primary"
-            className={styles.cta}
-            data-testid="today-tool-practice"
-            disabled={practiceCompleting}
-            onClick={() => void onPracticeAction()}
-          >
-            {startCtaLabel(duration)}
-          </DsButton>
         )}
-
-        <p className={styles.setup}>
-          <Link href={setupHref} data-testid="today-setup-practices-link">
-            {copy.setupPracticesLink} →
-          </Link>
-        </p>
       </div>
     </section>
   );

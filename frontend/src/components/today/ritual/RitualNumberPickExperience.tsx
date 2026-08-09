@@ -30,6 +30,8 @@ type Props = {
     support?: string | null;
   }>;
   onComplete: () => void;
+  /** Already confirmed today — show reveal, not pick ring. */
+  alreadyConfirmed?: boolean;
 };
 
 const NUMBER_TILE_SYMBOLS = ["✦", "○", "●", "◇", "◆", "✧"] as const;
@@ -63,8 +65,11 @@ export function RitualNumberPickExperience({
   reduceMotion,
   onRevealRequest,
   onComplete,
+  alreadyConfirmed = false,
 }: Props) {
-  const [revealed, setRevealed] = useState(false);
+  const [revealed, setRevealed] = useState(
+    () => alreadyConfirmed && isDisplayableNumber(systemDisplay),
+  );
   const [resolving, setResolving] = useState(false);
   const [display, setDisplay] = useState(systemDisplay);
   const [title, setTitle] = useState(numberTitle);
@@ -226,18 +231,10 @@ export function RitualNumberPickExperience({
           );
         })}
       </div>
-      <div className={styles.energyInfo} role="note">
-        <span className={styles.energyInfoIcon} aria-hidden>
-          ⓘ
-        </span>
-        <span>{RITUAL_COPY.numberDayEnergyInfo}</span>
-      </div>
-      <p className={styles.hint}>
-        {resolving ? "Открываем число дня…" : RITUAL_COPY.numberCircleHint}
-      </p>
+      {resolving ? <p className={styles.hint}>…</p> : null}
       {resolveError ? (
         <p className={styles.hint} role="alert">
-          Не удалось открыть число дня. Попробуй ещё раз.
+          Не удалось открыть. Попробуй ещё раз.
         </p>
       ) : null}
     </div>

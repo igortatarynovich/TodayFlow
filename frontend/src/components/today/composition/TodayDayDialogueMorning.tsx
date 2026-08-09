@@ -48,7 +48,6 @@ export function TodayDayDialogueMorning({
       {askFocus ? (
         <div className={styles.dialogueBlock}>
           <h2 className={styles.dialogueTitle}>{TODAY_DAY_DIALOGUE_COPY.focusTitle}</h2>
-          <p className={styles.dialogueLead}>{TODAY_DAY_DIALOGUE_COPY.focusLead}</p>
           <div className={styles.focusGrid} role="group" aria-label="Главный фокус">
             {TODAY_FOCUS_TOPICS.map((t) => (
               <button
@@ -65,22 +64,11 @@ export function TodayDayDialogueMorning({
               </button>
             ))}
           </div>
-          {showDeepenCta && onDeepenTopic ? (
-            <button
-              type="button"
-              className={styles.deepenTopicLink}
-              data-testid="today-focus-deepen-cta"
-              onClick={onDeepenTopic}
-            >
-              {FOCUS_DEEPEN_CTA_LABEL}
-            </button>
-          ) : null}
         </div>
       ) : null}
       {askMood ? (
         <div className={styles.dialogueBlock} data-testid="today-dialogue-mood">
           <h2 className={styles.dialogueTitle}>{TODAY_DAY_DIALOGUE_COPY.moodTitle}</h2>
-          <p className={styles.dialogueLead}>{TODAY_DAY_DIALOGUE_COPY.moodLead}</p>
           <div className={styles.focusGrid} role="group" aria-label="Настроение">
             {TODAY_MORNING_MOODS.map((m) => (
               <button

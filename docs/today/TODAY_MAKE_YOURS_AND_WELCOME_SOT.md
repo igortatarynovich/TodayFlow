@@ -64,7 +64,7 @@ Categories (user): **практики · аскезы · аффирмации ·
 | Habit | Soft title from `today_move` / first `do` / habit templates — **as propose label**, create via wizard | `?create=habit` / calendar wizard |
 | Goal | `buildTodayPromiseSuggestions` / `primary_action` / weekly-goal templates | Promise step or `/tracking/calendar?create=goal` |
 
-Honest empty: if no signal and no entity → short «Нет опоры на сегодня — добавь в Практиках / Календаре.» without invented calm rows.
+Honest empty: if no signal and no entity → short links to Практики / Календарь without invented calm rows or mechanism labels («Предложить из дня» и т.п. — запрещены).
 
 ---
 

@@ -267,10 +267,6 @@ export function RitualTarotPickExperience({
         data-pick-mode="deck"
         data-reduce={reduceMotion ? "true" : undefined}
       >
-        <div className={styles.gridHeader}>
-          <p className={styles.gridLead}>{gridLead ?? RITUAL_COPY.tarotGridLead}</p>
-          <p className={styles.gridSub}>{gridSub ?? RITUAL_COPY.tarotGridSub}</p>
-        </div>
         <div className={styles.deckStage} aria-label="Колода карты дня">
           <InteractiveCardDeck
             key={deckKey}
@@ -280,20 +276,17 @@ export function RitualTarotPickExperience({
             onCardsSelected={() => {
               commitDayCard();
             }}
-            ritualIntro="Стопка рубашек: тап или свайп снимает верхнюю карту."
+            ritualIntro=""
             variant="light"
           />
         </div>
-        <p className={styles.fanHonesty}>{RITUAL_COPY.tarotFanHonesty}</p>
-        <p className={styles.gridFooter}>{RITUAL_COPY.tarotGridPickFooter}</p>
-        {/* Test / a11y fallback: commit without deck pointer path */}
         <button
           type="button"
           className={styles.skipLink}
           data-testid="ritual-tarot-deck-commit"
           onClick={commitDayCard}
         >
-          Снять верхнюю карту
+          Открыть карту
         </button>
       </div>
     );

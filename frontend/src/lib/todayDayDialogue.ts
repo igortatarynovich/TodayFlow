@@ -113,6 +113,17 @@ function asSoftIntention(raw: string): string {
  * Intentions from the day's computed action + growth point + do-list — never canned affirmations.
  * Empty when there is nothing real to offer (user can write their own).
  */
+function promiseDedupeKey(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[«»""„]/g, "")
+    .replace(/[—–-]/g, " ")
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 80);
+}
+
 export function buildTodayPromiseSuggestions(input: {
   primaryAction?: string | null;
   focusTopicId?: string | null;
@@ -126,28 +137,32 @@ export function buildTodayPromiseSuggestions(input: {
   const push = (id: string, text: string) => {
     const normalized = text.replace(/\s+/g, " ").trim();
     if (!normalized) return;
-    const key = normalized.toLowerCase();
-    if (seen.has(key)) return;
+    const key = promiseDedupeKey(normalized);
+    if (!key || seen.has(key)) return;
+    // Near-duplicate: same first 48 chars after soft punctuation strip.
+    for (const prev of seen) {
+      if (key.startsWith(prev.slice(0, 48)) || prev.startsWith(key.slice(0, 48))) return;
+    }
     seen.add(key);
-    out.push({ id, text: normalized.length <= 140 ? normalized : `${normalized.slice(0, 137)}…` });
+    out.push({ id, text: normalized.length <= 120 ? normalized : `${normalized.slice(0, 117)}…` });
   };
 
+  // Prefer one day-action SoT: today_move XOR primary_action (not both when near-equal).
   const move = input.todayMove?.trim();
-  if (move) push("today_move", asSoftIntention(move));
-
   const primary = input.primaryAction?.trim();
-  if (primary) push("contract_primary", asSoftIntention(primary));
+  if (move) push("today_move", asSoftIntention(move));
+  else if (primary) push("contract_primary", asSoftIntention(primary));
 
   const growth = input.developmentPoint?.trim();
   if (growth) push("development", asSoftIntention(growth));
 
   const doItems = input.doItems ?? [];
   for (let index = 0; index < doItems.length; index += 1) {
-    if (out.length >= 4) break;
+    if (out.length >= 3) break;
     push(`do_${index}`, asSoftIntention(doItems[index]!));
   }
 
-  return out.slice(0, 4);
+  return out.slice(0, 3);
 }
 
 export const TODAY_EVENING_HIGHLIGHTS: TodayEveningHighlight[] = [
