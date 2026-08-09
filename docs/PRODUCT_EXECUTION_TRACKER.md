@@ -1,8 +1,19 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-08
+Last updated: 2026-08-09
 Owner: Product + Engineering
 Status: Active working document
+
+**IN PROGRESS (CODE, 2026-08-09):** **Make yours + Welcome/Progress SoT** — canon `docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md`; `TodayMakeYoursBlock` (6 categories · tracker · day proposes); welcome activity tags from `day_story.do` → morning priorities; Priority = product chips (handoff 6 two-line = optional FE); Number/Card = live ring/deck. Backend `welcome_glass` + `today_progress` DTO still open.
+
+## Architecture impact — Make yours / Welcome signal map (2026-08-09)
+
+- **SoT before:** Make yours = progress-only or empty copy; welcome activity tags = morning priorities only (ad-hoc); progress = FE `loadTodayGrowthTrackers` undocumented.
+- **SoT after:** Make yours = occupied → tracker · empty → propose from contract signals only (no invent mantra); welcome activity = do[] then priorities; progress composer documented as interim SoT until BE DTO.
+- **Public contract changed?** no (compose only)
+- **Migration required?** no
+- **Canon updated?** yes — `docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md` · SCENARIO_V3 Make yours row
+- **Backward compatible?** yes
 
 **IN PROGRESS (CODE, 2026-08-09):** **DS Ritual port from docs/design handoff** — `--tf-ds-glass-*` tokens; `DsGlassCard` / `DsChipGroup` / `DsHabitStreakRow` / `DsMoodBackground`; Welcome + progress on DS (Day Atmosphere SoT, no private welcome hex). Continue pixel-pass remaining handoff steps off page CSS.
 

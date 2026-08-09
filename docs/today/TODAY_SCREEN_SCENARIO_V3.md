@@ -19,7 +19,7 @@ v3.2 story-deck (Greeting→Energy+Flow→…) **deprecated** as presentation cu
 | Welcome | salutation · headline · date · energy glass (mood pills · lunar reason · activity tags) · CTA | Glance chrome + atmosphere + lunar |
 | Priority | morning focus topics (+ deepen CTA) | Dialogue / deepen → Фокус |
 | Promise | suggestions + «Написать своё» | Move promise |
-| Make yours | progress rows (streak + 7d) | Move trackers |
+| Make yours | 6 categories · tracker if set · propose from day if empty | Move trackers · [MAKE_YOURS SoT](./TODAY_MAKE_YOURS_AND_WELCOME_SOT.md) |
 | Поток дня | energy line + glance_timeline | Glance energy + Symbols·B timeline |
 | Число | number ritual cascade | Symbols·A number |
 | Карта | tarot ritual + cross-ref | Symbols·A card |

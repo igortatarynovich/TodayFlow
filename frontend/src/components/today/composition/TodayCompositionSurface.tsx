@@ -82,7 +82,7 @@ import { TodayInterpretationConfirm } from "@/components/today/composition/Today
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayPracticeGiftBlock } from "@/components/today/composition/TodayPracticeGiftBlock";
-import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
+import { TodayMakeYoursBlock } from "@/components/today/composition/TodayMakeYoursBlock";
 import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
 import { StoryBlockCue, StoryNextAnchor } from "@/components/today/composition/TodayStoryDeckFrames";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
@@ -123,6 +123,11 @@ import {
 import { canOfferFocusDeepen, resolveFocusDeepenTarget } from "@/lib/todayFocusDeepen";
 import { formatRitualTarotPersonalToday, pickRitualHookLine } from "@/lib/ritualRevealCopy";
 import { buildHandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
+import { resolveWelcomeActivityTags } from "@/lib/todayWelcomeActivityTags";
+import {
+  buildMakeYoursProposals,
+  makeYoursOccupiedFromProgress,
+} from "@/lib/todayMakeYoursProposals";
 
 type Props = {
   variant?: TodayCompositionVariant;
@@ -1196,16 +1201,10 @@ export function TodayCompositionSurface(props: Props) {
       | { name?: string; themes?: string; guidance?: string; phase_name?: string }
       | undefined;
     const lunarName = lunarRaw?.name || lunarRaw?.phase_name || null;
-    const priorities = props.morningRitualData?.daily_recommendations?.priorities;
-    const activityTags: string[] = [];
-    if (Array.isArray(priorities)) {
-      for (const row of priorities) {
-        if (typeof row === "string") {
-          const t = row.trim();
-          if (t && t.length <= 18) activityTags.push(t);
-        }
-      }
-    }
+    const activityTags = resolveWelcomeActivityTags({
+      contract: props.contract,
+      morningPriorities: props.morningRitualData?.daily_recommendations?.priorities,
+    });
     return buildHandoffWelcomeGlass({
       visualMode: props.contract.day_atmosphere?.visual_mode ?? null,
       lunarName,
@@ -1213,7 +1212,7 @@ export function TodayCompositionSurface(props: Props) {
       lunarGuidance: lunarRaw?.guidance ?? null,
       activityTags,
     });
-  }, [props.contract.day_atmosphere?.visual_mode, props.morningRitualData]);
+  }, [props.contract, props.morningRitualData]);
 
   const depthMenuTopics = useMemo(() => {
     const menu = props.contract.depth_layer?.menu;
@@ -1740,14 +1739,38 @@ export function TodayCompositionSurface(props: Props) {
     </div>
   );
 
-  const handoffMakeYoursBody =
-    progressRows.length > 0 ? (
-      <TodayProgressTracker rows={progressRows} />
-    ) : (
-      <p className={styles.actionsLead} data-testid="today-handoff-progress-empty">
-        Пока нет активных привычек или аскез — добавь опору в Практиках.
-      </p>
-    );
+  const makeYoursOccupied = useMemo(
+    () =>
+      makeYoursOccupiedFromProgress(
+        progressRows.map((r) => r.kind),
+        {
+          // Goal slot mirrors Promise until weekly-goal streak SoT exists.
+          goal: Boolean(engagement.dayGoal?.trim()),
+        },
+      ),
+    [progressRows, engagement.dayGoal],
+  );
+
+  const makeYoursProposals = useMemo(
+    () =>
+      buildMakeYoursProposals({
+        contract: props.contract,
+        occupied: makeYoursOccupied,
+        dayGoal: engagement.dayGoal,
+        promiseSuggestion: promiseSuggestions[0]?.text ?? null,
+      }),
+    [props.contract, makeYoursOccupied, engagement.dayGoal, promiseSuggestions],
+  );
+
+  const handoffMakeYoursBody = (
+    <TodayMakeYoursBlock
+      progressRows={progressRows}
+      proposals={makeYoursProposals}
+      occupiedCategoryIds={Object.keys(makeYoursOccupied).filter(
+        (id) => makeYoursOccupied[id as keyof typeof makeYoursOccupied],
+      )}
+    />
+  );
 
   const handoffPracticeBody =
     supportSlot === "practice" && practiceTool ? (
