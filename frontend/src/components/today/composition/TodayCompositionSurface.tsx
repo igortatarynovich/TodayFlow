@@ -1334,6 +1334,34 @@ export function TodayCompositionSurface(props: Props) {
     [props.contract, makeYoursOccupied, engagement.dayGoal, promiseSuggestions],
   );
 
+  const askMorningFocus = shouldAskMorningFocus({
+    dateISO,
+    focusTopicId: engagement.focusTopicId,
+    focusTopicCapturedAtMs: engagement.focusTopicCapturedAtMs,
+  });
+  const askMorningMood = shouldAskMorningMood({
+    dateISO,
+    morningMoodId: engagement.morningMoodId,
+    morningMoodCapturedAtMs: engagement.morningMoodCapturedAtMs,
+  });
+
+  // Priority answered → leave the step (no empty chrome with leftover title).
+  useEffect(() => {
+    if (!hydrated || !useProductPersonalized) return;
+    if (askMorningFocus || askMorningMood) return;
+    const idx = todayHandoffIndices(showSymbolsAct);
+    if (screenFlowIndex === idx.priority) {
+      setScreenFlowIndex(idx.promise);
+    }
+  }, [
+    hydrated,
+    useProductPersonalized,
+    askMorningFocus,
+    askMorningMood,
+    screenFlowIndex,
+    showSymbolsAct,
+  ]);
+
   if (eveningMode && continuityRecord && !dayClosed) {
     if (useProductFoundation) {
       return (
@@ -1413,16 +1441,6 @@ export function TodayCompositionSurface(props: Props) {
     );
   }
 
-  const askMorningFocus = shouldAskMorningFocus({
-    dateISO,
-    focusTopicId: engagement.focusTopicId,
-    focusTopicCapturedAtMs: engagement.focusTopicCapturedAtMs,
-  });
-  const askMorningMood = shouldAskMorningMood({
-    dateISO,
-    morningMoodId: engagement.morningMoodId,
-    morningMoodCapturedAtMs: engagement.morningMoodCapturedAtMs,
-  });
   const morningDialogue =
     askMorningFocus || askMorningMood ? (
       <TodayDayDialogueMorning
@@ -1459,23 +1477,6 @@ export function TodayCompositionSurface(props: Props) {
         }}
       />
     ) : null;
-
-  // Priority answered → leave the step (no empty chrome with leftover title).
-  useEffect(() => {
-    if (!hydrated || !useProductPersonalized) return;
-    if (askMorningFocus || askMorningMood) return;
-    const idx = todayHandoffIndices(showSymbolsAct);
-    if (screenFlowIndex === idx.priority) {
-      setScreenFlowIndex(idx.promise);
-    }
-  }, [
-    hydrated,
-    useProductPersonalized,
-    askMorningFocus,
-    askMorningMood,
-    screenFlowIndex,
-    showSymbolsAct,
-  ]);
 
   const greetingParts = splitSalutation(story.greeting.salutation);
   // Glance expect/trap only when personalized narrative is not showing the same slots.
