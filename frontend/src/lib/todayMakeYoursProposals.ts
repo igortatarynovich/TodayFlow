@@ -156,7 +156,7 @@ export function buildMakeYoursProposals(input: {
 }
 
 export function makeYoursOccupiedFromProgress(
-  kinds: Iterable<string>,
+  kinds: readonly string[],
   extras?: { goal?: boolean; affirmation?: boolean; mantra?: boolean },
 ): MakeYoursOccupied {
   const occupied: MakeYoursOccupied = {};
