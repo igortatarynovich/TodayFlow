@@ -1,0 +1,37 @@
+/* TodayFlow — shadows, motion, grain. Soft/warm shadows, slow rare fades, no bounce. */
+:root {
+  --tf-shadow-hero: 0 28px 56px rgba(42, 37, 32, 0.1);
+  --tf-shadow-card: 0 16px 40px rgba(42, 37, 32, 0.06);
+  --tf-shadow-soft: 0 12px 20px rgba(42, 37, 32, 0.03);
+  --tf-shadow-gold: 0 8px 24px rgba(201, 169, 110, 0.35);
+
+  --tf-motion-micro: 150ms; /* @kind other */
+  --tf-motion-reveal: 280ms; /* @kind other */
+  --tf-motion-card: 320ms; /* @kind other */
+  --tf-motion-page: 420ms; /* @kind other */
+  --tf-motion-stagger: 45ms; /* @kind other */
+  --tf-motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */
+  --tf-motion-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1); /* @kind other */
+
+  --tf-grain-opacity: 0.03; /* @kind other */
+}
+
+/* Paper-grain overlay — apply to page/section backgrounds, never to cards. */
+.tf-grain {
+  position: relative;
+}
+.tf-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--tf-grain-opacity);
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+  background-size: 4px 4px;
+}
+
+@keyframes tf-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tf-slide-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }

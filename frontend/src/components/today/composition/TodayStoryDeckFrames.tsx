@@ -140,13 +140,23 @@ export function TodayGreetingFrame({
   headline,
   loading = false,
   onStart,
+  moodPills = [],
+  reasonLine = null,
+  activityTags = [],
+  startHint = copy.storyNext.formDay,
 }: {
   salutation: string;
   dateLabel: string;
   headline: string | null;
   loading?: boolean;
   onStart: () => void;
+  /** Handoff welcome glass — omit clusters when empty. */
+  moodPills?: string[];
+  reasonLine?: string | null;
+  activityTags?: string[];
+  startHint?: string;
 }) {
+  const showGlass = moodPills.length > 0 || Boolean(reasonLine) || activityTags.length > 0;
   return (
     <div
       className={immersiveClass("photo", styles.greeting)}
@@ -163,13 +173,51 @@ export function TodayGreetingFrame({
             </h2>
             <p className={styles.dateLine}>{dateLabel}</p>
           </div>
+
+          {showGlass ? (
+            <div className={styles.welcomeGlass} data-testid="today-welcome-glass">
+              {(moodPills.length > 0 || reasonLine) && (
+                <div className={styles.welcomeGlassTop}>
+                  <span className={styles.welcomeMoon} aria-hidden>
+                    ◐
+                  </span>
+                  <div className={styles.welcomeGlassMain}>
+                    {moodPills.length > 0 ? (
+                      <div className={styles.welcomeMoodRow} data-testid="today-welcome-moods">
+                        {moodPills.map((pill) => (
+                          <span key={pill} className={styles.welcomeMoodPill}>
+                            {pill}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
+                    {reasonLine ? (
+                      <p className={styles.welcomeReason} data-testid="today-welcome-reason">
+                        {reasonLine}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+              )}
+              {activityTags.length > 0 ? (
+                <div className={styles.welcomeTagRow} data-testid="today-welcome-tags">
+                  {activityTags.map((tag) => (
+                    <span key={tag} className={styles.welcomeTag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
           <button type="button" className={styles.startCta} data-testid="today-greeting-start" onClick={onStart}>
             <span className={styles.startArrow} aria-hidden>
               →
             </span>
             <span className={styles.startCtaText}>
               <span className={styles.startCtaLabel}>Начать день</span>
-              <span className={styles.startHint}>{copy.storyNext.energy}</span>
+              <span className={styles.startHint}>{startHint}</span>
             </span>
           </button>
         </section>

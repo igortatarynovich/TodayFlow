@@ -1,27 +1,42 @@
-# Today — сценарий страницы (v3.2 story deck)
+# Today — сценарий страницы (v3.3 handoff composition)
 
-**Status:** ACTIVE · **Updated 2026-08-05** (mockup story-deck cuts on ScreenFlow)  
-**Prior lock:** v3.1 content jobs 2026-08-03
+**Status:** ACTIVE · **Updated 2026-08-08** (Architecture A — handoff = presentation SoT)  
+**Prior lock:** v3.2 story-deck cuts 2026-08-05 · v3.1 content jobs 2026-08-03
 
 **Presentation ScreenFlow (product):**  
-**Greeting → Energy+Flow → [Symbols] → Attributes → Practice → Insight → Close**
+**Welcome → Priority → Promise → Make yours → Поток дня → [Число → Карта] → Цвет → Фокус → Практика → Recap → Close**  
+(= **12** кадров с символами · **10** без). Welcome = шаг 0 **без** chrome dots; дальше — ScreenFlow dots + swipe + keyboard.
 
 Content houses ниже (v3.1) остаются источником смысла; меняется **нарезка кадров**.  
-Навигация: Greeting = шаг 0. Progress = ScreenFlow dots + swipe + keyboard.
+v3.2 story-deck (Greeting→Energy+Flow→…) **deprecated** as presentation cut — replaced by this handoff map.
 
 Связанные каноны: [SCREEN_FLOW_V1.md](../foundation/SCREEN_FLOW_V1.md) · [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) · [DAY_SYMBOL_REVEAL_CANON_V1.md](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md) · [DOMAIN_MAGNITUDE_V1.md](../foundation/DOMAIN_MAGNITUDE_V1.md) · [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) §16
 
-### Presentation map (v3.2)
+### Presentation map (v3.3 handoff)
 
 | Story frame | Склеивает / показывает | Content house (v3.1) |
 |-------------|------------------------|----------------------|
-| Greeting | salutation · date · CTA | greeting chrome |
-| Energy+Flow | энергия + полный timeline | Glance energy + Symbols·B timeline |
-| Symbols | карта (лицо остаётся) + число | Symbols·A |
-| Attributes | цвет + тема + фокус + избегать | Move color + Glance texture/focus + Move if/then |
-| Practice | practice XOR affirmation | Move support slot |
-| Insight | сюжет / why / beats | Plot |
+| Welcome | salutation · headline · date · energy glass (mood pills · lunar reason · activity tags) · CTA | Glance chrome + atmosphere + lunar |
+| Priority | morning focus topics (+ deepen CTA) | Dialogue / deepen → Фокус |
+| Promise | suggestions + «Написать своё» | Move promise |
+| Make yours | progress rows (streak + 7d) | Move trackers |
+| Поток дня | energy line + glance_timeline | Glance energy + Symbols·B timeline |
+| Число | number ritual cascade | Symbols·A number |
+| Карта | tarot ritual + cross-ref | Symbols·A card |
+| Цвет | day color guide | Move color |
+| Фокус | Daily Focus + depth_layer | Glance focus / Reading deepen |
+| Практика | gift practice XOR affirmation | Move support |
+| Recap | priority · promise · practice status | Response prep |
 | Close | evening question + trap tap + close CTA | Response + evening |
+
+### Architecture impact (2026-08-08 — A)
+
+- **SoT before:** presentation = story-deck v3.2 (7 frames); handoff HTML = prototype only; UX slices partly on dead PersonalizedSection.
+- **SoT after:** presentation = handoff 12-step ScreenFlow above; content jobs v3.1 unchanged.
+- **Public contract changed?** no JSON fields — FE composition only.
+- **Migration required?** no — next frontend rebuild; old clients ignore new frames.
+- **Canon updated?** yes — this file + SCREEN_FLOW_V1 Today mapping + tracker.
+- **Backward compatible?** yes for API; FE step indices / deep-links `?sf=1&step=N` remap.
 
 ---
 

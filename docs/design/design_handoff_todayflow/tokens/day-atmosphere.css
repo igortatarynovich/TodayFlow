@@ -1,0 +1,25 @@
+/* TodayFlow — Day Atmosphere mood palettes (frontend/src/styles/day-atmosphere.css).
+   8 moods x 4 day-phase intensity factors. Light moods use dark ink; two moods (tension, depth) are dark-surface. */
+:root {
+  --tf-mood-grounded-bg: #f3ede1; --tf-mood-grounded-glow-a: rgba(155,138,94,0.22); --tf-mood-grounded-glow-b: rgba(107,122,90,0.12); --tf-mood-grounded-decor: #6b5a3f;
+  --tf-mood-flow-bg: #eef1f5; --tf-mood-flow-glow-a: rgba(140,165,196,0.24); --tf-mood-flow-glow-b: rgba(176,158,201,0.14); --tf-mood-flow-decor: #5b7590;
+  --tf-mood-radiance-bg: #fdf1e0; --tf-mood-radiance-glow-a: rgba(230,175,100,0.32); --tf-mood-radiance-glow-b: rgba(240,140,110,0.14); --tf-mood-radiance-decor: #c9873a;
+  --tf-mood-momentum-bg: #f6e2d8; --tf-mood-momentum-glow-a: rgba(196,90,60,0.34); --tf-mood-momentum-glow-b: rgba(150,60,45,0.18); --tf-mood-momentum-decor: #a4432a;
+  --tf-mood-clarity-bg: #f1f2f4; --tf-mood-clarity-glow-a: rgba(120,130,145,0.12); --tf-mood-clarity-glow-b: rgba(120,130,145,0.06); --tf-mood-clarity-decor: #5b6472;
+  --tf-mood-renewal-bg: #fdf6ee; --tf-mood-renewal-glow-a: rgba(240,200,190,0.26); --tf-mood-renewal-glow-b: rgba(190,215,175,0.18); --tf-mood-renewal-decor: #a3b592;
+  --tf-mood-tension-bg: #221f22; --tf-mood-tension-glow-a: rgba(120,40,50,0.28); --tf-mood-tension-glow-b: rgba(70,60,90,0.16); --tf-mood-tension-decor: #c98d95;
+  --tf-mood-depth-bg: #171622; --tf-mood-depth-glow-a: rgba(70,60,110,0.22); --tf-mood-depth-glow-b: rgba(40,45,70,0.16); --tf-mood-depth-decor: #a79ccf;
+
+  /* Phase intensity multipliers applied to glow alpha */
+  --tf-phase-morning-factor: 1.2; /* @kind other */
+  --tf-phase-day-factor: 1; /* @kind other */
+  --tf-phase-evening-factor: 0.85; /* @kind other */
+  --tf-phase-night-factor: 0.65; /* @kind other */
+
+  /* Glass surface over a mood background */
+  --tf-glass-surface-light: rgba(250,246,238,0.74);
+  --tf-glass-surface-dark: rgba(255,255,255,0.07);
+  --tf-glass-border-light: rgba(107,90,63,0.18);
+  --tf-glass-border-dark: rgba(255,255,255,0.16);
+  --tf-glass-blur: 14px;
+}

@@ -1,0 +1,18 @@
+@import "tokens/fonts.css";
+@import "tokens/colors.css";
+@import "tokens/typography.css";
+@import "tokens/spacing.css";
+@import "tokens/effects.css";
+@import "tokens/day-atmosphere.css";
+
+html { overflow-x: clip; max-width: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--tf-page);
+  font-family: var(--tf-font-body);
+  color: var(--tf-ink);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--tf-ink-action); text-decoration: none; }
+a:hover { color: var(--tf-accent-gold-600); }

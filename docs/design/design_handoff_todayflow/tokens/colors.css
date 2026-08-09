@@ -1,0 +1,101 @@
+/* TodayFlow — color tokens. Warm parchment surfaces, five-role ink system, gold accent. */
+:root {
+  /* Surfaces */
+  --tf-page: #fdfbf7;
+  --tf-page-cream: #f7f4ee;
+  --tf-cream-300: #ede8de;
+  --tf-cream-400: #e2d9c8;
+  --tf-cream-border: #e8e2d6;
+  --tf-surface: #ffffff;
+  --tf-surface-muted: #f7f4ee;
+  --tf-surface-warm: #f5f0e8;
+  --tf-surface-dark: #1a1714;
+  --tf-surface-dark-elevated: #2a2520;
+
+  /* Ink — exactly five roles. Never add a sixth. */
+  --tf-ink: #2a211b;
+  --tf-ink-secondary: rgba(42, 33, 27, 0.68);
+  --tf-ink-quiet: rgba(42, 33, 27, 0.42);
+  --tf-ink-accent: #a57a3d;
+  --tf-ink-action: #4a3270;
+  --tf-on-dark: #faf8f5;
+
+  /* Accents */
+  --tf-accent-gold: #c9a96e;
+  --tf-accent-gold-soft: #e8d0a5;
+  --tf-accent-gold-200: #d4b896;
+  --tf-accent-gold-600: #8b6a3e;
+  --tf-accent-gold-wash: #f9f4e8;
+  --tf-accent-numerology: #4a3270;
+  --tf-accent-action: #8f6b3a;
+
+  /* Brand warm gradient (Today CTA / hero) */
+  --tf-peach: #f3c6b4;
+  --tf-terracotta: #d68e7a;
+  --tf-terracotta-deep: #c97a65;
+  --tf-gradient-cta: linear-gradient(135deg, var(--tf-peach) 0%, var(--tf-terracotta) 100%);
+  --tf-gradient-cta-hover: linear-gradient(135deg, #fad4c4 0%, #e29a86 52%, var(--tf-terracotta) 100%);
+
+  /* Borders */
+  --tf-border: #e8e2d6;
+  --tf-border-strong: #d8c9b0;
+  --tf-border-subtle: rgba(42, 37, 32, 0.06);
+  --tf-border-gold: rgba(201, 169, 110, 0.2);
+  --tf-border-ink: rgba(42, 37, 32, 0.08);
+
+  /* Glass */
+  --tf-glass: rgba(255, 255, 255, 0.5);
+  --tf-glass-on-dark: rgba(255, 255, 255, 0.08);
+
+  /* Semantic */
+  --tf-semantic-gift: #4f6647;
+  --tf-semantic-trap: #a65a4f;
+  --tf-semantic-grow: #3d5a80;
+  --tf-semantic-success: #4f6647;
+  --tf-semantic-alert: #d4964b;
+  --tf-semantic-error: #a65a4f;
+
+  /* Callout rails + washes */
+  --tf-callout-rail-insight: var(--tf-ink-accent);
+  --tf-callout-rail-practice: var(--tf-accent-numerology);
+  --tf-callout-rail-help: var(--tf-semantic-gift);
+  --tf-callout-rail-avoid: var(--tf-semantic-trap);
+  --tf-callout-wash-insight: var(--tf-surface);
+  --tf-callout-wash-practice: rgba(245, 240, 232, 0.72);
+  --tf-callout-wash-help: rgba(79, 102, 71, 0.06);
+  --tf-callout-wash-avoid: rgba(212, 150, 75, 0.1);
+  --tf-callout-wash-example: rgba(42, 33, 27, 0.04);
+
+  /* Heatmap / intensity */
+  --tf-heatmap-no-data: rgba(190, 175, 168, 0.4);
+  --tf-heatmap-low: rgba(243, 198, 180, 0.42);
+  --tf-heatmap-mid: rgba(230, 160, 138, 0.58);
+  --tf-heatmap-high: rgba(214, 142, 122, 0.88);
+}
+
+/* Dark product theme */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --tf-page: #121018;
+  --tf-page-cream: #1a1620;
+  --tf-cream-300: #2a2430;
+  --tf-cream-400: #342e3c;
+  --tf-cream-border: rgba(255, 255, 255, 0.1);
+  --tf-ink: #f5f0e8;
+  --tf-ink-secondary: #c8bdb0;
+  --tf-ink-quiet: #8a7e72;
+  --tf-accent-gold: #d4b896;
+  --tf-accent-gold-soft: #c9a96e;
+  --tf-accent-gold-200: #e8d0a5;
+  --tf-accent-gold-600: #e8d0a5;
+  --tf-accent-gold-wash: rgba(201, 169, 110, 0.12);
+  --tf-surface: #1e1a24;
+  --tf-surface-muted: #241f2c;
+  --tf-surface-warm: #241f2c;
+  --tf-border: rgba(255, 255, 255, 0.1);
+  --tf-border-strong: rgba(212, 184, 150, 0.28);
+  --tf-border-subtle: rgba(255, 255, 255, 0.06);
+  --tf-border-gold: rgba(201, 169, 110, 0.28);
+  --tf-border-ink: rgba(255, 255, 255, 0.1);
+  --tf-glass: rgba(255, 255, 255, 0.06);
+}

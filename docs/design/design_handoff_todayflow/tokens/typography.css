@@ -1,0 +1,28 @@
+/* TodayFlow — typography tokens. Serif display (editorial/mystical) + sans body (calm/legible). */
+:root {
+  --tf-font-display: "Instrument Serif", "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --tf-font-body: "Manrope", "Inter", system-ui, -apple-system, sans-serif;
+  --tf-font-accent: "Caveat", cursive;
+
+  --tf-type-display-xl-size: 3.75rem;   /* 60px */
+  --tf-type-display-l-size: 3rem;       /* 48px */
+  --tf-type-hero-size: 2.125rem;        /* 34px — card title / big takeaway */
+  --tf-type-section-size: 1.5rem;       /* 24px */
+  --tf-type-h1-size: 2.125rem;          /* 34px */
+  --tf-type-h2-size: 1.5rem;            /* 24px */
+  --tf-type-h3-size: 1.125rem;          /* 18px */
+  --tf-type-body-size: 1rem;            /* 16px */
+  --tf-type-comment-size: 0.875rem;     /* 14px */
+  --tf-type-caption-size: 0.75rem;      /* 12px */
+  --tf-type-label-size: 0.75rem;        /* 12px */
+
+  --tf-type-display-line: 1.1;
+  --tf-type-hero-line: 1.08;
+  --tf-type-section-line: 1.2;
+  --tf-type-body-line: 1.55;
+
+  --tf-type-display-weight: 600;
+  --tf-type-hero-weight: 700;
+  --tf-type-section-weight: 600;
+  --tf-type-body-weight: 400;
+}

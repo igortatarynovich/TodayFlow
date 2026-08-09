@@ -1,0 +1,9 @@
+<svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Uranus</title>
+  <g stroke="#000" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.5 42V20M35.5 42V20"></path>
+    <path d="M16.5 31h23"></path>
+    <circle cx="28" cy="14.5" r="5.5"></circle>
+  </g>
+  <circle cx="28" cy="14.5" r="2.25" fill="#000"></circle>
+</svg>

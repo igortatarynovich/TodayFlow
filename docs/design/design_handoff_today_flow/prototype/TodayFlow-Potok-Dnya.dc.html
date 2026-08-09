@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/todayflow-design-system-7383d061-27b5-4769-a4a3-2d220619d73a/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/todayflow-design-system-7383d061-27b5-4769-a4a3-2d220619d73a/tokens/colors.css">
+<link rel="stylesheet" href="_ds/todayflow-design-system-7383d061-27b5-4769-a4a3-2d220619d73a/tokens/typography.css">
+<link rel="stylesheet" href="_ds/todayflow-design-system-7383d061-27b5-4769-a4a3-2d220619d73a/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/todayflow-design-system-7383d061-27b5-4769-a4a3-2d220619d73a/tokens/effects.css">
+<link rel="stylesheet" href="_ds/todayflow-design-system-7383d061-27b5-4769-a4a3-2d220619d73a/tokens/day-atmosphere.css">
+<link rel="stylesheet" href="_ds/todayflow-design-system-7383d061-27b5-4769-a4a3-2d220619d73a/styles.css">
+<script src="_ds/todayflow-design-system-7383d061-27b5-4769-a4a3-2d220619d73a/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+  body { margin: 0; }
+  .tfd-fade { transition: opacity 220ms ease, transform 220ms ease; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--tf-surface-warm);display:flex;flex-direction:column;align-items:center;gap:20px;padding:48px 24px;font-family:var(--tf-font-body);box-sizing:border-box;">
+
+  <div style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--tf-ink-quiet);">Прототип · шаг {{ stepNumber }} из 12 · один экран = одна тема</div>
+
+  <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+    <div style="font-size:10px;color:var(--tf-ink-quiet);">Демо: атмосфера дня — {{ activeModeLabel }} · {{ activePhaseLabel }}</div>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:360px;">
+      <sc-for list="{{ modeButtons }}" as="btn" hint-placeholder-count="8">
+        <button style="{{ btn.style }}" onClick="{{ btn.onClick }}">{{ btn.label }}</button>
+      </sc-for>
+    </div>
+    <div style="display:flex;gap:4px;">
+      <sc-for list="{{ phaseButtons }}" as="btn" hint-placeholder-count="4">
+        <button style="{{ btn.style }}" onClick="{{ btn.onClick }}">{{ btn.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="width:390px;height:780px;border-radius:40px;overflow:hidden;box-shadow:var(--tf-shadow-hero);position:relative;display:flex;flex-direction:column;">
+    <div style="{{ moodBgStyle }}">
+
+      <sc-if value="{{ showArrows }}" hint-placeholder-val="{{ true }}">
+        <div style="{{ arrowLeftStyle }}" onClick="{{ goPrev }}">‹</div>
+        <div style="{{ arrowRightStyle }}" onClick="{{ goNext }}">›</div>
+      </sc-if>
+
+      <div style="{{ scrollAreaStyle }}" onPointerDown="{{ onPointerDown }}" onPointerUp="{{ onPointerUp }}">
+
+        <sc-if value="{{ showDots }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;justify-content:center;gap:5px;padding:6px 0 16px;">
+            <sc-for list="{{ dots }}" as="dot" hint-placeholder-count="12">
+              <button style="{{ dot.style }}" onClick="{{ dot.onClick }}"></button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="flex:1;display:flex;flex-direction:column;position:relative;">
+
+          <!-- STEP 0: Приветствие -->
+          <sc-if value="{{ isWelcome }}" hint-placeholder-val="{{ true }}">
+            <div class="tfd-fade" style="position:absolute;inset:-20px -20px 0;overflow:hidden;">
+              <image-slot id="welcome-photo" shape="rect" placeholder="Перетащи фото: пейзаж, тёплый утренний свет" style="position:absolute;inset:0;"></image-slot>
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,16,10,0.05) 0%, rgba(20,16,10,0.15) 45%, rgba(20,16,10,0.82) 100%);pointer-events:none;"></div>
+              <div style="position:absolute;left:24px;right:24px;bottom:26px;color:var(--tf-on-dark);">
+                <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.75;">Добрый день, Игорь</div>
+                <div style="font-family:var(--tf-font-display);font-weight:600;font-size:25px;line-height:1.3;margin-top:8px;">Середина дня — хороший момент свериться с собой.</div>
+                <div style="font-size:13px;opacity:0.65;margin-top:8px;">суббота, 8 августа</div>
+                <div style="background:rgba(255,255,255,0.08);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.16);border-radius:18px;padding:14px 16px;margin-top:14px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg, rgba(250,246,238,0.9), rgba(250,246,238,0.25));flex-shrink:0;"></div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                      <div style="font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,0.14);">Спокойная</div>
+                      <div style="font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,0.14);">Собранная</div>
+                    </div>
+                  </div>
+                  <div style="font-size:12px;opacity:0.7;margin-top:8px;">Убывающая Луна снижает импульсивность.</div>
+                  <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
+                    <div style="font-size:11px;opacity:0.85;padding:3px 9px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);">Планирование</div>
+                    <div style="font-size:11px;opacity:0.85;padding:3px 9px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);">Финансы</div>
+                    <div style="font-size:11px;opacity:0.85;padding:3px 9px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);">Разговоры</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;margin-top:18px;cursor:pointer;" onClick="{{ goNext }}">
+                  <div style="width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(250,246,238,0.6);display:flex;align-items:center;justify-content:center;font-size:17px;">→</div>
+                  <div>
+                    <div style="font-size:14px;font-weight:600;">Начать день</div>
+                    <div style="font-size:11.5px;opacity:0.65;">Оформим сегодняшний день</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- STEP 1: Приоритет -->
+          <sc-if value="{{ isPriority }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:12px;margin:auto 0;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Оформим день · Приоритет</div>
+              <div style="font-family:var(--tf-font-display);font-weight:600;font-size:19px;color:{{ inkColor }};">Что тебе сейчас важнее всего?</div>
+              <div style="font-size:13px;color:{{ inkSoftColor }};">Один выбор — и день подстроится под твой приоритет.</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <sc-for list="{{ priorityChips }}" as="chip" hint-placeholder-count="6">
+                  <button style="{{ chip.style }}" onClick="{{ chip.onClick }}">
+                    <div style="font-weight:700;font-size:13.5px;">{{ chip.label }}</div>
+                    <div style="font-size:11.5px;opacity:0.75;margin-top:2px;">{{ chip.sub }}</div>
+                  </button>
+                </sc-for>
+              </div>
+              <div style="font-size:12.5px;color:{{ accentColor }};margin-top:2px;text-decoration:underline;cursor:pointer;">Разобрать тему (сферу) точнее →</div>
+              <div style="{{ previewStripStyle }}" onClick="{{ goNext }}">
+                <div style="font-size:11px;color:{{ inkSoftColor }};">Дальше</div>
+                <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">Обещание →</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- STEP 2: Обещание -->
+          <sc-if value="{{ isPromise }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:10px;margin:auto 0;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Оформим день · Обещание</div>
+              <div style="font-family:var(--tf-font-display);font-weight:600;font-size:19px;color:{{ inkColor }};">Какое обещание ты хочешь дать себе сегодня?</div>
+              <div style="font-size:12.5px;color:{{ inkSoftColor }};margin-bottom:6px;">Маленькое обещание помогает завершить день осмысленно — выбери, если откликается.</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <sc-for list="{{ promiseOptions }}" as="opt" hint-placeholder-count="3">
+                  <button style="{{ opt.style }}" onClick="{{ opt.onClick }}">{{ opt.label }}</button>
+                </sc-for>
+                <button style="{{ writeOwnStyle }}" onClick="{{ toggleWriteOwn }}">Написать своё</button>
+                <sc-if value="{{ showCustomPromise }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ customPromiseBoxStyle }}">поле для своего текста — заглушка</div>
+                </sc-if>
+              </div>
+              <div style="{{ previewStripStyle }}" onClick="{{ goNext }}">
+                <div style="font-size:11px;color:{{ inkSoftColor }};">Дальше</div>
+                <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">Сделай день своим →</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- STEP 3: Сделай день своим -->
+          <sc-if value="{{ isOwnDay }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:12px;margin:auto 0;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Оформим день · Действие</div>
+              <div style="font-family:var(--tf-font-display);font-weight:600;font-size:19px;color:{{ inkColor }};">Сделай сегодняшний день своим</div>
+              <div style="font-size:12.5px;color:{{ inkSoftColor }};margin-bottom:4px;">Сегодня можно:</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <button style="{{ practiceCardStyle }}" onClick="{{ togglePracticeCard }}">
+                  <div style="font-weight:700;font-size:14px;">Практика</div>
+                  <div style="font-size:12px;opacity:0.75;margin-top:3px;">{{ selectedPracticeLabel }}</div>
+                </button>
+                <button style="{{ asceticCardStyle }}" onClick="{{ toggleAscetic }}">
+                  <div style="font-weight:700;font-size:14px;">Аскеза</div>
+                  <div style="font-size:12px;opacity:0.75;margin-top:3px;">{{ selectedAsceticLabel }}</div>
+                </button>
+                <button style="{{ habitCardStyle }}" onClick="{{ toggleHabit }}">
+                  <div style="font-weight:700;font-size:14px;">Привычка</div>
+                  <div style="font-size:12px;opacity:0.75;margin-top:3px;">{{ selectedHabitLabel }}</div>
+                </button>
+              </div>
+
+              <sc-if value="{{ ownDayOptionsOpen }}" hint-placeholder-val="{{ false }}">
+                <div class="tfd-fade" style="display:flex;flex-direction:column;gap:8px;">
+                  <sc-for list="{{ ownDayChips }}" as="opt" hint-placeholder-count="3">
+                    <button style="{{ opt.style }}" onClick="{{ opt.onClick }}">{{ opt.label }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <div>
+                <div style="font-family:var(--tf-font-display);font-weight:600;font-size:16px;color:{{ inkColor }};margin-bottom:8px;">Твой прогресс</div>
+                <div style="{{ glassCardStyle }}">
+                  <sc-for list="{{ trackedItems }}" as="tr" hint-placeholder-count="3">
+                    <div style="{{ tr.rowStyle }}">
+                      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                        <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">{{ tr.name }}</div>
+                        <div style="font-size:11px;color:{{ accentColor }};font-weight:600;">{{ tr.streakLabel }}</div>
+                      </div>
+                      <div style="font-size:10.5px;color:{{ inkSoftColor }};margin-top:1px;">{{ tr.kind }}</div>
+                      <div style="display:flex;gap:4px;margin-top:6px;">
+                        <sc-for list="{{ tr.dayDots }}" as="d" hint-placeholder-count="7">
+                          <div style="{{ d.style }}"></div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="{{ previewStripStyle }}" onClick="{{ goNext }}">
+                <div style="font-size:11px;color:{{ inkSoftColor }};">Дальше</div>
+                <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">Поток дня →</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- STEP 4: Поток дня -->
+          <sc-if value="{{ isFlow }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:14px;margin:auto 0;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Поток дня</div>
+              <div style="font-family:var(--tf-font-display);font-weight:600;font-size:21px;line-height:1.3;color:{{ inkColor }};">Утро, окна дня, вечер и отдых — как пройти сутки целиком.</div>
+              <div style="{{ glassCardStyle }}">
+                <sc-for list="{{ timelineItems }}" as="item" hint-placeholder-count="4">
+                  <div style="{{ item.rowStyle }}" onClick="{{ item.onClick }}">
+                    <div style="display:flex;gap:12px;align-items:flex-start;">
+                      <div style="{{ item.dotStyle }}"></div>
+                      <div style="flex:1;">
+                        <div style="display:flex;align-items:baseline;gap:8px;">
+                          <div style="font-family:var(--tf-font-display);font-weight:700;font-size:15px;color:{{ inkColor }};">{{ item.marker }}</div>
+                          <div style="font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">{{ item.tag }}</div>
+                        </div>
+                        <div style="font-size:13.5px;line-height:1.45;color:{{ inkMutedColor }};margin-top:3px;">{{ item.text }}</div>
+                        <sc-if value="{{ item.expanded }}" hint-placeholder-val="{{ false }}">
+                          <div style="font-size:12.5px;line-height:1.5;color:{{ inkSoftColor }};margin-top:8px;padding-top:8px;border-top:1px solid {{ borderColor }};">{{ item.detail }}</div>
+                        </sc-if>
+                      </div>
+                      <div style="{{ item.chevronStyle }}">{{ item.chevronGlyph }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="{{ previewStripStyle }}" onClick="{{ goNext }}">
+                <div style="font-size:11px;color:{{ inkSoftColor }};">Дальше</div>
+                <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">Число дня →</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- STEP 5: Число дня (ритуал) -->
+          <sc-if value="{{ isNumber }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:14px;margin:auto 0;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Число дня</div>
+
+              <sc-if value="{{ numberClosed }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:13px;color:{{ inkSoftColor }};text-align:center;margin-top:6px;">Выбери число интуитивно, не думая.</div>
+                <div style="position:relative;width:220px;height:220px;margin:8px auto 4px;">
+                  <sc-for list="{{ numberRing }}" as="slot" hint-placeholder-count="9">
+                    <button style="{{ slot.style }}" onClick="{{ slot.onClick }}"></button>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ numberOpened }}" hint-placeholder-val="{{ false }}">
+                <div style="{{ glassCardStyle }}">
+                  <div style="text-align:center;padding:10px 0;">
+                    <div style="font-family:var(--tf-font-display);font-weight:700;font-size:64px;color:{{ inkColor }};line-height:1;">8</div>
+                    <div style="font-size:14px;color:{{ inkMutedColor }};margin-top:6px;">Управленец</div>
+                  </div>
+                </div>
+                <sc-if value="{{ numberShowMeaning }}" hint-placeholder-val="{{ false }}">
+                  <div class="tfd-fade">
+                    <div style="{{ glassCardStyle }}">
+                      <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Значение</div>
+                      <div style="font-size:14px;line-height:1.55;color:{{ inkMutedColor }};margin-top:6px;">Восьмёрка — сила результата: движение вперёд там, где есть ясная договорённость и границы.</div>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ numberShowContext }}" hint-placeholder-val="{{ false }}">
+                  <div class="tfd-fade">
+                    <div style="{{ glassCardStyle }}">
+                      <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Опора дня</div>
+                      <div style="font-size:14px;line-height:1.55;color:{{ inkMutedColor }};margin-top:6px;">Сегодня хорошо закрывать долги, подводить итоги и держать слово.</div>
+                    </div>
+                  </div>
+                  <div style="{{ previewStripStyle }}" onClick="{{ goNext }}">
+                    <div style="font-size:11px;color:{{ inkSoftColor }};">Дальше</div>
+                    <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">Карта дня →</div>
+                  </div>
+                </sc-if>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <!-- STEP 6: Карта дня (ритуал) -->
+          <sc-if value="{{ isCard }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:14px;margin:auto 0;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Карта дня</div>
+
+              <sc-if value="{{ cardClosed }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:13px;color:{{ inkSoftColor }};text-align:center;margin-top:6px;">Коснись колоды, чтобы вытянуть карту.</div>
+                <div style="position:relative;height:220px;margin-top:6px;cursor:pointer;" onClick="{{ drawCard }}">
+                  <div style="{{ deckBackStyle1 }}"></div>
+                  <div style="{{ deckBackStyle2 }}"></div>
+                  <div style="{{ deckBackStyle3 }}"></div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ cardOpened }}" hint-placeholder-val="{{ false }}">
+                <div style="{{ cardArtStyle }}">
+                  <image-slot id="tarot-card-art" shape="rounded" radius="16" placeholder="Перетащи иллюстрацию карты: «Императрица» (III)" style="position:absolute;inset:0;"></image-slot>
+                </div>
+                <div style="text-align:center;font-family:var(--tf-font-display);font-weight:600;font-size:19px;color:{{ inkColor }};">Императрица</div>
+                <sc-if value="{{ cardShowMeaning }}" hint-placeholder-val="{{ false }}">
+                  <div class="tfd-fade">
+                    <div style="{{ glassCardStyle }}">
+                      <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Значение</div>
+                      <div style="font-size:14px;line-height:1.55;color:{{ inkMutedColor }};margin-top:6px;">Забота, изобилие, естественный рост. День поддерживает то, что вы выращиваете, а не форсируете.</div>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ cardShowContext }}" hint-placeholder-val="{{ false }}">
+                  <div class="tfd-fade">
+                    <div style="{{ glassCardStyle }}">
+                      <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Для тебя сегодня</div>
+                      <div style="font-size:14px;line-height:1.55;color:{{ inkMutedColor }};margin-top:6px;">При числе дня 8 (Управленец) эта карта — про силу результата без нажима: заботься о деле, а не толкай его.</div>
+                    </div>
+                  </div>
+                  <div style="{{ previewStripStyle }}" onClick="{{ goNext }}">
+                    <div style="font-size:11px;color:{{ inkSoftColor }};">Дальше</div>
+                    <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">Цвет дня →</div>
+                  </div>
+                </sc-if>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <!-- STEP 7: Цвет дня -->
+          <sc-if value="{{ isColor }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:14px;margin:auto 0;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;text-align:center;">Цвет дня</div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <div style="width:96px;height:96px;border-radius:50%;background:#4a90c4;border:3px solid rgba(255,255,255,0.8);box-shadow:0 8px 20px rgba(74,144,196,0.35);"></div>
+                <div style="font-family:var(--tf-font-display);font-weight:600;font-size:19px;color:{{ inkColor }};">Лазурь</div>
+                <div style="font-size:12.5px;color:{{ inkSoftColor }};">Интенсивность: ярко</div>
+              </div>
+              <div style="{{ glassCardStyle }}">
+                <div style="text-align:center;font-size:13.5px;line-height:1.5;color:{{ inkMutedColor }};">Ясность без тяжести — ровный фон для решения, не для дистанцирования.</div>
+              </div>
+              <div style="{{ glassCardStyle }}">
+                <sc-for list="{{ colorRows }}" as="row" hint-placeholder-count="4">
+                  <div style="{{ row.style }}">
+                    <div style="font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">{{ row.label }}</div>
+                    <div style="font-size:13.5px;line-height:1.45;color:{{ inkMutedColor }};margin-top:3px;">{{ row.text }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="{{ previewStripStyle }}" onClick="{{ goNext }}">
+                <div style="font-size:11px;color:{{ inkSoftColor }};">Дальше</div>
+                <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">Фокус дня →</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- STEP 8: Фокус дня -->
+          <sc-if value="{{ isFocus }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:14px;margin:auto 0;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Фокус дня</div>
+              <div style="font-family:var(--tf-font-display);font-weight:600;font-size:20px;color:{{ inkColor }};">Отпускание старого сценария.</div>
+              <div style="{{ glassCardStyle }}">
+                <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">В приоритете</div>
+                <div style="font-size:14px;line-height:1.55;color:{{ inkMutedColor }};margin-top:6px;">Замечать, где тревога ускоряет темп — и оставлять его ровным.</div>
+              </div>
+              <div style="{{ glassCardStyle }}">
+                <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">Лучше избегать</div>
+                <div style="font-size:14px;line-height:1.55;color:{{ inkMutedColor }};margin-top:6px;">Резких решений «прямо сейчас» — сегодня они обычно откатываются завтра.</div>
+              </div>
+              <div style="{{ previewStripStyle }}" onClick="{{ goNext }}">
+                <div style="font-size:11px;color:{{ inkSoftColor }};">Дальше</div>
+                <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">Практика дня →</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- STEP 9: Практика дня (подарок) -->
+          <sc-if value="{{ isPractice }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="position:absolute;inset:-20px -20px 0;overflow:hidden;">
+              <image-slot id="practice-photo" shape="rect" placeholder="Перетащи фото: спокойная практика у воды" style="position:absolute;inset:0;"></image-slot>
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,16,10,0.1) 0%, rgba(20,16,10,0.2) 40%, rgba(20,16,10,0.86) 100%);pointer-events:none;"></div>
+              <div style="position:absolute;left:24px;right:24px;bottom:26px;color:var(--tf-on-dark);">
+                <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.7;">Практика дня · подарок на сегодня</div>
+                <div style="font-family:var(--tf-font-display);font-weight:600;font-size:26px;line-height:1.25;margin-top:8px;">5 минут тишины</div>
+                <div style="font-size:13.5px;line-height:1.5;opacity:0.85;margin-top:8px;">Сядь удобнее, закрой глаза и просто наблюдай за дыханием. Ничего доказывать не нужно — только заметить, что происходит внутри.</div>
+                <button style="{{ practiceBtnStyle }}" onClick="{{ togglePracticeStarted }}">{{ practiceBtnLabel }}</button>
+                <div style="font-size:12px;opacity:0.65;margin-top:12px;text-decoration:underline;cursor:pointer;">Настроить привычку или практику →</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- STEP 10: Переход к итогу -->
+          <sc-if value="{{ isRecap }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:14px;flex:1;justify-content:center;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;text-align:center;">Вот и всё на сегодня</div>
+              <div style="{{ glassCardStyle }}">
+                <sc-for list="{{ recapRows }}" as="row" hint-placeholder-count="3">
+                  <div style="{{ row.style }}">
+                    <div style="font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;">{{ row.label }}</div>
+                    <div style="font-size:13.5px;color:{{ inkMutedColor }};margin-top:3px;">{{ row.value }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="{{ previewStripStyle }}" onClick="{{ goNext }}">
+                <div style="font-size:11px;color:{{ inkSoftColor }};">Дальше</div>
+                <div style="font-size:13.5px;font-weight:600;color:{{ inkColor }};">Итог дня →</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- STEP 11: Закрыть день -->
+          <sc-if value="{{ isClose }}" hint-placeholder-val="{{ false }}">
+            <div class="tfd-fade" style="display:flex;flex-direction:column;gap:16px;flex:1;justify-content:center;">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:{{ accentColor }};font-weight:600;text-align:center;">Итог дня</div>
+              <div style="{{ glassCardStyle }}">
+                <div style="text-align:center;font-size:15px;line-height:1.55;color:{{ inkColor }};">Сегодня без острой ловушки — ровный, предсказуемый день.</div>
+              </div>
+              <sc-if value="{{ isNotClosed }}" hint-placeholder-val="{{ true }}">
+                <button style="{{ closeDayBtnStyle }}" onClick="{{ startClosing }}">Закрыть день</button>
+              </sc-if>
+              <sc-if value="{{ isClosing }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="font-size:12.5px;color:{{ inkSoftColor }};text-align:center;">Получилось сегодня?</div>
+                  <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;">
+                    <sc-for list="{{ outcomeChips }}" as="chip" hint-placeholder-count="3">
+                      <button style="{{ chip.style }}" onClick="{{ chip.onClick }}">{{ chip.label }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ isClosed }}" hint-placeholder-val="{{ false }}">
+                <div style="text-align:center;font-size:14.5px;font-weight:600;color:{{ inkColor }};">Итог: {{ chosenOutcome }} ✓</div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+
+      <div style="{{ bottomNavStyle }}">
+        <sc-for list="{{ navItemsFull }}" as="nav" hint-placeholder-count="5">
+          <div style="{{ nav.wrapStyle }}">
+            <div style="{{ nav.iconStyle }}"></div>
+            <div style="{{ nav.labelStyle }}">{{ nav.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="max-width:390px;font-size:12px;line-height:1.5;color:var(--tf-ink-quiet);text-align:center;">
+    Точки сгруппированы по актам: «Оформим день» / «Поток дня» / «Итог». Число и Карта — ритуал: закрытый выбор → раскрытие → трактовка в контексте.
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 480, &quot;height&quot;: 900}}">
+const MOODS = ['grounded','flow','radiance','momentum','clarity','renewal','tension','depth'];
+const MOOD_LABEL = { grounded:'Заземление', flow:'Поток', radiance:'Сияние', momentum:'Импульс', clarity:'Ясность', renewal:'Обновление', tension:'Напряжение', depth:'Глубина' };
+const DARK_MOODS = { tension: true, depth: true };
+const PHASE_FACTOR = { morning: 1.15, day: 1, evening: 0.92, night: 0.8 };
+const PHASE_LABEL = { morning: 'Утро', day: 'День', evening: 'Вечер', night: 'Ночь' };
+
+const TIMELINE = [
+  { marker: 'УТРО', tag: 'СТАРТ', text: 'Лёгкое утро, без спешки — день ещё открыт.', expandable: false },
+  { marker: '11:20', tag: 'БЛАГОПРИЯТНО', text: 'Настроение ровнее — лучше снизить темп.', expandable: true,
+    detail: 'Убывающая Луна снижает импульсивность. Хорошо для спокойных разговоров и разбора дел.' },
+  { marker: '17:45', tag: 'БЛАГОПРИЯТНО', text: 'Контакт мягче — хорошее окно для разговоров.', expandable: true,
+    detail: 'Хорошо для важного созвона, честного разговора, извинения.' },
+  { marker: 'ВЕЧЕР', tag: 'ИТОГ', text: 'Соберём короткий итог дня перед сном.', expandable: false },
+];
+
+const COLOR_ROWS = [
+  { label: 'В одежде (ярче)', text: 'Светлая рубашка, шарф или носки лазурного оттенка.' },
+  { label: 'Аксессуар', text: 'Тонкий браслет или блокнот в мягком синем.' },
+  { label: 'Сколько', text: '10–15% образа — один акцент.' },
+  { label: 'Лучше избегать', text: 'Кислотно-оранжевый — усиливает срыв в «rush/impulse».' },
+];
+
+const PRIORITIES = [
+  { label: 'Фокус', sub: 'работа и концентрация' },
+  { label: 'Энергия', sub: 'темп и силы' },
+  { label: 'Отношения', sub: 'близость и контакт' },
+  { label: 'Деньги', sub: 'ресурсы и опоры' },
+  { label: 'Ясность', sub: 'решения без шума' },
+  { label: 'Спокойствие', sub: 'мягкий ритм дня' },
+];
+const PROMISES = [
+  'Выбери один хвост — конкретное дело или обязательство — и закрой его до полудня: либо сделай, либо честно перенеси/откажись.',
+  'Сегодня полезно замечать, где тревога ускоряет темп — и оставлять его ровным.',
+  'Одним предложением назови своё состояние вслух — по факту, без объяснений: «сегодня снимаю нагрузку, буду тихий».',
+];
+const OUTCOMES = ['Получилось', 'Частично', 'Не получилось'];
+const NAV_ITEMS = ['Я сегодня', 'Моя карта', 'Совместимость', 'Таро', 'Практики'];
+const OWNDAY_OPTIONS = {
+  practice: ['5 минут тишины', 'Дыхание 4-7-8', 'Растяжка у окна'],
+  ascetic: ['Без соцсетей до обеда', 'Без сахара сегодня', 'Один приём пищи в тишине'],
+  habit: ['Стакан воды утром', '10 минут чтения', 'Вечерняя прогулка'],
+};
+const TRACKED = [
+  { name: 'Стакан воды утром', kind: 'Привычка', streak: 5, days: [1, 1, 1, 0, 1, 1, 0] },
+  { name: 'Без сахара', kind: 'Аскеза', streak: 2, days: [0, 0, 0, 0, 0, 1, 1] },
+  { name: '5 минут тишины', kind: 'Практика', streak: 9, days: [1, 1, 1, 1, 1, 1, 1] },
+];
+const LAST_STEP = 11;
+// step map: 0 welcome · 1 priority · 2 promise · 3 ownday · 4 flow · 5 number · 6 card · 7 color · 8 focus · 9 practice · 10 recap · 11 close
+const CLUSTER_START = [4, 10];
+
+class Component extends DCLogic {
+  state = { step: 0, mood: 'grounded', phase: 'day', expandedTimeline: null, priority: null, promise: null, showCustomPromise: false,
+    ownDayOpen: null, selectedPractice: null, selectedAscetic: null, selectedHabit: null, practiceStarted: false,
+    numberStage: 'closed', cardStage: 'closed', closeStage: 'idle', outcome: null };
+  _touchX = null;
+  _timers = [];
+
+  toggleTimeline = (i) => this.setState(s => ({ expandedTimeline: s.expandedTimeline === i ? null : i }));
+  goTo = (i) => this.setState({ step: Math.max(0, Math.min(LAST_STEP, i)) });
+  goNext = () => this.goTo(this.state.step + 1);
+  goPrev = () => this.goTo(this.state.step - 1);
+  setMood = (m) => this.setState({ mood: m });
+  setPhase = (ph) => this.setState({ phase: ph });
+
+  pickPriority = (p) => this.setState({ priority: p });
+  pickPromise = (i) => this.setState({ promise: i, showCustomPromise: false });
+  toggleWriteOwn = () => this.setState(s => ({ showCustomPromise: !s.showCustomPromise, promise: null }));
+  toggleOwnDay = (cat) => this.setState(s => ({ ownDayOpen: s.ownDayOpen === cat ? null : cat }));
+  togglePracticeCard = () => this.toggleOwnDay('practice');
+  toggleAscetic = () => this.toggleOwnDay('ascetic');
+  toggleHabit = () => this.toggleOwnDay('habit');
+  selectOwnDayOption = (cat, label) => {
+    const key = { practice: 'selectedPractice', ascetic: 'selectedAscetic', habit: 'selectedHabit' }[cat];
+    this.setState({ [key]: label, ownDayOpen: null });
+  };
+  selectOwnDayOptionByLabel = (label) => this.selectOwnDayOption(this.state.ownDayOpen, label);
+  togglePracticeStarted = () => this.setState(s => ({ practiceStarted: !s.practiceStarted }));
+
+  pickNumber = () => {
+    if (this.state.numberStage !== 'closed') return;
+    this.setState({ numberStage: 'value' });
+    this._timers.push(setTimeout(() => this.setState({ numberStage: 'meaning' }), 700));
+    this._timers.push(setTimeout(() => this.setState({ numberStage: 'context' }), 1500));
+  };
+  drawCard = () => {
+    if (this.state.cardStage !== 'closed') return;
+    this.setState({ cardStage: 'drawn' });
+    this._timers.push(setTimeout(() => this.setState({ cardStage: 'meaning' }), 700));
+    this._timers.push(setTimeout(() => this.setState({ cardStage: 'context' }), 1500));
+  };
+
+  startClosing = () => this.setState({ closeStage: 'choosing' });
+  pickOutcome = (o) => this.setState({ outcome: o, closeStage: 'closed' });
+
+  renderVals() {
+    const s = this.state;
+    const dark = !!DARK_MOODS[s.mood];
+    const ink = dark ? '#faf8f5' : 'var(--tf-ink)';
+    const inkMuted = dark ? 'rgba(250,248,245,0.75)' : 'var(--tf-ink-secondary)';
+    const inkSoft = dark ? 'rgba(250,248,245,0.55)' : 'var(--tf-ink-quiet)';
+    const border = dark ? 'var(--tf-glass-border-dark)' : 'var(--tf-glass-border-light)';
+    const accent = 'var(--tf-accent-gold-600)';
+    const factor = PHASE_FACTOR[s.phase] || 1;
+    const phaseFilter = `saturate(${factor}) brightness(${(0.97 + factor * 0.03).toFixed(3)})`;
+
+    const modeButtons = MOODS.map(key => ({
+      label: MOOD_LABEL[key], onClick: () => this.setMood(key),
+      style: { border: 'none', borderRadius: 'var(--tf-radius-pill)', padding: '5px 10px', fontSize: '10.5px', fontWeight: 600, cursor: 'pointer',
+        background: s.mood === key ? 'var(--tf-accent-gold-600)' : 'var(--tf-border-subtle)', color: s.mood === key ? '#fff8ee' : 'var(--tf-ink-secondary)' },
+    }));
+    const phaseButtons = Object.keys(PHASE_LABEL).map(key => ({
+      label: PHASE_LABEL[key], onClick: () => this.setPhase(key),
+      style: { border: 'none', borderRadius: 'var(--tf-radius-pill)', padding: '5px 12px', fontSize: '10.5px', fontWeight: 600, cursor: 'pointer',
+        background: s.phase === key ? 'var(--tf-ink)' : 'var(--tf-border-subtle)', color: s.phase === key ? '#fff8ee' : 'var(--tf-ink-secondary)' },
+    }));
+
+    const scrollAreaStyle = { position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', padding: '20px 20px 18px', boxSizing: 'border-box', touchAction: 'pan-y' };
+
+    const moodBgStyle = {
+      position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden',
+      background: `radial-gradient(ellipse 85% 55% at 12% -8%, var(--tf-mood-${s.mood}-glow-a), transparent 58%), radial-gradient(ellipse 70% 45% at 92% 8%, var(--tf-mood-${s.mood}-glow-b), transparent 55%), var(--tf-mood-${s.mood}-bg)`,
+      color: dark ? '#faf8f5' : '#2a211b', transition: 'background 700ms ease, filter 400ms ease', filter: phaseFilter,
+    };
+    const glassCardStyle = {
+      background: dark ? 'var(--tf-glass-surface-dark)' : 'var(--tf-glass-surface-light)', backdropFilter: 'blur(var(--tf-glass-blur))',
+      borderRadius: '22px', border: `1px solid ${border}`, padding: '16px 17px', boxShadow: '0 8px 24px rgba(20,16,10,0.05)',
+    };
+
+    const timelineItems = TIMELINE.map((t, i) => {
+      const expanded = s.expandedTimeline === i;
+      return { ...t, expanded,
+        onClick: t.expandable ? () => this.toggleTimeline(i) : null,
+        rowStyle: { padding: i === 0 ? '0 0 14px' : (i === TIMELINE.length - 1 ? '14px 0 0' : '14px 0'),
+          borderTop: i === 0 ? 'none' : `1px solid ${border}`, cursor: t.expandable ? 'pointer' : 'default' },
+        dotStyle: { width: '8px', height: '8px', borderRadius: '50%', marginTop: '5px', flexShrink: 0,
+          background: t.tag === 'БЛАГОПРИЯТНО' ? accent : (dark ? 'rgba(250,248,245,0.35)' : 'rgba(42,33,27,0.28)') },
+        chevronStyle: { color: inkSoft, fontSize: '13px', opacity: t.expandable ? 0.7 : 0, transition: 'transform 200ms ease',
+          transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' },
+        chevronGlyph: t.expandable ? '›' : '',
+      };
+    });
+
+    const colorRows = COLOR_ROWS.map((r, i) => ({ label: r.label, text: r.text,
+      style: { padding: i === 0 ? '0 0 12px' : (i === COLOR_ROWS.length - 1 ? '12px 0 0' : '12px 0'),
+        borderTop: i === 0 ? 'none' : `1px solid ${border}` } }));
+
+    const outcomeChipStyle = (active) => ({
+      border: 'none', borderRadius: 'var(--tf-radius-pill)', padding: '8px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+      background: active ? accent : (dark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.5)'), color: active ? '#fff8ee' : inkMuted,
+    });
+    const outcomeChips = OUTCOMES.map(o => ({ label: o, style: outcomeChipStyle(s.outcome === o), onClick: () => this.pickOutcome(o) }));
+
+    const promiseRowStyle = (active) => ({
+      textAlign: 'left', border: 'none', borderRadius: 'var(--tf-radius-lg)', padding: '12px 14px', fontSize: '13px', lineHeight: '1.45', cursor: 'pointer',
+      background: active ? accent : (dark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.5)'), color: active ? '#fff8ee' : inkMuted,
+    });
+    const promiseOptions = PROMISES.map((text, i) => ({ label: text, style: promiseRowStyle(s.promise === i), onClick: () => this.pickPromise(i) }));
+
+    const numberRing = Array.from({ length: 9 }, (_, i) => {
+      const angle = (-90 + i * 40) * (Math.PI / 180);
+      const r = 88;
+      const x = 110 + r * Math.cos(angle) - 20;
+      const y = 110 + r * Math.sin(angle) - 20;
+      return { onClick: () => this.pickNumber(), style: {
+        position: 'absolute', left: `${x}px`, top: `${y}px`, width: '40px', height: '40px', borderRadius: '50%',
+        border: `1.5px solid ${border}`, background: dark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.55)', cursor: 'pointer',
+      } };
+    });
+
+    const deckBack = (rot, offset) => ({
+      position: 'absolute', left: '50%', top: '0', width: '140px', height: '210px', borderRadius: 'var(--tf-radius-lg)',
+      transform: `translateX(-50%) rotate(${rot}deg) translateY(${offset}px)`, background: 'rgba(139,106,62,0.16)',
+      border: `1.5px solid ${border}`, backgroundImage: 'repeating-linear-gradient(45deg, transparent 0 10px, rgba(139,106,62,0.14) 10px 11px)',
+    });
+
+    const recapRows = [
+      { label: 'Приоритет', value: s.priority || '— не выбран' },
+      { label: 'Обещание', value: s.promise != null ? PROMISES[s.promise].slice(0, 46) + '…' : (s.showCustomPromise ? 'своё обещание' : '— без обещания') },
+      { label: 'Практика', value: s.practiceStarted ? 'начата ✓' : 'ещё нет' },
+    ];
+
+    const ownDaySelected = s.ownDayOpen ? { practice: s.selectedPractice, ascetic: s.selectedAscetic, habit: s.selectedHabit }[s.ownDayOpen] : null;
+    const chipCardStyle = (active) => ({
+      textAlign: 'left', border: 'none', borderRadius: 'var(--tf-radius-lg)', padding: '11px 13px', cursor: 'pointer',
+      background: active ? accent : (dark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.55)'), color: active ? '#fff8ee' : inkMuted,
+    });
+    const priorityChips = PRIORITIES.map(pr => ({ label: pr.label, sub: pr.sub,
+      style: chipCardStyle(s.priority === pr.label), onClick: () => this.pickPriority(pr.label) }));
+    const ownDayChips = s.ownDayOpen ? OWNDAY_OPTIONS[s.ownDayOpen].map(label => ({ label,
+      style: chipCardStyle(ownDaySelected === label), onClick: () => this.selectOwnDayOptionByLabel(label) })) : [];
+
+    const infoCard = (active) => ({
+      textAlign: 'left', border: 'none', borderRadius: 'var(--tf-radius-lg)', padding: '11px 13px', cursor: 'pointer',
+      background: active ? accent : (dark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.55)'), color: active ? '#fff8ee' : inkMuted,
+      transition: 'all 150ms ease',
+    });
+
+    const dayDotStyle = (on) => ({ width: '10px', height: '10px', borderRadius: '50%',
+      background: on ? accent : 'transparent', border: `1.5px solid ${on ? accent : border}` });
+    const trackedItems = TRACKED.map((t, i) => ({ name: t.name, kind: t.kind, streakLabel: `${t.streak} дн. подряд`,
+      dayDots: t.days.map(d => ({ style: dayDotStyle(!!d) })),
+      rowStyle: { padding: i === 0 ? '0 0 12px' : (i === TRACKED.length - 1 ? '12px 0 0' : '12px 0'), borderTop: i === 0 ? 'none' : `1px solid ${border}` } }));
+
+    const dots = Array.from({ length: LAST_STEP + 1 }, (_, i) => ({
+      onClick: () => this.goTo(i),
+      style: { width: i === s.step ? '16px' : '5px', height: '5px', borderRadius: '3px', border: 'none', padding: 0, cursor: 'pointer',
+        marginLeft: CLUSTER_START.includes(i) ? '10px' : '0px',
+        background: i === s.step ? accent : 'rgba(139,106,62,0.33)', transition: 'all 200ms ease' },
+    }));
+
+    const arrowBase = { position: 'absolute', top: '50%', transform: 'translateY(-50%)', width: '28px', height: '28px',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', cursor: 'pointer',
+      fontSize: '18px', background: 'rgba(255,255,255,0.35)', zIndex: 3, userSelect: 'none' };
+
+    const activeNavIndex = 0;
+    const navItemsFull = NAV_ITEMS.map((label, i) => ({
+      label,
+      wrapStyle: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flex: 1, cursor: 'pointer' },
+      iconStyle: { width: '18px', height: '18px', borderRadius: '50%',
+        border: `1.5px solid ${i === activeNavIndex ? accent : 'var(--tf-ink-quiet)'}`,
+        background: i === activeNavIndex ? accent : 'transparent', opacity: i === activeNavIndex ? 1 : 0.55 },
+      labelStyle: { fontSize: '10px', fontWeight: i === activeNavIndex ? 700 : 500,
+        color: i === activeNavIndex ? accent : 'var(--tf-ink-quiet)', opacity: i === activeNavIndex ? 1 : 0.7 },
+    }));
+
+    return {
+      stepNumber: s.step + 1,
+      isWelcome: s.step === 0, isPriority: s.step === 1, isPromise: s.step === 2, isOwnDay: s.step === 3,
+      isFlow: s.step === 4, isNumber: s.step === 5, isCard: s.step === 6, isColor: s.step === 7,
+      isFocus: s.step === 8, isPractice: s.step === 9, isRecap: s.step === 10, isClose: s.step === 11,
+      showDots: s.step !== 0, showArrows: s.step !== 0,
+      numberClosed: s.numberStage === 'closed', numberOpened: s.numberStage !== 'closed',
+      numberShowMeaning: s.numberStage === 'meaning' || s.numberStage === 'context', numberShowContext: s.numberStage === 'context',
+      cardClosed: s.cardStage === 'closed', cardOpened: s.cardStage !== 'closed',
+      cardShowMeaning: s.cardStage === 'meaning' || s.cardStage === 'context', cardShowContext: s.cardStage === 'context',
+      isNotClosed: s.closeStage === 'idle', isClosing: s.closeStage === 'choosing', isClosed: s.closeStage === 'closed',
+      chosenOutcome: s.outcome,
+      scrollAreaStyle, moodBgStyle, glassCardStyle,
+      inkColor: ink, inkMutedColor: inkMuted, inkSoftColor: inkSoft, accentColor: accent, borderColor: border,
+      dotCount: LAST_STEP + 1, dotActive: s.step, clusterStarts: CLUSTER_START, goDot: this.goTo,
+      timelineItems, colorRows, priorityChips, promiseOptions, outcomeChips, numberRing, recapRows,
+      showCustomPromise: s.showCustomPromise,
+      goNext: this.goNext, goPrev: this.goPrev, startClosing: this.startClosing, drawCard: this.drawCard, pickPriority: this.pickPriority,
+      arrowsDisabledPrev: s.step === 0, arrowsDisabledNext: s.step === LAST_STEP,
+      previewStripStyle: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 17px',
+        borderRadius: 'var(--tf-radius-lg)', background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.4)', border: `1px solid ${border}`, cursor: 'pointer' },
+      cardArtStyle: { position: 'relative', width: '210px', aspectRatio: '3 / 5', margin: '0 auto', borderRadius: 'var(--tf-radius-lg)', overflow: 'hidden',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(139,106,62,0.13)', border: `1px solid ${border}` },
+      modeButtons, phaseButtons, activeModeLabel: MOOD_LABEL[s.mood], activePhaseLabel: PHASE_LABEL[s.phase],
+      deckBackStyle1: deckBack(-6, 6), deckBackStyle2: deckBack(4, 3), deckBackStyle3: deckBack(0, 0),
+      practiceBtnLabel: s.practiceStarted ? 'Практика начата ✓' : 'Начать практику · 5 минут',
+      togglePracticeStarted: this.togglePracticeStarted,
+      practiceBtnStyle: { marginTop: '16px', border: 'none', borderRadius: 'var(--tf-radius-pill)', padding: '13px 0', width: '100%',
+        fontSize: '14.5px', fontWeight: 700, cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.04em',
+        background: 'var(--tf-accent-gold)', color: '#fff' },
+      closeDayBtnStyle: { border: 'none', borderRadius: 'var(--tf-radius-pill)', padding: '14px 0', fontSize: '15px', fontWeight: 700,
+        textTransform: 'uppercase', letterSpacing: '0.04em', background: 'var(--tf-accent-gold)', color: '#fff', cursor: 'pointer' },
+      writeOwnStyle: { border: `1px dashed ${accent}`, borderRadius: 'var(--tf-radius-pill)', padding: '10px 14px', fontSize: '13px', fontWeight: 600,
+        background: 'transparent', color: accent, cursor: 'pointer', textAlign: 'center' },
+      customPromiseBoxStyle: { border: `1px solid ${border}`, borderRadius: 'var(--tf-radius-lg)', padding: '12px 14px', fontSize: '12.5px',
+        color: inkSoft, fontFamily: "'Courier New',monospace", background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.4)' },
+      toggleWriteOwn: this.toggleWriteOwn,
+      practiceCardStyle: infoCard(s.ownDayOpen === 'practice' || !!s.selectedPractice), togglePracticeCard: this.togglePracticeCard,
+      asceticCardStyle: infoCard(s.ownDayOpen === 'ascetic' || !!s.selectedAscetic), toggleAscetic: this.toggleAscetic,
+      habitCardStyle: { ...infoCard(s.ownDayOpen === 'habit' || !!s.selectedHabit), gridColumn: '1 / -1' }, toggleHabit: this.toggleHabit,
+      selectedPracticeLabel: s.selectedPractice || 'Короткое действие под ритм дня.',
+      selectedAsceticLabel: s.selectedAscetic || 'Осознанное ограничение на сегодня.',
+      selectedHabitLabel: s.selectedHabit || 'Закрепи то, что уже работает.',
+      ownDayOptionsOpen: !!s.ownDayOpen, ownDayChips, trackedItems,
+      onPointerDown: (e) => { this._touchX = e.clientX; },
+      onPointerUp: (e) => {
+        if (this._touchX == null) return;
+        const dx = e.clientX - this._touchX; this._touchX = null;
+        if (dx > 60) this.goPrev(); else if (dx < -60) this.goNext();
+      },
+      dots, navItemsFull,
+      arrowLeftStyle: { ...arrowBase, left: '-6px', opacity: s.step === 0 ? 0.25 : 0.8, pointerEvents: s.step === 0 ? 'none' : 'auto' },
+      arrowRightStyle: { ...arrowBase, right: '-6px', opacity: s.step === LAST_STEP ? 0.25 : 0.8, pointerEvents: s.step === LAST_STEP ? 'none' : 'auto' },
+      bottomNavStyle: { position: 'relative', zIndex: 3, display: 'flex', padding: '10px 16px 14px', gap: '4px',
+        background: 'rgba(253,250,244,0.92)', backdropFilter: 'blur(10px)', borderTop: `1px solid ${border}` },
+    };
+  }
+}
+
+</script>
+</body>
+</html>

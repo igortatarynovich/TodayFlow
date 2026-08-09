@@ -4,6 +4,17 @@ Last updated: 2026-08-08
 Owner: Product + Engineering
 Status: Active working document
 
+**IN PROGRESS (CODE, 2026-08-08):** **Today handoff composition A** — ScreenFlow = 12 steps (Welcome glass → … → Close); SCENARIO_V3.3 + SCREEN_FLOW mapping; greeting CTA «Оформим сегодняшний день». Pixel polish vs lost HTML prototype still open — re-upload `design_handoff_today_flow` for parity.
+
+## Architecture impact — Today handoff composition A (2026-08-08)
+
+- **SoT before:** story-deck v3.2 (7 frames); handoff = UX prototype only (decision B).
+- **SoT after:** handoff 12-step presentation is SoT (decision A); content houses v3.1 unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — FE rebuild
+- **Canon updated?** yes — `docs/today/TODAY_SCREEN_SCENARIO_V3.md` · `docs/foundation/SCREEN_FLOW_V1.md`
+- **Backward compatible?** yes for API; `?step=` indices remap
+
 **DONE (CODE, 2026-08-08):** **Day Atmosphere mobile lite** — photo wash WebP desktop+`-m` mobile (~12–55 KB vs ~1.5–2.2 MB PNG); PNG seeds → `art-seeds/`; single-paint (frame only); decor = CSS geometry × 16 `data-day-decor`; no ambient drift on mobile/coarse + pause when hidden; tab bar opaque (no backdrop-filter). Canon: FOUNDATION_UI §13.
 
 ## Architecture impact — Day Atmosphere mobile lite (2026-08-08)

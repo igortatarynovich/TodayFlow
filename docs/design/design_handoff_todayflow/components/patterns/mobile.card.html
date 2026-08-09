@@ -1,0 +1,22 @@
+<!-- @dsCard group="Components" viewport="440x520" name="Mobile patterns" subtitle="Ritual gates, pulse card, tab bar" -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../_ds_bundle.js"></script>
+<div id="root"></div>
+<script type="text/babel">
+const { DsMobileShell, DsRitualGateSection, DsRitualGate, DsPulseCard, DsMobileTabBar, IconSun, IconMap, IconUsers, IconTarot } = window.TodayFlowDesignSystem_7383d0;
+function Demo(){return (
+<DsMobileShell>
+  <div style={{padding:16,fontFamily:"var(--tf-font-body)"}}>
+    <DsPulseCard label="Streak" value="12 days" hint="Keep the morning ritual" />
+  </div>
+  <DsRitualGateSection eyebrow="Draw a card" hint="One card, one question">
+    <DsRitualGate kind="tarot" title="Tarot" cta="Draw" />
+    <DsRitualGate kind="number" title="Number" cta="Reveal" />
+  </DsRitualGateSection>
+  <DsMobileTabBar activeHref="/today" items={[{href:"/today",label:"Today",icon:<IconSun/>},{href:"/map",label:"Map",icon:<IconMap/>},{href:"/compat",label:"Pairs",icon:<IconUsers/>},{href:"/tarot",label:"Tarot",icon:<IconTarot/>}]} />
+</DsMobileShell>);}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>

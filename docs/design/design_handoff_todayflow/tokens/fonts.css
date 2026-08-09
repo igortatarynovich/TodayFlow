@@ -1,0 +1,3 @@
+/* TodayFlow self-hosts these via next/font/google in the product (see AGENTS notes in readme.md).
+   Design-system preview loads the same families from Google Fonts. */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Playfair+Display:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Lora:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@400;500;600&display=swap');

@@ -81,6 +81,8 @@ import {
 import { TodayInterpretationConfirm } from "@/components/today/composition/TodayInterpretationConfirm";
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
+import { TodayPracticeGiftBlock } from "@/components/today/composition/TodayPracticeGiftBlock";
+import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
 import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
 import { StoryBlockCue, StoryNextAnchor } from "@/components/today/composition/TodayStoryDeckFrames";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
@@ -120,6 +122,7 @@ import {
 } from "@/lib/todayGrowthTrackers";
 import { canOfferFocusDeepen, resolveFocusDeepenTarget } from "@/lib/todayFocusDeepen";
 import { formatRitualTarotPersonalToday, pickRitualHookLine } from "@/lib/ritualRevealCopy";
+import { buildHandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 
 type Props = {
   variant?: TodayCompositionVariant;
@@ -349,7 +352,12 @@ export function TodayCompositionSurface(props: Props) {
   const dayReadingReady =
     useProductFoundation &&
     (isDayScenarioReadyForChapters(props.contract) || story.personalizedReady);
-  const useProductPersonalized = dayReadingReady;
+  /**
+   * Handoff v3.3: full 12-step presentation whenever foundation is on.
+   * Content houses still honest-omit; we do not wait for day_scenario to start Priority→….
+   * `dayReadingReady` remains for deepen / reading-specific slots.
+   */
+  const useProductPersonalized = useProductFoundation;
   const showRitualAsComplement = useProductFoundation && !story.personalizedReady;
 
   const showSymbolsAct = Boolean(
@@ -1183,6 +1191,30 @@ export function TodayCompositionSurface(props: Props) {
   const energyLineDisplay = glanceEnergy?.effect || pulseDisplay;
   const energyCauseDisplay = glanceEnergy?.cause || null;
 
+  const welcomeGlass = useMemo(() => {
+    const lunarRaw = props.morningRitualData?.celestial_events?.lunar_phase as
+      | { name?: string; themes?: string; guidance?: string; phase_name?: string }
+      | undefined;
+    const lunarName = lunarRaw?.name || lunarRaw?.phase_name || null;
+    const priorities = props.morningRitualData?.daily_recommendations?.priorities;
+    const activityTags: string[] = [];
+    if (Array.isArray(priorities)) {
+      for (const row of priorities) {
+        if (typeof row === "string") {
+          const t = row.trim();
+          if (t && t.length <= 18) activityTags.push(t);
+        }
+      }
+    }
+    return buildHandoffWelcomeGlass({
+      visualMode: props.contract.day_atmosphere?.visual_mode ?? null,
+      lunarName,
+      lunarThemes: lunarRaw?.themes ?? null,
+      lunarGuidance: lunarRaw?.guidance ?? null,
+      activityTags,
+    });
+  }, [props.contract.day_atmosphere?.visual_mode, props.morningRitualData]);
+
   const depthMenuTopics = useMemo(() => {
     const menu = props.contract.depth_layer?.menu;
     if (!Array.isArray(menu)) return [] as string[];
@@ -1642,6 +1674,155 @@ export function TodayCompositionSurface(props: Props) {
     />
   );
 
+  const handoffPromiseBody = (
+    <div data-testid="today-handoff-promise">
+      {!engagement.dayGoal ? <p className={styles.promiseUnsetHint}>{copy.promiseUnsetHint}</p> : null}
+      <div className={styles.promiseGrid}>
+        {promiseSuggestions.map((s) => (
+          <button
+            key={s.id}
+            type="button"
+            className={
+              engagement.dayGoal === s.text ? `${styles.promiseChip} ${styles.promiseChipActive}` : styles.promiseChip
+            }
+            data-testid={`today-promise-${s.id}`}
+            onClick={() => {
+              persistEngagement({ dayGoal: s.text });
+              trackMeaningEvent({
+                event_type: "action_option_selected",
+                event_source: "today",
+                local_date: dateISO,
+                payload: {
+                  action: "day_promise_set",
+                  promise_text: s.text.slice(0, 200),
+                  surface: "today_handoff_promise",
+                },
+                refreshRings: false,
+              });
+            }}
+          >
+            {s.text}
+          </button>
+        ))}
+      </div>
+      {goalDraftOpen ? (
+        <div className={styles.goalForm} data-testid="today-entity-daily-goal">
+          <DsTextField
+            id="day-goal-input-handoff"
+            label={copy.goalPrompt}
+            value={goalDraft}
+            onChange={setGoalDraft}
+            maxLength={200}
+            placeholder={copy.goalPlaceholder}
+          />
+          <DsButton type="button" variant="primary" onClick={onSaveGoal}>
+            {copy.goalSave}
+          </DsButton>
+        </div>
+      ) : (
+        <DsButton
+          type="button"
+          variant="secondary"
+          className={styles.promiseCustom}
+          onClick={() => {
+            setGoalDraft(engagement.dayGoal ?? "");
+            setGoalDraftOpen(true);
+          }}
+        >
+          {engagement.dayGoal ? copy.editOwnPromise : copy.writeOwnPromise}
+        </DsButton>
+      )}
+      {engagement.dayGoal ? (
+        <p className={styles.promiseChosen} data-testid="today-promise-chosen">
+          Твоё обещание: {engagement.dayGoal}
+        </p>
+      ) : null}
+    </div>
+  );
+
+  const handoffMakeYoursBody =
+    progressRows.length > 0 ? (
+      <TodayProgressTracker rows={progressRows} />
+    ) : (
+      <p className={styles.actionsLead} data-testid="today-handoff-progress-empty">
+        Пока нет активных привычек или аскез — добавь опору в Практиках.
+      </p>
+    );
+
+  const handoffPracticeBody =
+    supportSlot === "practice" && practiceTool ? (
+      <TodayPracticeGiftBlock
+        title={practiceTool.title}
+        detail={practiceTool.detail ?? null}
+        duration={practiceTool.duration ?? null}
+        practiceStarted={engagement.practiceStarted}
+        practiceCompleted={engagement.practiceCompleted}
+        practiceCompleting={practiceCompleting}
+        onPracticeAction={() => void onPracticeAction()}
+      />
+    ) : null;
+
+  const handoffColorBody = story.colorGuide ? (
+    <TodayDayColorGuideSection guide={story.colorGuide} />
+  ) : (
+    <p className={styles.actionsLead}>Сегодня без отдельного цвета — держи опору из фокуса.</p>
+  );
+
+  const handoffFocusBody = (
+    <div data-testid="today-handoff-focus">
+      {glanceDailyFocus?.title ? (
+        <p className={styles.sectionTitle} data-testid="today-handoff-focus-title">
+          {glanceDailyFocus.title}
+        </p>
+      ) : null}
+      {glanceDailyFocus?.prioritize ? (
+        <p className={styles.actionsLead} data-testid="today-handoff-focus-prioritize">
+          В приоритете: {glanceDailyFocus.prioritize}
+        </p>
+      ) : null}
+      {glanceDailyFocus?.avoid ? (
+        <p className={styles.actionsLead} data-testid="today-handoff-focus-avoid">
+          Избегать: {glanceDailyFocus.avoid}
+        </p>
+      ) : null}
+      {!glanceDailyFocus?.title && !glanceDailyFocus?.prioritize && !glanceDailyFocus?.avoid ? (
+        <p className={styles.actionsLead}>Сегодня без острого фокуса — иди от обещания.</p>
+      ) : null}
+      {props.contract.depth_layer &&
+      Array.isArray(props.contract.depth_layer.menu) &&
+      props.contract.depth_layer.menu.length > 0 ? (
+        <TodayDepthLayerSection
+          dateISO={dateISO}
+          depthLayer={props.contract.depth_layer}
+          preferredTopic={preferredDepthTopic}
+          autoPickPreferred={autoPickDepthTopic}
+        />
+      ) : null}
+    </div>
+  );
+
+  const handoffRecapBody = (
+    <ul className={styles.whyStoryBody} data-testid="today-handoff-recap">
+      <li>
+        Приоритет:{" "}
+        {engagement.focusTopicId
+          ? engagement.focusTopicId
+          : "ещё не выбран"}
+      </li>
+      <li>Обещание: {engagement.dayGoal?.trim() || "ещё не задано"}</li>
+      <li>
+        Практика:{" "}
+        {engagement.practiceCompleted
+          ? "сделана"
+          : engagement.practiceStarted
+            ? "начата"
+            : supportSlot === "practice"
+              ? "ждёт"
+              : "не на сегодня"}
+      </li>
+    </ul>
+  );
+
   const ritualTarotImpactStage =
     story.tarotImpact && !story.personalizedReady ? (
       <div className={styles.ritualSpineStage} data-testid="today-zone-tarot-impact">
@@ -1790,114 +1971,15 @@ export function TodayCompositionSurface(props: Props) {
       insightHeroText={insightHeroText}
       morningDialogue={morningDialogue}
       showSymbols={showSymbolsAct}
-      symbolsBody={
-        <TodayScreenBlockStack testId="today-zone-symbols-stack" className={styles.symbolsStackBleed}>
-          {props.networkDegraded ? (
-            <TodayScreenBlock testId="today-symbols-fallback">
-              <p
-                className={styles.plotNarrativeWhy}
-                role="status"
-                data-fallback="true"
-                data-failure="no_connection"
-              >
-                {TODAY_NO_CONNECTION_COPY}
-              </p>
-            </TodayScreenBlock>
-          ) : null}
-          {/* Keep card/number from already-loaded props when session is degraded — do not blank the pane. */}
-          {showRitualAsComplement && !props.networkDegraded ? ritualGateSection : null}
-          {showRitualAsComplement && !props.networkDegraded ? ritualTarotImpactStage : null}
-          {!showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
-            <div className={styles.symbolsRevealStack} data-testid="today-zone-symbol-impacts">
-              {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
-                <section className={styles.symbolCardHero} data-story-block="symbols-card" data-story-pane="">
-                  <TodayHookRevealShell
-                    variant="tarot"
-                    kindLabel="Карта дня · открыта"
-                    title={
-                      symbolHooksView?.card?.name ||
-                      story.tarotImpact?.title ||
-                      props.cardName ||
-                      "Карта дня"
-                    }
-                    subtitle={story.tarotImpact?.headline || null}
-                    hook={symbolHooksView?.card?.hook_reveal || null}
-                    fallbackBody={
-                      symbolHooksView?.card?.meaning ||
-                      story.tarotImpact?.body ||
-                      props.cardMeaning ||
-                      null
-                    }
-                    visual={
-                      tarotPickedId != null && tarotCardFaceSrc(tarotPickedId) ? (
-                        <TarotPicture
-                          sources={tarotCardFacePicture(tarotPickedId)!}
-                          alt={
-                            symbolHooksView?.card?.name ||
-                            story.tarotImpact?.title ||
-                            props.cardName ||
-                            "Карта дня"
-                          }
-                          sizes="(max-width: 40rem) 48vw, 200px"
-                        />
-                      ) : null
-                    }
-                    testId="today-zone-tarot-impact"
-                  />
-                  {(story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal) ? (
-                    <StoryBlockCue targetId="symbols-number" label={copy.storyNext.scrollMore} />
-                  ) : useProductPersonalized ? (
-                    <StoryNextAnchor
-                      title={copy.storyNext.attributes}
-                      hint={copy.storyNext.attributesHint}
-                      onNext={() =>
-                        onScreenFlowIndexChange(todayScreenFlowAttributesIndex(true), { reason: "select" })
-                      }
-                    />
-                  ) : null}
-                </section>
-              ) : null}
-              {story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal ? (
-                <section className={styles.symbolNumberMoment} data-story-block="symbols-number" data-story-pane="">
-                  <TodayHookRevealShell
-                    variant="numerology"
-                    kindLabel="Число дня · открыто"
-                    title={
-                      String(
-                        symbolHooksView?.number?.reduced_value ??
-                          symbolHooksView?.number?.value ??
-                          story.numberImpact?.title ??
-                          props.numerologyValue ??
-                          "",
-                      )
-                    }
-                    subtitle={
-                      symbolHooksView?.number?.title || story.numberImpact?.headline || null
-                    }
-                    hook={symbolHooksView?.number?.hook_reveal || null}
-                    fallbackBody={
-                      symbolHooksView?.number?.summary ||
-                      story.numberImpact?.body ||
-                      props.numerologyMeaning ||
-                      null
-                    }
-                    testId="today-zone-number-impact"
-                  />
-                  {useProductPersonalized ? (
-                    <StoryNextAnchor
-                      title={copy.storyNext.attributes}
-                      hint={copy.storyNext.attributesHint}
-                      onNext={() =>
-                        onScreenFlowIndexChange(todayScreenFlowAttributesIndex(true), { reason: "select" })
-                      }
-                    />
-                  ) : null}
-                </section>
-              ) : null}
-            </div>
-          ) : null}
-        </TodayScreenBlockStack>
-      }
+      numberBody={numberPickExperience}
+      cardBody={tarotPickExperience}
+      welcomeGlass={welcomeGlass}
+      promiseBody={handoffPromiseBody}
+      makeYoursBody={handoffMakeYoursBody}
+      colorBody={handoffColorBody}
+      focusBody={handoffFocusBody}
+      practiceBody={handoffPracticeBody}
+      recapBody={handoffRecapBody}
       showPersonalized={useProductPersonalized}
       practiceTitle={practiceFrameTitle}
       practiceMeta={practiceFrameMeta}
