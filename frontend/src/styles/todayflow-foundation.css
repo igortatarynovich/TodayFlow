@@ -181,6 +181,15 @@
   --tf-ds-border-ink: rgba(42, 37, 32, 0.08);
   --tf-ds-glass: rgba(255, 255, 255, 0.5);
   --tf-ds-glass-on-dark: rgba(255, 255, 255, 0.08);
+  /* Handoff DsRitual glass over Day Atmosphere (docs/design/.../tokens/day-atmosphere.css) */
+  --tf-ds-glass-surface: rgba(250, 246, 238, 0.74);
+  --tf-ds-glass-border: rgba(107, 90, 63, 0.18);
+  --tf-ds-glass-blur: 14px;
+  --tf-glass-surface-light: var(--tf-ds-glass-surface);
+  --tf-glass-surface-dark: rgba(255, 255, 255, 0.07);
+  --tf-glass-border-light: var(--tf-ds-glass-border);
+  --tf-glass-border-dark: rgba(255, 255, 255, 0.16);
+  --tf-glass-blur: var(--tf-ds-glass-blur);
   --tf-ds-shadow-soft: 0 12px 20px rgba(42, 37, 32, 0.03);
   --tf-ds-shadow-card: 0 8px 24px rgba(42, 37, 32, 0.04);
   --tf-ds-shadow-gold: 0 8px 24px rgba(201, 169, 110, 0.35);

@@ -7,6 +7,12 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
+import {
+  DsBody,
+  DsDisplayTitle,
+  DsEyebrow,
+} from "@/design-system/primitives/DsTypography";
+import { DsChipGroup, DsGlassCard } from "@/design-system/patterns/DsRitual";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
@@ -158,69 +164,64 @@ export function TodayGreetingFrame({
 }) {
   const showGlass = moodPills.length > 0 || Boolean(reasonLine) || activityTags.length > 0;
   return (
-    <div
-      className={immersiveClass("photo", styles.greeting)}
-      data-testid="today-frame-greeting"
-      data-frame-art="greeting"
-    >
-      <ImmersiveArtPlane role="greeting" testId="today-frame-art-greeting" />
-      <div className={styles.immersiveContent}>
-        <section className={`${styles.storyPane} ${styles.storyPaneLift}`} data-story-block="greeting-hero">
-          <div className={styles.storyPaneBody}>
-            <p className={styles.salutation}>{salutation}</p>
-            <h2 className={styles.greetingHeadline}>
-              {loading ? copy.loadingDay : headline || "Сегодня — твой день"}
-            </h2>
-            <p className={styles.dateLine}>{dateLabel}</p>
-          </div>
+    <div className={styles.greetingOnAtmosphere} data-testid="today-frame-greeting" data-frame-art="atmosphere">
+      <div className={styles.greetingStack} data-story-block="greeting-hero">
+        <div className={styles.greetingCopy}>
+          <DsEyebrow>{salutation}</DsEyebrow>
+          <DsDisplayTitle as="h2" size="md" className={styles.greetingHeadlineDs}>
+            {loading ? copy.loadingDay : headline || "Сегодня — твой день"}
+          </DsDisplayTitle>
+          <DsBody size="sm" tone="secondary">
+            {dateLabel}
+          </DsBody>
+        </div>
 
-          {showGlass ? (
-            <div className={styles.welcomeGlass} data-testid="today-welcome-glass">
-              {(moodPills.length > 0 || reasonLine) && (
-                <div className={styles.welcomeGlassTop}>
-                  <span className={styles.welcomeMoon} aria-hidden>
-                    ◐
-                  </span>
-                  <div className={styles.welcomeGlassMain}>
-                    {moodPills.length > 0 ? (
-                      <div className={styles.welcomeMoodRow} data-testid="today-welcome-moods">
-                        {moodPills.map((pill) => (
-                          <span key={pill} className={styles.welcomeMoodPill}>
-                            {pill}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-                    {reasonLine ? (
-                      <p className={styles.welcomeReason} data-testid="today-welcome-reason">
-                        {reasonLine}
-                      </p>
-                    ) : null}
-                  </div>
+        {showGlass ? (
+          <DsGlassCard testId="today-welcome-glass" className={styles.welcomeGlassDs}>
+            {(moodPills.length > 0 || reasonLine) && (
+              <div className={styles.welcomeGlassTop}>
+                <span className={styles.welcomeMoon} aria-hidden>
+                  ◐
+                </span>
+                <div className={styles.welcomeGlassMain}>
+                  {moodPills.length > 0 ? (
+                    <DsChipGroup
+                      options={moodPills.map((label) => ({ label }))}
+                      variant="solid"
+                      columns={3}
+                      testId="today-welcome-moods"
+                    />
+                  ) : null}
+                  {reasonLine ? (
+                    <DsBody size="sm" className={styles.welcomeReasonDs}>
+                      <span data-testid="today-welcome-reason">{reasonLine}</span>
+                    </DsBody>
+                  ) : null}
                 </div>
-              )}
-              {activityTags.length > 0 ? (
-                <div className={styles.welcomeTagRow} data-testid="today-welcome-tags">
-                  {activityTags.map((tag) => (
-                    <span key={tag} className={styles.welcomeTag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          ) : null}
+              </div>
+            )}
+            {activityTags.length > 0 ? (
+              <div className={styles.welcomeTagRow}>
+                <DsChipGroup
+                  options={activityTags.map((label) => ({ label }))}
+                  variant="outline"
+                  columns={3}
+                  testId="today-welcome-tags"
+                />
+              </div>
+            ) : null}
+          </DsGlassCard>
+        ) : null}
 
-          <button type="button" className={styles.startCta} data-testid="today-greeting-start" onClick={onStart}>
-            <span className={styles.startArrow} aria-hidden>
-              →
-            </span>
-            <span className={styles.startCtaText}>
-              <span className={styles.startCtaLabel}>Начать день</span>
-              <span className={styles.startHint}>{startHint}</span>
-            </span>
-          </button>
-        </section>
+        <button type="button" className={styles.startCtaOnAtmosphere} data-testid="today-greeting-start" onClick={onStart}>
+          <span className={styles.startArrow} aria-hidden>
+            →
+          </span>
+          <span className={styles.startCtaText}>
+            <span className={styles.startCtaLabelOnAtmosphere}>Начать день</span>
+            <span className={styles.startHintOnAtmosphere}>{startHint}</span>
+          </span>
+        </button>
       </div>
     </div>
   );

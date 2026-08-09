@@ -325,11 +325,13 @@
 }
 
 .cardGlass {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
+  background: var(--tf-ds-glass-surface, var(--tf-ds-glass, rgba(255, 255, 255, 0.5)));
+  border: 1px solid var(--tf-ds-glass-border, rgba(255, 255, 255, 0.25));
+  backdrop-filter: blur(var(--tf-ds-glass-blur, 14px));
+  -webkit-backdrop-filter: blur(var(--tf-ds-glass-blur, 14px));
   border-radius: var(--tf-ds-radius-xl);
   padding: var(--tf-ds-space-10);
+  box-shadow: var(--tf-ds-shadow-soft);
 }
 
 /* Surface B density — FOUNDATION_UI §16.3 / §4 Insight pad+radius */
@@ -340,17 +342,11 @@
 
 /* Glass + compact = Today Block panel: atmosphere reads through */
 .cardGlass.cardSizeCompact {
-  background: color-mix(
-    in srgb,
-    var(--tf-ds-glass, rgba(255, 255, 255, 0.5)) 88%,
-    var(--day-surface-tint, transparent)
-  );
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow:
-    0 14px 40px rgba(42, 37, 32, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--tf-ds-glass-surface, var(--tf-ds-glass, rgba(255, 255, 255, 0.5)));
+  border: 1px solid var(--tf-ds-glass-border, rgba(255, 255, 255, 0.45));
+  box-shadow: var(--tf-ds-shadow-card, var(--tf-ds-shadow-soft));
+  backdrop-filter: blur(var(--tf-ds-glass-blur, 14px));
+  -webkit-backdrop-filter: blur(var(--tf-ds-glass-blur, 14px));
 }
 
 .cardOrbital {

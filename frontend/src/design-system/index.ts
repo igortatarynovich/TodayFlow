@@ -70,6 +70,14 @@ export {
 } from "@/design-system/patterns/DsMobile";
 export type { DsRitualGateKind } from "@/design-system/patterns/DsMobile";
 export {
+  DsChipGroup,
+  DsGlassCard,
+  DsHabitStreakRow,
+  DsMoodBackground,
+  isDsRitualDarkMood,
+} from "@/design-system/patterns/DsRitual";
+export type { DsChipOption } from "@/design-system/patterns/DsRitual";
+export {
   DsRailPanel,
   DsStreakRing,
   DsTimeline,

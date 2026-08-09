@@ -4,6 +4,7 @@ import {
   formatTodayProgressStreakLabel,
   type TodayProgressRow,
 } from "@/lib/todayGrowthTrackers";
+import { DsHabitStreakRow, DsSectionTitle } from "@/design-system";
 import { TodayScreenBlock } from "@/components/today/composition/TodayScreenBlock";
 import styles from "@/components/today/composition/TodayProgressTracker.module.css";
 
@@ -17,30 +18,19 @@ export function TodayProgressTracker({ rows, title = "Твой прогресс"
 
   return (
     <TodayScreenBlock testId="today-zone-progress">
-      <p className={styles.title}>{title}</p>
+      <DsSectionTitle as="p" className={styles.title}>
+        {title}
+      </DsSectionTitle>
       <ul className={styles.list}>
         {rows.map((row, index) => (
-          <li
-            key={row.id}
-            className={styles.row}
-            data-testid={`today-progress-row-${row.kind}`}
-            data-kind={row.kind}
-          >
-            <div className={styles.rowHead}>
-              <p className={styles.name}>{row.name}</p>
-              <p className={styles.streak}>{formatTodayProgressStreakLabel(row.streakDays)}</p>
-            </div>
-            <p className={styles.kind}>{row.kindLabel}</p>
-            <div className={styles.dots} aria-hidden>
-              {row.days.map((day) => (
-                <span
-                  key={day.dateISO}
-                  className={styles.dot}
-                  data-done={day.completed ? "true" : "false"}
-                  data-future={day.isFuture ? "true" : "false"}
-                />
-              ))}
-            </div>
+          <li key={row.id} className={styles.rowItem}>
+            <DsHabitStreakRow
+              name={row.name}
+              kind={row.kindLabel}
+              streakLabel={formatTodayProgressStreakLabel(row.streakDays)}
+              days={row.days.map((d) => d.completed)}
+              testId={`today-progress-row-${row.kind}`}
+            />
             {index < rows.length - 1 ? <div className={styles.divider} /> : null}
           </li>
         ))}

@@ -4,6 +4,17 @@ Last updated: 2026-08-08
 Owner: Product + Engineering
 Status: Active working document
 
+**IN PROGRESS (CODE, 2026-08-09):** **DS Ritual port from docs/design handoff** — `--tf-ds-glass-*` tokens; `DsGlassCard` / `DsChipGroup` / `DsHabitStreakRow` / `DsMoodBackground`; Welcome + progress on DS (Day Atmosphere SoT, no private welcome hex). Continue pixel-pass remaining handoff steps off page CSS.
+
+## Architecture impact — DS Ritual glass tokens (2026-08-09)
+
+- **SoT before:** Welcome glass = private hex in `TodayStoryDeckFrames.module.css`; `DsCard` glass used raw rgba blur.
+- **SoT after:** glass = `--tf-ds-glass-surface/border/blur` (handoff day-atmosphere.css); Today Welcome = `DsGlassCard` + `DsChipGroup` on Day Atmosphere; progress = `DsHabitStreakRow`.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** tracker; live tokens in foundation + day-atmosphere dark moods
+- **Backward compatible?** yes
+
 **IN PROGRESS (CODE, 2026-08-08):** **Today handoff composition A** — ScreenFlow = 12 steps (Welcome glass → … → Close); SCENARIO_V3.3 + SCREEN_FLOW mapping; greeting CTA «Оформим сегодняшний день». Pixel polish vs lost HTML prototype still open — re-upload `design_handoff_today_flow` for parity.
 
 ## Architecture impact — Today handoff composition A (2026-08-08)

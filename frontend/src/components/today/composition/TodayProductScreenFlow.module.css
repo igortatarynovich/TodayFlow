@@ -81,18 +81,19 @@
 .slotStack {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: var(--tf-ds-space-3);
   width: min(100%, 22rem);
   margin: 0 auto;
-  padding: calc(var(--sf-chrome-h, 3.25rem) + 0.5rem) 1.15rem 1.5rem;
+  padding: calc(var(--sf-chrome-h, 3.25rem) + var(--tf-ds-space-2)) var(--tf-ds-space-5) var(--tf-ds-space-6);
   box-sizing: border-box;
   text-align: left;
   min-height: 100%;
+  color: var(--tf-ink, #2a2520);
 }
 
 .slotEyebrow {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: var(--tf-type-label, 0.72rem);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -111,14 +112,14 @@
 .slotBody {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--tf-ds-space-3);
   flex: 1 1 auto;
   min-height: 0;
 }
 
 .slotFooter {
   margin-top: auto;
-  padding: 0.75rem 1.15rem 1.5rem;
+  padding: var(--tf-ds-space-3) var(--tf-ds-space-5) var(--tf-ds-space-6);
   display: flex;
   justify-content: center;
 }

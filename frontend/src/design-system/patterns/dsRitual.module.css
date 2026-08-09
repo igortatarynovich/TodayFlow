@@ -1,0 +1,148 @@
+/* DsRitual — tokens only (--tf-* / --day-*). No page hex. */
+
+.moodBackground {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-4);
+  min-height: 0;
+  background:
+    radial-gradient(ellipse 85% 55% at 12% -8%, var(--day-bg-glow-primary, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 50% at 88% 108%, var(--day-bg-glow-secondary, transparent), transparent 55%),
+    var(--day-bg-base, var(--tf-page-cream, #f7f1e8));
+  color: var(--tf-ink, #2a2520);
+}
+
+.moodBackground[data-ds-mood-dark="true"] {
+  color: var(--tf-ink, #f5f0e8);
+}
+
+.glassCard {
+  width: 100%;
+  text-align: left;
+  color: var(--tf-ink, #2a2520);
+}
+
+.glassCardDark {
+  color: var(--tf-ink, #f5f0e8);
+}
+
+.chipGroup {
+  display: grid;
+  gap: var(--tf-ds-space-2);
+  width: 100%;
+}
+
+.chipGroup2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.chipGroup3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  margin: 0;
+  padding: var(--tf-ds-space-2) var(--tf-ds-space-3);
+  border-radius: var(--tf-ds-radius-pill);
+  font: inherit;
+  cursor: default;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+button.chip {
+  cursor: pointer;
+}
+
+.chipSolid {
+  background: color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 14%, transparent);
+  border: 1px solid transparent;
+  color: var(--tf-ink, #2a2520);
+}
+
+.chipOutline {
+  background: transparent;
+  border: 1px solid var(--tf-ds-glass-border, var(--tf-ds-border-ink));
+  color: var(--tf-ink, #2a2520);
+}
+
+.chipSelected {
+  border-color: var(--day-decor-color, var(--tf-accent-gold));
+  background: color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 22%, transparent);
+}
+
+.chipWithSub {
+  border-radius: var(--tf-ds-radius-lg);
+  padding: var(--tf-ds-space-3);
+}
+
+.chipLabel {
+  font-size: var(--tf-type-label, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+.chipSub {
+  font-size: var(--tf-type-caption, 0.68rem);
+  color: var(--tf-ink-muted, #7a7168);
+  line-height: 1.3;
+}
+
+.streakRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 100%;
+}
+
+.streakHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--tf-ds-space-3);
+}
+
+.streakName {
+  margin: 0;
+  font-size: var(--tf-type-body-sm, 0.875rem);
+  font-weight: 600;
+  color: var(--tf-ink, #2a2520);
+}
+
+.streakMeta {
+  margin: 0;
+  flex-shrink: 0;
+  font-size: var(--tf-type-caption, 0.6875rem);
+  font-weight: 600;
+  color: var(--day-accent-soft, var(--tf-accent-gold));
+}
+
+.streakKind {
+  margin: 0;
+  font-size: var(--tf-type-caption, 0.6875rem);
+  color: var(--tf-ink-muted, #8a8072);
+}
+
+.streakDots {
+  display: flex;
+  gap: var(--tf-ds-space-1);
+  margin-top: var(--tf-ds-space-2);
+}
+
+.streakDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--tf-ds-radius-pill);
+  background: var(--tf-ds-border-ink, rgba(42, 37, 32, 0.12));
+}
+
+.streakDot[data-done="true"] {
+  background: var(--day-decor-color, var(--tf-accent-gold));
+}
