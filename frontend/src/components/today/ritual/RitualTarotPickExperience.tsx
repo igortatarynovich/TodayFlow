@@ -120,9 +120,10 @@ export function RitualTarotPickExperience({
   );
 
   useEffect(() => {
-    if (resumeCommittedId != null && phase === "idle" && !committedRef.current) {
-      setPhase("reveal");
-    }
+    if (resumeCommittedId == null) return;
+    if (phase === "reveal") return;
+    committedRef.current = true;
+    setPhase("reveal");
   }, [resumeCommittedId, phase]);
 
   useEffect(() => {
@@ -278,6 +279,7 @@ export function RitualTarotPickExperience({
             }}
             ritualIntro=""
             variant="light"
+            stackOnly
           />
         </div>
         <button

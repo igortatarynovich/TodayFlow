@@ -13,6 +13,8 @@ type Props = {
   guideGenerationId?: number | null;
   preferredTopic?: TodayDepthTopicId | string | null;
   autoPickPreferred?: boolean;
+  /** When false (other ScreenFlow step), force-close overlay so it cannot leak onto Welcome. */
+  isActive?: boolean;
 };
 
 function formatDeepenPayload(payload: Record<string, unknown> | null | undefined): string {
@@ -46,6 +48,7 @@ export function TodayDepthLayerSection({
   guideGenerationId = null,
   preferredTopic = null,
   autoPickPreferred = false,
+  isActive = true,
 }: Props) {
   const menu = Array.isArray(depthLayer.menu) ? depthLayer.menu : [];
   const canGenerate = Boolean(depthLayer.can_generate);
@@ -115,7 +118,15 @@ export function TodayDepthLayerSection({
     return () => window.removeEventListener("keydown", onKey);
   }, [overlayOpen]);
 
+  useEffect(() => {
+    if (!isActive) {
+      setOverlayOpen(false);
+      setLoading(false);
+    }
+  }, [isActive]);
+
   if (menu.length === 0) return null;
+  if (!isActive) return null;
 
   const activeLabel =
     menu.find((row) => row.topic === activeTopic)?.label ??

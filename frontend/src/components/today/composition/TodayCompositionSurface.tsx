@@ -1458,11 +1458,24 @@ export function TodayCompositionSurface(props: Props) {
           }
         }}
       />
-    ) : focusTopicLabel(engagement.focusTopicId) ? (
-      <p className={styles.promiseChosen} data-testid="today-priority-chosen">
-        {focusTopicLabel(engagement.focusTopicId)}
-      </p>
     ) : null;
+
+  // Priority answered → leave the step (no empty chrome with leftover title).
+  useEffect(() => {
+    if (!hydrated || !useProductPersonalized) return;
+    if (askMorningFocus || askMorningMood) return;
+    const idx = todayHandoffIndices(showSymbolsAct);
+    if (screenFlowIndex === idx.priority) {
+      setScreenFlowIndex(idx.promise);
+    }
+  }, [
+    hydrated,
+    useProductPersonalized,
+    askMorningFocus,
+    askMorningMood,
+    screenFlowIndex,
+    showSymbolsAct,
+  ]);
 
   const greetingParts = splitSalutation(story.greeting.salutation);
   // Glance expect/trap only when personalized narrative is not showing the same slots.
@@ -1714,60 +1727,93 @@ export function TodayCompositionSurface(props: Props) {
 
   const handoffPromiseBody = (
     <div data-testid="today-handoff-promise">
-      <div className={styles.promiseGrid}>
-        {promiseSuggestions.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            className={
-              engagement.dayGoal === s.text ? `${styles.promiseChip} ${styles.promiseChipActive}` : styles.promiseChip
-            }
-            data-testid={`today-promise-${s.id}`}
-            onClick={() => {
-              persistEngagement({ dayGoal: s.text });
-              trackMeaningEvent({
-                event_type: "action_option_selected",
-                event_source: "today",
-                local_date: dateISO,
-                payload: {
-                  action: "day_promise_set",
-                  promise_text: s.text.slice(0, 200),
-                  surface: "today_handoff_promise",
-                },
-                refreshRings: false,
-              });
-            }}
-          >
-            {s.text}
-          </button>
-        ))}
-      </div>
-      {goalDraftOpen ? (
-        <div className={styles.goalForm} data-testid="today-entity-daily-goal">
-          <DsTextField
-            id="day-goal-input-handoff"
-            label={copy.goalPrompt}
-            value={goalDraft}
-            onChange={setGoalDraft}
-            maxLength={200}
-            placeholder={copy.goalPlaceholder}
-          />
-          <DsButton type="button" variant="primary" onClick={onSaveGoal}>
-            {copy.goalSave}
-          </DsButton>
+      {engagement.dayGoal ? (
+        <div className={styles.promiseChosenBlock} data-testid="today-promise-chosen">
+          <p className={styles.promiseChosenText}>{engagement.dayGoal}</p>
+          {goalDraftOpen ? (
+            <div className={styles.goalForm} data-testid="today-entity-daily-goal">
+              <DsTextField
+                id="day-goal-input-handoff"
+                label={copy.goalPrompt}
+                value={goalDraft}
+                onChange={setGoalDraft}
+                maxLength={200}
+                placeholder={copy.goalPlaceholder}
+              />
+              <DsButton type="button" variant="primary" onClick={onSaveGoal}>
+                {copy.goalSave}
+              </DsButton>
+            </div>
+          ) : (
+            <DsButton
+              type="button"
+              variant="ghost"
+              className={styles.promiseCustom}
+              onClick={() => {
+                setGoalDraft(engagement.dayGoal ?? "");
+                setGoalDraftOpen(true);
+              }}
+            >
+              {copy.editOwnPromise}
+            </DsButton>
+          )}
         </div>
       ) : (
-        <DsButton
-          type="button"
-          variant="secondary"
-          className={styles.promiseCustom}
-          onClick={() => {
-            setGoalDraft(engagement.dayGoal ?? "");
-            setGoalDraftOpen(true);
-          }}
-        >
-          {engagement.dayGoal ? copy.editOwnPromise : copy.writeOwnPromise}
-        </DsButton>
+        <>
+          <div className={styles.promiseGrid}>
+            {promiseSuggestions.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className={styles.promiseChip}
+                data-testid={`today-promise-${s.id}`}
+                onClick={() => {
+                  persistEngagement({ dayGoal: s.text });
+                  trackMeaningEvent({
+                    event_type: "action_option_selected",
+                    event_source: "today",
+                    local_date: dateISO,
+                    payload: {
+                      action: "day_promise_set",
+                      promise_text: s.text.slice(0, 200),
+                      surface: "today_handoff_promise",
+                    },
+                    refreshRings: false,
+                  });
+                }}
+              >
+                {s.text}
+              </button>
+            ))}
+          </div>
+          {goalDraftOpen ? (
+            <div className={styles.goalForm} data-testid="today-entity-daily-goal">
+              <DsTextField
+                id="day-goal-input-handoff"
+                label={copy.goalPrompt}
+                value={goalDraft}
+                onChange={setGoalDraft}
+                maxLength={200}
+                placeholder={copy.goalPlaceholder}
+              />
+              <DsButton type="button" variant="primary" onClick={onSaveGoal}>
+                {copy.goalSave}
+              </DsButton>
+            </div>
+          ) : (
+            <DsButton
+              type="button"
+              variant="secondary"
+              className={styles.promiseCustom}
+              onClick={() => {
+                setGoalDraft("");
+                setGoalDraftOpen(true);
+              }}
+            >
+              {copy.writeOwnPromise}
+            </DsButton>
+          )}
+        </>
       )}
     </div>
   );
@@ -1831,6 +1877,7 @@ export function TodayCompositionSurface(props: Props) {
           depthLayer={props.contract.depth_layer}
           preferredTopic={preferredDepthTopic}
           autoPickPreferred={false}
+          isActive={screenFlowIndex === todayHandoffIndices(showSymbolsAct).focus}
         />
       ) : null}
     </div>

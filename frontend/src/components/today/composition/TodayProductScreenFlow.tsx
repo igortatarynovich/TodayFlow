@@ -322,7 +322,7 @@ export function TodayProductScreenFlow({
               <>
                 <ScreenFlowStep id="number" label={copy.storyNext.number} scrollable={false}>
                   <div
-                    className={flowStyles.storyFrame}
+                    className={`${flowStyles.storyFrame} ${flowStyles.ritualFrame}`}
                     data-testid="today-frame-number"
                     data-story-scroll="pane"
                   >
@@ -338,7 +338,7 @@ export function TodayProductScreenFlow({
 
                 <ScreenFlowStep id="card" label={copy.storyNext.card} scrollable={false}>
                   <div
-                    className={flowStyles.storyFrame}
+                    className={`${flowStyles.storyFrame} ${flowStyles.ritualFrame}`}
                     data-testid="today-frame-card"
                     data-story-scroll="pane"
                   >

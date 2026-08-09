@@ -192,8 +192,8 @@
 .deckStage {
   position: relative;
   width: 100%;
-  max-width: 12rem;
-  margin: 0.75rem auto 0;
+  max-width: 14rem;
+  margin: 1.25rem auto 0;
 }
 
 .fanCard {

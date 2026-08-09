@@ -2123,6 +2123,26 @@
   font-weight: 600;
 }
 
+.promiseChosenBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  align-items: stretch;
+}
+
+.promiseChosenText {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 45%, transparent);
+  background: color-mix(in srgb, var(--tf-surface, #fff) 92%, #fff4e8);
+  font-family: var(--tf-font-display, Georgia, serif);
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: var(--tf-ink, #2a2520);
+  text-align: left;
+}
+
 @media (max-width: 380px) {
   .influenceGrid {
     grid-template-columns: 1fr;

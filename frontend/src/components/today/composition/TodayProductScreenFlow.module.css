@@ -123,3 +123,18 @@
   display: flex;
   justify-content: center;
 }
+
+.ritualFrame {
+  padding-top: calc(var(--sf-chrome-h, 3.25rem) + 0.75rem);
+  padding-inline: var(--tf-ds-space-4, 1rem);
+  padding-bottom: var(--tf-ds-space-3, 0.75rem);
+  box-sizing: border-box;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.ritualFrame > :first-child {
+  flex: 0 1 auto;
+  max-width: min(100%, 22rem);
+  margin-inline: auto;
+}

@@ -35,7 +35,7 @@ export const TODAY_COMPOSITION_COPY = {
   promiseUnsetHint: "Маленькое обещание помогает завершить день осмысленно — выбери, если откликается.",
   promiseSave: "Выбрать обещание",
   writeOwnPromise: "Написать своё",
-  editOwnPromise: "Изменить своими словами…",
+  editOwnPromise: "Изменить",
   goalPrompt: "Своё обещание на сегодня",
   goalPlaceholder: "Своими словами — из того, что уже звучит в дне",
   goalSave: "Сохранить обещание",

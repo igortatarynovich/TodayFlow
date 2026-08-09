@@ -22,6 +22,8 @@ interface InteractiveCardDeckProps {
   loading?: boolean;
   /** Re-draw a fresh deck from the server (called on reset). */
   onReshuffle?: () => void;
+  /** Today ritual: wallet only — no focus empty panel / swipe explainers. */
+  stackOnly?: boolean;
 }
 
 const FOCUS_WIDTH = 280;
@@ -91,6 +93,7 @@ export function InteractiveCardDeck({
   variant = "light",
   loading = false,
   onReshuffle,
+  stackOnly = false,
 }: InteractiveCardDeckProps) {
   const reduceMotion = usePrefersReducedMotion();
   const [deckOrder, setDeckOrder] = useState<number[]>(() => shuffleIndices(cards.length));
@@ -453,57 +456,59 @@ export function InteractiveCardDeck({
         </div>
       ) : null}
 
-      {ritualIntro ? <p className={styles.intro}>{ritualIntro}</p> : null}
+      {ritualIntro && !stackOnly ? <p className={styles.intro}>{ritualIntro}</p> : null}
 
-      <div className={styles.stage}>
-        <div className={styles.stageFocus}>
-          {focusCard ? (
-            <>
-              <div className={styles.focusFrame} style={{ width: FOCUS_WIDTH, maxWidth: "100%", height: focusHeight }}>
-                <MotionFlip
-                  testId={`tarot-deck-motion-flip-${focusIndex}`}
-                  flipped={focusFlipped}
-                  reducedMotion={reduceMotion}
-                  durationMs={reduceMotion ? 150 : 450}
-                  back={
-                    <div className={styles.focusFill}>
-                      <TarotCardBack widthPx={FOCUS_WIDTH} chrome="bare" />
-                    </div>
-                  }
-                  front={
-                    <div className={styles.focusFill}>
-                      <CardVisual
-                        card={focusCard}
-                        orientation={focusOrientation}
-                        size="hero"
-                        widthPx={FOCUS_WIDTH}
-                        chrome="bare"
-                        showName={false}
-                      />
-                    </div>
-                  }
-                />
+      <div className={stackOnly ? styles.stageStackOnly : styles.stage}>
+        {!stackOnly ? (
+          <div className={styles.stageFocus}>
+            {focusCard ? (
+              <>
+                <div className={styles.focusFrame} style={{ width: FOCUS_WIDTH, maxWidth: "100%", height: focusHeight }}>
+                  <MotionFlip
+                    testId={`tarot-deck-motion-flip-${focusIndex}`}
+                    flipped={focusFlipped}
+                    reducedMotion={reduceMotion}
+                    durationMs={reduceMotion ? 150 : 450}
+                    back={
+                      <div className={styles.focusFill}>
+                        <TarotCardBack widthPx={FOCUS_WIDTH} chrome="bare" />
+                      </div>
+                    }
+                    front={
+                      <div className={styles.focusFill}>
+                        <CardVisual
+                          card={focusCard}
+                          orientation={focusOrientation}
+                          size="hero"
+                          widthPx={FOCUS_WIDTH}
+                          chrome="bare"
+                          showName={false}
+                        />
+                      </div>
+                    }
+                  />
+                </div>
+                <div className={styles.focusMeta}>
+                  <p className={styles.focusSlot}>{focusSlotLabel}</p>
+                  <p className={styles.focusName}>{focusCard.name}</p>
+                  <p className={styles.focusOrient}>
+                    {focusOrientation === "reversed" ? "Перевёрнутое положение" : "Прямое положение"}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className={styles.focusEmpty} aria-hidden={canSelectMore}>
+                <p className={styles.focusEmptyTitle}>Карта откроется здесь</p>
+                <p className={styles.focusEmptyBody}>Листайте стопку свайпом и тапните, когда почувствуете свою карту.</p>
               </div>
-              <div className={styles.focusMeta}>
-                <p className={styles.focusSlot}>{focusSlotLabel}</p>
-                <p className={styles.focusName}>{focusCard.name}</p>
-                <p className={styles.focusOrient}>
-                  {focusOrientation === "reversed" ? "Перевёрнутое положение" : "Прямое положение"}
-                </p>
-              </div>
-            </>
-          ) : (
-            <div className={styles.focusEmpty} aria-hidden={canSelectMore}>
-              <p className={styles.focusEmptyTitle}>Карта откроется здесь</p>
-              <p className={styles.focusEmptyBody}>Листайте стопку свайпом и тапните, когда почувствуете свою карту.</p>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        ) : null}
 
         <div className={styles.deckColumn}>
           {canSelectMore ? (
             <>
-              {selectionLabels?.[selectedIndices.length] ? (
+              {selectionLabels?.[selectedIndices.length] && !stackOnly ? (
                 <p className={styles.stepLabel}>{selectionLabels[selectedIndices.length]}</p>
               ) : null}
               <div className={styles.walletStage}>
@@ -557,7 +562,7 @@ export function InteractiveCardDeck({
                         onPointerUp={finishPointer}
                         onPointerCancel={finishPointer}
                         onKeyDown={onKeyDownTop}
-                        aria-label="Выбрать эту карту. Стрелки или свайп — листать стопку."
+                        aria-label="Открыть карту дня"
                         data-testid="tarot-deck-draw"
                         disabled={busy}
                       >
@@ -567,20 +572,26 @@ export function InteractiveCardDeck({
                   })}
                 </div>
               </div>
-              <p className={styles.progress}>{progressLabel}</p>
-              <p className={styles.trustHint}>
-                {canCycle
-                  ? "Свайп — листать. Тап — выбрать эту карту."
-                  : "Тап — выбрать последнюю карту."}
-              </p>
+              {!stackOnly ? (
+                <>
+                  <p className={styles.progress}>{progressLabel}</p>
+                  <p className={styles.trustHint}>
+                    {canCycle
+                      ? "Свайп — листать. Тап — выбрать эту карту."
+                      : "Тап — выбрать последнюю карту."}
+                  </p>
+                </>
+              ) : null}
             </>
           ) : remainingIndices.length === 0 || selectedIndices.length >= requiredCount ? (
-            <p className={styles.fanDoneHint}>
-              {selectedIndices.length >= requiredCount ? "Расклад собран." : "Карты закончились"}
-            </p>
+            stackOnly ? null : (
+              <p className={styles.fanDoneHint}>
+                {selectedIndices.length >= requiredCount ? "Расклад собран." : "Карты закончились"}
+              </p>
+            )
           ) : null}
 
-          {selectedIndices.length > 0 ? (
+          {selectedIndices.length > 0 && !stackOnly ? (
             <button type="button" onClick={handleReset} className={styles.resetLink} disabled={busy}>
               Сбросить и перетасовать
             </button>
@@ -588,7 +599,7 @@ export function InteractiveCardDeck({
         </div>
       </div>
 
-      {selectedIndices.length === requiredCount ? (
+      {selectedIndices.length === requiredCount && !stackOnly ? (
         <p className={styles.doneNote}>Все карты на месте — откройте толкование.</p>
       ) : null}
     </div>

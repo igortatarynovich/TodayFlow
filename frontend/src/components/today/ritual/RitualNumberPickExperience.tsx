@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { pulseDayPhaseRevealFlash } from "@/lib/dayPhaseAtmosphere";
 import { ritualRevealCtaReady, useRitualRevealStages } from "@/lib/ritualRevealCascade";
@@ -76,8 +76,27 @@ export function RitualNumberPickExperience({
   const [meaning, setMeaning] = useState(numberMeaning);
   const [support, setSupport] = useState(daySupport);
   const [resolveError, setResolveError] = useState(false);
-  const doneRef = useRef(false);
+  const doneRef = useRef(alreadyConfirmed);
   const { showMeaning, showContext } = useRitualRevealStages(revealed, reduceMotion);
+
+  useEffect(() => {
+    if (!alreadyConfirmed) return;
+    if (isDisplayableNumber(systemDisplay)) {
+      setDisplay(systemDisplay);
+      setRevealed(true);
+      doneRef.current = true;
+    }
+  }, [alreadyConfirmed, systemDisplay]);
+
+  useEffect(() => {
+    if (numberTitle) setTitle(numberTitle);
+  }, [numberTitle]);
+  useEffect(() => {
+    if (numberMeaning) setMeaning(numberMeaning);
+  }, [numberMeaning]);
+  useEffect(() => {
+    if (daySupport) setSupport(daySupport);
+  }, [daySupport]);
 
   const hasMeaning = Boolean(String(meaning ?? "").trim());
   const hasSupport = Boolean(String(support ?? "").trim());
@@ -197,7 +216,7 @@ export function RitualNumberPickExperience({
           ) : null}
         </div>
 
-        {ctaReady ? (
+        {ctaReady && !alreadyConfirmed ? (
           <div className={styles.revealActions}>
             <button type="button" className={styles.revealPrimaryCta} onClick={onConfirm}>
               {RITUAL_COPY.numberRevealDoneCta}
