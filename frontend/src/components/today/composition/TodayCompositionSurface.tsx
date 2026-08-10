@@ -133,6 +133,7 @@ import {
   makeYoursOccupiedFromProgress,
 } from "@/lib/todayMakeYoursProposals";
 import { syncDayPromiseToConnection } from "@/lib/todayPromiseSync";
+import { pickTodayDepthMenu } from "@/lib/todayDepthMenuToday";
 
 type Props = {
   variant?: TodayCompositionVariant;
