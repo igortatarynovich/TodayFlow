@@ -71,6 +71,74 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.accents).toEqual(["Работа"]);
     expect(model.vibeClosing).toBeNull();
     expect(model.activityTags).toEqual(["подготовка"]);
+    expect(model.supportLine).toContain("Доверять");
+    expect(model.betterCards.map((c) => c.id)).toEqual(
+      expect.arrayContaining(["work", "people"]),
+    );
+    expect(model.betterCards.find((c) => c.id === "work")?.body).toBeTruthy();
+  });
+
+  it("builds lunar caption, why factors, and personal line from foundation", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        day_atmosphere: {
+          visual_mode: "flow",
+          intensity: 0.5,
+          warmth: 0.5,
+          motion: "low",
+          contrast: "medium",
+          decor_variant: "default",
+          time_phase: "day",
+        },
+        day_story: {
+          contract_version: "day_story_v1",
+          theme: "Мягкий поток",
+          trap: "Торопить ответ",
+          do: ["Держать один канал"],
+          day_foundation: {
+            lunar: {
+              phase: { name: "Растущая Луна", themes: "Сбор сил" },
+              moon_sign: { sign_ru: "Весы" },
+              beats: [{ id: "b1", title: "Тригон Луна — Плутон", story_ru: "Глубина без драмы." }],
+            },
+            numerology: { personal_day: 10, summary_ru: "Число про ясность выбора." },
+          },
+          day_scenario: {
+            conflict: {
+              why_personal: "Ты уже чувствуешь, где лишний шум.",
+            },
+            scenes: [
+              {
+                scene_id: "s1",
+                sphere: "work",
+                opportunity: "Одно ясное письмо.",
+              },
+              {
+                scene_id: "s2",
+                sphere: "relationships",
+                opportunity: "Короткий честный разговор.",
+              },
+              {
+                scene_id: "s3",
+                sphere: "energy",
+                opportunity: "Пауза без телефона.",
+              },
+            ],
+          },
+        },
+      },
+      dateLabel: "10 августа 2026",
+      salutation: "Доброе утро",
+    });
+
+    expect(model.visualMode).toBe("flow");
+    expect(model.modeLabel).toBeTruthy();
+    expect(model.lunarCaption).toBe("Растущая Луна в Весы");
+    expect(model.whyFactors.some((f) => f.id === "lunar")).toBe(true);
+    expect(model.whyFactors.some((f) => f.id === "number")).toBe(true);
+    expect(model.betterCards).toHaveLength(3);
+    expect(model.personalLine).toContain("лишний шум");
   });
 
   it("omits empty sections and does not duplicate atmosphere into expect note", () => {

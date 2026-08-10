@@ -4,6 +4,8 @@ Last updated: 2026-08-10
 Owner: Product + Engineering
 Status: Active working document
 
+**DONE (CODE, 2026-08-10):** **Today Block 1 dashboard + detail sheet (v3.4.2)** — mockup-led cards on `day` (hero · why chips · better · support‖trap · personal); tap opens overlay sheet; CTA → orientation; timeline on orientation. No invent / no public JSON change. Canon: SCENARIO_V3.4.2.
+
 **DONE (CODE, 2026-08-10):** **Today Block 1 = atmosphere + orientation** — page1: date/greeting/atmosphere line/pills/note/expect/timeline; page2: trap/cues/energy; meaningful mood pills; wider layout; no vibe label / no expect dupe. Canon: SCENARIO_V3.4.1.
 
 ## Architecture impact — Today day frames (2026-08-10)

@@ -18,8 +18,8 @@ import type { TapResponseCode } from "@/lib/todayTapWidget";
 import { fetchDayFacts } from "@/lib/todayDayFacts";
 
 /**
- * Today presentation v3.4.1 — six product blocks; Block 1 = two frames.
- * День (атмосфера) → Ориентир → Ритуалы → Инструкция → Цвет → Задания → Петля
+ * Today presentation v3.4.2 — six product blocks; Block 1 = dashboard + orientation.
+ * День (dashboard / sheet) → Ориентир → Ритуалы → Инструкция → Цвет → Задания → Петля
  * Canon: docs/today/TODAY_SCREEN_SCENARIO_V3.md
  */
 

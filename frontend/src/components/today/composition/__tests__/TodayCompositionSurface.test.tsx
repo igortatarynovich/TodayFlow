@@ -278,16 +278,19 @@ describe("TodayCompositionSurface", () => {
     );
 
     expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
-    // v3.4.1: day · orientation · rituals · instruction · color · tasks · loop
+    // v3.4.2: day (dashboard) · orientation · rituals · instruction · color · tasks · loop
     expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
     expect(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-brief")).toHaveAttribute(
       "data-pane",
       "atmosphere",
     );
+    expect(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-brief-vibe")).toBeInTheDocument();
+    expect(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-personal-cta")).toBeInTheDocument();
     expect(within(screen.getByTestId("today-frame-orientation")).getByTestId("today-day-brief")).toHaveAttribute(
       "data-pane",
       "orientation",
     );
+    expect(within(screen.getByTestId("today-frame-orientation")).getByTestId("today-day-brief-timeline")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-rituals")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-number")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-card")).toBeInTheDocument();

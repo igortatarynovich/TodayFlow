@@ -2,14 +2,29 @@
  * Block 1 day ambassador model — assemble from existing contract fields only.
  * No invent. Honest omit when empty.
  *
- * Presentation (v3.4.1): two frames
- *   atmosphere — date · greeting · atmosphere line · pills · note · expect · timeline
- *   orientation — trap · cues · energy (+ lunar cause)
+ * Presentation (v3.4.2 dashboard):
+ *   date · lunar caption · mode hero · why factors · better cards ·
+ *   support ‖ trap · personal · (detail sheet on tap)
  * Canon: TODAY_SCREEN_SCENARIO_V3 · EXPLAIN_MEANING_NOT_MECHANISM
  */
 
+import type { DayVisualMode } from "@/lib/dayAtmosphere";
+import { DAY_MODE_LABELS_RU, DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { HandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
+
+export type TodayDayWhyFactor = {
+  id: string;
+  label: string;
+  detail: string | null;
+};
+
+export type TodayDayBetterCard = {
+  id: string;
+  title: string;
+  body: string;
+  detail: string | null;
+};
 
 export type TodayDayBriefModel = {
   dateLabel: string;
@@ -20,9 +35,7 @@ export type TodayDayBriefModel = {
   vibe: string | null;
   moodPills: string[];
   activityTags: string[];
-  /** Sphere accents — not mixed into mood pills. */
   accents: string[];
-  /** Short atmosphere note (lunar/reason) — must not duplicate expect. */
   atmosphereNote: string | null;
   /** @deprecated alias for atmosphereNote */
   why: string | null;
@@ -32,11 +45,23 @@ export type TodayDayBriefModel = {
   trap: string | null;
   doItems: string[];
   avoidItems: string[];
-  /** Unused on new frames — kept null for compat. */
   vibeClosing: string | null;
+  /** Closed day mood id */
+  visualMode: DayVisualMode | null;
+  modeLabel: string | null;
+  /** Lunar / sky caption under date */
+  lunarCaption: string | null;
+  /** «Почему так сегодня» chips */
+  whyFactors: TodayDayWhyFactor[];
+  /** «Сегодня лучше» grid */
+  betterCards: TodayDayBetterCard[];
+  /** Опора дня */
+  supportLine: string | null;
+  supportDetail: string | null;
+  /** Personal bridge */
+  personalLine: string | null;
 };
 
-/** Kitchen / ephemeris dump — defensive FE mirror of BE value gate. */
 const KITCHEN_MECHANISM_RE =
   /профекц|секундарн\w*\s+прогресс|прогресс\.?\s*солнц|прогресс\.?\s*лун|solar\s*return|управител|нет\s+времени\/места|активных\s+личных\s+транзит|firdaria|vimshottari|\bzr\s*(?:fortune|spirit)\b|time[_\s-]?lords|\d+(?:[.,]\d+)?°|возраст\s+\d+(?:[.,]\d+)?\s*лет|дата\s+19\d{2}-\d{2}-\d{2}|дата\s+20\d{2}-\d{2}-\d{2}/i;
 
@@ -49,7 +74,6 @@ function normalizeKey(s: string): string {
   return s.toLowerCase().replace(/\s+/g, " ").trim();
 }
 
-/** Meaning-only line — reject kitchen dumps. */
 export function cleanAmbassadorWhy(s: string | null | undefined): string | null {
   const t = clean(s);
   if (!t) return null;
@@ -73,7 +97,6 @@ function uniqTrim(items: Array<string | null | undefined>, max: number): string[
   return out;
 }
 
-/** Clip to first sentences. No invent. */
 export function clipCompassProse(s: string | null | undefined, maxChars = 180): string | null {
   const t = clean(s);
   if (!t) return null;
@@ -112,6 +135,18 @@ function pickAtmosphereNote(parts: Array<string | null | undefined>): string | n
   return null;
 }
 
+function isDayVisualMode(value: unknown): value is DayVisualMode {
+  return typeof value === "string" && (DAY_VISUAL_MODES as readonly string[]).includes(value);
+}
+
+function resolveVisualMode(contract: TodayContractV1): DayVisualMode | null {
+  const fromAtm = contract.day_atmosphere?.visual_mode;
+  if (isDayVisualMode(fromAtm)) return fromAtm;
+  const fromStory = (contract.day_story as { visual_mode?: string } | undefined)?.visual_mode;
+  if (isDayVisualMode(fromStory)) return fromStory;
+  return null;
+}
+
 function sceneAccents(contract: TodayContractV1): string[] {
   const scenes = contract.day_story?.day_scenario?.scenes;
   if (!Array.isArray(scenes) || !scenes.length) return [];
@@ -121,6 +156,135 @@ function sceneAccents(contract: TodayContractV1): string[] {
     pool.map((s) => s.sphere_label_ru || s.sphere || null),
     3,
   );
+}
+
+function buildLunarCaption(contract: TodayContractV1, glassReason: string | null): string | null {
+  const lunar = contract.day_story?.day_foundation?.lunar;
+  const phase = clean(lunar?.phase?.name);
+  const sign =
+    clean(lunar?.moon_sign?.sign_ru) ||
+    clean(lunar?.moon_sign?.sign);
+  if (phase && sign) return `${phase} в ${sign}`;
+  if (phase) return phase;
+  if (sign) return `Луна в ${sign}`;
+  return glassReason ? clipCompassProse(glassReason, 72) : null;
+}
+
+function buildWhyFactors(
+  contract: TodayContractV1,
+  glass: HandoffWelcomeGlass | null | undefined,
+): TodayDayWhyFactor[] {
+  const out: TodayDayWhyFactor[] = [];
+  const seen = new Set<string>();
+
+  const push = (id: string, label: string | null, detail: string | null) => {
+    const lab = clean(label);
+    if (!lab) return;
+    const key = normalizeKey(lab);
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push({ id, label: lab, detail: cleanAmbassadorWhy(detail) });
+  };
+
+  const lunar = contract.day_story?.day_foundation?.lunar;
+  const phase = clean(lunar?.phase?.name);
+  const sign = clean(lunar?.moon_sign?.sign_ru) || clean(lunar?.moon_sign?.sign);
+  if (phase || sign) {
+    push(
+      "lunar",
+      phase && sign ? `${phase} · ${sign}` : phase || `Луна в ${sign}`,
+      clean(lunar?.phase?.themes) || clean(lunar?.phase?.guidance) || clean(lunar?.summary_ru),
+    );
+  } else if (glass?.reasonLine) {
+    push("lunar-glass", clipCompassProse(glass.reasonLine, 48), glass.reasonLine);
+  }
+
+  const num = contract.day_story?.day_foundation?.numerology;
+  const dayNum = num?.personal_day ?? num?.universal_day;
+  if (typeof dayNum === "number" && Number.isFinite(dayNum)) {
+    push("number", `Число дня ${dayNum}`, clean(num?.summary_ru));
+  }
+
+  const beats = [
+    ...(contract.day_story?.day_foundation?.astro?.beats || []),
+    ...(contract.day_story?.day_foundation?.lunar?.beats || []),
+  ];
+  for (const beat of beats) {
+    if (out.length >= 4) break;
+    const title = clean(beat.title);
+    if (!title || KITCHEN_MECHANISM_RE.test(title)) continue;
+    push(`beat-${beat.id || title}`, clipCompassProse(title, 42), clean(beat.story_ru));
+  }
+
+  return out.slice(0, 4);
+}
+
+const BETTER_BUCKETS: Array<{
+  id: string;
+  title: string;
+  spheres: string[];
+  domainKeys: string[];
+}> = [
+  { id: "work", title: "Работа", spheres: ["work", "work_decisions", "money"], domainKeys: ["work", "money"] },
+  {
+    id: "people",
+    title: "Люди",
+    spheres: ["relationships", "communication", "home"],
+    domainKeys: ["relationships"],
+  },
+  {
+    id: "self",
+    title: "Для себя",
+    spheres: ["energy", "energy_body", "rest_travel", "creativity", "rest"],
+    domainKeys: ["energy"],
+  },
+];
+
+function buildBetterCards(contract: TodayContractV1): TodayDayBetterCard[] {
+  const scenes = contract.day_story?.day_scenario?.scenes;
+  const domains = contract.domains;
+  const cards: TodayDayBetterCard[] = [];
+
+  for (const bucket of BETTER_BUCKETS) {
+    let body: string | null = null;
+    let detail: string | null = null;
+
+    if (Array.isArray(scenes)) {
+      const match = scenes.find((s) => {
+        const sp = String(s.sphere || "").toLowerCase();
+        return bucket.spheres.some((b) => sp === b || sp.includes(b));
+      });
+      if (match) {
+        body =
+          clipCompassProse(match.opportunity || match.recommended_action || match.what_happens, 72) ||
+          null;
+        detail =
+          cleanAmbassadorWhy(match.opportunity) ||
+          cleanAmbassadorWhy(match.recommended_action) ||
+          cleanAmbassadorWhy(match.what_happens) ||
+          cleanAmbassadorWhy(match.domestic_example);
+      }
+    }
+
+    if (!body && domains) {
+      for (const key of bucket.domainKeys) {
+        const lens = (domains as Record<string, { opportunity?: string; action?: string; status?: string }>)[key];
+        if (!lens) continue;
+        body = clipCompassProse(lens.opportunity || lens.action || lens.status, 72);
+        detail =
+          cleanAmbassadorWhy(lens.opportunity) ||
+          cleanAmbassadorWhy(lens.action) ||
+          cleanAmbassadorWhy(lens.status);
+        if (body) break;
+      }
+    }
+
+    if (body) {
+      cards.push({ id: bucket.id, title: bucket.title, body, detail });
+    }
+  }
+
+  return cards.slice(0, 3);
 }
 
 export function buildTodayDayBriefModel(input: {
@@ -135,6 +299,7 @@ export function buildTodayDayBriefModel(input: {
 }): TodayDayBriefModel {
   const story = input.contract.day_story;
   const glass = input.welcomeGlass;
+  const visualMode = resolveVisualMode(input.contract);
 
   const atmosphereLine =
     clean(input.headline) ||
@@ -157,13 +322,24 @@ export function buildTodayDayBriefModel(input: {
     essence,
     story?.day_scenario?.conflict?.why_arose,
   ]);
-  // Never duplicate expect into atmosphere note.
   if (overlaps(atmosphereNote, expect) || overlaps(atmosphereNote, atmosphereLine)) {
     atmosphereNote = null;
   }
 
   const doItems = uniqTrim(story?.do || [], 3).map((item) => clipCompassProse(item, 200) || item);
   const avoidItems = uniqTrim(story?.avoid || [], 2).map((item) => clipCompassProse(item, 180) || item);
+  const supportLine = doItems[0] || clipCompassProse(story?.advantage, 120);
+  const supportDetail =
+    cleanAmbassadorWhy(story?.do?.[0]) ||
+    cleanAmbassadorWhy(story?.advantage) ||
+    (doItems.length > 1 ? doItems.slice(1).join(" · ") : null);
+
+  const personalLine =
+    clipCompassProse(
+      cleanAmbassadorWhy(story?.day_scenario?.conflict?.why_personal) ||
+        cleanAmbassadorWhy(input.contract.personal_growth?.development_point),
+      180,
+    ) || null;
 
   return {
     dateLabel: input.dateLabel,
@@ -182,5 +358,13 @@ export function buildTodayDayBriefModel(input: {
     doItems,
     avoidItems,
     vibeClosing: null,
+    visualMode,
+    modeLabel: visualMode ? DAY_MODE_LABELS_RU[visualMode] : null,
+    lunarCaption: buildLunarCaption(input.contract, glass?.reasonLine ?? null),
+    whyFactors: buildWhyFactors(input.contract, glass),
+    betterCards: buildBetterCards(input.contract),
+    supportLine,
+    supportDetail,
+    personalLine,
   };
 }

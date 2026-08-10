@@ -413,6 +413,12 @@ export function TodayCompositionSurface(props: Props) {
     [dateISO, trackMeaningEvent],
   );
 
+  const goToOrientation = useCallback(() => {
+    onScreenFlowIndexChange(todayHandoffIndices(showSymbolsAct).orientation, {
+      reason: "select",
+    });
+  }, [onScreenFlowIndexChange, showSymbolsAct]);
+
   useEffect(() => {
     if (singleVoice || !props.onRitualSpineComplete || !story.personalizedReady) return;
     const tarotMainId = engagement.tarotPickedId ?? anchorTarotId;
@@ -2104,12 +2110,17 @@ export function TodayCompositionSurface(props: Props) {
       loading={themeLoading}
       pane="atmosphere"
       model={dayBriefModel}
-      timeline={<TodayGlanceTimelineSlot dateISO={dateISO} variant="story" />}
+      onContinue={goToOrientation}
     />
   );
 
   const dayOrientationBrief = (
-    <TodayDayBrief loading={themeLoading} pane="orientation" model={dayBriefModel} />
+    <TodayDayBrief
+      loading={themeLoading}
+      pane="orientation"
+      model={dayBriefModel}
+      timeline={<TodayGlanceTimelineSlot dateISO={dateISO} variant="story" />}
+    />
   );
 
   const dayTasksModel = buildTodayDayTasks({

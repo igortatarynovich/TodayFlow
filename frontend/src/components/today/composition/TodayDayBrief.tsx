@@ -1,13 +1,13 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useCallback, useEffect, useId, useState, type ReactNode } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import type { TodayDayBriefModel } from "@/lib/todayDayBrief";
 import styles from "@/components/today/composition/TodayDayBrief.module.css";
 
 /**
- * Block 1 frames — atmosphere (page 1) · orientation (page 2).
- * Canon: TODAY_SCREEN_SCENARIO_V3 v3.4.1
+ * Block 1 — dashboard (mockup-led) + orientation pane.
+ * Tap opens detail sheet overlay. Canon: TODAY_SCREEN_SCENARIO_V3 v3.4.2
  */
 
 export type TodayDayBriefPane = "atmosphere" | "orientation";
@@ -16,31 +16,97 @@ export type TodayDayBriefProps = {
   model: TodayDayBriefModel;
   pane?: TodayDayBriefPane;
   loading?: boolean;
-  /** Timeline / поток — only on atmosphere pane. */
   timeline?: ReactNode;
+  /** Advance ScreenFlow after personal CTA (optional). */
+  onContinue?: () => void;
 };
+
+type SheetState = {
+  title: string;
+  body: string;
+  kicker?: string;
+} | null;
 
 export function TodayDayBrief({
   model,
   pane = "atmosphere",
   loading = false,
   timeline = null,
+  onContinue,
 }: TodayDayBriefProps) {
   if (pane === "orientation") {
-    return <TodayDayOrientation model={model} loading={loading} />;
+    return <TodayDayOrientation model={model} loading={loading} timeline={timeline} />;
   }
-  return <TodayDayAtmosphere model={model} loading={loading} timeline={timeline} />;
+  return (
+    <TodayDayDashboard model={model} loading={loading} onContinue={onContinue} />
+  );
 }
 
-function TodayDayAtmosphere({
+function TodayDayDetailSheet({
+  sheet,
+  onClose,
+}: {
+  sheet: SheetState;
+  onClose: () => void;
+}) {
+  const titleId = useId();
+  useEffect(() => {
+    if (!sheet) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [sheet, onClose]);
+
+  if (!sheet) return null;
+
+  return (
+    <div
+      className={styles.sheetRoot}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      data-testid="today-day-detail-sheet"
+    >
+      <button
+        type="button"
+        className={styles.sheetBackdrop}
+        aria-label={copy.sheetClose}
+        onClick={onClose}
+      />
+      <div className={styles.sheetPanel}>
+        {sheet.kicker ? <p className={styles.sheetKicker}>{sheet.kicker}</p> : null}
+        <h3 id={titleId} className={styles.sheetTitle}>
+          {sheet.title}
+        </h3>
+        <p className={styles.sheetBody}>{sheet.body}</p>
+        <button type="button" className={styles.sheetClose} onClick={onClose}>
+          {copy.sheetClose}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function TodayDayDashboard({
   model,
   loading,
-  timeline,
+  onContinue,
 }: {
   model: TodayDayBriefModel;
   loading: boolean;
-  timeline: ReactNode;
+  onContinue?: () => void;
 }) {
+  const [sheet, setSheet] = useState<SheetState>(null);
+  const openSheet = useCallback((next: SheetState) => setSheet(next), []);
+  const closeSheet = useCallback(() => setSheet(null), []);
+
   const {
     dateLabel,
     salutation,
@@ -49,56 +115,202 @@ function TodayDayAtmosphere({
     moodPills,
     atmosphereNote,
     expect,
+    modeLabel,
+    lunarCaption,
+    whyFactors,
+    betterCards,
+    supportLine,
+    supportDetail,
+    trap,
+    personalLine,
+    energy,
+    energyCause,
   } = model;
+
   const line = atmosphereLine ?? vibe;
+  const heroBody = expect || atmosphereNote || energy;
+  const heroCue = moodPills[0] || atmosphereNote;
 
   return (
     <div
-      className={styles.root}
+      className={styles.dash}
       data-testid="today-day-brief"
       data-pane="atmosphere"
     >
-      <header className={styles.hero}>
-        <p className={styles.date} data-testid="today-day-brief-date">
-          {dateLabel}
-        </p>
-        <p className={styles.salutation}>{salutation}</p>
-        <h2 className={styles.atmosphereLine} data-testid="today-day-brief-vibe">
-          {loading ? copy.loadingDay : line || "Сегодняшний день"}
-        </h2>
+      <header className={styles.dashHeader}>
+        <div className={styles.dashHeaderText}>
+          <p className={styles.date} data-testid="today-day-brief-date">
+            {dateLabel}
+          </p>
+          {lunarCaption ? (
+            <p className={styles.lunarCaption} data-testid="today-day-brief-lunar">
+              {lunarCaption}
+            </p>
+          ) : (
+            <p className={styles.salutation}>{salutation}</p>
+          )}
+        </div>
       </header>
 
-      {(moodPills.length > 0 || atmosphereNote) && (
-        <section className={styles.section} data-testid="today-day-brief-atmosphere">
+      <button
+        type="button"
+        className={styles.heroCard}
+        data-testid="today-day-brief-vibe"
+        data-mode={model.visualMode || undefined}
+        onClick={() =>
+          openSheet({
+            title: modeLabel || copy.atmosphereLabel,
+            kicker: copy.atmosphereLabel,
+            body: [line, heroBody, heroCue].filter(Boolean).join("\n\n") || copy.loadingDay,
+          })
+        }
+      >
+        {modeLabel ? <p className={styles.heroMode}>{modeLabel}</p> : null}
+        <h2 className={styles.heroTitle}>
+          {loading ? copy.loadingDay : line || "Сегодняшний день"}
+        </h2>
+        {heroBody ? <p className={styles.heroBody}>{heroBody}</p> : null}
+        {heroCue ? (
+          <p className={styles.heroCue} data-testid="today-day-brief-mood">
+            {heroCue}
+          </p>
+        ) : null}
+      </button>
+
+      {whyFactors.length > 0 ? (
+        <section className={styles.section} data-testid="today-day-brief-why-factors">
+          <div className={styles.sectionHead}>
+            <p className={styles.blockLabel}>{copy.whyTodayLabel}</p>
+          </div>
+          <ul className={styles.factorRow}>
+            {whyFactors.map((f) => (
+              <li key={f.id}>
+                <button
+                  type="button"
+                  className={styles.factorChip}
+                  onClick={() =>
+                    openSheet({
+                      title: f.label,
+                      kicker: copy.whyTodayLabel,
+                      body: f.detail || f.label,
+                    })
+                  }
+                >
+                  {f.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : atmosphereNote ? (
+        <section className={styles.section} data-testid="today-day-brief-why">
           <p className={styles.blockLabel}>{copy.atmosphereLabel}</p>
-          {moodPills.length > 0 ? (
-            <ul className={styles.moodRow} data-testid="today-day-brief-mood">
-              {moodPills.map((m) => (
-                <li key={m}>{m}</li>
-              ))}
-            </ul>
+          <p className={styles.blockBody}>{atmosphereNote}</p>
+        </section>
+      ) : null}
+
+      {betterCards.length > 0 ? (
+        <section className={styles.section} data-testid="today-day-brief-better">
+          <p className={styles.blockLabel}>{copy.betterTodayLabel}</p>
+          <div className={styles.betterGrid}>
+            {betterCards.map((card) => (
+              <button
+                key={card.id}
+                type="button"
+                className={styles.betterCard}
+                data-testid={`today-day-better-${card.id}`}
+                onClick={() =>
+                  openSheet({
+                    title: card.title,
+                    kicker: copy.betterTodayLabel,
+                    body: card.detail || card.body,
+                  })
+                }
+              >
+                <span className={styles.betterTitle}>{card.title}</span>
+                <span className={styles.betterBody}>{card.body}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {(supportLine || trap) && (
+        <section className={styles.pairGrid} data-testid="today-day-brief-pair">
+          {supportLine ? (
+            <button
+              type="button"
+              className={styles.supportCard}
+              data-testid="today-day-brief-do"
+              onClick={() =>
+                openSheet({
+                  title: copy.supportLabel,
+                  body: supportDetail || supportLine,
+                })
+              }
+            >
+              <span className={styles.pairLabel}>{copy.supportLabel}</span>
+              <span className={styles.pairBody}>{supportLine}</span>
+            </button>
           ) : null}
-          {atmosphereNote ? (
-            <p className={styles.blockBody} data-testid="today-day-brief-why">
-              {atmosphereNote}
-            </p>
+          {trap ? (
+            <button
+              type="button"
+              className={styles.trapCard}
+              data-testid="today-day-brief-trap"
+              onClick={() =>
+                openSheet({
+                  title: copy.trapDayLabel,
+                  body: trap,
+                })
+              }
+            >
+              <span className={styles.pairLabel}>{copy.trapDayLabel}</span>
+              <span className={styles.pairBody}>{trap}</span>
+            </button>
           ) : null}
         </section>
       )}
 
-      {expect ? (
-        <section className={styles.section} data-testid="today-day-brief-expect">
-          <p className={styles.blockLabel}>{copy.expectLabel}</p>
-          <p className={styles.blockBody}>{expect}</p>
+      {personalLine || onContinue ? (
+        <section className={styles.personalCard} data-testid="today-day-brief-personal">
+          <p className={styles.blockLabel}>{copy.personalTodayLabel}</p>
+          {personalLine ? (
+            <button
+              type="button"
+              className={styles.personalBodyBtn}
+              onClick={() =>
+                openSheet({
+                  title: copy.personalTodayLabel,
+                  body: personalLine,
+                })
+              }
+            >
+              <p className={styles.blockBody}>{personalLine}</p>
+            </button>
+          ) : null}
+          {onContinue ? (
+            <button
+              type="button"
+              className={styles.personalCta}
+              data-testid="today-day-personal-cta"
+              onClick={onContinue}
+            >
+              {copy.personalTodayCta}
+            </button>
+          ) : null}
         </section>
       ) : null}
 
-      {timeline ? (
-        <section className={styles.timeline} data-testid="today-day-brief-timeline">
-          <p className={styles.blockLabel}>{copy.timelineLabel}</p>
-          <div className={styles.timelineBody}>{timeline}</div>
+      {energy && !heroBody?.includes(energy) ? (
+        <section className={styles.section} data-testid="today-day-brief-energy">
+          <p className={styles.blockLabel}>{copy.pulseLabel}</p>
+          <p className={styles.blockBodyMuted}>{energy}</p>
+          {energyCause ? <p className={styles.blockBodyMuted}>{energyCause}</p> : null}
         </section>
       ) : null}
+
+      <TodayDayDetailSheet sheet={sheet} onClose={closeSheet} />
     </div>
   );
 }
@@ -106,13 +318,15 @@ function TodayDayAtmosphere({
 function TodayDayOrientation({
   model,
   loading,
+  timeline,
 }: {
   model: TodayDayBriefModel;
   loading: boolean;
+  timeline: ReactNode;
 }) {
-  const { trap, doItems, avoidItems, energy, energyCause } = model;
+  const { trap, doItems, avoidItems, energy, energyCause, expect } = model;
   const hasCues = doItems.length > 0 || avoidItems.length > 0;
-  const empty = !trap && !hasCues && !energy && !loading;
+  const empty = !trap && !hasCues && !energy && !expect && !timeline && !loading;
 
   return (
     <div
@@ -120,6 +334,13 @@ function TodayDayOrientation({
       data-testid="today-day-brief"
       data-pane="orientation"
     >
+      {expect ? (
+        <section className={styles.section} data-testid="today-day-brief-expect">
+          <p className={styles.blockLabel}>{copy.expectLabel}</p>
+          <p className={styles.blockBody}>{expect}</p>
+        </section>
+      ) : null}
+
       {trap ? (
         <section className={styles.trapBlock} data-testid="today-day-brief-trap">
           <p className={styles.compassLabel}>{copy.trapLabel}</p>
@@ -130,12 +351,7 @@ function TodayDayOrientation({
       {hasCues ? (
         <section className={styles.cuesStack} data-testid="today-day-brief-instruction">
           {doItems.length > 0 ? (
-            <div
-              className={styles.cueDo}
-              data-testid="today-day-brief-do"
-              data-polarity="support"
-              aria-label="Ориентир"
-            >
+            <div className={styles.cueDo} data-testid="today-day-brief-do" data-polarity="support">
               <ul className={styles.list}>
                 {doItems.map((item) => (
                   <li key={item}>{item}</li>
@@ -144,12 +360,7 @@ function TodayDayOrientation({
             </div>
           ) : null}
           {avoidItems.length > 0 ? (
-            <div
-              className={styles.cueAvoid}
-              data-testid="today-day-brief-avoid"
-              data-polarity="caution"
-              aria-label="Осторожность"
-            >
+            <div className={styles.cueAvoid} data-testid="today-day-brief-avoid" data-polarity="caution">
               <ul className={styles.list}>
                 {avoidItems.map((item) => (
                   <li key={item}>{item}</li>
@@ -169,6 +380,13 @@ function TodayDayOrientation({
               {energyCause}
             </p>
           ) : null}
+        </section>
+      ) : null}
+
+      {timeline ? (
+        <section className={styles.timeline} data-testid="today-day-brief-timeline">
+          <p className={styles.blockLabel}>{copy.timelineLabel}</p>
+          <div className={styles.timelineBody}>{timeline}</div>
         </section>
       ) : null}
 

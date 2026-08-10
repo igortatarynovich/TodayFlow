@@ -1,7 +1,7 @@
-# Today — сценарий страницы (v3.4 · шесть блоков)
+# Today — сценарий страницы (v3.4.2 · шесть блоков)
 
 **Status:** ACTIVE · **Updated 2026-08-10**  
-**Prior:** v3.4 six blocks · v3.3 handoff 12-step (2026-08-08) · v3.2 story-deck · v3.1 content jobs  
+**Prior:** v3.4.1 atmosphere+orientation · v3.4 six blocks · v3.3 handoff 12-step · v3.2 story-deck · v3.1 content jobs  
 
 ## Presentation SoT — шесть блоков (LOCKED) · Block 1 = 2 кадра
 
@@ -10,9 +10,14 @@
 
 ```text
 1. День          — два кадра:
-                   (a) Атмосфера: дата · приветствие · строка атмосферы · pills · note · чего ожидать · поток/timeline
-                   (b) Ориентир: ловушка · шаги (do/avoid без ярлыков «делать/не делать») · энергия (+ лунный cause)
-                   Не выделять отдельный «вайб» — headline = атмосфера. Без дубля expect на обоих кадрах.
+                   (a) Атмосфера = dashboard (не длинная колонка):
+                       дата + лунная подпись · hero режима (mode + atmosphere + cue) ·
+                       «Почему так сегодня» (chips) · «Сегодня лучше» (≤3 карточки) ·
+                       Опора ‖ Ловушка · персональный мост + CTA.
+                       Tap по блоку → detail sheet поверх (без смены ScreenFlow-шага).
+                       CTA «Посмотреть мой день» → кадр orientation.
+                   (b) Ориентир: trap · do/avoid · энергия (+ cause) · timeline/поток
+                   Не выделять отдельный «вайб» — headline = атмосфера. Без invent; omit если пусто.
 2. Ритуалы       — число · карта (персональный вход)
 3. Инструкция    — персональная инструкция на день (мне)
 4. Цвет          — цвет дня
@@ -35,7 +40,7 @@
 
 | # | Польза (зачем открыл) | Scan / layout |
 |---|----------------------|---------------|
-| 1 | Снять тревогу «со мной всё ок / сегодня такой день» | **Кадр a:** атмосфера → pills → note → expect → timeline. **Кадр b:** ловушка → шаги → энергия. Без дубля expect. |
+| 1 | Снять тревогу «со мной всё ок / сегодня такой день» | **Кадр a:** dashboard (hero · why chips · better · опора‖ловушка · personal); detail sheet on tap. **Кадр b:** ориентир + timeline. |
 | 2 | Внешнее → внутреннее; момент «здесь» | Число + карта на **одном** кадре |
 | 3 | Мост тренд × личная карта | 2–3 предложения; полярность цветом (без ярлыков Prioritize/Avoid) |
 | 4 | Визуальный якорь дня | Цвет + одна строка «зачем» |
@@ -49,8 +54,8 @@
 
 | # | Блок | ScreenFlow id | Что показывает | Откуда смысл (houses / nests) |
 |---|------|---------------|----------------|-------------------------------|
-| 1a | День · атмосфера | `day` | дата · приветствие · строка атмосферы · pills · note · expect · timeline | day_story · welcome_glass · glance timeline · morning celestial |
-| 1b | День · ориентир | `orientation` | trap · do/avoid · энергия (+ cause) | day_story · chorus energy |
+| 1a | День · атмосфера | `day` | dashboard: date/lunar · mode hero · why chips · better cards · support‖trap · personal (+ sheet) | day_story · day_foundation · welcome_glass · day_atmosphere · domains/scenes |
+| 1b | День · ориентир | `orientation` | trap · do/avoid · энергия (+ cause) · timeline | day_story · chorus energy · glance timeline |
 | 2 | Ритуалы | `rituals` | число + карта (если symbols) | Symbols·A |
 | 3 | Инструкция | `instruction` | персональный prioritize / avoid (+ deepen опц.) | Glance Daily Focus · depth_layer |
 | 4 | Цвет | `color` | color guide | color_guide / Move color |
@@ -70,6 +75,15 @@
 | Focus отдельно от «инструкции» | = блок 3 |
 | Recap | Лишний; петля = promise+close |
 | 12 swipe-шагов | Распыляет день |
+
+### Architecture impact (2026-08-10 — Block 1 dashboard + detail sheet · v3.4.2)
+
+- **SoT before:** Block 1a = vertical atmosphere stack (date · greeting · line · pills · note · expect · timeline).
+- **SoT after:** Block 1a = **dashboard cards** (hero · why factors · better · support‖trap · personal); tap → **detail sheet overlay**; timeline moves to `orientation`; CTA advances to orientation. Fields assembled from existing contract only (no invent).
+- **Public contract changed?** no — FE composition / presentation map only
+- **Migration required?** no step indices; sheet is overlay on `day`
+- **Canon updated?** yes — this file
+- **Backward compatible?** yes API; old deep-links unchanged
 
 ### Architecture impact (2026-08-10 — day atmosphere + orientation frames)
 
