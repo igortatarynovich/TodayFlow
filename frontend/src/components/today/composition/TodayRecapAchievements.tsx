@@ -14,25 +14,24 @@ type Props = {
   items: TodayRecapItem[];
 };
 
-/** Recap as achievement tiles — not a plain text list. */
+/** Thin handoff recap — one glass with priority / promise / practice rows. */
 export function TodayRecapAchievements({ items }: Props) {
   return (
     <div className={styles.root} data-testid="today-handoff-recap">
-      <div className={styles.grid}>
-        {items.map((item) => (
-          <DsGlassCard
-            key={item.id}
-            className={item.done ? styles.cardDone : styles.card}
-            testId={`today-recap-${item.id}`}
-          >
-            <DsEyebrow>{item.label}</DsEyebrow>
-            <p className={styles.value}>{item.value}</p>
-            <p className={styles.status} aria-hidden>
-              {item.done ? "✓" : "·"}
-            </p>
-          </DsGlassCard>
-        ))}
-      </div>
+      <DsGlassCard className={styles.sheet} testId="today-recap-sheet">
+        <ul className={styles.list}>
+          {items.map((item) => (
+            <li
+              key={item.id}
+              className={item.done ? styles.rowDone : styles.row}
+              data-testid={`today-recap-${item.id}`}
+            >
+              <DsEyebrow>{item.label}</DsEyebrow>
+              <p className={styles.value}>{item.value}</p>
+            </li>
+          ))}
+        </ul>
+      </DsGlassCard>
     </div>
   );
 }

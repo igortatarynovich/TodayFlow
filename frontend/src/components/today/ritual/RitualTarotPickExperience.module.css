@@ -35,12 +35,53 @@
   align-items: center;
 }
 
-/* --- Idle --- */
+/* --- Idle: 3 stacked backs (handoff closed-state) --- */
 .idleStack {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.65rem;
+}
+
+.idleDeck {
+  position: relative;
+  width: min(168px, 46vw);
+  aspect-ratio: 3 / 5;
+  margin: 0.35rem auto 0.15rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.idleDeckBack {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(154, 132, 104, 0.4);
+  box-shadow:
+    0 14px 32px rgba(60, 40, 28, 0.18),
+    0 0 0 1px rgba(255, 252, 248, 0.28) inset;
+  background: var(--tarot-card-bg);
+  transform-origin: center bottom;
+}
+
+.idleDeckBack:nth-child(1) {
+  transform: translate(-10px, 6px) rotate(-6deg);
+  z-index: 1;
+  opacity: 0.88;
+}
+
+.idleDeckBack:nth-child(2) {
+  transform: translate(10px, 4px) rotate(5deg);
+  z-index: 2;
+  opacity: 0.92;
+}
+
+.idleDeckBack:nth-child(3) {
+  transform: translate(0, 0) rotate(0deg);
+  z-index: 3;
 }
 
 .idleCard {

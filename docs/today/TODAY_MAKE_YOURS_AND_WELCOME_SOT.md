@@ -84,4 +84,31 @@ Honest empty: if no signal and no entity → short links to Календарь /
 
 ## 5. Number / Card
 
-**Keep live ritual UX:** existing number flower/ring + tarot deck/open card (`RitualNumberPickExperience` / `RitualTarotPickExperience`). Do **not** replace with handoff 9 blank slots / 3 card-backs.
+**Keep live ritual UX** (`RitualNumberPickExperience` / `RitualTarotPickExperience`). Closed-state polish only:
+- Number idle → **9 blank ring** slots (still live pick, not a stub).
+- Card idle → **3 stacked backs** (tap opens live deck).
+
+Do **not** replace rituals with static handoff placeholders.
+
+**Tarot × number compose (FE):** after both revealed, personal line may read `При числе дня N (title) эта карта — …` via `formatRitualTarotPersonalToday` — presentation only; meaning SoT stays symbol hooks / impact.
+
+---
+
+## 6. Day promise → Day Connection
+
+Local engagement `dayGoal` remains primary UX store (survives refresh via CUM).  
+On set (chip or free-text): also `POST /day-connection/{date}` with `morning_intention` + `morning_completed` (`todayPromiseSync`) — fire-and-forget; transport failure does not invent copy or roll back local promise.
+
+---
+
+## 7. Thin recap (handoff)
+
+Recap frame shows **three** rows only: Приоритет · Обещание · Практика (started/done).  
+Number / card are **not** on recap — they live on their ritual steps.
+
+---
+
+## 8. Atmosphere crossfade (P2)
+
+Mode change on product routes: capture `--day-prev-*` wash → hold on frame `::after` → apply new `--day-*` → fade out previous.  
+Skip on `prefers-reduced-motion`, lite/touch-narrow, and when document hidden.

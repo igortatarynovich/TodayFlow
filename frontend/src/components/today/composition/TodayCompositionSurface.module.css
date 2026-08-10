@@ -2182,16 +2182,16 @@
 
 .promiseChip {
   text-align: left;
-  padding: 0.9rem 1rem;
-  border-radius: 16px;
-  border: 1px solid var(--tdp-border);
-  background: rgba(255, 255, 255, 0.55);
-  color: var(--tdp-ink);
+  padding: 0.95rem 1.05rem;
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, var(--tdp-border)) 22%, transparent);
+  background: color-mix(in srgb, var(--day-surface-tint, #fff) 82%, rgba(255, 255, 255, 0.55));
+  color: var(--tf-ink, var(--tdp-ink));
   font-size: 0.9375rem;
-  line-height: 1.5;
-  color: var(--tdp-ink);
+  line-height: 1.55;
   cursor: pointer;
   transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  box-shadow: 0 1px 0 color-mix(in srgb, #fff 55%, transparent);
 }
 
 .promiseChip:hover {
@@ -2200,8 +2200,8 @@
 }
 
 .promiseChipActive {
-  border-color: rgba(184, 95, 74, 0.4);
-  background: var(--tdp-accent-soft);
+  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 55%, transparent);
+  background: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 14%, #fff);
   box-shadow: var(--tdp-shadow-sm);
 }
 

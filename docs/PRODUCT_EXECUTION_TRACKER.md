@@ -1,8 +1,19 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-09
+Last updated: 2026-08-10
 Owner: Product + Engineering
 Status: Active working document
+
+**DONE (CODE, 2026-08-10):** **Wave B2 + Atmosphere crossfade + ritual closed-state** — promise → `day-connection.morning_intention`; practice gift start→started→complete; thin recap (priority/promise/practice); tarot idle 3 stacked backs; Atmosphere hold→out wash crossfade (skip lite/reduced-motion). Canon: `docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md` §5–8.
+
+## Architecture impact — Wave B2 / Atmosphere P2 (2026-08-10)
+
+- **SoT before:** day promise = FE engagement only; recap = 5 tiles incl. number/card; Atmosphere mode change = instant token swap; tarot idle = single back / stackOnly deck.
+- **SoT after:** promise also mirrors to Day Connection `morning_intention` (fire-and-forget); recap = 3 handoff rows; Atmosphere two-layer wash via `--day-prev-*` + `data-day-crossfade` hold|out; tarot closed-state = 3 stacked backs (live ritual kept). Practice started remains FE engagement (no new BE field).
+- **Public contract changed?** no — reuses existing `POST /day-connection/{date}` fields
+- **Migration required?** no
+- **Canon updated?** yes — `TODAY_MAKE_YOURS_AND_WELCOME_SOT.md` §5–8
+- **Backward compatible?** yes
 
 **DONE (CODE, 2026-08-09):** **Wave B1 P0 nests on `/today/contract`** — `welcome_glass` · `today_progress` · `color_guide`. Canon: `docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md`.
 

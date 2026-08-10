@@ -27,7 +27,7 @@ function startCtaLabel(duration: string | null | undefined): string {
 
 /**
  * Move «Практика дня» — gift framing.
- * Primary CTA opens practice page; timer starts only when user presses start there.
+ * Primary CTA marks started on this step (handoff); open practice page is secondary.
  */
 export function TodayPracticeGiftBlock({
   title,
@@ -63,29 +63,37 @@ export function TodayPracticeGiftBlock({
           </p>
         ) : (
           <div className={styles.actions}>
-            <DsButton
-              href={practiceHref}
-              variant="primary"
-              className={styles.cta}
-              data-testid="today-tool-practice"
-            >
-              {startCtaLabel(duration)}
-            </DsButton>
-            {practiceStarted ? (
+            {!practiceStarted ? (
               <DsButton
                 type="button"
-                variant="secondary"
+                variant="primary"
                 className={styles.cta}
-                data-testid="today-tool-practice-complete"
+                data-testid="today-tool-practice"
                 disabled={practiceCompleting}
                 onClick={() => void onPracticeAction()}
               >
-                {copy.practiceComplete}
+                {startCtaLabel(duration)}
               </DsButton>
-            ) : null}
+            ) : (
+              <>
+                <p className={styles.confirmed} data-testid="today-practice-gift-started">
+                  Практика начата
+                </p>
+                <DsButton
+                  type="button"
+                  variant="primary"
+                  className={styles.cta}
+                  data-testid="today-tool-practice-complete"
+                  disabled={practiceCompleting}
+                  onClick={() => void onPracticeAction()}
+                >
+                  {copy.practiceComplete}
+                </DsButton>
+              </>
+            )}
             <p className={styles.setup}>
-              <Link href={setupHref} data-testid="today-setup-practices-link">
-                {copy.setupPracticesLink} →
+              <Link href={practiceHref} data-testid="today-setup-practices-link">
+                {practiceId ? "Открыть практику →" : `${copy.setupPracticesLink} →`}
               </Link>
             </p>
           </div>

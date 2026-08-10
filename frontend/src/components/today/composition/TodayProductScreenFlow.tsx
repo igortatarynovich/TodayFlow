@@ -423,7 +423,7 @@ export function TodayProductScreenFlow({
               <SlotStep
                 testId="today-frame-recap"
                 eyebrow={copy.storyNext.recap}
-                title="Что уже оформили"
+                title=""
                 nextTitle={copy.storyNext.close}
                 nextHint={copy.storyNext.closeHint}
                 onNext={() => go(idx.close)}

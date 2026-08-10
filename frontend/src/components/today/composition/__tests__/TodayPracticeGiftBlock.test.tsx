@@ -36,6 +36,6 @@ describe("TodayPracticeGiftBlock", () => {
       />,
     );
     expect(screen.getByTestId("today-practice-gift-started")).toBeInTheDocument();
-    expect(screen.getByTestId("today-tool-practice")).toHaveTextContent(/Завершить практику/);
+    expect(screen.getByTestId("today-tool-practice-complete")).toHaveTextContent(/Отметить сделанной/);
   });
 });

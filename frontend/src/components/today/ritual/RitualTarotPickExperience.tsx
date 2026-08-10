@@ -298,18 +298,33 @@ export function RitualTarotPickExperience({
     <div
       className={`${styles.wrap} ${styles.breathe} ${pressed ? styles.press : ""}`}
       data-reduce={reduceMotion ? "true" : undefined}
+      data-testid="ritual-tarot-idle"
     >
       <div className={styles.idleStack}>
-        <button type="button" className={styles.idleCard} onClick={onIdleActivate}>
-          <span className={styles.breatheGlow} aria-hidden />
-          <TarotPicture sources={back} sizes="168px" priority />
-          <span className={styles.hint}>
-            <span className={styles.hintSparkle} aria-hidden>
-              ✦
-            </span>
-            <span>{RITUAL_COPY.tarotIdleHint}</span>
+        <button
+          type="button"
+          className={styles.idleDeck}
+          onClick={onIdleActivate}
+          aria-label={RITUAL_COPY.tarotIdleHint}
+          data-testid="ritual-tarot-idle-deck"
+        >
+          <span className={`${styles.idleDeckBack}`} aria-hidden>
+            <TarotPicture sources={back} sizes="168px" />
+          </span>
+          <span className={`${styles.idleDeckBack}`} aria-hidden>
+            <TarotPicture sources={back} sizes="168px" />
+          </span>
+          <span className={`${styles.idleDeckBack}`}>
+            <span className={styles.breatheGlow} aria-hidden />
+            <TarotPicture sources={back} sizes="168px" priority />
           </span>
         </button>
+        <span className={styles.hint}>
+          <span className={styles.hintSparkle} aria-hidden>
+            ✦
+          </span>
+          <span>{RITUAL_COPY.tarotIdleHint}</span>
+        </span>
         {allowSkipAnimation ? (
           <button type="button" className={styles.skipLink} onClick={skipToRevealCommitted}>
             {RITUAL_COPY.tarotSkipAnimationCta}

@@ -132,7 +132,7 @@ import {
   buildMakeYoursProposals,
   makeYoursOccupiedFromProgress,
 } from "@/lib/todayMakeYoursProposals";
-import { pickTodayDepthMenu } from "@/lib/todayDepthMenuToday";
+import { syncDayPromiseToConnection } from "@/lib/todayPromiseSync";
 
 type Props = {
   variant?: TodayCompositionVariant;
@@ -996,6 +996,7 @@ export function TodayCompositionSurface(props: Props) {
     if (!trimmed) return;
     persistEngagement({ dayGoal: trimmed });
     setGoalDraftOpen(false);
+    void syncDayPromiseToConnection(dateISO, trimmed);
     trackMeaningEvent({
       event_type: "action_option_selected",
       event_source: "today",
@@ -1008,6 +1009,27 @@ export function TodayCompositionSurface(props: Props) {
       refreshRings: false,
     });
   }, [goalDraft, dateISO, persistEngagement, trackMeaningEvent]);
+
+  const onPickPromise = useCallback(
+    (text: string) => {
+      const trimmed = text.replace(/\s+/g, " ").trim();
+      if (!trimmed) return;
+      persistEngagement({ dayGoal: trimmed });
+      void syncDayPromiseToConnection(dateISO, trimmed);
+      trackMeaningEvent({
+        event_type: "action_option_selected",
+        event_source: "today",
+        local_date: dateISO,
+        payload: {
+          action: "day_promise_set",
+          promise_text: trimmed.slice(0, 200),
+          surface: "today_handoff_promise",
+        },
+        refreshRings: false,
+      });
+    },
+    [dateISO, persistEngagement, trackMeaningEvent],
+  );
 
   const onPracticeAction = useCallback(async () => {
     if (engagement.practiceCompleted) return;
@@ -1810,20 +1832,7 @@ export function TodayCompositionSurface(props: Props) {
                 type="button"
                 className={styles.promiseChip}
                 data-testid={`today-promise-${s.id}`}
-                onClick={() => {
-                  persistEngagement({ dayGoal: s.text });
-                  trackMeaningEvent({
-                    event_type: "action_option_selected",
-                    event_source: "today",
-                    local_date: dateISO,
-                    payload: {
-                      action: "day_promise_set",
-                      promise_text: s.text.slice(0, 200),
-                      surface: "today_handoff_promise",
-                    },
-                    refreshRings: false,
-                  });
-                }}
+                onClick={() => onPickPromise(s.text)}
               >
                 {s.text}
               </button>
@@ -1959,50 +1968,39 @@ export function TodayCompositionSurface(props: Props) {
     </div>
   );
 
+  /** Handoff thin recap: priority · promise · practice started (not number/card). */
   const handoffRecapBody = (
     <TodayRecapAchievements
       items={[
         {
           id: "priority",
           label: "Приоритет",
-          value: focusTopicLabel(engagement.focusTopicId) || "—",
+          value: focusTopicLabel(engagement.focusTopicId) || "— не выбран",
           done: Boolean(engagement.focusTopicId),
         },
         {
           id: "promise",
           label: "Обещание",
           value: engagement.dayGoal?.trim()
-            ? engagement.dayGoal.trim().length > 80
-              ? `${engagement.dayGoal.trim().slice(0, 77)}…`
+            ? engagement.dayGoal.trim().length > 46
+              ? `${engagement.dayGoal.trim().slice(0, 46)}…`
               : engagement.dayGoal.trim()
-            : "—",
+            : "— без обещания",
           done: Boolean(engagement.dayGoal?.trim()),
         },
         {
           id: "practice",
           label: "Практика",
           value: engagement.practiceCompleted
-            ? "Сделана"
+            ? "сделана ✓"
             : engagement.practiceStarted
-              ? "В процессе"
+              ? "начата ✓"
               : supportSlot === "practice"
-                ? practiceTool?.title || "Ждёт"
-                : "—",
-          done: Boolean(engagement.practiceCompleted),
-        },
-        {
-          id: "number",
-          label: "Число",
-          value: engagement.numberConfirmed
-            ? engagement.numberValue || props.numerologyValue || "Открыто"
-            : "—",
-          done: Boolean(engagement.numberConfirmed),
-        },
-        {
-          id: "card",
-          label: "Карта",
-          value: engagement.tarotPickedName || "—",
-          done: Boolean(engagement.tarotPickedName),
+                ? practiceTool?.title
+                  ? `ещё нет · ${practiceTool.title}`
+                  : "ещё нет"
+                : "ещё нет",
+          done: Boolean(engagement.practiceStarted || engagement.practiceCompleted),
         },
       ]}
     />
@@ -2535,20 +2533,7 @@ export function TodayCompositionSurface(props: Props) {
                     engagement.dayGoal === s.text ? `${styles.promiseChip} ${styles.promiseChipActive}` : styles.promiseChip
                   }
                   data-testid={`today-promise-${s.id}`}
-                  onClick={() => {
-                    persistEngagement({ dayGoal: s.text });
-                    trackMeaningEvent({
-                      event_type: "action_option_selected",
-                      event_source: "today",
-                      local_date: dateISO,
-                      payload: {
-                        action: "day_promise_set",
-                        promise_text: s.text.slice(0, 200),
-                        surface: "today_day_story_v3",
-                      },
-                      refreshRings: false,
-                    });
-                  }}
+                  onClick={() => onPickPromise(s.text)}
                 >
                   {s.text}
                 </button>

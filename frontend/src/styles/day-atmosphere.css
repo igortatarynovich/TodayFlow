@@ -323,10 +323,54 @@ html[data-day-mode] [data-product-web-frame][data-theme="dark"] {
   position: relative;
   isolation: isolate;
   color: var(--tf-ink, #2a2520);
+  transition: background-color var(--day-crossfade-ms, 520ms) ease;
+}
+
+/* Previous wash layer — fades out when mode changes (P2 crossfade). */
+html[data-day-mode] [data-product-web-frame]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--day-prev-bg-base, transparent);
+  background-image:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--day-prev-surface-tint, transparent) 78%, transparent) 0%,
+      color-mix(in srgb, var(--day-prev-bg-base, transparent) 42%, transparent) 42%,
+      color-mix(in srgb, var(--day-prev-bg-base, transparent) 28%, transparent) 100%
+    ),
+    var(--day-prev-bg-art, none);
+  background-size: cover, cover;
+  background-position: center top, center top;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: none;
+}
+
+/* hold = previous wash visible instantly; out = fade to reveal new tokens */
+html[data-day-mode][data-day-crossfade="hold"] [data-product-web-frame]::after {
+  opacity: 1;
+  transition: none;
+}
+
+html[data-day-mode][data-day-crossfade="out"] [data-product-web-frame]::after {
+  opacity: 0;
+  transition: opacity var(--day-crossfade-ms, 520ms) ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-day-mode] [data-product-web-frame],
+  html[data-day-mode] [data-product-web-frame]::after {
+    transition: none;
+  }
 }
 
 html[data-day-mode] [data-product-web-frame] > [data-ds-app-shell] {
   background: transparent;
+  position: relative;
+  z-index: 1;
 }
 
 /* Day mood owns product chrome — beat frame data-theme="dark" sidebar/main washes. */
