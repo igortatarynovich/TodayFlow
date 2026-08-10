@@ -101,13 +101,25 @@ _SIGN_EN_TO_NOM: dict[str, str] = {
 
 
 def _sign_label_prepositional(sign: str | None) -> str:
-    """Знак в предложном падеже после «в» («в Деве»); понимает en и ru."""
+    """Знак в предложном падеже после «в» («в Деве»); понимает en и ru (любой регистр)."""
     if not sign:
         return ""
     key = str(sign).strip()
+    if not key:
+        return ""
+    # Title-case EN keys in maps; also accept lowercase / UPPER.
+    titled = key[:1].upper() + key[1:].lower() if key.isascii() else key
+    if titled in _SIGN_EN_TO_RU:
+        return _SIGN_EN_TO_RU[titled]
     if key in _SIGN_EN_TO_RU:
         return _SIGN_EN_TO_RU[key]
-    return _SIGN_RU_TO_PREP.get(key, key)
+    if key in _SIGN_RU_TO_PREP:
+        return _SIGN_RU_TO_PREP[key]
+    # RU nominative already in map keys; try title-case Cyrillic
+    ru_titled = key[:1].upper() + key[1:].lower()
+    if ru_titled in _SIGN_RU_TO_PREP:
+        return _SIGN_RU_TO_PREP[ru_titled]
+    return key
 
 
 _PLANET_INTROS: dict[str, str] = {

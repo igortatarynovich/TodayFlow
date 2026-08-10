@@ -216,14 +216,20 @@ def _generic_engine(identity_thesis: str) -> dict[str, dict[str, str]]:
     pack = _ENGINE_BY_IDENTITY.get(identity_thesis)
     if pack:
         return pack
-    # Thin generic expansion for theses without full bank yet.
+    # Person-facing defaults — never ship mechanism / English slot ids / thesis keys.
+    surfaces = {
+        "decision": "Ты решаешь яснее, когда опираешься на уже понятое ядро — без чужого темпа как единственного аргумента.",
+        "perception": "Ты считываешь людей через то, что уже видно в тебе: тон, дистанция и смысл раньше чужой повестки.",
+        "stress": "Стресс растёт, когда тебя тянут в чужой ритм без права на свой ясный контур.",
+        "risk": "Риск — кружить в идеях и связях так долго, что выбор и шаг откладываются.",
+        "recovery": "Восстановление — вернуть себе ясный ритм и право дойти до вывода самому.",
+        "growth": "Рост — сделать один ясный шаг из того, что уже понятно, не собирая бесконечный круг вариантов.",
+        "burnout": "Выгорание — когда бесконечный сбор смысла съедает живое движение и близость.",
+    }
     return {
         slot: {
-            "surface_text": (
-                f"Через ядро «{identity_thesis}» здесь видно, как механизм проявляется "
-                f"в зоне «{slot}» — без второй identity-линии."
-            ),
-            "expansion_because": f"Это расширение {identity_thesis}, а не новое ядро.",
+            "surface_text": surfaces[slot],
+            "expansion_because": "Расширение того же ядра, не новая линия про себя.",
         }
         for slot in ENGINE_SLOTS
     }

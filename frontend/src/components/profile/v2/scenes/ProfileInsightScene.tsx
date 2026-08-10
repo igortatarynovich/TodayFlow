@@ -4,6 +4,7 @@ import { useProfileMotionInView } from "@/components/foundation/ProfileMotion";
 import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
 import type { ProfileJourneyNode } from "@/lib/profilePage/buildProfileJourneyProjection";
+import { localizeAstroFactLine } from "@/lib/profilePage/presentWhyAnchors";
 import { scrubUserFacingText } from "@/lib/todayValueGate";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
@@ -38,7 +39,12 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
     .map((q) => scrubUserFacingText(q))
     .filter((q): q is string => Boolean(q));
   const showLiving = livingEvidence.length > 0;
-  const showGrounded = node.groundedOn.length > 0;
+  const groundedLabels = node.groundedOn
+    .map((g) => localizeAstroFactLine(g.label))
+    .map((label) => scrubUserFacingText(label))
+    .filter((label): label is string => Boolean(label))
+    .filter((label, i, arr) => arr.findIndex((x) => x.toLowerCase() === label.toLowerCase()) === i);
+  const showGrounded = groundedLabels.length > 0;
   const help = scrubUserFacingText(node.help);
   const showHelp = Boolean(help);
   const insight = scrubUserFacingText(node.insight) || node.insight;
@@ -91,8 +97,8 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
                 <span className={styles.insightSpineDot} aria-hidden />
                 <p className={styles.insightChainLabel}>{copy.groundedLabel}</p>
                 <ul className={styles.insightGroundList}>
-                  {node.groundedOn.map((g) => (
-                    <li key={g.id || g.label}>{g.label}</li>
+                  {groundedLabels.map((label) => (
+                    <li key={label}>{label}</li>
                   ))}
                 </ul>
               </div>

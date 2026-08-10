@@ -81,10 +81,13 @@ function meaningForSelected(
   if (essence) {
     return essence.length > 180 ? clip(essence, 180) : essence;
   }
-  if (row.detail) {
+  if (row.claimProse && row.claimProse.trim().length >= 12) {
+    return clip(row.claimProse);
+  }
+  if (row.detail && !/^(солнце|луна|асцендент|середина|число пути)/i.test(row.detail)) {
     return clip(`${row.detail[0]?.toUpperCase()}${row.detail.slice(1)}.`);
   }
-  return clip(row.title || "Опора имени в портрете.");
+  return clip(row.title || "Число пути — то, что выбрало имя в портрете.");
 }
 
 function meaningForInfluenced(
@@ -94,8 +97,46 @@ function meaningForInfluenced(
     frameworkCards?: ProfileFrameworkCard[] | null;
   },
 ): string {
+  // CE claim prose already person-facing — use it; never echo fact detail as meaning.
+  if (row.claimProse && row.claimProse.trim().length >= 12) {
+    return clip(row.claimProse);
+  }
+
   const cards = ctx.frameworkCards ?? [];
   const id = row.id.toLowerCase();
+
+  if (id.startsWith("ce_claim:")) {
+    const thesis = id.slice("ce_claim:".length);
+    if (thesis.includes("presence") || thesis.includes("_asc")) {
+      const fromTitle = row.title.match(/в\s+(\S+?)(?:\.|$)/i)?.[1]?.replace(/[.,;:]+$/u, "") || "";
+      const prepToId: Record<string, string> = {
+        овне: "aries",
+        тельце: "taurus",
+        близнецах: "gemini",
+        раке: "cancer",
+        льве: "leo",
+        деве: "virgo",
+        весах: "libra",
+        скорпионе: "scorpio",
+        стрельце: "sagittarius",
+        козероге: "capricorn",
+        водолее: "aquarius",
+        рыбах: "pisces",
+      };
+      const signId =
+        prepToId[fromTitle.toLowerCase()] ||
+        normalizeSignId(fromTitle) ||
+        null;
+      const bySign = signId ? ASC_CONTACT_BY_SIGN[signId] : null;
+      if (bySign) return clip(bySign);
+      return clip(
+        "В первом контакте тебя считывают по темпу и дистанции — до знакомства с ядром.",
+      );
+    }
+    if (thesis.includes("air_mind") || thesis.includes("direction")) {
+      return clip("Ты проявляешь силу через идеи, связи и ясный обмен — не через размах.");
+    }
+  }
 
   if (id === "sun") {
     const fromCard = frameworkBody(cards, "sun");
@@ -191,9 +232,9 @@ function meaningForInfluenced(
   }
 
   return clip(
-    row.detail
+    row.detail && !/^(солнце|луна|асцендент|середина|число пути)/i.test(row.detail)
       ? `${row.detail[0]?.toUpperCase()}${row.detail.slice(1)}.`
-      : "Опора рядом с именем в портрете.",
+      : "Это расширяет портрет рядом с именем.",
   );
 }
 

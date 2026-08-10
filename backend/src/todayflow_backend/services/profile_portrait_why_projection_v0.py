@@ -15,7 +15,7 @@ from todayflow_backend.services.profile_baseline_archetype_v0 import archetype_s
 PROJECTION_VERSION = "profile_portrait_why_v0.1"
 TITLE_RU = "Почему портрет звучит именно так"
 HONESTY_NO_TIME_RU = (
-    "Без времени рождения пока не видны ASC и дома — они покажут, "
+    "Без времени рождения пока не видны асцендент и дома — они покажут, "
     "как эти качества проявляются во внешнем поведении и отдельных сферах жизни."
 )
 
@@ -175,7 +175,7 @@ def project_portrait_why_v0(
                 "class": "portrait_influenced_by",
                 "fact_keys": ["natal_summary.angles.ascendant_sign"],
                 "value": rising,
-                "label": f"ASC в {_sign_label_prepositional(rising)}",
+                "label": f"Асцендент в {_sign_label_prepositional(rising)}",
             }
         )
     else:
@@ -183,7 +183,7 @@ def project_portrait_why_v0(
             {
                 "id": "asc",
                 "reason": "birth_time_unknown" if not time_known else "asc_unavailable",
-                "opens": "ASC и вход во внешнее поведение",
+                "opens": "Асцендент и вход во внешнее поведение",
             }
         )
 
@@ -194,7 +194,7 @@ def project_portrait_why_v0(
                 "class": "portrait_influenced_by",
                 "fact_keys": ["natal_summary.angles.midheaven_sign"],
                 "value": mc,
-                "label": f"MC в {_sign_label_prepositional(mc)}",
+                "label": f"Середина неба в {_sign_label_prepositional(mc)}",
             }
         )
     else:
@@ -202,7 +202,7 @@ def project_portrait_why_v0(
             {
                 "id": "mc",
                 "reason": "birth_time_unknown" if not time_known else "mc_unavailable",
-                "opens": "MC и дома / сферы проявления",
+                "opens": "Середина неба и дома / сферы проявления",
             }
         )
 

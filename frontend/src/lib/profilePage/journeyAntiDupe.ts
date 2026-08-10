@@ -36,8 +36,8 @@ export function textOverlapRatio(a: string, b: string): number {
 
 /** Person-facing fact lines only — no product/engine how-it-works copy. */
 const FACT_FALLBACK: Record<string, string> = {
-  archetype_from_life_path: "Число пути — опора имени в портрете.",
-  life_path: "Число пути — опора имени в портрете.",
+  archetype_from_life_path: "Число пути — то, что выбрало имя в портрете.",
+  life_path: "Число пути — то, что выбрало имя в портрете.",
   sun: "Солнце окрашивает, как ты проявляешь силу в мире.",
   moon: "Луна окрашивает, как ты чувствуешь и восстанавливаешься.",
   asc: "В первом контакте тебя считывают по темпу и дистанции.",

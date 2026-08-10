@@ -520,12 +520,18 @@ def _scrub_machine_thesis(text: str, identity_thesis: str | None = None) -> str:
 
 # Profile journey forbids day agenda in Act 3–4 helps (Forms + PROFILE_V2 lexicon).
 _DAY_AGENDA_RE = re.compile(r"\b(сегодня|завтра|на сегодня)\b", re.I)
+_KITCHEN_HELP_RE = re.compile(
+    r"механизм проявляется|identity-линии|builds_through_|зоне\s*«?(decision|perception|stress|risk|recovery|growth|burnout)»?",
+    re.I,
+)
 
 
 def _scrub_day_agenda(text: str) -> str | None:
     """Drop or soften day-agenda tokens; null if the line collapses."""
     t = re.sub(r"\s+", " ", str(text or "").strip())
     if not t:
+        return None
+    if _KITCHEN_HELP_RE.search(t):
         return None
     if not _DAY_AGENDA_RE.search(t):
         return t
@@ -551,6 +557,8 @@ def _clip_person(text: str, limit: int, *, identity_thesis: str | None = None) -
 
 
 def _fact_label(fact: dict[str, Any]) -> str | None:
+    from todayflow_backend.services.natal_chart_personalization import _sign_label_prepositional
+
     ft = str(fact.get("fact_type") or "")
     value = fact.get("value")
     sign = None
@@ -560,18 +568,28 @@ def _fact_label(fact: dict[str, Any]) -> str | None:
         return f"число пути {value}"
     if not sign:
         return None
-    sign_ru = sign[:1].upper() + sign[1:].lower() if sign else sign
+    prep = _sign_label_prepositional(sign)
+    if not prep:
+        return None
     if ft == "planet_sign:sun":
-        return f"Солнце в {sign_ru}"
+        return f"Солнце в {prep}"
     if ft == "planet_sign:moon":
-        return f"Луна в {sign_ru}"
+        return f"Луна в {prep}"
     if ft == "angle_sign:ascendant":
-        return f"ASC в {sign_ru}"
+        return f"Асцендент в {prep}"
+    if ft == "angle_sign:midheaven":
+        return f"Середина неба в {prep}"
     if ft == "planet_sign:mars":
-        return f"Марс в {sign_ru}"
+        return f"Марс в {prep}"
     if ft.startswith("planet_sign:"):
         body = ft.split(":", 1)[-1]
-        return f"{body} в {sign_ru}"
+        body_ru = {
+            "mercury": "Меркурий",
+            "venus": "Венера",
+            "jupiter": "Юпитер",
+            "saturn": "Сатурн",
+        }.get(body.lower(), body.capitalize() if body.isascii() else body)
+        return f"{body_ru} в {prep}"
     return None
 
 
@@ -945,15 +963,33 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     }
 
     grounded_on: list[dict[str, Any]] = []
-    for row in selected_by[:1] + influenced_by[:3]:
-        grounded_on.append(
-            {
-                "id": row.get("id"),
-                "label": row.get("label"),
-                "fact_keys": list(row.get("fact_keys") or []),
-                "role": "grounded_on",
-            }
-        )
+    seen_ground: set[str] = set()
+    for row in selected_by[:1] + influenced_by[:5]:
+        # Forms Step 3: fact anchors only (Солнце в …), not claim—fact mash / mechanism.
+        raw_label = str(row.get("label") or "")
+        facts_only: list[str] = []
+        if " — " in raw_label or " – " in raw_label or " - " in raw_label:
+            detail = re.split(r"\s+[—–-]\s+", raw_label, maxsplit=1)
+            if len(detail) == 2:
+                for part in re.split(r"\s*;\s*", detail[1]):
+                    p = part.strip()
+                    if p and p.lower() not in seen_ground:
+                        facts_only.append(p)
+                        seen_ground.add(p.lower())
+        if not facts_only:
+            # Claim without facts — skip (no kitchen claim title as «опора вывода»).
+            continue
+        for fl in facts_only[:2]:
+            grounded_on.append(
+                {
+                    "id": row.get("id"),
+                    "label": fl,
+                    "fact_keys": list(row.get("fact_keys") or []),
+                    "role": "grounded_on",
+                }
+            )
+        if len(grounded_on) >= 4:
+            break
 
     # Forms: birth-only → «Главное напряжение»; living quotes → «Самая большая ловушка».
     from todayflow_backend.services.profile_insight_nodes_projection_v0 import _living_quotes

@@ -64,7 +64,7 @@ def test_case_a_pq001_selected_by_life_path_only() -> None:
     omit_ids = {row["id"] for row in why["omitted"]}
     assert "asc" in omit_ids and "mc" in omit_ids
     assert why["honesty_line"]
-    assert "ASC" in why["honesty_line"]
+    assert "асцендент" in why["honesty_line"].lower()
 
 
 def test_with_time_includes_asc_when_natal_has_angles() -> None:

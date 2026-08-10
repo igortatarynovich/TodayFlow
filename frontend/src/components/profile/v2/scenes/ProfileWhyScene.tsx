@@ -99,11 +99,6 @@ function WhyCardBody({
         <span className={styles.whyProofIcon} aria-hidden>
           <WhyAnchorGlyph label={row.title} rowClass={row.class} size={28} />
         </span>
-        <p className={styles.whyProofRole}>
-          {row.role === "selected"
-            ? PROFILE_V2_COPY.zones.why.selectedLabel
-            : PROFILE_V2_COPY.zones.why.influencedLabel}
-        </p>
       </div>
       <p className={styles.whyProofTitle}>{row.title}</p>
       {row.detail ? <p className={styles.whyProofDetail}>{row.detail}</p> : null}
