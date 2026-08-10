@@ -33,6 +33,16 @@ function kindClass(kind: string): string {
  * Visual Modes #4 — Act 3: vertical story spine (≠ Act1 hero, ≠ Act2 proof grid).
  * Forms cascade: title → insight → grounded → help → living (omit empty).
  */
+function isKitchenInsightHelp(text: string): boolean {
+  const low = text.toLowerCase();
+  return (
+    low.includes("механизм проявляется") ||
+    low.includes("identity-линии") ||
+    low.includes("identity-линии") ||
+    /зоне\s*«?(decision|perception|stress|risk|recovery|growth|burnout)»?/.test(low)
+  );
+}
+
 export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
   const copy = PROFILE_V2_COPY.zones.insight;
   const livingEvidence = node.livingEvidence
@@ -45,7 +55,8 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
     .filter((label): label is string => Boolean(label))
     .filter((label, i, arr) => arr.findIndex((x) => x.toLowerCase() === label.toLowerCase()) === i);
   const showGrounded = groundedLabels.length > 0;
-  const help = scrubUserFacingText(node.help);
+  const helpRaw = scrubUserFacingText(node.help);
+  const help = helpRaw && !isKitchenInsightHelp(helpRaw) ? helpRaw : null;
   const showHelp = Boolean(help);
   const insight = scrubUserFacingText(node.insight) || node.insight;
   const eyebrow = kindEyebrow(node.kind);
