@@ -17,7 +17,8 @@ export const TODAY_COMPOSITION_COPY = {
   vibeLabel: "Вайб",
   conflictLabel: "Главный сюжет дня",
   eventsLeadLabel: "Что происходит на небе",
-  instructionTitle: "Компас дня",
+  instructionTitle: "Инструкция",
+  instructionBridgeEyebrow: "Твой личный фокус сегодня",
   ritualTarotPendingTitle: "Давай вытащим карту дня",
   ritualTarotPendingBody:
     "Не ответ на все вопросы — скорее зеркало. Выбери ту, к которой тянет, и посмотрим, что она говорит о сегодня.",

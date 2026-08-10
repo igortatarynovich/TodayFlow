@@ -245,6 +245,21 @@ def apply_day_story_value_gate(story: dict[str, Any]) -> dict[str, Any]:
         personal_out = dict(personal)
         summary = scrub_user_facing_text(str(personal_out.get("summary_ru") or ""), allow_textbook=True)
         personal_out["summary_ru"] = summary or ""
+        # Nested family summaries can still carry mechanism dumps.
+        for nest_key in (
+            "personal_astrology",
+            "human_design",
+            "bazi",
+            "vedic_personal",
+            "name_numbers",
+        ):
+            nest = personal_out.get(nest_key)
+            if not isinstance(nest, dict):
+                continue
+            nest_out = dict(nest)
+            nest_summary = scrub_user_facing_text(str(nest_out.get("summary_ru") or ""), allow_textbook=True)
+            nest_out["summary_ru"] = nest_summary or ""
+            personal_out[nest_key] = nest_out
         out["day_personal"] = personal_out
 
     # Plot why_arose must stay meaning — not ruler/degree dumps.

@@ -2127,6 +2127,21 @@
   margin: 0.65rem 0 0.85rem;
 }
 
+.instructionBridge {
+  margin: 0 0 0.85rem;
+  font-size: var(--tf-type-body, 0.98rem);
+  line-height: 1.5;
+}
+
+.instructionBridgeEyebrow {
+  display: block;
+  margin: 0 0 0.35rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.68;
+}
+
 .focusTwoCard {
   display: flex;
   flex-direction: column;

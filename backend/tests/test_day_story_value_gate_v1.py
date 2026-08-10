@@ -110,6 +110,22 @@ def test_scrubs_profection_progression_solar_return_dump():
     assert ok, hits
 
 
+def test_scrubs_nested_personal_astrology_summary():
+    dump = "Профекция года (возраст 36): управитель Сатурн. Solar return 2026."
+    out = apply_day_story_value_gate(
+        {
+            "expect": "Утром тело подаёт первые сигналы.",
+            "trap": "Тянет компенсировать вторым кофе.",
+            "do": ["Короткая телесная проверка."],
+            "day_personal": {
+                "summary_ru": "",
+                "personal_astrology": {"summary_ru": dump},
+            },
+        }
+    )
+    assert out["day_personal"]["personal_astrology"]["summary_ru"] == ""
+
+
 def test_allows_soft_sky_meaning_without_mechanism():
     text = "Луна в серпе гасит лишний шум — день просит меньше входящего."
     assert scrub_user_facing_text(text) == text

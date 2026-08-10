@@ -12,6 +12,7 @@ import { TodayPersonalizedProductSection } from "@/components/today/composition/
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayDayBrief } from "@/components/today/composition/TodayDayBrief";
 import { buildTodayDayBriefModel } from "@/lib/todayDayBrief";
+import { buildTodayInstructionBridgeModel } from "@/lib/todayInstructionBridge";
 import { TodayDayTasksBlock } from "@/components/today/composition/TodayDayTasksBlock";
 import { buildTodayDayTasks } from "@/lib/todayDayTasks";
 import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
@@ -1222,6 +1223,10 @@ export function TodayCompositionSurface(props: Props) {
     () => buildGlanceDailyFocus(props.contract, props.guideNarrativePayload ?? null),
     [props.contract, props.guideNarrativePayload],
   );
+  const instructionBridge = useMemo(
+    () => buildTodayInstructionBridgeModel(props.contract),
+    [props.contract],
+  );
   const glanceEnergy = useMemo(() => buildGlanceEnergyFromChorus(props.contract), [props.contract]);
   const plotNarrative = useMemo(() => buildPlotConflictNarrative(props.contract), [props.contract]);
   const plotBeats = useMemo(() => buildPlotStoryBeats(props.contract), [props.contract]);
@@ -1928,6 +1933,12 @@ export function TodayCompositionSurface(props: Props) {
 
   const handoffFocusBody = (
     <div data-testid="today-handoff-focus">
+      {instructionBridge.lead ? (
+          <p className={styles.instructionBridge} data-testid="today-instruction-bridge">
+            <span className={styles.instructionBridgeEyebrow}>{copy.instructionBridgeEyebrow}</span>
+            {instructionBridge.lead}
+          </p>
+      ) : null}
       {glanceDailyFocus?.title ? (
         <p className={styles.sectionTitle} data-testid="today-handoff-focus-title">
           {glanceDailyFocus.title}

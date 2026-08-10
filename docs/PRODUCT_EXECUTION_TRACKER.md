@@ -4,7 +4,7 @@ Last updated: 2026-08-10
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4+ useful compass)** — Block 1 scan hierarchy (vibe → why → Trap‖Do/Avoid); kitchen dump gated; Block 5 ≤2 tasks. Canon job: min friction → max clarity → fast action. Next: block 3 personal bridge · block 6 accept/checkout.
+**IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4+ useful compass)** — Block 1 scan · Block 3 personal bridge (`why_personal` / soft transit) · Block 5 ≤2 tasks. Next: block 6 accept/checkout.
 
 ## Architecture impact — Today six blocks (2026-08-10)
 
