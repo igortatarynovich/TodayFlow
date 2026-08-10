@@ -228,7 +228,7 @@ describe("TodayCompositionSurface", () => {
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
-    await user.click(within(screen.getByTestId("today-frame-day")).getByTestId("today-story-next-anchor"));
+    await user.click(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-personal-cta"));
     expect(screen.getByTestId("today-frame-orientation")).toBeInTheDocument();
     // Block 1b then rituals (chrome dots start after day).
     const ritualsDot = screen.getByTestId("screen-flow-dot-2");
@@ -286,6 +286,7 @@ describe("TodayCompositionSurface", () => {
     );
     expect(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-brief-vibe")).toBeInTheDocument();
     expect(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-personal-cta")).toBeInTheDocument();
+    expect(within(screen.getByTestId("today-frame-day")).queryByTestId("today-story-next-anchor")).not.toBeInTheDocument();
     expect(within(screen.getByTestId("today-frame-orientation")).getByTestId("today-day-brief")).toHaveAttribute(
       "data-pane",
       "orientation",
@@ -415,7 +416,7 @@ describe("TodayCompositionSurface", () => {
     );
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
-    await user.click(within(screen.getByTestId("today-frame-day")).getByTestId("today-story-next-anchor"));
+    await user.click(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-personal-cta"));
     const tasksDot = screen.getByTestId("screen-flow-dot-5");
     await user.click(tasksDot);
     expect(screen.getByTestId("today-frame-tasks")).toBeInTheDocument();

@@ -175,6 +175,7 @@ function SlotStep({
   nextHint,
   onNext,
   wide = false,
+  hideNext = false,
 }: {
   testId: string;
   eyebrow?: string;
@@ -185,6 +186,8 @@ function SlotStep({
   onNext: () => void;
   /** Wider readable column for day / orientation prose */
   wide?: boolean;
+  /** Day dashboard owns its own continue CTA — do not duplicate StoryNextAnchor. */
+  hideNext?: boolean;
 }) {
   return (
     <div className={flowStyles.storyFrame} data-testid={testId} data-story-scroll="pane">
@@ -192,7 +195,9 @@ function SlotStep({
         {eyebrow ? <p className={flowStyles.slotEyebrow}>{eyebrow}</p> : null}
         {title ? <h2 className={flowStyles.slotTitle}>{title}</h2> : null}
         <div className={flowStyles.slotBody}>{children}</div>
-        <StoryNextAnchor title={nextTitle} hint={nextHint} onNext={onNext} />
+        {hideNext ? null : (
+          <StoryNextAnchor title={nextTitle} hint={nextHint} onNext={onNext} />
+        )}
       </div>
     </div>
   );
@@ -274,8 +279,8 @@ export function TodayProductScreenFlow({
         <ScreenFlowStep id="day" label={copy.storyNext.day} scrollable>
           <SlotStep
             testId="today-frame-day"
-            eyebrow={copy.storyNext.day}
             wide
+            hideNext={showPersonalized}
             nextTitle={
               showPersonalized ? copy.storyNext.orientation : copy.storyNext.further
             }
