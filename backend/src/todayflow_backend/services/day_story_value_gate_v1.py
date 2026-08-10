@@ -67,6 +67,31 @@ TEXTBOOK_HOUSE_PHRASES_RU: tuple[str, ...] = (
     "в астрологии этот дом",
 )
 
+# Kitchen / ephemeris mechanism — evidence for models, never ambassador prose.
+# Canon: EXPLAIN_MEANING_NOT_MECHANISM · TODAY_SCREEN_SCENARIO_V3 §0 (конкретность / no kitchen).
+MECHANISM_ASTRO_LEAK_RE = re.compile(
+    r"профекц|"
+    r"секундарн\w*\s+прогресс|"
+    r"прогресс\.?\s*солнц|"
+    r"прогресс\.?\s*лун|"
+    r"solar\s*return|"
+    r"лунарн\w*\s+возврат|"
+    r"возврат\s+солнц|"
+    r"управител|"
+    r"нет\s+(?:времени|ASC)|"
+    r"нет\s+времени/места\s+для\s+ASC|"
+    r"активных\s+личных\s+транзит|"
+    r"firdaria|"
+    r"vimshottari|"
+    r"\bzr\s*(?:fortune|spirit)\b|"
+    r"time[_\s-]?lords|"
+    r"\d+(?:[.,]\d+)?°|"  # raw ecliptic degrees
+    r"возраст\s+\d+(?:[.,]\d+)?\s*лет|"
+    r"дата\s+19\d{2}-\d{2}-\d{2}|"
+    r"дата\s+20\d{2}-\d{2}-\d{2}",
+    re.IGNORECASE,
+)
+
 _RAW_KEY_RE = re.compile(
     r"(?:тема\s+[`«\"']([a-z][a-z0-9_]{1,32})[`»\"'])|(?:`([a-z][a-z0-9_]{2,32})`)",
     re.IGNORECASE,
@@ -111,6 +136,14 @@ def _low(text: str) -> str:
     return _norm(text).lower().replace("ё", "е")
 
 
+def is_kitchen_mechanism_prose(text: str | None) -> bool:
+    """True when text is ephemeris/kitchen dump, not person-facing meaning."""
+    raw = _norm(text or "")
+    if not raw:
+        return False
+    return bool(MECHANISM_ASTRO_LEAK_RE.search(raw))
+
+
 def find_value_gate_hits(text: str, *, allow_textbook: bool = False) -> list[str]:
     """Return reasons why user-facing text must be hidden."""
     raw = _norm(text)
@@ -127,6 +160,9 @@ def find_value_gate_hits(text: str, *, allow_textbook: bool = False) -> list[str
         for phrase in TEXTBOOK_HOUSE_PHRASES_RU:
             if _low(phrase) in low:
                 hits.append(f"textbook:{phrase}")
+
+    if is_kitchen_mechanism_prose(raw):
+        hits.append("kitchen_mechanism")
 
     if _RAW_KEY_RE.search(raw):
         hits.append("raw_topic_key")
@@ -202,6 +238,27 @@ def apply_day_story_value_gate(story: dict[str, Any]) -> dict[str, Any]:
             elif lab:
                 thesis_out[lab_key] = lab
         out["day_thesis"] = thesis_out
+
+    # day_personal.summary_ru is a kitchen mash (profections/progressions/SR) — never ambassador copy.
+    personal = out.get("day_personal")
+    if isinstance(personal, dict):
+        personal_out = dict(personal)
+        summary = scrub_user_facing_text(str(personal_out.get("summary_ru") or ""), allow_textbook=True)
+        personal_out["summary_ru"] = summary or ""
+        out["day_personal"] = personal_out
+
+    # Plot why_arose must stay meaning — not ruler/degree dumps.
+    scenario = out.get("day_scenario")
+    if isinstance(scenario, dict):
+        scenario_out = dict(scenario)
+        conflict = scenario_out.get("conflict")
+        if isinstance(conflict, dict):
+            conflict_out = dict(conflict)
+            for key in ("why_arose", "why_personal", "named_factor"):
+                cleaned = scrub_user_facing_text(str(conflict_out.get(key) or ""), allow_textbook=True)
+                conflict_out[key] = cleaned or ""
+            scenario_out["conflict"] = conflict_out
+        out["day_scenario"] = scenario_out
 
     # One claim → one slot: story must not reprint expect+trap+do soup.
     expect = _norm(str(out.get("expect") or ""))

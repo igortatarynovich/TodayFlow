@@ -625,7 +625,9 @@ def build_interpretive_chorus_v1(
 _KITCHEN_NATAL_RE = re.compile(
     r"Firdaria|ZR\s*Fortune|ZR\s*Spirit|Лоты\s*soft|Vimshottari|BaZi|"
     r"HD\s*soft|Variables\s*soft|Solar\s*return|time[_\s-]?lords|"
-    r"управител|прогрес+и|нет\s+ASC|soft:\s*Луна",
+    r"управител|прогрес+и|профекц|секундарн|"
+    r"нет\s+ASC|нет\s+времени/места|активных\s+личных\s+транзит|"
+    r"soft:\s*Луна|\d+(?:[.,]\d+)?°",
     re.IGNORECASE,
 )
 

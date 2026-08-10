@@ -5,7 +5,8 @@ import type { TodayDayBriefModel } from "@/lib/todayDayBrief";
 import styles from "@/components/today/composition/TodayDayBrief.module.css";
 
 /**
- * Block 1 — day trend ambassador (SCENARIO v3.4).
+ * Block 1 — day trend ambassador (SCENARIO v3.4+ useful compass).
+ * Scan hierarchy: vibe → short why → Trap ‖ Instruction → secondary expect/energy.
  * Renders assembled model only — no invent.
  */
 
@@ -21,7 +22,6 @@ export function TodayDayBrief({ model, loading = false }: TodayDayBriefProps) {
     vibe,
     moodPills,
     accents,
-    activityTags,
     why,
     energy,
     energyCause,
@@ -32,7 +32,7 @@ export function TodayDayBrief({ model, loading = false }: TodayDayBriefProps) {
     vibeClosing,
   } = model;
 
-  const hasInstruction = doItems.length > 0 || avoidItems.length > 0;
+  const hasCompass = Boolean(trap) || doItems.length > 0 || avoidItems.length > 0;
 
   return (
     <div className={styles.root} data-testid="today-day-brief">
@@ -61,72 +61,65 @@ export function TodayDayBrief({ model, loading = false }: TodayDayBriefProps) {
       </header>
 
       {why ? (
-        <section className={styles.block} data-testid="today-day-brief-why">
-          <p className={styles.blockLabel}>{copy.whyStoryTitle}</p>
+        <section className={styles.why} data-testid="today-day-brief-why">
           <p className={styles.blockBody}>{why}</p>
         </section>
       ) : null}
 
+      {hasCompass ? (
+        <section className={styles.compass} data-testid="today-day-brief-compass">
+          {trap ? (
+            <div className={styles.compassTrap} data-testid="today-day-brief-trap">
+              <p className={styles.compassLabel}>{copy.trapLabel}</p>
+              <p className={styles.compassBody}>{trap}</p>
+            </div>
+          ) : null}
+          {doItems.length > 0 || avoidItems.length > 0 ? (
+            <div className={styles.compassDo} data-testid="today-day-brief-instruction">
+              {doItems.length > 0 ? (
+                <div data-testid="today-day-brief-do">
+                  <p className={styles.compassLabel}>{copy.doLabel}</p>
+                  <ul className={styles.list}>
+                    {doItems.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              {avoidItems.length > 0 ? (
+                <div data-testid="today-day-brief-avoid">
+                  <p className={styles.compassLabel}>{copy.avoidLabel}</p>
+                  <ul className={styles.list}>
+                    {avoidItems.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {expect ? (
+        <section className={styles.secondary} data-testid="today-day-brief-expect">
+          <p className={styles.blockLabel}>{copy.expectLabel}</p>
+          <p className={styles.blockBodyMuted}>{expect}</p>
+        </section>
+      ) : null}
+
       {energy ? (
-        <section className={styles.block} data-testid="today-day-brief-energy">
+        <section className={styles.secondary} data-testid="today-day-brief-energy">
           <p className={styles.blockLabel}>{copy.pulseLabel}</p>
-          <p className={styles.blockBody}>{energy}</p>
+          <p className={styles.blockBodyMuted}>{energy}</p>
           {energyCause ? <p className={styles.blockBodyMuted}>{energyCause}</p> : null}
         </section>
       ) : null}
 
-      {activityTags.length > 0 ? (
-        <ul className={styles.tagRow} data-testid="today-day-brief-tags">
-          {activityTags.map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-        </ul>
-      ) : null}
-
-      {expect ? (
-        <section className={styles.block} data-testid="today-day-brief-expect">
-          <p className={styles.blockLabel}>{copy.expectLabel}</p>
-          <p className={styles.blockBody}>{expect}</p>
-        </section>
-      ) : null}
-
-      {trap ? (
-        <section className={styles.block} data-testid="today-day-brief-trap">
-          <p className={styles.blockLabel}>{copy.trapLabel}</p>
-          <p className={styles.blockBody}>{trap}</p>
-        </section>
-      ) : null}
-
-      {hasInstruction ? (
-        <section className={styles.instruction} data-testid="today-day-brief-instruction">
-          <p className={styles.blockLabel}>{copy.instructionTitle}</p>
-          {doItems.length > 0 ? (
-            <div className={styles.block} data-testid="today-day-brief-do">
-              <p className={styles.subLabel}>{copy.doLabel}</p>
-              <ul className={styles.list}>
-                {doItems.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-          {avoidItems.length > 0 ? (
-            <div className={styles.block} data-testid="today-day-brief-avoid">
-              <p className={styles.subLabel}>{copy.avoidLabel}</p>
-              <ul className={styles.list}>
-                {avoidItems.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-        </section>
-      ) : null}
-
       {vibeClosing ? (
-        <section className={styles.block} data-testid="today-day-brief-vibe-closing">
+        <section className={styles.secondary} data-testid="today-day-brief-vibe-closing">
           <p className={styles.blockLabel}>{copy.vibeLabel}</p>
-          <p className={styles.blockBody}>{vibeClosing}</p>
+          <p className={styles.blockBodyMuted}>{vibeClosing}</p>
         </section>
       ) : null}
     </div>

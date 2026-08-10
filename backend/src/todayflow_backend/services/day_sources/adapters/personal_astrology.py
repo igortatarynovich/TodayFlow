@@ -171,25 +171,14 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
         )
 
     summary_parts: list[str] = []
+    # User-facing summary = at most one soft transit meaning.
+    # Profections / progressions / solar return stay in nested nests (kitchen), not in summary_ru.
     if beats and beats[0].get("kind") == "natal_transit":
-        summary_parts.append(str(beats[0].get("story_ru") or beats[0].get("title") or ""))
-        transit_extra = sum(1 for b in beats if b.get("kind") == "natal_transit") - 1
-        if transit_extra > 0:
-            summary_parts.append(f"Ещё активных личных транзитов: {transit_extra}.")
-    if profections and profections.get("summary_ru"):
-        summary_parts.append(str(profections["summary_ru"]))
-    if progressions and progressions.get("secondary_progressions"):
-        summary_parts.append(
-            str(progressions["secondary_progressions"].get("summary_ru") or "")
-        )
-    if returns and returns.get("solar_return"):
-        summary_parts.append(str(returns["solar_return"].get("summary_ru") or ""))
-    if house_rulers and house_rulers.get("summary_ru"):
-        summary_parts.append(str(house_rulers["summary_ru"]))
-    if time_lords and time_lords.get("summary_ru"):
-        summary_parts.append(str(time_lords["summary_ru"]))
-    if planet_returns and planet_returns.get("active") and planet_returns.get("summary_ru"):
-        summary_parts.append(str(planet_returns["summary_ru"]))
+        soft = str(beats[0].get("story_ru") or beats[0].get("title") or "").strip()
+        from todayflow_backend.services.day_story_value_gate_v1 import is_kitchen_mechanism_prose
+
+        if soft and not is_kitchen_mechanism_prose(soft):
+            summary_parts.append(soft)
     summary = " ".join(p for p in summary_parts if p)
 
     return SourceResult(

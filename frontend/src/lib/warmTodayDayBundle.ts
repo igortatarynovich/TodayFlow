@@ -28,7 +28,7 @@ export function warmTodayDayBundle(options?: { force?: boolean }): Promise<void>
       const [contract, morning, opening, bundle] = await Promise.all([
         fetchTodayContractV1(localDate).catch(() => null),
         getJson<MorningRitualData>(
-          `/morning-ritual/today?target_date=${encodeURIComponent(localDate)}`,
+          `/morning-ritual/today?target_date=${encodeURIComponent(localDate)}&fast_mode=1`,
         ).catch(() => null),
         getJson<Record<string, unknown>>("/today/opening").catch(() => null),
         getJson<Record<string, unknown>>("/today/bundle").catch(() => null),

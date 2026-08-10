@@ -428,9 +428,11 @@ export default function TodayPage() {
           }
 
           const experienceMode = searchParams.get("full") !== "1";
-          const ritualPromise = getJson<MorningRitualData>(
-            `/morning-ritual/today?target_date=${encodeURIComponent(todayIso)}`,
-          ).catch(() => null);
+          // First paint must not wait on morning-ritual LLM (can be 30s+ on timeout).
+          // Use fast_mode; apply ritual when ready without blocking contract/cycle paint.
+          const ritualUrl =
+            `/morning-ritual/today?target_date=${encodeURIComponent(todayIso)}&fast_mode=1`;
+          const ritualPromise = getJson<MorningRitualData>(ritualUrl).catch(() => null);
           const contractPromise = fetchTodayContractV1(todayIso).catch(() => null);
           let data: TodayCycleData | null = null;
           if (!force) {
@@ -445,7 +447,6 @@ export default function TodayPage() {
           if (!data) {
             data = await refetchToday({ force });
           }
-          const ritualPayload = await ritualPromise;
           let contractPayload = await contractPromise;
           if (!data) {
             throw new Error(RITUAL_COPY.todayPageLoadError);
@@ -482,20 +483,7 @@ export default function TodayPage() {
             writeCoreProfileToCache(core, core.astro?.profile_id ?? null);
           }
           const morningFromCycle = (normalized.morning as MorningRitualData) || null;
-          let nextMorning: MorningRitualData | null = morningFromCycle;
-          if (ritualPayload) {
-            nextMorning = {
-              ...morningFromCycle,
-              ...ritualPayload,
-              celestial_events:
-                ritualPayload.celestial_events ?? morningFromCycle?.celestial_events ?? undefined,
-              daily_horoscope:
-                ritualPayload.daily_horoscope ?? morningFromCycle?.daily_horoscope ?? undefined,
-            };
-            setMorningRitualData(nextMorning);
-          } else {
-            setMorningRitualData(morningFromCycle);
-          }
+          setMorningRitualData(morningFromCycle);
           // Only persist product-ready packages into the calm-open cache.
           if (
             contractPayload.day_story &&
@@ -504,7 +492,7 @@ export default function TodayPage() {
           ) {
             writeTodayDayBundle(todayIso, {
               contract: contractPayload,
-              morning: nextMorning,
+              morning: morningFromCycle,
               cycle: normalized,
             });
           }
@@ -513,6 +501,32 @@ export default function TodayPage() {
             setThinkingState(null);
           }
           hasLoadedOnceRef.current = true;
+
+          void ritualPromise.then((ritualPayload) => {
+            if (!ritualPayload) return;
+            const nextMorning: MorningRitualData = {
+              ...(morningFromCycle || {}),
+              ...ritualPayload,
+              celestial_events:
+                ritualPayload.celestial_events ?? morningFromCycle?.celestial_events ?? undefined,
+              daily_horoscope:
+                ritualPayload.daily_horoscope ?? morningFromCycle?.daily_horoscope ?? undefined,
+            };
+            setMorningRitualData(nextMorning);
+            const readyContract = contractPayload;
+            if (
+              readyContract &&
+              readyContract.day_story &&
+              !isDayNotReady(readyContract) &&
+              !isDayAssembling(readyContract)
+            ) {
+              writeTodayDayBundle(todayIso, {
+                contract: readyContract,
+                morning: nextMorning,
+                cycle: normalized,
+              });
+            }
+          });
 
           if (!experienceMode) {
             const weekStart = getWeekStart(todayIso);

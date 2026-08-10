@@ -562,13 +562,18 @@ def assemble_today_contract_v1(
     return apply_text_quality_gate_to_contract(contract, DOMAIN_FALLBACKS_V1)
 
 
+# Subtrees with their own contracts — do not scan for legacy sphere keys.
+# welcome_glass.reason is SoT (Wave B1); day_story carries narrative slots.
+_LEGACY_SCAN_SKIP_TOP_KEYS = frozenset({"day_story", "welcome_glass"})
+
+
 def _collect_forbidden_keys(obj: Any, path: str = "") -> list[str]:
     hits: list[str] = []
     if isinstance(obj, dict):
         for key, value in obj.items():
             key_s = str(key)
             child_path = f"{path}.{key_s}" if path else key_s
-            if key_s == "day_story":
+            if not path and key_s in _LEGACY_SCAN_SKIP_TOP_KEYS:
                 continue
             # Fixed-4 wire ids are legal under domains.*
             if key_s in _FORBIDDEN_OUTPUT_KEYS and not (

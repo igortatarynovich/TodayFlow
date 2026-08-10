@@ -1,4 +1,4 @@
-import { buildTodayDayBriefModel } from "@/lib/todayDayBrief";
+import { buildTodayDayBriefModel, cleanAmbassadorWhy } from "@/lib/todayDayBrief";
 import type { TodayContractV1 } from "@/lib/todayContract";
 
 const baseContract: TodayContractV1 = {
@@ -59,10 +59,10 @@ describe("buildTodayDayBriefModel", () => {
 
     expect(model.vibe).toBe("Стратегическая пауза");
     expect(model.why).toContain("Луна в Раке");
-    expect(model.expect).toBe("Обострённая интуиция.");
-    expect(model.trap).toBe("Поиск подвоха на ровном месте.");
-    expect(model.doItems).toEqual(["Доверять шестому чувству", "Готовить почву"]);
-    expect(model.avoidItems).toEqual(["Не лезть на рожон"]);
+    expect(model.expect).toContain("Обострённая интуиция");
+    expect(model.trap).toContain("Поиск подвоха");
+    expect(model.doItems[0]).toContain("Доверять");
+    expect(model.avoidItems[0]).toContain("Не лезть");
     expect(model.accents).toEqual(["Работа"]);
     expect(model.vibeClosing).toContain("Спокойная уверенность");
     expect(model.activityTags).toEqual(["подготовка"]);
@@ -85,5 +85,58 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.why).toBeNull();
     expect(model.expect).toBeNull();
     expect(model.vibeClosing).toBeNull();
+  });
+
+  it("rejects kitchen profection dump for why and prefers why_arose", () => {
+    const dump =
+      "Ещё активных личных транзитов: 2. Профекция года (возраст 36): 1-й дом, " +
+      "управитель Сатурн. Секундарные прогрессии: прогресс. Солнце 1.1°. Solar return 2026.";
+    expect(cleanAmbassadorWhy(dump)).toBeNull();
+
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        day_story: {
+          contract_version: "day_story_v1",
+          theme: "Стратегическая пауза",
+          day_personal: { summary_ru: dump },
+          story: "Длинная сцена про почту и пять писем — не вайб-список.",
+          day_scenario: {
+            conflict: {
+              why_arose: "Серп Луны гасит лишний шум — день просит меньше входящего.",
+            },
+          },
+        },
+      },
+      dateLabel: "10 августа",
+      salutation: "Добрый день",
+    });
+    expect(model.why).toContain("Серп Луны");
+    expect(model.why).not.toMatch(/профекц|Solar return/i);
+    expect(model.vibeClosing).toBeNull();
+  });
+
+  it("clips long expect for compass scan", () => {
+    const long =
+      "Утром тело подаёт первые сигналы — чуть тяжелее оторваться. " +
+      "Это не сон, это фаза: серп гаснет. " +
+      "Если позволить себе лишние десять минут на ощутимые вещи, тело отдаст курс. " +
+      "И ещё один абзац про почту и пять писем, который не должен попасть в компас целиком.";
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        day_story: {
+          contract_version: "day_story_v1",
+          theme: "Пауза",
+          expect: long,
+          trap: "Второй кофе вместо опоры.",
+          do: ["Телесная проверка перед работой."],
+        },
+      },
+      dateLabel: "10 августа",
+      salutation: "Добрый день",
+    });
+    expect(model.expect!.length).toBeLessThan(long.length);
+    expect(model.expect).toContain("первые сигналы");
   });
 });

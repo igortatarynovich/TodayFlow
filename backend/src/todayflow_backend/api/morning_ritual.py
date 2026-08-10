@@ -221,21 +221,9 @@ async def get_morning_ritual(
     core_profile = core_profile_service.build_cached_or_baseline(db, user)
 
     tarot_explanation: dict = {"status": "not_revealed", "personalized": False}
-    if card_revealed and is_paid and not fast_mode:
-        _card_id_raw = tarot_card_payload.get("id")
-        try:
-            _card_id = int(_card_id_raw) if _card_id_raw is not None else None
-        except (TypeError, ValueError):
-            _card_id = None
-        tarot_explanation = explain_tarot_card(
-            user=user,
-            db=db,
-            card_name=str(tarot_card_payload.get("name") or ""),
-            orientation=str(tarot_card_payload.get("orientation") or "upright"),
-            target_date=target_date,
-            card_id=_card_id,
-        )
-    elif card_revealed:
+    # GET is a paint surface — never block on Nebius for card/number prose.
+    # Personalized explain stays available via dedicated enrichment paths if needed.
+    if card_revealed:
         tarot_explanation = {
             "summary": tarot_card_payload.get("meaning") or "",
             "keywords": tarot_card_payload.get("keywords") or [],
@@ -243,16 +231,7 @@ async def get_morning_ritual(
         }
 
     numerology_explanation: dict = {"status": "not_revealed", "personalized": False}
-    if number_revealed and is_paid and not fast_mode:
-        numerology_explanation = explain_numerology_number(
-            user=user,
-            db=db,
-            number=numerology_number_payload.get("value")
-            or numerology_number_payload.get("reduced_value"),
-            number_type="day",
-            target_date=target_date,
-        )
-    elif number_revealed:
+    if number_revealed:
         numerology_explanation = {
             "summary": numerology_number_payload.get("summary") or "",
             "title": numerology_number_payload.get("title") or "",
@@ -459,127 +438,19 @@ async def _get_daily_recommendations(
         core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
     )
     if cached_generation is not None:
-        return cached_generation.normalized_response
+        cached = cached_generation.normalized_response
+        if isinstance(cached, dict) and _is_valid_recommendation_payload(cached):
+            return cached
 
+    # P0: Today/morning GET must not wait on Nebius for daily_recommendation.
+    # Same pattern as daily_foundation (skip_llm today_first_paint_p0).
     started_at = perf_counter()
-    user_prompt = None
-
+    fallback = {
+        "what_to_do": "Назови один результат дня и закрой по нему первый шаг до того, как мелкие дела разорвут внимание.",
+        "what_to_avoid": "Не позволяй сообщениям, чужим просьбам и случайным задачам решить за тебя, чему этот день служит.",
+        "key_focus": "general",
+    }
     try:
-        from todayflow_backend.core.user_context import get_user_context
-        from todayflow_backend.core.config import settings
-        from todayflow_backend.core.llm_openai_compatible import (
-            chat_completion_plain,
-            get_openai_compatible_client,
-            is_llm_chat_configured,
-            resolve_default_chat_model,
-            resolve_max_tokens,
-        )
-        
-        # Получаем контекст пользователя
-        user_context = get_user_context(user, target_date.isoformat(), db)
-        
-        # Если есть ИИ, генерируем рекомендацию
-        if is_llm_chat_configured():
-            try:
-                client = get_openai_compatible_client()
-                if client is None:
-                    raise RuntimeError("llm_client_unavailable")
-                model_id = resolve_default_chat_model()
-                
-                # Формируем промпт на основе контекста
-                prompt_parts = [
-                    f"Дата: {target_date.isoformat()}",
-                    "",
-                    "=== ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ ===",
-                ]
-                
-                if user_context.get("natal_chart"):
-                    natal = user_context["natal_chart"]
-                    if natal.get("sun_sign"):
-                        prompt_parts.append(f"Солнце в {natal['sun_sign']}")
-                    if natal.get("moon_sign"):
-                        prompt_parts.append(f"Луна в {natal['moon_sign']}")
-                    if natal.get("ascendant"):
-                        prompt_parts.append(f"Асцендент в {natal['ascendant']}")
-                else:
-                    prompt_parts.append("Полной натальной карты нет.")
-
-                # Symbols once as raw values only — do not also pass catalog
-                # day_meaning (double-weights the same number into do/avoid).
-                if user_context.get("numerology"):
-                    numerology = user_context["numerology"]
-                    if numerology.get("day_number") is not None:
-                        prompt_parts.append(f"Число дня: {numerology['day_number']}")
-
-                if user_context.get("tarot_card"):
-                    tarot = user_context["tarot_card"]
-                    prompt_parts.append(
-                        f"Карта дня: {tarot.get('card_name', 'не указана')} ({tarot.get('orientation', 'upright')})"
-                    )
-                
-                prompt_parts.extend([
-                    "",
-                    "Сформируй общую рекомендацию по дню на основе профиля и контекста.",
-                    "Что должно получиться:",
-                    "- одно понятное действие, которое стоит сделать сегодня;",
-                    "- один понятный тип поведения, которого лучше не усиливать;",
-                    "- одна фокусная область дня;",
-                    "Только JSON, без markdown.",
-                ])
-                
-                user_prompt = "\n".join(prompt_parts)
-                import json
-                import re
-
-                raw = chat_completion_plain(
-                    client,
-                    model=model_id,
-                    messages=[
-                        {"role": "system", "content": DAILY_RECOMMENDATION_PROMPT},
-                        {"role": "user", "content": user_prompt},
-                    ],
-                    temperature=0.65,
-                    max_tokens=300,
-                )
-                if not raw:
-                    raise ValueError("empty_llm_response")
-                content = raw.strip()
-                m = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", content)
-                if m:
-                    content = m.group(1).strip()
-                
-                recommendations = json.loads(content)
-                if _is_valid_recommendation_payload(recommendations):
-                    learning_service.log_generation(
-                        db,
-                        module="daily_recommendation",
-                        surface="daily_recommendation",
-                        user_id=user.id,
-                        core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
-                        prompt_version_id=prompt_version.id,
-                        model=model_id,
-                        locale=locale,
-                        input_payload={"target_date": target_date.isoformat()},
-                        system_prompt=DAILY_RECOMMENDATION_PROMPT,
-                        user_prompt=user_prompt,
-                        raw_response=content,
-                        normalized_response=recommendations,
-                        status="success",
-                        used_fallback=False,
-                        duration_ms=int((perf_counter() - started_at) * 1000),
-                    )
-                    return recommendations
-            except Exception as e:
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.warning(f"Failed to generate recommendations with AI: {e}", exc_info=True)
-        
-        # Fallback: базовая рекомендация
-        fallback = {
-            "what_to_do": "Назови один результат дня и закрой по нему первый шаг до того, как мелкие дела разорвут внимание.",
-            "what_to_avoid": "Не позволяй сообщениям, чужим просьбам и случайным задачам решить за тебя, чему этот день служит.",
-            "key_focus": "general",
-        }
         learning_service.log_generation(
             db,
             module="daily_recommendation",
@@ -587,11 +458,14 @@ async def _get_daily_recommendations(
             user_id=user.id,
             core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
             prompt_version_id=prompt_version.id,
-            model=None if user_prompt is None else resolve_default_chat_model(),
+            model=None,
             locale=locale,
-            input_payload={"target_date": target_date.isoformat()},
+            input_payload={
+                "target_date": target_date.isoformat(),
+                "skip_llm": "today_first_paint_p0",
+            },
             system_prompt=DAILY_RECOMMENDATION_PROMPT,
-            user_prompt=user_prompt,
+            user_prompt=None,
             normalized_response=fallback,
             status="fallback",
             used_fallback=True,
@@ -600,15 +474,9 @@ async def _get_daily_recommendations(
         return fallback
     except Exception as e:
         import logging
-        from todayflow_backend.core.config import settings as _settings_for_log
 
         logger = logging.getLogger(__name__)
         logger.warning(f"Failed to get daily recommendations: {e}", exc_info=True)
-        fallback = {
-            "what_to_do": "Назови один результат дня и закрой по нему первый шаг до того, как мелкие дела разорвут внимание.",
-            "what_to_avoid": "Не позволяй сообщениям, чужим просьбам и случайным задачам решить за тебя, чему этот день служит.",
-            "key_focus": "general",
-        }
         learning_service.log_generation(
             db,
             module="daily_recommendation",
@@ -616,11 +484,11 @@ async def _get_daily_recommendations(
             user_id=user.id,
             core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
             prompt_version_id=prompt_version.id,
-            model=resolve_default_chat_model() if user_prompt else None,
+            model=None,
             locale=locale,
             input_payload={"target_date": target_date.isoformat()},
             system_prompt=DAILY_RECOMMENDATION_PROMPT,
-            user_prompt=user_prompt,
+            user_prompt=None,
             normalized_response=fallback,
             status="error",
             used_fallback=True,

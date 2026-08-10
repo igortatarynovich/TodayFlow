@@ -76,3 +76,40 @@ def test_scrubs_kitchen_tension_and_element_focus_catalog():
     assert scrub_user_facing_text("Инициатива и действие") is None
     assert scrub_user_facing_text("Структура и устойчивость") is None
     assert scrub_user_facing_text("Эмпатия и внутренняя глубина") is None
+
+
+def test_scrubs_profection_progression_solar_return_dump():
+    dump = (
+        "Создаёт напряжение, которое просит осознанного выбора — не автоматической реакции. "
+        "Ещё активных личных транзитов: 2. Профекция года (возраст 36): 1-й дом, знак Водолей, "
+        "управитель Сатурн — тело, самопрезентация. База — солнечный знак (нет времени/места для ASC). "
+        "Секундарные прогрессии (день=год): прогресс. Солнце Овен 1.1°, Луна Козерог 28.6° "
+        "(возраст 36.49 лет → дата 1990-03-21). Solar return 2026: карт…"
+    )
+    assert "kitchen_mechanism" in find_value_gate_hits(dump)
+    assert scrub_user_facing_text(dump) is None
+
+    story = {
+        "expect": "Утром тело подаёт первые сигналы.",
+        "trap": "Тянет компенсировать вторым кофе.",
+        "do": ["Короткая телесная проверка."],
+        "avoid": ["Не будить себя стимулом."],
+        "day_personal": {"summary_ru": dump},
+        "events_lead": "Луна в серпе просит меньше входящего.",
+        "day_scenario": {
+            "conflict": {
+                "why_arose": "Луна — старый серп. Китайский управитель дня — вода.",
+            }
+        },
+    }
+    out = apply_day_story_value_gate(story)
+    assert out["day_personal"]["summary_ru"] == ""
+    assert out["day_scenario"]["conflict"]["why_arose"] == ""
+    assert out["events_lead"]
+    ok, hits = day_story_passes_value_gate(out)
+    assert ok, hits
+
+
+def test_allows_soft_sky_meaning_without_mechanism():
+    text = "Луна в серпе гасит лишний шум — день просит меньше входящего."
+    assert scrub_user_facing_text(text) == text

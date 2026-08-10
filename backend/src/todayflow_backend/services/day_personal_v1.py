@@ -88,7 +88,12 @@ def build_day_personal_v1(
         summary_parts.append(str(electional.get("summary_ru") or "").strip())
     if isinstance(name_numbers, dict) and name_numbers.get("status") == "ok":
         summary_parts.append(str(name_numbers.get("summary_ru") or "").strip())
-    summary = _clip(" ".join(p for p in summary_parts if p), 480)
+    from todayflow_backend.services.day_story_value_gate_v1 import is_kitchen_mechanism_prose
+
+    summary = _clip(
+        " ".join(p for p in summary_parts if p and not is_kitchen_mechanism_prose(p)),
+        480,
+    )
 
     electional_row = sources.get("electional_horary") if isinstance(sources, dict) else None
 

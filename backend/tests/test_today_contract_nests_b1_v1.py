@@ -3,11 +3,20 @@
 from __future__ import annotations
 
 from datetime import date
+from pathlib import Path
+import json
 
+from todayflow_backend.services.today_contract_assembler_v1 import (
+    assemble_today_contract_v1,
+    validate_today_contract_v1,
+)
 from todayflow_backend.services.today_contract_nests_b1_v1 import (
+    attach_b1_nests_to_contract,
     build_color_guide_v1,
     build_welcome_glass_v1,
 )
+
+_FIXTURES = Path(__file__).resolve().parent / "fixtures" / "today_contract_v1"
 
 
 def test_welcome_glass_mood_tags_from_visual_mode():
@@ -90,8 +99,6 @@ def test_color_guide_talisman_fallback_and_null_without_name():
 
 
 def test_attach_nests_on_contract_dict():
-    from todayflow_backend.services.today_contract_nests_b1_v1 import attach_b1_nests_to_contract
-
     contract = {
         "day_atmosphere": {"visual_mode": "radiance"},
         "day_story": {
@@ -108,3 +115,31 @@ def test_attach_nests_on_contract_dict():
     assert out["welcome_glass"]["good_for"] == ["Шаг", "Пауза"]
     assert out["color_guide"]["name"] == "Изумрудный"
     assert out["today_progress"] == {"rows": []}
+
+
+def test_welcome_glass_reason_does_not_fail_legacy_key_validation():
+    """Regression: B1 welcome_glass.reason must not trip legacy-key scan (prod 500)."""
+    from todayflow_backend.services.today_contract_assembler_v1 import _collect_forbidden_keys
+
+    raw = json.loads((_FIXTURES / "full_legacy_payload.json").read_text(encoding="utf-8"))
+    contract = assemble_today_contract_v1(
+        spheres=raw.get("spheres"),
+        narrative=raw.get("narrative"),
+        morning_ritual=raw.get("morning_ritual"),
+        fusion=raw.get("fusion"),
+        fallback_context=raw.get("fallback_context"),
+    )
+    contract["day_atmosphere"] = {"visual_mode": "radiance"}
+    contract["day_story"] = {
+        "do": ["Шаг"],
+        "day_foundation": {
+            "lunar": {"phase": {"name": "Полнолуние", "guidance": "Держи один фокус."}}
+        },
+    }
+    attach_b1_nests_to_contract(contract, target_date=date(2026, 8, 10))
+    assert contract["welcome_glass"]["reason"]
+    forbidden = _collect_forbidden_keys(contract)
+    assert "welcome_glass.reason" not in forbidden
+    assert not any(path.startswith("welcome_glass.") for path in forbidden)
+    errors = validate_today_contract_v1(contract)
+    assert not any("legacy keys" in e for e in errors)

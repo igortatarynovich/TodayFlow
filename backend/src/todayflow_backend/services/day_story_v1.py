@@ -909,11 +909,14 @@ def day_story_to_today_contract_v1(
     progress: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Map day_story_v1 → today_contract_v1 (direct, no legacy assembler)."""
+    unavailable = str(story.get("interpretation_status") or "").strip() == "unavailable"
+    if not unavailable and isinstance(story, dict):
+        story = apply_day_story_value_gate(dict(story))
+
     domains_in = expand_legacy_domain_lenses(
         story.get("domains") if isinstance(story.get("domains"), dict) else {}
     )
     trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
-    unavailable = str(story.get("interpretation_status") or "").strip() == "unavailable"
     present = set(
         normalize_domains_present(trace.get("domains_present") or list(domains_in.keys()))
     )

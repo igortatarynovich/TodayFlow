@@ -4,7 +4,7 @@ Last updated: 2026-08-10
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4)** — Block 1 brief + **Block 5 tasks** (`buildTodayDayTasks`: ≤2 today + daily streaks, no catalog). Next: deploy FE when asked. Research frozen.
+**IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4+ useful compass)** — Block 1 scan hierarchy (vibe → why → Trap‖Do/Avoid); kitchen dump gated; Block 5 ≤2 tasks. Canon job: min friction → max clarity → fast action. Next: block 3 personal bridge · block 6 accept/checkout.
 
 ## Architecture impact — Today six blocks (2026-08-10)
 
