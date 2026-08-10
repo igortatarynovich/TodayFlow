@@ -272,7 +272,7 @@ export type TodayContractDayStoryV1 = {
         active?: Array<{ body?: string; body_ru?: string }>;
         limitation_ru?: string;
       } | null;
-      beats?: Array<{ id?: string; title?: string; story_ru?: string }>;
+      beats?: Array<{ id?: string; kind?: string; title?: string; story_ru?: string }>;
     } | null;
     human_design?: {
       summary_ru?: string;
