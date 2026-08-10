@@ -33,7 +33,7 @@
 | 2 | Ритуалы | `rituals` | число + карта (если symbols) | Symbols·A |
 | 3 | Инструкция | `instruction` | персональный prioritize / avoid (+ deepen опц.) | Glance Daily Focus · depth_layer |
 | 4 | Цвет | `color` | color guide | color_guide / Move color |
-| 5 | Задания | `tasks` | 1–2 выдачи дня + ежедневные streaks; не shop из 6 категорий | practice gift · today_progress · точечные proposals |
+| 5 | Задания | `tasks` | **≤2** выдачи «на сегодня» + блок «каждый день» (streaks); empty = честный omit; не catalog shop | practice gift · affirmation · `practice_recommendation` · `today_progress` |
 | 6 | Петля | `loop` | обещание → close / evening | Move promise · Response · evening |
 
 Без symbols: блок 2 omit → **5** шагов.  

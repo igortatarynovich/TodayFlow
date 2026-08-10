@@ -63,11 +63,20 @@
   z-index: 0;
   pointer-events: none;
   background-color: #0c0a12;
-  background-image: var(--story-art);
+  background-image: var(--story-art, none);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 0;
+}
+
+/* Inactive ScreenFlow steps keep the plane node but no bitmap decode. */
+.immersiveArt[data-frame-art-active="false"] {
+  background-image: none;
+}
+
+.immersiveArt[data-frame-art-active="false"]::after {
+  display: none;
 }
 
 .immersiveArt::after {

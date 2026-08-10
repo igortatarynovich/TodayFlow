@@ -16,6 +16,8 @@
 | Number · Card · Color · Focus · Recap · Close | Day Atmosphere wash only |
 | Practice gift | `ImmersiveArtPlane` photo (`role=practice`) |
 
+**Single-paint rule:** ≤1 full-bleed bitmap per viewport. Active `ImmersiveArtPlane` claims `html[data-day-photo=step]` → shell `--day-bg-art` + `.day-atmosphere-decor` suppressed (`day-atmosphere.css`). Inactive steps keep the plane node but do not decode `--story-art`. Scene motif washes (`[data-profile-atmosphere]`) are hidden under `html[data-day-mode]` — Day Atmosphere owns the frame photo.
+
 Atmosphere tokens (`--day-*` / ink / glass) apply on **all** steps. Handoff SoT: `docs/design/design_handoff_today_flow/README.md`.
 
 ---

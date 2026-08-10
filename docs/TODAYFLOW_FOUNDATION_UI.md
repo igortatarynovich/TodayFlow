@@ -556,6 +556,8 @@ interface DayAtmosphereContract {
 
 **Статус:** visible product pass — BE nest `day_atmosphere` из сюжета дня · bridge потребляет nest · shell/`--day-*` фон · decor layer · Glance glass-hero IA. Dark-appearance палитры — backlog (§13.4). Photo wash = WebP (desktop + mobile `-m`); decor = CSS geometry по `data-day-decor` (single-paint).
 
+**Single-paint (2026-08-10):** на viewport ≤1 full-bleed bitmap. Shell wash живёт на `[data-product-web-frame]`. Активный `ImmersiveArtPlane` ставит `html[data-day-photo=step]` → shell `--day-bg-art` + decor **выключаются**. Неактивные шаги не декодируют `--story-art`. `[data-profile-atmosphere]` (космические WebP мотивов) **скрыты** под `html[data-day-mode]` — иначе второй bitmap поверх дня. Mobile/coarse: без `backdrop-filter` на tabBar / sidebar / `cardGlass` / glass clusters (opaque fill).
+
 ### 13.1 Код
 
 | Файл | Роль |
@@ -584,6 +586,7 @@ interface DayAtmosphereContract {
 - Decor polish: текущие 16 вариантов (`DAY_MODE_DECOR_VARIANTS`) — CSS geometry keyed by `html[data-day-decor]`; дальнейшая художественная доводка / optional inline SVG assets без возврата к double-paint PNG.
 - Photo wash runtime: `public/images/backgrounds/{1–5}.webp` + `{1–5}-m.webp` (mobile / coarse). PNG seeds → `frontend/art-seeds/day-atmosphere/` (не в public).
 - Plot photo-wash vs day-mode — дальнейшее подчинение phase-hero day-токенам (избежать тройной атмосферы).
+- **DONE (2026-08-10):** step ImmersiveArtPlane ↔ suppress shell wash; hide ProfileAtmosphere under day-mode; mobile glass/sidebar opaque (no live blur).
 
 ---
 

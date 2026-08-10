@@ -11,6 +11,9 @@ import { TodayEveningProductClose } from "@/components/today/composition/TodayEv
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayDayBrief } from "@/components/today/composition/TodayDayBrief";
+import { buildTodayDayBriefModel } from "@/lib/todayDayBrief";
+import { TodayDayTasksBlock } from "@/components/today/composition/TodayDayTasksBlock";
+import { buildTodayDayTasks } from "@/lib/todayDayTasks";
 import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
 import { TodayProductScreenFlow, todayHandoffIndices, todayScreenFlowAttributesIndex, todayScreenFlowPracticeIndex, todayScreenFlowReadingIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
@@ -2114,28 +2117,66 @@ export function TodayCompositionSurface(props: Props) {
 
   const dayStoryBrief = (
     <TodayDayBrief
-      dateLabel={props.displayDate}
-      salutation={story.greeting.salutation}
-      headline={story.greeting.line}
       loading={themeLoading}
-      welcomeGlass={welcomeGlass}
-      energyLine={energyLineDisplay}
-      energyCause={energyCauseDisplay}
-      expect={props.contract.day_story?.expect ?? null}
-      trap={props.contract.day_story?.trap ?? null}
-      doItems={props.contract.day_story?.do ?? null}
-      avoidItems={props.contract.day_story?.avoid ?? null}
-      whyLine={props.contract.day_story?.day_scenario?.conflict?.why_arose?.trim() || null}
+      model={buildTodayDayBriefModel({
+        contract: props.contract,
+        dateLabel: props.displayDate,
+        salutation: story.greeting.salutation,
+        headline: story.greeting.line,
+        welcomeGlass,
+        energyLine: energyLineDisplay,
+        energyCause: energyCauseDisplay,
+        loading: themeLoading,
+      })}
     />
   );
 
+  const dayTasksModel = buildTodayDayTasks({
+    contract: props.contract,
+    practiceTitle:
+      supportSlot === "practice"
+        ? practiceTool?.title || (practiceRec?.kind === "practice" ? practiceRec.text : null)
+        : null,
+    practiceDetail:
+      supportSlot === "practice"
+        ? practiceTool?.detail || (practiceRec?.kind === "practice" ? practiceRec.reason : null)
+        : null,
+    affirmationTitle:
+      supportSlot === "affirmation"
+        ? (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool?.title || null
+        : null,
+    affirmationDetail:
+      supportSlot === "affirmation"
+        ? (practiceRec?.kind === "affirmation" ? practiceRec.reason : null) || null
+        : null,
+    progressRows: displayProgressRows,
+    maxToday: 2,
+  });
+
+  const affirmationTaskSlot =
+    supportSlot === "affirmation" && practiceFrameTitle ? (
+      <div data-testid="today-task-affirmation-slot">
+        <p className={styles.sectionTitle}>{practiceFrameTitle}</p>
+        {practiceFrameMeta ? <p className={styles.actionsLead}>{practiceFrameMeta}</p> : null}
+        <DsButton
+          type="button"
+          variant="primary"
+          disabled={engagement.affirmationRead}
+          data-testid="today-tool-affirmation-done"
+          onClick={onAffirmationDone}
+        >
+          {engagement.affirmationRead ? copy.affirmationDone : copy.markAffirmationDone}
+        </DsButton>
+      </div>
+    ) : null;
+
   const handoffTasksBody = (
-    <div data-testid="today-handoff-tasks">
-      {handoffPracticeBody}
-      {displayProgressRows.length > 0 ? (
-        <TodayProgressTracker rows={displayProgressRows} title="Сегодня и каждый день" />
-      ) : null}
-    </div>
+    <TodayDayTasksBlock
+      todayTasks={dayTasksModel.today}
+      progressRows={displayProgressRows}
+      practiceSlot={handoffPracticeBody}
+      affirmationSlot={affirmationTaskSlot}
+    />
   );
 
   const dayStoryFoundation = isFirstToday ? (

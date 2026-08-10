@@ -409,6 +409,37 @@ html[data-day-mode] [data-product-web-frame] > [data-product-web-chrome] {
   z-index: 1;
 }
 
+/*
+ * Single-paint rule (FOUNDATION_UI §13 / TODAY_MAKE_YOURS §0):
+ * Active ImmersiveArtPlane claims html[data-day-photo=step] → drop shell photo
+ * wash + decor. Inactive steps keep the plane node but do not decode --story-art.
+ */
+html[data-day-mode][data-day-photo="step"] {
+  --day-bg-art: none;
+}
+
+html[data-day-mode][data-day-photo="step"] [data-product-web-frame] {
+  background-image: none;
+  background-color: var(--day-bg-base);
+}
+
+html[data-day-mode][data-day-photo="step"] [data-product-web-frame]::after {
+  background-image: none;
+  opacity: 0;
+}
+
+html[data-day-mode][data-day-photo="step"] .day-atmosphere-decor {
+  display: none;
+}
+
+/*
+ * Day Atmosphere owns the product-frame photo. Scene motif washes
+ * (ProfileAtmosphere cosmic WebP) are a second bitmap — hide under day-mode.
+ */
+html[data-day-mode] [data-product-web-frame] [data-profile-atmosphere] {
+  display: none;
+}
+
 /* Decor layer — geometric only (no photo). Photo wash paints once on the frame. */
 .day-atmosphere-decor {
   pointer-events: none;
@@ -580,19 +611,39 @@ html[data-day-decor="drift"] .day-atmosphere-decor__art {
 
 /*
  * Mobile GPU relief: opaque chrome instead of live backdrop-filter over the
- * animated/washed frame (tab bar + primary Today glass clusters).
+ * washed frame (tab bar, sidebar, DsCard glass, Today glass clusters).
+ * Live blur × photo wash is the main phone-heat path under day-mode.
  */
 @media (max-width: 48rem), (pointer: coarse) {
+  html[data-day-mode] [data-product-web-frame] {
+    --tf-ds-glass-blur: 0px;
+  }
+
   html[data-day-mode] [data-product-web-frame] [class*="tabBar"] {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: color-mix(in srgb, var(--day-surface-tint) 96%, #ffffff);
   }
 
-  html[data-day-mode] [data-product-web-frame] [class*="dayAnchor"],
-  html[data-day-mode] [data-product-web-frame] [class*="glassPanel"],
-  html[data-day-mode] [data-product-web-frame] [class*="actShell"] {
+  html[data-day-mode] [data-product-web-frame] [class*="sidebar"],
+  html[data-day-mode] [data-product-web-frame][data-theme="dark"] [class*="sidebar"] {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    background: color-mix(in srgb, var(--day-surface-tint) 96%, #ffffff);
+  }
+
+  html[data-day-mode] [data-product-web-frame] [class*="cardGlass"],
+  html[data-day-mode] [data-product-web-frame] [class*="dayAnchor"],
+  html[data-day-mode] [data-product-web-frame] [class*="glassPanel"],
+  html[data-day-mode] [data-product-web-frame] [class*="actShell"],
+  html[data-day-mode] [data-product-web-frame] [class*="contextPanel"],
+  html[data-day-mode] [data-product-web-frame] [class*="continuityPill"],
+  html[data-day-mode] [data-product-web-frame] [class*="ritualGate"] {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  html[data-day-mode] [data-product-web-frame] [class*="cardGlass"] {
+    background: color-mix(in srgb, var(--day-surface-tint) 94%, #ffffff);
   }
 }

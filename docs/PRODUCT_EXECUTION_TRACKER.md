@@ -4,7 +4,7 @@ Last updated: 2026-08-10
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4)** — SoT locked + FE ScreenFlow remapped (6/5 steps). Day brief from `day_story`/welcome_glass; rituals stacked; tasks = practice+progress (no catalog shop); loop = promise+close. Polish/block-1 copy richness still open. Canon: `TODAY_SCREEN_SCENARIO_V3.md`. Research explanatory systems **frozen**.
+**IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4)** — Block 1 brief + **Block 5 tasks** (`buildTodayDayTasks`: ≤2 today + daily streaks, no catalog). Next: deploy FE when asked. Research frozen.
 
 ## Architecture impact — Today six blocks (2026-08-10)
 
@@ -71,6 +71,17 @@ Status: Active working document
 - **Migration required?** no — FE rebuild
 - **Canon updated?** yes — `docs/today/TODAY_SCREEN_SCENARIO_V3.md` · `docs/foundation/SCREEN_FLOW_V1.md`
 - **Backward compatible?** yes for API; `?step=` indices remap
+
+**DONE (CODE, 2026-08-10):** **Day Atmosphere single-paint / phone heat** — active `ImmersiveArtPlane` suppresses shell `--day-bg-art` + decor; inactive steps skip bitmap decode; `[data-profile-atmosphere]` hidden under `data-day-mode`; mobile/coarse: no `backdrop-filter` on sidebar / `cardGlass` / glass clusters (opaque). Canon: FOUNDATION_UI §13 · TODAY_MAKE_YOURS §0.
+
+## Architecture impact — Day Atmosphere single-paint (2026-08-10)
+
+- **SoT before:** Welcome/Practice could stack frame WebP + ImmersiveArtPlane; ProfileAtmosphere cosmic washes painted under day-mode; mobile still blurred sidebar/`cardGlass` over wash.
+- **SoT after:** ≤1 full-bleed bitmap — step photo **or** shell wash (not both); motif washes deferred to Day Atmosphere on product frame; mobile glass = opaque tint, not live blur.
+- **Public contract changed?** no — `day_atmosphere` nest unchanged.
+- **Migration required?** no — frontend rebuild.
+- **Canon updated?** yes — FOUNDATION_UI §13 · `docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md` §0.
+- **Backward compatible?** yes — visual: less stacked atmosphere on Profile/Tarot/Compat under day-mode (motifs off).
 
 **DONE (CODE, 2026-08-08):** **Day Atmosphere mobile lite** — photo wash WebP desktop+`-m` mobile (~12–55 KB vs ~1.5–2.2 MB PNG); PNG seeds → `art-seeds/`; single-paint (frame only); decor = CSS geometry × 16 `data-day-decor`; no ambient drift on mobile/coarse + pause when hidden; tab bar opaque (no backdrop-filter). Canon: FOUNDATION_UI §13.
 

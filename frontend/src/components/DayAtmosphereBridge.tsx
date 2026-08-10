@@ -34,6 +34,7 @@ function clearDayAtmosphere(root: HTMLElement): void {
   root.removeAttribute("data-day-mode");
   root.removeAttribute("data-day-decor");
   root.removeAttribute("data-day-crossfade");
+  root.removeAttribute("data-day-photo");
   for (const key of DAY_ATMOSPHERE_TOKEN_KEYS) {
     root.style.removeProperty(key);
   }

@@ -4,7 +4,7 @@
  */
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import {
@@ -42,17 +42,23 @@ import styles from "@/components/today/composition/TodayStoryDeckFrames.module.c
 
 type StoryArtTone = "photo" | "energy" | "practice";
 
-/** Resolve art URL and bind it as this block's own background (not Day Atmosphere theme). */
-function useStoryFrameArt(role: TodayStoryArtRole): CSSProperties {
+/**
+ * Resolve art URL and bind it as this block's own background (not Day Atmosphere theme).
+ * When `enabled` is false (inactive ScreenFlow step), skip the bitmap so only the active
+ * step holds a photo — FOUNDATION_UI single-paint / phone heat.
+ */
+function useStoryFrameArt(role: TodayStoryArtRole, enabled = true): CSSProperties {
   const [src, setSrc] = useState(() => resolveTodayStoryFrameArt(role));
   useEffect(() => {
+    if (!enabled) return;
     setSrc(resolveTodayStoryFrameArt(role));
     const root = document.documentElement;
     const sync = () => setSrc(resolveTodayStoryFrameArt(role));
     const obs = new MutationObserver(sync);
     obs.observe(root, { attributes: true, attributeFilter: ["data-day-mode", "data-day-phase"] });
     return () => obs.disconnect();
-  }, [role]);
+  }, [role, enabled]);
+  if (!enabled) return {};
   return { "--story-art": `url("${src}")` } as CSSProperties;
 }
 
@@ -62,15 +68,51 @@ function immersiveClass(tone: StoryArtTone, ...extra: Array<string | false | nul
     .join(" ");
 }
 
-/** Full-bleed photo plane for the ScreenFlow step — stays pinned while content scrolls. */
+function readImmersiveStepActive(el: HTMLElement | null): boolean {
+  if (!el) return true;
+  const step = el.closest("[data-step-active]");
+  if (!step) return true;
+  return step.getAttribute("data-step-active") === "true";
+}
+
+/**
+ * Full-bleed photo plane for the ScreenFlow step — stays pinned while content scrolls.
+ * Active plane claims `html[data-day-photo=step]` so shell `--day-bg-art` + decor drop
+ * (TODAY_MAKE_YOURS §0 single-paint). Inactive steps keep the node, no bitmap decode.
+ */
 function ImmersiveArtPlane({ role, testId }: { role: TodayStoryArtRole; testId: string }) {
-  const artStyle = useStoryFrameArt(role);
+  const ref = useRef<HTMLDivElement>(null);
+  const [stepActive, setStepActive] = useState(false);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const step = el.closest("[data-step-active]");
+    const sync = () => setStepActive(readImmersiveStepActive(el));
+    sync();
+    if (!step) return;
+    const obs = new MutationObserver(sync);
+    obs.observe(step, { attributes: true, attributeFilter: ["data-step-active"] });
+    return () => obs.disconnect();
+  }, []);
+  useLayoutEffect(() => {
+    if (!stepActive) return;
+    const root = document.documentElement;
+    root.setAttribute("data-day-photo", "step");
+    return () => {
+      if (root.getAttribute("data-day-photo") === "step") {
+        root.removeAttribute("data-day-photo");
+      }
+    };
+  }, [stepActive]);
+  const artStyle = useStoryFrameArt(role, stepActive);
   return (
     <div
+      ref={ref}
       className={styles.immersiveArt}
       style={artStyle}
       data-testid={testId}
       data-frame-art={role}
+      data-frame-art-active={stepActive ? "true" : "false"}
       aria-hidden
     />
   );
