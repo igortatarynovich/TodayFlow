@@ -12,8 +12,6 @@ export const TODAY_COMPOSITION_COPY = {
   lunarContextTitle: "Лунный контекст",
   expectLabel: "Чего ожидать",
   trapLabel: "Ловушка",
-  doLabel: "Делать",
-  avoidLabel: "Не делать",
   vibeLabel: "Вайб",
   conflictLabel: "Главный сюжет дня",
   eventsLeadLabel: "Что происходит на небе",
@@ -128,7 +126,6 @@ export const TODAY_COMPOSITION_COPY = {
     closeHint: "Вопрос, которым можно закрыть день.",
     numberCue: "Число дня",
     flowCue: "Поток дня",
-    avoidLabel: "Чего избегать",
   },
   /** Journey scene chrome — same family as Profile · Wave 1 ActShell. */
   journey: {
@@ -177,8 +174,6 @@ export const TODAY_COMPOSITION_COPY = {
     glanceNearestPracticeHint: "практика →",
     /** One Daily Focus — replaces legacy «Сферы дня» chips (R15–R17). */
     glanceFocusLabel: "Фокус дня",
-    glanceFocusPrioritize: "В приоритете · ",
-    glanceFocusAvoid: "Избегать · ",
     /** @deprecated Prefer glanceFocusLabel — kept for mid-migration strings. */
     glanceSpheresLabel: "Фокус дня",
     teaserPlotHook: "одна линия, что держит день",

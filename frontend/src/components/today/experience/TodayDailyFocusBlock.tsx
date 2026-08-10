@@ -65,20 +65,38 @@ export function TodayDailyFocusBlock({
           {prioritize ? (
             <p
               className="orbit-body-sm"
-              style={{ margin: "0.55rem 0 0", lineHeight: 1.58, color: "#3d3228" }}
+              style={{
+                margin: "0.55rem 0 0",
+                padding: "0.55rem 0.75rem",
+                lineHeight: 1.58,
+                color: "#1f3d2a",
+                background: "color-mix(in srgb, #3d6b4f 12%, transparent)",
+                borderLeft: "3px solid #2f5a40",
+                borderRadius: "0.55rem",
+              }}
               data-testid="today-experience-focus-prioritize"
+              data-polarity="support"
+              aria-label="Ориентир"
             >
-              <span style={{ color: "#6a5132" }}>{copy.journey.glanceFocusPrioritize}</span>
               {prioritize}
             </p>
           ) : null}
           {avoid ? (
             <p
               className="orbit-body-sm"
-              style={{ margin: "0.55rem 0 0", lineHeight: 1.58, color: "#3d3228" }}
+              style={{
+                margin: "0.55rem 0 0",
+                padding: "0.55rem 0.75rem",
+                lineHeight: 1.58,
+                color: "#5c241c",
+                background: "color-mix(in srgb, #8a3f35 11%, transparent)",
+                borderLeft: "3px solid #7a342c",
+                borderRadius: "0.55rem",
+              }}
               data-testid="today-experience-focus-avoid"
+              data-polarity="caution"
+              aria-label="Осторожность"
             >
-              <span style={{ color: "#6a5132" }}>{copy.journey.glanceFocusAvoid}</span>
               {avoid}
             </p>
           ) : null}

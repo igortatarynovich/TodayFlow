@@ -2149,12 +2149,23 @@
   text-align: left;
 }
 
-.focusTwoCardEyebrow {
-  margin: 0;
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  opacity: 0.72;
+/* Block 3: polarity by color — no «в приоритете / избегать» labels. */
+.focusTwoCardSupport {
+  box-shadow: inset 3px 0 0 color-mix(in srgb, #2f5a40 72%, transparent);
+  background: color-mix(in srgb, #3d6b4f 10%, transparent);
+}
+
+.focusTwoCardCaution {
+  box-shadow: inset 3px 0 0 color-mix(in srgb, #7a342c 70%, transparent);
+  background: color-mix(in srgb, #8a3f35 9%, transparent);
+}
+
+.focusTwoCardSupport .focusTwoCardBody {
+  color: color-mix(in srgb, #1f3d2a 50%, var(--day-ink, currentColor));
+}
+
+.focusTwoCardCaution .focusTwoCardBody {
+  color: color-mix(in srgb, #5c241c 48%, var(--day-ink, currentColor));
 }
 
 .focusTwoCardBody {

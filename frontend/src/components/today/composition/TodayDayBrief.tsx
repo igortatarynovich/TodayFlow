@@ -75,10 +75,14 @@ export function TodayDayBrief({ model, loading = false }: TodayDayBriefProps) {
             </div>
           ) : null}
           {doItems.length > 0 || avoidItems.length > 0 ? (
-            <div className={styles.compassDo} data-testid="today-day-brief-instruction">
+            <div className={styles.compassCues} data-testid="today-day-brief-instruction">
               {doItems.length > 0 ? (
-                <div data-testid="today-day-brief-do">
-                  <p className={styles.compassLabel}>{copy.doLabel}</p>
+                <div
+                  className={styles.cueDo}
+                  data-testid="today-day-brief-do"
+                  data-polarity="support"
+                  aria-label="Ориентир"
+                >
                   <ul className={styles.list}>
                     {doItems.map((item) => (
                       <li key={item}>{item}</li>
@@ -87,8 +91,12 @@ export function TodayDayBrief({ model, loading = false }: TodayDayBriefProps) {
                 </div>
               ) : null}
               {avoidItems.length > 0 ? (
-                <div data-testid="today-day-brief-avoid">
-                  <p className={styles.compassLabel}>{copy.avoidLabel}</p>
+                <div
+                  className={styles.cueAvoid}
+                  data-testid="today-day-brief-avoid"
+                  data-polarity="caution"
+                  aria-label="Осторожность"
+                >
                   <ul className={styles.list}>
                     {avoidItems.map((item) => (
                       <li key={item}>{item}</li>

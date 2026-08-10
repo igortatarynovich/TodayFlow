@@ -1899,15 +1899,23 @@ export function TodayCompositionSurface(props: Props) {
       ) : null}
       <div className={styles.focusTwoCards}>
         {glanceDailyFocus?.prioritize ? (
-          <DsGlassCard className={styles.focusTwoCard} testId="today-handoff-focus-prioritize">
-            <p className={styles.focusTwoCardEyebrow}>В приоритете</p>
-            <p className={styles.focusTwoCardBody}>{glanceDailyFocus.prioritize}</p>
+          <DsGlassCard
+            className={`${styles.focusTwoCard} ${styles.focusTwoCardSupport}`}
+            testId="today-handoff-focus-prioritize"
+          >
+            <p className={styles.focusTwoCardBody} data-polarity="support" aria-label="Ориентир">
+              {glanceDailyFocus.prioritize}
+            </p>
           </DsGlassCard>
         ) : null}
         {glanceDailyFocus?.avoid ? (
-          <DsGlassCard className={styles.focusTwoCard} testId="today-handoff-focus-avoid">
-            <p className={styles.focusTwoCardEyebrow}>Лучше избегать</p>
-            <p className={styles.focusTwoCardBody}>{glanceDailyFocus.avoid}</p>
+          <DsGlassCard
+            className={`${styles.focusTwoCard} ${styles.focusTwoCardCaution}`}
+            testId="today-handoff-focus-avoid"
+          >
+            <p className={styles.focusTwoCardBody} data-polarity="caution" aria-label="Осторожность">
+              {glanceDailyFocus.avoid}
+            </p>
           </DsGlassCard>
         ) : null}
       </div>

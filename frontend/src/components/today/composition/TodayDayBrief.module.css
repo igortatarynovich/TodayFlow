@@ -81,23 +81,41 @@
 }
 
 .compassTrap,
-.compassDo {
+.cueDo,
+.cueAvoid {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   padding: 0.85rem 0.95rem;
   border-radius: 0.75rem;
-  background: color-mix(in srgb, var(--day-ink, currentColor) 6%, transparent);
-  border: 1px solid color-mix(in srgb, var(--day-ink, currentColor) 14%, transparent);
+  border: 1px solid transparent;
 }
 
 .compassTrap {
-  border-color: color-mix(in srgb, var(--day-ink, currentColor) 22%, transparent);
+  background: color-mix(in srgb, var(--day-ink, currentColor) 6%, transparent);
+  border-color: color-mix(in srgb, var(--day-ink, currentColor) 18%, transparent);
 }
 
-.compassDo {
-  background: color-mix(in srgb, var(--day-accent, var(--day-ink, currentColor)) 10%, transparent);
-  border-color: color-mix(in srgb, var(--day-accent, var(--day-ink, currentColor)) 28%, transparent);
+/* Polarity without «делать / не делать»: color + edge speak. */
+.compassCues {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.cueDo {
+  background: color-mix(in srgb, #3d6b4f 12%, var(--day-surface-tint, transparent));
+  border-color: color-mix(in srgb, #3d6b4f 34%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, #2f5a40 72%, transparent);
+  color: color-mix(in srgb, #1f3d2a 55%, var(--day-ink, currentColor));
+}
+
+.cueAvoid {
+  background: color-mix(in srgb, #8a3f35 11%, var(--day-surface-tint, transparent));
+  border-color: color-mix(in srgb, #8a3f35 32%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, #7a342c 70%, transparent);
+  color: color-mix(in srgb, #5c241c 50%, var(--day-ink, currentColor));
 }
 
 .compassLabel {
@@ -127,14 +145,26 @@
   font-weight: 500;
 }
 
-.list li::before {
-  content: "· ";
-  opacity: 0.55;
+.cueDo .list li::before {
+  content: "";
+  display: inline-block;
+  width: 0.42rem;
+  height: 0.42rem;
+  margin-right: 0.45rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, #2f5a40 78%, transparent);
+  vertical-align: 0.1em;
 }
 
-.compassDo .list + .compassLabel,
-.compassDo > div + div {
-  margin-top: 0.55rem;
+.cueAvoid .list li::before {
+  content: "";
+  display: inline-block;
+  width: 0.42rem;
+  height: 0.42rem;
+  margin-right: 0.45rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, #7a342c 78%, transparent);
+  vertical-align: 0.1em;
 }
 
 .secondary {

@@ -1007,12 +1007,18 @@
   text-align: left;
 }
 
-.cardItemLabel {
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--tf-ink, #2a2520);
+.cardItemSupport {
+  background: color-mix(in srgb, #3d6b4f 12%, var(--day-surface-tint, transparent));
+  border-color: color-mix(in srgb, #3d6b4f 34%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, #2f5a40 72%, transparent);
+  color: color-mix(in srgb, #1f3d2a 55%, var(--tf-ink, #2a2520));
+}
+
+.cardItemCaution {
+  background: color-mix(in srgb, #8a3f35 11%, var(--day-surface-tint, transparent));
+  border-color: color-mix(in srgb, #8a3f35 32%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, #7a342c 70%, transparent);
+  color: color-mix(in srgb, #5c241c 50%, var(--tf-ink, #2a2520));
 }
 
 .focusTitle {

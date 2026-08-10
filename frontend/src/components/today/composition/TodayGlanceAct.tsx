@@ -213,14 +213,22 @@ export function TodayGlanceAct({
               {(prioritize || avoid) && (
                 <ul className={styles.focusList}>
                   {prioritize ? (
-                    <li className={styles.focusItem} data-testid="today-glance-focus-prioritize">
-                      <span className={styles.focusDirectionLabel}>{copy.journey.glanceFocusPrioritize}</span>
+                    <li
+                      className={`${styles.focusItem} ${styles.focusItemSupport}`}
+                      data-testid="today-glance-focus-prioritize"
+                      data-polarity="support"
+                      aria-label="Ориентир"
+                    >
                       {prioritize}
                     </li>
                   ) : null}
                   {avoid ? (
-                    <li className={styles.focusItem} data-testid="today-glance-focus-avoid">
-                      <span className={styles.focusDirectionLabel}>{copy.journey.glanceFocusAvoid}</span>
+                    <li
+                      className={`${styles.focusItem} ${styles.focusItemCaution}`}
+                      data-testid="today-glance-focus-avoid"
+                      data-polarity="caution"
+                      aria-label="Осторожность"
+                    >
                       {avoid}
                     </li>
                   ) : null}

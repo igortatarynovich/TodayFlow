@@ -150,16 +150,21 @@
   font-size: 0.88rem;
   line-height: 1.4;
   color: var(--tf-ink-muted, #7a7168);
+  text-align: left;
 }
 
-.focusDirectionLabel {
-  display: block;
-  margin-bottom: 0.15rem;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--tf-ink, #2a2520);
+.focusItemSupport {
+  background: color-mix(in srgb, #3d6b4f 12%, var(--day-surface-tint, transparent));
+  border-color: color-mix(in srgb, #3d6b4f 34%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, #2f5a40 72%, transparent);
+  color: color-mix(in srgb, #1f3d2a 55%, var(--tf-ink, #2a2520));
+}
+
+.focusItemCaution {
+  background: color-mix(in srgb, #8a3f35 11%, var(--day-surface-tint, transparent));
+  border-color: color-mix(in srgb, #8a3f35 32%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, #7a342c 70%, transparent);
+  color: color-mix(in srgb, #5c241c 50%, var(--tf-ink, #2a2520));
 }
 
 .nearestSlot {

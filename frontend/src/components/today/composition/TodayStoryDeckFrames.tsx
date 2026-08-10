@@ -652,10 +652,12 @@ export function TodayAttributesFrame({
                   ) : null}
                   {prioritize ? (
                     <ul className={styles.cardList}>
-                      <li className={styles.cardItem} data-testid="today-glance-focus-prioritize">
-                        <span className={styles.cardItemLabel}>
-                          {copy.journey.glanceFocusPrioritize.replace(" · ", "")}
-                        </span>
+                      <li
+                        className={`${styles.cardItem} ${styles.cardItemSupport}`}
+                        data-testid="today-glance-focus-prioritize"
+                        data-polarity="support"
+                        aria-label="Ориентир"
+                      >
                         <span>{prioritize}</span>
                       </li>
                     </ul>
@@ -668,12 +670,13 @@ export function TodayAttributesFrame({
               ) : null}
               {hasAvoid ? (
                 <div className={styles.compassSection} data-testid="today-attributes-avoid">
-                  <p className={styles.eyebrow}>{copy.storyNext.avoidLabel}</p>
                   <ul className={styles.cardList}>
-                    <li className={styles.cardItem} data-testid="today-glance-focus-avoid">
-                      <span className={styles.cardItemLabel}>
-                        {copy.journey.glanceFocusAvoid.replace(" · ", "")}
-                      </span>
+                    <li
+                      className={`${styles.cardItem} ${styles.cardItemCaution}`}
+                      data-testid="today-glance-focus-avoid"
+                      data-polarity="caution"
+                      aria-label="Осторожность"
+                    >
                       <span>{avoid}</span>
                     </li>
                   </ul>
