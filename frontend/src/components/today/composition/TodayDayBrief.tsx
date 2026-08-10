@@ -126,7 +126,6 @@ function TodayDayDashboard({
   } = model;
 
   const line = atmosphereLine ?? vibe;
-  const modeEn = model.visualMode ? model.visualMode.toUpperCase() : null;
   const heroBody = line || expect || atmosphereNote;
   const heroCue = moodPills[0] || null;
   const betterIcon: Record<string, string> = {
@@ -163,7 +162,7 @@ function TodayDayDashboard({
         data-mode={model.visualMode || undefined}
         onClick={() =>
           openSheet({
-            title: modeLabel || modeEn || copy.atmosphereLabel,
+            title: modeLabel || copy.atmosphereLabel,
             kicker: copy.atmosphereLabel,
             body:
               [line, expect, atmosphereNote, heroCue].filter(Boolean).join("\n\n") ||
@@ -171,16 +170,9 @@ function TodayDayDashboard({
           })
         }
       >
-        {loading ? (
-          <h2 className={styles.heroModeEn}>{copy.loadingDay}</h2>
-        ) : modeEn ? (
-          <>
-            <h2 className={styles.heroModeEn}>{modeEn}</h2>
-            {modeLabel ? <p className={styles.heroModeRu}>{modeLabel}</p> : null}
-          </>
-        ) : (
-          <h2 className={styles.heroModeEn}>{modeLabel || "Сегодня"}</h2>
-        )}
+        <h2 className={styles.heroMode}>
+          {loading ? copy.loadingDay : modeLabel || "Сегодня"}
+        </h2>
         {heroBody ? <p className={styles.heroBody}>{heroBody}</p> : null}
         {heroCue ? (
           <p className={styles.heroCue} data-testid="today-day-brief-mood">

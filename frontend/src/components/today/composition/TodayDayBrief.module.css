@@ -82,22 +82,13 @@
   outline-offset: 2px;
 }
 
-.heroModeEn {
+.heroMode {
   margin: 0;
   font-family: var(--tf-font-display, Georgia, "Times New Roman", serif);
-  font-size: clamp(2rem, 7vw, 2.75rem);
+  font-size: clamp(1.85rem, 6vw, 2.45rem);
   font-weight: 600;
-  letter-spacing: 0.04em;
-  line-height: 1.05;
-  text-transform: uppercase;
-}
-
-.heroModeRu {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
   letter-spacing: 0.02em;
-  opacity: 0.88;
+  line-height: 1.1;
 }
 
 .heroBody {
