@@ -1,8 +1,11 @@
 /**
  * Block 1 day ambassador model — assemble from existing contract fields only.
  * No invent. Honest omit when empty.
- * Canon: TODAY_SCREEN_SCENARIO_V3 § six blocks · block 1
- *         EXPLAIN_MEANING_NOT_MECHANISM — kitchen/ephemeris never in why.
+ *
+ * Presentation (v3.4.1): two frames
+ *   atmosphere — date · greeting · atmosphere line · pills · note · expect · timeline
+ *   orientation — trap · cues · energy (+ lunar cause)
+ * Canon: TODAY_SCREEN_SCENARIO_V3 · EXPLAIN_MEANING_NOT_MECHANISM
  */
 
 import type { TodayContractV1 } from "@/lib/todayContract";
@@ -11,13 +14,17 @@ import type { HandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 export type TodayDayBriefModel = {
   dateLabel: string;
   salutation: string;
-  /** Hero vibe title */
+  /** Atmosphere headline (not a separate «вайб» product label). */
+  atmosphereLine: string | null;
+  /** @deprecated alias — same as atmosphereLine */
   vibe: string | null;
   moodPills: string[];
   activityTags: string[];
-  /** Strong sphere / scene accents (labels only) */
+  /** Sphere accents — not mixed into mood pills. */
   accents: string[];
-  /** Configuration / why the day is like this */
+  /** Short atmosphere note (lunar/reason) — must not duplicate expect. */
+  atmosphereNote: string | null;
+  /** @deprecated alias for atmosphereNote */
   why: string | null;
   energy: string | null;
   energyCause: string | null;
@@ -25,7 +32,7 @@ export type TodayDayBriefModel = {
   trap: string | null;
   doItems: string[];
   avoidItems: string[];
-  /** Closing vibe / overall tone */
+  /** Unused on new frames — kept null for compat. */
   vibeClosing: string | null;
 };
 
@@ -38,12 +45,15 @@ function clean(s: string | null | undefined): string | null {
   return t ? t : null;
 }
 
-/** Meaning-only line for ambassador why — reject kitchen dumps. */
+function normalizeKey(s: string): string {
+  return s.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+/** Meaning-only line — reject kitchen dumps. */
 export function cleanAmbassadorWhy(s: string | null | undefined): string | null {
   const t = clean(s);
   if (!t) return null;
   if (KITCHEN_MECHANISM_RE.test(t)) return null;
-  // Long mash of several kitchen sentences — not a why paragraph.
   if (t.length > 320 && (t.match(/\./g) || []).length >= 4) return null;
   return t;
 }
@@ -54,7 +64,7 @@ function uniqTrim(items: Array<string | null | undefined>, max: number): string[
   for (const raw of items) {
     const t = clean(raw);
     if (!t) continue;
-    const key = t.toLowerCase();
+    const key = normalizeKey(t);
     if (seen.has(key)) continue;
     seen.add(key);
     out.push(t);
@@ -63,17 +73,20 @@ function uniqTrim(items: Array<string | null | undefined>, max: number): string[
   return out;
 }
 
-/** Clip to first 1–2 sentences for 3-second compass scan. No invent. */
+/** Clip to first sentences. No invent. */
 export function clipCompassProse(s: string | null | undefined, maxChars = 180): string | null {
   const t = clean(s);
   if (!t) return null;
   if (t.length <= maxChars) return t;
   const parts = t.split(/(?<=[.!?…])\s+/).filter(Boolean);
   let out = parts[0] || t.slice(0, maxChars);
-  if (parts.length > 1 && (out + " " + parts[1]).length <= maxChars + 24) {
+  if (parts.length > 1 && (out + " " + parts[1]).length <= maxChars + 40) {
     out = `${out} ${parts[1]}`;
   }
-  if (out.length > maxChars + 40) {
+  if (parts.length > 2 && (out + " " + parts[2]).length <= maxChars + 24) {
+    out = `${out} ${parts[2]}`;
+  }
+  if (out.length > maxChars + 48) {
     out = out.slice(0, maxChars).replace(/\s+\S*$/, "").trim();
   }
   return out.endsWith(".") || out.endsWith("!") || out.endsWith("?") || out.endsWith("…")
@@ -81,14 +94,20 @@ export function clipCompassProse(s: string | null | undefined, maxChars = 180): 
     : `${out}…`;
 }
 
-/**
- * Prefer meaning slots in product order — never pick longest kitchen dump.
- * day_personal.summary_ru is kitchen evidence mash; not used for ambassador why.
- */
-function pickWhy(parts: Array<string | null | undefined>): string | null {
+function overlaps(a: string | null, b: string | null): boolean {
+  if (!a || !b) return false;
+  const aa = normalizeKey(a);
+  const bb = normalizeKey(b);
+  if (aa === bb) return true;
+  if (aa.length >= 24 && bb.includes(aa.slice(0, Math.min(48, aa.length)))) return true;
+  if (bb.length >= 24 && aa.includes(bb.slice(0, Math.min(48, bb.length)))) return true;
+  return false;
+}
+
+function pickAtmosphereNote(parts: Array<string | null | undefined>): string | null {
   for (const part of parts) {
     const ok = cleanAmbassadorWhy(part);
-    if (ok) return clipCompassProse(ok, 200);
+    if (ok) return clipCompassProse(ok, 160);
   }
   return null;
 }
@@ -117,7 +136,7 @@ export function buildTodayDayBriefModel(input: {
   const story = input.contract.day_story;
   const glass = input.welcomeGlass;
 
-  const vibe =
+  const atmosphereLine =
     clean(input.headline) ||
     clean(story?.headline_anchor) ||
     clean(story?.theme) ||
@@ -131,41 +150,37 @@ export function buildTodayDayBriefModel(input: {
     clean(story?.day_foundation?.essence?.story_ru) ||
     null;
 
-  const why = pickWhy([
-    story?.day_scenario?.conflict?.why_arose,
+  const expect = clipCompassProse(story?.expect, 320);
+
+  let atmosphereNote = pickAtmosphereNote([
     glass?.reasonLine,
     essence,
-    story?.events_lead,
-    // Explicitly skip day_personal.summary_ru — kitchen mash (profections/SR/…).
+    story?.day_scenario?.conflict?.why_arose,
   ]);
-
-  const doItems = uniqTrim(story?.do || [], 2).map((item) => clipCompassProse(item, 140) || item);
-  const avoidItems = uniqTrim(story?.avoid || [], 2).map((item) => clipCompassProse(item, 120) || item);
-
-  // Ambient list only — full scene story is not «общий вайб».
-  let vibeClosing =
-    clean(story?.vibe_closing) ||
-    (Array.isArray(story?.vibe_strokes) && story.vibe_strokes.length
-      ? uniqTrim(story.vibe_strokes, 4).join(" · ")
-      : null);
-  if (vibeClosing && (vibeClosing === vibe || vibeClosing === why)) {
-    vibeClosing = null;
+  // Never duplicate expect into atmosphere note.
+  if (overlaps(atmosphereNote, expect) || overlaps(atmosphereNote, atmosphereLine)) {
+    atmosphereNote = null;
   }
+
+  const doItems = uniqTrim(story?.do || [], 3).map((item) => clipCompassProse(item, 200) || item);
+  const avoidItems = uniqTrim(story?.avoid || [], 2).map((item) => clipCompassProse(item, 180) || item);
 
   return {
     dateLabel: input.dateLabel,
     salutation: input.salutation,
-    vibe: input.loading ? null : vibe,
-    moodPills: uniqTrim(glass?.moodPills || [], 3),
+    atmosphereLine: input.loading ? null : atmosphereLine,
+    vibe: input.loading ? null : atmosphereLine,
+    moodPills: uniqTrim(glass?.moodPills || [], 2),
     activityTags: uniqTrim(glass?.activityTags || [], 3),
     accents: sceneAccents(input.contract),
-    why,
-    energy: clipCompassProse(input.energyLine, 140),
-    energyCause: clipCompassProse(cleanAmbassadorWhy(input.energyCause), 120),
-    expect: clipCompassProse(story?.expect, 160),
-    trap: clipCompassProse(story?.trap, 140),
+    atmosphereNote,
+    why: atmosphereNote,
+    energy: clipCompassProse(input.energyLine, 180),
+    energyCause: clipCompassProse(cleanAmbassadorWhy(input.energyCause), 160),
+    expect,
+    trap: clipCompassProse(story?.trap, 260),
     doItems,
     avoidItems,
-    vibeClosing: vibeClosing ? clipCompassProse(vibeClosing, 160) : null,
+    vibeClosing: null,
   };
 }

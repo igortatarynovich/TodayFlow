@@ -3,6 +3,9 @@
 export const TODAY_COMPOSITION_COPY = {
   foundationLabel: "Основа дня",
   pulseLabel: "Энергия дня",
+  atmosphereLabel: "Атмосфера",
+  timelineLabel: "Поток дня",
+  orientationEmpty: "Ориентиры дня ещё собираются — можно перейти дальше.",
   foundationEyebrow: "Сегодняшняя основа дня",
   glanceStrongTitle: "Чего ожидать",
   glanceWeakTitle: "Ловушка дня",
@@ -12,7 +15,7 @@ export const TODAY_COMPOSITION_COPY = {
   lunarContextTitle: "Лунный контекст",
   expectLabel: "Чего ожидать",
   trapLabel: "Ловушка",
-  vibeLabel: "Вайб",
+  vibeLabel: "Атмосфера",
   conflictLabel: "Главный сюжет дня",
   eventsLeadLabel: "Что происходит на небе",
   instructionTitle: "Инструкция",
@@ -81,9 +84,11 @@ export const TODAY_COMPOSITION_COPY = {
   storyNext: {
     further: "Дальше",
     scrollMore: "Листайте дальше",
-    /** Six blocks v3.4 */
+    /** Six blocks v3.4 — day = atmosphere + orientation frames */
     day: "День",
-    dayHint: "Вайб и ориентиры сегодня.",
+    dayHint: "Атмосфера и чего ожидать.",
+    orientation: "Ориентир",
+    orientationHint: "Ловушка, шаги и энергия.",
     rituals: "Ритуалы",
     ritualsHint: "Число и карта дня.",
     instruction: "Инструкция",

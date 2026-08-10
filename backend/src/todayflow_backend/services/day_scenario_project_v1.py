@@ -267,6 +267,7 @@ def _strip_meaning_slots(base: dict[str, Any]) -> None:
     base["evening_closure"] = ""
     base["practice_recommendation"] = None
     base.pop("talisman", None)
+    base.pop("visual_mode", None)
     # Domains: keep structure empty — contract maps unavailable → empty lenses
     base["domains"] = {}
 
@@ -549,6 +550,15 @@ def project_day_scenario_onto_day_story_v1(
             "driver_ids": list(conflict.get("driver_ids") or [])[:3],
             "composition_ids": list(thesis.get("composition_ids") or [])[:3],
         }
+
+    # Day mood (visual_mode) — closed enum from native LLM; invalid ignored (atmosphere fallback)
+    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
+
+    mood = normalize_visual_mode(scen.get("visual_mode"))
+    if mood:
+        base["visual_mode"] = mood
+    else:
+        base.pop("visual_mode", None)
 
     facts = [
         str(d.get("fact_ru") or "").strip()

@@ -165,6 +165,7 @@ def _valid_native(**overrides):
             },
             "humor_setup": None,
         },
+        "visual_mode": "tension",
         "generation_notes": "test",
     }
     base.update(overrides)
@@ -290,6 +291,7 @@ def test_native_maps_to_scenario_and_b5_projector():
         day_thesis=thesis,
     )
     assert scenario["generation_source"] == GENERATION_SOURCE_NATIVE
+    assert scenario.get("visual_mode") == "tension"
     assert validate_day_scenario_v1(scenario) == []
     assert all(
         str(sc.get("serves_conflict") or "") == "тон дня"
@@ -311,6 +313,7 @@ def test_native_maps_to_scenario_and_b5_projector():
     story["interpretation_status"] = "ok"
     story["expect"] = "LLM legacy expect"
     projected = project_day_scenario_onto_day_story_v1(story, scenario)
+    assert projected.get("visual_mode") == "tension"
     assert projected["interpretation_status"] == "ok"
     assert not str(projected["expect"]).startswith("LLM legacy")
     assert "Прояснение" in projected["primary_conflict"] or "Прояснение" in projected["theme"]
@@ -319,6 +322,43 @@ def test_native_maps_to_scenario_and_b5_projector():
     contract = day_story_to_today_contract_v1(projected)
     assert contract["day_story"]["expect"]
     assert contract["day_story"]["talisman"]["color"] == scenario["props"]["color"]["name"]
+    assert (contract.get("day_atmosphere") or {}).get("visual_mode") == "tension"
+
+
+def test_native_invalid_visual_mode_dropped_atmosphere_falls_back():
+    pack, thesis, ritual, interp, allowed = _interp_and_allowed()
+    native = normalize_native_scenario_llm_c1(_valid_native(visual_mode="not-a-mood"))
+    assert validate_native_scenario_llm_c1(native, allowed_evidence_ids=allowed) == []
+    scenario = native_llm_to_day_scenario_v1(
+        native,
+        interpretation=interp,
+        ritual_context=ritual,
+        celestial_events={"day_events_pack": pack},
+        day_thesis=thesis,
+    )
+    assert "visual_mode" not in scenario or scenario.get("visual_mode") is None
+    story = build_day_story_fallback_v1(
+        day_engine_brief={"anchor_summary": "Ось.", "do_hint": "Шаг.", "avoid_hint": "Стоп."},
+        interpretation=interp,
+        ritual_context=ritual,
+        celestial_events={"day_events_pack": pack},
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+    )
+    projected = project_day_scenario_onto_day_story_v1(story, scenario)
+    assert not projected.get("visual_mode")
+    contract = day_story_to_today_contract_v1(projected, generation_id="fallback-mood")
+    atm = contract.get("day_atmosphere") or {}
+    assert atm.get("visual_mode") in {
+        "grounded",
+        "flow",
+        "radiance",
+        "momentum",
+        "clarity",
+        "tension",
+        "renewal",
+        "depth",
+    }
 
 
 def test_invalid_output_projects_to_unavailable_not_legacy():

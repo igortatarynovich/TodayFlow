@@ -744,6 +744,7 @@ class TodayContractDayStoryV1(BaseModel):
     development_point: str = ""
     primary_action: str = ""
     evening_closure: str = ""
+    visual_mode: str | None = None
     trace: dict[str, Any] = Field(default_factory=dict)
 
 

@@ -8,7 +8,7 @@ describe("buildHandoffWelcomeGlass", () => {
       lunarThemes: "снижает импульсивность.",
       activityTags: ["Планирование", "Финансы", "Разговоры", "Extra"],
     });
-    expect(glass.moodPills).toEqual(["Ясная", "Собранная"]);
+    expect(glass.moodPills).toEqual(["Ясный ум", "Порядок в делах"]);
     expect(glass.reasonLine).toMatch(/Убывающая Луна/);
     expect(glass.reasonLine).toMatch(/импульсивность/i);
     expect(glass.activityTags).toEqual(["Планирование", "Финансы", "Разговоры"]);

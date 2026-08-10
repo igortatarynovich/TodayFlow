@@ -78,6 +78,43 @@ def test_from_story_with_thesis():
     assert nest["time_phase"] == "morning"
 
 
+def test_from_story_llm_visual_mode_wins_over_thesis():
+    nest = day_atmosphere_from_story(
+        {
+            "interpretation_status": "ok",
+            "day_thesis": {"mode": "opportunity"},
+            "visual_mode": "depth",
+        },
+        local_date="2026-08-03",
+        hour=10,
+    )
+    assert nest is not None
+    assert nest["visual_mode"] == "depth"
+
+
+def test_from_story_invalid_visual_mode_falls_back_to_thesis():
+    nest = day_atmosphere_from_story(
+        {
+            "interpretation_status": "ok",
+            "day_thesis": {"mode": "conflict"},
+            "visual_mode": "sagittarius-vibes",
+        },
+        local_date="2026-08-03",
+        hour=14,
+    )
+    assert nest is not None
+    assert nest["visual_mode"] == "tension"
+
+
+def test_build_accepts_explicit_visual_mode():
+    nest = build_day_atmosphere_v1(
+        day_thesis={"mode": "conflict"},
+        visual_mode="renewal",
+        hour=12,
+    )
+    assert nest["visual_mode"] == "renewal"
+
+
 def test_day_story_to_today_contract_includes_atmosphere():
     from todayflow_backend.services.day_story_v1 import day_story_to_today_contract_v1
 
@@ -97,6 +134,7 @@ def test_day_story_to_today_contract_includes_atmosphere():
         "development_point": "Точка роста с достаточным текстом",
         "primary_action": "Действие с достаточным текстом",
         "day_thesis": {"mode": "transition", "label_ru": "Переход"},
+        "visual_mode": "momentum",
         "domains": {
             "work": {
                 "status": "статус работы достаточно длинный",
@@ -128,4 +166,4 @@ def test_day_story_to_today_contract_includes_atmosphere():
     contract = day_story_to_today_contract_v1(story, generation_id="test-gen")
     atm = contract.get("day_atmosphere")
     assert isinstance(atm, dict)
-    assert atm["visual_mode"] == "flow"
+    assert atm["visual_mode"] == "momentum"

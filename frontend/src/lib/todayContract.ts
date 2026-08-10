@@ -156,6 +156,8 @@ export type TodayContractDayStoryV1 = {
     strong_pattern_ids?: string[];
   } | null;
   evening_closure?: string;
+  /** Closed day mood (same enum as day_atmosphere.visual_mode). LLM pick; optional. */
+  visual_mode?: string | null;
   talisman?: {
     color?: string;
     stone?: string;

@@ -98,6 +98,12 @@ _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayF
 - development_point — личный soft-клейм → бытовой смысл, иначе "".
 - Не подставляй универсальные шаблоны и готовые «формулы дня». Если evidence не хватает для слота — оставь слот пустой строкой / [].
 
+НАСТРОЕНИЕ ДНЯ (visual_mode) — обязательно, ровно один id:
+grounded|flow|radiance|momentum|clarity|tension|renewal|depth
+Это атмосфера дня (UI), не свободная строка. Выбери по thesis + drivers, не по одному знаку Луны.
+Кратко: grounded=устойчивость · flow=мягкость · radiance=открытость · momentum=импульс ·
+clarity=ясность · tension=острота · renewal=обновление · depth=тишина/углубление.
+
 Запрещены штампы:
 «Сегодня сильнее», «Опирайся на это», «Зона риска», «Направить внимание», «Не распыляйся»,
 «довериться потоку», «устойчивость через ритм», «один важный разговор», «одно дело до конца»,
@@ -142,7 +148,8 @@ _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayF
   "practice_recommendation": {"kind":"promise|ascetic|affirmation|practice|none","text":"string","reason":"string"},
   "supports_story": "string",
   "evening_closure": "string",
-  "symbolic_note": "string"
+  "symbolic_note": "string",
+  "visual_mode": "grounded|flow|radiance|momentum|clarity|tension|renewal|depth"
 }
 """
 
@@ -455,6 +462,11 @@ def _normalize_day_story_payload(
         "symbolic_note": _clip(raw.get("symbolic_note"), 400),
         "supports_story": _clip(raw.get("supports_story"), 480),
     }
+    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
+
+    mood = normalize_visual_mode(raw.get("visual_mode"))
+    if mood:
+        out["visual_mode"] = mood
     strokes_raw = raw.get("vibe_strokes")
     strokes: list[str] = []
     if isinstance(strokes_raw, list):
@@ -1007,6 +1019,11 @@ def day_story_to_today_contract_v1(
         ),
         "trace": trace,
     }
+    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
+
+    mood = normalize_visual_mode(story.get("visual_mode"))
+    if mood and not unavailable:
+        day_story_out["visual_mode"] = mood
     progress_out = dict(progress) if isinstance(progress, dict) else {}
     if trace:
         progress_out.setdefault("story_confidence", trace.get("confidence"))

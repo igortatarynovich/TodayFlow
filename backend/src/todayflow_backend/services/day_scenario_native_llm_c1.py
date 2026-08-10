@@ -282,8 +282,21 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
     "affirmation_tension": {"scene_id": "...", "trap": "...", "text": "..."},
     "humor_setup": {"scene_id": "...", "text": "..."}
   },
+  "visual_mode": "grounded|flow|radiance|momentum|clarity|tension|renewal|depth",
   "generation_notes": "только внутренние заметки; не для UI"
 }
+
+НАСТРОЕНИЕ ДНЯ (visual_mode) — обязательно, ровно один id из закрытого набора:
+это настроение/атмосфера дня для UI (не цвет, не CSS, не свободная строка).
+Выбери по фактам + сюжету conflict/scenes, не по одному ярлыку «Луна в X».
+- grounded — устойчивость, практика, медленный надёжный темп
+- flow — мягкость, восприимчивость, эмоциональная текучесть
+- radiance — открытость, проявление, светлая уверенность
+- momentum — импульс, скорость, решительное движение вперёд
+- clarity — ясность, порядок, анализ и собранность
+- tension — острота, перегруз, нужна защита внимания
+- renewal — облегчение, завершение цикла, пространство для нового
+- depth — тишина, уединение, погружение без срочности
 
 Правила (жёстко):
 - одна история, один conflict;
@@ -642,6 +655,7 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
             if humor.get("text")
             else None,
         },
+        "visual_mode": _clip(src.get("visual_mode"), 32).lower().replace("-", "_").replace(" ", "_"),
         "generation_notes": _clip(src.get("generation_notes"), 400),
     }
 
@@ -941,7 +955,11 @@ def native_llm_to_day_scenario_v1(
     # Attach LLM prop_material as diagnostics only (not SoT for final color)
     props["prop_material_llm"] = norm.get("prop_material")
 
-    return {
+    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
+
+    visual_mode = normalize_visual_mode(norm.get("visual_mode"))
+
+    out: dict[str, Any] = {
         "contract_version": DAY_SCENARIO_V1_CONTRACT,
         "version": DAY_SCENARIO_V1_VERSION,
         "runtime_sot": True,
@@ -959,6 +977,9 @@ def native_llm_to_day_scenario_v1(
         },
         "generation_notes": norm.get("generation_notes"),
     }
+    if visual_mode:
+        out["visual_mode"] = visual_mode
+    return out
 
 
 def mark_deterministic_generation_source(scenario: dict[str, Any] | None) -> dict[str, Any]:

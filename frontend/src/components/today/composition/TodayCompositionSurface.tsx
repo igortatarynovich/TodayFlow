@@ -12,6 +12,7 @@ import { TodayPersonalizedProductSection } from "@/components/today/composition/
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayDayBrief } from "@/components/today/composition/TodayDayBrief";
 import { buildTodayDayBriefModel } from "@/lib/todayDayBrief";
+import { TodayGlanceTimelineSlot } from "@/components/today/composition/TodayWave2Slots";
 import { buildTodayInstructionBridgeModel } from "@/lib/todayInstructionBridge";
 import { TodayDayTasksBlock } from "@/components/today/composition/TodayDayTasksBlock";
 import { buildTodayDayTasks } from "@/lib/todayDayTasks";
@@ -2087,20 +2088,28 @@ export function TodayCompositionSurface(props: Props) {
       />
     ) : null;
 
+  const dayBriefModel = buildTodayDayBriefModel({
+    contract: props.contract,
+    dateLabel: props.displayDate,
+    salutation: story.greeting.salutation,
+    headline: story.greeting.line,
+    welcomeGlass,
+    energyLine: energyLineDisplay,
+    energyCause: energyCauseDisplay,
+    loading: themeLoading,
+  });
+
   const dayStoryBrief = (
     <TodayDayBrief
       loading={themeLoading}
-      model={buildTodayDayBriefModel({
-        contract: props.contract,
-        dateLabel: props.displayDate,
-        salutation: story.greeting.salutation,
-        headline: story.greeting.line,
-        welcomeGlass,
-        energyLine: energyLineDisplay,
-        energyCause: energyCauseDisplay,
-        loading: themeLoading,
-      })}
+      pane="atmosphere"
+      model={dayBriefModel}
+      timeline={<TodayGlanceTimelineSlot dateISO={dateISO} variant="story" />}
     />
+  );
+
+  const dayOrientationBrief = (
+    <TodayDayBrief loading={themeLoading} pane="orientation" model={dayBriefModel} />
   );
 
   const dayTasksModel = buildTodayDayTasks({
@@ -2167,6 +2176,7 @@ export function TodayCompositionSurface(props: Props) {
       dateISO={dateISO}
       dateLabel={props.displayDate}
       dayBody={dayStoryBrief}
+      orientationBody={dayOrientationBrief}
       showSymbols={showSymbolsAct}
       numberBody={numberPickExperience}
       cardBody={tarotPickExperience}

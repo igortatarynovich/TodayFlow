@@ -21,7 +21,7 @@ _FIXTURES = Path(__file__).resolve().parent / "fixtures" / "today_contract_v1"
 
 def test_welcome_glass_mood_tags_from_visual_mode():
     glass = build_welcome_glass_v1(visual_mode="flow")
-    assert glass["mood_tags"] == ["Мягкая", "Текучая"]
+    assert glass["mood_tags"] == ["Мягкая чувствительность", "Идти по течению"]
     assert glass["reason"] is None
     assert glass["good_for"] == []
 
@@ -33,7 +33,7 @@ def test_welcome_glass_reason_lunar_no_invent():
         lunar_themes="Время уточнять один шаг. Остальное позже.",
     )
     assert glass["reason"] == "Растущая луна — Время уточнять один шаг."
-    assert glass["mood_tags"] == ["Ясная", "Собранная"]
+    assert glass["mood_tags"] == ["Ясный ум", "Порядок в делах"]
 
 
 def test_welcome_glass_good_for_from_do_short_only():
@@ -110,7 +110,7 @@ def test_attach_nests_on_contract_dict():
         },
     }
     out = attach_b1_nests_to_contract(contract, target_date=date(2026, 8, 9))
-    assert out["welcome_glass"]["mood_tags"] == ["Светлая", "Открытая"]
+    assert out["welcome_glass"]["mood_tags"] == ["Проявить себя", "Открытый контакт"]
     assert out["welcome_glass"]["reason"]
     assert out["welcome_glass"]["good_for"] == ["Шаг", "Пауза"]
     assert out["color_guide"]["name"] == "Изумрудный"

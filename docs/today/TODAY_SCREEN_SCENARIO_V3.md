@@ -1,15 +1,18 @@
 # Today — сценарий страницы (v3.4 · шесть блоков)
 
 **Status:** ACTIVE · **Updated 2026-08-10**  
-**Prior:** v3.3 handoff 12-step (2026-08-08) · v3.2 story-deck · v3.1 content jobs  
+**Prior:** v3.4 six blocks · v3.3 handoff 12-step (2026-08-08) · v3.2 story-deck · v3.1 content jobs  
 
-## Presentation SoT — шесть блоков (LOCKED)
+## Presentation SoT — шесть блоков (LOCKED) · Block 1 = 2 кадра
 
 Продуктовая нарезка Today. **Не расширять** без явного решения owner.  
 12-step handoff v3.3 = **deprecated** как presentation SoT (слишком много кадров = suite, не день).
 
 ```text
-1. День          — общий тренд: вайб · энергия · сферы/акценты · почему так · ждать · ловушка · ориентир‖осторожность (цвет, без ярлыков «делать/не делать»)
+1. День          — два кадра:
+                   (a) Атмосфера: дата · приветствие · строка атмосферы · pills · note · чего ожидать · поток/timeline
+                   (b) Ориентир: ловушка · шаги (do/avoid без ярлыков «делать/не делать») · энергия (+ лунный cause)
+                   Не выделять отдельный «вайб» — headline = атмосфера. Без дубля expect на обоих кадрах.
 2. Ритуалы       — число · карта (персональный вход)
 3. Инструкция    — персональная инструкция на день (мне)
 4. Цвет          — цвет дня
@@ -32,7 +35,7 @@
 
 | # | Польза (зачем открыл) | Scan / layout |
 |---|----------------------|---------------|
-| 1 | Снять тревогу «со мной всё ок / сегодня такой день» | **3 сек:** вайб → короткий why → **контраст Ловушка ‖ ориентир/осторожность (цвет, без «делать/не делать»)**; expect/энергия — вторичны |
+| 1 | Снять тревогу «со мной всё ок / сегодня такой день» | **Кадр a:** атмосфера → pills → note → expect → timeline. **Кадр b:** ловушка → шаги → энергия. Без дубля expect. |
 | 2 | Внешнее → внутреннее; момент «здесь» | Число + карта на **одном** кадре |
 | 3 | Мост тренд × личная карта | 2–3 предложения; полярность цветом (без ярлыков Prioritize/Avoid) |
 | 4 | Визуальный якорь дня | Цвет + одна строка «зачем» |
@@ -46,14 +49,15 @@
 
 | # | Блок | ScreenFlow id | Что показывает | Откуда смысл (houses / nests) |
 |---|------|---------------|----------------|-------------------------------|
-| 1 | День | `day` | дата · вайб/headline · why · энергия · expect · trap · do/avoid · (опц.) timeline/сферы-акценты | day_story · welcome_glass · glance energy/timeline · morning celestial |
+| 1a | День · атмосфера | `day` | дата · приветствие · строка атмосферы · pills · note · expect · timeline | day_story · welcome_glass · glance timeline · morning celestial |
+| 1b | День · ориентир | `orientation` | trap · do/avoid · энергия (+ cause) | day_story · chorus energy |
 | 2 | Ритуалы | `rituals` | число + карта (если symbols) | Symbols·A |
 | 3 | Инструкция | `instruction` | персональный prioritize / avoid (+ deepen опц.) | Glance Daily Focus · depth_layer |
 | 4 | Цвет | `color` | color guide | color_guide / Move color |
 | 5 | Задания | `tasks` | **≤2** выдачи «на сегодня» + блок «каждый день» (streaks); empty = честный omit; не catalog shop | practice gift · affirmation · `practice_recommendation` · `today_progress` |
 | 6 | Петля | `loop` | обещание → close / evening | Move promise · Response · evening |
 
-Без symbols: блок 2 omit → **5** шагов.  
+Без symbols: блок 2 omit → **6** шагов (day+orientation+…). С symbols → **7**.  
 Шаг 0 (`day`) может быть без chrome dots; дальше — ScreenFlow dots + swipe.
 
 ### Deprecated (не возвращать без решения)
@@ -66,6 +70,15 @@
 | Focus отдельно от «инструкции» | = блок 3 |
 | Recap | Лишний; петля = promise+close |
 | 12 swipe-шагов | Распыляет день |
+
+### Architecture impact (2026-08-10 — day atmosphere + orientation frames)
+
+- **SoT before:** Block 1 = one frame (vibe + trap‖cues + expect/energy stacked; narrow 22rem columns).
+- **SoT after:** Block 1 = **two frames** — `day` (atmosphere · expect · timeline) → `orientation` (trap · cues · energy); headline = atmosphere (no «вайб» label); mood pills = concrete cues from visual_mode; wider prose column.
+- **Public contract changed?** no
+- **Migration required?** yes FE step indices / deep-links (+1 after day)
+- **Canon updated?** yes — this file
+- **Backward compatible?** yes API; old deep-links remap best-effort
 
 ### Architecture impact (2026-08-10 — six blocks)
 

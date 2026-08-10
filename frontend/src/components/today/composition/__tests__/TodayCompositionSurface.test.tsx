@@ -127,7 +127,7 @@ describe("TodayCompositionSurface", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
     expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
-    expect(screen.getByTestId("today-day-brief")).toBeInTheDocument();
+    expect(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-brief")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-number")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-card")).toBeInTheDocument();
     expect(screen.getByTestId("ritual-tarot-pick-grid")).toBeInTheDocument();
@@ -229,8 +229,9 @@ describe("TodayCompositionSurface", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
     await user.click(within(screen.getByTestId("today-frame-day")).getByTestId("today-story-next-anchor"));
-    // Six blocks: rituals is step 1 (first chrome dot when day is 0).
-    const ritualsDot = screen.getByTestId("screen-flow-dot-1");
+    expect(screen.getByTestId("today-frame-orientation")).toBeInTheDocument();
+    // Block 1b then rituals (chrome dots start after day).
+    const ritualsDot = screen.getByTestId("screen-flow-dot-2");
     await user.click(ritualsDot);
     expect(screen.getByTestId("today-frame-rituals")).toBeInTheDocument();
     expect(screen.getByTestId("ritual-tarot-pick-grid")).toBeInTheDocument();
@@ -277,14 +278,21 @@ describe("TodayCompositionSurface", () => {
     );
 
     expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
-    // Six blocks v3.4: day · rituals · instruction · color · tasks · loop
+    // v3.4.1: day · orientation · rituals · instruction · color · tasks · loop
     expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
-    expect(screen.getByTestId("today-day-brief")).toBeInTheDocument();
+    expect(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-brief")).toHaveAttribute(
+      "data-pane",
+      "atmosphere",
+    );
+    expect(within(screen.getByTestId("today-frame-orientation")).getByTestId("today-day-brief")).toHaveAttribute(
+      "data-pane",
+      "orientation",
+    );
     expect(screen.getByTestId("today-frame-rituals")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-number")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-card")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-instruction")).toBeInTheDocument();
-    expect(screen.getByTestId("today-composition-surface").querySelectorAll("[data-screen-flow-step]").length).toBe(6);
+    expect(screen.getByTestId("today-composition-surface").querySelectorAll("[data-screen-flow-step]").length).toBe(7);
   });
 
   it("shows opened card and number interpretation after ritual", () => {
@@ -405,7 +413,7 @@ describe("TodayCompositionSurface", () => {
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
     await user.click(within(screen.getByTestId("today-frame-day")).getByTestId("today-story-next-anchor"));
-    const tasksDot = screen.getByTestId("screen-flow-dot-4");
+    const tasksDot = screen.getByTestId("screen-flow-dot-5");
     await user.click(tasksDot);
     expect(screen.getByTestId("today-frame-tasks")).toBeInTheDocument();
   });

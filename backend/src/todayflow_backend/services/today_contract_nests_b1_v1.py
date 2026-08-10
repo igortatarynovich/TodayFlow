@@ -18,15 +18,16 @@ from todayflow_backend.db.models import User
 TODAY_PROGRESS_WINDOW_DAYS = 7
 
 # Mirror FE buildHandoffWelcomeGlass VISUAL_MOOD_PILLS (todayHandoffWelcome.ts).
+# Concrete cues — not abstract adjectives.
 VISUAL_MOOD_TAGS: dict[str, tuple[str, str]] = {
-    "grounded": ("Спокойная", "Устойчивая"),
-    "flow": ("Мягкая", "Текучая"),
-    "radiance": ("Светлая", "Открытая"),
-    "momentum": ("Живая", "Собранная"),
-    "clarity": ("Ясная", "Собранная"),
-    "tension": ("Острая", "Внимательная"),
-    "renewal": ("Свежая", "Мягкая"),
-    "depth": ("Глубокая", "Тихая"),
+    "grounded": ("Опора в теле", "Медленный надёжный темп"),
+    "flow": ("Мягкая чувствительность", "Идти по течению"),
+    "radiance": ("Проявить себя", "Открытый контакт"),
+    "momentum": ("Импульс вперёд", "Решительный шаг"),
+    "clarity": ("Ясный ум", "Порядок в делах"),
+    "tension": ("Острое внимание", "Защитить фокус"),
+    "renewal": ("Сбросить лишнее", "Место для нового"),
+    "depth": ("Тишина внутри", "Без срочных решений"),
 }
 
 KIND_LABEL_RU: dict[str, str] = {

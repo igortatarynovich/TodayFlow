@@ -91,6 +91,15 @@
   color: var(--tf-ink, #2a2520);
 }
 
+.slotStackWide {
+  width: min(100%, 36rem);
+  max-width: 36rem;
+}
+
+.slotStackWide .slotBody {
+  align-items: stretch;
+}
+
 .slotEyebrow {
   margin: 0;
   font-size: var(--tf-type-label, 0.72rem);

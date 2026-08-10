@@ -14,7 +14,7 @@ const baseContract: TodayContractV1 = {
 };
 
 describe("buildTodayDayBriefModel", () => {
-  it("assembles ambassador brief from day_story without inventing", () => {
+  it("assembles atmosphere + orientation fields without inventing", () => {
     const model = buildTodayDayBriefModel({
       contract: {
         ...baseContract,
@@ -28,6 +28,9 @@ describe("buildTodayDayBriefModel", () => {
           avoid: ["Не лезть на рожон"],
           vibe_closing: "Спокойная уверенность и глубокий фокус.",
           day_scenario: {
+            conflict: {
+              why_arose: "Серп гаснет — день просит меньше входящего.",
+            },
             scenes: [
               {
                 scene_id: "s1",
@@ -49,7 +52,7 @@ describe("buildTodayDayBriefModel", () => {
       salutation: "Доброе утро",
       headline: null,
       welcomeGlass: {
-        moodPills: ["спокойствие"],
+        moodPills: ["Ясный ум", "Порядок в делах"],
         reasonLine: null,
         activityTags: ["подготовка"],
       },
@@ -57,18 +60,20 @@ describe("buildTodayDayBriefModel", () => {
       energyCause: "Трин Луны и Плутона",
     });
 
+    expect(model.atmosphereLine).toBe("Стратегическая пауза");
     expect(model.vibe).toBe("Стратегическая пауза");
-    expect(model.why).toContain("Луна в Раке");
+    expect(model.atmosphereNote).toContain("Серп гаснет");
     expect(model.expect).toContain("Обострённая интуиция");
     expect(model.trap).toContain("Поиск подвоха");
     expect(model.doItems[0]).toContain("Доверять");
     expect(model.avoidItems[0]).toContain("Не лезть");
+    expect(model.moodPills).toEqual(["Ясный ум", "Порядок в делах"]);
     expect(model.accents).toEqual(["Работа"]);
-    expect(model.vibeClosing).toContain("Спокойная уверенность");
+    expect(model.vibeClosing).toBeNull();
     expect(model.activityTags).toEqual(["подготовка"]);
   });
 
-  it("omits empty sections and does not duplicate vibe into closing", () => {
+  it("omits empty sections and does not duplicate atmosphere into expect note", () => {
     const model = buildTodayDayBriefModel({
       contract: {
         ...baseContract,
@@ -76,18 +81,24 @@ describe("buildTodayDayBriefModel", () => {
           contract_version: "day_story_v1",
           theme: "Один тон",
           story: "Один тон",
+          expect: "Один тон",
         },
       },
       dateLabel: "10 августа",
       salutation: "Привет",
+      welcomeGlass: {
+        moodPills: [],
+        reasonLine: "Один тон",
+        activityTags: [],
+      },
     });
-    expect(model.vibe).toBe("Один тон");
-    expect(model.why).toBeNull();
-    expect(model.expect).toBeNull();
+    expect(model.atmosphereLine).toBe("Один тон");
+    expect(model.atmosphereNote).toBeNull();
+    expect(model.expect).toBe("Один тон");
     expect(model.vibeClosing).toBeNull();
   });
 
-  it("rejects kitchen profection dump for why and prefers why_arose", () => {
+  it("rejects kitchen profection dump for atmosphere note", () => {
     const dump =
       "Ещё активных личных транзитов: 2. Профекция года (возраст 36): 1-й дом, " +
       "управитель Сатурн. Секундарные прогрессии: прогресс. Солнце 1.1°. Solar return 2026.";
@@ -111,17 +122,16 @@ describe("buildTodayDayBriefModel", () => {
       dateLabel: "10 августа",
       salutation: "Добрый день",
     });
-    expect(model.why).toContain("Серп Луны");
-    expect(model.why).not.toMatch(/профекц|Solar return/i);
+    expect(model.atmosphereNote).toContain("Серп Луны");
+    expect(model.atmosphereNote).not.toMatch(/профекц|Solar return/i);
     expect(model.vibeClosing).toBeNull();
   });
 
-  it("clips long expect for compass scan", () => {
+  it("keeps expect readable (not ultra-short compass clip)", () => {
     const long =
       "Утром тело подаёт первые сигналы — чуть тяжелее оторваться. " +
       "Это не сон, это фаза: серп гаснет. " +
-      "Если позволить себе лишние десять минут на ощутимые вещи, тело отдаст курс. " +
-      "И ещё один абзац про почту и пять писем, который не должен попасть в компас целиком.";
+      "Если позволить себе лишние десять минут на ощутимые вещи, тело отдаст курс.";
     const model = buildTodayDayBriefModel({
       contract: {
         ...baseContract,
@@ -136,7 +146,7 @@ describe("buildTodayDayBriefModel", () => {
       dateLabel: "10 августа",
       salutation: "Добрый день",
     });
-    expect(model.expect!.length).toBeLessThan(long.length);
     expect(model.expect).toContain("первые сигналы");
+    expect(model.expect).toContain("серп гаснет");
   });
 });

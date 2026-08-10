@@ -435,15 +435,16 @@ TODAYFLOW_FOUNDATION_UI
 **Миграция consumers (2026-08-04):** отдельный «Task 1.5» four-screen pass **не делаем**. Day-atmosphere decorative wiring входит в каждый DsCard-wave PR. Пилот — Weekly + Challenges; дальше Today / Practices / Compatibility / Onboarding / Tarot / Landing / Profile повторяют тот же паттерн (§17).
 4. **Motion** — только атмосферный: цикл 15–40 сек, смещение на несколько px, никаких быстрых бесконечных частиц, обязателен `prefers-reduced-motion`, останавливается или упрощается вне активного экрана.
 
-### 11.5 Как движок выбирает режим — приоритет
+### 11.5 Как выбирается режим — приоритет
 
-1. Общий эмоциональный сюжет дня.
-2. Уровень интенсивности.
-3. Доминирующее качество/элемент дня.
-4. Время суток (день ↔ Day-phase, см. §11.1).
-5. Персональная поправка пользователя (аналог pin в Mood).
+**SoT (2026-08-10):** настроение дня = закрытый `visual_mode` из восьми режимов §11.3.
 
-Движок **не** выбирает режим только по положению Луны — иначе оформление слишком примитивно отражает содержание дня.
+1. **LLM** выбирает ровно один id из набора по фактам дня + сюжету (native scenario C1 / day_story). Не цвета, не CSS, не свободная строка.
+2. Если id отсутствует или вне enum → **fallback**: детерминированный map `thesis.mode` → `visual_mode` (`day_atmosphere_v1`).
+3. Время суток может смягчить fallback (evening/night + stability/recovery → `depth`).
+4. Персональная поправка пользователя (pin) побеждает на клиенте (`resolveDayAtmosphere`).
+
+Движок **не** выбирает режим только по положению Луны и **не** строит отдельную «научную» геометрию неба для mood. Intensity / warmth / contrast следуют за resolved `visual_mode`.
 
 ### 11.6 Контракт движка (типы — §12)
 
@@ -564,7 +565,7 @@ interface DayAtmosphereContract {
 |------|------|
 | `frontend/src/styles/day-atmosphere.css` | Статическая light-палитра на 8 `html[data-day-mode="…"]`, значения = `DAY_MODE_BASE_TOKENS` из §12.3. `:root` — нейтральный fallback до гидратации. `prefers-reduced-motion` зануляет motion-токены через `!important` — побеждает даже инлайн-стили от моста. Product shell читает `--day-bg-*` / decor. |
 | `frontend/src/components/DayAtmosphereBridge.tsx` | Мост: `data-day-mode` + инлайн `--day-*` на `documentElement`. Читает pin + `day_atmosphere` из Today payload; pin побеждает. Скоуп — `isAppProductRoute`. |
-| `backend/.../day_atmosphere_v1.py` | Детерминированный mapper `thesis.mode` → closed `DayAtmosphereContract` (без LLM-цветов); nest на today wire. |
+| `backend/.../day_atmosphere_v1.py` | Closed `DayAtmosphereContract`: LLM `visual_mode` (enum) → nest; invalid/missing → `thesis.mode` map fallback. Never LLM colors/CSS. |
 | `frontend/src/components/DayAtmosphereDecor.tsx` | Decor layer — CSS geometry by `data-day-decor` (no photo). |
 | `frontend/src/components/__tests__/DayAtmosphereBridge.test.tsx` | Bridge + engine nest + pin. |
 

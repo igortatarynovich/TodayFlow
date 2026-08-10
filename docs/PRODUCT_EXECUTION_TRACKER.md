@@ -4,6 +4,28 @@ Last updated: 2026-08-10
 Owner: Product + Engineering
 Status: Active working document
 
+**DONE (CODE, 2026-08-10):** **Today Block 1 = atmosphere + orientation** — page1: date/greeting/atmosphere line/pills/note/expect/timeline; page2: trap/cues/energy; meaningful mood pills; wider layout; no vibe label / no expect dupe. Canon: SCENARIO_V3.4.1.
+
+## Architecture impact — Today day frames (2026-08-10)
+
+- **SoT before:** Block 1 one cramped frame (vibe + trap‖cues + expect/energy).
+- **SoT after:** Block 1 two ScreenFlow frames (`day` → `orientation`); pills = concrete visual_mode cues; headline = atmosphere.
+- **Public contract changed?** no
+- **Migration required?** yes FE step indices (+1 after day)
+- **Canon updated?** yes — TODAY_SCREEN_SCENARIO_V3
+- **Backward compatible?** yes API
+
+**DONE (CODE, 2026-08-10):** **Day mood = LLM `visual_mode`** — closed 8-set (`DAY_VISUAL_MODES`); native C1 + day_story ask for id; invalid/missing → thesis.mode map fallback. Canon: FOUNDATION_UI §11.5.
+
+## Architecture impact — Day mood via LLM visual_mode (2026-08-10)
+
+- **SoT before:** `day_atmosphere.visual_mode` only from deterministic `thesis.mode` map.
+- **SoT after:** LLM picks `visual_mode` from closed 8 (grounded|flow|radiance|momentum|clarity|tension|renewal|depth) on native scenario / day_story; atmosphere nest prefers that id; thesis map = fallback. No sky-geometry engine.
+- **Public contract changed?** additive optional `day_story.visual_mode` / `day_scenario.visual_mode` (same enum as nest); `day_atmosphere` shape unchanged.
+- **Migration required?** no — cached stories without field keep thesis fallback until regenerate.
+- **Canon updated?** yes — FOUNDATION_UI §11.5 · §13.1
+- **Backward compatible?** yes
+
 **IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4+ useful compass)** — Blocks 1·3·5·6; do/avoid = color polarity (no «делать/не делать» labels). Pack editorial voice when generation slots stabilize.
 
 ## Architecture impact — Today six blocks (2026-08-10)

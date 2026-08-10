@@ -12,16 +12,16 @@ export type HandoffWelcomeGlass = {
   activityTags: string[];
 };
 
-/** Presentation chips keyed by Day Atmosphere visual_mode (already SoT for the day). */
+/** Presentation chips keyed by Day Atmosphere visual_mode — concrete cues, not abstract adjectives. */
 const VISUAL_MOOD_PILLS: Record<DayVisualMode, [string, string]> = {
-  grounded: ["Спокойная", "Устойчивая"],
-  flow: ["Мягкая", "Текучая"],
-  radiance: ["Светлая", "Открытая"],
-  momentum: ["Живая", "Собранная"],
-  clarity: ["Ясная", "Собранная"],
-  tension: ["Острая", "Внимательная"],
-  renewal: ["Свежая", "Мягкая"],
-  depth: ["Глубокая", "Тихая"],
+  grounded: ["Опора в теле", "Медленный надёжный темп"],
+  flow: ["Мягкая чувствительность", "Идти по течению"],
+  radiance: ["Проявить себя", "Открытый контакт"],
+  momentum: ["Импульс вперёд", "Решительный шаг"],
+  clarity: ["Ясный ум", "Порядок в делах"],
+  tension: ["Острое внимание", "Защитить фокус"],
+  renewal: ["Сбросить лишнее", "Место для нового"],
+  depth: ["Тишина внутри", "Без срочных решений"],
 };
 
 function clean(text: string | null | undefined): string {

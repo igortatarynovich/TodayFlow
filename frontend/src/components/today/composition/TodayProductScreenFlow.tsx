@@ -18,13 +18,14 @@ import type { TapResponseCode } from "@/lib/todayTapWidget";
 import { fetchDayFacts } from "@/lib/todayDayFacts";
 
 /**
- * Today presentation v3.4 — six blocks (LOCKED).
- * День → Ритуалы → Инструкция → Цвет → Задания → Петля
+ * Today presentation v3.4.1 — six product blocks; Block 1 = two frames.
+ * День (атмосфера) → Ориентир → Ритуалы → Инструкция → Цвет → Задания → Петля
  * Canon: docs/today/TODAY_SCREEN_SCENARIO_V3.md
  */
 
 export type TodaySixBlockIndices = {
   day: number;
+  orientation: number;
   rituals: number;
   instruction: number;
   color: number;
@@ -52,8 +53,10 @@ export type TodayProductScreenFlowProps = {
   dateLabel: string;
   showSymbols: boolean;
   showPersonalized: boolean;
-  /** Block 1 — trend ambassador brief */
+  /** Block 1a — atmosphere */
   dayBody?: ReactNode;
+  /** Block 1b — trap / cues / energy */
+  orientationBody?: ReactNode;
   numberBody?: ReactNode;
   cardBody?: ReactNode;
   /** @deprecated */
@@ -90,40 +93,42 @@ export function todayHandoffIndices(showSymbols: boolean): TodaySixBlockIndices 
   if (showSymbols) {
     return {
       day: 0,
-      rituals: 1,
-      instruction: 2,
-      color: 3,
-      tasks: 4,
-      loop: 5,
+      orientation: 1,
+      rituals: 2,
+      instruction: 3,
+      color: 4,
+      tasks: 5,
+      loop: 6,
       welcome: 0,
-      number: 1,
-      card: 1,
-      focus: 2,
-      practice: 4,
-      close: 5,
+      number: 2,
+      card: 2,
+      focus: 3,
+      practice: 5,
+      close: 6,
       priority: -1,
-      promise: 5,
-      makeYours: 4,
+      promise: 6,
+      makeYours: 5,
       dayFlow: 0,
       recap: -1,
     };
   }
   return {
     day: 0,
+    orientation: 1,
     rituals: -1,
-    instruction: 1,
-    color: 2,
-    tasks: 3,
-    loop: 4,
+    instruction: 2,
+    color: 3,
+    tasks: 4,
+    loop: 5,
     welcome: 0,
     number: -1,
     card: -1,
-    focus: 1,
-    practice: 3,
-    close: 4,
+    focus: 2,
+    practice: 4,
+    close: 5,
     priority: -1,
-    promise: 4,
-    makeYours: 3,
+    promise: 5,
+    makeYours: 4,
     dayFlow: 0,
     recap: -1,
   };
@@ -134,7 +139,7 @@ export function todayScreenFlowStepCount(opts: {
   showPersonalized: boolean;
 }): number {
   if (!opts.showPersonalized) return 1;
-  return opts.showSymbols ? 6 : 5;
+  return opts.showSymbols ? 7 : 6;
 }
 
 export function todayScreenFlowReadingIndex(showSymbols: boolean): number {
@@ -169,6 +174,7 @@ function SlotStep({
   nextTitle,
   nextHint,
   onNext,
+  wide = false,
 }: {
   testId: string;
   eyebrow?: string;
@@ -177,10 +183,12 @@ function SlotStep({
   nextTitle: string;
   nextHint?: string;
   onNext: () => void;
+  /** Wider readable column for day / orientation prose */
+  wide?: boolean;
 }) {
   return (
     <div className={flowStyles.storyFrame} data-testid={testId} data-story-scroll="pane">
-      <div className={flowStyles.slotStack}>
+      <div className={joinClass(flowStyles.slotStack, wide ? flowStyles.slotStackWide : null)}>
         {eyebrow ? <p className={flowStyles.slotEyebrow}>{eyebrow}</p> : null}
         {title ? <h2 className={flowStyles.slotTitle}>{title}</h2> : null}
         <div className={flowStyles.slotBody}>{children}</div>
@@ -198,6 +206,7 @@ export function TodayProductScreenFlow({
   cardBody = null,
   showPersonalized,
   dayBody = null,
+  orientationBody = null,
   instructionBody = null,
   focusBody = null,
   colorBody = null,
@@ -229,8 +238,8 @@ export function TodayProductScreenFlow({
   const instruction = instructionBody ?? focusBody;
   const numberSlot = numberBody ?? (showSymbols ? symbolsBody : null);
   const cardSlot = cardBody;
-  // Dots after day: rituals? + instruction + color + tasks + loop
-  const dotClusters = showSymbols ? [1, 3, 1] : [3, 1];
+  // Dots after day: orientation + rituals? + instruction + color + tasks + loop
+  const dotClusters = showSymbols ? [1, 1, 3, 1] : [1, 3, 1];
 
   useEffect(() => {
     if (!dateISO) return;
@@ -239,7 +248,8 @@ export function TodayProductScreenFlow({
     });
   }, [dateISO]);
 
-  const afterDay = showSymbols ? idx.rituals : idx.instruction;
+  const afterDay = idx.orientation;
+  const afterOrientation = showSymbols ? idx.rituals : idx.instruction;
   const afterRituals = idx.instruction;
   const afterInstruction = idx.color;
   const afterColor = idx.tasks;
@@ -265,8 +275,11 @@ export function TodayProductScreenFlow({
           <SlotStep
             testId="today-frame-day"
             eyebrow={copy.storyNext.day}
-            nextTitle={showSymbols ? copy.storyNext.rituals : copy.storyNext.instruction}
-            nextHint={showSymbols ? copy.storyNext.ritualsHint : copy.storyNext.instructionHint}
+            wide
+            nextTitle={
+              showPersonalized ? copy.storyNext.orientation : copy.storyNext.further
+            }
+            nextHint={showPersonalized ? copy.storyNext.orientationHint : undefined}
             onNext={() => go(showPersonalized ? afterDay : 0)}
           >
             {dayBody}
@@ -275,6 +288,18 @@ export function TodayProductScreenFlow({
 
         {showPersonalized ? (
           <>
+            <ScreenFlowStep id="orientation" label={copy.storyNext.orientation} scrollable>
+              <SlotStep
+                testId="today-frame-orientation"
+                wide
+                nextTitle={showSymbols ? copy.storyNext.rituals : copy.storyNext.instruction}
+                nextHint={showSymbols ? copy.storyNext.ritualsHint : copy.storyNext.instructionHint}
+                onNext={() => go(afterOrientation)}
+              >
+                {orientationBody}
+              </SlotStep>
+            </ScreenFlowStep>
+
             {showSymbols ? (
               <ScreenFlowStep id="rituals" label={copy.storyNext.rituals} scrollable>
                 <div

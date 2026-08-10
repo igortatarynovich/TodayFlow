@@ -1,14 +1,19 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: 1.05rem;
-  padding-bottom: 0.5rem;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: min(100%, 36rem);
+  margin-inline: auto;
+  padding-bottom: 0.25rem;
+  text-align: left;
+  box-sizing: border-box;
 }
 
 .hero {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .date {
@@ -24,84 +29,99 @@
   opacity: 0.8;
 }
 
-.vibe {
-  margin: 0.1rem 0 0;
+.atmosphereLine {
+  margin: 0.15rem 0 0;
   font-family: var(--tf-font-display, inherit);
-  font-size: clamp(1.45rem, 4.4vw, 1.95rem);
+  font-size: clamp(1.4rem, 4.2vw, 1.9rem);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.25;
+  max-width: 34rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
 .moodRow,
-.accentRow,
 .list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 0.55rem;
+  gap: 0.45rem 0.55rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.moodRow li,
-.accentRow li {
-  padding: 0.2rem 0.55rem;
-  border: 1px solid color-mix(in srgb, var(--day-ink, currentColor) 22%, transparent);
+.moodRow li {
+  padding: 0.28rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--day-ink, currentColor) 20%, transparent);
   border-radius: 999px;
-  font-size: var(--tf-type-caption, 0.75rem);
+  font-size: var(--tf-type-caption, 0.8rem);
+  line-height: 1.3;
+  background: color-mix(in srgb, var(--day-surface-tint, transparent) 55%, transparent);
 }
 
-.accentRow li {
-  border-color: color-mix(in srgb, var(--day-accent, var(--day-ink, currentColor)) 40%, transparent);
-  opacity: 0.92;
-}
-
-.why {
+.blockLabel {
   margin: 0;
+  font-size: var(--tf-type-caption, 0.72rem);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.58;
 }
 
-.why .blockBody {
+.blockBody {
+  margin: 0;
   font-size: var(--tf-type-body, 1rem);
+  line-height: 1.55;
+}
+
+.blockBodyMuted {
+  margin: 0;
+  font-size: var(--tf-type-caption, 0.9rem);
   line-height: 1.5;
+  opacity: 0.8;
 }
 
-/* Center of gravity: trap ‖ instruction — 3-second compass */
-.compass {
-  display: grid;
-  grid-template-columns: 1fr;
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.timelineBody {
+  min-width: 0;
+  width: 100%;
+}
+
+/* Orientation — single column, full readable width */
+.trapBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.95rem 1.05rem;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--day-ink, currentColor) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--day-ink, currentColor) 16%, transparent);
+}
+
+.cuesStack {
+  display: flex;
+  flex-direction: column;
   gap: 0.65rem;
+  min-width: 0;
 }
 
-@media (min-width: 640px) {
-  .compass {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    align-items: stretch;
-  }
-}
-
-.compassTrap,
 .cueDo,
 .cueAvoid {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  padding: 0.85rem 0.95rem;
-  border-radius: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.85rem;
   border: 1px solid transparent;
-}
-
-.compassTrap {
-  background: color-mix(in srgb, var(--day-ink, currentColor) 6%, transparent);
-  border-color: color-mix(in srgb, var(--day-ink, currentColor) 18%, transparent);
-}
-
-/* Polarity without «делать / не делать»: color + edge speak. */
-.compassCues {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-  min-width: 0;
 }
 
 .cueDo {
@@ -128,21 +148,22 @@
 
 .compassBody {
   margin: 0;
-  font-size: var(--tf-type-body, 0.95rem);
-  line-height: 1.45;
+  font-size: var(--tf-type-body, 1rem);
+  line-height: 1.5;
   font-weight: 500;
 }
 
 .list {
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.45rem;
 }
 
 .list li {
   margin: 0;
-  font-size: var(--tf-type-body, 0.95rem);
-  line-height: 1.45;
+  font-size: var(--tf-type-body, 0.98rem);
+  line-height: 1.5;
   font-weight: 500;
+  padding-left: 0.1rem;
 }
 
 .cueDo .list li::before {
@@ -150,10 +171,10 @@
   display: inline-block;
   width: 0.42rem;
   height: 0.42rem;
-  margin-right: 0.45rem;
+  margin-right: 0.5rem;
   border-radius: 50%;
   background: color-mix(in srgb, #2f5a40 78%, transparent);
-  vertical-align: 0.1em;
+  vertical-align: 0.15em;
 }
 
 .cueAvoid .list li::before {
@@ -161,35 +182,8 @@
   display: inline-block;
   width: 0.42rem;
   height: 0.42rem;
-  margin-right: 0.45rem;
+  margin-right: 0.5rem;
   border-radius: 50%;
   background: color-mix(in srgb, #7a342c 78%, transparent);
-  vertical-align: 0.1em;
-}
-
-.secondary {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.blockLabel {
-  margin: 0;
-  font-size: var(--tf-type-caption, 0.72rem);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  opacity: 0.58;
-}
-
-.blockBody {
-  margin: 0;
-  font-size: var(--tf-type-body, 0.98rem);
-  line-height: 1.5;
-}
-
-.blockBodyMuted {
-  margin: 0;
-  font-size: var(--tf-type-caption, 0.88rem);
-  line-height: 1.45;
-  opacity: 0.78;
+  vertical-align: 0.15em;
 }
