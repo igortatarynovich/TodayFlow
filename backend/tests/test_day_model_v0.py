@@ -5,6 +5,37 @@ from __future__ import annotations
 from todayflow_backend.services.day_model_v0 import build_day_model_v0
 
 
+def test_build_day_model_v0_empty_tension_when_aligned():
+    """Aligned sources must not emit kitchen meta as tension.summary."""
+    foundation = {"spine": {"day_axis": "День про завершение одной линии", "first_move": "Закрыть задачу"}}
+    out = build_day_model_v0(
+        foundation=foundation,
+        ritual={"mood": "спокойное"},
+        fusion_scores={"energy": 50},
+        intent_slice=None,
+        internal_profile=None,
+        locale="ru",
+    )
+    assert out["tension"]["summary"] == ""
+    assert out["gate"]["tension_defined"] is False
+    low = (out["tension"]["summary"] or "").lower()
+    assert "источники" not in low
+    assert "согласован" not in low
+
+
+def test_build_day_model_v0_en_empty_tension_when_aligned():
+    out = build_day_model_v0(
+        foundation={"spine": {"best_mode": "steady maintenance today"}},
+        ritual={"mood": "calm"},
+        fusion_scores={"energy": 50},
+        intent_slice=None,
+        internal_profile=None,
+        locale="en",
+    )
+    assert out["tension"]["summary"] == ""
+    assert "sources mostly align" not in (out["tension"]["summary"] or "").lower()
+
+
 def test_build_day_model_v0_direction_from_spine_axis_ru():
     foundation = {"spine": {"day_axis": "День про завершение одной линии", "first_move": "Закрыть задачу"}}
     ritual = {"mood": "спокойное", "numerology_value": "1"}

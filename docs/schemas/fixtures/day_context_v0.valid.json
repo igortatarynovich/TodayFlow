@@ -78,7 +78,7 @@
         "sources_blob": "Звезда | 3"
       },
       "vector": { "direction": "transition", "summary": "Держи одну ясную нить дня." },
-      "tension": { "summary": "Источники в основном согласованы.", "signals": ["aligned"] },
+      "tension": { "summary": "", "signals": ["aligned"] },
       "opportunity": { "summary": "Один ограниченный шаг сегодня.", "intent_echo": null },
       "risk": { "summary": "Параллельные «надо» вместо одной доведённой линии." },
       "tempo": { "label": "steady", "summary": "Ресурс 55/100 — темп «steady»." },

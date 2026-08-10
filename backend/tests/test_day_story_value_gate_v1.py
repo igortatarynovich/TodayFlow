@@ -67,3 +67,12 @@ def test_textbook_house_hidden_for_profile():
     text = "Первый дом отвечает за первое впечатление и то, как вы входите в мир."
     assert scrub_user_facing_text(text) is None
     assert scrub_user_facing_text(text, allow_textbook=True) is not None
+
+
+def test_scrubs_kitchen_tension_and_element_focus_catalog():
+    assert find_value_gate_hits("Источники в основном согласованы.")
+    assert scrub_user_facing_text("Источники в основном согласованы.") is None
+    assert scrub_user_facing_text("Мышление и ясные формулировки") is None
+    assert scrub_user_facing_text("Инициатива и действие") is None
+    assert scrub_user_facing_text("Структура и устойчивость") is None
+    assert scrub_user_facing_text("Эмпатия и внутренняя глубина") is None

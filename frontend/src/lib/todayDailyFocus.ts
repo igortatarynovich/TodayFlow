@@ -10,7 +10,11 @@ import {
   parseDayModelBriefFromGuide,
 } from "@/components/today/todayGuideActionable";
 import { buildTodayNarrativeV1 } from "@/lib/todayNarrativeFromContract";
-import { filterDailyFocusLines, isDailyFocusGuidanceLeak } from "@/lib/todayDailyFocusBoundary";
+import {
+  filterDailyFocusLines,
+  isDailyFocusKitchenLeak,
+  isDailyFocusReject,
+} from "@/lib/todayDailyFocusBoundary";
 
 export type DailyFocusModel = {
   dailyFocusId: string;
@@ -51,12 +55,10 @@ function descriptiveCandidatesFromGuide(payload: Record<string, unknown> | null)
   if (!payload) return [];
   const dayModel = parseDayModelBriefFromGuide(payload);
   const brief = parseDayEngineBriefFromGuide(payload);
+  // Never promote tension.summary (kitchen diagnostic) into Daily Focus.
   const fromModel = [
     ...(dayModel?.vectorSummary ? descriptiveSentences(dayModel.vectorSummary) : []),
     ...(dayModel?.oneFocus ? descriptiveSentences(dayModel.oneFocus) : []),
-    ...(dayModel?.tempoLabel && dayModel.tensionSummary
-      ? descriptiveSentences(dayModel.tensionSummary.split(";")[0])
-      : []),
   ];
   if (fromModel.length > 0) return fromModel;
 
@@ -90,16 +92,18 @@ function pickTitle(payload: Record<string, unknown> | null, contract: TodayContr
   }
 
   const headline = narrativeString(payload, "headline");
-  if (headline && !isDailyFocusGuidanceLeak(headline)) {
+  if (headline && !isDailyFocusReject(headline)) {
     return headline;
   }
 
   const subline = narrativeString(payload, "subline");
-  if (subline && !isDailyFocusGuidanceLeak(subline)) {
+  if (subline && !isDailyFocusReject(subline)) {
     return subline;
   }
 
-  return buildTodayNarrativeV1(contract).mainThought.headline || "О чём этот день";
+  const fallback = buildTodayNarrativeV1(contract).mainThought.headline || "";
+  if (fallback && !isDailyFocusReject(fallback)) return fallback;
+  return "";
 }
 
 function buildDailyFocusFromDayStory(contract: TodayContractV1): DailyFocusModel {
@@ -107,11 +111,18 @@ function buildDailyFocusFromDayStory(contract: TodayContractV1): DailyFocusModel
   const headline = dayStoryHeadline(contract);
   const direction = contract.day_story?.direction?.trim();
 
-  const titleCandidate = headline || paragraphs[0] || buildTodayNarrativeV1(contract).mainThought.headline;
-  const title =
-    titleCandidate.endsWith(".") || titleCandidate.endsWith("!") || titleCandidate.endsWith("?")
-      ? titleCandidate
-      : `${titleCandidate}.`;
+  const titleRaw =
+    (headline && !isDailyFocusReject(headline) ? headline : null) ||
+    (paragraphs[0] && !isDailyFocusReject(paragraphs[0]) ? paragraphs[0] : null) ||
+    (() => {
+      const h = buildTodayNarrativeV1(contract).mainThought.headline || "";
+      return h && !isDailyFocusReject(h) ? h : "";
+    })();
+  const title = !titleRaw
+    ? ""
+    : titleRaw.endsWith(".") || titleRaw.endsWith("!") || titleRaw.endsWith("?")
+      ? titleRaw
+      : `${titleRaw}.`;
 
   let lines = filterDailyFocusLines(
     paragraphs.filter((line) => line !== title.replace(/\.$/, "") && line !== title).slice(0, 2),
@@ -121,12 +132,9 @@ function buildDailyFocusFromDayStory(contract: TodayContractV1): DailyFocusModel
   }
   if (lines.length === 0 && contract.personal_growth?.development_point) {
     const dev = contract.personal_growth.development_point.trim();
-    if (dev && !isDailyFocusGuidanceLeak(dev)) {
+    if (dev && !isDailyFocusReject(dev)) {
       lines = filterDailyFocusLines([dev]);
     }
-  }
-  if (lines.length === 0) {
-    lines = ["Сегодня внимание смещается к одной понятной теме дня — без списка задач."];
   }
 
   return {
@@ -167,13 +175,9 @@ export function buildDailyFocusModel(
 
   if (lines.length === 0 && contract.personal_growth?.development_point) {
     const dev = contract.personal_growth.development_point.trim();
-    if (dev && !isDailyFocusGuidanceLeak(dev)) {
-      lines = [dev];
+    if (dev && !isDailyFocusReject(dev)) {
+      lines = filterDailyFocusLines([dev]);
     }
-  }
-
-  if (lines.length === 0) {
-    lines = ["Сегодня внимание смещается к одной понятной теме дня — без списка задач."];
   }
 
   return {
@@ -216,7 +220,9 @@ export type GlanceDailyFocusModel = {
 function cleanDirectionLine(raw: string | null | undefined, title: string): string | null {
   const text = (raw ?? "").replace(/\s+/g, " ").trim();
   if (!text || text.length < 8) return null;
+  if (isDailyFocusKitchenLeak(text)) return null;
   // day_story do/avoid/trap are intentional direction — not guide do_hint / avoid_hint.
+  // Kitchen/meta only here; keep intentional do/avoid even if imperative.
   const titleKey = title.replace(/[.!?]+$/u, "").trim().toLowerCase();
   if (titleKey && text.toLowerCase().startsWith(titleKey)) return null;
   if (titleKey && text.toLowerCase() === titleKey) return null;

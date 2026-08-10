@@ -40,6 +40,12 @@ SYSTEM_LEAK_PHRASES_RU: tuple[str, ...] = (
     "система знает",
     "недостаточно данных",
     "нам не хватает",
+    # Kitchen day_model / profile baseline catalogs — never ship as day_story Focus copy
+    "источники в основном согласованы",
+    "мышление и ясные формулировки",
+    "инициатива и действие",
+    "структура и устойчивость",
+    "эмпатия и внутренняя глубина",
 )
 
 # Textbook astrology without personal conclusion — for Profile house blurbs.

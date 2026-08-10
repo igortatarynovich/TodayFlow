@@ -1531,6 +1531,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-10 | Today / Focus | **Kill kitchen leaks in Фокус дня** | **LIVE (code→deploy)** | Stopped `element_focus` catalog + aligned-tension kitchen («Источники в основном согласованы») from Daily Focus. BE: empty tension when aligned; orchestrator `do_focus` not seeded from element; value-gate bans. FE: no tension candidate; kitchen reject; no canned filler. Empty omit wins.
 - 2026-08-04 | Design System | **Day shell chrome fix** | **DONE (LIVE)** | PR #14 merged · frontend rebuild. Day-mode = shell routes; evening phase gated; sidebar stretch.
 - 2026-08-05 | Design System | **Task 2.9b Compatibility result** | **IN PROGRESS (code)** | Exploration main/duals/tips/deep + funnel confidence/today/risk + analyze/signs personalized → `DsCallout`/`DsQuote`. Not zone DONE — 6-axis DoD + screenshots remain.
 - 2026-08-05 | Design System | **Task 2.9b Tarot result** | **DONE (CODE)** | `TarotWebResult` answer/next_step/A·B/confidence/why → `DsCallout`/`DsQuote`. Not zone DONE — 6-axis DoD + screenshots remain.

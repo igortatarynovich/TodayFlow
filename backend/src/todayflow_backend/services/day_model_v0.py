@@ -263,15 +263,8 @@ def build_day_model_v0(
             if en
             else "Символ карты и стержень дня тянут в разные стороны."
         )
-    tension_summary = (
-        " ".join(tension_reasons)[:420]
-        if tension_reasons
-        else (
-            "Sources mostly align; keep one clear lane and avoid extra promises."
-            if en
-            else "Источники в основном согласованы; держи одну ясную линию и не добавляй лишних обещаний."
-        )
-    )
+    # Empty when sources align — never emit kitchen meta ("sources mostly align") as product copy.
+    tension_summary = " ".join(tension_reasons)[:420] if tension_reasons else ""
 
     vector_summary = _clip(axis or best_mode, 360) if (axis or best_mode) else (
         "Hold one clear thread for today." if en else "Держи одну ясную нить дня."
@@ -356,7 +349,7 @@ def build_day_model_v0(
         "strategy": {"summary": strategy_summary, "one_focus": _clip(fm_clean or opportunity_summary, 200)},
         "gate": {
             "vector_defined": gate_vector,
-            "tension_defined": True,
+            "tension_defined": bool(tension_reasons),
             "risk_defined": gate_risk,
         },
     }

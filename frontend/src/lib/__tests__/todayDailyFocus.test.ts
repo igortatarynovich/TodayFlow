@@ -3,7 +3,11 @@ import {
   buildGlanceDailyFocus,
   mergeTarotTrapIntoGlanceDailyFocus,
 } from "@/lib/todayDailyFocus";
-import { isDailyFocusGuidanceLeak, filterDailyFocusLines } from "@/lib/todayDailyFocusBoundary";
+import {
+  isDailyFocusGuidanceLeak,
+  isDailyFocusKitchenLeak,
+  filterDailyFocusLines,
+} from "@/lib/todayDailyFocusBoundary";
 import type { TodayContractV1 } from "@/lib/todayContract";
 
 const minimalContract: TodayContractV1 = {
@@ -47,6 +51,14 @@ describe("PR1 S5 boundary — Daily Focus", () => {
       "Сегодня стоит сосредоточиться на разговорах. Если хочешь продвинуть проект — обсуди его до обеда.";
     expect(isDailyFocusGuidanceLeak(bad)).toBe(true);
     expect(filterDailyFocusLines([bad])).toEqual([]);
+  });
+
+  it("rejects kitchen tension and element_focus catalog", () => {
+    expect(isDailyFocusKitchenLeak("Источники в основном согласованы.")).toBe(true);
+    expect(isDailyFocusKitchenLeak("Мышление и ясные формулировки")).toBe(true);
+    expect(filterDailyFocusLines(["Источники в основном согласованы.", "Реальный фокус дня про ясный выбор."])).toEqual([
+      "Реальный фокус дня про ясный выбор.",
+    ]);
   });
 
   it("keeps user good-example descriptive phrasing", () => {
@@ -117,6 +129,41 @@ describe("PR1 S5 boundary — Daily Focus", () => {
     expect(model.title).toMatch(/один фокус/i);
     expect(model.lines.join(" ")).toMatch(/ясность|линию/i);
     expect(model.title).not.toMatch(/чужой guide/i);
+  });
+
+  it("omits kitchen one_focus and tension from glance focus", () => {
+    const focus = buildGlanceDailyFocus(minimalContract, {
+      day_model: {
+        contract_version: "day_model_v0",
+        strategy: { one_focus: "Мышление и ясные формулировки" },
+        tension: {
+          summary: "Источники в основном согласованы; держи одну ясную линию.",
+        },
+        scales: { tempo: "steady" },
+        vector: { summary: "Источники в основном согласованы." },
+      },
+    });
+    const joined = [focus.title, focus.prioritize, focus.avoid].filter(Boolean).join(" ");
+    expect(joined).not.toMatch(/мышление и ясные/i);
+    expect(joined).not.toMatch(/источники в основном согласованы/i);
+  });
+
+  it("does not invent canned filler when candidates empty", () => {
+    const thin: TodayContractV1 = {
+      ...minimalContract,
+      personal_growth: { development_point: "" },
+      global_context: { period: "" },
+    };
+    const model = buildDailyFocusModel(thin, {
+      day_model: {
+        contract_version: "day_model_v0",
+        strategy: { one_focus: "Мышление и ясные формулировки" },
+        tension: { summary: "Источники в основном согласованы." },
+        scales: { tempo: "steady" },
+      },
+    });
+    expect(model.lines.join(" ")).not.toMatch(/понятной теме дня/i);
+    expect(model.title).not.toMatch(/мышление и ясные/i);
   });
 });
 

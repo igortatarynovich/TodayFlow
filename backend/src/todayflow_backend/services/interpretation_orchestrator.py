@@ -32,13 +32,13 @@ class InterpretationOrchestrator:
         numerology = numerology or {}
         life_path = self._as_int((core_profile.get("numerology") or {}).get("life_path"))
         day_number = self._as_int(numerology.get("dayNumber"))
-        element_focus = baseline.get("element_focus") or "Стабильность и бережный темп"
+        # element_focus stays internal baseline only — never seed day do_focus / first_move.
         rhythm_style = baseline.get("rhythm_style") or "Малые повторяемые действия"
 
-        do_focus = element_focus
+        do_focus = "Один короткий осознанный шаг"
         avoid_focus = "Перегруз задач и реактивные решения"
         tone = "grounded"
-        rules_applied = ["baseline_element_focus", "baseline_rhythm_style"]
+        rules_applied = ["baseline_rhythm_style", "actionable_do_focus_default"]
 
         if needs:
             do_focus = self._append_focus(do_focus, self._needs_focus_phrase(needs))
