@@ -4,7 +4,7 @@ Last updated: 2026-08-10
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4+ useful compass)** — Block 1 scan · Block 3 personal bridge (`why_personal` / soft transit) · Block 5 ≤2 tasks. Next: block 6 accept/checkout.
+**IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4+ useful compass)** — Blocks 1·3·5·6 (accept/checkout). Pack editorial voice when generation slots stabilize.
 
 ## Architecture impact — Today six blocks (2026-08-10)
 

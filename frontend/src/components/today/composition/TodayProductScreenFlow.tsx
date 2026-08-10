@@ -71,6 +71,8 @@ export type TodayProductScreenFlowProps = {
   practiceCompleting?: boolean;
   onPracticeAction?: () => void;
   promiseBody?: ReactNode;
+  /** When true, loop body owns accept/checkout — skip legacy CloseFrame. */
+  loopOwnsClose?: boolean;
   contract: TodayContractV1;
   tapResponse?: TapResponseCode | null;
   onTapRecorded?: (response: TapResponseCode) => void;
@@ -208,6 +210,7 @@ export function TodayProductScreenFlow({
   onPracticeAction,
   practiceBody = null,
   promiseBody = null,
+  loopOwnsClose = false,
   contract,
   tapResponse = null,
   onTapRecorded,
@@ -363,17 +366,21 @@ export function TodayProductScreenFlow({
               <div className={flowStyles.storyFrame} data-testid="today-frame-loop" data-story-scroll="pane">
                 <div className={flowStyles.slotStack}>
                   <p className={flowStyles.slotEyebrow}>{copy.storyNext.loop}</p>
-                  <h2 className={flowStyles.slotTitle}>{copy.promiseTitle}</h2>
+                  <h2 className={flowStyles.slotTitle}>
+                    {loopOwnsClose ? copy.storyNext.loop : copy.promiseTitle}
+                  </h2>
                   <div className={flowStyles.slotBody}>{promiseBody}</div>
-                  <TodayCloseFrame
-                    contract={contract}
-                    dateISO={dateISO}
-                    tapResponse={tapResponse}
-                    onTapRecorded={onTapRecorded}
-                    onOpenEvening={onOpenEvening}
-                    dayPromise={dayPromise}
-                    onPickOutcome={onCloseOutcome}
-                  />
+                  {!loopOwnsClose ? (
+                    <TodayCloseFrame
+                      contract={contract}
+                      dateISO={dateISO}
+                      tapResponse={tapResponse}
+                      onTapRecorded={onTapRecorded}
+                      onOpenEvening={onOpenEvening}
+                      dayPromise={dayPromise}
+                      onPickOutcome={onCloseOutcome}
+                    />
+                  ) : null}
                 </div>
               </div>
             </ScreenFlowStep>

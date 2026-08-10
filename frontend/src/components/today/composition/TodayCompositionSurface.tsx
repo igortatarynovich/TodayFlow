@@ -15,6 +15,8 @@ import { buildTodayDayBriefModel } from "@/lib/todayDayBrief";
 import { buildTodayInstructionBridgeModel } from "@/lib/todayInstructionBridge";
 import { TodayDayTasksBlock } from "@/components/today/composition/TodayDayTasksBlock";
 import { buildTodayDayTasks } from "@/lib/todayDayTasks";
+import { TodayLoopBlock } from "@/components/today/composition/TodayLoopBlock";
+import { buildTodayLoopModel } from "@/lib/todayLoopModel";
 import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
 import { TodayProductScreenFlow, todayHandoffIndices, todayScreenFlowAttributesIndex, todayScreenFlowPracticeIndex, todayScreenFlowReadingIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
@@ -494,6 +496,24 @@ export function TodayCompositionSurface(props: Props) {
       engagement.focusTopicId,
     ],
   );
+
+  const loopModel = useMemo(
+    () =>
+      buildTodayLoopModel({
+        contract: props.contract,
+        dayGoal: engagement.dayGoal,
+        promiseSuggestions,
+        isEveningSurface: story.isEveningSurface,
+      }),
+    [
+      props.contract,
+      engagement.dayGoal,
+      promiseSuggestions,
+      story.isEveningSurface,
+    ],
+  );
+
+  const [loopOutcome, setLoopOutcome] = useState<"done" | "partial" | "not_done" | null>(null);
 
   const strengthenTools = useMemo(
     () =>
@@ -1787,83 +1807,16 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const handoffPromiseBody = (
-    <div data-testid="today-handoff-promise">
-      {engagement.dayGoal ? (
-        <div className={styles.promiseChosenBlock} data-testid="today-promise-chosen">
-          <p className={styles.promiseChosenText}>{engagement.dayGoal}</p>
-          {goalDraftOpen ? (
-            <div className={styles.goalForm} data-testid="today-entity-daily-goal">
-              <DsTextField
-                id="day-goal-input-handoff"
-                label={copy.goalPrompt}
-                value={goalDraft}
-                onChange={setGoalDraft}
-                maxLength={200}
-                placeholder={copy.goalPlaceholder}
-              />
-              <DsButton type="button" variant="primary" onClick={onSaveGoal}>
-                {copy.goalSave}
-              </DsButton>
-            </div>
-          ) : (
-            <DsButton
-              type="button"
-              variant="ghost"
-              className={styles.promiseCustom}
-              onClick={() => {
-                setGoalDraft(engagement.dayGoal ?? "");
-                setGoalDraftOpen(true);
-              }}
-            >
-              {copy.editOwnPromise}
-            </DsButton>
-          )}
-        </div>
-      ) : (
-        <>
-          <div className={styles.promiseGrid}>
-            {promiseSuggestions.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                className={styles.promiseChip}
-                data-testid={`today-promise-${s.id}`}
-                onClick={() => onPickPromise(s.text)}
-              >
-                {s.text}
-              </button>
-            ))}
-          </div>
-          {goalDraftOpen ? (
-            <div className={styles.goalForm} data-testid="today-entity-daily-goal">
-              <DsTextField
-                id="day-goal-input-handoff"
-                label={copy.goalPrompt}
-                value={goalDraft}
-                onChange={setGoalDraft}
-                maxLength={200}
-                placeholder={copy.goalPlaceholder}
-              />
-              <DsButton type="button" variant="primary" onClick={onSaveGoal}>
-                {copy.goalSave}
-              </DsButton>
-            </div>
-          ) : (
-            <DsButton
-              type="button"
-              variant="secondary"
-              className={styles.promiseCustom}
-              onClick={() => {
-                setGoalDraft("");
-                setGoalDraftOpen(true);
-              }}
-            >
-              {copy.writeOwnPromise}
-            </DsButton>
-          )}
-        </>
-      )}
-    </div>
+    <TodayLoopBlock
+      model={loopModel}
+      onAccept={onPickPromise}
+      onOpenEvening={onOpenEvening}
+      onPickOutcome={(outcome) => {
+        setLoopOutcome(outcome);
+        onSubmitEveningClose(outcome, null, "");
+      }}
+      outcome={loopOutcome}
+    />
   );
 
   const displayProgressRows = progressRowsFromContract ?? progressRows;
@@ -2210,6 +2163,7 @@ export function TodayCompositionSurface(props: Props) {
       numberBody={numberPickExperience}
       cardBody={tarotPickExperience}
       promiseBody={handoffPromiseBody}
+      loopOwnsClose
       colorBody={handoffColorBody}
       instructionBody={handoffFocusBody}
       tasksBody={handoffTasksBody}
