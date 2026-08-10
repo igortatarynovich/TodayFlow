@@ -123,13 +123,17 @@ function TodayDayDashboard({
     supportDetail,
     trap,
     personalLine,
-    energy,
-    energyCause,
   } = model;
 
   const line = atmosphereLine ?? vibe;
-  const heroBody = expect || atmosphereNote || energy;
-  const heroCue = moodPills[0] || atmosphereNote;
+  const modeEn = model.visualMode ? model.visualMode.toUpperCase() : null;
+  const heroBody = line || expect || atmosphereNote;
+  const heroCue = moodPills[0] || null;
+  const betterIcon: Record<string, string> = {
+    work: "◆",
+    people: "◎",
+    self: "✧",
+  };
 
   return (
     <div
@@ -159,16 +163,24 @@ function TodayDayDashboard({
         data-mode={model.visualMode || undefined}
         onClick={() =>
           openSheet({
-            title: modeLabel || copy.atmosphereLabel,
+            title: modeLabel || modeEn || copy.atmosphereLabel,
             kicker: copy.atmosphereLabel,
-            body: [line, heroBody, heroCue].filter(Boolean).join("\n\n") || copy.loadingDay,
+            body:
+              [line, expect, atmosphereNote, heroCue].filter(Boolean).join("\n\n") ||
+              copy.loadingDay,
           })
         }
       >
-        {modeLabel ? <p className={styles.heroMode}>{modeLabel}</p> : null}
-        <h2 className={styles.heroTitle}>
-          {loading ? copy.loadingDay : line || "Сегодняшний день"}
-        </h2>
+        {loading ? (
+          <h2 className={styles.heroModeEn}>{copy.loadingDay}</h2>
+        ) : modeEn ? (
+          <>
+            <h2 className={styles.heroModeEn}>{modeEn}</h2>
+            {modeLabel ? <p className={styles.heroModeRu}>{modeLabel}</p> : null}
+          </>
+        ) : (
+          <h2 className={styles.heroModeEn}>{modeLabel || "Сегодня"}</h2>
+        )}
         {heroBody ? <p className={styles.heroBody}>{heroBody}</p> : null}
         {heroCue ? (
           <p className={styles.heroCue} data-testid="today-day-brief-mood">
@@ -202,22 +214,21 @@ function TodayDayDashboard({
             ))}
           </ul>
         </section>
-      ) : atmosphereNote ? (
-        <section className={styles.section} data-testid="today-day-brief-why">
-          <p className={styles.blockLabel}>{copy.atmosphereLabel}</p>
-          <p className={styles.blockBody}>{atmosphereNote}</p>
-        </section>
       ) : null}
 
       {betterCards.length > 0 ? (
         <section className={styles.section} data-testid="today-day-brief-better">
           <p className={styles.blockLabel}>{copy.betterTodayLabel}</p>
-          <div className={styles.betterGrid}>
+          <div
+            className={styles.betterGrid}
+            data-count={Math.min(3, betterCards.length)}
+          >
             {betterCards.map((card) => (
               <button
                 key={card.id}
                 type="button"
                 className={styles.betterCard}
+                data-bucket={card.id}
                 data-testid={`today-day-better-${card.id}`}
                 onClick={() =>
                   openSheet({
@@ -227,6 +238,9 @@ function TodayDayDashboard({
                   })
                 }
               >
+                <span className={styles.betterIcon} aria-hidden>
+                  {betterIcon[card.id] || "•"}
+                </span>
                 <span className={styles.betterTitle}>{card.title}</span>
                 <span className={styles.betterBody}>{card.body}</span>
               </button>
@@ -302,14 +316,6 @@ function TodayDayDashboard({
         </section>
       ) : null}
 
-      {energy && !heroBody?.includes(energy) ? (
-        <section className={styles.section} data-testid="today-day-brief-energy">
-          <p className={styles.blockLabel}>{copy.pulseLabel}</p>
-          <p className={styles.blockBodyMuted}>{energy}</p>
-          {energyCause ? <p className={styles.blockBodyMuted}>{energyCause}</p> : null}
-        </section>
-      ) : null}
-
       <TodayDayDetailSheet sheet={sheet} onClose={closeSheet} />
     </div>
   );
@@ -335,7 +341,7 @@ function TodayDayOrientation({
       data-pane="orientation"
     >
       {expect ? (
-        <section className={styles.section} data-testid="today-day-brief-expect">
+        <section className={styles.expectCard} data-testid="today-day-brief-expect">
           <p className={styles.blockLabel}>{copy.expectLabel}</p>
           <p className={styles.blockBody}>{expect}</p>
         </section>
@@ -372,7 +378,7 @@ function TodayDayOrientation({
       ) : null}
 
       {energy ? (
-        <section className={styles.section} data-testid="today-day-brief-energy">
+        <section className={styles.energyCard} data-testid="today-day-brief-energy">
           <p className={styles.blockLabel}>{copy.pulseLabel}</p>
           <p className={styles.blockBody}>{energy}</p>
           {energyCause ? (
