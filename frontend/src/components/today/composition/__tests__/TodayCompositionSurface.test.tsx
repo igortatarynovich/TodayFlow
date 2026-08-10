@@ -1,7 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TodayCompositionSurface } from "@/components/today/composition/TodayCompositionSurface";
-import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import {
   dayContinuityStorageKey,
@@ -113,11 +112,9 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByText("С чего продолжить")).toBeInTheDocument();
 
     const surface = screen.getByTestId("today-composition-surface");
-    const zoneIds = within(surface)
-      .getAllByTestId(/^today-zone-/)
-      .map((el) => el.getAttribute("data-testid"));
-
-    expect(zoneIds.indexOf("today-zone-memory")).toBeLessThan(zoneIds.indexOf("today-zone-greeting"));
+    const memory = within(surface).getByTestId("today-zone-memory");
+    const day = within(surface).getByTestId("today-frame-day");
+    expect(memory.compareDocumentPosition(day) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it("hides memory stub when yesterday was not closed", () => {
@@ -126,26 +123,26 @@ describe("TodayCompositionSurface", () => {
     expect(screen.queryByText(/Здесь появится связь/i)).not.toBeInTheDocument();
   });
 
-  it("renders day story greeting and foundation before ritual", () => {
+  it("renders day brief block before ritual", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
-    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
-    expect(screen.getByTestId("today-greeting-start")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
+    expect(screen.getByTestId("today-day-brief")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-number")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-card")).toBeInTheDocument();
     expect(screen.getByTestId("ritual-tarot-pick-grid")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-why-story")).not.toBeInTheDocument();
   });
 
-  it("keeps greeting deck when embedded in web dashboard without leaking number before ritual", () => {
+  it("keeps day brief when embedded in web dashboard without leaking number before ritual", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" embeddedInWebDashboard />);
 
     expect(screen.queryByTestId("today-zone-greeting")).not.toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-pulse")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-frame-number")).toBeInTheDocument();
     expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-greeting").textContent || "").not.toMatch(/число дня\s*[—-]?\s*4/i);
+    expect(screen.getByTestId("today-frame-day").textContent || "").not.toMatch(/число дня\s*[—-]?\s*4/i);
   });
 
   it("ScreenFlow greeting-first hosts story-deck steps", () => {
@@ -188,7 +185,7 @@ describe("TodayCompositionSurface", () => {
 
     expect(screen.getByTestId("today-zone-foundation")).toBeInTheDocument();
     expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
     expect(screen.queryByTestId("today-slot-verdict-strip")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-composition-surface").querySelectorAll("[data-screen-flow-step]").length).toBeGreaterThanOrEqual(3);
   });
@@ -227,17 +224,16 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-evening-open")).toHaveTextContent("Закрыть день");
   });
 
-  it("opens tarot pick overlay from ritual gate without inventing strengthen", async () => {
+  it("opens tarot pick from rituals step without inventing strengthen", async () => {
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
-    await user.click(screen.getByTestId("today-greeting-start"));
-    // Handoff: card ritual is its own ScreenFlow step (index 6 with symbols).
-    const cardDot = screen.getByTestId("screen-flow-dot-6");
-    await user.click(cardDot);
-    expect(screen.getByTestId("today-frame-card")).toBeInTheDocument();
+    await user.click(within(screen.getByTestId("today-frame-day")).getByTestId("today-story-next-anchor"));
+    // Six blocks: rituals is step 1 (first chrome dot when day is 0).
+    const ritualsDot = screen.getByTestId("screen-flow-dot-1");
+    await user.click(ritualsDot);
+    expect(screen.getByTestId("today-frame-rituals")).toBeInTheDocument();
     expect(screen.getByTestId("ritual-tarot-pick-grid")).toBeInTheDocument();
-    expect(screen.getByText(RITUAL_COPY.experiencePickCardEyebrow)).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-actions")).not.toBeInTheDocument();
   });
@@ -281,14 +277,14 @@ describe("TodayCompositionSurface", () => {
     );
 
     expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
-    // Handoff: welcome + priority… + number/card + focus; plot lives in data, not a swipe frame.
-    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-priority")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-energy-flow")).toBeInTheDocument();
+    // Six blocks v3.4: day · rituals · instruction · color · tasks · loop
+    expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
+    expect(screen.getByTestId("today-day-brief")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-rituals")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-number")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-card")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-focus")).toBeInTheDocument();
-    expect(screen.getByTestId("today-composition-surface").querySelectorAll("[data-screen-flow-step]").length).toBe(12);
+    expect(screen.getByTestId("today-frame-instruction")).toBeInTheDocument();
+    expect(screen.getByTestId("today-composition-surface").querySelectorAll("[data-screen-flow-step]").length).toBe(6);
   });
 
   it("shows opened card and number interpretation after ritual", () => {
@@ -339,15 +335,12 @@ describe("TodayCompositionSurface", () => {
 
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
-    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-priority")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-promise")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-make-yours")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-energy-flow")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-rituals")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-instruction")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-color")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-focus")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-recap")).toBeInTheDocument();
-    expect(screen.getByTestId("today-frame-close")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-tasks")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-loop")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-personal")).not.toBeInTheDocument();
   });
 
@@ -388,10 +381,8 @@ describe("TodayCompositionSurface", () => {
       <TodayCompositionSurface {...baseProps} contract={contractWithStory} variant="default" />,
     );
 
-    // Gift framing when support slot is practice; else legacy practice frame.
-    const gift = screen.queryByTestId("today-frame-practice-gift");
-    const legacy = screen.queryByTestId("today-frame-practice");
-    expect(gift || legacy).toBeTruthy();
+    // Tasks block hosts practice gift (six blocks v3.4).
+    expect(screen.getByTestId("today-frame-tasks")).toBeInTheDocument();
     expect(screen.getAllByText(/Закрыть одну задачу/i).length).toBeGreaterThan(0);
   });
 
@@ -413,15 +404,13 @@ describe("TodayCompositionSurface", () => {
     );
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
-    await user.click(screen.getByTestId("today-greeting-start"));
-    const practiceDot = screen.getByTestId("screen-flow-dot-9");
-    await user.click(practiceDot);
-    expect(
-      screen.queryByTestId("today-frame-practice-gift") || screen.queryByTestId("today-frame-practice"),
-    ).toBeTruthy();
+    await user.click(within(screen.getByTestId("today-frame-day")).getByTestId("today-story-next-anchor"));
+    const tasksDot = screen.getByTestId("screen-flow-dot-4");
+    await user.click(tasksDot);
+    expect(screen.getByTestId("today-frame-tasks")).toBeInTheDocument();
   });
 
-  it("shows morning dialogue on insight when mood missing after ritual", () => {
+  it("does not mount morning dialogue as its own six-block step", () => {
     window.localStorage.setItem(
       "todayflow.day_engagement.v1.2026-06-23",
       JSON.stringify({
@@ -435,7 +424,9 @@ describe("TodayCompositionSurface", () => {
       }),
     );
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
-    expect(screen.getByTestId("today-zone-dialogue-morning")).toBeInTheDocument();
+    // Priority/dialogue step removed in v3.4 — not a product frame.
+    expect(screen.queryByTestId("today-zone-dialogue-morning")).not.toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
   });
 
   it("gates firstToday behind intent/reality reaction chips", () => {

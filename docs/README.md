@@ -19,6 +19,7 @@
 | Launch gaps / DoD / code | [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) — ⚠️ STALE |
 | Launch UX feel (reference) | [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) — ⚠️ STALE |
 | Трекер работ | [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) |
+| **Human Explanatory Systems (research)** | [audits/HUMAN_EXPLANATORY_SYSTEMS_ANALYSIS.md](./audits/HUMAN_EXPLANATORY_SYSTEMS_ANALYSIS.md) — разбор объяснительных систем (не product SoT); intersection / retention; **запрет** прыжка в фичи TodayFlow до закрытия research |
 
 ## PIM · Intelligence
 

@@ -70,7 +70,18 @@ export const TODAY_COMPOSITION_COPY = {
   storyNext: {
     further: "Дальше",
     scrollMore: "Листайте дальше",
-    /** @deprecated handoff CTA uses formDay */
+    /** Six blocks v3.4 */
+    day: "День",
+    dayHint: "Вайб и ориентиры сегодня.",
+    rituals: "Ритуалы",
+    ritualsHint: "Число и карта дня.",
+    instruction: "Инструкция",
+    instructionHint: "Что важно именно тебе.",
+    tasks: "Задания",
+    tasksHint: "Одно-два действия на сегодня.",
+    loop: "Обещание и итог",
+    loopHint: "Закрепить день и закрыть его.",
+    /** @deprecated handoff labels kept for compat */
     energy: "Энергия дня",
     energyHint: "Какой сегодня день.",
     formDay: "Оформим сегодняшний день",

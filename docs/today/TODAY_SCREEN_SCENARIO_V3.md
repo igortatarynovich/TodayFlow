@@ -1,42 +1,65 @@
-# Today — сценарий страницы (v3.3 handoff composition)
+# Today — сценарий страницы (v3.4 · шесть блоков)
 
-**Status:** ACTIVE · **Updated 2026-08-08** (Architecture A — handoff = presentation SoT)  
-**Prior lock:** v3.2 story-deck cuts 2026-08-05 · v3.1 content jobs 2026-08-03
+**Status:** ACTIVE · **Updated 2026-08-10**  
+**Prior:** v3.3 handoff 12-step (2026-08-08) · v3.2 story-deck · v3.1 content jobs  
 
-**Presentation ScreenFlow (product):**  
-**Welcome → Priority → Promise → Make yours → Поток дня → [Число → Карта] → Цвет → Фокус → Практика → Recap → Close**  
-(= **12** кадров с символами · **10** без). Welcome = шаг 0 **без** chrome dots; дальше — ScreenFlow dots + swipe + keyboard.
+## Presentation SoT — шесть блоков (LOCKED)
 
-Content houses ниже (v3.1) остаются источником смысла; меняется **нарезка кадров**.  
-v3.2 story-deck (Greeting→Energy+Flow→…) **deprecated** as presentation cut — replaced by this handoff map.
+Продуктовая нарезка Today. **Не расширять** без явного решения owner.  
+12-step handoff v3.3 = **deprecated** как presentation SoT (слишком много кадров = suite, не день).
 
-Связанные каноны: [SCREEN_FLOW_V1.md](../foundation/SCREEN_FLOW_V1.md) · [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) · [DAY_SYMBOL_REVEAL_CANON_V1.md](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md) · [DOMAIN_MAGNITUDE_V1.md](../foundation/DOMAIN_MAGNITUDE_V1.md) · [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) §16
+```text
+1. День          — общий тренд: вайб · энергия · сферы/акценты · почему так · ждать · ловушка · делать/не делать
+2. Ритуалы       — число · карта (персональный вход)
+3. Инструкция    — персональная инструкция на день (мне)
+4. Цвет          — цвет дня
+5. Задания       — 1–2 на сегодня (+ ежедневные, если уже ведутся); не каталог «выбери из шести»
+6. Петля         — обещание дня → закрытие дня
+```
 
-### Presentation map (v3.3 handoff)
+**Правила рамки:**
 
-| Story frame | Склеивает / показывает | Content house (v3.1) |
-|-------------|------------------------|----------------------|
-| Welcome | salutation · headline · date · energy glass (mood pills · lunar reason · activity tags) · CTA | Glance chrome + atmosphere + lunar |
-| Priority | morning focus topics (+ deepen CTA) | Dialogue / deepen → Фокус |
-| Promise | suggestions + «Написать своё» | Move promise |
-| Make yours | 6 categories · tracker if set · propose from day if empty | Move trackers · [MAKE_YOURS SoT](./TODAY_MAKE_YOURS_AND_WELCOME_SOT.md) |
-| Поток дня | energy line + glance_timeline | Glance energy + Symbols·B timeline |
-| Число | number ritual cascade | Symbols·A number |
-| Карта | tarot ritual + cross-ref | Symbols·A card |
-| Цвет | day color guide | Move color |
-| Фокус | Daily Focus + depth_layer | Glance focus / Reading deepen |
-| Практика | gift practice XOR affirmation | Move support |
-| Recap | priority · promise · practice status | Response prep |
-| Close | evening question + trap tap + close CTA | Response + evening |
+1. Общие тренды **не избегать** — блок 1 = амбассадор тренда дня (не стыдливый soft glass).  
+2. Персонализация наращивается блоками 2–3–5–6, **не вместо** блока 1.  
+3. Любой новый кадр/раздел обязан ответить: в какой из 6 блоков входит. Если ни в какой — **out of scope**.  
+4. Content houses v3.1 (Plot / Symbols / Move / …) остаются **источниками смысла**; меняется только склейка в 6 блоков.  
+5. Research explanatory systems (`docs/audits/HUMAN_EXPLANATORY_SYSTEMS_ANALYSIS.md`) — справочник; **не** спека экрана.
 
-### Architecture impact (2026-08-08 — A)
+### Presentation map (v3.4)
 
-- **SoT before:** presentation = story-deck v3.2 (7 frames); handoff HTML = prototype only; UX slices partly on dead PersonalizedSection.
-- **SoT after:** presentation = handoff 12-step ScreenFlow above; content jobs v3.1 unchanged.
-- **Public contract changed?** no JSON fields — FE composition only.
-- **Migration required?** no — next frontend rebuild; old clients ignore new frames.
-- **Canon updated?** yes — this file + SCREEN_FLOW_V1 Today mapping + tracker.
-- **Backward compatible?** yes for API; FE step indices / deep-links `?sf=1&step=N` remap.
+| # | Блок | ScreenFlow id | Что показывает | Откуда смысл (houses / nests) |
+|---|------|---------------|----------------|-------------------------------|
+| 1 | День | `day` | дата · вайб/headline · why · энергия · expect · trap · do/avoid · (опц.) timeline/сферы-акценты | day_story · welcome_glass · glance energy/timeline · morning celestial |
+| 2 | Ритуалы | `rituals` | число + карта (если symbols) | Symbols·A |
+| 3 | Инструкция | `instruction` | персональный prioritize / avoid (+ deepen опц.) | Glance Daily Focus · depth_layer |
+| 4 | Цвет | `color` | color guide | color_guide / Move color |
+| 5 | Задания | `tasks` | 1–2 выдачи дня + ежедневные streaks; не shop из 6 категорий | practice gift · today_progress · точечные proposals |
+| 6 | Петля | `loop` | обещание → close / evening | Move promise · Response · evening |
+
+Без symbols: блок 2 omit → **5** шагов.  
+Шаг 0 (`day`) может быть без chrome dots; дальше — ScreenFlow dots + swipe.
+
+### Deprecated (не возвращать без решения)
+
+| Было (v3.3) | Почему вне рамки |
+|-------------|------------------|
+| Priority отдельным кадром | Не блок 1 и не 3 |
+| Make yours как каталог 6 категорий | Блок 5 = выдача, не магазин |
+| Поток дня отдельным кадром | Входит в блок 1 |
+| Focus отдельно от «инструкции» | = блок 3 |
+| Recap | Лишний; петля = promise+close |
+| 12 swipe-шагов | Распыляет день |
+
+### Architecture impact (2026-08-10 — six blocks)
+
+- **SoT before:** presentation = handoff 12-step ScreenFlow (v3.3).  
+- **SoT after:** presentation = **6 блоков** выше; content jobs v3.1 unchanged as meaning houses.  
+- **Public contract changed?** no required JSON — FE composition; optional richer day-brief copy may use existing `day_story` fields.  
+- **Migration required?** yes FE — step indices / `?sf=1&step=N` remap.  
+- **Canon updated?** yes — this file · SCREEN_FLOW_V1 Today mapping · tracker.  
+- **Backward compatible?** yes for API; old deep-links remap best-effort.
+
+Связанные: [SCREEN_FLOW_V1.md](../foundation/SCREEN_FLOW_V1.md) · [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) · [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) §16
 
 ---
 

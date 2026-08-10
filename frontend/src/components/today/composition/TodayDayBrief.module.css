@@ -1,0 +1,89 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.date {
+  margin: 0;
+  font-size: var(--tf-type-caption, 0.8125rem);
+  opacity: 0.72;
+  letter-spacing: 0.02em;
+}
+
+.salutation {
+  margin: 0;
+  font-size: var(--tf-type-caption, 0.8125rem);
+  opacity: 0.8;
+}
+
+.vibe {
+  margin: 0;
+  font-family: var(--tf-font-display, inherit);
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.moodRow,
+.tagRow,
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.moodRow li,
+.tagRow li {
+  padding: 0.2rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--day-ink, currentColor) 22%, transparent);
+  border-radius: 999px;
+  font-size: var(--tf-type-caption, 0.75rem);
+}
+
+.list {
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.list li {
+  margin: 0;
+  font-size: var(--tf-type-body, 0.95rem);
+  line-height: 1.45;
+}
+
+.list li::before {
+  content: "· ";
+  opacity: 0.55;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.blockLabel {
+  margin: 0;
+  font-size: var(--tf-type-caption, 0.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.65;
+}
+
+.blockBody {
+  margin: 0;
+  font-size: var(--tf-type-body, 0.95rem);
+  line-height: 1.5;
+}
+
+.blockBodyMuted {
+  margin: 0;
+  font-size: var(--tf-type-caption, 0.85rem);
+  line-height: 1.45;
+  opacity: 0.75;
+}

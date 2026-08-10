@@ -10,6 +10,8 @@ import { TodayDayContinuityEveningClose } from "@/components/today/experience/To
 import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
+import { TodayDayBrief } from "@/components/today/composition/TodayDayBrief";
+import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
 import { TodayProductScreenFlow, todayHandoffIndices, todayScreenFlowAttributesIndex, todayScreenFlowPracticeIndex, todayScreenFlowReadingIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import {
@@ -1410,22 +1412,7 @@ export function TodayCompositionSurface(props: Props) {
     morningMoodCapturedAtMs: engagement.morningMoodCapturedAtMs,
   });
 
-  // Priority answered → leave the step (no empty chrome with leftover title).
-  useEffect(() => {
-    if (!hydrated || !useProductPersonalized) return;
-    if (askMorningFocus || askMorningMood) return;
-    const idx = todayHandoffIndices(showSymbolsAct);
-    if (screenFlowIndex === idx.priority) {
-      setScreenFlowIndex(idx.promise);
-    }
-  }, [
-    hydrated,
-    useProductPersonalized,
-    askMorningFocus,
-    askMorningMood,
-    screenFlowIndex,
-    showSymbolsAct,
-  ]);
+  // Priority step removed in v3.4 six blocks — no auto-advance from dialogue.
 
   if (eveningMode && continuityRecord && !dayClosed) {
     if (useProductFoundation) {
@@ -1537,7 +1524,7 @@ export function TodayCompositionSurface(props: Props) {
             refreshRings: false,
           });
           if (useProductPersonalized) {
-            setScreenFlowIndex(todayHandoffIndices(showSymbolsAct).promise);
+            setScreenFlowIndex(todayHandoffIndices(showSymbolsAct).instruction);
           }
         }}
       />
@@ -2125,6 +2112,32 @@ export function TodayCompositionSurface(props: Props) {
       />
     ) : null;
 
+  const dayStoryBrief = (
+    <TodayDayBrief
+      dateLabel={props.displayDate}
+      salutation={story.greeting.salutation}
+      headline={story.greeting.line}
+      loading={themeLoading}
+      welcomeGlass={welcomeGlass}
+      energyLine={energyLineDisplay}
+      energyCause={energyCauseDisplay}
+      expect={props.contract.day_story?.expect ?? null}
+      trap={props.contract.day_story?.trap ?? null}
+      doItems={props.contract.day_story?.do ?? null}
+      avoidItems={props.contract.day_story?.avoid ?? null}
+      whyLine={props.contract.day_story?.day_scenario?.conflict?.why_arose?.trim() || null}
+    />
+  );
+
+  const handoffTasksBody = (
+    <div data-testid="today-handoff-tasks">
+      {handoffPracticeBody}
+      {displayProgressRows.length > 0 ? (
+        <TodayProgressTracker rows={displayProgressRows} title="Сегодня и каждый день" />
+      ) : null}
+    </div>
+  );
+
   const dayStoryFoundation = isFirstToday ? (
     <ConversationThread testId="conversation-thread-first-today">
       {reactionGateSection}
@@ -2140,30 +2153,15 @@ export function TodayCompositionSurface(props: Props) {
     <TodayProductScreenFlow
       dateISO={dateISO}
       dateLabel={props.displayDate}
-      greetingSalutation={story.greeting.salutation}
-      greetingHeadline={story.greeting.line}
-      themeTitle={copy.journey.glanceThemeLabel}
-      dayTexture={dayTexture}
-      dailyFocus={glanceDailyFocus}
-      energyLine={energyLineDisplay}
-      energyCause={energyCauseDisplay}
-      themeLoading={themeLoading}
-      colorGuide={handoffColorGuide}
-      moveDo={moveIfThen?.do ?? null}
-      moveAvoid={moveIfThen?.avoid ?? null}
-      plotSlot={plotNarrativeSection}
-      insightHeroText={insightHeroText}
-      morningDialogue={morningDialogue}
+      dayBody={dayStoryBrief}
       showSymbols={showSymbolsAct}
       numberBody={numberPickExperience}
       cardBody={tarotPickExperience}
-      welcomeGlass={welcomeGlass}
       promiseBody={handoffPromiseBody}
-      makeYoursBody={handoffMakeYoursBody}
       colorBody={handoffColorBody}
-      focusBody={handoffFocusBody}
+      instructionBody={handoffFocusBody}
+      tasksBody={handoffTasksBody}
       practiceBody={handoffPracticeBody}
-      recapBody={handoffRecapBody}
       showPersonalized={useProductPersonalized}
       practiceTitle={practiceFrameTitle}
       practiceMeta={practiceFrameMeta}
@@ -2187,7 +2185,7 @@ export function TodayCompositionSurface(props: Props) {
       onIndexChange={onScreenFlowIndexChange}
       embeddedInWebDashboard={embeddedInWebDashboard}
       topRowSection={topRowSection}
-      greetingSection={greetingSection}
+      greetingSection={null}
     />
 
   );

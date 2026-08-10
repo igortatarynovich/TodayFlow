@@ -152,24 +152,25 @@ Meaning events: см. [TODAY_PERSONALIZATION_CORE.md](../TODAY_PERSONALIZATION_C
 
 ## 4. Today mapping
 
-Content jobs SoT: [TODAY_SCREEN_SCENARIO_V3.md](../today/TODAY_SCREEN_SCENARIO_V3.md) **v3.1**.
+Content jobs SoT: [TODAY_SCREEN_SCENARIO_V3.md](../today/TODAY_SCREEN_SCENARIO_V3.md) **v3.1 houses**.  
+**Presentation SoT (LOCKED 2026-08-10):** **six blocks** — День → Ритуалы → Инструкция → Цвет → Задания → Петля.
 
-| Index | Job | Notes (v3.1) |
-|-------|-----|----------------|
-| 0 Glance | 2с ориентация | **текстура = тон** (не факты) · ≤2 sphere chips из Reading · shared honest «без острого фокуса» · nearest · CTA Symbols·A · **без цвета** |
-| 1 Plot | откуда тон | спина фактов 0…2 · optional why_arose · why_personal deep · opposing_forces **только если данные** · не seed |
-| 2 Symbols | ритуал + синтез | **A** карта→число (base+bridge; fail=баннер) · **B** ниже: астро + полный timeline · раскрытое не пропадает · **без цвета** |
-| 3 Reading | что важно | ≤2 из 4 (`work/money/relationships/energy`) · поэтапно: почему → возможность → ловушка · **без действия** |
-| 4 Move | что делать | **цвет первым** + интенсивность мягко/ярко · if/then глобально · цель · опора практика\|аффирмация |
-| 5 Response | отклик | ловушка сильнейшей магнитуды · или «без острой ловушки» без тапа · Обошёл/Попал/Не про это |
+| Index | Block | Notes |
+|-------|-------|--------|
+| 0 | День | тренд-амбассадор: вайб · why · энергия · expect/trap/do·don't · (опц. timeline) |
+| 1 | Ритуалы | число + карта (omit if no symbols) |
+| 2 | Инструкция | персональный prioritize/avoid |
+| 3 | Цвет | color guide |
+| 4 | Задания | 1–2 выдачи + ежедневные; не catalog shop |
+| 5 | Петля | обещание → close |
 
-When Symbols is omitted, Reading/Move/Response shift left (indices 2–4). Step count = `2 + (symbols?1:0) + (personalized?3:0)`.
+Without symbols: indices shift (5 steps). Re-entry: ordinary visit → **0**; deep-link `sf=1&step=N`.
 
-Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
+**v3.3 12-step handoff — deprecated** (see SCENARIO_V3.4).
 
 **Contract:** [TODAY_WAVE2_CONTRACT_V1.md](../today/TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1` + `day_story` → Today Contract Assembler.
 
-**Композиция:** `TodayProductScreenFlow.tsx` — обёртка вокруг `ScreenFlow` (dots + swipe; labeled `TodayActNav` not mounted); personal acts via `actFilter` (not nested `asScreenFlowSteps` — ScreenFlow collects only JSX-tree `ScreenFlowStep` children).
+**Композиция:** `TodayProductScreenFlow.tsx` — ScreenFlow dots + swipe.
 
 ---
 
@@ -262,6 +263,12 @@ Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
 - **Today mapping:** Personal interim bundle → discrete Reading / Move / Response steps
 - **Nav:** ActNav chips for Чтение · Действие · Отклик when personalized ready
 - **Impl:** `actFilter` on `TodayPersonalizedProductSection` inside direct `ScreenFlowStep` children
+
+### 2026-08-10 — Today six blocks (v3.4)
+
+- **Presentation SoT:** День → Ритуалы → Инструкция → Цвет → Задания → Петля
+- **Deprecated:** v3.3 12-step handoff as product frame
+- **Detail:** [TODAY_SCREEN_SCENARIO_V3.md](../today/TODAY_SCREEN_SCENARIO_V3.md)
 
 ### 2026-07-30 — v1.0 (init)
 

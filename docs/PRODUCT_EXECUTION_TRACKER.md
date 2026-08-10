@@ -4,6 +4,19 @@ Last updated: 2026-08-10
 Owner: Product + Engineering
 Status: Active working document
 
+**IN PROGRESS (CODE, 2026-08-10):** **Today six blocks (v3.4)** — SoT locked + FE ScreenFlow remapped (6/5 steps). Day brief from `day_story`/welcome_glass; rituals stacked; tasks = practice+progress (no catalog shop); loop = promise+close. Polish/block-1 copy richness still open. Canon: `TODAY_SCREEN_SCENARIO_V3.md`. Research explanatory systems **frozen**.
+
+## Architecture impact — Today six blocks (2026-08-10)
+
+- **SoT before:** handoff 12-step ScreenFlow (Welcome…Recap…Close).
+- **SoT after:** six product blocks (day · rituals · instruction · color · tasks · loop); content houses v3.1 unchanged.
+- **Public contract changed?** no required fields — composition; day brief uses existing `day_story` / welcome_glass / glance.
+- **Migration required?** yes FE step indices / deep-links.
+- **Canon updated?** yes — SCENARIO_V3.4 · SCREEN_FLOW_V1 §4 · tracker.
+- **Backward compatible?** yes API; FE remap.
+
+**PAUSED (RESEARCH):** Human Explanatory Systems Analysis v0.2 — not driving Today UI. Doc remains at `docs/audits/HUMAN_EXPLANATORY_SYSTEMS_ANALYSIS.md`.
+
 **DONE (CODE, 2026-08-10):** **Wave B2 + Atmosphere crossfade + ritual closed-state** — promise → `day-connection.morning_intention`; practice gift start→started→complete; thin recap (priority/promise/practice); tarot idle 3 stacked backs; Atmosphere hold→out wash crossfade (skip lite/reduced-motion). Canon: `docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md` §5–8.
 
 ## Architecture impact — Wave B2 / Atmosphere P2 (2026-08-10)

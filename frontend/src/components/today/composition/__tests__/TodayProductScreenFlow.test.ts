@@ -9,37 +9,41 @@ import {
   todayScreenFlowSymbolsIndex,
 } from "@/components/today/composition/TodayProductScreenFlow";
 
-describe("todayScreenFlow handoff v3.3 indices", () => {
+describe("todayScreenFlow six blocks v3.4 indices", () => {
   it("welcome-only when not personalized", () => {
     expect(todayScreenFlowStepCount({ showSymbols: false, showPersonalized: false })).toBe(1);
     expect(todayScreenFlowStepCount({ showSymbols: true, showPersonalized: false })).toBe(1);
   });
 
-  it("counts 12 steps with symbols", () => {
-    expect(todayScreenFlowStepCount({ showSymbols: true, showPersonalized: true })).toBe(12);
+  it("counts 6 steps with symbols", () => {
+    expect(todayScreenFlowStepCount({ showSymbols: true, showPersonalized: true })).toBe(6);
     const idx = todayHandoffIndices(true);
-    expect(idx.welcome).toBe(0);
-    expect(idx.priority).toBe(1);
-    expect(idx.number).toBe(5);
-    expect(idx.card).toBe(6);
-    expect(idx.close).toBe(11);
+    expect(idx.day).toBe(0);
+    expect(idx.rituals).toBe(1);
+    expect(idx.instruction).toBe(2);
+    expect(idx.color).toBe(3);
+    expect(idx.tasks).toBe(4);
+    expect(idx.loop).toBe(5);
+    expect(idx.number).toBe(1);
+    expect(idx.card).toBe(1);
+    expect(idx.close).toBe(5);
   });
 
-  it("counts 10 steps without symbols", () => {
-    expect(todayScreenFlowStepCount({ showSymbols: false, showPersonalized: true })).toBe(10);
+  it("counts 5 steps without symbols", () => {
+    expect(todayScreenFlowStepCount({ showSymbols: false, showPersonalized: true })).toBe(5);
     const idx = todayHandoffIndices(false);
-    expect(idx.number).toBe(-1);
-    expect(idx.color).toBe(5);
-    expect(idx.close).toBe(9);
+    expect(idx.rituals).toBe(-1);
+    expect(idx.instruction).toBe(1);
+    expect(idx.loop).toBe(4);
   });
 
-  it("maps legacy helpers onto handoff houses", () => {
-    expect(todayScreenFlowSymbolsIndex()).toBe(5);
-    expect(todayScreenFlowAttributesIndex(true)).toBe(7);
-    expect(todayScreenFlowReadingIndex(true)).toBe(8);
-    expect(todayScreenFlowPracticeIndex(true)).toBe(9);
-    expect(todayScreenFlowInsightIndex(true)).toBe(10);
-    expect(todayScreenFlowCloseIndex(true)).toBe(11);
-    expect(todayScreenFlowPracticeIndex(false)).toBe(7);
+  it("maps helpers onto six-block houses", () => {
+    expect(todayScreenFlowSymbolsIndex()).toBe(1);
+    expect(todayScreenFlowAttributesIndex(true)).toBe(3);
+    expect(todayScreenFlowReadingIndex(true)).toBe(2);
+    expect(todayScreenFlowPracticeIndex(true)).toBe(4);
+    expect(todayScreenFlowInsightIndex(true)).toBe(5);
+    expect(todayScreenFlowCloseIndex(true)).toBe(5);
+    expect(todayScreenFlowPracticeIndex(false)).toBe(3);
   });
 });
