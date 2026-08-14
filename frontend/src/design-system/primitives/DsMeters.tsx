@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { joinClass } from "@/design-system/utils/joinClass";
 import fk from "@/design-system/primitives/dsFormKit.module.css";
 
@@ -109,6 +110,103 @@ export function DsMetric({ value, label, className, testId }: DsMetricProps) {
     <div className={className} data-testid={testId}>
       <p className={fk.metricValue}>{value}</p>
       {label ? <p className={fk.metricLabel}>{label}</p> : null}
+    </div>
+  );
+}
+
+type DsLinearProgressProps = {
+  /** 0–100 */
+  value: number;
+  className?: string;
+  testId?: string;
+  label?: string;
+};
+
+/** Linear progress track — fill width encodes value. */
+export function DsLinearProgress({ value, className, testId, label }: DsLinearProgressProps) {
+  const clamped = Math.max(0, Math.min(100, value));
+  return (
+    <div
+      className={joinClass(fk.linearProgress, className)}
+      data-testid={testId}
+      role="progressbar"
+      aria-valuenow={Math.round(clamped)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={label}
+    >
+      <span className={fk.linearProgressFill} style={{ width: `${clamped}%` }} />
+    </div>
+  );
+}
+
+const WAVE_W = 120;
+const WAVE_H = 36;
+const WAVE_CYCLES = 2.5;
+
+/**
+ * Semantic wave meter: amplitude and filled width both encode `value` (0–100).
+ * Not a decorative wave — geometry changes with the input.
+ */
+export function DsWaveMeter({
+  value,
+  className,
+  testId,
+  label,
+  showLabel = false,
+}: {
+  value: number;
+  className?: string;
+  testId?: string;
+  label?: string;
+  showLabel?: boolean;
+}) {
+  const reactId = useId().replace(/:/g, "");
+  const clamped = Math.max(0, Math.min(100, value));
+  const t = clamped / 100;
+  const amp = 2 + t * (WAVE_H * 0.38);
+  const mid = WAVE_H / 2;
+  const fillW = Math.max(0.5, (clamped / 100) * WAVE_W);
+
+  const points: string[] = [];
+  for (let x = 0; x <= WAVE_W; x += 2) {
+    const y = mid - Math.sin((x / WAVE_W) * Math.PI * 2 * WAVE_CYCLES) * amp;
+    points.push(`${x},${y.toFixed(2)}`);
+  }
+  const topPath = `M 0,${mid} L ${points.join(" L ")}`;
+  const areaPath = `${topPath} L ${WAVE_W},${WAVE_H} L 0,${WAVE_H} Z`;
+  const filledClipId = `ds-wave-fill-${reactId}`;
+
+  return (
+    <div
+      className={joinClass(fk.waveMeter, className)}
+      data-testid={testId}
+      role="img"
+      aria-label={label ?? `${Math.round(clamped)} percent`}
+    >
+      <svg
+        className={fk.waveMeterSvg}
+        viewBox={`0 0 ${WAVE_W} ${WAVE_H}`}
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <defs>
+          <clipPath id={filledClipId}>
+            <rect x="0" y="0" width={fillW} height={WAVE_H} />
+          </clipPath>
+        </defs>
+        <path className={fk.waveMeterTrack} d={areaPath} />
+        <path className={fk.waveMeterValue} d={areaPath} clipPath={`url(#${filledClipId})`} />
+        <path
+          d={topPath}
+          fill="none"
+          stroke="var(--day-decor-color, var(--tf-accent-gold))"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+          opacity={0.85}
+        />
+      </svg>
+      {showLabel ? <p className={fk.waveMeterLabel}>{label ?? `${Math.round(clamped)}%`}</p> : null}
     </div>
   );
 }

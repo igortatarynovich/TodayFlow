@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useId, useState, type ReactNode } from "react";
-import { CelestialMoon } from "@/components/celestial/CelestialMoon";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import type { TodayDayBriefModel } from "@/lib/todayDayBrief";
 import {
@@ -10,10 +9,12 @@ import {
   DsCallout,
   DsCaption,
   DsCard,
+  DsCelestialMoon,
   DsChip,
   DsChipCluster,
   DsContentCard,
   DsEyebrow,
+  DsFab,
   DsHeroBlock,
   DsHeroFabArrow,
   DsIconBadge,
@@ -21,16 +22,19 @@ import {
   DsListRow,
   DsMetricCard,
   DsOverlaySheet,
+  DsQuote,
   DsRadialMeter,
+  DsSectionHeader,
   DsStarDivider,
+  DsWaveMeter,
 } from "@/design-system";
 import { TODAY_DOMAIN_ICON_MAP } from "@/design-system/icons/DsIcons";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 /**
- * Block 1 — Form Kit pilot (FOUNDATION_UI §15.8 + kit sheet roles).
- * Hero (glass + moon bleed) · Metric (solid) · List (solid + domain icons) ·
- * Callout pair (help/avoid) · Action (accent). Planets = celestial only, not life spheres.
+ * Block 1 — Form Kit production (FOUNDATION_UI §15.8).
+ * Wire only roles with real model data. UI imports: design-system/** only
+ * (plus domain data/types). Planets = celestial contexts only, not life spheres.
  */
 
 export type TodayDayBriefPane = "atmosphere" | "orientation";
@@ -64,6 +68,14 @@ function BetterDomainLeading({ id }: { id: string }) {
       <Icon className={layout.domainIcon} />
     </DsIconBadge>
   );
+}
+
+/** Parse energy string → 0–100, or null when no real numeric signal. */
+function parseEnergyPct(energy: string | null | undefined): number | null {
+  if (!energy) return null;
+  const m = String(energy).match(/(\d{1,3})\s*%/);
+  if (!m) return null;
+  return Math.min(100, Math.max(0, Number(m[1])));
 }
 
 export function TodayDayBrief({
@@ -135,6 +147,7 @@ function TodayDayDashboard({
     atmosphereLine,
     vibe,
     moodPills,
+    activityTags,
     atmosphereNote,
     expect,
     modeLabel,
@@ -153,12 +166,9 @@ function TodayDayDashboard({
   const heroCue = moodPills[0] || null;
   const heroMeta = lunarCaption || salutation;
   const showMoon = typeof moonPhase === "number" && Number.isFinite(moonPhase);
-  const energyPct = (() => {
-    if (!energy) return 62;
-    const m = String(energy).match(/(\d{1,3})\s*%/);
-    if (m) return Math.min(100, Number(m[1]));
-    return 62;
-  })();
+  const energyPct = parseEnergyPct(energy);
+  const showMetric = energyPct !== null;
+  const statusChipLabel = modeLabel || heroCue;
 
   const openHero = () =>
     openSheet({
@@ -171,7 +181,7 @@ function TodayDayDashboard({
 
   /* Single moon — Hero bleed only. A second backdrop disk reads as a duplicate. */
   const moonBleed = showMoon ? (
-    <CelestialMoon
+    <DsCelestialMoon
       phase={moonPhase}
       size={300}
       spin={0.014}
@@ -195,7 +205,6 @@ function TodayDayDashboard({
           <DsCaption>{dateLabel}</DsCaption>
         </p>
 
-        {/* Kit: Hero (glass + cropped moon) ≠ Data (solid metric) */}
         <div className={layout.pilotGrid}>
           <DsHeroBlock
             testId="today-day-brief-vibe"
@@ -213,11 +222,27 @@ function TodayDayDashboard({
             }
             bleedClassName={showMoon ? layout.heroMoonBleed : undefined}
             chips={
-              heroCue || moodPills.length ? (
+              moodPills.length || activityTags.length || statusChipLabel ? (
                 <DsChipCluster>
-                  {(moodPills.length ? moodPills.slice(0, 3) : heroCue ? [heroCue] : []).map((pill) => (
-                    <DsChip key={pill} testId={pill === heroCue ? "today-day-brief-mood" : undefined}>
-                      {pill}
+                  {statusChipLabel ? (
+                    <DsChip
+                      variant="status"
+                      statusTone="neutral"
+                      testId={statusChipLabel === heroCue ? "today-day-brief-mood" : "today-day-brief-status"}
+                    >
+                      {statusChipLabel}
+                    </DsChip>
+                  ) : null}
+                  {(moodPills.length ? moodPills : []).slice(0, 3).map((pill) =>
+                    pill === statusChipLabel ? null : (
+                      <DsChip key={pill} testId={pill === heroCue ? "today-day-brief-mood" : undefined}>
+                        {pill}
+                      </DsChip>
+                    ),
+                  )}
+                  {activityTags.slice(0, 2).map((tag) => (
+                    <DsChip key={tag} variant="time">
+                      {tag}
                     </DsChip>
                   ))}
                 </DsChipCluster>
@@ -233,38 +258,46 @@ function TodayDayDashboard({
             onOpen={openHero}
           />
 
-          <DsMetricCard
-            testId="today-day-brief-energy-metric"
-            tone="solid"
-            value={`${Math.round(energyPct)}%`}
-            label={copy.pulseLabel}
-            meter={<DsRadialMeter value={energyPct} size={80} />}
-          />
+          {showMetric ? (
+            <DsMetricCard
+              testId="today-day-brief-energy-metric"
+              tone="solid"
+              value={`${Math.round(energyPct)}%`}
+              label={copy.pulseLabel}
+              meter={
+                <div className={layout.stackTight}>
+                  <DsRadialMeter value={energyPct} size={80} />
+                  <DsWaveMeter value={energyPct} testId="today-day-brief-energy-wave" />
+                </div>
+              }
+            />
+          ) : null}
         </div>
 
-        {/* Kit: List — domain stroke icons (§16.6), never planet photos for life spheres */}
         {betterCards.length > 0 ? (
-          <DsListPanel title={copy.betterTodayLabel} tone="solid" testId="today-day-brief-better">
-            {betterCards.map((card) => (
-              <DsListRow
-                key={card.id}
-                testId={`today-day-better-${card.id}`}
-                leading={<BetterDomainLeading id={card.id} />}
-                title={card.title}
-                subtitle={card.body}
-                onClick={() =>
-                  openSheet({
-                    title: card.title,
-                    kicker: copy.betterTodayLabel,
-                    body: card.detail || card.body,
-                  })
-                }
-              />
-            ))}
-          </DsListPanel>
+          <>
+            <DsSectionHeader title={copy.betterTodayLabel} withDivider={false} />
+            <DsListPanel tone="solid" testId="today-day-brief-better">
+              {betterCards.map((card) => (
+                <DsListRow
+                  key={card.id}
+                  testId={`today-day-better-${card.id}`}
+                  leading={<BetterDomainLeading id={card.id} />}
+                  title={card.title}
+                  subtitle={card.body}
+                  onClick={() =>
+                    openSheet({
+                      title: card.title,
+                      kicker: copy.betterTodayLabel,
+                      body: card.detail || card.body,
+                    })
+                  }
+                />
+              ))}
+            </DsListPanel>
+          </>
         ) : null}
 
-        {/* Kit: meaning pair — help vs avoid rails (§5.1), not twin ContentCards */}
         {(supportLine || trap) && (
           <section data-testid="today-day-brief-pair" className={layout.pairGrid}>
             {supportLine ? (
@@ -304,26 +337,31 @@ function TodayDayDashboard({
           </section>
         )}
 
-        {/* Kit: Action / CTA — accent plate, not another glass twin */}
-        {personalLine || onContinue ? (
+        {personalLine ? (
           <>
             <DsStarDivider />
-            <DsActionCard
-              testId="today-day-brief-personal"
-              tone="accent"
-              title={copy.personalTodayLabel}
-              body={personalLine || undefined}
-              action={
-                onContinue ? (
-                  <DsButton data-testid="today-day-personal-cta" onClick={onContinue}>
-                    {copy.personalTodayCta}
-                  </DsButton>
-                ) : (
-                  <DsChip variant="ghost">·</DsChip>
-                )
-              }
-            />
+            <DsQuote highlight kicker={copy.personalTodayLabel} testId="today-day-brief-quote">
+              {personalLine}
+            </DsQuote>
           </>
+        ) : null}
+
+        {onContinue ? (
+          <DsActionCard
+            testId="today-day-brief-personal"
+            tone="accent"
+            title={copy.personalTodayLabel}
+            action={
+              <>
+                <DsButton size="lg" data-testid="today-day-personal-cta" onClick={onContinue}>
+                  {copy.personalTodayCta}
+                </DsButton>
+                <DsFab ariaLabel={copy.personalTodayCta} size="md" onClick={onContinue}>
+                  →
+                </DsFab>
+              </>
+            }
+          />
         ) : null}
       </div>
 
@@ -341,14 +379,21 @@ function TodayDayOrientation({
   loading: boolean;
   timeline: ReactNode;
 }) {
-  const { trap, doItems, avoidItems, energy, energyCause, expect } = model;
+  const { trap, doItems, avoidItems, energy, energyCause, expect, personalLine } = model;
   const hasCues = doItems.length > 0 || avoidItems.length > 0;
+  const energyPct = parseEnergyPct(energy);
   const empty = !trap && !hasCues && !energy && !expect && !timeline && !loading;
 
   return (
     <div className={layout.pilotStack} data-testid="today-day-brief" data-pane="orientation">
       {expect ? (
         <DsContentCard tone="glass" testId="today-day-brief-expect" eyebrow={copy.expectLabel} body={expect} />
+      ) : null}
+
+      {personalLine ? (
+        <DsQuote highlight kicker={copy.personalTodayLabel}>
+          {personalLine}
+        </DsQuote>
       ) : null}
 
       {trap ? (
@@ -376,7 +421,20 @@ function TodayDayOrientation({
         </section>
       ) : null}
 
-      {energy ? (
+      {energyPct !== null ? (
+        <DsMetricCard
+          tone="solid"
+          testId="today-day-brief-energy"
+          value={`${Math.round(energyPct)}%`}
+          label={energyCause || copy.pulseLabel}
+          meter={
+            <div className={layout.stackTight}>
+              <DsRadialMeter value={energyPct} size={72} />
+              <DsWaveMeter value={energyPct} />
+            </div>
+          }
+        />
+      ) : energy ? (
         <DsMetricCard
           tone="solid"
           testId="today-day-brief-energy"

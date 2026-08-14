@@ -2,9 +2,10 @@ import type { ReactNode } from "react";
 import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import type { DsSurfaceTone } from "@/design-system/primitives/DsSurface";
-import { DsBody, DsCaption, DsEyebrow, DsHeadline } from "@/design-system/primitives/DsTypography";
+import { DsBody, DsCaption, DsEyebrow, DsHeadline, DsSectionTitle } from "@/design-system/primitives/DsTypography";
 import { DsFab } from "@/design-system/primitives/DsFab";
 import { DsChipCluster } from "@/design-system/primitives/DsChip";
+import { DsStarDivider } from "@/design-system/primitives/DsStarDivider";
 import { joinClass } from "@/design-system/utils/joinClass";
 import c from "@/design-system/compositions/dsCompositions.module.css";
 import fk from "@/design-system/primitives/dsFormKit.module.css";
@@ -69,6 +70,42 @@ export function DsHeroFabArrow(props: { onClick?: () => void; ariaLabel: string;
     <DsFab ariaLabel={props.ariaLabel} onClick={props.onClick} size="sm" testId={props.testId}>
       →
     </DsFab>
+  );
+}
+
+type DsSectionHeaderProps = {
+  title: string;
+  eyebrow?: string;
+  /** Optional trailing control (e.g. ghost “View all” button). */
+  action?: ReactNode;
+  withDivider?: boolean;
+  className?: string;
+  testId?: string;
+};
+
+/**
+ * Form Kit section header — composition only (typography + optional action + star divider).
+ * Not a visual primitive; no own skin beyond layout gap.
+ */
+export function DsSectionHeader({
+  title,
+  eyebrow,
+  action,
+  withDivider = false,
+  className,
+  testId,
+}: DsSectionHeaderProps) {
+  return (
+    <header className={joinClass(c.sectionHeader, className)} data-testid={testId}>
+      <div className={c.sectionHeaderRow}>
+        <div className={c.sectionHeaderCopy}>
+          {eyebrow ? <DsEyebrow>{eyebrow}</DsEyebrow> : null}
+          <DsSectionTitle>{title}</DsSectionTitle>
+        </div>
+        {action ? <div className={c.sectionHeaderAction}>{action}</div> : null}
+      </div>
+      {withDivider ? <DsStarDivider /> : null}
+    </header>
   );
 }
 

@@ -4,7 +4,7 @@ import {
   COLOR_DAY_UNAVAILABLE_RU,
   type TodayDayColorGuide,
 } from "@/lib/todayDayColorGuide";
-import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
+import styles from "@/design-system/compositions/dsCompositionSurface.module.css";
 
 type Props = {
   guide: TodayDayColorGuide;

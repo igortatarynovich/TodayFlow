@@ -7,6 +7,33 @@
   width: 100%;
 }
 
+/* Section header — layout only (skin from typography / divider / button atoms) */
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  width: 100%;
+}
+
+.sectionHeaderRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  width: 100%;
+}
+
+.sectionHeaderCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  min-width: 0;
+}
+
+.sectionHeaderAction {
+  flex-shrink: 0;
+}
+
 .heroInner {
   position: relative;
   display: flex;

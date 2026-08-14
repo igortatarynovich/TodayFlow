@@ -125,3 +125,9 @@
   padding: var(--tf-ds-space-5, 1rem);
   min-height: 5rem;
 }
+
+.inlineIcon {
+  width: 0.95rem;
+  height: 0.95rem;
+  display: block;
+}

@@ -16,14 +16,16 @@ export type { DsCardSize, DsCardVariant } from "@/design-system/primitives/DsCar
 export { DsSurface, legacySurfaceVariantToTone } from "@/design-system/primitives/DsSurface";
 export type { DsSurfaceTone, DsSurfaceLegacyVariant } from "@/design-system/primitives/DsSurface";
 export { DsChip, DsChipCluster } from "@/design-system/primitives/DsChip";
-export type { DsChipVariant } from "@/design-system/primitives/DsChip";
+export type { DsChipStatusTone, DsChipVariant } from "@/design-system/primitives/DsChip";
 export { DsFab } from "@/design-system/primitives/DsFab";
 export type { DsFabSize } from "@/design-system/primitives/DsFab";
 export {
   DsDotMeter,
+  DsLinearProgress,
   DsMetric,
   DsRadialMeter,
   DsSpectrum,
+  DsWaveMeter,
 } from "@/design-system/primitives/DsMeters";
 export { DsStarDivider } from "@/design-system/primitives/DsStarDivider";
 export { DsAvatar } from "@/design-system/primitives/DsAvatar";
@@ -72,10 +74,18 @@ export {
   DsListRow,
   DsMetricCard,
   DsOverlaySheet,
+  DsSectionHeader,
   DsWindowCard,
 } from "@/design-system/compositions/DsBlocks";
 
-export { DsPlanet, DsZodiac, DsNumber, DsTarotFace, DsAngle } from "@/design-system/visual";
+export {
+  DsPlanet,
+  DsZodiac,
+  DsNumber,
+  DsTarotFace,
+  DsAngle,
+  DsCelestialMoon,
+} from "@/design-system/visual";
 
 export { DsOrbitalViz, DsThemePanel, DsThemeViz } from "@/design-system/patterns/DsThemePanel";
 export type { DsOrbitalNode } from "@/design-system/patterns/DsThemePanel";

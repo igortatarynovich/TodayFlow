@@ -13,6 +13,8 @@ const FORM_KIT_EXPORTS = [
   "DsDotMeter",
   "DsSpectrum",
   "DsMetric",
+  "DsLinearProgress",
+  "DsWaveMeter",
   "DsStarDivider",
   "DsAvatar",
   "DsOverlaySheet",
@@ -23,11 +25,13 @@ const FORM_KIT_EXPORTS = [
   "DsMetricCard",
   "DsActionCard",
   "DsListRow",
+  "DsSectionHeader",
   "DsPlanet",
   "DsZodiac",
   "DsNumber",
   "DsTarotFace",
   "DsAngle",
+  "DsCelestialMoon",
 ] as const;
 
 describe("Form Kit exports", () => {

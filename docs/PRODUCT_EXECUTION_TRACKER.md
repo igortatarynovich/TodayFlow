@@ -932,15 +932,16 @@ Status: `IN_PROGRESS`
 
 ### Form Kit (2026-08-14) — closed visual SoT
 - **Canon:** `TODAYFLOW_FOUNDATION_UI.md` §15.8 — Surface≠Card; compositions; visual import contract; formal DoD; form≠kit colors.
-- **Code:** `frontend/src/design-system/` primitives + `compositions/` + `visual/` wrappers; catalog `/design-system`; gate declarative skin bans.
-- **Pilot:** Today day brief → Form Kit compositions (no local skin on pilot surface).
+- **Hard rules:** `DsWaveMeter` = semantic value viz; `DsChip` `statusTone` = `--tf-semantic-*` only (no `--day-*`); `DsSectionHeader` = composition only.
+- **Code:** `frontend/src/design-system/` primitives + `compositions/` + `visual/` wrappers; catalog `/design-system` = **100% sheet roles specimen**; gate declarative skin bans.
+- **Production:** Today day brief wires only roles with real model data; UI imports from `design-system/**` (+ domain data/types). Next stage = zone migration only (Practices…).
 - **Zone sequence (absolute no local skin after each):** Today → Profile → Practices → Compatibility → Natal → rest. Allowlist: `scripts/ds_form_kit_zone_allowlist.json`.
 
 ### Tasks
 - [x] Lock color tokens, typography scale, spacing grid.
 - [x] Standardize button/card/input variants.
 - [x] Unify icon style and tarot cover style.
-- [x] **Form Kit closed set** — §15.8 primitives + compositions + visual contract + gate + catalog DoD + day-brief pilot.
+- [x] **Form Kit closed set** — §15.8 primitives + compositions + visual contract + gate + **full-sheet catalog specimen** + day-brief data-backed wiring.
 - [ ] **Form Kit zones** — Today → Profile → Practices → Compatibility → Natal → rest (zero local skin per closed zone). Allowlist: `scripts/ds_form_kit_zone_allowlist.json`.
   - **Today zone CLOSED** · **Profile zone CLOSED** (2026-08-14): local `*.module.css` moved under `design-system/**`. Next: Practices (5 modules).
   - Today/Profile inventory closed via DS compositions/patterns/layouts/profile skins.
@@ -1600,6 +1601,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-14 | Design System | **Form Kit full-sheet SoT** | **LIVE (FE)** | Chips statusTone=`--tf-semantic-*` only; `DsLinearProgress` + semantic `DsWaveMeter`; button `lg`; `DsSectionHeader` composition; quote highlight; `/design-system` 100% sheet specimen; DayBrief data-backed only + `DsCelestialMoon`. Next = Practices zone migration.
 - 2026-08-14 | Ops / LLM | **K2.6 primary · K3 complex-only** | **CODE→deploy** | `NEBIUS_MODEL=K2.6`; `NEBIUS_COMPLEX_MODEL=K3` for CE 2–4 / profile funnel / natal decode only. Day/prewarm stay on K2.6.
 - 2026-08-04 | Design System | **Day shell chrome fix** | **DONE (LIVE)** | PR #14 merged · frontend rebuild. Day-mode = shell routes; evening phase gated; sidebar stretch.
 - 2026-08-05 | Design System | **Task 2.9b Compatibility result** | **IN PROGRESS (code)** | Exploration main/duals/tips/deep + funnel confidence/today/risk + analyze/signs personalized → `DsCallout`/`DsQuote`. Not zone DONE — 6-axis DoD + screenshots remain.

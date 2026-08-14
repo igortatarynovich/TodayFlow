@@ -1,5 +1,6 @@
 "use client";
 
+import { useId, useState } from "react";
 import { dsAppNavItemsRu } from "@/components/product-ui/productWebShellChrome";
 import {
   DsActionCard,
@@ -26,12 +27,15 @@ import {
   DsHeroBlock,
   DsInsightRow,
   DsInsightTile,
+  DsLinearProgress,
   DsListPanel,
   DsListRow,
+  DsMetric,
   DsMetricCard,
   DsMobileTabBar,
   DsNumber,
   DsOrbitalViz,
+  DsOverlaySheet,
   DsPlanet,
   DsPulseCard,
   DsQuote,
@@ -39,21 +43,25 @@ import {
   DsRitualGate,
   DsRitualGateSection,
   DsSearchField,
+  DsSectionHeader,
   DsSpectrum,
   DsStarDivider,
   DsStatusBadge,
   DsSubtitle,
   DsSurface,
+  DsTarotFace,
   DsTextField,
   DsThemePanel,
   DsTitle,
+  DsWaveMeter,
   DsWindowCard,
   DsZodiac,
   DsFeatureIcon,
   IconCalendar,
   IconMoon,
   IconSparkles,
-} from "@/design-system";import { DS_FIGMA_MAP } from "@/design-system/registry/figmaMap";
+} from "@/design-system";
+import { DS_FIGMA_MAP } from "@/design-system/registry/figmaMap";
 import cat from "@/design-system/catalog/dsCatalog.module.css";
 
 function CatalogSection({ title, children }: { title: string; children: React.ReactNode }) {
@@ -89,6 +97,9 @@ function SpacingBlock({ label, size }: { label: string; size: string }) {
 }
 
 export function DsCatalog() {
+  const [overlayOpen, setOverlayOpen] = useState(false);
+  const overlayTitleId = useId();
+
   return (
     <div className={cat.page} data-testid="ds-catalog">
       <header className={cat.hero}>
@@ -154,10 +165,9 @@ export function DsCatalog() {
 
       <CatalogSection title="Form Kit · Surfaces (tone only)">
         <DsBody size="sm" muted>
-          §15.8 — <code>DsSurface</code> = visual shell; <code>DsCard</code> = pad/gap on a tone. Color from{" "}
-          <code>--tf-*</code> / <code>--day-*</code>, not the kit sheet neon.
+          §15.8 specimen — 100% sheet roles. Color from <code>--tf-*</code> / <code>--day-*</code>, not kit neon.
         </DsBody>
-        <div className={cat.cardGrid} style={{ marginTop: "1rem" }}>
+        <div className={cat.cardGrid} style={{ marginTop: "1rem" }} data-testid="form-kit-surfaces">
           {(["none", "subtle", "solid", "glass", "accent", "overlay"] as const).map((tone) => (
             <DsSurface key={tone} tone={tone} className={cat.formKitSurface}>
               <DsCaption>{tone}</DsCaption>
@@ -167,28 +177,121 @@ export function DsCatalog() {
         </div>
       </CatalogSection>
 
-      <CatalogSection title="Form Kit · Primitives">
-        <div className={cat.row}>
-          <DsChip icon={<DsPlanet planet="moon" size={16} />}>Moon</DsChip>
-          <DsChip variant="status">High energy</DsChip>
-          <DsFab ariaLabel="Continue">→</DsFab>
-          <DsAvatar label="A" />
-          <DsZodiac sign="leo" size={28} />
-          <DsNumber value={7} size={28} />
-          <DsAngle angle="asc" size={28} />
+      <CatalogSection title="Form Kit · Buttons & FAB">
+        <DsCaption>Primary / Secondary / Ghost / Icon × lg · md · sm + FAB</DsCaption>
+        <div className={cat.row} style={{ marginTop: "0.75rem", flexWrap: "wrap", gap: "0.75rem" }}>
+          <DsButton size="lg">Primary L</DsButton>
+          <DsButton size="md">Primary M</DsButton>
+          <DsButton size="sm">Primary S</DsButton>
+          <DsButton variant="secondary" size="lg">
+            Secondary L
+          </DsButton>
+          <DsButton variant="secondary" size="md">
+            Secondary M
+          </DsButton>
+          <DsButton variant="ghost" size="md">
+            Ghost
+          </DsButton>
+          <DsButton variant="icon" size="md" aria-label="Icon">
+            →
+          </DsButton>
+          <DsFab ariaLabel="FAB md" size="md">
+            →
+          </DsFab>
+          <DsFab ariaLabel="FAB sm" size="sm">
+            →
+          </DsFab>
+          <DsFab ariaLabel="FAB lg" size="lg">
+            →
+          </DsFab>
         </div>
-        <div className={cat.row} style={{ marginTop: "1rem", alignItems: "center" }}>
+      </CatalogSection>
+
+      <CatalogSection title="Form Kit · Chips">
+        <DsCaption>Status (semantic --tf-* only) · category+icon · time · selection · signal</DsCaption>
+        <div className={cat.row} style={{ marginTop: "0.75rem" }} data-testid="form-kit-chips">
+          <DsChip variant="status" statusTone="good">
+            High energy
+          </DsChip>
+          <DsChip variant="status" statusTone="warn">
+            Caution
+          </DsChip>
+          <DsChip variant="status" statusTone="risk">
+            Trap
+          </DsChip>
+          <DsChip variant="status" statusTone="neutral">
+            Neutral
+          </DsChip>
+          <DsChip icon={<IconSparkles className={cat.inlineIcon} />}>Love</DsChip>
+          <DsChip icon={<IconCalendar className={cat.inlineIcon} />}>Work</DsChip>
+          <DsChip variant="time">09:00</DsChip>
+          <DsChip variant="time" selected>
+            13:40
+          </DsChip>
+          <DsChip variant="selection" selected icon={<IconMoon className={cat.inlineIcon} />}>
+            Today
+          </DsChip>
+          <DsChip icon={<DsPlanet planet="moon" size={16} />}>Moon</DsChip>
+          <DsChip icon={<DsPlanet planet="mars" size={16} />}>Mars</DsChip>
+          <DsChip variant="ghost">Ghost</DsChip>
+        </div>
+      </CatalogSection>
+
+      <CatalogSection title="Form Kit · Energy meters">
+        <DsCaption>Metric · Radial · Dots · Linear · Wave (semantic) · Spectrum</DsCaption>
+        <div
+          className={cat.row}
+          style={{ marginTop: "0.75rem", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}
+          data-testid="form-kit-meters"
+        >
+          <DsMetric value="78%" label="Energy" />
           <DsRadialMeter value={78} />
           <DsDotMeter value={4} />
-          <div style={{ flex: 1, minWidth: "12rem" }}>
+          <div style={{ flex: "1 1 8rem", minWidth: "8rem" }}>
+            <DsLinearProgress value={78} label="Energy progress" />
+          </div>
+          <div style={{ flex: "1 1 8rem", minWidth: "8rem" }}>
+            <DsWaveMeter value={78} showLabel />
+          </div>
+          <div style={{ flex: "1 1 10rem", minWidth: "10rem" }}>
             <DsSpectrum value={0.62} lowLabel="Low" highLabel="High" />
           </div>
         </div>
         <DsStarDivider />
       </CatalogSection>
 
+      <CatalogSection title="Form Kit · Avatars & visuals">
+        <div className={cat.row} style={{ alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+          <DsAvatar label="You" size="lg" />
+          <DsAvatar label="Partner" size="lg" />
+          <DsAvatar label="A" size="sm" />
+          <DsZodiac sign="leo" size={36} />
+          <DsNumber value={7} size={36} />
+          <DsAngle angle="asc" size={36} />
+          <DsPlanet planet="neptune" size={48} />
+          <DsTarotFace src="/images/cards/tarot/web/faces/00-768x1280.avif" alt="Tarot specimen" />
+        </div>
+      </CatalogSection>
+
+      <CatalogSection title="Form Kit · Section header & Quote">
+        <DsSectionHeader
+          eyebrow="Explore"
+          title="Living maps"
+          action={
+            <DsButton variant="ghost" size="sm">
+              View all
+            </DsButton>
+          }
+          withDivider
+          testId="form-kit-section-header"
+        />
+        <DsQuote highlight kicker="Insight" testId="form-kit-quote-highlight">
+          Ясность сегодня — не скорость, а точный выбор опоры.
+        </DsQuote>
+      </CatalogSection>
+
       <CatalogSection title="Form Kit · Compositions">
-        <div className={cat.cardGrid}>
+        <div className={cat.cardGrid} data-testid="form-kit-compositions">
           <DsHeroBlock
             tone="glass"
             eyebrow="Clarity in focus"
@@ -197,7 +300,9 @@ export function DsCatalog() {
             bleed={<DsPlanet planet="neptune" size={120} />}
             chips={
               <DsChipCluster>
-                <DsChip>Focus</DsChip>
+                <DsChip variant="status" statusTone="good">
+                  Focus
+                </DsChip>
               </DsChipCluster>
             }
             fab={<DsFab ariaLabel="Open" size="sm">→</DsFab>}
@@ -209,16 +314,37 @@ export function DsCatalog() {
             endLabel="16:20"
             spectrum={<DsSpectrum value={0.55} />}
           />
-          <DsMetricCard tone="solid" value="78%" label="Energy" meter={<DsRadialMeter value={78} size={72} />} />
+          <DsMetricCard
+            tone="solid"
+            value="78%"
+            label="Energy"
+            meter={
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", width: "5.5rem" }}>
+                <DsRadialMeter value={78} size={72} />
+                <DsWaveMeter value={78} />
+              </div>
+            }
+          />
           <DsContentCard
             tone="subtle"
             eyebrow="Note"
             body="Content block — prose + chips, not a metric twin."
             chips={<DsChip>tag</DsChip>}
           />
-          <DsActionCard tone="accent" title="See your full day" action={<DsButton>Open</DsButton>} />
+          <DsActionCard
+            tone="accent"
+            title="See your full day"
+            action={
+              <>
+                <DsButton size="lg">Open</DsButton>
+                <DsFab ariaLabel="Continue" size="md">
+                  →
+                </DsFab>
+              </>
+            }
+          />
         </div>
-        <DsListPanel tone="glass" title="List panel">
+        <DsListPanel tone="glass" title="List panel · celestial signals">
           <DsListRow
             leading={<DsPlanet planet="moon" size={36} />}
             title="Moon in Virgo"
@@ -232,6 +358,22 @@ export function DsCatalog() {
             onClick={() => undefined}
           />
         </DsListPanel>
+        <div style={{ marginTop: "1rem" }}>
+          <DsButton variant="secondary" size="sm" onClick={() => setOverlayOpen(true)}>
+            Open OverlaySheet
+          </DsButton>
+        </div>
+        {overlayOpen ? (
+          <DsOverlaySheet
+            titleId={overlayTitleId}
+            title="Overlay sheet"
+            kicker="Form Kit"
+            body="Opaque overlay tone — never glass over imagery."
+            closeLabel="Close"
+            onClose={() => setOverlayOpen(false)}
+            testId="form-kit-overlay-sheet"
+          />
+        ) : null}
       </CatalogSection>
 
       <CatalogSection title="3. Spacing">
