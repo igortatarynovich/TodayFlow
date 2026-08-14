@@ -1,9 +1,20 @@
 "use client";
 
-import { DsButton } from "@/design-system";
+import {
+  DsActionCard,
+  DsBody,
+  DsButton,
+  DsCaption,
+  DsChip,
+  DsChipCluster,
+  DsContentCard,
+  DsEyebrow,
+  DsListPanel,
+  DsListRow,
+} from "@/design-system";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import type { TodayLoopModel } from "@/lib/todayLoopModel";
-import styles from "@/components/today/composition/TodayLoopBlock.module.css";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 export type TodayLoopBlockProps = {
   model: TodayLoopModel;
@@ -20,8 +31,7 @@ const OUTCOMES: { id: "done" | "partial" | "not_done"; label: string }[] = [
 ];
 
 /**
- * Block 6 — morning accept + evening checkout.
- * Renders assembled model only — no invent.
+ * Block 6 — morning accept + evening checkout (Form Kit).
  */
 export function TodayLoopBlock({
   model,
@@ -32,78 +42,74 @@ export function TodayLoopBlock({
 }: TodayLoopBlockProps) {
   if (model.mode === "evening") {
     return (
-      <div className={styles.root} data-testid="today-loop-block" data-mode="evening">
-        <p className={styles.kicker}>{copy.loopEveningKicker}</p>
-        <h3 className={styles.title} data-testid="today-loop-title">
-          {copy.loopEveningTitle}
-        </h3>
+      <div className={layout.stack} data-testid="today-loop-block" data-mode="evening">
+        <DsEyebrow>{copy.loopEveningKicker}</DsEyebrow>
+        <p data-testid="today-loop-title">
+          <DsBody>{copy.loopEveningTitle}</DsBody>
+        </p>
         {model.manifesto ? (
-          <p className={styles.manifesto} data-testid="today-loop-manifesto">
-            {model.manifesto}
-          </p>
+          <DsContentCard tone="glass" testId="today-loop-manifesto" body={model.manifesto} />
         ) : null}
         {model.trapCheck ? (
-          <section className={styles.trapCheck} data-testid="today-loop-trap-check">
-            <p className={styles.label}>{copy.loopTrapCheckLabel}</p>
-            <p className={styles.body}>{model.trapCheck}</p>
-          </section>
+          <DsContentCard
+            tone="accent"
+            testId="today-loop-trap-check"
+            eyebrow={copy.loopTrapCheckLabel}
+            body={model.trapCheck}
+          />
         ) : null}
         {onPickOutcome ? (
-          <div className={styles.outcomes} data-testid="today-loop-outcomes">
+          <DsChipCluster testId="today-loop-outcomes">
             {OUTCOMES.map((row) => (
-              <button
+              <DsChip
                 key={row.id}
-                type="button"
-                className={outcome === row.id ? styles.outcomeActive : styles.outcome}
-                data-testid={`today-loop-outcome-${row.id}`}
+                selected={outcome === row.id}
+                testId={`today-loop-outcome-${row.id}`}
                 onClick={() => onPickOutcome(row.id)}
               >
                 {row.label}
-              </button>
+              </DsChip>
             ))}
-          </div>
+          </DsChipCluster>
         ) : null}
         {model.eveningClosure ? (
-          <p className={styles.closure} data-testid="today-loop-evening-closure">
-            {model.eveningClosure}
-          </p>
+          <DsCaption>
+            <span data-testid="today-loop-evening-closure">{model.eveningClosure}</span>
+          </DsCaption>
         ) : (
-          <p className={styles.closureMuted}>{copy.loopEveningFallback}</p>
+          <DsCaption>{copy.loopEveningFallback}</DsCaption>
         )}
-        <DsButton
-          type="button"
-          variant="primary"
-          className={styles.primaryCta}
-          data-testid="today-loop-sleep-cta"
-          onClick={onOpenEvening}
-        >
-          {copy.loopSleepCta}
-        </DsButton>
+        <DsActionCard
+          tone="accent"
+          title={copy.loopSleepCta}
+          action={
+            <DsButton type="button" variant="primary" data-testid="today-loop-sleep-cta" onClick={onOpenEvening}>
+              {copy.loopSleepCta}
+            </DsButton>
+          }
+        />
       </div>
     );
   }
 
   return (
-    <div className={styles.root} data-testid="today-loop-block" data-mode="morning">
-      <p className={styles.kicker}>{copy.loopMorningKicker}</p>
+    <div className={layout.stack} data-testid="today-loop-block" data-mode="morning">
+      <DsEyebrow>{copy.loopMorningKicker}</DsEyebrow>
       {model.manifesto ? (
-        <p className={styles.manifesto} data-testid="today-loop-manifesto">
-          {model.manifesto}
-        </p>
+        <DsContentCard tone="glass" testId="today-loop-manifesto" body={model.manifesto} />
       ) : (
-        <p className={styles.closureMuted} data-testid="today-loop-empty">
-          {copy.promiseUnsetHint}
-        </p>
+        <DsCaption>
+          <span data-testid="today-loop-empty">{copy.promiseUnsetHint}</span>
+        </DsCaption>
       )}
       {model.accepted ? (
-        <p className={styles.accepted} data-testid="today-loop-accepted">
+        <DsChip variant="status" testId="today-loop-accepted">
           {copy.loopAcceptedLabel}
-        </p>
+        </DsChip>
       ) : model.manifesto ? (
         <DsButton
           type="button"
           variant="primary"
-          className={styles.primaryCta}
           data-testid="today-loop-accept-cta"
           onClick={() => onAccept(model.manifesto!)}
         >
@@ -111,28 +117,18 @@ export function TodayLoopBlock({
         </DsButton>
       ) : null}
       {!model.accepted && model.alternatives.length > 0 ? (
-        <div className={styles.alts} data-testid="today-loop-alternatives">
-          <p className={styles.label}>{copy.loopAlternativesLabel}</p>
+        <DsListPanel tone="subtle" title={copy.loopAlternativesLabel} testId="today-loop-alternatives">
           {model.alternatives.map((s) => (
-            <button
+            <DsListRow
               key={s.id}
-              type="button"
-              className={styles.altChip}
-              data-testid={`today-loop-alt-${s.id}`}
+              title={s.text}
+              testId={`today-loop-alt-${s.id}`}
               onClick={() => onAccept(s.text)}
-            >
-              {s.text}
-            </button>
+            />
           ))}
-        </div>
+        </DsListPanel>
       ) : null}
-      <DsButton
-        type="button"
-        variant="secondary"
-        className={styles.eveningSoft}
-        data-testid="today-evening-open"
-        onClick={onOpenEvening}
-      >
+      <DsButton type="button" variant="secondary" data-testid="today-evening-open" onClick={onOpenEvening}>
         {copy.eveningCta}
       </DsButton>
     </div>

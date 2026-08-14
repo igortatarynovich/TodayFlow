@@ -3,7 +3,7 @@ import { joinClass } from "@/design-system/utils/joinClass";
 import fk from "@/design-system/primitives/dsFormKit.module.css";
 
 /** Form Kit surface tones — visual shell only (FOUNDATION_UI §15.8). */
-export type DsSurfaceTone = "none" | "subtle" | "solid" | "glass" | "accent";
+export type DsSurfaceTone = "none" | "subtle" | "solid" | "glass" | "accent" | "overlay";
 
 /** @deprecated Use `tone`. Maps legacy Surface variants → Form Kit tones. */
 export type DsSurfaceLegacyVariant = "elevated" | "outline" | "glass" | "card";
@@ -14,6 +14,7 @@ const TONE_CLASS: Record<DsSurfaceTone, string> = {
   solid: fk.toneSolid,
   glass: fk.toneGlass,
   accent: fk.toneAccent,
+  overlay: fk.toneOverlay,
 };
 
 export function legacySurfaceVariantToTone(variant: DsSurfaceLegacyVariant): DsSurfaceTone {

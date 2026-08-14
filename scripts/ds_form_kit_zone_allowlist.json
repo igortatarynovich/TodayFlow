@@ -16,15 +16,11 @@
       "frontend/src/components/today/composition/TodayActNav.module.css",
       "frontend/src/components/today/composition/TodayActShell.module.css",
       "frontend/src/components/today/composition/TodayCompositionSurface.module.css",
-      "frontend/src/components/today/composition/TodayDayTasks.module.css",
-      "frontend/src/components/today/composition/TodayDepthLayerSection.module.css",
       "frontend/src/components/today/composition/TodayEveningProductClose.module.css",
       "frontend/src/components/today/composition/TodayGlanceAct.module.css",
       "frontend/src/components/today/composition/TodayHookRevealShell.module.css",
-      "frontend/src/components/today/composition/TodayLoopBlock.module.css",
       "frontend/src/components/today/composition/TodayMakeYoursBlock.module.css",
       "frontend/src/components/today/composition/TodayPersonalizedProductSection.module.css",
-      "frontend/src/components/today/composition/TodayPracticeGiftBlock.module.css",
       "frontend/src/components/today/composition/TodayProductScreenFlow.module.css",
       "frontend/src/components/today/composition/TodayProgressTracker.module.css",
       "frontend/src/components/today/composition/TodayRecapAchievements.module.css",
@@ -103,5 +99,11 @@
   "closed_pilot": {
     "path": "frontend/src/components/today/composition/TodayDayBrief.module.css",
     "note": "Form Kit pilot — Today day brief uses design-system compositions only; CSS module removed."
-  }
+  },
+  "closed": [
+    "frontend/src/components/today/composition/TodayDayTasks.module.css",
+    "frontend/src/components/today/composition/TodayDepthLayerSection.module.css",
+    "frontend/src/components/today/composition/TodayLoopBlock.module.css",
+    "frontend/src/components/today/composition/TodayPracticeGiftBlock.module.css"
+  ]
 }

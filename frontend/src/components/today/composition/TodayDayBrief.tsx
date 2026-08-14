@@ -1,20 +1,24 @@
 "use client";
 
 import { useCallback, useEffect, useId, useState, type ReactNode } from "react";
+import { CelestialMoon } from "@/components/celestial/CelestialMoon";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import type { TodayDayBriefModel } from "@/lib/todayDayBrief";
 import {
   DsActionCard,
-  DsBody,
   DsButton,
   DsCaption,
   DsCard,
   DsChip,
   DsChipCluster,
+  DsContentCard,
   DsEyebrow,
   DsHeroBlock,
   DsHeroFabArrow,
+  DsListPanel,
+  DsListRow,
   DsMetricCard,
+  DsOverlaySheet,
   DsPlanet,
   DsRadialMeter,
   DsStarDivider,
@@ -23,8 +27,8 @@ import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 /**
  * Block 1 — Form Kit pilot (FOUNDATION_UI §15.8).
- * Atmosphere pane: hero + metric + celestial visual + chips — zero local visual CSS.
- * Canon: TODAY_SCREEN_SCENARIO_V3 v3.4.2
+ * Distinct kit roles: Hero · Metric · List · Content pair · Action.
+ * Moon backdrop restored as atmosphere (not a card twin).
  */
 
 export type TodayDayBriefPane = "atmosphere" | "orientation";
@@ -34,7 +38,6 @@ export type TodayDayBriefProps = {
   pane?: TodayDayBriefPane;
   loading?: boolean;
   timeline?: ReactNode;
-  /** Advance ScreenFlow after personal CTA (optional). */
   onContinue?: () => void;
 };
 
@@ -43,6 +46,12 @@ type SheetState = {
   body: string;
   kicker?: string;
 } | null;
+
+const BETTER_PLANET: Record<string, string> = {
+  work: "mars",
+  people: "venus",
+  self: "sun",
+};
 
 export function TodayDayBrief({
   model,
@@ -82,44 +91,15 @@ function TodayDayDetailSheet({
   if (!sheet) return null;
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      data-testid="today-day-detail-sheet"
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 40,
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "center",
-        padding: "var(--tf-ds-space-4, 1rem)",
-      }}
-    >
-      <button
-        type="button"
-        aria-label={copy.sheetClose}
-        onClick={onClose}
-        style={{
-          position: "absolute",
-          inset: 0,
-          border: "none",
-          background: "transparent",
-          cursor: "pointer",
-        }}
-      />
-      <DsCard tone="glass" size="default" className={layout.stack} testId="today-day-detail-panel">
-        {sheet.kicker ? <DsEyebrow>{sheet.kicker}</DsEyebrow> : null}
-        <h3 id={titleId}>
-          <DsBody>{sheet.title}</DsBody>
-        </h3>
-        <DsBody size="sm">{sheet.body}</DsBody>
-        <DsButton variant="secondary" onClick={onClose}>
-          {copy.sheetClose}
-        </DsButton>
-      </DsCard>
-    </div>
+    <DsOverlaySheet
+      testId="today-day-detail-sheet"
+      titleId={titleId}
+      title={sheet.title}
+      body={sheet.body}
+      kicker={sheet.kicker}
+      closeLabel={copy.sheetClose}
+      onClose={onClose}
+    />
   );
 }
 
@@ -146,6 +126,7 @@ function TodayDayDashboard({
     expect,
     modeLabel,
     lunarCaption,
+    moonPhase,
     betterCards,
     supportLine,
     supportDetail,
@@ -158,6 +139,7 @@ function TodayDayDashboard({
   const heroBody = line || expect || atmosphereNote;
   const heroCue = moodPills[0] || null;
   const heroMeta = lunarCaption || salutation;
+  const showMoon = typeof moonPhase === "number" && Number.isFinite(moonPhase);
   const energyPct = (() => {
     if (!energy) return 62;
     const m = String(energy).match(/(\d{1,3})\s*%/);
@@ -165,79 +147,90 @@ function TodayDayDashboard({
     return 62;
   })();
 
+  const openHero = () =>
+    openSheet({
+      title: modeLabel || copy.atmosphereLabel,
+      kicker: copy.atmosphereLabel,
+      body:
+        [heroMeta, line, expect, atmosphereNote, heroCue].filter(Boolean).join("\n\n") ||
+        copy.loadingDay,
+    });
+
   return (
     <div
-      className={layout.pilotStack}
+      className={[layout.pilotStack, showMoon ? layout.pilotWithMoon : null].filter(Boolean).join(" ")}
       data-testid="today-day-brief"
       data-pane="atmosphere"
       data-form-kit="pilot"
+      data-has-moon={showMoon ? "true" : "false"}
     >
-      <p data-testid="today-day-brief-date">
-        <DsCaption>{dateLabel}</DsCaption>
-      </p>
+      {showMoon ? (
+        <div className={layout.moonBackdrop} aria-hidden data-testid="today-day-brief-moon">
+          <CelestialMoon
+            phase={moonPhase}
+            size={608}
+            spin={0.014}
+            glow={1.35}
+            animated
+            textureSrc="/images/celestial/moon_lro_2k.jpg"
+            className={layout.moonDisk}
+          />
+        </div>
+      ) : null}
 
-      <div className={layout.pilotGrid}>
-        <DsHeroBlock
-          testId="today-day-brief-vibe"
-          eyebrow={heroMeta || copy.atmosphereLabel}
-          title={loading ? copy.loadingDay : modeLabel || "Сегодня"}
-          body={heroBody || undefined}
-          bleed={<DsPlanet planet="moon" size={132} />}
-          chips={
-            heroCue || moodPills.length ? (
-              <DsChipCluster>
-                {(moodPills.length ? moodPills.slice(0, 3) : heroCue ? [heroCue] : []).map((pill) => (
-                  <DsChip key={pill} testId={pill === heroCue ? "today-day-brief-mood" : undefined}>
-                    {pill}
-                  </DsChip>
-                ))}
-              </DsChipCluster>
-            ) : undefined
-          }
-          fab={
-            <DsHeroFabArrow
-              ariaLabel={copy.atmosphereLabel}
-              testId="today-day-brief-hero-fab"
-              onClick={() =>
-                openSheet({
-                  title: modeLabel || copy.atmosphereLabel,
-                  kicker: copy.atmosphereLabel,
-                  body:
-                    [heroMeta, line, expect, atmosphereNote, heroCue].filter(Boolean).join("\n\n") ||
-                    copy.loadingDay,
-                })
-              }
-            />
-          }
-          onOpen={() =>
-            openSheet({
-              title: modeLabel || copy.atmosphereLabel,
-              kicker: copy.atmosphereLabel,
-              body:
-                [heroMeta, line, expect, atmosphereNote, heroCue].filter(Boolean).join("\n\n") ||
-                copy.loadingDay,
-            })
-          }
-        />
+      <div className={layout.pilotForeground}>
+        <p data-testid="today-day-brief-date">
+          <DsCaption>{dateLabel}</DsCaption>
+        </p>
 
-        <DsMetricCard
-          testId="today-day-brief-energy-metric"
-          value={`${Math.round(energyPct)}%`}
-          label={copy.pulseLabel}
-          meter={<DsRadialMeter value={energyPct} size={72} />}
-        />
-      </div>
+        {/* Kit: Hero (atmosphere) + Data (metric) — different block roles */}
+        <div className={layout.pilotGrid}>
+          <DsHeroBlock
+            testId="today-day-brief-vibe"
+            tone="glass"
+            eyebrow={heroMeta || copy.atmosphereLabel}
+            title={loading ? copy.loadingDay : modeLabel || "Сегодня"}
+            body={heroBody || undefined}
+            chips={
+              heroCue || moodPills.length ? (
+                <DsChipCluster>
+                  {(moodPills.length ? moodPills.slice(0, 3) : heroCue ? [heroCue] : []).map((pill) => (
+                    <DsChip key={pill} testId={pill === heroCue ? "today-day-brief-mood" : undefined}>
+                      {pill}
+                    </DsChip>
+                  ))}
+                </DsChipCluster>
+              ) : undefined
+            }
+            fab={
+              <DsHeroFabArrow
+                ariaLabel={copy.atmosphereLabel}
+                testId="today-day-brief-hero-fab"
+                onClick={openHero}
+              />
+            }
+            onOpen={openHero}
+          />
 
-      {betterCards.length > 0 ? (
-        <section data-testid="today-day-brief-better" className={layout.stack}>
-          <DsEyebrow>{copy.betterTodayLabel}</DsEyebrow>
-          <div className={layout.betterGrid} data-count={Math.min(3, betterCards.length)}>
+          <DsMetricCard
+            testId="today-day-brief-energy-metric"
+            tone="solid"
+            value={`${Math.round(energyPct)}%`}
+            label={copy.pulseLabel}
+            meter={<DsRadialMeter value={energyPct} size={80} />}
+          />
+        </div>
+
+        {/* Kit: List panel — planet rows, not a grid of twin glass cards */}
+        {betterCards.length > 0 ? (
+          <DsListPanel title={copy.betterTodayLabel} tone="glass" testId="today-day-brief-better">
             {betterCards.map((card) => (
-              <DsCard
+              <DsListRow
                 key={card.id}
-                tone="glass"
-                size="compact"
-                as="button"
+                testId={`today-day-better-${card.id}`}
+                leading={<DsPlanet planet={BETTER_PLANET[card.id] || "mercury"} size={36} />}
+                title={card.title}
+                subtitle={card.body}
                 onClick={() =>
                   openSheet({
                     title: card.title,
@@ -245,74 +238,71 @@ function TodayDayDashboard({
                     body: card.detail || card.body,
                   })
                 }
-                testId={`today-day-better-${card.id}`}
-              >
-                <DsBody size="sm">{card.title}</DsBody>
-                <DsCaption>{card.body}</DsCaption>
-              </DsCard>
+              />
             ))}
-          </div>
-        </section>
-      ) : null}
+          </DsListPanel>
+        ) : null}
 
-      {(supportLine || trap) && (
-        <section data-testid="today-day-brief-pair" className={layout.pairGrid}>
-          {supportLine ? (
-            <DsCard
-              tone="subtle"
-              size="compact"
-              as="button"
-              testId="today-day-brief-do"
-              onClick={() =>
-                openSheet({
-                  title: copy.supportLabel,
-                  body: supportDetail || supportLine,
-                })
-              }
-            >
-              <DsEyebrow>{copy.supportLabel}</DsEyebrow>
-              <DsBody size="sm">{supportLine}</DsBody>
-            </DsCard>
-          ) : null}
-          {trap ? (
-            <DsCard
-              tone="subtle"
-              size="compact"
-              as="button"
-              testId="today-day-brief-trap"
-              onClick={() =>
-                openSheet({
-                  title: copy.trapDayLabel,
-                  body: trap,
-                })
-              }
-            >
-              <DsEyebrow>{copy.trapDayLabel}</DsEyebrow>
-              <DsBody size="sm">{trap}</DsBody>
-            </DsCard>
-          ) : null}
-        </section>
-      )}
+        {/* Kit: Content pair — support (subtle) vs trap (accent), not identical twins */}
+        {(supportLine || trap) && (
+          <section data-testid="today-day-brief-pair" className={layout.pairGrid}>
+            {supportLine ? (
+              <DsContentCard
+                tone="subtle"
+                as="button"
+                testId="today-day-brief-do"
+                eyebrow={copy.supportLabel}
+                body={supportLine}
+                chips={<DsChip variant="ghost">опора</DsChip>}
+                onClick={() =>
+                  openSheet({
+                    title: copy.supportLabel,
+                    body: supportDetail || supportLine,
+                  })
+                }
+              />
+            ) : null}
+            {trap ? (
+              <DsContentCard
+                tone="accent"
+                as="button"
+                testId="today-day-brief-trap"
+                eyebrow={copy.trapDayLabel}
+                body={trap}
+                chips={<DsChip variant="status">внимание</DsChip>}
+                onClick={() =>
+                  openSheet({
+                    title: copy.trapDayLabel,
+                    body: trap,
+                  })
+                }
+              />
+            ) : null}
+          </section>
+        )}
 
-      {personalLine || onContinue ? (
-        <>
-          <DsStarDivider />
-          <DsActionCard
-            testId="today-day-brief-personal"
-            title={copy.personalTodayLabel}
-            body={personalLine || undefined}
-            action={
-              onContinue ? (
-                <DsButton data-testid="today-day-personal-cta" onClick={onContinue}>
-                  {copy.personalTodayCta}
-                </DsButton>
-              ) : (
-                <DsChip variant="ghost">·</DsChip>
-              )
-            }
-          />
-        </>
-      ) : null}
+        {/* Kit: Action / CTA block */}
+        {personalLine || onContinue ? (
+          <>
+            <DsStarDivider />
+            <DsActionCard
+              testId="today-day-brief-personal"
+              tone="accent"
+              title={copy.personalTodayLabel}
+              body={personalLine || undefined}
+              action={
+                onContinue ? (
+                  <DsButton data-testid="today-day-personal-cta" onClick={onContinue}>
+                    {copy.personalTodayCta}
+                  </DsButton>
+                ) : (
+                  <DsChip variant="ghost">·</DsChip>
+                )
+              }
+            />
+          </>
+        ) : null}
+      </div>
 
       <TodayDayDetailSheet sheet={sheet} onClose={closeSheet} />
     </div>
@@ -335,56 +325,39 @@ function TodayDayOrientation({
   return (
     <div className={layout.pilotStack} data-testid="today-day-brief" data-pane="orientation">
       {expect ? (
-        <DsCard tone="glass" size="compact" testId="today-day-brief-expect">
-          <DsEyebrow>{copy.expectLabel}</DsEyebrow>
-          <DsBody size="sm">{expect}</DsBody>
-        </DsCard>
+        <DsContentCard tone="glass" testId="today-day-brief-expect" eyebrow={copy.expectLabel} body={expect} />
       ) : null}
 
       {trap ? (
-        <DsCard tone="subtle" size="compact" testId="today-day-brief-trap">
-          <DsEyebrow>{copy.trapLabel}</DsEyebrow>
-          <DsBody size="sm">{trap}</DsBody>
-        </DsCard>
+        <DsContentCard tone="accent" testId="today-day-brief-trap" eyebrow={copy.trapLabel} body={trap} />
       ) : null}
 
       {hasCues ? (
         <section className={layout.stack} data-testid="today-day-brief-instruction">
           {doItems.length > 0 ? (
-            <DsCard tone="glass" size="compact" testId="today-day-brief-do">
-              <ul>
-                {doItems.map((item) => (
-                  <li key={item}>
-                    <DsBody size="sm">{item}</DsBody>
-                  </li>
-                ))}
-              </ul>
-            </DsCard>
+            <DsListPanel tone="subtle" testId="today-day-brief-do" title={copy.supportLabel}>
+              {doItems.map((item) => (
+                <DsListRow key={item} title={item} />
+              ))}
+            </DsListPanel>
           ) : null}
           {avoidItems.length > 0 ? (
-            <DsCard tone="subtle" size="compact" testId="today-day-brief-avoid">
-              <ul>
-                {avoidItems.map((item) => (
-                  <li key={item}>
-                    <DsBody size="sm">{item}</DsBody>
-                  </li>
-                ))}
-              </ul>
-            </DsCard>
+            <DsListPanel tone="glass" testId="today-day-brief-avoid" title={copy.trapDayLabel}>
+              {avoidItems.map((item) => (
+                <DsListRow key={item} title={item} />
+              ))}
+            </DsListPanel>
           ) : null}
         </section>
       ) : null}
 
       {energy ? (
-        <DsCard tone="glass" size="compact" testId="today-day-brief-energy">
-          <DsEyebrow>{copy.pulseLabel}</DsEyebrow>
-          <DsBody size="sm">{energy}</DsBody>
-          {energyCause ? (
-            <DsCaption>
-              <span data-testid="today-day-brief-energy-cause">{energyCause}</span>
-            </DsCaption>
-          ) : null}
-        </DsCard>
+        <DsMetricCard
+          tone="solid"
+          testId="today-day-brief-energy"
+          value={energy}
+          label={energyCause || copy.pulseLabel}
+        />
       ) : null}
 
       {timeline ? (

@@ -941,7 +941,8 @@ Status: `IN_PROGRESS`
 - [x] Standardize button/card/input variants.
 - [x] Unify icon style and tarot cover style.
 - [x] **Form Kit closed set** — §15.8 primitives + compositions + visual contract + gate + catalog DoD + day-brief pilot.
-- [ ] **Form Kit zones** — Today → Profile → Practices → Compatibility → Natal → rest (zero local skin per closed zone). Allowlist: `scripts/ds_form_kit_zone_allowlist.json` (TodayDayBrief pilot closed / CSS removed).
+- [ ] **Form Kit zones** — Today → Profile → Practices → Compatibility → Natal → rest (zero local skin per closed zone). Allowlist: `scripts/ds_form_kit_zone_allowlist.json`.
+  - Today closed so far: DayBrief · Loop · DayTasks · PracticeGift · DepthLayer (CSS removed). Remaining Today modules still on allowlist.
 - [x] **Task 2.7 Wave 1** — Shell/layout unification (`--tf-shell-max` / readable; kill phone columns). Practices/Profile/Compatibility + Tarot hub. Exit: `layout DoD ✅`, zones still IN PROGRESS.
 - [x] **Task 2.6 Wave 2** — Expand DS gate for `rgba()` / `color-mix()`; rewrite Compatibility local rgba cards to `--tf-*`/`--day-*`.
 - [x] **Task 2.6b Wave 2** — Typography on same three zones + Tarot hub → Foundation `--tf-type-*` roles.

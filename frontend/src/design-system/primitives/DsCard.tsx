@@ -25,6 +25,7 @@ const TONE_CLASS: Record<DsSurfaceTone, string> = {
   solid: fk.toneSolid,
   glass: fk.toneGlass,
   accent: fk.toneAccent,
+  overlay: fk.toneOverlay,
 };
 
 export function cardVariantToTone(variant: DsCardVariant): DsSurfaceTone {

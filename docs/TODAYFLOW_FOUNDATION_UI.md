@@ -739,13 +739,18 @@ interface DayAtmosphereContract {
 
 | Слой | Роль | Примеры |
 |------|------|---------|
-| **Surface** | Только визуальная оболочка / тон | `DsSurface` `tone: none \| subtle \| solid \| glass \| accent` |
+| **Surface** | Только визуальная оболочка / тон | `DsSurface` `tone: none \| subtle \| solid \| glass \| accent \| overlay` |
 | **Card** | Композиционный контейнер (pad/gap/`as`); **обязан** сидеть на `DsSurface` | `DsCard` (`tone` + size); legacy `variant` → alias к `tone` |
 | **Primitives** | Атомы кожи + метрики + CTA | `DsButton` · `DsFab` · `DsChip` · `DsRadialMeter` · `DsDotMeter` · `DsSpectrum` · `DsStarDivider` · `DsAvatar` · `DsMetric` · typography/quote |
 | **Visual** | Единственный feature-импорт celestial UI | `design-system/visual/{DsPlanet,DsZodiac,DsNumber,DsTarotFace,DsAngle}` |
-| **Compositions** | Сборка **без** собственной кожи | `DsHeroBlock` · `DsWindowCard` · `DsMetricCard` · `DsActionCard` · `DsListRow` |
+| **Compositions** | Сборка **без** собственной кожи | `DsHeroBlock` · `DsWindowCard` · `DsMetricCard` · `DsContentCard` · `DsListPanel` · `DsActionCard` · `DsListRow` · `DsOverlaySheet` |
 
 **Запрещено:** «тип блока = тип поверхности» одним enum; composition CSS с `border-radius` / `backdrop-filter` / decorative gradients / `box-shadow` / bg hex|rgba (кроме layout gap/grid).
+
+**Читаемость (обязательно):**
+- Каждая surface задаёт `color: var(--tf-ink)` — текст не сливается с атмосферой/луной.
+- Sheet / modal / всё, что открывается **поверх** контента или imagery → только `tone="overlay"` (`DsOverlaySheet`) или `solid`. **Glass на оверлее запрещён.**
+- In-page `glass` / `subtle` должны быть достаточно непрозрачны, чтобы body text читался поверх imagery.
 
 #### Visual import contract
 

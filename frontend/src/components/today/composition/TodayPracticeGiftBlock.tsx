@@ -1,10 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { DsButton } from "@/design-system";
+import {
+  DsActionCard,
+  DsBody,
+  DsButton,
+  DsCaption,
+  DsChip,
+  DsHeroBlock,
+} from "@/design-system";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { resolveTodayStoryFrameArt } from "@/lib/todayStoryFrameArt";
-import styles from "@/components/today/composition/TodayPracticeGiftBlock.module.css";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 type Props = {
   title: string;
@@ -26,8 +33,7 @@ function startCtaLabel(duration: string | null | undefined): string {
 }
 
 /**
- * Move «Практика дня» — gift framing.
- * Primary CTA marks started on this step (handoff); open practice page is secondary.
+ * Move «Практика дня» — Form Kit Hero + Action (bleed photo).
  */
 export function TodayPracticeGiftBlock({
   title,
@@ -46,59 +52,64 @@ export function TodayPracticeGiftBlock({
   const practiceHref = practiceId ? `/practices/${practiceId}` : setupHref;
 
   return (
-    <section className={styles.root} data-testid="today-zone-practice-gift">
-      <div className={styles.photoWrap}>
-        <img className={styles.photo} src={photoSrc} alt="" />
-        <div className={styles.photoScrim} aria-hidden />
-        <p className={styles.eyebrow}>{copy.practiceGiftEyebrow}</p>
-      </div>
+    <section className={layout.stack} data-testid="today-zone-practice-gift">
+      <DsHeroBlock
+        tone="solid"
+        eyebrow={copy.practiceGiftEyebrow}
+        title={title}
+        body={instructions || undefined}
+        bleed={
+          // eslint-disable-next-line @next/next/no-img-element -- story-frame public art
+          <img src={photoSrc} alt="" style={{ width: "100%", height: "auto", display: "block" }} />
+        }
+      />
 
-      <div className={styles.body}>
-        <h3 className={styles.title}>{title}</h3>
-        {instructions ? <p className={styles.instructions}>{instructions}</p> : null}
-
-        {practiceCompleted ? (
-          <p className={styles.confirmed} data-testid="today-practice-gift-done">
-            {copy.practiceCompleted}
-          </p>
-        ) : (
-          <div className={styles.actions}>
-            {!practiceStarted ? (
-              <DsButton
-                type="button"
-                variant="primary"
-                className={styles.cta}
-                data-testid="today-tool-practice"
-                disabled={practiceCompleting}
-                onClick={() => void onPracticeAction()}
-              >
-                {startCtaLabel(duration)}
-              </DsButton>
-            ) : (
-              <>
-                <p className={styles.confirmed} data-testid="today-practice-gift-started">
-                  Практика начата
-                </p>
+      {practiceCompleted ? (
+        <DsChip variant="status" testId="today-practice-gift-done">
+          {copy.practiceCompleted}
+        </DsChip>
+      ) : (
+        <DsActionCard
+          tone="accent"
+          title={practiceStarted ? "Практика начата" : startCtaLabel(duration)}
+          body={practiceStarted ? undefined : undefined}
+          action={
+            <div className={layout.stack}>
+              {!practiceStarted ? (
                 <DsButton
                   type="button"
                   variant="primary"
-                  className={styles.cta}
-                  data-testid="today-tool-practice-complete"
+                  data-testid="today-tool-practice"
                   disabled={practiceCompleting}
                   onClick={() => void onPracticeAction()}
                 >
-                  {copy.practiceComplete}
+                  {startCtaLabel(duration)}
                 </DsButton>
-              </>
-            )}
-            <p className={styles.setup}>
-              <Link href={practiceHref} data-testid="today-setup-practices-link">
-                {practiceId ? "Открыть практику →" : `${copy.setupPracticesLink} →`}
-              </Link>
-            </p>
-          </div>
-        )}
-      </div>
+              ) : (
+                <>
+                  <DsCaption>
+                    <span data-testid="today-practice-gift-started">Практика начата</span>
+                  </DsCaption>
+                  <DsButton
+                    type="button"
+                    variant="primary"
+                    data-testid="today-tool-practice-complete"
+                    disabled={practiceCompleting}
+                    onClick={() => void onPracticeAction()}
+                  >
+                    {copy.practiceComplete}
+                  </DsButton>
+                </>
+              )}
+              <DsBody size="sm">
+                <Link href={practiceHref} data-testid="today-setup-practices-link">
+                  {practiceId ? "Открыть практику →" : `${copy.setupPracticesLink} →`}
+                </Link>
+              </DsBody>
+            </div>
+          }
+        />
+      )}
     </section>
   );
 }

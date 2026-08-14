@@ -1,23 +1,22 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { DsCaption, DsContentCard, DsEyebrow } from "@/design-system";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
 import type { TodayDayTask } from "@/lib/todayDayTasks";
 import type { TodayProgressRow } from "@/lib/todayGrowthTrackers";
-import styles from "@/components/today/composition/TodayDayTasks.module.css";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 type Props = {
   todayTasks: TodayDayTask[];
-  /** Raw progress rows for streak UI (daily cadence). */
   progressRows?: TodayProgressRow[];
-  /** Optional rich gift UI for the primary practice task */
   practiceSlot?: ReactNode;
   affirmationSlot?: ReactNode;
 };
 
 /**
- * Block 5 — 1–2 today assignments + daily trackers.
+ * Block 5 — today assignments + daily trackers (Form Kit).
  */
 export function TodayDayTasksBlock({
   todayTasks,
@@ -30,47 +29,50 @@ export function TodayDayTasksBlock({
 
   if (!hasToday && !hasDaily) {
     return (
-      <p className={styles.empty} data-testid="today-day-tasks-empty">
-        {copy.tasksEmpty}
+      <p data-testid="today-day-tasks-empty">
+        <DsCaption>{copy.tasksEmpty}</DsCaption>
       </p>
     );
   }
 
   return (
-    <div className={styles.root} data-testid="today-day-tasks">
+    <div className={layout.stack} data-testid="today-day-tasks">
       {hasToday ? (
-        <section className={styles.section} data-testid="today-day-tasks-today">
-          <p className={styles.sectionLabel}>{copy.tasksTodayLabel}</p>
-          <ul className={styles.list}>
+        <section className={layout.stack} data-testid="today-day-tasks-today">
+          <DsEyebrow>{copy.tasksTodayLabel}</DsEyebrow>
+          <div className={layout.stack}>
             {todayTasks.map((task) => {
               if (task.kind === "practice" && practiceSlot) {
                 return (
-                  <li key={task.id} className={styles.item} data-testid={`today-task-${task.kind}`}>
+                  <div key={task.id} data-testid={`today-task-${task.kind}`}>
                     {practiceSlot}
-                  </li>
+                  </div>
                 );
               }
               if (task.kind === "affirmation" && affirmationSlot) {
                 return (
-                  <li key={task.id} className={styles.item} data-testid={`today-task-${task.kind}`}>
+                  <div key={task.id} data-testid={`today-task-${task.kind}`}>
                     {affirmationSlot}
-                  </li>
+                  </div>
                 );
               }
               return (
-                <li key={task.id} className={styles.card} data-testid={`today-task-${task.kind}`}>
-                  <p className={styles.kind}>{task.kindLabel}</p>
-                  <p className={styles.title}>{task.title}</p>
-                  {task.detail ? <p className={styles.detail}>{task.detail}</p> : null}
-                </li>
+                <DsContentCard
+                  key={task.id}
+                  tone="solid"
+                  testId={`today-task-${task.kind}`}
+                  eyebrow={task.kindLabel}
+                  title={task.title}
+                  body={task.detail || undefined}
+                />
               );
             })}
-          </ul>
+          </div>
         </section>
       ) : null}
 
       {hasDaily ? (
-        <section className={styles.section} data-testid="today-day-tasks-daily">
+        <section className={layout.stack} data-testid="today-day-tasks-daily">
           <TodayProgressTracker rows={progressRows} title={copy.tasksDailyLabel} />
         </section>
       ) : null}

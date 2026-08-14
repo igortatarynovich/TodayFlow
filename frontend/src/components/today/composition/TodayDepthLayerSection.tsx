@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { TodayContractDepthLayerV1, TodayDepthTopicId } from "@/lib/todayContract";
 import { fetchTodayNarrativeCached } from "@/lib/todayNarrativeCache";
 import { narrativeString, narrativeStringArray } from "@/lib/todayNarrativeApi";
-import styles from "@/components/today/composition/TodayDepthLayerSection.module.css";
+import { DsButton, DsChip, DsChipCluster, DsOverlaySheet } from "@/design-system";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 type Props = {
   dateISO: string;
@@ -13,11 +13,9 @@ type Props = {
   guideGenerationId?: number | null;
   preferredTopic?: TodayDepthTopicId | string | null;
   autoPickPreferred?: boolean;
-  /** When false (other ScreenFlow step), force-close overlay so it cannot leak onto Welcome. */
   isActive?: boolean;
 };
 
-/** Short deepen: title + one why line — not the full LLM sheet. */
 function formatDeepenBrief(payload: Record<string, unknown> | null | undefined): string {
   if (!payload) return "";
   const title = narrativeString(payload.title);
@@ -53,7 +51,7 @@ function shortLabel(label: string, value?: string | null): string {
 }
 
 /**
- * Depth topics as compact chips; detail opens as a short panel (not a second essay).
+ * Depth topics as Form Kit chips; detail = opaque overlay sheet.
  */
 export function TodayDepthLayerSection({
   dateISO,
@@ -71,6 +69,7 @@ export function TodayDepthLayerSection({
   const [resultText, setResultText] = useState<string | null>(null);
   const [isCta, setIsCta] = useState(false);
   const autoPickedRef = useRef<string | null>(null);
+  const titleId = useId();
 
   const onPick = useCallback(
     async (topic: TodayDepthTopicId) => {
@@ -137,57 +136,48 @@ export function TodayDepthLayerSection({
     (activeTopic ? String(activeTopic) : "");
 
   return (
-    <section className={styles.root} data-testid="today-depth-layer">
-      <div className={styles.chips} role="list">
+    <section className={layout.stack} data-testid="today-depth-layer">
+      <DsChipCluster>
         {menu.map((row) => {
           const topic = row.topic as TodayDepthTopicId;
           const selected = activeTopic === topic && panelOpen;
           return (
-            <button
+            <DsChip
               key={topic}
-              type="button"
-              role="listitem"
-              className={selected ? styles.chipActive : styles.chip}
+              selected={selected}
               disabled={loading && activeTopic === topic}
               onClick={() => void onPick(topic)}
-              data-testid={`today-depth-topic-${topic}`}
+              testId={`today-depth-topic-${topic}`}
             >
-              <span className={styles.chipLabel}>{shortLabel(row.label, row.value)}</span>
-            </button>
+              {shortLabel(row.label, row.value)}
+            </DsChip>
           );
         })}
-      </div>
+      </DsChipCluster>
 
       {panelOpen ? (
-        <div className={styles.briefPanel} data-testid="today-depth-layer-overlay">
-          <div className={styles.briefHead}>
-            <p className={styles.overlayTitle}>{activeLabel}</p>
-            <button
-              type="button"
-              className={styles.overlayClose}
-              onClick={() => setPanelOpen(false)}
-            >
-              Закрыть
-            </button>
-          </div>
-          {loading ? <p className={styles.status}>…</p> : null}
-          {resultText ? (
-            <div
-              className={isCta ? styles.resultCta : styles.result}
-              data-testid="today-depth-layer-result"
-            >
-              <p className={styles.resultBody}>{resultText}</p>
-              {isCta ? (
-                <Link
-                  href={depthLayer.subscribe_path || "/account/subscriptions"}
-                  className={styles.subscribeLink}
-                >
-                  Подписка и trial
-                </Link>
+        <DsOverlaySheet
+          testId="today-depth-layer-overlay"
+          titleId={titleId}
+          title={activeLabel}
+          body={loading ? "…" : resultText || ""}
+          closeLabel="Закрыть"
+          onClose={() => setPanelOpen(false)}
+          footer={
+            <>
+              {resultText ? (
+                <span data-testid="today-depth-layer-result" hidden>
+                  {resultText}
+                </span>
               ) : null}
-            </div>
-          ) : null}
-        </div>
+              {isCta && !loading ? (
+                <DsButton href={depthLayer.subscribe_path || "/account/subscriptions"}>
+                  Подписка и trial
+                </DsButton>
+              ) : null}
+            </>
+          }
+        />
       ) : null}
     </section>
   );

@@ -1,11 +1,15 @@
 /* Form Kit skin — FOUNDATION_UI §15.8. Form from ui-kit-form-sheet; color via --tf-* / --day-*. */
 
-/* ——— Surface tones (visual shell only) ——— */
+/* ——— Surface tones (visual shell only) ———
+ * Ink is owned by the surface: text never inherits a washed page color.
+ * Overlay = opaque elevated shell for sheets/modals (not glass — imagery must not show through).
+ */
 .surfaceBase {
   box-sizing: border-box;
   border-radius: var(--tf-ds-radius-lg, 1.5rem);
   border: 1px solid transparent;
   background: transparent;
+  color: var(--tf-ink, #2a211b);
 }
 
 .toneNone {
@@ -13,31 +17,76 @@
   border-color: transparent;
   box-shadow: none;
   backdrop-filter: none;
+  color: var(--tf-ink, #2a211b);
 }
 
 .toneSubtle {
-  background: color-mix(in srgb, var(--tf-ink, #1a1714) 6%, transparent);
-  border-color: color-mix(in srgb, var(--tf-ink, #1a1714) 8%, transparent);
+  /* Readable wash over atmosphere — not a bare tint that drops text into the moon. */
+  background: color-mix(in srgb, var(--tf-surface, #fff) 86%, transparent);
+  border-color: color-mix(in srgb, var(--tf-ink, #2a211b) 10%, transparent);
+  color: var(--tf-ink, #2a211b);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .toneSolid {
   background: var(--tf-surface, #fff);
-  border-color: color-mix(in srgb, var(--tf-ink, #1a1714) 10%, transparent);
-  box-shadow: var(--tf-ds-shadow-soft, 0 8px 24px color-mix(in srgb, var(--tf-ink) 8%, transparent));
+  border-color: color-mix(in srgb, var(--tf-ink, #2a211b) 12%, transparent);
+  box-shadow: var(--tf-ds-shadow-soft, 0 8px 24px color-mix(in srgb, var(--tf-ink) 10%, transparent));
+  color: var(--tf-ink, #2a211b);
 }
 
 .toneGlass {
-  background: var(--tf-ds-glass-surface, var(--tf-ds-glass, color-mix(in srgb, var(--tf-surface) 72%, transparent)));
-  border-color: var(--tf-ds-glass-border, color-mix(in srgb, #fff 22%, transparent));
-  backdrop-filter: blur(var(--tf-ds-glass-blur, 14px));
-  -webkit-backdrop-filter: blur(var(--tf-ds-glass-blur, 14px));
-  box-shadow: var(--tf-ds-shadow-soft, none);
+  /* Frosted but opaque enough that body text stays legible over imagery. */
+  background: color-mix(in srgb, var(--tf-surface, #fff) 88%, transparent);
+  border-color: var(--tf-ds-glass-border, color-mix(in srgb, var(--tf-ink) 14%, transparent));
+  backdrop-filter: blur(var(--tf-ds-glass-blur, 16px));
+  -webkit-backdrop-filter: blur(var(--tf-ds-glass-blur, 16px));
+  box-shadow: var(--tf-ds-shadow-soft, 0 10px 28px color-mix(in srgb, var(--tf-ink) 12%, transparent));
+  color: var(--tf-ink, #2a211b);
 }
 
 .toneAccent {
-  background: color-mix(in srgb, var(--day-accent-soft, var(--tf-accent-gold)) 55%, var(--tf-surface, #fff));
-  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 35%, transparent);
-  box-shadow: 0 0 24px color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 28%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--day-accent-soft, var(--tf-accent-gold)) 28%,
+    var(--tf-surface, #fff)
+  );
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 32%, transparent);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 18%, transparent);
+  color: var(--tf-ink, #2a211b);
+}
+
+/**
+ * Overlay / sheet shell — fully opaque. Use for modals and anything that
+ * stacks above imagery or other cards. Never glass.
+ */
+.toneOverlay {
+  background: var(--tf-surface, #fff);
+  border-color: color-mix(in srgb, var(--tf-ink, #2a211b) 12%, transparent);
+  box-shadow:
+    0 -8px 40px color-mix(in srgb, var(--tf-ink) 22%, transparent),
+    0 12px 32px color-mix(in srgb, var(--tf-ink) 14%, transparent);
+  color: var(--tf-ink, #2a211b);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.overlayScrim {
+  position: absolute;
+  inset: 0;
+  border: none;
+  cursor: pointer;
+  /* Token-based dim — keeps moon/cards from competing with sheet text. */
+  background: color-mix(in srgb, var(--tf-ink, #2a211b) 48%, transparent);
+}
+
+.overlaySheet {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 28rem);
+  max-height: min(78dvh, 36rem);
+  overflow: auto;
 }
 
 /* ——— Card shell (layout on Surface) ——— */
@@ -118,7 +167,8 @@
 }
 
 .chipGhost {
-  background: transparent;
+  background: color-mix(in srgb, var(--tf-surface, #fff) 70%, transparent);
+  border-color: color-mix(in srgb, var(--tf-ink) 14%, transparent);
 }
 
 .chipIcon {
@@ -128,6 +178,18 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+}
+
+.chipButton {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+}
+
+.chipButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .chipGroup {

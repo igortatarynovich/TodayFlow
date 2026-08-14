@@ -15,6 +15,7 @@ import {
   DsChipCluster,
   DsChipField,
   DsClassifier,
+  DsContentCard,
   DsDisplayTitle,
   DsDotMeter,
   DsEmph,
@@ -25,6 +26,7 @@ import {
   DsHeroBlock,
   DsInsightRow,
   DsInsightTile,
+  DsListPanel,
   DsListRow,
   DsMetricCard,
   DsMobileTabBar,
@@ -51,8 +53,7 @@ import {
   IconCalendar,
   IconMoon,
   IconSparkles,
-} from "@/design-system";
-import { DS_FIGMA_MAP } from "@/design-system/registry/figmaMap";
+} from "@/design-system";import { DS_FIGMA_MAP } from "@/design-system/registry/figmaMap";
 import cat from "@/design-system/catalog/dsCatalog.module.css";
 
 function CatalogSection({ title, children }: { title: string; children: React.ReactNode }) {
@@ -157,10 +158,10 @@ export function DsCatalog() {
           <code>--tf-*</code> / <code>--day-*</code>, not the kit sheet neon.
         </DsBody>
         <div className={cat.cardGrid} style={{ marginTop: "1rem" }}>
-          {(["none", "subtle", "solid", "glass", "accent"] as const).map((tone) => (
+          {(["none", "subtle", "solid", "glass", "accent", "overlay"] as const).map((tone) => (
             <DsSurface key={tone} tone={tone} className={cat.formKitSurface}>
               <DsCaption>{tone}</DsCaption>
-              <DsBody size="sm">Surface tone</DsBody>
+              <DsBody size="sm">{tone === "overlay" ? "Sheets only — opaque" : "Surface tone"}</DsBody>
             </DsSurface>
           ))}
         </div>
@@ -189,30 +190,48 @@ export function DsCatalog() {
       <CatalogSection title="Form Kit · Compositions">
         <div className={cat.cardGrid}>
           <DsHeroBlock
+            tone="glass"
             eyebrow="Clarity in focus"
             title="Сегодня держит ясность"
-            body="Короткий день-бриф без локальной кожи."
+            body="Hero — крупный блок с bleed и FAB."
             bleed={<DsPlanet planet="neptune" size={120} />}
-            chips={<DsChipCluster><DsChip>Focus</DsChip></DsChipCluster>}
+            chips={
+              <DsChipCluster>
+                <DsChip>Focus</DsChip>
+              </DsChipCluster>
+            }
             fab={<DsFab ariaLabel="Open" size="sm">→</DsFab>}
           />
           <DsWindowCard
+            tone="solid"
             title="Best window"
             startLabel="13:40"
             endLabel="16:20"
             spectrum={<DsSpectrum value={0.55} />}
           />
-          <DsMetricCard value="78%" label="Energy" meter={<DsRadialMeter value={78} size={72} />} />
-          <DsActionCard title="See your full day" action={<DsButton>Open</DsButton>} />
+          <DsMetricCard tone="solid" value="78%" label="Energy" meter={<DsRadialMeter value={78} size={72} />} />
+          <DsContentCard
+            tone="subtle"
+            eyebrow="Note"
+            body="Content block — prose + chips, not a metric twin."
+            chips={<DsChip>tag</DsChip>}
+          />
+          <DsActionCard tone="accent" title="See your full day" action={<DsButton>Open</DsButton>} />
         </div>
-        <DsCard tone="glass" size="compact">
+        <DsListPanel tone="glass" title="List panel">
           <DsListRow
             leading={<DsPlanet planet="moon" size={36} />}
             title="Moon in Virgo"
             subtitle="Detail before speed"
             onClick={() => undefined}
           />
-        </DsCard>
+          <DsListRow
+            leading={<DsPlanet planet="mars" size={36} />}
+            title="Mars in Capricorn"
+            subtitle="Push with structure"
+            onClick={() => undefined}
+          />
+        </DsListPanel>
       </CatalogSection>
 
       <CatalogSection title="3. Spacing">
