@@ -128,7 +128,8 @@
   position: relative;
   z-index: 1;
   margin: 0 auto;
-  padding: 0;
+  /* Inset so rim orbs/angles are not clipped by .stage overflow:hidden */
+  padding: 0.35rem;
   background: transparent;
   border-radius: 50%;
   border: none;
@@ -138,9 +139,10 @@
   overflow: visible;
   aspect-ratio: 1 / 1;
   /* Fill the stage width — wheel is the hero, not a padded widget. */
-  width: 100%;
+  width: min(100%, calc(100% - 0.5rem));
   max-width: none;
-  align-self: stretch;
+  align-self: center;
+  box-sizing: border-box;
 }
 
 @keyframes natalAspectWave {
@@ -174,9 +176,10 @@
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
+  /* Must stay square overflow — circular clip was cutting zodiac/angle markers on the rim. */
   overflow: visible;
   touch-action: manipulation;
-  border-radius: 50%;
+  border-radius: 0;
   filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.28));
 }
 

@@ -13,21 +13,30 @@ import type { SymbolicIconProps } from "./icons/iconProps";
 
 export type PlanetIconProps = SymbolicIconProps & {
   planet: string | null | undefined;
+  /**
+   * Photo fit inside the size box.
+   * `cover` fills a circular slot (natal disc); `contain` keeps full art + padding.
+   */
+  fit?: "contain" | "cover";
 };
 
 function PlanetPhotoSymbol({
   slug,
   size,
   className,
+  fit = "contain",
 }: {
   slug: PlanetSlug;
   size: number;
   className?: string;
+  fit?: "contain" | "cover";
 }) {
+  const cover = fit === "cover";
   return (
     <span
       data-testid="planet-symbol"
       data-visual="photo"
+      data-fit={fit}
       aria-hidden
       className={className}
       style={{
@@ -37,6 +46,8 @@ function PlanetPhotoSymbol({
         flexShrink: 0,
         alignItems: "center",
         justifyContent: "center",
+        overflow: cover ? "hidden" : undefined,
+        borderRadius: cover ? "50%" : undefined,
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- static public WebP; size parity with prior mask slot */}
@@ -46,7 +57,14 @@ function PlanetPhotoSymbol({
         width={size}
         height={size}
         draggable={false}
-        style={{ width: size, height: size, objectFit: "contain", display: "block" }}
+        style={{
+          width: size,
+          height: size,
+          objectFit: cover ? "cover" : "contain",
+          objectPosition: "center",
+          display: "block",
+          borderRadius: cover ? "50%" : undefined,
+        }}
       />
     </span>
   );
@@ -90,13 +108,19 @@ function PlanetSealSymbol({
   );
 }
 
-export function PlanetIcon({ planet, size = 24, className, stroke = "currentColor" }: PlanetIconProps) {
+export function PlanetIcon({
+  planet,
+  size = 24,
+  className,
+  stroke = "currentColor",
+  fit = "contain",
+}: PlanetIconProps) {
   const slug = resolvePlanetSlug(planet);
   if (!slug) return null;
 
   if (VISUAL_ASSET_MODE === "asset") {
     if (planetHasPhotoAsset(slug)) {
-      return <PlanetPhotoSymbol slug={slug} size={size} className={className} />;
+      return <PlanetPhotoSymbol slug={slug} size={size} className={className} fit={fit} />;
     }
     return <PlanetSealSymbol slug={slug} size={size} className={className} stroke={stroke} />;
   }
