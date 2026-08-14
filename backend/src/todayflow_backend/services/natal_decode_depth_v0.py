@@ -23,7 +23,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
-    resolve_default_chat_model,
+    resolve_complex_chat_model,
 )
 from todayflow_backend.db import models
 from todayflow_backend.prompts.registry_v1 import get_prompt
@@ -499,7 +499,7 @@ def generate_natal_decode_depth_v0(
         client = get_openai_compatible_client()
         raw = chat_completion_text(
             client,
-            model=resolve_default_chat_model(),
+            model=resolve_complex_chat_model(),
             messages=[
                 {"role": "system", "content": system},
                 {"role": "user", "content": user_msg},
@@ -555,7 +555,7 @@ def generate_natal_decode_depth_v0(
             module="profile",
             surface=LAYER_KIND,
             user_id=user_id,
-            model=resolve_default_chat_model(),
+            model=resolve_complex_chat_model(),
             locale=locale,
             input_payload={
                 "fingerprint": fingerprint,

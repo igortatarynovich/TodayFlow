@@ -99,9 +99,11 @@ class Settings(BaseSettings):
     # Nebius Token Factory (OpenAI-compatible): https://docs.tokenfactory.nebius.com/
     nebius_api_key: str | None = None  # NEBIUS_API_KEY
     nebius_base_url: str = "https://api.tokenfactory.eu-west2.nebius.com/v1/"  # NEBIUS_BASE_URL
-    nebius_model: str = "moonshotai/Kimi-K2.6"  # NEBIUS_MODEL — Kimi voice trial (K3 TTFT ~160s+ on Nebius)
-    # Empty during Kimi primary trial — do not silently hop to DeepSeek and “pass” the test.
-    # Set NEBIUS_FALLBACK_MODEL=deepseek-ai/DeepSeek-V4-Pro to re-enable provider failover.
+    # Primary = K2.6 for day/prewarm/routine. K3 only via NEBIUS_COMPLEX_MODEL on
+    # explicit complex user ops (CE portrait stages, natal decode) — see resolve_complex_chat_model.
+    nebius_model: str = "moonshotai/Kimi-K2.6"  # NEBIUS_MODEL
+    nebius_complex_model: str = "moonshotai/Kimi-K3"  # NEBIUS_COMPLEX_MODEL — empty disables K3 path
+    # Empty fallback = no silent DeepSeek hop. Set deepseek-ai/DeepSeek-V4-Pro to re-enable.
     nebius_fallback_model: str = ""  # NEBIUS_FALLBACK_MODEL
     llm_provider: str = "openai"  # LLM_PROVIDER — openai | gemini | nebius
     # Hard HTTP timeout for OpenAI-compatible clients (Nebius/OpenAI/Gemini proxy).

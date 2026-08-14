@@ -135,6 +135,11 @@ def get_gemini_compatible_client() -> Any | None:
 
 
 def resolve_default_chat_model() -> str:
+    """Primary model for routine generation (day native, windows, narrative, …).
+
+    Nebius SoT: ``NEBIUS_MODEL`` = Kimi-K2.6. Do not use this for CE portrait /
+    natal-decode — call ``resolve_complex_chat_model`` instead.
+    """
     provider = (settings.llm_provider or "openai").strip().lower()
     if provider == "gemini":
         return settings.gemini_model
@@ -145,6 +150,22 @@ def resolve_default_chat_model() -> str:
             return override
         return settings.nebius_model
     return settings.llm_default_model
+
+
+def resolve_complex_chat_model() -> str:
+    """K3 (or ``NEBIUS_COMPLEX_MODEL``) for multi-step portrait / natal-decode only.
+
+    Gate: use only where quality delta vs K2.6 is product-visible and the call is a
+    user-justified operation (CE Stage 2–4 publish, profile disclosure funnel,
+    natal decode depth). Empty ``NEBIUS_COMPLEX_MODEL`` → same as primary.
+    """
+    provider = (settings.llm_provider or "openai").strip().lower()
+    if provider == "nebius":
+        complex_id = (getattr(settings, "nebius_complex_model", None) or "").strip()
+        if complex_id:
+            return complex_id
+        return settings.nebius_model
+    return resolve_default_chat_model()
 
 
 def resolve_guidance_chat_model() -> str:
@@ -405,9 +426,10 @@ def chat_completion_text(
     JSON mode may fall back to plain completion when the provider rejects
     ``response_format`` or returns empty content.
 
-    When ``LLM_PROVIDER=nebius``, primary is Kimi-K3. Optional
+    When ``LLM_PROVIDER=nebius``, primary is ``NEBIUS_MODEL`` (K2.6). Optional
     ``NEBIUS_FALLBACK_MODEL`` retries once on provider failure when set.
     Throttle (429) does not switch models. Kimi calls stream by default.
+    Pass ``resolve_complex_chat_model()`` as ``model`` only for CE/natal ops.
     """
     chain = resolve_chat_model_chain(model)
     last_kind: str | None = None

@@ -38,7 +38,7 @@ def test_call_with_retry_records_rejected_and_accepted_attempts(tmp_path: Path):
                 side_effect=fake_call,
             ),
             patch(
-                "todayflow_backend.services.profile_disclosure_funnel_v0.resolve_default_chat_model",
+                "todayflow_backend.services.profile_disclosure_funnel_v0.resolve_complex_chat_model",
                 return_value="mock-model",
             ),
         ):

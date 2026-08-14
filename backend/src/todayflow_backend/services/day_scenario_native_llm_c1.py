@@ -36,7 +36,7 @@ NATIVE_FAILURE_GATE = "gate"
 NATIVE_FAILURE_OTHER = "other"
 
 # After provider timeout on the same model: do not burn a second identical wait.
-# Attempt 0 may switch Kimi → DeepSeek once; attempt ≥1 is Kimi-only (gate feedback).
+# Attempt 0 may switch primary → fallback once; attempt ≥1 is primary-only (gate feedback).
 ATTEMPT2_POLICY_TIMEOUT = "attempt0_kimi_then_deepseek_attempt1_kimi_only"
 
 
@@ -68,11 +68,11 @@ def gate_failure_class(reject_reason: str | None) -> str:
 
 
 def resolve_native_attempt_model(attempt_idx: int) -> str:
-    """Nebius primary (Kimi) for every attempt.
+    """Primary model (K2.6) for every native day attempt.
 
     Attempt 0 may still chain to NEBIUS_FALLBACK_MODEL via ``allow_model_fallback``.
     Attempt ≥1 stays on primary only (gate feedback keeps the preferred voice).
-    ``attempt_idx`` kept for call-site / meta clarity.
+    ``attempt_idx`` kept for call-site / meta clarity. Not K3 — day is routine path.
     """
     _ = attempt_idx
     return str(resolve_default_chat_model() or "")

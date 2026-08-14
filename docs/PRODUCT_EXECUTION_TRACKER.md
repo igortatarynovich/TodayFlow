@@ -1,8 +1,19 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-10
+Last updated: 2026-08-14
 Owner: Product + Engineering
 Status: Active working document
+
+**DONE (OPS+CODE, 2026-08-14):** **K2.6 primary · K3 complex-only** — `NEBIUS_MODEL=moonshotai/Kimi-K2.6` for day/prewarm/routine; `NEBIUS_COMPLEX_MODEL=moonshotai/Kimi-K3` + `resolve_complex_chat_model()` only for CE Stage 2–4, profile disclosure funnel, natal decode. Canon: LLM_QUALITY Nebius section.
+
+## Architecture impact — K2.6 primary + K3 complex-only (2026-08-14)
+
+- **SoT before:** Live `NEBIUS_MODEL=moonshotai/Kimi-K3` for all Nebius chat (day + profile).
+- **SoT after:** Primary `moonshotai/Kimi-K2.6` (`resolve_default_chat_model`); K3 only via `NEBIUS_COMPLEX_MODEL` on allowlisted complex user ops (CE 2–4, profile funnel, natal decode). Empty complex → same as primary.
+- **Public contract changed?** no
+- **Migration required?** no — env + resolver; cached day rows keep prior model id in logs
+- **Canon updated?** yes — `docs/LLM_QUALITY_AND_PROMPT_EVOLUTION.md` Nebius routing table
+- **Backward compatible?** yes for GET cache
 
 **DONE (CODE, 2026-08-10):** **Today Block 1 dashboard + detail sheet (v3.4.2)** — mockup-led cards on `day` (hero · why chips · better · support‖trap · personal); tap opens overlay sheet; CTA → orientation; timeline on orientation. No invent / no public JSON change. Canon: SCENARIO_V3.4.2.
 
@@ -1579,7 +1590,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-08-10 | Today / Focus | **Kill kitchen leaks in Фокус дня** | **LIVE (code→deploy)** | Stopped `element_focus` catalog + aligned-tension kitchen («Источники в основном согласованы») from Daily Focus. BE: empty tension when aligned; orchestrator `do_focus` not seeded from element; value-gate bans. FE: no tension candidate; kitchen reject; no canned filler. Empty omit wins.
+- 2026-08-14 | Ops / LLM | **K2.6 primary · K3 complex-only** | **CODE→deploy** | `NEBIUS_MODEL=K2.6`; `NEBIUS_COMPLEX_MODEL=K3` for CE 2–4 / profile funnel / natal decode only. Day/prewarm stay on K2.6.
 - 2026-08-04 | Design System | **Day shell chrome fix** | **DONE (LIVE)** | PR #14 merged · frontend rebuild. Day-mode = shell routes; evening phase gated; sidebar stretch.
 - 2026-08-05 | Design System | **Task 2.9b Compatibility result** | **IN PROGRESS (code)** | Exploration main/duals/tips/deep + funnel confidence/today/risk + analyze/signs personalized → `DsCallout`/`DsQuote`. Not zone DONE — 6-axis DoD + screenshots remain.
 - 2026-08-05 | Design System | **Task 2.9b Tarot result** | **DONE (CODE)** | `TarotWebResult` answer/next_step/A·B/confidence/why → `DsCallout`/`DsQuote`. Not zone DONE — 6-axis DoD + screenshots remain.

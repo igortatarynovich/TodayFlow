@@ -25,13 +25,20 @@ OpenAI-compatible client:
 LLM_PROVIDER=nebius
 NEBIUS_API_KEY=...
 NEBIUS_BASE_URL=https://api.tokenfactory.eu-west2.nebius.com/v1/
-NEBIUS_MODEL=moonshotai/Kimi-K3
+NEBIUS_MODEL=moonshotai/Kimi-K2.6
+NEBIUS_COMPLEX_MODEL=moonshotai/Kimi-K3
 NEBIUS_FALLBACK_MODEL=
 LLM_STREAM_COMPLETIONS=1
 LLM_STREAM_READ_TIMEOUT_SECONDS=120
 ```
 
-Kimi primary (voice trial). Prefer the **regional** Token Factory host (`eu-west2`) — K3 TTFT there is ~1s; the global `api.tokenfactory.nebius.com` host measured ~160s TTFT for the same model. Streaming is required for thinking models (Moonshot). Empty fallback = no silent DeepSeek hop. Note: some models (e.g. K2.6) may be 404 on the regional host only.
+**Model routing (2026-08-14):** Primary / day / prewarm / routine = **Kimi-K2.6** (`NEBIUS_MODEL`, `resolve_default_chat_model`). **Kimi-K3** (`NEBIUS_COMPLEX_MODEL`, `resolve_complex_chat_model`) only for multi-step portrait / natal ops where quality delta is product-visible and the call is user-justified:
+
+| Uses K2.6 | Uses K3 (complex) |
+|-----------|-------------------|
+| native day_story C1, day_flow windows, today narrative, guide/spheres funnels | CE Stage 2–4 LLM, profile disclosure funnel, natal decode depth |
+
+Empty `NEBIUS_COMPLEX_MODEL` → complex path falls back to primary. Prefer regional Token Factory (`eu-west2`). Streaming required for Moonshot thinking models. Empty `NEBIUS_FALLBACK_MODEL` = no silent DeepSeek hop.
 
 Equivalent manual wiring:
 
