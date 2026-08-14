@@ -2094,6 +2094,10 @@ export function TodayCompositionSurface(props: Props) {
       />
     ) : null;
 
+  const lunarHintRaw = props.morningRitualData?.celestial_events?.lunar_phase as
+    | { id?: string; name?: string; phase_name?: string; cycle_day?: number }
+    | null
+    | undefined;
   const dayBriefModel = buildTodayDayBriefModel({
     contract: props.contract,
     dateLabel: props.displayDate,
@@ -2103,6 +2107,13 @@ export function TodayCompositionSurface(props: Props) {
     energyLine: energyLineDisplay,
     energyCause: energyCauseDisplay,
     loading: themeLoading,
+    lunarHint: lunarHintRaw
+      ? {
+          id: lunarHintRaw.id ?? null,
+          name: lunarHintRaw.name || lunarHintRaw.phase_name || null,
+          cycle_day: lunarHintRaw.cycle_day ?? null,
+        }
+      : null,
   });
 
   const dayStoryBrief = (

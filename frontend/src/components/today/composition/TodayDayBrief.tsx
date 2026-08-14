@@ -119,7 +119,6 @@ function TodayDayDashboard({
     modeLabel,
     lunarCaption,
     moonPhase,
-    whyFactors,
     betterCards,
     supportLine,
     supportDetail,
@@ -136,6 +135,7 @@ function TodayDayDashboard({
     self: "✧",
   };
   const showMoon = typeof moonPhase === "number" && Number.isFinite(moonPhase);
+  const heroMeta = lunarCaption || salutation;
 
   return (
     <div
@@ -145,34 +145,20 @@ function TodayDayDashboard({
       data-has-moon={showMoon ? "true" : "false"}
     >
       {showMoon ? (
-        <div className={styles.moonBleed} aria-hidden data-testid="today-day-brief-moon">
+        <div className={styles.moonBackdrop} aria-hidden data-testid="today-day-brief-moon">
           <CelestialMoon
             phase={moonPhase}
-            size={200}
-            spin={0}
-            glow={0.85}
-            animated={false}
-            textureSrc="/images/celestial/moon_lro_1k.jpg"
+            size={608}
+            spin={0.014}
+            glow={1.35}
+            animated
+            textureSrc="/images/celestial/moon_lro_2k.jpg"
             className={styles.moonDisk}
           />
         </div>
       ) : null}
 
-      <header className={styles.dashHeader}>
-        <div className={styles.dashHeaderText}>
-          <p className={styles.date} data-testid="today-day-brief-date">
-            {dateLabel}
-          </p>
-          {lunarCaption ? (
-            <p className={styles.lunarCaption} data-testid="today-day-brief-lunar">
-              {lunarCaption}
-            </p>
-          ) : (
-            <p className={styles.salutation}>{salutation}</p>
-          )}
-        </div>
-      </header>
-
+      <div className={styles.dashForeground}>
       <button
         type="button"
         className={styles.heroCard}
@@ -183,11 +169,24 @@ function TodayDayDashboard({
             title: modeLabel || copy.atmosphereLabel,
             kicker: copy.atmosphereLabel,
             body:
-              [line, expect, atmosphereNote, heroCue].filter(Boolean).join("\n\n") ||
+              [heroMeta, line, expect, atmosphereNote, heroCue].filter(Boolean).join("\n\n") ||
               copy.loadingDay,
           })
         }
       >
+        <div className={styles.heroMeta}>
+          <p className={styles.date} data-testid="today-day-brief-date">
+            {dateLabel}
+          </p>
+          {heroMeta ? (
+            <p
+              className={styles.lunarCaption}
+              data-testid={lunarCaption ? "today-day-brief-lunar" : undefined}
+            >
+              {heroMeta}
+            </p>
+          ) : null}
+        </div>
         <h2 className={styles.heroMode}>
           {loading ? copy.loadingDay : modeLabel || "Сегодня"}
         </h2>
@@ -198,33 +197,6 @@ function TodayDayDashboard({
           </p>
         ) : null}
       </button>
-
-      {whyFactors.length > 0 ? (
-        <section className={styles.section} data-testid="today-day-brief-why-factors">
-          <div className={styles.sectionHead}>
-            <p className={styles.blockLabel}>{copy.whyTodayLabel}</p>
-          </div>
-          <ul className={styles.factorRow}>
-            {whyFactors.map((f) => (
-              <li key={f.id}>
-                <button
-                  type="button"
-                  className={styles.factorChip}
-                  onClick={() =>
-                    openSheet({
-                      title: f.label,
-                      kicker: copy.whyTodayLabel,
-                      body: f.detail || f.label,
-                    })
-                  }
-                >
-                  {f.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
 
       {betterCards.length > 0 ? (
         <section className={styles.section} data-testid="today-day-brief-better">
@@ -325,6 +297,8 @@ function TodayDayDashboard({
           ) : null}
         </section>
       ) : null}
+
+      </div>
 
       <TodayDayDetailSheet sheet={sheet} onClose={closeSheet} />
     </div>

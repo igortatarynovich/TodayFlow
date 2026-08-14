@@ -91,6 +91,13 @@
   color: var(--tf-ink, #2a2520);
 }
 
+@media (max-width: 48rem) {
+  .slotStack {
+    /* Extra top inset so day glass card is not glued to the phone chrome */
+    padding-top: calc(var(--sf-chrome-h, 3.25rem) + clamp(2.5rem, 10vh, 5rem));
+  }
+}
+
 .slotStackWide {
   width: min(100%, 36rem);
   max-width: 36rem;

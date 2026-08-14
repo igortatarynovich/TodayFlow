@@ -211,9 +211,9 @@
 .tabBar {
   display: flex;
   justify-content: space-around;
-  align-items: flex-start;
-  min-height: 5.5rem;
-  padding: 0.5625rem var(--tf-ds-space-6) env(safe-area-inset-bottom, 0.75rem);
+  align-items: center;
+  min-height: 3.85rem;
+  padding: 0.4rem var(--tf-ds-space-6) max(0.35rem, env(safe-area-inset-bottom, 0.45rem));
   border-top: 1px solid var(--tf-ds-border-ink);
   /* Opaque fill — avoid live backdrop-filter over Day Atmosphere wash on phones. */
   background: color-mix(in srgb, var(--day-surface-tint, rgba(253, 251, 247, 0.96)) 96%, #ffffff);

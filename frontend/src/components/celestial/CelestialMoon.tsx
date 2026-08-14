@@ -63,21 +63,24 @@ const FRAG = /* glsl */ `
 
     vec3 albedo = texture2D(uTex, vUv).rgb;
     albedo *= vec3(0.96, 0.98, 1.02);
-    albedo = mix(albedo, sqrt(max(albedo, 0.0)), 0.14);
+    albedo = mix(albedo, sqrt(max(albedo, 0.0)), 0.18);
 
-    float ambient = 0.03;
-    float diffuse = lit * 0.96;
-    float earthshine = (1.0 - penumbra) * 0.04;
+    /* UI floor: even near-new keeps maria readable (earthshine + soft fill). */
+    float ambient = 0.1;
+    float diffuse = lit * 0.9;
+    float earthshine = (1.0 - penumbra) * 0.32;
+    float shade = ambient + diffuse + earthshine;
+    shade = max(shade, mix(0.26, 0.08, lit));
 
     vec3 V = normalize(-vView);
-    float fresnel = pow(1.0 - max(dot(N, V), 0.0), 3.3);
-    float rim = fresnel * (0.16 + 0.42 * lit) * uGlow;
+    float fresnel = pow(1.0 - max(dot(N, V), 0.0), 3.1);
+    float rim = fresnel * (0.22 + 0.38 * lit) * uGlow;
 
-    vec3 color = albedo * (ambient + diffuse + earthshine);
-    color += vec3(0.88, 0.92, 1.0) * rim;
+    vec3 color = albedo * shade;
+    color += vec3(0.86, 0.9, 1.0) * rim;
 
     vec3 H = normalize(L + V);
-    color += vec3(pow(max(dot(N, H), 0.0), 72.0) * lit * 0.04);
+    color += vec3(pow(max(dot(N, H), 0.0), 64.0) * lit * 0.05);
 
     gl_FragColor = vec4(color, 1.0);
   }

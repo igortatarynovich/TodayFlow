@@ -37,6 +37,18 @@
   background: transparent;
 }
 
+@media (max-width: 48rem) {
+  .storyBleed {
+    /* Reserve room so floating step chrome sits lower (~30% of upper band) */
+    --sf-mobile-chrome-offset: clamp(2rem, 9vh, 4.25rem);
+    --sf-chrome-h: calc(3.25rem + var(--sf-mobile-chrome-offset));
+  }
+
+  .storyBleed > .chrome {
+    top: var(--sf-mobile-chrome-offset);
+  }
+}
+
 .storyBleed > .chrome button {
   pointer-events: auto;
 }

@@ -176,15 +176,28 @@ function buildLunarCaption(contract: TodayContractV1, glassReason: string | null
   return glassReason ? clipCompassProse(glassReason, 72) : null;
 }
 
-function buildMoonPhase(contract: TodayContractV1): number | null {
+export type TodayDayBriefLunarHint = {
+  id?: string | null;
+  name?: string | null;
+  cycle_day?: number | null;
+};
+
+function buildMoonPhase(
+  contract: TodayContractV1,
+  lunarHint?: TodayDayBriefLunarHint | null,
+  glassReason?: string | null,
+): number | null {
   const phase = contract.day_story?.day_foundation?.lunar?.phase;
-  if (!phase) return null;
-  const cycle =
-    typeof phase.cycle_day === "number" && Number.isFinite(phase.cycle_day) ? phase.cycle_day : null;
+  const cycleFromFoundation =
+    typeof phase?.cycle_day === "number" && Number.isFinite(phase.cycle_day) ? phase.cycle_day : null;
+  const cycleFromHint =
+    typeof lunarHint?.cycle_day === "number" && Number.isFinite(lunarHint.cycle_day)
+      ? lunarHint.cycle_day
+      : null;
   return resolveCelestialMoonPhase({
-    cycleDay: cycle,
-    phaseId: phase.id ?? null,
-    phaseName: phase.name ?? null,
+    cycleDay: cycleFromFoundation ?? cycleFromHint,
+    phaseId: phase?.id ?? lunarHint?.id ?? null,
+    phaseName: phase?.name ?? lunarHint?.name ?? glassReason ?? null,
   });
 }
 
@@ -314,6 +327,8 @@ export function buildTodayDayBriefModel(input: {
   energyLine?: string | null;
   energyCause?: string | null;
   loading?: boolean;
+  /** Morning celestial lunar — fill-empty when day_foundation.phase is thin. */
+  lunarHint?: TodayDayBriefLunarHint | null;
 }): TodayDayBriefModel {
   const story = input.contract.day_story;
   const glass = input.welcomeGlass;
@@ -379,7 +394,9 @@ export function buildTodayDayBriefModel(input: {
     visualMode,
     modeLabel: visualMode ? DAY_MODE_LABELS_RU[visualMode] : null,
     lunarCaption: buildLunarCaption(input.contract, glass?.reasonLine ?? null),
-    moonPhase: input.loading ? null : buildMoonPhase(input.contract),
+    moonPhase: input.loading
+      ? null
+      : buildMoonPhase(input.contract, input.lunarHint, glass?.reasonLine ?? null),
     whyFactors: buildWhyFactors(input.contract, glass),
     betterCards: buildBetterCards(input.contract),
     supportLine,

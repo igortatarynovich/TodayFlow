@@ -218,4 +218,29 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.expect).toContain("первые сигналы");
     expect(model.expect).toContain("серп гаснет");
   });
+
+  it("falls back to lunarHint when foundation phase is missing", () => {
+    const model = buildTodayDayBriefModel({
+      contract: baseContract,
+      dateLabel: "14 августа",
+      salutation: "Привет",
+      lunarHint: { id: "new", name: "Новолуние", cycle_day: 1.18 },
+    });
+    expect(model.moonPhase).toBeCloseTo(1.18 / 29.53058867, 5);
+  });
+
+  it("resolves moonPhase from welcome glass reason when foundation/hint empty", () => {
+    const model = buildTodayDayBriefModel({
+      contract: baseContract,
+      dateLabel: "14 августа",
+      salutation: "Привет",
+      welcomeGlass: {
+        moodPills: [],
+        reasonLine: "Новолуние — Тихий сброс, прояснение мотивов",
+        activityTags: [],
+      },
+    });
+    expect(model.lunarCaption).toContain("Новолуние");
+    expect(model.moonPhase).toBe(0);
+  });
 });
