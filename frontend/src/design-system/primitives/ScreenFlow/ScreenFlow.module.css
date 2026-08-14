@@ -368,6 +368,17 @@
   }
 }
 
+/* Day brief: chrome hidden on step 0 — don't reserve the floating chrome band. */
+.slotStackCompactTop {
+  padding-top: var(--tf-ds-space-4, 0.75rem);
+}
+
+@media (max-width: 48rem) {
+  .slotStackCompactTop {
+    padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
+  }
+}
+
 .slotStackWide {
   width: min(100%, 36rem);
   max-width: 36rem;

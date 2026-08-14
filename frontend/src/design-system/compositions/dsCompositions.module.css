@@ -25,20 +25,61 @@
   z-index: 0;
 }
 
-/* Kit Hero: celestial sphere cropped in the corner — not a full twin card. */
+/* Kit Hero: celestial sphere cropped in the corner — not a full twin card.
+ * Left edge fades so dark phases (new moon) never sit under ink. */
 .heroMoonBleed {
-  right: -18%;
-  top: -42%;
-  width: min(78%, 22rem);
-  opacity: 0.95;
+  right: -26%;
+  top: -36%;
+  width: min(58%, 16.5rem);
+  opacity: 0.94;
   overflow: visible;
+  -webkit-mask-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    transparent 12%,
+    rgba(0, 0, 0, 0.45) 32%,
+    #000 52%
+  );
+  mask-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    transparent 12%,
+    rgba(0, 0, 0, 0.45) 32%,
+    #000 52%
+  );
 }
 
 .heroMoonBleed > * {
+  width: 100%;
+  height: auto;
+  max-width: none;
+  display: block;
+}
+
+.heroMoonBleed > * > *,
+.heroMoonBleed > .moonDisk {
   width: 100% !important;
   height: auto !important;
   max-width: none;
   filter: drop-shadow(0 12px 28px color-mix(in srgb, var(--tf-ink, #2a211b) 18%, transparent));
+}
+
+/* Soft veil behind copy so dark ink stays readable over the bleed. */
+.heroInner.heroWithMoon {
+  background: color-mix(in srgb, var(--tf-surface, #fff) 78%, transparent);
+}
+
+.heroWithMoon .heroCopy {
+  max-width: min(68%, 16rem);
+  border-radius: 0.65rem;
+  margin-inline: -0.35rem;
+  padding-inline: 0.35rem;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--tf-surface, #fff) 82%, transparent) 0%,
+    color-mix(in srgb, var(--tf-surface, #fff) 58%, transparent) 72%,
+    transparent 100%
+  );
 }
 
 .domainIcon {
@@ -172,29 +213,9 @@
   position: relative;
 }
 
-.pilotWithMoon {
-  isolation: isolate;
-}
-
-/* Soft far atmosphere only — primary moon lives in Hero bleed (kit). */
-.moonBackdrop {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  overflow: hidden;
-  opacity: 0.28;
-}
-
 .moonDisk {
-  margin-top: -22%;
-  margin-right: -18%;
-  width: min(92%, 28rem);
+  display: block;
   max-width: none;
-  flex-shrink: 0;
 }
 
 .pilotForeground {

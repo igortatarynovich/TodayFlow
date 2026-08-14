@@ -169,39 +169,27 @@ function TodayDayDashboard({
         copy.loadingDay,
     });
 
+  /* Single moon — Hero bleed only. A second backdrop disk reads as a duplicate. */
   const moonBleed = showMoon ? (
     <CelestialMoon
       phase={moonPhase}
-      size={340}
+      size={300}
       spin={0.014}
-      glow={1.2}
+      glow={1.05}
       animated
       textureSrc="/images/celestial/moon_lro_2k.jpg"
+      className={layout.moonDisk}
     />
   ) : null;
 
   return (
     <div
-      className={[layout.pilotStack, showMoon ? layout.pilotWithMoon : null].filter(Boolean).join(" ")}
+      className={layout.pilotStack}
       data-testid="today-day-brief"
       data-pane="atmosphere"
       data-form-kit="pilot"
       data-has-moon={showMoon ? "true" : "false"}
     >
-      {showMoon ? (
-        <div className={layout.moonBackdrop} aria-hidden data-testid="today-day-brief-moon">
-          <CelestialMoon
-            phase={moonPhase}
-            size={520}
-            spin={0.01}
-            glow={0.85}
-            animated
-            textureSrc="/images/celestial/moon_lro_2k.jpg"
-            className={layout.moonDisk}
-          />
-        </div>
-      ) : null}
-
       <div className={layout.pilotForeground}>
         <p data-testid="today-day-brief-date">
           <DsCaption>{dateLabel}</DsCaption>
@@ -212,10 +200,17 @@ function TodayDayDashboard({
           <DsHeroBlock
             testId="today-day-brief-vibe"
             tone="glass"
+            className={showMoon ? layout.heroWithMoon : undefined}
             eyebrow={heroMeta || copy.atmosphereLabel}
             title={loading ? copy.loadingDay : modeLabel || "Сегодня"}
             body={heroBody || undefined}
-            bleed={moonBleed}
+            bleed={
+              showMoon ? (
+                <div data-testid="today-day-brief-moon" aria-hidden>
+                  {moonBleed}
+                </div>
+              ) : null
+            }
             bleedClassName={showMoon ? layout.heroMoonBleed : undefined}
             chips={
               heroCue || moodPills.length ? (

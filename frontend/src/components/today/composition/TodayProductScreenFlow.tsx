@@ -176,6 +176,7 @@ function SlotStep({
   onNext,
   wide = false,
   hideNext = false,
+  compactTop = false,
 }: {
   testId: string;
   eyebrow?: string;
@@ -188,10 +189,18 @@ function SlotStep({
   wide?: boolean;
   /** Day dashboard owns its own continue CTA — do not duplicate StoryNextAnchor. */
   hideNext?: boolean;
+  /** Day step has no ScreenFlow chrome — skip reserved chrome band. */
+  compactTop?: boolean;
 }) {
   return (
     <div className={sfStyles.storyFrame} data-testid={testId} data-story-scroll="pane">
-      <div className={joinClass(sfStyles.slotStack, wide ? sfStyles.slotStackWide : null)}>
+      <div
+        className={joinClass(
+          sfStyles.slotStack,
+          wide ? sfStyles.slotStackWide : null,
+          compactTop ? sfStyles.slotStackCompactTop : null,
+        )}
+      >
         {eyebrow ? <DsEyebrow>{eyebrow}</DsEyebrow> : null}
         {title ? <DsHeadline as="h2">{title}</DsHeadline> : null}
         <div className={sfStyles.slotBody}>{children}</div>
@@ -280,6 +289,7 @@ export function TodayProductScreenFlow({
           <SlotStep
             testId="today-frame-day"
             wide
+            compactTop
             hideNext={showPersonalized}
             nextTitle={
               showPersonalized ? copy.storyNext.orientation : copy.storyNext.further
