@@ -730,6 +730,38 @@ interface DayAtmosphereContract {
 - **Остаток §17b:** декоративные `#fff` в border/box-shadow/orb highlights; оставшиеся хардкоды вне топ-списка; ручной QA dark на Profile/Practices/Challenges.
 - **§17c:** запрет новых ad-hoc CTA / lint checklist. **Today Response pass:** `TodayTapWidget` → `DsButton` (ad-hoc `.tapBtn` removed).
 
+### 15.8 Form Kit — закрытый визуальный набор (2026-08-14)
+
+**Источник формы:** [`docs/design/assets/ui-kit-form-sheet.png`](design/assets/ui-kit-form-sheet.png).  
+**Цвет:** только `--tf-*` + `--day-*` (настроение дня). Палитра/неон с листа **не** канон.
+
+#### Слои (не смешивать)
+
+| Слой | Роль | Примеры |
+|------|------|---------|
+| **Surface** | Только визуальная оболочка / тон | `DsSurface` `tone: none \| subtle \| solid \| glass \| accent` |
+| **Card** | Композиционный контейнер (pad/gap/`as`); **обязан** сидеть на `DsSurface` | `DsCard` (`tone` + size); legacy `variant` → alias к `tone` |
+| **Primitives** | Атомы кожи + метрики + CTA | `DsButton` · `DsFab` · `DsChip` · `DsRadialMeter` · `DsDotMeter` · `DsSpectrum` · `DsStarDivider` · `DsAvatar` · `DsMetric` · typography/quote |
+| **Visual** | Единственный feature-импорт celestial UI | `design-system/visual/{DsPlanet,DsZodiac,DsNumber,DsTarotFace,DsAngle}` |
+| **Compositions** | Сборка **без** собственной кожи | `DsHeroBlock` · `DsWindowCard` · `DsMetricCard` · `DsActionCard` · `DsListRow` |
+
+**Запрещено:** «тип блока = тип поверхности» одним enum; composition CSS с `border-radius` / `backdrop-filter` / decorative gradients / `box-shadow` / bg hex|rgba (кроме layout gap/grid).
+
+#### Visual import contract
+
+Feature-код импортирует celestial UI **только** через `design-system/visual/*`. Прямой импорт `components/visualIdentity/PlanetIcon` (и siblings) из feature — запрещён после Form Kit slice. Физический перенос файлов не обязателен: wrappers достаточны.
+
+#### Gate
+
+`scripts/check_ds_style_gate.py`: вне `design-system/` и вне zone-allowlist — запрет ad-hoc class-паттернов **и** новых визуальных деклараций (`border-radius`, `backdrop-filter`, `box-shadow`, decorative gradients, `background`/`background-color` с hex/rgba/hsl литералами).
+
+#### Formal DoD — Form Kit closed
+
+> Новый продуктовый экран собирается **только** из экспортов `design-system/**` без **одной** визуальной CSS-декларации вне DS.  
+> Если нельзя — kit не closed.
+
+Миграция зон (после closed kit): Today → Profile → Practices → Compatibility → Natal → rest. После закрытия зоны — **absolute** no local skin-layer.
+
 ---
 
 ## 16. Today Screen — Story Frame Composition

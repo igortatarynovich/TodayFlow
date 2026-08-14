@@ -2,33 +2,51 @@
 
 import { dsAppNavItemsRu } from "@/components/product-ui/productWebShellChrome";
 import {
+  DsActionCard,
+  DsAngle,
+  DsAvatar,
   DsBody,
   DsButton,
   DsCallout,
   DsCaption,
   DsCard,
   DsCheckbox,
+  DsChip,
+  DsChipCluster,
   DsChipField,
   DsClassifier,
   DsDisplayTitle,
+  DsDotMeter,
   DsEmph,
   DsEyebrow,
+  DsFab,
   DsFeatureTile,
   DsHeadline,
+  DsHeroBlock,
   DsInsightRow,
   DsInsightTile,
+  DsListRow,
+  DsMetricCard,
   DsMobileTabBar,
+  DsNumber,
   DsOrbitalViz,
+  DsPlanet,
   DsPulseCard,
   DsQuote,
+  DsRadialMeter,
   DsRitualGate,
   DsRitualGateSection,
   DsSearchField,
+  DsSpectrum,
+  DsStarDivider,
   DsStatusBadge,
   DsSubtitle,
+  DsSurface,
   DsTextField,
   DsThemePanel,
   DsTitle,
+  DsWindowCard,
+  DsZodiac,
   DsFeatureIcon,
   IconCalendar,
   IconMoon,
@@ -131,6 +149,70 @@ export function DsCatalog() {
           Tone (rail) и label (capsule) — независимые оси. Primary CTA остаётся золотой; action-ink — только
           ссылки/интерактивный текст.
         </DsBody>
+      </CatalogSection>
+
+      <CatalogSection title="Form Kit · Surfaces (tone only)">
+        <DsBody size="sm" muted>
+          §15.8 — <code>DsSurface</code> = visual shell; <code>DsCard</code> = pad/gap on a tone. Color from{" "}
+          <code>--tf-*</code> / <code>--day-*</code>, not the kit sheet neon.
+        </DsBody>
+        <div className={cat.cardGrid} style={{ marginTop: "1rem" }}>
+          {(["none", "subtle", "solid", "glass", "accent"] as const).map((tone) => (
+            <DsSurface key={tone} tone={tone} className={cat.formKitSurface}>
+              <DsCaption>{tone}</DsCaption>
+              <DsBody size="sm">Surface tone</DsBody>
+            </DsSurface>
+          ))}
+        </div>
+      </CatalogSection>
+
+      <CatalogSection title="Form Kit · Primitives">
+        <div className={cat.row}>
+          <DsChip icon={<DsPlanet planet="moon" size={16} />}>Moon</DsChip>
+          <DsChip variant="status">High energy</DsChip>
+          <DsFab ariaLabel="Continue">→</DsFab>
+          <DsAvatar label="A" />
+          <DsZodiac sign="leo" size={28} />
+          <DsNumber value={7} size={28} />
+          <DsAngle angle="asc" size={28} />
+        </div>
+        <div className={cat.row} style={{ marginTop: "1rem", alignItems: "center" }}>
+          <DsRadialMeter value={78} />
+          <DsDotMeter value={4} />
+          <div style={{ flex: 1, minWidth: "12rem" }}>
+            <DsSpectrum value={0.62} lowLabel="Low" highLabel="High" />
+          </div>
+        </div>
+        <DsStarDivider />
+      </CatalogSection>
+
+      <CatalogSection title="Form Kit · Compositions">
+        <div className={cat.cardGrid}>
+          <DsHeroBlock
+            eyebrow="Clarity in focus"
+            title="Сегодня держит ясность"
+            body="Короткий день-бриф без локальной кожи."
+            bleed={<DsPlanet planet="neptune" size={120} />}
+            chips={<DsChipCluster><DsChip>Focus</DsChip></DsChipCluster>}
+            fab={<DsFab ariaLabel="Open" size="sm">→</DsFab>}
+          />
+          <DsWindowCard
+            title="Best window"
+            startLabel="13:40"
+            endLabel="16:20"
+            spectrum={<DsSpectrum value={0.55} />}
+          />
+          <DsMetricCard value="78%" label="Energy" meter={<DsRadialMeter value={78} size={72} />} />
+          <DsActionCard title="See your full day" action={<DsButton>Open</DsButton>} />
+        </div>
+        <DsCard tone="glass" size="compact">
+          <DsListRow
+            leading={<DsPlanet planet="moon" size={36} />}
+            title="Moon in Virgo"
+            subtitle="Detail before speed"
+            onClick={() => undefined}
+          />
+        </DsCard>
       </CatalogSection>
 
       <CatalogSection title="3. Spacing">

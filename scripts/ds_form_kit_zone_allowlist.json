@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "description": "Form Kit open zones — paths still allowed to carry local visual skin (FOUNDATION_UI §15.8). Remove paths when a zone closes.",
+  "sequence": [
+    "today",
+    "profile",
+    "practices",
+    "compatibility",
+    "natal",
+    "rest"
+  ],
+  "zones": {
+    "today": [
+      "frontend/src/components/foundation/TodayFlowScene.module.css",
+      "frontend/src/components/today/TodayDayReveal.module.css",
+      "frontend/src/components/today/composition/TodayActNav.module.css",
+      "frontend/src/components/today/composition/TodayActShell.module.css",
+      "frontend/src/components/today/composition/TodayCompositionSurface.module.css",
+      "frontend/src/components/today/composition/TodayDayTasks.module.css",
+      "frontend/src/components/today/composition/TodayDepthLayerSection.module.css",
+      "frontend/src/components/today/composition/TodayEveningProductClose.module.css",
+      "frontend/src/components/today/composition/TodayGlanceAct.module.css",
+      "frontend/src/components/today/composition/TodayHookRevealShell.module.css",
+      "frontend/src/components/today/composition/TodayLoopBlock.module.css",
+      "frontend/src/components/today/composition/TodayMakeYoursBlock.module.css",
+      "frontend/src/components/today/composition/TodayPersonalizedProductSection.module.css",
+      "frontend/src/components/today/composition/TodayPracticeGiftBlock.module.css",
+      "frontend/src/components/today/composition/TodayProductScreenFlow.module.css",
+      "frontend/src/components/today/composition/TodayProgressTracker.module.css",
+      "frontend/src/components/today/composition/TodayRecapAchievements.module.css",
+      "frontend/src/components/today/composition/TodayScreenBlock.module.css",
+      "frontend/src/components/today/composition/TodayStoryDeckFrames.module.css",
+      "frontend/src/components/today/composition/TodayWave2Slots.module.css",
+      "frontend/src/components/today/ritual/RitualNumberPickExperience.module.css",
+      "frontend/src/components/today/ritual/RitualTarotPickExperience.module.css"
+    ],
+    "profile": [
+      "frontend/src/app/profile/profileRoute.module.css",
+      "frontend/src/components/profile/editorial/profileEditorial.module.css",
+      "frontend/src/components/profile/profileChartDeep.module.css",
+      "frontend/src/components/profile/profileExpandableSection.module.css",
+      "frontend/src/components/profile/profilePortalDeepSection.module.css",
+      "frontend/src/components/profile/profileSurface.module.css",
+      "frontend/src/components/profile/quickMap/profileQuickMap.module.css",
+      "frontend/src/components/profile/v0/profileV0.module.css",
+      "frontend/src/components/profile/v2/profileAtmosphere.module.css",
+      "frontend/src/components/profile/v2/profileV2System.module.css"
+    ],
+    "practices": [
+      "frontend/src/app/practices/PracticesPage.module.css",
+      "frontend/src/components/practices/session/practiceLiveSession.module.css",
+      "frontend/src/components/practices/stateCycle/practicesStateCycle.module.css",
+      "frontend/src/components/practices/v2/practicesV2History.module.css",
+      "frontend/src/components/practices/v2/practicesV2System.module.css"
+    ],
+    "compatibility": [
+      "frontend/src/components/compatibility/CompatibilityAccessDisclosure.module.css",
+      "frontend/src/components/compatibility/CompatibilityEncyclopediaHub.module.css",
+      "frontend/src/components/compatibility/CompatibilityExplorationResult.module.css",
+      "frontend/src/components/compatibility/CompatibilityMicroEcho.module.css",
+      "frontend/src/components/compatibility/CompatibilityPairJournalSurface.module.css",
+      "frontend/src/components/visualIdentity/compatibilityOrbitSymbol.module.css"
+    ],
+    "natal": [
+      "frontend/src/components/natal-chart/natalChartWheel.module.css"
+    ],
+    "rest": [
+      "frontend/src/app/challenges/challenges.module.css",
+      "frontend/src/app/tarot/journey/TarotJourneyPage.module.css",
+      "frontend/src/app/tarot/spread/[spreadId]/TarotSpreadRitual.module.css",
+      "frontend/src/components/celestial/celestialMoon.module.css",
+      "frontend/src/components/conversation/conversation.module.css",
+      "frontend/src/components/foundation/geometry/foundationGeometry.module.css",
+      "frontend/src/components/foundation/heroLarge.module.css",
+      "frontend/src/components/foundation/heroMedium.module.css",
+      "frontend/src/components/foundation/heroSmall.module.css",
+      "frontend/src/components/foundation/profileMotion.module.css",
+      "frontend/src/components/foundation/surfaceInsight.module.css",
+      "frontend/src/components/guest/guestAccessLimitGate.module.css",
+      "frontend/src/components/guidance/TarotReadingStorySurface.module.css",
+      "frontend/src/components/landing/landing.module.css",
+      "frontend/src/components/onboarding/valueFirst/firstResult.module.css",
+      "frontend/src/components/onboarding/valueFirst/valueFirstOnboarding.module.css",
+      "frontend/src/components/orbit/LoadingSpinner.module.css",
+      "frontend/src/components/orbit/SkeletonLoader.module.css",
+      "frontend/src/components/orbit/Toast.module.css",
+      "frontend/src/components/product-ui/MoodThemeControl.module.css",
+      "frontend/src/components/product-ui/ProductGuestShowcase.module.css",
+      "frontend/src/components/product-ui/ProductJourneyScene.module.css",
+      "frontend/src/components/product-ui/ProductScenePlate.module.css",
+      "frontend/src/components/product-ui/productWebScreens.module.css",
+      "frontend/src/components/shell/tarotShell.module.css",
+      "frontend/src/components/tarot/InteractiveCardDeck.module.css",
+      "frontend/src/components/tarot/TarotCardOfDayScreen.module.css",
+      "frontend/src/components/tarot/TarotJourneyPanel.module.css",
+      "frontend/src/components/tarot/TarotQuestionFlow.module.css",
+      "frontend/src/components/visualIdentity/elementAtmosphere.module.css",
+      "frontend/src/components/visualIdentity/sacredGeometry.module.css",
+      "frontend/src/components/weekly/weeklyFocus.module.css",
+      "frontend/src/components/weekly/weeklyIntegration.module.css"
+    ]
+  },
+  "closed_pilot": {
+    "path": "frontend/src/components/today/composition/TodayDayBrief.module.css",
+    "note": "Form Kit pilot — Today day brief uses design-system compositions only; CSS module removed."
+  }
+}

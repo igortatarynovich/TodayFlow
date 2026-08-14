@@ -930,10 +930,18 @@ Status: `COMPLETED`
 ## Phase 5: Design System Hardening
 Status: `IN_PROGRESS`
 
+### Form Kit (2026-08-14) — closed visual SoT
+- **Canon:** `TODAYFLOW_FOUNDATION_UI.md` §15.8 — Surface≠Card; compositions; visual import contract; formal DoD; form≠kit colors.
+- **Code:** `frontend/src/design-system/` primitives + `compositions/` + `visual/` wrappers; catalog `/design-system`; gate declarative skin bans.
+- **Pilot:** Today day brief → Form Kit compositions (no local skin on pilot surface).
+- **Zone sequence (absolute no local skin after each):** Today → Profile → Practices → Compatibility → Natal → rest. Allowlist: `scripts/ds_form_kit_zone_allowlist.json`.
+
 ### Tasks
 - [x] Lock color tokens, typography scale, spacing grid.
 - [x] Standardize button/card/input variants.
 - [x] Unify icon style and tarot cover style.
+- [x] **Form Kit closed set** — §15.8 primitives + compositions + visual contract + gate + catalog DoD + day-brief pilot.
+- [ ] **Form Kit zones** — Today → Profile → Practices → Compatibility → Natal → rest (zero local skin per closed zone). Allowlist: `scripts/ds_form_kit_zone_allowlist.json` (TodayDayBrief pilot closed / CSS removed).
 - [x] **Task 2.7 Wave 1** — Shell/layout unification (`--tf-shell-max` / readable; kill phone columns). Practices/Profile/Compatibility + Tarot hub. Exit: `layout DoD ✅`, zones still IN PROGRESS.
 - [x] **Task 2.6 Wave 2** — Expand DS gate for `rgba()` / `color-mix()`; rewrite Compatibility local rgba cards to `--tf-*`/`--day-*`.
 - [x] **Task 2.6b Wave 2** — Typography on same three zones + Tarot hub → Foundation `--tf-type-*` roles.

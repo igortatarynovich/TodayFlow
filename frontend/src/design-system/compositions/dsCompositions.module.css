@@ -1,0 +1,132 @@
+/* Form Kit compositions — layout only (FOUNDATION_UI §15.8). No skin. */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  width: 100%;
+}
+
+.heroInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  min-height: 10rem;
+  overflow: hidden;
+}
+
+.heroBleed {
+  position: absolute;
+  right: -1.25rem;
+  top: -0.75rem;
+  width: min(46%, 9.5rem);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heroCopy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  max-width: 70%;
+}
+
+.heroFooter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  margin-top: auto;
+  padding-top: var(--tf-ds-space-4, 0.75rem);
+}
+
+.windowTimes {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-3, 0.5rem);
+}
+
+.metricRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-4, 0.75rem);
+}
+
+.actionCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--tf-ds-space-4, 0.75rem);
+}
+
+.listRow {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: var(--tf-ds-space-3, 0.5rem) 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.listRowBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.listRowChevron {
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+.pilotStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-5, 1rem);
+  width: 100%;
+  position: relative;
+}
+
+.pilotGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--tf-ds-space-4, 0.75rem);
+}
+
+@media (min-width: 720px) {
+  .pilotGrid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+.pairGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--tf-ds-space-3, 0.5rem);
+}
+
+.betterGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--tf-ds-space-3, 0.5rem);
+}
+
+@media (max-width: 520px) {
+  .betterGrid {
+    grid-template-columns: 1fr;
+  }
+}

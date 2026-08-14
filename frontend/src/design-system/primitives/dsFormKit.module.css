@@ -1,0 +1,323 @@
+/* Form Kit skin — FOUNDATION_UI §15.8. Form from ui-kit-form-sheet; color via --tf-* / --day-*. */
+
+/* ——— Surface tones (visual shell only) ——— */
+.surfaceBase {
+  box-sizing: border-box;
+  border-radius: var(--tf-ds-radius-lg, 1.5rem);
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.toneNone {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.toneSubtle {
+  background: color-mix(in srgb, var(--tf-ink, #1a1714) 6%, transparent);
+  border-color: color-mix(in srgb, var(--tf-ink, #1a1714) 8%, transparent);
+}
+
+.toneSolid {
+  background: var(--tf-surface, #fff);
+  border-color: color-mix(in srgb, var(--tf-ink, #1a1714) 10%, transparent);
+  box-shadow: var(--tf-ds-shadow-soft, 0 8px 24px color-mix(in srgb, var(--tf-ink) 8%, transparent));
+}
+
+.toneGlass {
+  background: var(--tf-ds-glass-surface, var(--tf-ds-glass, color-mix(in srgb, var(--tf-surface) 72%, transparent)));
+  border-color: var(--tf-ds-glass-border, color-mix(in srgb, #fff 22%, transparent));
+  backdrop-filter: blur(var(--tf-ds-glass-blur, 14px));
+  -webkit-backdrop-filter: blur(var(--tf-ds-glass-blur, 14px));
+  box-shadow: var(--tf-ds-shadow-soft, none);
+}
+
+.toneAccent {
+  background: color-mix(in srgb, var(--day-accent-soft, var(--tf-accent-gold)) 55%, var(--tf-surface, #fff));
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 35%, transparent);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 28%, transparent);
+}
+
+/* ——— Card shell (layout on Surface) ——— */
+.cardShell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  width: 100%;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: inherit;
+}
+
+.cardPadDefault {
+  padding: var(--tf-ds-space-6, 1.25rem) var(--tf-ds-space-6, 1.25rem);
+}
+
+.cardPadCompact {
+  padding: var(--tf-ds-space-4, 0.75rem) var(--tf-ds-space-5, 1rem);
+  border-radius: var(--tf-ds-radius-md, 1.1rem);
+}
+
+.cardInteractive {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* ——— Fab ——— */
+.fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #fff 28%, transparent);
+  background: color-mix(in srgb, var(--day-accent-soft, var(--tf-accent-gold)) 70%, var(--tf-surface));
+  color: var(--tf-ink, #1a1714);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 40%, transparent);
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.fabSm {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.fabLg {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+/* ——— Chip ——— */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 100%;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--tf-ink) 12%, transparent);
+  background: color-mix(in srgb, var(--tf-surface, #fff) 80%, transparent);
+  color: var(--tf-ink, #1a1714);
+  font-family: var(--tf-font-body);
+  font-size: var(--tf-type-caption-size, 0.75rem);
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.chipStatus {
+  background: color-mix(in srgb, var(--day-accent-soft, var(--tf-accent-gold)) 45%, var(--tf-surface));
+  border-color: transparent;
+}
+
+.chipGhost {
+  background: transparent;
+}
+
+.chipIcon {
+  display: inline-flex;
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.chipGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+/* ——— Meters ——— */
+.radialWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radialSvg {
+  display: block;
+  transform: rotate(-90deg);
+}
+
+.radialTrack {
+  fill: none;
+  stroke: color-mix(in srgb, var(--tf-ink) 12%, transparent);
+}
+
+.radialValue {
+  fill: none;
+  stroke: var(--day-decor-color, var(--tf-accent-gold));
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--tf-motion-settle, 0.4s) var(--tf-motion-ease-out, ease);
+}
+
+.radialLabel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--tf-font-display);
+  font-size: var(--tf-type-section-size, 1.5rem);
+  font-weight: 600;
+  color: var(--tf-ink);
+  transform: none;
+}
+
+.dotMeter {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tf-ink) 18%, transparent);
+}
+
+.dotOn {
+  background: var(--day-decor-color, var(--tf-accent-gold));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 45%, transparent);
+}
+
+.spectrum {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.spectrumTrack {
+  position: relative;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--tf-ink-quiet, #6b6560) 55%, transparent),
+    var(--day-accent-soft, var(--tf-accent-gold)),
+    var(--day-decor-color, var(--tf-accent-gold))
+  );
+}
+
+.spectrumThumb {
+  position: absolute;
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: var(--tf-surface, #fff);
+  border: 2px solid color-mix(in srgb, #fff 70%, transparent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--tf-ink) 25%, transparent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.spectrumLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--tf-type-caption-size, 0.75rem);
+  color: var(--tf-ink-quiet, #6b6560);
+}
+
+.metricValue {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(var(--tf-type-section-size), 6vw, var(--tf-type-display-l-size));
+  font-weight: 600;
+  line-height: 1;
+  color: var(--tf-ink);
+}
+
+.metricLabel {
+  margin: 0;
+  font-size: var(--tf-type-caption-size, 0.75rem);
+  color: var(--tf-ink-quiet);
+}
+
+.starDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin: var(--tf-ds-space-4, 0.75rem) 0;
+}
+
+.starDividerLine {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--tf-ink) 14%, transparent);
+  border: none;
+}
+
+.starDividerIcon {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex-shrink: 0;
+  color: var(--day-decor-color, var(--tf-accent-gold));
+  opacity: 0.9;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--day-accent-soft, var(--tf-accent-gold)) 35%, var(--tf-surface));
+  color: var(--tf-ink);
+  font-family: var(--tf-font-display);
+  font-weight: 600;
+  font-size: var(--tf-type-body-size, 1rem);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 25%, transparent);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatarSm {
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--tf-type-caption-size, 0.75rem);
+}
+
+.avatarLg {
+  width: 3.25rem;
+  height: 3.25rem;
+  font-size: var(--tf-type-section-size, 1.25rem);
+}
+
+.tarotFace {
+  display: block;
+  width: 100%;
+  max-width: 7.5rem;
+  aspect-ratio: 3 / 5;
+  object-fit: cover;
+  border-radius: var(--tf-ds-radius-sm, 0.75rem);
+  border: 1px solid color-mix(in srgb, var(--tf-accent-gold) 45%, transparent);
+}
+
+.angleBadge {
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+}
+
+.angleBadge img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
