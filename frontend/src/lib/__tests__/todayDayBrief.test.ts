@@ -98,7 +98,7 @@ describe("buildTodayDayBriefModel", () => {
           do: ["Держать один канал"],
           day_foundation: {
             lunar: {
-              phase: { name: "Растущая Луна", themes: "Сбор сил" },
+              phase: { id: "waxing_gibbous", name: "Растущая Луна", cycle_day: 11, themes: "Сбор сил" },
               moon_sign: { sign_ru: "Весы" },
               beats: [{ id: "b1", title: "Тригон Луна — Плутон", story_ru: "Глубина без драмы." }],
             },
@@ -135,6 +135,7 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.visualMode).toBe("flow");
     expect(model.modeLabel).toBeTruthy();
     expect(model.lunarCaption).toBe("Растущая Луна в Весы");
+    expect(model.moonPhase).toBeCloseTo(11 / 29.53058867, 5);
     expect(model.whyFactors.some((f) => f.id === "lunar")).toBe(true);
     expect(model.whyFactors.some((f) => f.id === "number")).toBe(true);
     expect(model.betterCards).toHaveLength(3);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useState, type ReactNode } from "react";
+import { CelestialMoon } from "@/components/celestial/CelestialMoon";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import type { TodayDayBriefModel } from "@/lib/todayDayBrief";
 import styles from "@/components/today/composition/TodayDayBrief.module.css";
@@ -117,6 +118,7 @@ function TodayDayDashboard({
     expect,
     modeLabel,
     lunarCaption,
+    moonPhase,
     whyFactors,
     betterCards,
     supportLine,
@@ -133,13 +135,29 @@ function TodayDayDashboard({
     people: "◎",
     self: "✧",
   };
+  const showMoon = typeof moonPhase === "number" && Number.isFinite(moonPhase);
 
   return (
     <div
-      className={styles.dash}
+      className={[styles.dash, showMoon ? styles.dashWithMoon : null].filter(Boolean).join(" ")}
       data-testid="today-day-brief"
       data-pane="atmosphere"
+      data-has-moon={showMoon ? "true" : "false"}
     >
+      {showMoon ? (
+        <div className={styles.moonBleed} aria-hidden data-testid="today-day-brief-moon">
+          <CelestialMoon
+            phase={moonPhase}
+            size={200}
+            spin={0}
+            glow={0.85}
+            animated={false}
+            textureSrc="/images/celestial/moon_lro_1k.jpg"
+            className={styles.moonDisk}
+          />
+        </div>
+      ) : null}
+
       <header className={styles.dashHeader}>
         <div className={styles.dashHeaderText}>
           <p className={styles.date} data-testid="today-day-brief-date">

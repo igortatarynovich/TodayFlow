@@ -18,13 +18,55 @@
   box-sizing: border-box;
   padding-bottom: 0.35rem;
   color: var(--dash-ink);
+  position: relative;
+  isolation: isolate;
+}
+
+.dashWithMoon {
+  /* Room for the visible lower limb so date/caption stay readable */
+  padding-top: 0.15rem;
+}
+
+.moonBleed {
+  position: absolute;
+  top: -7.25rem;
+  right: -3.1rem;
+  z-index: 0;
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  opacity: 0.94;
+  /* Soft fade at the cut — reads as “behind the screen edge” */
+  mask-image: linear-gradient(to bottom, transparent 0%, transparent 22%, #000 48%, #000 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 22%, #000 48%, #000 100%);
+}
+
+.moonDisk {
+  filter: drop-shadow(0 12px 30px rgba(18, 24, 40, 0.4));
 }
 
 .dashHeader {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
+  /* Keep copy clear of the moon limb on the right */
+  padding-right: min(46%, 8.75rem);
+  min-height: 2.75rem;
+}
+
+@media (max-width: 360px) {
+  .moonBleed {
+    right: -4rem;
+    top: -7.6rem;
+    opacity: 0.85;
+  }
+
+  .dashHeader {
+    padding-right: min(40%, 7.25rem);
+  }
 }
 
 .dashHeaderText {
@@ -55,6 +97,8 @@
 /* Hero — dark immersive card, light type (mockup FLOW card) */
 .heroCard {
   appearance: none;
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

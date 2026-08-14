@@ -527,6 +527,7 @@ export type TodayDayFoundationV1 = {
   };
   lunar?: {
     phase?: {
+      id?: string;
       name?: string;
       cycle_day?: number;
       guidance?: string;

@@ -10,6 +10,7 @@
 
 import type { DayVisualMode } from "@/lib/dayAtmosphere";
 import { DAY_MODE_LABELS_RU, DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
+import { resolveCelestialMoonPhase } from "@/lib/celestialMoonPhase";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { HandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 
@@ -51,6 +52,11 @@ export type TodayDayBriefModel = {
   modeLabel: string | null;
   /** Lunar / sky caption under date */
   lunarCaption: string | null;
+  /**
+   * Continuous lunar phase for CelestialMoon (0=new … 0.5=full … 1=new).
+   * From day_foundation.lunar.phase.cycle_day (preferred) or id/name.
+   */
+  moonPhase: number | null;
   /** «Почему так сегодня» chips */
   whyFactors: TodayDayWhyFactor[];
   /** «Сегодня лучше» grid */
@@ -168,6 +174,18 @@ function buildLunarCaption(contract: TodayContractV1, glassReason: string | null
   if (phase) return phase;
   if (sign) return `Луна в ${sign}`;
   return glassReason ? clipCompassProse(glassReason, 72) : null;
+}
+
+function buildMoonPhase(contract: TodayContractV1): number | null {
+  const phase = contract.day_story?.day_foundation?.lunar?.phase;
+  if (!phase) return null;
+  const cycle =
+    typeof phase.cycle_day === "number" && Number.isFinite(phase.cycle_day) ? phase.cycle_day : null;
+  return resolveCelestialMoonPhase({
+    cycleDay: cycle,
+    phaseId: phase.id ?? null,
+    phaseName: phase.name ?? null,
+  });
 }
 
 function buildWhyFactors(
@@ -361,6 +379,7 @@ export function buildTodayDayBriefModel(input: {
     visualMode,
     modeLabel: visualMode ? DAY_MODE_LABELS_RU[visualMode] : null,
     lunarCaption: buildLunarCaption(input.contract, glass?.reasonLine ?? null),
+    moonPhase: input.loading ? null : buildMoonPhase(input.contract),
     whyFactors: buildWhyFactors(input.contract, glass),
     betterCards: buildBetterCards(input.contract),
     supportLine,
