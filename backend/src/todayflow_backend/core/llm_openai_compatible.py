@@ -45,7 +45,7 @@ def is_llm_chat_configured() -> bool:
     return bool(key)
 
 
-def _resolve_llm_credentials() -> tuple[str, str] | None:
+def _resolve_llm_credentials(*, model: str | None = None) -> tuple[str, str] | None:
     """Возвращает (api_key, base_url) для активного chat-провайдера."""
     provider = (settings.llm_provider or "openai").strip().lower()
     if provider == "gemini":
@@ -58,7 +58,12 @@ def _resolve_llm_credentials() -> tuple[str, str] | None:
         key = (settings.nebius_api_key or "").strip()
         if not key:
             return None
-        base = (settings.nebius_base_url or "https://api.tokenfactory.eu-west2.nebius.com/v1/").strip()
+        base = (settings.nebius_base_url or "https://api.tokenfactory.us-central1.nebius.com/v1/").strip()
+        complex_mid = (getattr(settings, "nebius_complex_model", None) or "").strip()
+        complex_base = (getattr(settings, "nebius_complex_base_url", None) or "").strip()
+        mid = (model or "").strip()
+        if mid and complex_mid and mid == complex_mid and complex_base:
+            base = complex_base
         return key, base.rstrip("/")
 
     key = (settings.llm_chat_api_key or settings.openai_api_key or "").strip()
@@ -73,15 +78,18 @@ def _resolve_llm_credentials() -> tuple[str, str] | None:
     return key, base.rstrip("/") if base else ""
 
 
-def get_openai_compatible_client(*, operation: str | None = None) -> Any | None:
+def get_openai_compatible_client(*, operation: str | None = None, model: str | None = None) -> Any | None:
     """Собирает `openai.OpenAI` с опциональным `base_url` для своего провайдера.
 
     operation:
       sync — read-path / accidental calls: short timeout, no SDK retries
       background — enrichment jobs: longer timeout, still no SDK retries
         (job-level attempt_count owns retries)
+    model:
+      When Nebius + matches ``NEBIUS_COMPLEX_MODEL``, uses ``NEBIUS_COMPLEX_BASE_URL``
+      (K3 on eu-west2). Otherwise primary ``NEBIUS_BASE_URL`` (K2.6 on us-central1).
     """
-    creds = _resolve_llm_credentials()
+    creds = _resolve_llm_credentials(model=model)
     if creds is None:
         return None
     try:

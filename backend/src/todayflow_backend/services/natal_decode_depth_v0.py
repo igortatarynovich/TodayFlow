@@ -496,10 +496,11 @@ def generate_natal_decode_depth_v0(
     )
 
     try:
-        client = get_openai_compatible_client()
+        model = resolve_complex_chat_model()
+        client = get_openai_compatible_client(model=model)
         raw = chat_completion_text(
             client,
-            model=resolve_complex_chat_model(),
+            model=model,
             messages=[
                 {"role": "system", "content": system},
                 {"role": "user", "content": user_msg},

@@ -98,7 +98,9 @@ class Settings(BaseSettings):
     gemini_max_tokens: int = 4096  # GEMINI_MAX_TOKENS — Gemini 2.5 резервирует budget на thinking
     # Nebius Token Factory (OpenAI-compatible): https://docs.tokenfactory.nebius.com/
     nebius_api_key: str | None = None  # NEBIUS_API_KEY
-    nebius_base_url: str = "https://api.tokenfactory.eu-west2.nebius.com/v1/"  # NEBIUS_BASE_URL
+    # K2.6 catalog region (us-central1). K3 stays on eu-west2 via NEBIUS_COMPLEX_BASE_URL.
+    nebius_base_url: str = "https://api.tokenfactory.us-central1.nebius.com/v1/"  # NEBIUS_BASE_URL
+    nebius_complex_base_url: str = "https://api.tokenfactory.eu-west2.nebius.com/v1/"  # NEBIUS_COMPLEX_BASE_URL
     # Primary = K2.6 for day/prewarm/routine. K3 only via NEBIUS_COMPLEX_MODEL on
     # explicit complex user ops (CE portrait stages, natal decode) — see resolve_complex_chat_model.
     nebius_model: str = "moonshotai/Kimi-K2.6"  # NEBIUS_MODEL

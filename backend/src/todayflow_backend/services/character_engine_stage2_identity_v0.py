@@ -527,7 +527,7 @@ def build_character_engine_identity_core_v0(
     from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
 
     system = with_practitioner_persona(system, locale=locale)
-    client = get_openai_compatible_client(operation="background")
+    client = get_openai_compatible_client(operation="background", model=resolve_complex_chat_model())
     model = resolve_complex_chat_model()
     messages = [
         {"role": "system", "content": system},

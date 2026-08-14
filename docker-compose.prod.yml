@@ -51,7 +51,8 @@ services:
       LLM_DEFAULT_MODEL: ${LLM_DEFAULT_MODEL:-}
       LLM_QUALITY_MODE: ${LLM_QUALITY_MODE:-rich}
       NEBIUS_API_KEY: ${NEBIUS_API_KEY:-}
-      NEBIUS_BASE_URL: ${NEBIUS_BASE_URL:-https://api.tokenfactory.eu-west2.nebius.com/v1/}
+      NEBIUS_BASE_URL: ${NEBIUS_BASE_URL:-https://api.tokenfactory.us-central1.nebius.com/v1/}
+      NEBIUS_COMPLEX_BASE_URL: ${NEBIUS_COMPLEX_BASE_URL:-https://api.tokenfactory.eu-west2.nebius.com/v1/}
       NEBIUS_MODEL: ${NEBIUS_MODEL:-moonshotai/Kimi-K2.6}
       NEBIUS_COMPLEX_MODEL: ${NEBIUS_COMPLEX_MODEL:-moonshotai/Kimi-K3}
       NEBIUS_FALLBACK_MODEL: ${NEBIUS_FALLBACK_MODEL:-}

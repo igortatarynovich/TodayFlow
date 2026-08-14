@@ -114,12 +114,13 @@ def _call(
     """Returns (parsed_dict_or_none, raw_content_or_none). Behavior unchanged when capture off."""
     if not is_llm_chat_configured():
         return None, None
-    client = get_openai_compatible_client()
+    model = resolve_complex_chat_model()
+    client = get_openai_compatible_client(model=model)
     if client is None:
         return None, None
     content = chat_completion_plain(
         client,
-        model=resolve_complex_chat_model(),
+        model=model,
         messages=[
             {"role": "system", "content": system},
             {"role": "user", "content": user},
