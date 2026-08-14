@@ -154,6 +154,33 @@ export function planetPhotoPath(slug: PlanetSlug): string {
   return `${ICON_BASE}/planets/${slug}.webp`;
 }
 
+/** Chart angle badges from celestial-kit sheet (ASC/DSC/MC/IC). */
+export type ChartAngleSlug = "asc" | "dsc" | "mc" | "ic";
+
+export function chartAngleAssetPath(slug: ChartAngleSlug): string {
+  return `${ICON_BASE}/angles/${slug}.webp`;
+}
+
+/** Neon glass zodiac orbs for dark natal wheel (separate from gold seal ZodiacIcon). */
+export function zodiacOrbAssetPath(slug: ZodiacSlug): string {
+  return `${ICON_BASE}/zodiac-orbs/${slug}.webp`;
+}
+
+/** Small decorative accents from celestial-kit sheet. */
+export type CelestialKitDecorSlug =
+  | "cardinal-ring"
+  | "nebula-orb"
+  | "star-gold"
+  | "star-silver"
+  | "flare-gold"
+  | "flare-ring"
+  | "orbit-planet"
+  | "lens-nested";
+
+export function celestialKitDecorPath(slug: CelestialKitDecorSlug): string {
+  return `/images/decorative/kit/${slug}.webp`;
+}
+
 /** Metallic digit icons 1–9 (WebP). No 0 on sheet — NumberIcon falls back to text. */
 export type NumberDigit = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 

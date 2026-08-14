@@ -92,11 +92,13 @@
 }
 
 .signatureGlyphAsc {
-  background-image: url("/images/decorative/compass.svg");
+  background-image: url("/images/icons/angles/asc.webp");
+  opacity: 0.95;
 }
 
 .signatureGlyphMc {
-  background-image: url("/images/decorative/north-star.svg");
+  background-image: url("/images/icons/angles/mc.webp");
+  opacity: 0.95;
 }
 
 .signatureCardNumerology {

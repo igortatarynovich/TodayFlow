@@ -839,11 +839,13 @@
 }
 
 .constellationNode_rising .constellationGlyph {
-  background-image: url("/images/decorative/compass.svg");
+  background-image: url("/images/icons/angles/asc.webp");
+  opacity: 0.95;
 }
 
 .constellationNode_mc .constellationGlyph {
-  background-image: url("/images/decorative/north-star.svg");
+  background-image: url("/images/icons/angles/mc.webp");
+  opacity: 0.95;
 }
 
 .constellationNode_lp .constellationGlyph,

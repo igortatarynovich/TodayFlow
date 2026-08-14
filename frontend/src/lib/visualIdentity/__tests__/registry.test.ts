@@ -9,6 +9,9 @@ import {
   planetHasPhotoAsset,
   planetPhotoPath,
   earthPhotoPath,
+  chartAngleAssetPath,
+  zodiacOrbAssetPath,
+  celestialKitDecorPath,
   resolvePlanetSlug,
   zodiacAssetPath,
   zodiacIllustrationPath,
@@ -72,6 +75,12 @@ describe("visualIdentity registry", () => {
     expect(planetPhotoPath("saturn")).toBe("/images/icons/planets/saturn.webp");
     expect(planetPhotoPath("mercury")).toBe("/images/icons/planets/mercury.webp");
     expect(earthPhotoPath()).toBe("/images/icons/planets/earth.webp");
+  });
+
+  it("maps celestial-kit chart accents", () => {
+    expect(chartAngleAssetPath("asc")).toBe("/images/icons/angles/asc.webp");
+    expect(zodiacOrbAssetPath("leo")).toBe("/images/icons/zodiac-orbs/leo.webp");
+    expect(celestialKitDecorPath("star-gold")).toBe("/images/decorative/kit/star-gold.webp");
   });
 
   it("resolves EN and RU element names", () => {

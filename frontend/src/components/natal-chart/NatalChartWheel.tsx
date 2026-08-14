@@ -11,7 +11,7 @@ import {
   deriveMajorAspectCalloutsFromLongitudes,
   NATAL_ASPECT_HALO,
 } from "@/lib/natal/natalWheelMaterial";
-import { resolvePlanetSlug } from "@/lib/visualIdentity/registry";
+import { resolvePlanetSlug, chartAngleAssetPath, zodiacOrbAssetPath, type ChartAngleSlug, type ZodiacSlug } from "@/lib/visualIdentity/registry";
 import { resolveNatalPlanetLayout } from "@/lib/natal/natalWheelLayout";
 import {
   resolveNatalAtmosphereElement,
@@ -400,18 +400,18 @@ export function NatalChartWheel({
 
   // Zodiac signs with their glyphs (U+FE0E: text presentation, not emoji)
   const zodiacSigns = useMemo(() => [
-    { name: "Aries", glyph: "♈︎", element: "fire" },
-    { name: "Taurus", glyph: "♉︎", element: "earth" },
-    { name: "Gemini", glyph: "♊︎", element: "air" },
-    { name: "Cancer", glyph: "♋︎", element: "water" },
-    { name: "Leo", glyph: "♌︎", element: "fire" },
-    { name: "Virgo", glyph: "♍︎", element: "earth" },
-    { name: "Libra", glyph: "♎︎", element: "air" },
-    { name: "Scorpio", glyph: "♏︎", element: "water" },
-    { name: "Sagittarius", glyph: "♐︎", element: "fire" },
-    { name: "Capricorn", glyph: "♑︎", element: "earth" },
-    { name: "Aquarius", glyph: "♒︎", element: "air" },
-    { name: "Pisces", glyph: "♓︎", element: "water" },
+    { name: "Aries", slug: "aries" as ZodiacSlug, glyph: "♈︎", element: "fire" },
+    { name: "Taurus", slug: "taurus" as ZodiacSlug, glyph: "♉︎", element: "earth" },
+    { name: "Gemini", slug: "gemini" as ZodiacSlug, glyph: "♊︎", element: "air" },
+    { name: "Cancer", slug: "cancer" as ZodiacSlug, glyph: "♋︎", element: "water" },
+    { name: "Leo", slug: "leo" as ZodiacSlug, glyph: "♌︎", element: "fire" },
+    { name: "Virgo", slug: "virgo" as ZodiacSlug, glyph: "♍︎", element: "earth" },
+    { name: "Libra", slug: "libra" as ZodiacSlug, glyph: "♎︎", element: "air" },
+    { name: "Scorpio", slug: "scorpio" as ZodiacSlug, glyph: "♏︎", element: "water" },
+    { name: "Sagittarius", slug: "sagittarius" as ZodiacSlug, glyph: "♐︎", element: "fire" },
+    { name: "Capricorn", slug: "capricorn" as ZodiacSlug, glyph: "♑︎", element: "earth" },
+    { name: "Aquarius", slug: "aquarius" as ZodiacSlug, glyph: "♒︎", element: "air" },
+    { name: "Pisces", slug: "pisces" as ZodiacSlug, glyph: "♓︎", element: "water" },
   ], []);
 
   const degreeToAngle = useCallback((degree: number): number => {
@@ -573,11 +573,11 @@ export function NatalChartWheel({
   ]);
 
   const angleMarkers = useMemo(() => {
-    const markers = [
-      { key: "ASC", degree: houseCusps[0], color: INK.angle.ASC },
-      { key: "IC", degree: houseCusps[3], color: INK.angle.IC },
-      { key: "DSC", degree: houseCusps[6], color: INK.angle.DSC },
-      { key: "MC", degree: houseCusps[9], color: INK.angle.MC },
+    const markers: Array<{ key: string; slug: ChartAngleSlug; degree: number; color: string }> = [
+      { key: "ASC", slug: "asc", degree: houseCusps[0], color: INK.angle.ASC },
+      { key: "IC", slug: "ic", degree: houseCusps[3], color: INK.angle.IC },
+      { key: "DSC", slug: "dsc", degree: houseCusps[6], color: INK.angle.DSC },
+      { key: "MC", slug: "mc", degree: houseCusps[9], color: INK.angle.MC },
     ];
     return markers.map((marker) => {
       const angle = degreeToAngle(marker.degree);
@@ -965,63 +965,51 @@ export function NatalChartWheel({
           const signAngle = degreeToAngle(i * 30 + 15);
           const bandRadius = (outerRadius + zodiacInnerRadius) / 2;
           const pos = getPosition(signAngle, bandRadius);
-          const stroke = INK.elementStroke[sign.element] || INK.gold;
-          const wash = INK.elementWash[sign.element] || "rgba(255,250,242,0.88)";
           const markerR = isMobile ? 13 : 16;
+          const size = markerR * 2;
           return (
-            <g key={sign.name}>
-              <circle
-                cx={pos.x}
-                cy={pos.y}
-                r={markerR}
-                fill={wash}
-                stroke={stroke}
-                strokeWidth="2"
-                opacity="0.96"
-              />
-              <text
-                x={pos.x}
-                y={pos.y}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize={isMobile ? "14" : "17"}
-                fill={stroke}
-                fontWeight="700"
-              >
-                {sign.glyph}
-              </text>
-            </g>
+            <image
+              key={sign.name}
+              href={zodiacOrbAssetPath(sign.slug)}
+              x={pos.x - size / 2}
+              y={pos.y - size / 2}
+              width={size}
+              height={size}
+              preserveAspectRatio="xMidYMid meet"
+              opacity="0.96"
+              style={{ pointerEvents: "none" }}
+            />
           );
         })}
         </g>
 
         {/* Layer mid: angle markers only — aspect chords live under planets (not in the old hub well). */}
         <g className={styles.layerMid}>
-        {angleMarkers.map((marker) => (
-          <g key={marker.key} opacity={focusPlanet ? 0.45 : 0.7}>
-            <line
-              x1={marker.inner.x}
-              y1={marker.inner.y}
-              x2={marker.outer.x}
-              y2={marker.outer.y}
-              stroke={marker.color}
-              strokeWidth="1.8"
-              opacity="0.7"
-            />
-            <circle cx={marker.outer.x} cy={marker.outer.y} r="13" fill={INK.white} stroke={marker.color} strokeWidth="2" />
-            <text
-              x={marker.outer.x}
-              y={marker.outer.y}
-              textAnchor="middle"
-              dominantBaseline="central"
-              fontSize="10"
-              fill={marker.color}
-              fontWeight="700"
-            >
-              {marker.key}
-            </text>
-          </g>
-        ))}
+        {angleMarkers.map((marker) => {
+          const size = 26;
+          return (
+            <g key={marker.key} opacity={focusPlanet ? 0.45 : 0.85}>
+              <line
+                x1={marker.inner.x}
+                y1={marker.inner.y}
+                x2={marker.outer.x}
+                y2={marker.outer.y}
+                stroke={marker.color}
+                strokeWidth="1.8"
+                opacity="0.7"
+              />
+              <image
+                href={chartAngleAssetPath(marker.slug)}
+                x={marker.outer.x - size / 2}
+                y={marker.outer.y - size / 2}
+                width={size}
+                height={size}
+                preserveAspectRatio="xMidYMid meet"
+                style={{ pointerEvents: "none" }}
+              />
+            </g>
+          );
+        })}
         </g>
 
         {/* Layer front: major chords → hub → lit discs */}

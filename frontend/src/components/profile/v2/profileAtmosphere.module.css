@@ -18,11 +18,12 @@
 
 .motif_why {
   background-image:
+    url("/images/decorative/kit/cardinal-ring.webp"),
     url("/images/decorative/orbit.svg"),
     url("/images/cosmic/zodiac_wash.webp");
-  background-repeat: no-repeat, no-repeat;
-  background-position: 108% -12%, 50% 45%;
-  background-size: min(18rem, 55%) auto, cover;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: -18% 108%, 108% -12%, 50% 45%;
+  background-size: min(14rem, 42%) auto, min(18rem, 55%) auto, cover;
   opacity: 0.16;
 }
 
@@ -57,10 +58,12 @@
 }
 
 .motif_natal {
-  background-image: url("/images/cosmic/celestial_wash.webp");
-  background-repeat: no-repeat;
-  background-position: 50% 42%;
-  background-size: cover;
+  background-image:
+    url("/images/decorative/kit/nebula-orb.webp"),
+    url("/images/cosmic/celestial_wash.webp");
+  background-repeat: no-repeat, no-repeat;
+  background-position: 92% 12%, 50% 42%;
+  background-size: min(7.5rem, 26%) auto, cover;
   opacity: 0.28;
   mix-blend-mode: soft-light;
 }
