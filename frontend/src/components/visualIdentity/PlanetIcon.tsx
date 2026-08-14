@@ -3,6 +3,8 @@
 import {
   VISUAL_ASSET_MODE,
   planetAssetPath,
+  planetHasPhotoAsset,
+  planetPhotoPath,
   resolvePlanetSlug,
   type PlanetSlug,
 } from "@/lib/visualIdentity/registry";
@@ -13,7 +15,44 @@ export type PlanetIconProps = SymbolicIconProps & {
   planet: string | null | undefined;
 };
 
-function PlanetAssetSymbol({
+function PlanetPhotoSymbol({
+  slug,
+  size,
+  className,
+}: {
+  slug: PlanetSlug;
+  size: number;
+  className?: string;
+}) {
+  return (
+    <span
+      data-testid="planet-symbol"
+      data-visual="photo"
+      aria-hidden
+      className={className}
+      style={{
+        width: size,
+        height: size,
+        display: "inline-flex",
+        flexShrink: 0,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element -- static public WebP; size parity with prior mask slot */}
+      <img
+        src={planetPhotoPath(slug)}
+        alt=""
+        width={size}
+        height={size}
+        draggable={false}
+        style={{ width: size, height: size, objectFit: "contain", display: "block" }}
+      />
+    </span>
+  );
+}
+
+function PlanetSealSymbol({
   slug,
   size,
   className,
@@ -28,6 +67,7 @@ function PlanetAssetSymbol({
   return (
     <span
       data-testid="planet-symbol"
+      data-visual="seal"
       aria-hidden
       className={className}
       style={{
@@ -55,7 +95,10 @@ export function PlanetIcon({ planet, size = 24, className, stroke = "currentColo
   if (!slug) return null;
 
   if (VISUAL_ASSET_MODE === "asset") {
-    return <PlanetAssetSymbol slug={slug} size={size} className={className} stroke={stroke} />;
+    if (planetHasPhotoAsset(slug)) {
+      return <PlanetPhotoSymbol slug={slug} size={size} className={className} />;
+    }
+    return <PlanetSealSymbol slug={slug} size={size} className={className} stroke={stroke} />;
   }
 
   return (

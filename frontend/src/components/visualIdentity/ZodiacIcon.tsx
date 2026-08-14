@@ -34,14 +34,12 @@ function ZodiacAssetSymbol({
   slug,
   size,
   className,
-  stroke,
 }: {
   slug: ZodiacSlug;
   size: number;
   className?: string;
   stroke: string;
 }) {
-  const tint = stroke === "currentColor" ? "currentColor" : stroke;
   return (
     <span
       data-testid="zodiac-symbol"
@@ -50,20 +48,22 @@ function ZodiacAssetSymbol({
       style={{
         width: size,
         height: size,
-        display: "inline-block",
+        display: "inline-flex",
         flexShrink: 0,
-        backgroundColor: tint,
-        color: tint,
-        maskImage: `url(${zodiacAssetPath(slug)})`,
-        WebkitMaskImage: `url(${zodiacAssetPath(slug)})`,
-        maskSize: "contain",
-        WebkitMaskSize: "contain",
-        maskRepeat: "no-repeat",
-        WebkitMaskRepeat: "no-repeat",
-        maskPosition: "center",
-        WebkitMaskPosition: "center",
+        alignItems: "center",
+        justifyContent: "center",
       }}
-    />
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element -- static public WebP seal; size parity with prior mask slot */}
+      <img
+        src={zodiacAssetPath(slug)}
+        alt=""
+        width={size}
+        height={size}
+        draggable={false}
+        style={{ width: size, height: size, objectFit: "contain", display: "block" }}
+      />
+    </span>
   );
 }
 

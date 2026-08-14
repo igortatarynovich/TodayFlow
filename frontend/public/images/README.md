@@ -276,7 +276,7 @@ import Image from 'next/image';
 4. Background patterns
 
 ### Low Priority (Can be added later)
-1. Zodiac avatars
+1. ✅ Zodiac avatars — `zodiac/{aries…pisces}.webp` (640×640; see `zodiac/README.md`)
 2. Promotional banners
 3. Pattern decorative images
 

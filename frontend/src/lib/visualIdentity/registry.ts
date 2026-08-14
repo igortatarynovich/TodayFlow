@@ -1,4 +1,5 @@
 import type { Element } from "@/lib/zodiac-utils";
+import { resolveZodiacSignId } from "@/lib/zodiacKnowledge";
 
 /** Переключить на `asset`, когда премиальные SVG лежат в `public/images/icons/`. */
 export type VisualAssetMode = "inline" | "asset";
@@ -67,11 +68,119 @@ export const ARCHETYPE_SLUGS = [
 ] as const satisfies readonly ArchetypeSlug[];
 
 export function zodiacAssetPath(slug: ZodiacSlug): string {
+  /** Gold metallic seal icons (WebP). Line SVG glyphs remain as `{slug}.svg` for tools/fallback. */
+  return `${ICON_BASE}/zodiac/${slug}.webp`;
+}
+
+export function zodiacGlyphSvgPath(slug: ZodiacSlug): string {
   return `${ICON_BASE}/zodiac/${slug}.svg`;
 }
 
+/**
+ * Painterly zodiac portraits (WebP) — separate from seal icons.
+ * Source sheet: docs/design/assets/image.png → scripts/crop_zodiac_illustrations.py
+ */
+const ZODIAC_ILLUSTRATION_BASE = "/images/zodiac";
+
+export const ZODIAC_SLUGS = [
+  "aries",
+  "taurus",
+  "gemini",
+  "cancer",
+  "leo",
+  "virgo",
+  "libra",
+  "scorpio",
+  "sagittarius",
+  "capricorn",
+  "aquarius",
+  "pisces",
+] as const satisfies readonly ZodiacSlug[];
+
+const ZODIAC_SLUG_SET = new Set<string>(ZODIAC_SLUGS);
+
+export function zodiacIllustrationPath(slug: ZodiacSlug): string {
+  return `${ZODIAC_ILLUSTRATION_BASE}/${slug}.webp`;
+}
+
+/** Resolve a product zodiac slug for illustration lookup, or null. */
+export function resolveZodiacIllustrationSlug(
+  raw: string | null | undefined,
+): ZodiacSlug | null {
+  const id = resolveZodiacSignId(raw ?? "", null);
+  if (id && ZODIAC_SLUG_SET.has(id)) return id as ZodiacSlug;
+  return null;
+}
+
+export function zodiacIllustrationSrc(sign: string | null | undefined): string | null {
+  const slug = resolveZodiacIllustrationSlug(sign);
+  return slug ? zodiacIllustrationPath(slug) : null;
+}
+
+/** Line-seal SVG (tintable mask). Prefer `planetPhotoPath` when a photo exists. */
 export function planetAssetPath(slug: PlanetSlug): string {
   return `${ICON_BASE}/planets/${slug}.svg`;
+}
+
+/**
+ * Photo planets from docs/design/assets/planets-sheet.png
+ * (+ mercury-pluto-sheet.png for Mercury/Pluto).
+ */
+export const PLANET_PHOTO_SLUGS = [
+  "sun",
+  "moon",
+  "mercury",
+  "venus",
+  "mars",
+  "jupiter",
+  "saturn",
+  "uranus",
+  "neptune",
+  "pluto",
+] as const satisfies readonly PlanetSlug[];
+
+const PLANET_PHOTO_SET = new Set<string>(PLANET_PHOTO_SLUGS);
+
+/** Optional Earth asset from the same sheet (not a traditional chart body). */
+export function earthPhotoPath(): string {
+  return `${ICON_BASE}/planets/earth.webp`;
+}
+
+export function planetHasPhotoAsset(slug: PlanetSlug | string): boolean {
+  return PLANET_PHOTO_SET.has(slug);
+}
+
+export function planetPhotoPath(slug: PlanetSlug): string {
+  return `${ICON_BASE}/planets/${slug}.webp`;
+}
+
+/** Metallic digit icons 1–9 (WebP). No 0 on sheet — NumberIcon falls back to text. */
+export type NumberDigit = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+
+export const NUMBER_DIGITS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const satisfies readonly NumberDigit[];
+
+const NUMBER_DIGIT_SET = new Set<string>(NUMBER_DIGITS);
+
+export function numberDigitAssetPath(digit: NumberDigit): string {
+  return `${ICON_BASE}/numbers/${digit}.webp`;
+}
+
+export function isNumberDigit(raw: string): raw is NumberDigit {
+  return NUMBER_DIGIT_SET.has(raw);
+}
+
+/** Digits for icon rendering; null if empty/placeholder. Keeps master numbers as digit runs (11 → 1,1). */
+export function resolveNumberDigits(value: string | number | null | undefined): NumberDigit[] | null {
+  const raw = String(value ?? "").trim();
+  if (!raw || raw === "—" || raw === "-" || raw === "…") return null;
+  const chars = raw.replace(/\s+/g, "");
+  if (!/^\d+$/.test(chars)) return null;
+  const digits: NumberDigit[] = [];
+  for (const ch of chars) {
+    if (!isNumberDigit(ch)) return null;
+    digits.push(ch);
+  }
+  return digits.length ? digits : null;
 }
 
 const PLANET_SLUGS = new Set<string>([

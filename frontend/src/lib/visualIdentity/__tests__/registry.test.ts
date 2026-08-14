@@ -6,8 +6,14 @@ import {
   archetypeIllustrationSrc,
   resolveArchetypeIllustrationSlug,
   planetAssetPath,
+  planetHasPhotoAsset,
+  planetPhotoPath,
+  earthPhotoPath,
   resolvePlanetSlug,
   zodiacAssetPath,
+  zodiacIllustrationPath,
+  zodiacIllustrationSrc,
+  resolveZodiacIllustrationSlug,
   elementAssetPath,
   resolveElementSlug,
   ARCHETYPE_SLUGS,
@@ -46,8 +52,26 @@ describe("visualIdentity registry", () => {
     expect(archetypeAssetPath("sage")).toBe("/images/icons/archetypes/sage.svg");
     expect(archetypeAssetPath("unknown")).toBe("/images/icons/archetypes/unknown.svg");
     expect(planetAssetPath("moon")).toBe("/images/icons/planets/moon.svg");
-    expect(zodiacAssetPath("aquarius")).toBe("/images/icons/zodiac/aquarius.svg");
+    expect(zodiacAssetPath("aquarius")).toBe("/images/icons/zodiac/aquarius.webp");
     expect(elementAssetPath("fire")).toBe("/images/icons/elements/fire.svg");
+  });
+
+  it("maps zodiac signs to painterly illustration WebP paths", () => {
+    expect(zodiacIllustrationPath("aries")).toBe("/images/zodiac/aries.webp");
+    expect(zodiacIllustrationSrc("Aquarius")).toBe("/images/zodiac/aquarius.webp");
+    expect(zodiacIllustrationSrc("Водолей")).toBe("/images/zodiac/aquarius.webp");
+    expect(resolveZodiacIllustrationSlug("Рыбы")).toBe("pisces");
+    expect(zodiacIllustrationSrc("")).toBeNull();
+    expect(resolveZodiacIllustrationSlug("Ophiuchus")).toBeNull();
+  });
+
+  it("prefers photo WebP for all ten traditional chart planets", () => {
+    expect(planetHasPhotoAsset("sun")).toBe(true);
+    expect(planetHasPhotoAsset("mercury")).toBe(true);
+    expect(planetHasPhotoAsset("pluto")).toBe(true);
+    expect(planetPhotoPath("saturn")).toBe("/images/icons/planets/saturn.webp");
+    expect(planetPhotoPath("mercury")).toBe("/images/icons/planets/mercury.webp");
+    expect(earthPhotoPath()).toBe("/images/icons/planets/earth.webp");
   });
 
   it("resolves EN and RU element names", () => {

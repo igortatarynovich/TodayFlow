@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { NumberIcon } from "@/components/visualIdentity/NumberIcon";
 import { RitualEntryHeroIllustration } from "@/components/today/ritual/RitualEntryHeroIllustration";
 import { RitualNumberPickExperience } from "@/components/today/ritual/RitualNumberPickExperience";
 import { RitualTarotPickExperience } from "@/components/today/ritual/RitualTarotPickExperience";
@@ -1330,7 +1331,7 @@ export function TodayRitualFlow(props: Props) {
                       flexShrink: 0,
                     }}
                   >
-                    {props.numerologyValue}
+                    <NumberIcon value={props.numerologyValue} size={22} />
                   </div>
                   <div style={{ flex: "1 1 12rem", minWidth: 0 }}>
                     <p className="todayflow-eyebrow" style={{ margin: "0 0 0.35rem", ...ritualTextWrap }}>
@@ -1842,7 +1843,9 @@ export function TodayRitualFlow(props: Props) {
                 }}
               >
                 <p className="orbit-body-sm" style={{ margin: 0, color: "#2d241c", lineHeight: 1.45, ...ritualTextWrap }}>
-                  <span style={{ fontWeight: 800, fontVariantNumeric: "tabular-nums", fontSize: "1.4rem" }}>{props.numerologyValue}</span>
+                  <span style={{ display: "inline-flex", verticalAlign: "middle" }}>
+                    <NumberIcon value={props.numerologyValue} size={28} alt={props.numerologyValue} />
+                  </span>
                   <span style={{ color: "#6a5132", fontWeight: 600 }}> · </span>
                   <span style={{ color: "#4a3d2e", fontWeight: 600 }}>{RITUAL_COPY.numberRevealScreenTitle}</span>
                 </p>
@@ -1914,7 +1917,7 @@ export function TodayRitualFlow(props: Props) {
                         ...ritualTextWrap,
                       }}
                     >
-                      {props.numerologyValue}
+                      <NumberIcon value={props.numerologyValue} size={52} alt={props.numerologyValue} />
                     </p>
                   </div>
                   <h2

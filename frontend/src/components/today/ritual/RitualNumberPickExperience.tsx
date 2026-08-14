@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { NumberIcon } from "@/components/visualIdentity/NumberIcon";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { pulseDayPhaseRevealFlash } from "@/lib/dayPhaseAtmosphere";
 import { ritualRevealCtaReady, useRitualRevealStages } from "@/lib/ritualRevealCascade";
@@ -197,7 +198,9 @@ export function RitualNumberPickExperience({
         <div className={styles.cascade}>
           <div className={styles.cascadeCard} data-testid="ritual-number-value">
             <div className={styles.halo}>
-              <span className={styles.bigNum}>{display}</span>
+              <span className={styles.bigNum}>
+                <NumberIcon value={display} size={48} alt={display} />
+              </span>
             </div>
             {title ? <p className={styles.valueTitle}>{title}</p> : null}
           </div>

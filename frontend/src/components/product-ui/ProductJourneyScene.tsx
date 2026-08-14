@@ -14,6 +14,12 @@ import {
   type TodayActShellAccent,
 } from "@/components/today/composition/TodayActShell";
 import type { ProductScenePlateId } from "@/lib/productScenePlates";
+import {
+  planetAssetPath,
+  planetHasPhotoAsset,
+  planetPhotoPath,
+  type PlanetSlug,
+} from "@/lib/visualIdentity/registry";
 import styles from "@/components/product-ui/ProductJourneyScene.module.css";
 
 type ProductJourneySceneProps = {
@@ -329,7 +335,9 @@ export function planetIconSrc(planetRuOrEn: string | null | undefined): string |
     плутон: "pluto",
   };
   for (const [key, file] of Object.entries(map)) {
-    if (raw.includes(key)) return `/images/icons/planets/${file}.svg`;
+    if (!raw.includes(key)) continue;
+    if (planetHasPhotoAsset(file)) return planetPhotoPath(file as PlanetSlug);
+    return planetAssetPath(file as PlanetSlug);
   }
   return null;
 }

@@ -206,10 +206,9 @@
 }
 
 .bigNum {
-  font-family: var(--orbit-font-display);
-  font-size: clamp(2.4rem, 8vw, 3rem);
-  font-weight: 700;
-  color: #2d241c;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   line-height: 1;
 }
 

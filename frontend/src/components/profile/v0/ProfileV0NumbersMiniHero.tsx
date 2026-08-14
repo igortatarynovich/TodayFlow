@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { NumberIcon } from "@/components/visualIdentity/NumberIcon";
 import type { ProfileV0NumberRow, ProfileV0NumbersCard } from "@/lib/profilePage/buildProfileV0Data";
 import styles from "./profileV0.module.css";
 
@@ -35,7 +36,9 @@ function NumbersSatellite({
       <span className={styles.numbersSatelliteKind}>Спутник</span>
       <span className={styles.numbersSatelliteCaption}>{row.caption}</span>
       <div className={styles.numbersSatelliteOrbit} aria-hidden>
-        <span className={styles.numbersSatelliteDigit}>{row.value}</span>
+        <span className={styles.numbersSatelliteDigit}>
+          <NumberIcon value={row.value} size={22} />
+        </span>
       </div>
     </button>
   );
@@ -118,7 +121,9 @@ export function ProfileV0NumbersMiniHero({
           aria-hidden
         />
         <div className={styles.profileNumbersOrbitCompactCore}>
-          <span className={styles.profileNumbersOrbitCompactValue}>{hero.value}</span>
+          <span className={styles.profileNumbersOrbitCompactValue}>
+            <NumberIcon value={hero.value} size={44} alt={String(hero.value)} />
+          </span>
         </div>
 
         {numbers.rings.slice(0, 3).map((ring, index) => (
@@ -126,7 +131,9 @@ export function ProfileV0NumbersMiniHero({
             key={`${ring.label}-${ring.value}`}
             className={`${styles.profileNumbersOrbitSatellite} ${RING_PLACEMENTS[index] ?? RING_PLACEMENTS[2]}`}
           >
-            <span className={styles.profileNumbersOrbitSatelliteDot}>{ring.value}</span>
+            <span className={styles.profileNumbersOrbitSatelliteDot}>
+              <NumberIcon value={ring.value} size={20} />
+            </span>
             <span className={styles.profileNumbersOrbitSatelliteLabel}>{ring.label}</span>
           </div>
         ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { NumberIcon } from "@/components/visualIdentity/NumberIcon";
 import type { ProfileV0NumbersCard } from "@/lib/profilePage/buildProfileV0Data";
 import styles from "./profileEditorial.module.css";
 
@@ -40,7 +41,9 @@ export function ProfileEditorialNumbers({ numbers }: { numbers: ProfileV0Numbers
           aria-pressed={activeId === "lp"}
           onClick={() => setActiveId("lp")}
         >
-          <span className={styles.numOrbitCoreValue}>{numbers.hero.value}</span>
+          <span className={styles.numOrbitCoreValue}>
+            <NumberIcon value={numbers.hero.value} size={48} alt={String(numbers.hero.value)} />
+          </span>
           <span className={styles.numOrbitCoreLabel}>Путь</span>
         </button>
 
@@ -55,7 +58,9 @@ export function ProfileEditorialNumbers({ numbers }: { numbers: ProfileV0Numbers
             aria-label={`${ring.label}: ${ring.value}`}
             onClick={() => setActiveId(ring.id)}
           >
-            <span className={styles.numOrbitNodeValue}>{ring.value}</span>
+            <span className={styles.numOrbitNodeValue}>
+              <NumberIcon value={ring.value} size={22} />
+            </span>
             <span className={styles.numOrbitNodeCaption}>{ring.label}</span>
           </button>
         ))}
@@ -74,7 +79,9 @@ export function ProfileEditorialNumbers({ numbers }: { numbers: ProfileV0Numbers
           <p className={styles.numbersMeaningKicker}>
             {activeGuide.value ? (
               <>
-                <span className={styles.numbersMeaningDigit}>{activeGuide.value}</span>
+                <span className={styles.numbersMeaningDigit}>
+                  <NumberIcon value={activeGuide.value} size={18} />
+                </span>
                 {activeGuide.title}
               </>
             ) : (
