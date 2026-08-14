@@ -1,7 +1,7 @@
 "use client";
 
 import type { CompactUserModel } from "@/lib/types";
-import styles from "./quickMap/profileQuickMap.module.css";
+import styles from "@/design-system/profile/dsProfileQuickMap.module.css";
 
 type Props = {
   cum: CompactUserModel | null | undefined;

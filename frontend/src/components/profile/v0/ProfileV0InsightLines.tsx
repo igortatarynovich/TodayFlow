@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 export type InsightLine = { label: string; value: string };
 

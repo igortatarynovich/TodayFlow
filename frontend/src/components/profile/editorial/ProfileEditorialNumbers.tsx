@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { NumberIcon } from "@/components/visualIdentity/NumberIcon";
 import type { ProfileV0NumbersCard } from "@/lib/profilePage/buildProfileV0Data";
-import styles from "./profileEditorial.module.css";
+import styles from "@/design-system/profile/dsProfileEditorial.module.css";
 
 const RING_PLACEMENT = [
   styles.numOrbitNodeTop,

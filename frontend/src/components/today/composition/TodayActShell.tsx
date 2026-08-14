@@ -5,7 +5,9 @@ import {
   ProfileAtmosphere,
   type ProfileAtmosphereMotif,
 } from "@/components/profile/v2/ProfileAtmosphere";
-import styles from "@/components/today/composition/TodayActShell.module.css";
+import { DsBody, DsEyebrow, DsPill } from "@/design-system";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
+import { joinClass } from "@/design-system/utils/joinClass";
 
 /**
  * Today ActShell — Wave 1 layout contract.
@@ -14,7 +16,7 @@ import styles from "@/components/today/composition/TodayActShell.module.css";
  * max-width / padding shells (readable measure on text lines only is OK).
  * Future natal / media modules: stack visual → text inside this shell only.
  *
- * Review checklist: no padding/max-width outside ActShell for Today acts.
+ * Form Kit: layout classes live in design-system (FOUNDATION_UI §15.8).
  */
 export type TodayActShellAccent = "default" | "sky" | "support" | "action";
 
@@ -56,15 +58,6 @@ export function TodayActShell({
   className = "",
   id,
 }: TodayActShellProps) {
-  const accentClass =
-    accent === "sky"
-      ? styles.accentSky
-      : accent === "support"
-        ? styles.accentSupport
-        : accent === "action"
-          ? styles.accentAction
-          : styles.accentDefault;
-
   const actId =
     id ??
     (step != null && String(step).trim() !== ""
@@ -74,16 +67,13 @@ export function TodayActShell({
   return (
     <section
       id={actId}
-      className={[
-        styles.shell,
-        styles.actScreen,
-        accentClass,
-        gutter === "none" ? styles.gutterNone : styles.gutterPage,
-        bridge ? styles.bridge : "",
+      className={joinClass(
+        layout.actShell,
+        layout.actScreen,
+        gutter === "none" ? layout.actGutterNone : layout.actGutterPage,
+        bridge ? layout.actBridge : null,
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
       data-testid={testId}
       data-today-act-shell="true"
       data-act-gutter={gutter}
@@ -91,18 +81,19 @@ export function TodayActShell({
       data-act-step={step != null ? String(step) : undefined}
     >
       {motif ? <ProfileAtmosphere motif={motif} /> : null}
-      {visual ? <div className={styles.visual}>{visual}</div> : null}
+      {visual ? <div className={layout.actVisual}>{visual}</div> : null}
       {title ? (
-        <header className={styles.header}>
-          <p className={styles.stepIndex}>
-            {step != null ? <span className={styles.stepBadge}>{step}</span> : null}
-            <span>{title}</span>
-          </p>
-          {lead ? <p className={styles.lead}>{lead}</p> : null}
+        <header className={layout.actHeader}>
+          <DsEyebrow>
+            {step != null ? <DsPill>{step}</DsPill> : null}
+            {step != null ? " " : null}
+            {title}
+          </DsEyebrow>
+          {lead ? <DsBody size="sm" muted>{lead}</DsBody> : null}
         </header>
       ) : null}
       {slotBefore}
-      {children ? <div className={styles.body}>{children}</div> : null}
+      {children ? <div className={layout.actBody}>{children}</div> : null}
       {slotAfter}
     </section>
   );

@@ -2,9 +2,9 @@
 
 import type { ReactNode } from "react";
 import { PROFILE_PORTRAIT_SECTION_COPY as copy } from "@/lib/profilePortraitSection";
-import editorialStyles from "@/components/profile/editorial/profileEditorial.module.css";
-import quickMapStyles from "@/components/profile/quickMap/profileQuickMap.module.css";
-import v0Styles from "@/components/profile/v0/profileV0.module.css";
+import editorialStyles from "@/design-system/profile/dsProfileEditorial.module.css";
+import quickMapStyles from "@/design-system/profile/dsProfileQuickMap.module.css";
+import v0Styles from "@/design-system/profile/dsProfileV0.module.css";
 
 type Props = {
   className?: string;

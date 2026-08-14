@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { SurfaceInsight, type SurfaceInsightVariant } from "@/components/foundation/SurfaceInsight";
-import styles from "./profileSurface.module.css";
+import styles from "@/design-system/profile/dsProfileSurface.module.css";
 
 export type ProfileSurfaceTone =
   | "default"

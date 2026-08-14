@@ -1,3 +1,4 @@
+/* Form Kit Profile skin — FOUNDATION_UI §15.8 */
 .page {
   --profile-content-width: var(--tf-shell-max, 52rem);
   --profile-layer-gap: 16px;

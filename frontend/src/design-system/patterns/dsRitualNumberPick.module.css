@@ -1,3 +1,4 @@
+/* Form Kit ritual pick pattern — FOUNDATION_UI §15.8 */
 .wrap {
   position: relative;
   width: 100%;
@@ -54,7 +55,7 @@
   gap: 0.45rem;
   font-size: 0.78rem;
   line-height: 1.45;
-  color: #5f4930;
+  color: var(--tf-ink-soft, #5f4930);
   text-align: left;
   border-radius: 14px;
   background: rgba(255, 252, 248, 0.88);
@@ -66,7 +67,7 @@
 .energyInfoIcon {
   flex-shrink: 0;
   font-weight: 700;
-  color: #b86b55;
+  color: var(--day-decor-color, #b86b55);
   font-size: 0.72rem;
   line-height: 1.35;
 }
@@ -81,7 +82,7 @@
   font-family: var(--orbit-font-display);
   font-size: 1.15rem;
   font-weight: 600;
-  color: #2d241c;
+  color: var(--tf-ink, #2d241c);
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(90, 52, 44, 0.08);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -116,7 +117,7 @@
   margin: 0.45rem 0 0;
   text-align: center;
   font-size: 0.74rem;
-  color: #8a7860;
+  color: var(--tf-ink-muted, #8a7860);
   line-height: 1.45;
 }
 
@@ -152,21 +153,21 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--day-accent-soft, #9c7e52);
+  color: var(--day-accent-soft, var(--tf-accent-gold-600, #9c7e52));
 }
 
 .cascadeBody {
   margin: 0.4rem 0 0;
   font-size: 0.875rem;
   line-height: 1.55;
-  color: #3d3228;
+  color: var(--tf-ink, #3d3228);
   text-align: left;
 }
 
 .valueTitle {
   margin: 0.45rem 0 0;
   font-size: 0.9rem;
-  color: #5f4930;
+  color: var(--tf-ink-soft, #5f4930);
 }
 
 @keyframes cascadeIn {
@@ -189,7 +190,7 @@
   max-width: 18rem;
   font-size: 0.88rem;
   line-height: 1.55;
-  color: #3d3228;
+  color: var(--tf-ink, #3d3228);
 }
 
 .halo {
@@ -248,7 +249,7 @@
   font-size: 0.98rem;
   font-weight: 700;
   cursor: pointer;
-  color: #fffdfb;
+  color: var(--tf-surface, #fffdfb);
   text-shadow: 0 1px 2px rgba(60, 36, 24, 0.18);
   background: linear-gradient(90deg, #c97a65 0%, #d9a08d 42%, #e8b8a4 100%);
   font-family: inherit;

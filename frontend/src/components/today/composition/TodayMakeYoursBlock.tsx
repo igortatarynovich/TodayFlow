@@ -14,7 +14,16 @@ import { getWeekStart } from "@/components/today/todayPageUtils";
 import type { TodayProgressRow } from "@/lib/todayGrowthTrackers";
 import type { MakeYoursCategoryId, MakeYoursProposal } from "@/lib/todayMakeYoursProposals";
 import { useToast } from "@/components/ToastProvider";
-import styles from "@/components/today/composition/TodayMakeYoursBlock.module.css";
+import {
+  DsBody,
+  DsCaption,
+  DsChip,
+  DsChipCluster,
+  DsContentCard,
+  DsListPanel,
+  DsListRow,
+} from "@/design-system";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 type CatalogItem = { id: string; title: string; hint?: string | null };
 
@@ -54,8 +63,7 @@ type Props = {
 };
 
 /**
- * Make yours — tracker if set; inline catalog pick if empty.
- * Practices are not on this step. Canon: TODAY_MAKE_YOURS_AND_WELCOME_SOT.
+ * Make yours — Form Kit chips + list picks (TODAY_MAKE_YOURS_AND_WELCOME_SOT).
  */
 export function TodayMakeYoursBlock({
   dateISO,
@@ -216,7 +224,6 @@ export function TodayMakeYoursBlock({
         });
         toast.success("Аффирмация выбрана");
       } else if (active === "mantra") {
-        // Mantras have no tracker-entry SoT yet — pick is on-step only.
         toast.success(`Мантра: ${item.title}`);
       }
       setActive(null);
@@ -240,71 +247,73 @@ export function TodayMakeYoursBlock({
   };
 
   return (
-    <div className={styles.root} data-testid="today-make-yours">
-      <div className={styles.accordionList} data-testid="today-make-yours-categories">
+    <div className={layout.stack} data-testid="today-make-yours">
+      <DsChipCluster testId="today-make-yours-categories">
         {CATEGORY_CHIPS.map((c) => {
-          const open = active === c.id;
           const label = pickedLabel(c.id);
           return (
-            <div key={c.id} className={open ? styles.accordionOpen : styles.accordionCard}>
-              <button
-                type="button"
-                className={styles.accordionHead}
-                data-testid={`today-make-yours-cat-${c.id}`}
-                aria-expanded={open}
-                onClick={() => onSelectCategory(c.id)}
-              >
-                <span className={styles.accordionTitle}>{c.label}</span>
-                {label ? <span className={styles.accordionSub}>{label}</span> : null}
-              </button>
-              {open ? (
-                <div className={styles.pickPanel} data-testid={`today-make-yours-pick-${c.id}`}>
-                  <p className={styles.pickLead}>{PICK_COPY[c.id].lead}</p>
-                  {proposalForActive ? (
-                    <p className={styles.pickHint}>{proposalForActive.title}</p>
-                  ) : null}
-                  {loading ? <p className={styles.pickStatus}>…</p> : null}
-                  {loadError ? <p className={styles.pickStatus}>{loadError}</p> : null}
-                  {!loading && !loadError && items.length === 0 ? (
-                    <p className={styles.pickStatus}>Пока пусто в каталоге.</p>
-                  ) : null}
-                  <ul className={styles.pickList}>
-                    {items.slice(0, 3).map((it) => (
-                      <li key={it.id}>
-                        <button
-                          type="button"
-                          className={styles.pickItem}
-                          disabled={Boolean(savingId)}
-                          onClick={() => void onPick(it)}
-                          data-testid={`today-make-yours-item-${it.id}`}
-                        >
-                          <span className={styles.pickTitle}>{it.title}</span>
-                          {it.hint ? <span className={styles.pickMeta}>{it.hint}</span> : null}
-                          <span className={styles.pickCta}>
-                            {savingId === it.id ? "…" : PICK_COPY[c.id].cta}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
+            <DsChip
+              key={c.id}
+              selected={active === c.id}
+              testId={`today-make-yours-cat-${c.id}`}
+              onClick={() => onSelectCategory(c.id)}
+            >
+              {c.label}
+              {label ? ` · ${label}` : ""}
+            </DsChip>
           );
         })}
-      </div>
+      </DsChipCluster>
+
+      {active ? (
+        <DsContentCard
+          tone="glass"
+          testId={`today-make-yours-pick-${active}`}
+          eyebrow={PICK_COPY[active].lead}
+          body={proposalForActive?.title || undefined}
+          chips={
+            <div className={layout.stack}>
+              {loading ? <DsCaption>…</DsCaption> : null}
+              {loadError ? <DsCaption>{loadError}</DsCaption> : null}
+              {!loading && !loadError && items.length === 0 ? (
+                <DsCaption>Пока пусто в каталоге.</DsCaption>
+              ) : null}
+              <DsListPanel tone="subtle">
+                {items.slice(0, 3).map((it) => (
+                  <DsListRow
+                    key={it.id}
+                    title={it.title}
+                    subtitle={
+                      it.hint
+                        ? `${it.hint} · ${savingId === it.id ? "…" : PICK_COPY[active].cta}`
+                        : savingId === it.id
+                          ? "…"
+                          : PICK_COPY[active].cta
+                    }
+                    testId={`today-make-yours-item-${it.id}`}
+                    onClick={() => {
+                      if (!savingId) void onPick(it);
+                    }}
+                  />
+                ))}
+              </DsListPanel>
+            </div>
+          }
+        />
+      ) : null}
 
       {progressRows.length > 0 ? (
         <TodayProgressTracker rows={progressRows} title="Твой прогресс" />
       ) : null}
 
       {progressRows.length === 0 && proposals.length === 0 && !active ? (
-        <p className={styles.empty} data-testid="today-make-yours-empty">
-          Выбери категорию выше — или открой{" "}
-          <Link href="/tracking/calendar">календарь</Link>
-          {" · "}
-          <Link href="/affirmations">аффирмации</Link>
-        </p>
+        <DsBody size="sm">
+          <span data-testid="today-make-yours-empty">
+            Выбери категорию выше — или открой <Link href="/tracking/calendar">календарь</Link>
+            {" · "}
+            <Link href="/affirmations">аффирмации</Link>
+          </span>
+        </DsBody>
       ) : null}
     </div>
   );

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { NumberIcon } from "@/components/visualIdentity/NumberIcon";
 import type { ProfileV0NumberRow, ProfileV0NumbersCard } from "@/lib/profilePage/buildProfileV0Data";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 type SatelliteKey = "manifest" | "tension" | "bd" | "together";
 type SatellitePlacement = "left" | "right" | "bottomRight";

@@ -10,38 +10,8 @@
     "rest"
   ],
   "zones": {
-    "today": [
-      "frontend/src/components/foundation/TodayFlowScene.module.css",
-      "frontend/src/components/today/TodayDayReveal.module.css",
-      "frontend/src/components/today/composition/TodayActNav.module.css",
-      "frontend/src/components/today/composition/TodayActShell.module.css",
-      "frontend/src/components/today/composition/TodayCompositionSurface.module.css",
-      "frontend/src/components/today/composition/TodayEveningProductClose.module.css",
-      "frontend/src/components/today/composition/TodayGlanceAct.module.css",
-      "frontend/src/components/today/composition/TodayHookRevealShell.module.css",
-      "frontend/src/components/today/composition/TodayMakeYoursBlock.module.css",
-      "frontend/src/components/today/composition/TodayPersonalizedProductSection.module.css",
-      "frontend/src/components/today/composition/TodayProductScreenFlow.module.css",
-      "frontend/src/components/today/composition/TodayProgressTracker.module.css",
-      "frontend/src/components/today/composition/TodayRecapAchievements.module.css",
-      "frontend/src/components/today/composition/TodayScreenBlock.module.css",
-      "frontend/src/components/today/composition/TodayStoryDeckFrames.module.css",
-      "frontend/src/components/today/composition/TodayWave2Slots.module.css",
-      "frontend/src/components/today/ritual/RitualNumberPickExperience.module.css",
-      "frontend/src/components/today/ritual/RitualTarotPickExperience.module.css"
-    ],
-    "profile": [
-      "frontend/src/app/profile/profileRoute.module.css",
-      "frontend/src/components/profile/editorial/profileEditorial.module.css",
-      "frontend/src/components/profile/profileChartDeep.module.css",
-      "frontend/src/components/profile/profileExpandableSection.module.css",
-      "frontend/src/components/profile/profilePortalDeepSection.module.css",
-      "frontend/src/components/profile/profileSurface.module.css",
-      "frontend/src/components/profile/quickMap/profileQuickMap.module.css",
-      "frontend/src/components/profile/v0/profileV0.module.css",
-      "frontend/src/components/profile/v2/profileAtmosphere.module.css",
-      "frontend/src/components/profile/v2/profileV2System.module.css"
-    ],
+    "today": [],
+    "profile": [],
     "practices": [
       "frontend/src/app/practices/PracticesPage.module.css",
       "frontend/src/components/practices/session/practiceLiveSession.module.css",
@@ -101,9 +71,41 @@
     "note": "Form Kit pilot — Today day brief uses design-system compositions only; CSS module removed."
   },
   "closed": [
+    "frontend/src/app/profile/profileRoute.module.css",
+    "frontend/src/components/foundation/TodayFlowScene.module.css",
+    "frontend/src/components/profile/editorial/profileEditorial.module.css",
+    "frontend/src/components/profile/profileChartDeep.module.css",
+    "frontend/src/components/profile/profileExpandableSection.module.css",
+    "frontend/src/components/profile/profilePortalDeepSection.module.css",
+    "frontend/src/components/profile/profileSurface.module.css",
+    "frontend/src/components/profile/quickMap/profileQuickMap.module.css",
+    "frontend/src/components/profile/v0/profileV0.module.css",
+    "frontend/src/components/profile/v2/profileAtmosphere.module.css",
+    "frontend/src/components/profile/v2/profileV2System.module.css",
+    "frontend/src/components/today/TodayDayReveal.module.css",
+    "frontend/src/components/today/composition/TodayActNav.module.css",
+    "frontend/src/components/today/composition/TodayActShell.module.css",
+    "frontend/src/components/today/composition/TodayCompositionSurface.module.css",
     "frontend/src/components/today/composition/TodayDayTasks.module.css",
     "frontend/src/components/today/composition/TodayDepthLayerSection.module.css",
+    "frontend/src/components/today/composition/TodayEveningProductClose.module.css",
+    "frontend/src/components/today/composition/TodayGlanceAct.module.css",
+    "frontend/src/components/today/composition/TodayHookRevealShell.module.css",
     "frontend/src/components/today/composition/TodayLoopBlock.module.css",
-    "frontend/src/components/today/composition/TodayPracticeGiftBlock.module.css"
-  ]
+    "frontend/src/components/today/composition/TodayMakeYoursBlock.module.css",
+    "frontend/src/components/today/composition/TodayPersonalizedProductSection.module.css",
+    "frontend/src/components/today/composition/TodayPracticeGiftBlock.module.css",
+    "frontend/src/components/today/composition/TodayProductScreenFlow.module.css",
+    "frontend/src/components/today/composition/TodayProgressTracker.module.css",
+    "frontend/src/components/today/composition/TodayRecapAchievements.module.css",
+    "frontend/src/components/today/composition/TodayScreenBlock.module.css",
+    "frontend/src/components/today/composition/TodayStoryDeckFrames.module.css",
+    "frontend/src/components/today/composition/TodayWave2Slots.module.css",
+    "frontend/src/components/today/ritual/RitualNumberPickExperience.module.css",
+    "frontend/src/components/today/ritual/RitualTarotPickExperience.module.css"
+  ],
+  "zone_status": {
+    "today": "closed",
+    "profile": "closed"
+  }
 }

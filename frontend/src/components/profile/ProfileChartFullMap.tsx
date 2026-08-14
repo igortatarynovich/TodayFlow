@@ -8,7 +8,7 @@ import {
   HOUSE_LAYER,
 } from "@/components/profile/profileHouseConstants";
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
-import styles from "./profileChartDeep.module.css";
+import styles from "@/design-system/profile/dsProfileChartDeep.module.css";
 
 const PLANET_LABELS: Record<string, string> = {
   sun: "Солнце",

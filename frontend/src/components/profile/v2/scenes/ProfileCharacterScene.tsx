@@ -6,7 +6,7 @@ import {
   useProfileMotionInView,
 } from "@/components/foundation/ProfileMotion";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type ProfileCharacterSceneProps = {
   strengthens: string[];

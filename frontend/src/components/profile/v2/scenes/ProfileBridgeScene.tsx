@@ -4,7 +4,7 @@ import { useProfileMotionInView } from "@/components/foundation/ProfileMotion";
 import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
 import { DsButton } from "@/design-system";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type ProfileBridgeSceneProps = {
   bridgeLine: string | null;

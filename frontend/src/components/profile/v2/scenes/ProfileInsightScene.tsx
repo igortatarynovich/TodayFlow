@@ -6,7 +6,7 @@ import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/p
 import type { ProfileJourneyNode } from "@/lib/profilePage/buildProfileJourneyProjection";
 import { localizeAstroFactLine } from "@/lib/profilePage/presentWhyAnchors";
 import { scrubUserFacingText } from "@/lib/todayValueGate";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type ProfileInsightSceneProps = {
   node: ProfileJourneyNode;

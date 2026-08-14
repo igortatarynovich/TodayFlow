@@ -1,3 +1,4 @@
+/* Form Kit Profile skin — FOUNDATION_UI §15.8 */
 .profileRouteShell {
   min-height: 100vh;
   background: var(--tf-page, var(--tf-surface-warm, var(--tf-surface)));

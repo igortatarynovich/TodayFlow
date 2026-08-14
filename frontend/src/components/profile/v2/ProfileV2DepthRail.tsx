@@ -6,7 +6,7 @@ import {
   PROFILE_V2_EXPLORE_NAV,
   type ProfileV2ZoneId,
 } from "@/components/profile/v2/profileV2SystemCopy";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 function zoneDomId(zone: ProfileV2ZoneId): string {
   return `profile-v2-${zone}`;

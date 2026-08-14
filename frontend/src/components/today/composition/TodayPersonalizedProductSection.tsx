@@ -52,7 +52,7 @@ import {
 } from "@/lib/todaySlotAvailability";
 import { readingSphereChapterId } from "@/lib/todayFocusDeepen";
 import type { TodayProgressRow } from "@/lib/todayGrowthTrackers";
-import styles from "@/components/today/composition/TodayPersonalizedProductSection.module.css";
+import styles from "@/design-system/compositions/dsPersonalizedProduct.module.css";
 
 export type TodayPersonalActFilter = "reading" | "move" | "response" | "all";
 

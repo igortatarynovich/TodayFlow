@@ -14,7 +14,7 @@ import {
 } from "@/lib/profileCumInsights";
 import { isUsableProfileCopy } from "@/lib/profilePage/profileCopySafety";
 import type { CompactUserModel, CompactUserModelConfidenceHistory } from "@/lib/types";
-import styles from "./quickMap/profileQuickMap.module.css";
+import styles from "@/design-system/profile/dsProfileQuickMap.module.css";
 
 type Props = {
   cum: CompactUserModel | null | undefined;

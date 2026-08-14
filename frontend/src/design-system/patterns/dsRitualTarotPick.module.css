@@ -1,10 +1,11 @@
+/* Form Kit ritual pick pattern — FOUNDATION_UI §15.8 */
 /* Tarot ritual — one continuous table scene (fan → flip). Aspect 3:5. */
 
 .wrap {
-  --tarot-card-bg: #f4ebe0;
-  --ritual-ink: #2a2218;
-  --ritual-ink-soft: #6b5d4d;
-  --ritual-gold: #8b6a3e;
+  --tarot-card-bg: var(--tf-surface, #f4ebe0);
+  --ritual-ink: var(--tf-ink, #2a2218);
+  --ritual-ink-soft: var(--tf-ink-soft, #6b5d4d);
+  --ritual-gold: var(--tf-accent-gold-600, #8b6a3e);
   position: relative;
   width: 100%;
   min-height: 300px;
@@ -386,14 +387,14 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ritual-gold, #8b6a3e);
+  color: var(--ritual-gold, var(--tf-accent-gold-600, #8b6a3e));
 }
 
 .cascadeBody {
   margin: 0.4rem 0 0;
   font-size: 0.875rem;
   line-height: 1.55;
-  color: var(--ritual-ink-soft, #6b5d4d);
+  color: var(--ritual-ink-soft, var(--tf-ink-soft, #6b5d4d));
 }
 
 @keyframes ritualCascadeIn {

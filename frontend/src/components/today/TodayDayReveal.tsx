@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MOTION } from "@/design-system/motion/tokens";
 import { usePrefersReducedMotion } from "@/design-system/motion/usePrefersReducedMotion";
-import styles from "@/components/today/TodayDayReveal.module.css";
+import styles from "@/design-system/motion/dsDayReveal.module.css";
 
 type Props = {
   /** Data already in hand — theatrical open, not a real wait. */

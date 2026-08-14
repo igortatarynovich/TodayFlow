@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState, type MouseEvent, type ReactNode } from "react";
 import { ProfileMotionExpand, profileMotionStyles } from "@/components/foundation/ProfileMotion";
-import styles from "./profileExpandableSection.module.css";
+import styles from "@/design-system/profile/dsProfileExpandable.module.css";
 
 export function ProfileExpandableSection({
   id,

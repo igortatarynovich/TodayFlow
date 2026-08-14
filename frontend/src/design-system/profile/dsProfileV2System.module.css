@@ -1,3 +1,4 @@
+/* Form Kit Profile skin — FOUNDATION_UI §15.8 */
 .pageRoot {
   /* Day Atmosphere decorative hooks (CTAs stay DsButton gold) */
   --profile-day-decor: var(--day-decor-color, var(--tf-accent-action));

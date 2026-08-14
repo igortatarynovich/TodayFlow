@@ -20,7 +20,7 @@ import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection"
 import { ProfileLivingMapsSection } from "@/components/profile/ProfileLivingMapsSection";
 import { ProfileCumInsightsBlock } from "@/components/profile/ProfileCumInsightsBlock";
 import type { CompactUserModel } from "@/lib/types";
-import styles from "./profileQuickMap.module.css";
+import styles from "@/design-system/profile/dsProfileQuickMap.module.css";
 
 export type ProfileQuickMapDeepProps = {
   natalPreview: NatalChartPreview | null;

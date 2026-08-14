@@ -9,7 +9,7 @@ import type { LifeMapSection, NatalChartPreview } from "@/components/profile/pro
 import { buildNumerologySignatureCards } from "@/components/profile/profileNumerologySignature";
 import type { CoreProfile } from "@/lib/types";
 import { zodiacRuName } from "@/lib/zodiacKnowledge";
-import styles from "./profileChartDeep.module.css";
+import styles from "@/design-system/profile/dsProfileChartDeep.module.css";
 
 export type ProfileChartSectionProps = {
   natalPreview: NatalChartPreview | null;

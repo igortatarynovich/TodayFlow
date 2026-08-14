@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import type { ProfileHabitWeaveRow } from "@/lib/profileHabitWeavePreview";
-import editorialStyles from "@/components/profile/editorial/profileEditorial.module.css";
-import quickMapStyles from "@/components/profile/quickMap/profileQuickMap.module.css";
+import editorialStyles from "@/design-system/profile/dsProfileEditorial.module.css";
+import quickMapStyles from "@/design-system/profile/dsProfileQuickMap.module.css";
 
 type Props = {
   row: ProfileHabitWeaveRow;

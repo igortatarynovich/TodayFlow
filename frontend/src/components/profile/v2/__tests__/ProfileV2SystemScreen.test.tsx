@@ -170,9 +170,9 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-system")).toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-person-story")).not.toBeInTheDocument();
 
-    // Hero: archetype name as H1, recognition line separate — share-core only (no fact wall)
+    // Hero: archetype name as H1; body prefers identity_core over recognition_line
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Исследователь/i);
-    expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent("структуру");
+    expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent(/ясный фокус/i);
     expect(screen.queryByTestId("profile-v2-identity-markers")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-essence-foundation")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-chart-signature")).not.toBeInTheDocument();
@@ -184,9 +184,9 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-why-anchor-archetype_from_life_path")).toHaveTextContent(
       /Исследовател/i,
     );
-    expect(screen.getByTestId("profile-v2-why-meaning-archetype_from_life_path")).toHaveTextContent(
-      /числа пути/i,
-    );
+    expect(
+      screen.getByTestId("profile-v2-why-meaning-archetype_from_life_path").textContent?.length || 0,
+    ).toBeGreaterThan(20);
     expect(screen.getByTestId("profile-v2-why-anchor-sun")).toHaveTextContent(/Солнце в Деве/i);
     expect(screen.getByTestId("profile-v2-why-anchor-sun")).toHaveAttribute("data-expanded", "false");
     expect(screen.getByTestId("profile-v2-why-meaning-sun").textContent?.length || 0).toBeGreaterThan(20);

@@ -3,9 +3,9 @@
 import { useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
+import { DsCaption, DsEyebrow, DsHeadline } from "@/design-system";
 import { joinClass } from "@/design-system/utils/joinClass";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import flowStyles from "@/components/today/composition/TodayProductScreenFlow.module.css";
 import sfStyles from "@/design-system/primitives/ScreenFlow/ScreenFlow.module.css";
 import {
   StoryNextAnchor,
@@ -190,11 +190,11 @@ function SlotStep({
   hideNext?: boolean;
 }) {
   return (
-    <div className={flowStyles.storyFrame} data-testid={testId} data-story-scroll="pane">
-      <div className={joinClass(flowStyles.slotStack, wide ? flowStyles.slotStackWide : null)}>
-        {eyebrow ? <p className={flowStyles.slotEyebrow}>{eyebrow}</p> : null}
-        {title ? <h2 className={flowStyles.slotTitle}>{title}</h2> : null}
-        <div className={flowStyles.slotBody}>{children}</div>
+    <div className={sfStyles.storyFrame} data-testid={testId} data-story-scroll="pane">
+      <div className={joinClass(sfStyles.slotStack, wide ? sfStyles.slotStackWide : null)}>
+        {eyebrow ? <DsEyebrow>{eyebrow}</DsEyebrow> : null}
+        {title ? <DsHeadline as="h2">{title}</DsHeadline> : null}
+        <div className={sfStyles.slotBody}>{children}</div>
         {hideNext ? null : (
           <StoryNextAnchor title={nextTitle} hint={nextHint} onNext={onNext} />
         )}
@@ -261,7 +261,7 @@ export function TodayProductScreenFlow({
   const afterTasks = idx.loop;
 
   return (
-    <div data-testid="today-zone-foundation" className={flowStyles.foundation}>
+    <div data-testid="today-zone-foundation" className={sfStyles.flowFoundation}>
       {!embeddedInWebDashboard ? topRowSection : null}
       {!embeddedInWebDashboard ? greetingSection : null}
 
@@ -273,7 +273,7 @@ export function TodayProductScreenFlow({
         showFrameArrows={showChrome}
         dotStartIndex={1}
         dotClusters={showPersonalized ? dotClusters : undefined}
-        className={joinClass(flowStyles.screenFlowStory, sfStyles.storyBleed)}
+        className={sfStyles.storyBleed}
         testId="today-screen-flow"
       >
         <ScreenFlowStep id="day" label={copy.storyNext.day} scrollable>
@@ -308,12 +308,12 @@ export function TodayProductScreenFlow({
             {showSymbols ? (
               <ScreenFlowStep id="rituals" label={copy.storyNext.rituals} scrollable>
                 <div
-                  className={`${flowStyles.storyFrame} ${flowStyles.ritualFrame}`}
+                  className={joinClass(sfStyles.storyFrame, sfStyles.ritualFrame)}
                   data-testid="today-frame-rituals"
                   data-story-scroll="pane"
                 >
-                  <div className={flowStyles.slotStack}>
-                    <p className={flowStyles.slotEyebrow}>{copy.storyNext.rituals}</p>
+                  <div className={sfStyles.slotStack}>
+                    <DsEyebrow>{copy.storyNext.rituals}</DsEyebrow>
                     <div data-testid="today-frame-number">{numberSlot}</div>
                     <div data-testid="today-frame-card">{cardSlot}</div>
                     <StoryNextAnchor
@@ -382,24 +382,24 @@ export function TodayProductScreenFlow({
                   onAction={() => onPracticeAction?.()}
                   onGoNext={() => go(afterTasks)}
                   linkSlot={
-                    <p className={flowStyles.practiceLink}>
+                    <DsCaption muted>
                       <Link href="/practices" data-testid="today-setup-practices-link">
                         {copy.setupPracticesLink} →
                       </Link>
-                    </p>
+                    </DsCaption>
                   }
                 />
               )}
             </ScreenFlowStep>
 
             <ScreenFlowStep id="loop" label={copy.storyNext.loop} scrollable>
-              <div className={flowStyles.storyFrame} data-testid="today-frame-loop" data-story-scroll="pane">
-                <div className={flowStyles.slotStack}>
-                  <p className={flowStyles.slotEyebrow}>{copy.storyNext.loop}</p>
-                  <h2 className={flowStyles.slotTitle}>
+              <div className={sfStyles.storyFrame} data-testid="today-frame-loop" data-story-scroll="pane">
+                <div className={sfStyles.slotStack}>
+                  <DsEyebrow>{copy.storyNext.loop}</DsEyebrow>
+                  <DsHeadline as="h2">
                     {loopOwnsClose ? copy.storyNext.loop : copy.promiseTitle}
-                  </h2>
-                  <div className={flowStyles.slotBody}>{promiseBody}</div>
+                  </DsHeadline>
+                  <div className={sfStyles.slotBody}>{promiseBody}</div>
                   {!loopOwnsClose ? (
                     <TodayCloseFrame
                       contract={contract}

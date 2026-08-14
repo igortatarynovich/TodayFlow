@@ -115,7 +115,7 @@ import {
   tarotDeepenIdempotencyKey,
   TAROT_DEEPEN_EVENT_SOURCE,
 } from "@/lib/tarotDeepenEvents";
-import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
+import styles from "@/design-system/compositions/dsCompositionSurface.module.css";
 import { DsButton, DsRitualGate, DsRitualGateSection } from "@/design-system";
 import { DsGlassCard } from "@/design-system/patterns/DsRitual";
 import { DsTextField } from "@/design-system/primitives/DsForm";

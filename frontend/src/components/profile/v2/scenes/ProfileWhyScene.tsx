@@ -17,7 +17,7 @@ import {
 import type { ProfileFrameworkCard } from "@/lib/profilePage/buildProfileQuickMapData";
 import { consumeProfileMotionOnce } from "@/lib/profile/profileMotionOnce";
 import type { CoreProfile } from "@/lib/types";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type ProfileWhySceneProps = {
   why: ProfileJourneyWhy;

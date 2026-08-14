@@ -10,7 +10,7 @@ import {
   pendingInterpretationInstances,
 } from "@/lib/interpretationInstanceConfirm";
 import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
-import styles from "./profileQuickMap.module.css";
+import styles from "@/design-system/profile/dsProfileQuickMap.module.css";
 
 const DISMISS_PREFIX = "todayflow.profile_ilr_instance.dismiss.v1";
 

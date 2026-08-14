@@ -29,8 +29,10 @@ type DsSurfaceProps = {
   /** @deprecated Prefer `tone`. */
   variant?: DsSurfaceLegacyVariant;
   className?: string;
-  as?: "div" | "section" | "article" | "span";
+  as?: "div" | "section" | "article" | "span" | "nav";
   testId?: string;
+  /** Forwarded for landmark / chrome surfaces (e.g. sticky act nav). */
+  "aria-label"?: string;
 };
 
 export function DsSurface({
@@ -40,6 +42,7 @@ export function DsSurface({
   className,
   as: Tag = "div",
   testId,
+  "aria-label": ariaLabel,
 }: DsSurfaceProps) {
   const resolved = tone ?? legacySurfaceVariantToTone(variant);
   return (
@@ -47,6 +50,7 @@ export function DsSurface({
       className={joinClass(fk.surfaceBase, TONE_CLASS[resolved], className)}
       data-surface-tone={resolved}
       data-testid={testId}
+      aria-label={ariaLabel}
     >
       {children}
     </Tag>

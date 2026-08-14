@@ -7,6 +7,7 @@ import type { TodayDayBriefModel } from "@/lib/todayDayBrief";
 import {
   DsActionCard,
   DsButton,
+  DsCallout,
   DsCaption,
   DsCard,
   DsChip,
@@ -15,20 +16,21 @@ import {
   DsEyebrow,
   DsHeroBlock,
   DsHeroFabArrow,
+  DsIconBadge,
   DsListPanel,
   DsListRow,
   DsMetricCard,
   DsOverlaySheet,
-  DsPlanet,
   DsRadialMeter,
   DsStarDivider,
 } from "@/design-system";
+import { TODAY_DOMAIN_ICON_MAP } from "@/design-system/icons/DsIcons";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 /**
- * Block 1 — Form Kit pilot (FOUNDATION_UI §15.8).
- * Distinct kit roles: Hero · Metric · List · Content pair · Action.
- * Moon backdrop restored as atmosphere (not a card twin).
+ * Block 1 — Form Kit pilot (FOUNDATION_UI §15.8 + kit sheet roles).
+ * Hero (glass + moon bleed) · Metric (solid) · List (solid + domain icons) ·
+ * Callout pair (help/avoid) · Action (accent). Planets = celestial only, not life spheres.
  */
 
 export type TodayDayBriefPane = "atmosphere" | "orientation";
@@ -47,11 +49,22 @@ type SheetState = {
   kicker?: string;
 } | null;
 
-const BETTER_PLANET: Record<string, string> = {
-  work: "mars",
-  people: "venus",
-  self: "sun",
+/** betterCards ids → DomainKey for §16.6 linear icons (not planet photos). */
+const BETTER_DOMAIN: Record<string, keyof typeof TODAY_DOMAIN_ICON_MAP> = {
+  work: "work",
+  people: "relationships",
+  self: "energy",
 };
+
+function BetterDomainLeading({ id }: { id: string }) {
+  const key = BETTER_DOMAIN[id] ?? "energy";
+  const Icon = TODAY_DOMAIN_ICON_MAP[key];
+  return (
+    <DsIconBadge size="md">
+      <Icon className={layout.domainIcon} />
+    </DsIconBadge>
+  );
+}
 
 export function TodayDayBrief({
   model,
@@ -156,6 +169,17 @@ function TodayDayDashboard({
         copy.loadingDay,
     });
 
+  const moonBleed = showMoon ? (
+    <CelestialMoon
+      phase={moonPhase}
+      size={340}
+      spin={0.014}
+      glow={1.2}
+      animated
+      textureSrc="/images/celestial/moon_lro_2k.jpg"
+    />
+  ) : null;
+
   return (
     <div
       className={[layout.pilotStack, showMoon ? layout.pilotWithMoon : null].filter(Boolean).join(" ")}
@@ -168,9 +192,9 @@ function TodayDayDashboard({
         <div className={layout.moonBackdrop} aria-hidden data-testid="today-day-brief-moon">
           <CelestialMoon
             phase={moonPhase}
-            size={608}
-            spin={0.014}
-            glow={1.35}
+            size={520}
+            spin={0.01}
+            glow={0.85}
             animated
             textureSrc="/images/celestial/moon_lro_2k.jpg"
             className={layout.moonDisk}
@@ -183,7 +207,7 @@ function TodayDayDashboard({
           <DsCaption>{dateLabel}</DsCaption>
         </p>
 
-        {/* Kit: Hero (atmosphere) + Data (metric) — different block roles */}
+        {/* Kit: Hero (glass + cropped moon) ≠ Data (solid metric) */}
         <div className={layout.pilotGrid}>
           <DsHeroBlock
             testId="today-day-brief-vibe"
@@ -191,6 +215,8 @@ function TodayDayDashboard({
             eyebrow={heroMeta || copy.atmosphereLabel}
             title={loading ? copy.loadingDay : modeLabel || "Сегодня"}
             body={heroBody || undefined}
+            bleed={moonBleed}
+            bleedClassName={showMoon ? layout.heroMoonBleed : undefined}
             chips={
               heroCue || moodPills.length ? (
                 <DsChipCluster>
@@ -221,14 +247,14 @@ function TodayDayDashboard({
           />
         </div>
 
-        {/* Kit: List panel — planet rows, not a grid of twin glass cards */}
+        {/* Kit: List — domain stroke icons (§16.6), never planet photos for life spheres */}
         {betterCards.length > 0 ? (
-          <DsListPanel title={copy.betterTodayLabel} tone="glass" testId="today-day-brief-better">
+          <DsListPanel title={copy.betterTodayLabel} tone="solid" testId="today-day-brief-better">
             {betterCards.map((card) => (
               <DsListRow
                 key={card.id}
                 testId={`today-day-better-${card.id}`}
-                leading={<DsPlanet planet={BETTER_PLANET[card.id] || "mercury"} size={36} />}
+                leading={<BetterDomainLeading id={card.id} />}
                 title={card.title}
                 subtitle={card.body}
                 onClick={() =>
@@ -243,45 +269,47 @@ function TodayDayDashboard({
           </DsListPanel>
         ) : null}
 
-        {/* Kit: Content pair — support (subtle) vs trap (accent), not identical twins */}
+        {/* Kit: meaning pair — help vs avoid rails (§5.1), not twin ContentCards */}
         {(supportLine || trap) && (
           <section data-testid="today-day-brief-pair" className={layout.pairGrid}>
             {supportLine ? (
-              <DsContentCard
-                tone="subtle"
-                as="button"
-                testId="today-day-brief-do"
-                eyebrow={copy.supportLabel}
-                body={supportLine}
-                chips={<DsChip variant="ghost">опора</DsChip>}
+              <button
+                type="button"
+                className={layout.pairHit}
+                data-testid="today-day-brief-do"
                 onClick={() =>
                   openSheet({
                     title: copy.supportLabel,
                     body: supportDetail || supportLine,
                   })
                 }
-              />
+              >
+                <DsCallout tone="help" label="help" title={copy.supportLabel}>
+                  {supportLine}
+                </DsCallout>
+              </button>
             ) : null}
             {trap ? (
-              <DsContentCard
-                tone="accent"
-                as="button"
-                testId="today-day-brief-trap"
-                eyebrow={copy.trapDayLabel}
-                body={trap}
-                chips={<DsChip variant="status">внимание</DsChip>}
+              <button
+                type="button"
+                className={layout.pairHit}
+                data-testid="today-day-brief-trap"
                 onClick={() =>
                   openSheet({
                     title: copy.trapDayLabel,
                     body: trap,
                   })
                 }
-              />
+              >
+                <DsCallout tone="avoid" label="attention" title={copy.trapDayLabel}>
+                  {trap}
+                </DsCallout>
+              </button>
             ) : null}
           </section>
         )}
 
-        {/* Kit: Action / CTA block */}
+        {/* Kit: Action / CTA — accent plate, not another glass twin */}
         {personalLine || onContinue ? (
           <>
             <DsStarDivider />
@@ -329,7 +357,9 @@ function TodayDayOrientation({
       ) : null}
 
       {trap ? (
-        <DsContentCard tone="accent" testId="today-day-brief-trap" eyebrow={copy.trapLabel} body={trap} />
+        <DsCallout tone="avoid" label="attention" title={copy.trapLabel} testId="today-day-brief-trap">
+          {trap}
+        </DsCallout>
       ) : null}
 
       {hasCues ? (
@@ -342,7 +372,7 @@ function TodayDayOrientation({
             </DsListPanel>
           ) : null}
           {avoidItems.length > 0 ? (
-            <DsListPanel tone="glass" testId="today-day-brief-avoid" title={copy.trapDayLabel}>
+            <DsListPanel tone="solid" testId="today-day-brief-avoid" title={copy.trapDayLabel}>
               {avoidItems.map((item) => (
                 <DsListRow key={item} title={item} />
               ))}

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { getJson, putJson } from "@/lib/api";
 import type { CoreProfile } from "@/lib/types";
 import { DsButton } from "@/design-system";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type DeepThemesApiState = {
   catalog: Array<{ id: string; label: string }>;

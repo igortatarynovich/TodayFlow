@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 export type ProfileCardTone = "insight" | "growth" | "growthLove" | "growthMoney" | "discovery";
 export type ProfileBlockType = "insight" | "action" | "portal";

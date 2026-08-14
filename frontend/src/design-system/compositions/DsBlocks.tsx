@@ -15,6 +15,8 @@ type DsHeroBlockProps = {
   body?: string;
   chips?: ReactNode;
   bleed?: ReactNode;
+  /** Layout class for bleed wrapper (e.g. cropped moon vs small asset). */
+  bleedClassName?: string;
   fab?: ReactNode;
   /** Kit hero often sits light over atmosphere — default glass. */
   tone?: DsSurfaceTone;
@@ -30,6 +32,7 @@ export function DsHeroBlock({
   body,
   chips,
   bleed,
+  bleedClassName,
   fab,
   tone = "glass",
   onOpen,
@@ -45,7 +48,7 @@ export function DsHeroBlock({
       className={joinClass(c.heroInner, className)}
       testId={testId}
     >
-      {bleed ? <div className={c.heroBleed}>{bleed}</div> : null}
+      {bleed ? <div className={joinClass(c.heroBleed, bleedClassName)}>{bleed}</div> : null}
       <div className={c.heroCopy}>
         {eyebrow ? <DsEyebrow>{eyebrow}</DsEyebrow> : null}
         <DsHeadline>{title}</DsHeadline>

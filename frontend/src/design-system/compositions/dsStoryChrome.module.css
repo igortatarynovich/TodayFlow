@@ -1,0 +1,114 @@
+/* Form Kit story chrome — within-step cue + ScreenFlow next (FOUNDATION_UI §16 / §15.8). */
+
+.blockCue,
+.nextAnchor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+  margin: 0.15rem auto;
+  padding: 0.45rem 0.75rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  opacity: 0.88;
+}
+
+.blockCueArrow,
+.nextAnchorArrow {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--tf-ink, #2a2520) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 22%, transparent);
+  background: color-mix(in srgb, var(--day-surface-tint, #fff) 55%, transparent);
+  animation: dsStoryDownCue 1.8s ease-in-out infinite;
+}
+
+.blockCueLabel {
+  font-size: 0.72rem;
+  font-weight: 560;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
+.nextAnchorEyebrow {
+  font-size: 0.68rem;
+  font-weight: 560;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
+.nextAnchorTitle {
+  font-family: var(--tf-font-display, Georgia, serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--tf-ink, #2a2520);
+}
+
+.nextAnchorHint {
+  max-width: 28ch;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
+:global(.immersive) .blockCueArrow,
+:global(.immersive) .nextAnchorArrow,
+:global([class*="immersive"]) .blockCueArrow,
+:global([class*="immersive"]) .nextAnchorArrow {
+  color: color-mix(in srgb, #fff8f0 88%, transparent);
+  border-color: color-mix(in srgb, #fff 28%, transparent);
+  background: color-mix(in srgb, #fff 10%, transparent);
+}
+
+:global(.immersive) .blockCueLabel,
+:global(.immersive) .nextAnchorEyebrow,
+:global(.immersive) .nextAnchorHint,
+:global([class*="immersive"]) .blockCueLabel,
+:global([class*="immersive"]) .nextAnchorEyebrow,
+:global([class*="immersive"]) .nextAnchorHint {
+  color: color-mix(in srgb, #fff8f0 72%, transparent);
+}
+
+:global(.immersive) .nextAnchorTitle,
+:global([class*="immersive"]) .nextAnchorTitle {
+  color: #fff8f0;
+}
+
+.blockCue:focus-visible .blockCueArrow,
+.nextAnchor:focus-visible .nextAnchorArrow {
+  outline: 2px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 55%, transparent);
+  outline-offset: 3px;
+}
+
+@keyframes dsStoryDownCue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blockCueArrow,
+  .nextAnchorArrow {
+    animation: none;
+  }
+}

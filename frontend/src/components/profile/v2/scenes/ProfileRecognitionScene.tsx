@@ -2,7 +2,7 @@
 
 import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 import { ArchetypeHeroVisual } from "@/components/visualIdentity/ArchetypeHeroVisual";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { MotionDrift } from "@/design-system/motion";

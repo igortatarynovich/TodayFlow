@@ -1,7 +1,7 @@
 "use client";
 
 import type { ProfileV0WhoCard } from "@/lib/profilePage/buildProfileV0Data";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 export function ProfileV0WhoScene({ who }: { who: ProfileV0WhoCard }) {
   const heading = `Почему именно ${who.archetypeLabel}`;

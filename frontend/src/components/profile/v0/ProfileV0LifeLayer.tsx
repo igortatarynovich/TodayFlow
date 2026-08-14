@@ -3,7 +3,7 @@
 import type { ProfileV0LoveCard, ProfileV0MoneyCard } from "@/lib/profilePage/buildProfileV0SphereCards";
 import { ProfileV0LoveObject } from "./ProfileV0LoveObject";
 import { ProfileV0MoneyObject } from "./ProfileV0MoneyObject";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 export function ProfileV0LifeLayer({ love, money }: { love: ProfileV0LoveCard | null; money: ProfileV0MoneyCard | null }) {
   if (!love && !money) return null;
