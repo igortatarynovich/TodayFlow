@@ -41,26 +41,26 @@
 }
 
 .toneGlass {
-  /* Frosted — moon/atmosphere may read through; still legible for title+body. */
-  background: color-mix(in srgb, var(--tf-surface, #fff) 68%, transparent);
-  border-color: var(--tf-ds-glass-border, color-mix(in srgb, var(--tf-ink) 16%, transparent));
-  backdrop-filter: blur(var(--tf-ds-glass-blur, 18px));
-  -webkit-backdrop-filter: blur(var(--tf-ds-glass-blur, 18px));
-  box-shadow: var(--tf-ds-shadow-soft, 0 10px 28px color-mix(in srgb, var(--tf-ink) 12%, transparent));
+  /* Frosted plate — visibly lighter / more open than solid. */
+  background: color-mix(in srgb, var(--tf-surface, #fff) 52%, transparent);
+  border-color: var(--tf-ds-glass-border, color-mix(in srgb, var(--tf-ink) 14%, transparent));
+  backdrop-filter: blur(var(--tf-ds-glass-blur, 22px));
+  -webkit-backdrop-filter: blur(var(--tf-ds-glass-blur, 22px));
+  box-shadow: var(--tf-ds-shadow-soft, 0 12px 32px color-mix(in srgb, var(--tf-ink) 14%, transparent));
   color: var(--tf-ink, #2a211b);
 }
 
 .toneAccent {
-  /* Strong day-mood wash + rail — must not twin with subtle/glass. */
+  /* Strong day-mood wash + rail — must not twin with subtle/glass/solid. */
   background: color-mix(
     in srgb,
-    var(--day-accent-soft, var(--tf-accent-gold-wash, #f9f4e8)) 55%,
+    var(--day-accent-soft, var(--tf-accent-gold-wash, #f9f4e8)) 72%,
     var(--tf-surface, #fff)
   );
-  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 42%, transparent);
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 48%, transparent);
   box-shadow:
-    inset 3px 0 0 color-mix(in srgb, var(--day-decor-color, var(--tf-accent-action)) 75%, transparent),
-    0 10px 28px color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 16%, transparent);
+    inset 4px 0 0 color-mix(in srgb, var(--day-decor-color, var(--tf-accent-action)) 85%, transparent),
+    0 14px 36px color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 22%, transparent);
   color: var(--tf-ink, #2a211b);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;

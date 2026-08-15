@@ -20,6 +20,7 @@ export type CelestialMoonProps = {
    * phase still updates via props; cheaper on battery.
    */
   animated?: boolean;
+  testId?: string;
 };
 
 /** NASA LRO equirect — needed for true axial spin (near-side photo cannot yaw). */
@@ -234,6 +235,7 @@ export function CelestialMoon({
   className,
   textureSrc = DEFAULT_TEXTURE,
   animated = true,
+  testId = "celestial-moon",
 }: CelestialMoonProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const phaseRef = useRef(phase);
@@ -418,7 +420,7 @@ export function CelestialMoon({
           ["--moon-glow" as string]: String(glow),
         } as CSSProperties
       }
-      data-testid="celestial-moon"
+      data-testid={testId}
       aria-hidden
     >
       <div className={styles.bloom} />

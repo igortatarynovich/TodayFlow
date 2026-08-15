@@ -43,6 +43,15 @@
   overflow: hidden;
 }
 
+/* Dominant first-viewport hero — room for bleed; moon may escape the plate. */
+.heroFeature {
+  min-height: clamp(16rem, 38vw, 22rem);
+  overflow: visible;
+  gap: var(--tf-ds-space-5, 1rem);
+  padding-block: var(--tf-ds-space-6, 1.25rem);
+}
+
+/* Generic bleed slot — small corner asset. */
 .heroBleed {
   position: absolute;
   right: -1.25rem;
@@ -52,61 +61,20 @@
   z-index: 0;
 }
 
-/* Kit Hero: celestial sphere cropped in the corner — not a full twin card.
- * Left edge fades so dark phases (new moon) never sit under ink. */
+/* Kit Hero: celestial sphere cropped / bleeding past the glass edge. */
 .heroMoonBleed {
-  right: -26%;
-  top: -36%;
-  width: min(58%, 16.5rem);
-  opacity: 0.94;
+  right: -14%;
+  top: -28%;
+  width: min(58%, 18rem);
+  opacity: 0.92;
   overflow: visible;
-  -webkit-mask-image: linear-gradient(
-    100deg,
-    transparent 0%,
-    transparent 12%,
-    rgba(0, 0, 0, 0.45) 32%,
-    #000 52%
-  );
-  mask-image: linear-gradient(
-    100deg,
-    transparent 0%,
-    transparent 12%,
-    rgba(0, 0, 0, 0.45) 32%,
-    #000 52%
-  );
+  z-index: 0;
 }
 
 .heroMoonBleed > * {
-  width: 100%;
-  height: auto;
-  max-width: none;
-  display: block;
-}
-
-.heroMoonBleed > * > *,
-.heroMoonBleed > .moonDisk {
   width: 100% !important;
   height: auto !important;
   max-width: none;
-  filter: drop-shadow(0 12px 28px color-mix(in srgb, var(--tf-ink, #2a211b) 18%, transparent));
-}
-
-/* Soft veil behind copy so dark ink stays readable over the bleed. */
-.heroInner.heroWithMoon {
-  background: color-mix(in srgb, var(--tf-surface, #fff) 78%, transparent);
-}
-
-.heroWithMoon .heroCopy {
-  max-width: min(68%, 16rem);
-  border-radius: 0.65rem;
-  margin-inline: -0.35rem;
-  padding-inline: 0.35rem;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--tf-surface, #fff) 82%, transparent) 0%,
-    color-mix(in srgb, var(--tf-surface, #fff) 58%, transparent) 72%,
-    transparent 100%
-  );
 }
 
 .domainIcon {
@@ -117,6 +85,7 @@
 .pairHit {
   display: block;
   width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   border: none;
@@ -140,6 +109,12 @@
   flex-direction: column;
   gap: var(--tf-ds-space-2, 0.35rem);
   max-width: 72%;
+}
+
+.heroCopyFeature {
+  max-width: min(22rem, 68%);
+  gap: var(--tf-ds-space-3, 0.5rem);
+  padding-top: var(--tf-ds-space-2, 0.35rem);
 }
 
 .heroFooter {
@@ -183,6 +158,24 @@
   justify-content: center;
 }
 
+.actionBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  text-align: left;
+  min-height: 4.5rem;
+}
+
+.actionBarCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  min-width: 0;
+  flex: 1;
+}
+
 .contentBody {
   display: flex;
   flex-direction: column;
@@ -213,10 +206,18 @@
   text-align: left;
   background: transparent;
   border: none;
-  padding: var(--tf-ds-space-3, 0.5rem) 0;
+  padding: var(--tf-ds-space-3, 0.55rem) 0;
   cursor: pointer;
   color: inherit;
   font: inherit;
+}
+
+.listRow:last-child {
+  padding-bottom: 0;
+}
+
+.listRow:first-child {
+  padding-top: 0;
 }
 
 .listRowBody {
@@ -235,22 +236,30 @@
 .pilotStack {
   display: flex;
   flex-direction: column;
-  gap: var(--tf-ds-space-5, 1rem);
+  gap: var(--tf-ds-space-6, 1.25rem);
   width: 100%;
+  max-width: min(100%, 40rem);
+  margin-inline: auto;
   position: relative;
 }
 
-.moonDisk {
-  display: block;
-  max-width: none;
+.pilotWithMoon {
+  isolation: isolate;
+  overflow: visible;
 }
 
-.pilotForeground {
-  position: relative;
-  z-index: 1;
+/* Dense mid band: better-today + list + support/trap as one composition. */
+.dayBriefMid {
   display: flex;
   flex-direction: column;
-  gap: var(--tf-ds-space-5, 1rem);
+  gap: var(--tf-ds-space-3, 0.5rem);
+  width: 100%;
+}
+
+.dayBriefClose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-4, 0.75rem);
   width: 100%;
 }
 
@@ -259,11 +268,12 @@
   grid-template-columns: 1fr;
   gap: var(--tf-ds-space-4, 0.75rem);
   align-items: stretch;
+  width: 100%;
 }
 
 @media (min-width: 720px) {
   .pilotGrid {
-    grid-template-columns: 1.35fr 0.65fr;
+    grid-template-columns: 1.2fr 0.8fr;
   }
 }
 

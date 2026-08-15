@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import type { DsSurfaceTone } from "@/design-system/primitives/DsSurface";
-import { DsBody, DsCaption, DsEyebrow, DsHeadline, DsSectionTitle } from "@/design-system/primitives/DsTypography";
+import { DsBody, DsCaption, DsDisplayTitle, DsEyebrow, DsHeadline, DsSectionTitle } from "@/design-system/primitives/DsTypography";
 import { DsFab } from "@/design-system/primitives/DsFab";
 import { DsChipCluster } from "@/design-system/primitives/DsChip";
 import { DsStarDivider } from "@/design-system/primitives/DsStarDivider";
@@ -14,6 +14,8 @@ type DsHeroBlockProps = {
   eyebrow?: string;
   title: string;
   body?: string;
+  /** Optional quiet line under body (e.g. lunar caption — not an uppercase eyebrow). */
+  detail?: string;
   chips?: ReactNode;
   bleed?: ReactNode;
   /** Layout class for bleed wrapper (e.g. cropped moon vs small asset). */
@@ -21,6 +23,8 @@ type DsHeroBlockProps = {
   fab?: ReactNode;
   /** Kit hero often sits light over atmosphere — default glass. */
   tone?: DsSurfaceTone;
+  /** `feature` = dominant first viewport hero (display title, room for bleed). */
+  size?: "default" | "feature";
   onOpen?: () => void;
   className?: string;
   testId?: string;
@@ -31,29 +35,37 @@ export function DsHeroBlock({
   eyebrow,
   title,
   body,
+  detail,
   chips,
   bleed,
   bleedClassName,
   fab,
   tone = "glass",
+  size = "default",
   onOpen,
   className,
   testId,
 }: DsHeroBlockProps) {
+  const feature = size === "feature";
   return (
     <DsCard
       tone={tone}
       size="default"
       as={onOpen ? "button" : "article"}
       onClick={onOpen}
-      className={joinClass(c.heroInner, className)}
+      className={joinClass(c.heroInner, feature ? c.heroFeature : null, className)}
       testId={testId}
     >
       {bleed ? <div className={joinClass(c.heroBleed, bleedClassName)}>{bleed}</div> : null}
-      <div className={c.heroCopy}>
+      <div className={joinClass(c.heroCopy, feature ? c.heroCopyFeature : null)}>
         {eyebrow ? <DsEyebrow>{eyebrow}</DsEyebrow> : null}
-        <DsHeadline>{title}</DsHeadline>
-        {body ? <DsBody size="sm">{body}</DsBody> : null}
+        {feature ? <DsDisplayTitle size="lg">{title}</DsDisplayTitle> : <DsHeadline>{title}</DsHeadline>}
+        {body ? <DsBody size={feature ? "lg" : "sm"}>{body}</DsBody> : null}
+        {detail ? (
+          <DsBody size="sm" tone="quiet">
+            {detail}
+          </DsBody>
+        ) : null}
       </div>
       {(chips || fab) && (
         <div className={c.heroFooter}>
@@ -212,27 +224,40 @@ export function DsContentCard({
 }
 
 type DsActionCardProps = {
-  title: string;
+  /** Optional — omit when the CTA itself is the only message (no title dupe). */
+  title?: string;
   body?: string;
   action: ReactNode;
   tone?: DsSurfaceTone;
+  /** `bar` = compact horizontal CTA strip; `center` = kit poster. */
+  layout?: "center" | "bar";
   className?: string;
   testId?: string;
 };
 
-/** Kit Action / CTA block: centered prompt + button/fab. */
+/** Kit Action / CTA block: centered prompt + button/fab, or compact bar. */
 export function DsActionCard({
   title,
   body,
   action,
   tone = "accent",
+  layout = "center",
   className,
   testId,
 }: DsActionCardProps) {
   return (
-    <DsCard tone={tone} size="default" className={joinClass(c.actionCenter, className)} testId={testId}>
-      <DsHeadline>{title}</DsHeadline>
-      {body ? <DsBody size="sm">{body}</DsBody> : null}
+    <DsCard
+      tone={tone}
+      size={layout === "bar" ? "compact" : "default"}
+      className={joinClass(layout === "bar" ? c.actionBar : c.actionCenter, className)}
+      testId={testId}
+    >
+      {title || body ? (
+        <div className={layout === "bar" ? c.actionBarCopy : undefined}>
+          {title ? <DsHeadline>{title}</DsHeadline> : null}
+          {body ? <DsBody size="sm">{body}</DsBody> : null}
+        </div>
+      ) : null}
       {action}
     </DsCard>
   );
