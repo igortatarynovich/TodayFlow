@@ -28,7 +28,7 @@ function BodyInSign({
   return (
     <span className={layout.skyPair}>
       <DsPlanet planet={body} size={size} fit="cover" />
-      {sign ? <DsZodiac sign={sign} size={Math.round(size * 0.86)} variant="illustration" /> : null}
+      {sign ? <DsZodiac sign={sign} size={Math.round(size * 0.86)} /> : null}
     </span>
   );
 }

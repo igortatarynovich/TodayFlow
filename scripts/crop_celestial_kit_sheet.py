@@ -17,7 +17,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import shutil
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -26,7 +25,6 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "docs" / "design" / "assets"
 SHEET_CANDIDATES = [
     ASSETS / "celestial-kit-sheet.png",
-    ASSETS / "image copy.png",
 ]
 MASTER = ASSETS / "celestial-kit"
 PUBLIC = ROOT / "frontend" / "public" / "images"
@@ -68,11 +66,6 @@ DECOS = {
 def resolve_sheet() -> Path:
     for p in SHEET_CANDIDATES:
         if p.is_file():
-            if p.name == "image copy.png":
-                dst = ASSETS / "celestial-kit-sheet.png"
-                if not dst.exists():
-                    shutil.move(str(p), str(dst))
-                return dst
             return p
     raise SystemExit("missing celestial-kit-sheet.png")
 

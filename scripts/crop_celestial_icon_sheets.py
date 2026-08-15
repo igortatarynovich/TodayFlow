@@ -2,7 +2,8 @@
 """Slice gold zodiac glyph sheet + planet photo sheets into app icons.
 
 Sources:
-  docs/design/assets/zodiac-glyphs-sheet.png
+  docs/design/assets/zodiac-metal-glyphs-sheet.png  (3D silver/gold glyphs; preferred)
+  docs/design/assets/zodiac-glyphs-sheet.png        (legacy framed seals)
   docs/design/assets/planets-sheet.png
   docs/design/assets/mercury-pluto-sheet.png
 
@@ -15,6 +16,7 @@ Outputs:
 Usage:
   python3 scripts/crop_celestial_icon_sheets.py
   python3 scripts/crop_celestial_icon_sheets.py --dry-run
+  python3 scripts/crop_celestial_icon_sheets.py --zodiac-only
 """
 
 from __future__ import annotations
@@ -29,6 +31,8 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "docs" / "design" / "assets"
 
 ZODIAC_SHEET_CANDIDATES = [
+    ASSETS / "zodiac-metal-glyphs-sheet.png",
+    ASSETS / "image copy.png",
     ASSETS / "zodiac-glyphs-sheet.png",
 ]
 PLANET_SHEET_CANDIDATES = [
@@ -37,7 +41,6 @@ PLANET_SHEET_CANDIDATES = [
 ]
 MERCURY_PLUTO_SHEET_CANDIDATES = [
     ASSETS / "mercury-pluto-sheet.png",
-    ASSETS / "image copy.png",
 ]
 
 ZODIAC_MASTER = ASSETS / "zodiac-glyphs"
@@ -89,6 +92,31 @@ def resolve_sheet_optional(candidates: list[Path]) -> Path | None:
         if p.is_file():
             return p
     return None
+
+
+def sheet_has_alpha(im: Image.Image, *, sample_step: int = 8) -> bool:
+    """True when a meaningful share of sampled pixels is already transparent."""
+    rgba = im.convert("RGBA")
+    w, h = rgba.size
+    px = rgba.load()
+    clear = 0
+    n = 0
+    for y in range(0, h, sample_step):
+        for x in range(0, w, sample_step):
+            n += 1
+            if px[x, y][3] == 0:
+                clear += 1
+    return n > 0 and (clear / n) >= 0.15
+
+
+def scrub_alpha_fringe(im: Image.Image, *, floor: int = 8) -> Image.Image:
+    """Zero near-invisible leftover matte from background knockout."""
+    rgba = im.convert("RGBA")
+    out = []
+    for r, g, b, a in rgba.getdata():
+        out.append((r, g, b, 0) if a < floor else (r, g, b, a))
+    rgba.putdata(out)
+    return rgba
 
 
 def knock_out_light(im: Image.Image) -> Image.Image:
@@ -182,9 +210,12 @@ def save_pair(master: Path, public: Path, im: Image.Image, *, dry_run: bool) -> 
 def process_zodiac(sheet: Path, *, dry_run: bool) -> None:
     print(f"zodiac sheet: {sheet}")
     src = Image.open(sheet).convert("RGBA")
+    transparent = sheet_has_alpha(src)
+    print(f"  alpha sheet: {transparent}")
     for slug, box in zip(ZODIAC_SIGNS, cell_boxes(*src.size, 4, 3)):
-        cut = knock_out_light(src.crop(box))
-        plate = to_square(cut, ZODIAC_OUT, pad_ratio=0.04)
+        cut = src.crop(box)
+        cut = scrub_alpha_fringe(cut) if transparent else knock_out_light(cut)
+        plate = to_square(cut, ZODIAC_OUT, pad_ratio=0.08)
         save_pair(
             ZODIAC_MASTER / f"{slug}.png",
             ZODIAC_PUBLIC / f"{slug}.webp",
@@ -258,12 +289,7 @@ def process_mercury_pluto(sheet: Path, *, dry_run: bool) -> None:
 def maybe_rename_sheets(*, dry_run: bool) -> None:
     pairs = [
         (ASSETS / "image copy 2.png", ASSETS / "planets-sheet.png"),
-        (
-            ASSETS / "image copy.png",
-            ASSETS / "mercury-pluto-sheet.png"
-            if (ASSETS / "zodiac-glyphs-sheet.png").exists()
-            else ASSETS / "zodiac-glyphs-sheet.png",
-        ),
+        (ASSETS / "image copy.png", ASSETS / "zodiac-metal-glyphs-sheet.png"),
     ]
     for src, dst in pairs:
         if src.is_file() and not dst.exists():
@@ -276,14 +302,19 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--skip-rename", action="store_true")
+    parser.add_argument("--zodiac-only", action="store_true")
     args = parser.parse_args()
 
     if not args.skip_rename:
         maybe_rename_sheets(dry_run=args.dry_run)
 
     zodiac_sheet = resolve_sheet(ZODIAC_SHEET_CANDIDATES)
-    planet_sheet = resolve_sheet(PLANET_SHEET_CANDIDATES)
     process_zodiac(zodiac_sheet, dry_run=args.dry_run)
+    if args.zodiac_only:
+        print("done")
+        return
+
+    planet_sheet = resolve_sheet(PLANET_SHEET_CANDIDATES)
     process_planets(planet_sheet, dry_run=args.dry_run)
 
     mp_sheet = resolve_sheet_optional(MERCURY_PLUTO_SHEET_CANDIDATES)

@@ -2,7 +2,8 @@
 
 - `numbers.png` → digit icons 1–9 → `frontend/public/images/icons/numbers/*.webp`
   (`python3 scripts/crop_numbers_sheet.py`)
-- `zodiac-glyphs-sheet.png` → gold zodiac seals → `frontend/public/images/icons/zodiac/*.webp`
+- `zodiac-metal-glyphs-sheet.png` → 3D silver/gold glyphs (Today planet+sign) → `frontend/public/images/icons/zodiac/*.webp`
+- `zodiac-glyphs-sheet.png` → legacy framed gold seals (fallback source)
 - `planets-sheet.png` → planet photos → `frontend/public/images/icons/planets/*.webp`
 - `mercury-pluto-sheet.png` → mercury + pluto photos
 - `celestial-kit-sheet.png` → chart angles, neon zodiac orbs, decor accents
