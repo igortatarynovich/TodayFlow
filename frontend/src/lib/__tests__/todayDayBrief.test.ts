@@ -286,5 +286,30 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.skyStrip?.moonLabel).toBe("Луна в Деве");
     expect(model.skyStrip?.headlineLabel).toContain("Меркурий во Льве");
     expect(model.whyFactors.find((f) => f.id === "lunar")?.label).toBe("Луна в Деве");
+    expect(model.skyStrip?.personalLine).toBeNull();
+  });
+
+  it("puts natal overlay on the sky strip, not development_point", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        personal_growth: { development_point: "точка роста персонажа" },
+        sky_today: {
+          moon: { body: "moon", body_ru: "Луна", sign: "Virgo", sign_ru: "Дева" },
+        },
+        day_story: {
+          contract_version: "day_story_v1",
+          day_scenario: {
+            conflict: {
+              why_personal: "тебе обычно проще держать слово, если оно взвешено заранее",
+            },
+          },
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.skyStrip?.personalLine).toContain("держать слово");
+    expect(model.skyStrip?.personalLine).not.toContain("точка роста");
   });
 });

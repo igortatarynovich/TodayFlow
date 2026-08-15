@@ -308,3 +308,174 @@ async def find_moon_sign_ingress_time(
                 return hi.replace(microsecond=0)
         return hi.replace(microsecond=0)
     return None
+
+
+_ASPECT_ANGLE = {name: angle for name, angle in MAJOR_ASPECTS}
+
+
+def match_timed_lunar_exact(
+    headline: dict[str, Any] | None,
+    timed_lunar_aspects: list[dict[str, Any]] | None,
+    *,
+    target_date: date,
+) -> str | None:
+    """Reuse Moon timeline if the headline pair is Moon × planet today."""
+    hs = headline if isinstance(headline, dict) else {}
+    a = _norm_body(str(hs.get("planet_a") or ""))
+    b = _norm_body(str(hs.get("planet_b") or ""))
+    aspect = _norm_body(str(hs.get("aspect") or ""))
+    other = b if a == "moon" else a if b == "moon" else ""
+    if not other or not aspect:
+        return None
+    day = target_date.isoformat()
+    for row in timed_lunar_aspects or []:
+        if not isinstance(row, dict):
+            continue
+        if _norm_body(str(row.get("planet") or "")) != other:
+            continue
+        if _norm_body(str(row.get("aspect") or "")) != aspect:
+            continue
+        when = str(row.get("exact_time") or "").strip()
+        if when[:10] == day:
+            return when
+    return None
+
+
+async def _bisect_pair_aspect_time(
+    astro_service: _ChartClient,
+    *,
+    left: datetime,
+    right: datetime,
+    body_a: str,
+    body_b: str,
+    aspect_angle: float,
+    residual_index: int,
+    coordinates: dict[str, float] | None,
+    max_iter: int = 18,
+) -> datetime | None:
+    lo, hi = left, right
+    lon_lo = await _longitudes_at(astro_service, lo, coordinates=coordinates)
+    lon_hi = await _longitudes_at(astro_service, hi, coordinates=coordinates)
+    if body_a not in lon_lo or body_b not in lon_lo or body_a not in lon_hi or body_b not in lon_hi:
+        return None
+    r_list_lo = _residuals_for_aspect(lon_lo[body_a], lon_lo[body_b], aspect_angle)
+    r_list_hi = _residuals_for_aspect(lon_hi[body_a], lon_hi[body_b], aspect_angle)
+    if residual_index >= len(r_list_lo) or residual_index >= len(r_list_hi):
+        return None
+    r_lo = r_list_lo[residual_index]
+    r_hi = r_list_hi[residual_index]
+    if abs(r_lo) < 1e-6:
+        return lo
+    if abs(r_hi) < 1e-6:
+        return hi
+    if r_lo * r_hi > 0:
+        return None
+
+    for _ in range(max_iter):
+        mid = lo + (hi - lo) / 2
+        lon_mid = await _longitudes_at(astro_service, mid, coordinates=coordinates)
+        if body_a not in lon_mid or body_b not in lon_mid:
+            return None
+        r_mid = _residuals_for_aspect(lon_mid[body_a], lon_mid[body_b], aspect_angle)[residual_index]
+        if abs(r_mid) * 60.0 <= 2.0:
+            return mid.replace(microsecond=0)
+        if r_lo * r_mid <= 0:
+            hi, r_hi = mid, r_mid
+        else:
+            lo, r_lo = mid, r_mid
+    return (lo + (hi - lo) / 2).replace(microsecond=0)
+
+
+async def find_exact_pair_aspect_time(
+    astro_service: _ChartClient,
+    *,
+    planet_a: str,
+    planet_b: str,
+    aspect: str,
+    target_date: date,
+    timezone_name: str | None = None,
+    coordinates: dict[str, float] | None = None,
+    step_hours: int = 2,
+) -> datetime | None:
+    """Civil-day zero-cross for a shared-sky pair. None if it does not exact today.
+
+    Noon orb is not a clock. WAVE2: orb ≠ time.
+    """
+    a = _norm_body(planet_a)
+    b = _norm_body(planet_b)
+    angle = _ASPECT_ANGLE.get(_norm_body(aspect))
+    if not a or not b or a == b or angle is None:
+        return None
+    tz = _zone(timezone_name)
+    start = datetime.combine(target_date, datetime.min.time(), tzinfo=tz)
+    end = start + timedelta(days=1)
+    step = timedelta(hours=max(1, step_hours))
+    samples: list[tuple[datetime, dict[str, float]]] = []
+    cursor = start
+    while cursor <= end:
+        try:
+            lons = await _longitudes_at(astro_service, cursor, coordinates=coordinates)
+        except Exception:
+            cursor += step
+            continue
+        if a in lons and b in lons:
+            samples.append((cursor, lons))
+        cursor += step
+
+    for i in range(len(samples) - 1):
+        t0, lon0 = samples[i]
+        t1, lon1 = samples[i + 1]
+        r0s = _residuals_for_aspect(lon0[a], lon0[b], angle)
+        r1s = _residuals_for_aspect(lon1[a], lon1[b], angle)
+        for idx, (r0, r1) in enumerate(zip(r0s, r1s)):
+            if r0 * r1 > 0 and abs(r0) > 1.0 and abs(r1) > 1.0:
+                continue
+            if abs(r0) > 50 and abs(r1) > 50:
+                continue
+            exact = await _bisect_pair_aspect_time(
+                astro_service,
+                left=t0,
+                right=t1,
+                body_a=a,
+                body_b=b,
+                aspect_angle=angle,
+                residual_index=idx,
+                coordinates=coordinates,
+            )
+            if exact is None:
+                continue
+            if exact < start or exact >= end:
+                continue
+            return exact
+    return None
+
+
+async def resolve_sky_aspect_exact_time(
+    astro_service: _ChartClient,
+    *,
+    headline: dict[str, Any] | None,
+    timed_lunar_aspects: list[dict[str, Any]] | None,
+    target_date: date,
+    timezone_name: str | None = None,
+    coordinates: dict[str, float] | None = None,
+) -> str | None:
+    """Exact ISO clock for headline if it perfects on target_date; else None."""
+    matched = match_timed_lunar_exact(
+        headline, timed_lunar_aspects, target_date=target_date
+    )
+    if matched:
+        return matched
+    hs = headline if isinstance(headline, dict) else {}
+    exact = await find_exact_pair_aspect_time(
+        astro_service,
+        planet_a=str(hs.get("planet_a") or ""),
+        planet_b=str(hs.get("planet_b") or ""),
+        aspect=str(hs.get("aspect") or ""),
+        target_date=target_date,
+        timezone_name=timezone_name,
+        coordinates=coordinates,
+    )
+    if exact is None:
+        return None
+    return exact.isoformat(timespec="seconds")
+

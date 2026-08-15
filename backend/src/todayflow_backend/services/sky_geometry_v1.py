@@ -393,5 +393,6 @@ def pick_headline_sky(aspects: list[dict[str, Any]]) -> dict[str, Any] | None:
         "daily_score": top.get("daily_score"),
         "domain_weights": top.get("domain_weights") or {},
         "thesis_hint": top.get("thesis_hint"),
+        "exact_time": top.get("exact_time"),
         "contract_version": SKY_GEOMETRY_V1,
     }

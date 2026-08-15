@@ -1,12 +1,14 @@
 """sky_today_v1 — compact shared-sky nest for Today strip + tap sheet.
 
 Canon: DAY_ENGINE_AND_COHERENCE §2 · TODAY_SCREEN_SCENARIO_V3 Block 1a.
-Surface: Moon in sign (every day) + one headline pair. Sheet: all bodies + majors.
-No natal overlay. Honest omit when empty. No invented copy.
+Public nest is influence, not an ephemeris dump: Moon climate + one headline pair.
+Personal overlay is L3 (day_personal / why_personal) — composed on Today, not this nest.
+Honest omit when empty. No invented copy.
 """
 
 from __future__ import annotations
 
+from datetime import date
 from typing import Any
 
 from todayflow_backend.services.sky_geometry_v1 import CORE_BODIES, positions_to_sky_bodies
@@ -87,12 +89,52 @@ def _moon_from_foundation(day_foundation: dict[str, Any] | None) -> dict[str, An
         "sign_ru": sign_ru,
         "degree": float(moon["degree"]) if isinstance(moon.get("degree"), (int, float)) else None,
         "retrograde": False,
+        "exact_time_local": None,
     }
+
+
+def _on_day(raw: Any, target_date: date | None) -> str | None:
+    value = _clean(raw)
+    if not value:
+        return None
+    if target_date is not None and value[:10] != target_date.isoformat():
+        return None
+    return value
+
+
+def _moon_ingress_time(ce: dict[str, Any], target_date: date | None) -> str | None:
+    for row in ce.get("ingresses") or []:
+        if not isinstance(row, dict):
+            continue
+        planet = _norm_body(row.get("planet") or row.get("planet_ru"))
+        if "moon" not in planet and "лун" not in planet:
+            continue
+        when = _on_day(row.get("exact_time") or row.get("exact_time_local"), target_date)
+        if when:
+            return when
+    return None
+
+
+def _window_from_voc(ce: dict[str, Any], target_date: date | None) -> dict[str, str] | None:
+    voc = _as_dict(ce.get("void_of_course"))
+    if _clean(voc.get("status")).lower() != "ok":
+        return None
+    starts = _clean(voc.get("starts_at"))
+    ends = _clean(voc.get("ends_at"))
+    if not starts or not ends:
+        return None
+    if target_date is not None:
+        day = target_date.isoformat()
+        if not (starts[:10] <= day <= ends[:10]):
+            return None
+    return {"kind": "void_of_course", "starts_at": starts, "ends_at": ends}
 
 
 def _headline_with_signs(
     headline: dict[str, Any] | None,
     by_body: dict[str, dict[str, Any]],
+    *,
+    target_date: date | None = None,
 ) -> dict[str, Any] | None:
     hs = _as_dict(headline)
     a = _norm_body(hs.get("planet_a"))
@@ -124,33 +166,11 @@ def _headline_with_signs(
         "aspect": aspect,
         "aspect_ru": aspect_ru,
         "title_ru": title_ru,
+        "story_ru": _clean(hs.get("story_ru")) or None,
         "orb_delta": hs.get("orb_delta"),
-    }
-
-
-def _slim_aspect(row: dict[str, Any], by_body: dict[str, dict[str, Any]]) -> dict[str, Any] | None:
-    a = _norm_body(row.get("planet_a"))
-    b = _norm_body(row.get("planet_b"))
-    aspect = _norm_body(row.get("aspect"))
-    if not a or not b or not aspect:
-        return None
-    left = by_body.get(a) or {}
-    right = by_body.get(b) or {}
-    aspect_ru = _ASPECT_RU.get(aspect, aspect)
-    a_ru = _clean(left.get("body_ru")) or _clean(row.get("planet_a"))
-    b_ru = _clean(right.get("body_ru")) or _clean(row.get("planet_b"))
-    return {
-        "id": _clean(row.get("id")) or f"sky-{a}-{aspect}-{b}",
-        "planet_a": a,
-        "planet_b": b,
-        "planet_a_ru": a_ru,
-        "planet_b_ru": b_ru,
-        "sign_a_ru": _clean(left.get("sign_ru")) or None,
-        "sign_b_ru": _clean(right.get("sign_ru")) or None,
-        "aspect": aspect,
-        "aspect_ru": aspect_ru,
-        "title_ru": _clean(row.get("title_ru")) or f"{a_ru} — {aspect_ru} — {b_ru}",
-        "orb_delta": row.get("orb_delta"),
+        "exact_time_local": _on_day(
+            hs.get("exact_time_local") or hs.get("exact_time"), target_date
+        ),
     }
 
 
@@ -158,6 +178,7 @@ def build_sky_today_v1(
     *,
     celestial_events: dict[str, Any] | None = None,
     day_foundation: dict[str, Any] | None = None,
+    target_date: date | None = None,
 ) -> dict[str, Any] | None:
     """Compact nest for Today strip + sheet. None when nothing to show."""
     ce = _as_dict(celestial_events)
@@ -178,26 +199,30 @@ def build_sky_today_v1(
     by_body = {str(r.get("body")): r for r in positions}
 
     moon = by_body.get("moon") or _moon_from_foundation(day_foundation)
-    headline = _headline_with_signs(ce.get("headline_sky") if isinstance(ce.get("headline_sky"), dict) else None, by_body)
+    if isinstance(moon, dict):
+        ingress = _moon_ingress_time(ce, target_date)
+        if ingress:
+            moon = {**moon, "exact_time_local": ingress}
+        else:
+            moon = {**moon, "exact_time_local": None}
+    headline = _headline_with_signs(
+        ce.get("headline_sky") if isinstance(ce.get("headline_sky"), dict) else None,
+        by_body,
+        target_date=target_date,
+    )
+    window = _window_from_voc(ce, target_date)
 
-    aspects: list[dict[str, Any]] = []
-    for row in list(ce.get("sky_aspects") or [])[:8]:
-        if not isinstance(row, dict):
-            continue
-        slim = _slim_aspect(row, by_body)
-        if slim:
-            aspects.append(slim)
-
-    if not moon and not headline and not positions:
+    if not moon and not headline:
         return None
 
-    return {
+    nest: dict[str, Any] = {
         "contract_version": SKY_TODAY_V1,
         "moon": moon,
         "headline": headline,
-        "positions": positions,
-        "aspects": aspects,
     }
+    if window:
+        nest["window"] = window
+    return nest
 
 
 def celestial_events_from_morning(morning: Any | None) -> dict[str, Any] | None:

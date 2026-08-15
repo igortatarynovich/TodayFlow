@@ -817,6 +817,7 @@ class TodayContractSkyBodyV1(BaseModel):
     sign_ru: str
     degree: float | None = None
     retrograde: bool = False
+    exact_time_local: str | None = None
 
 
 class TodayContractSkyHeadlineV1(BaseModel):
@@ -832,7 +833,9 @@ class TodayContractSkyHeadlineV1(BaseModel):
     aspect: str
     aspect_ru: str
     title_ru: str
+    story_ru: str | None = None
     orb_delta: float | None = None
+    exact_time_local: str | None = None
 
 
 class TodayContractSkyAspectV1(BaseModel):
@@ -849,14 +852,19 @@ class TodayContractSkyAspectV1(BaseModel):
     orb_delta: float | None = None
 
 
+class TodayContractSkyWindowV1(BaseModel):
+    kind: str
+    starts_at: str
+    ends_at: str
+
+
 class TodayContractSkyTodayV1(BaseModel):
-    """Shared-sky strip: Moon every day + one headline; sheet lists the rest."""
+    """Shared-sky influence: Moon climate + one headline. Not an ephemeris dump."""
 
     contract_version: str = "sky_today_v1"
     moon: TodayContractSkyBodyV1 | None = None
     headline: TodayContractSkyHeadlineV1 | None = None
-    positions: list[TodayContractSkyBodyV1] = Field(default_factory=list)
-    aspects: list[TodayContractSkyAspectV1] = Field(default_factory=list)
+    window: TodayContractSkyWindowV1 | None = None
 
 
 class TodayContractV1Response(BaseModel):

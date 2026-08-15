@@ -11,6 +11,7 @@ from todayflow_backend.services.astro import ChartResponse
 from todayflow_backend.services.celestial_events_builder import build_celestial_events
 from todayflow_backend.services.day_sources.timed_lunar_aspects import (
     find_timed_major_moon_aspects,
+    match_timed_lunar_exact,
 )
 from todayflow_backend.services.day_sources.void_of_course import build_void_of_course_v0
 
@@ -124,3 +125,23 @@ def test_void_of_course_uses_exact_ingress_time():
     assert voc["status"] == "ok"
     assert voc["ends_at"].startswith("2026-07-25T14:30")
     assert voc["in_void_of_course"] is True
+
+
+def test_match_timed_lunar_exact_only_same_civil_day():
+    headline = {"planet_a": "Moon", "planet_b": "Venus", "aspect": "trine"}
+    timed = [
+        {"planet": "venus", "aspect": "trine", "exact_time": "2026-07-24T08:00:00+03:00"},
+    ]
+    assert (
+        match_timed_lunar_exact(headline, timed, target_date=date(2026, 7, 24))
+        == "2026-07-24T08:00:00+03:00"
+    )
+    assert match_timed_lunar_exact(headline, timed, target_date=date(2026, 7, 25)) is None
+    assert (
+        match_timed_lunar_exact(
+            {"planet_a": "mercury", "planet_b": "jupiter", "aspect": "conjunction"},
+            timed,
+            target_date=date(2026, 7, 24),
+        )
+        is None
+    )

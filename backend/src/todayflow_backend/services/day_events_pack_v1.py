@@ -260,6 +260,7 @@ def _events_from_sky_aspects(aspects: list[Any]) -> list[dict[str, Any]]:
                 target_body=planet_b,
                 aspect=aspect,
                 fact_key="sky_aspect",
+                when=str(row.get("exact_time") or "") or None,
                 meta={k: v for k, v in meta.items() if v is not None},
             )
         )

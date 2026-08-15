@@ -16,6 +16,7 @@ from todayflow_backend.services.sky_geometry_v1 import (
 from todayflow_backend.services.day_sources.timed_lunar_aspects import (
     find_moon_sign_ingress_time,
     find_timed_major_moon_aspects,
+    resolve_sky_aspect_exact_time,
 )
 from todayflow_backend.services.day_sources.void_of_course import build_void_of_course_v0
 from todayflow_backend.services.lunar import LunarService
@@ -478,6 +479,25 @@ async def build_celestial_events(
         when = str(row.get("exact_time") or "")
         time_bit = f" Точно около {when[11:16]}." if len(when) >= 16 else ""
         row["story_ru"] = f"{title}: {base}{time_bit}"[:240] if title else f"{base}{time_bit}"[:240]
+
+    if isinstance(headline_sky, dict):
+        try:
+            when = await resolve_sky_aspect_exact_time(
+                astro_service,
+                headline=headline_sky,
+                timed_lunar_aspects=timed_lunar_aspects,
+                target_date=target_date,
+                timezone_name=sky_tz,
+            )
+        except Exception:
+            when = None
+        if when:
+            headline_sky["exact_time"] = when
+            hid = str(headline_sky.get("id") or "")
+            for row in sky_aspects:
+                if isinstance(row, dict) and str(row.get("id") or "") == hid:
+                    row["exact_time"] = when
+                    break
 
     void_of_course = build_void_of_course_v0(
         target_date=target_date,

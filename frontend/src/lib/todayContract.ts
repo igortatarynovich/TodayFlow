@@ -755,6 +755,7 @@ export type TodayContractSkyBodyV1 = {
   sign_ru: string;
   degree?: number | null;
   retrograde?: boolean;
+  exact_time_local?: string | null;
 };
 
 export type TodayContractSkyHeadlineV1 = {
@@ -770,7 +771,9 @@ export type TodayContractSkyHeadlineV1 = {
   aspect: string;
   aspect_ru: string;
   title_ru: string;
+  story_ru?: string | null;
   orb_delta?: number | null;
+  exact_time_local?: string | null;
 };
 
 export type TodayContractSkyAspectV1 = {
@@ -787,11 +790,18 @@ export type TodayContractSkyAspectV1 = {
   orb_delta?: number | null;
 };
 
-/** Shared sky strip + sheet. Moon every day; headline is the extra body-pair. */
+export type TodayContractSkyWindowV1 = {
+  kind: string;
+  starts_at: string;
+  ends_at: string;
+};
+
+/** Shared sky influence: Moon climate + one headline. Not an ephemeris dump. */
 export type TodayContractSkyTodayV1 = {
   contract_version?: string;
   moon?: TodayContractSkyBodyV1 | null;
   headline?: TodayContractSkyHeadlineV1 | null;
+  window?: TodayContractSkyWindowV1 | null;
   positions?: TodayContractSkyBodyV1[];
   aspects?: TodayContractSkyAspectV1[];
 };
@@ -811,7 +821,7 @@ export type TodayContractV1 = {
   welcome_glass?: TodayContractWelcomeGlassV1 | null;
   today_progress?: TodayContractTodayProgressV1 | null;
   color_guide?: TodayContractColorGuideV1 | null;
-  /** Shared sky: Moon in sign every day + one headline pair. Sheet lists the rest. */
+  /** Shared sky influence: Moon climate + one headline. Not an ephemeris dump. */
   sky_today?: TodayContractSkyTodayV1 | null;
 };
 

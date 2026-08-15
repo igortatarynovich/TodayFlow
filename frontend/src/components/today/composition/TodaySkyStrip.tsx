@@ -13,7 +13,8 @@ import {
   DsZodiac,
 } from "@/design-system";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
-import { inSign, positionLabel, type TodaySkyStripModel } from "@/lib/todaySkyToday";
+import type { TodaySkyStripModel } from "@/lib/todaySkyToday";
+import { joinSkyMeta } from "@/lib/todaySkyToday";
 
 function BodyInSign({
   body,
@@ -53,47 +54,46 @@ function TodaySkySheet({
     };
   }, [onClose]);
 
-  const positions = model.positions.length ? model.positions : [model.moon];
+  const lead = model.headlineLabel || model.moonLabel || copy.skySheetTitle;
 
   return (
     <DsOverlaySheet
       testId="today-sky-sheet"
       titleId={titleId}
-      title={copy.skySheetTitle}
+      title={lead}
       kicker={copy.skyStripKicker}
       closeLabel={copy.sheetClose}
       onClose={onClose}
     >
-      <DsListPanel tone="solid" title={copy.skySheetPositions} testId="today-sky-sheet-positions">
-        {positions.map((row) => (
+      <DsListPanel tone="solid" title={copy.skySheetShared} testId="today-sky-sheet-shared">
+        {model.headline && model.headlineLabel ? (
           <DsListRow
-            key={row.body}
-            testId={`today-sky-sheet-body-${row.body}`}
-            leading={<BodyInSign body={row.body} sign={row.sign} size={32} />}
-            title={positionLabel(row)}
+            testId="today-sky-sheet-headline"
+            leading={
+              <span className={layout.skyPair}>
+                <BodyInSign body={model.headline.planet_a} sign={model.headline.sign_a} size={32} />
+                <BodyInSign body={model.headline.planet_b} sign={model.headline.sign_b} size={32} />
+              </span>
+            }
+            title={model.headlineLabel}
+            subtitle={joinSkyMeta([model.headlineWhen, model.headlineOrb, model.sharedStory]) || undefined}
           />
-        ))}
+        ) : null}
+        {model.moon && model.moonLabel ? (
+          <DsListRow
+            testId="today-sky-sheet-moon"
+            leading={<BodyInSign body={model.moon.body} sign={model.moon.sign} size={32} />}
+            title={joinSkyMeta([model.moonLabel, model.moonDegree]) || model.moonLabel}
+            subtitle={model.moonWhen ? `с ${model.moonWhen}` : undefined}
+          />
+        ) : null}
+        {model.windowLabel ? (
+          <DsListRow testId="today-sky-sheet-window" title={copy.skySheetWindow} subtitle={model.windowLabel} />
+        ) : null}
       </DsListPanel>
-      {model.aspects.length ? (
-        <DsListPanel tone="solid" title={copy.skySheetAspects} testId="today-sky-sheet-aspects">
-          {model.aspects.map((row) => (
-            <DsListRow
-              key={row.id}
-              testId={`today-sky-sheet-aspect-${row.id}`}
-              leading={
-                <span className={layout.skyPair}>
-                  <DsPlanet planet={row.planet_a} size={28} fit="cover" />
-                  <DsPlanet planet={row.planet_b} size={28} fit="cover" />
-                </span>
-              }
-              title={row.title_ru}
-              subtitle={
-                inSign(row.planet_a_ru, row.sign_a_ru) && inSign(row.planet_b_ru, row.sign_b_ru)
-                  ? `${inSign(row.planet_a_ru, row.sign_a_ru)} · ${inSign(row.planet_b_ru, row.sign_b_ru)}`
-                  : undefined
-              }
-            />
-          ))}
+      {model.personalLine ? (
+        <DsListPanel tone="solid" title={copy.skySheetPersonal} testId="today-sky-sheet-personal">
+          <DsListRow testId="today-sky-sheet-personal-line" title={model.personalLine} />
         </DsListPanel>
       ) : null}
     </DsOverlaySheet>
@@ -104,6 +104,12 @@ export function TodaySkyStrip({ model }: { model: TodaySkyStripModel }) {
   const [open, setOpen] = useState(false);
   const openSheet = useCallback(() => setOpen(true), []);
   const closeSheet = useCallback(() => setOpen(false), []);
+
+  const leadLabel = model.headlineLabel || model.moonLabel;
+  if (!leadLabel) return null;
+  const leadLine = model.headlineLabel
+    ? joinSkyMeta([model.headlineLabel, model.headlineWhen]) || model.headlineLabel
+    : joinSkyMeta([model.moonLabel, model.moonDegree, model.moonWhen ? `с ${model.moonWhen}` : null]) || leadLabel;
 
   return (
     <>
@@ -116,23 +122,30 @@ export function TodaySkyStrip({ model }: { model: TodaySkyStripModel }) {
       >
         <DsEyebrow>{copy.skyStripKicker}</DsEyebrow>
         <span className={layout.skyStripRow}>
-          <BodyInSign body={model.moon.body} sign={model.moon.sign} />
+          {model.headline ? (
+            <span className={layout.skyStripHeadlineArt} aria-hidden>
+              <BodyInSign body={model.headline.planet_a} sign={model.headline.sign_a} />
+              <BodyInSign body={model.headline.planet_b} sign={model.headline.sign_b} />
+            </span>
+          ) : model.moon ? (
+            <BodyInSign body={model.moon.body} sign={model.moon.sign} />
+          ) : null}
           <span className={layout.skyStripCopy}>
             <DsBody size="sm">
-              <span data-testid="today-sky-strip-moon">{model.moonLabel}</span>
+              <span data-testid="today-sky-strip-headline">{leadLine}</span>
             </DsBody>
-            {model.headlineLabel ? (
+            {model.headlineLabel && model.moonLabel ? (
               <DsCaption>
-                <span data-testid="today-sky-strip-headline">{model.headlineLabel}</span>
+                <span data-testid="today-sky-strip-moon">
+                  {joinSkyMeta([
+                    model.moonLabel,
+                    model.moonDegree,
+                    model.moonWhen ? `с ${model.moonWhen}` : null,
+                  ])}
+                </span>
               </DsCaption>
             ) : null}
           </span>
-          {model.headline ? (
-            <span className={layout.skyStripHeadlineArt} aria-hidden>
-              <BodyInSign body={model.headline.planet_a} sign={model.headline.sign_a} size={24} />
-              <BodyInSign body={model.headline.planet_b} sign={model.headline.sign_b} size={24} />
-            </span>
-          ) : null}
         </span>
       </button>
       {open ? <TodaySkySheet model={model} onClose={closeSheet} /> : null}

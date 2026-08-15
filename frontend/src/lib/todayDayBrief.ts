@@ -3,8 +3,8 @@
  * No invent. Honest omit when empty.
  *
  * Presentation (v3.4.2 dashboard):
- *   date · sky strip (Moon in sign + headline) · mode hero · why factors · better cards ·
- *   support ‖ trap · personal · (detail sheet on tap)
+ *   date · sky strip (day weather) · mode hero · why factors · better cards ·
+ *   support ‖ trap · personal · (sky sheet: shared influence + personal overlay)
  * Canon: TODAY_SCREEN_SCENARIO_V3 · EXPLAIN_MEANING_NOT_MECHANISM
  */
 
@@ -67,7 +67,7 @@ export type TodayDayBriefModel = {
   supportDetail: string | null;
   /** Personal bridge */
   personalLine: string | null;
-  /** Moon in sign + headline pair; tap sheet lists the rest. */
+  /** Day weather (Moon + headline) + personal overlay on tap. Not an ephemeris. */
   skyStrip: TodaySkyStripModel | null;
 };
 
@@ -336,6 +336,31 @@ function buildBetterCards(contract: TodayContractV1): TodayDayBetterCard[] {
   return cards.slice(0, 3);
 }
 
+function firstNatalTransitSoft(contract: TodayContractV1): string | null {
+  const beats = contract.day_story?.day_personal?.personal_astrology?.beats;
+  if (!Array.isArray(beats)) return null;
+  for (const beat of beats) {
+    if (String(beat?.kind || "") !== "natal_transit") continue;
+    const line = cleanAmbassadorWhy(beat?.story_ru || beat?.title);
+    if (line) return line;
+  }
+  return null;
+}
+
+/** Natal overlay for the sky sheet. Guest/no-natal = omit. Not development_point. */
+function pickSkyPersonalOverlay(contract: TodayContractV1): string | null {
+  const story = contract.day_story;
+  return (
+    clipCompassProse(
+      cleanAmbassadorWhy(story?.day_scenario?.conflict?.why_personal) ||
+        firstNatalTransitSoft(contract) ||
+        cleanAmbassadorWhy(story?.day_personal?.personal_astrology?.summary_ru) ||
+        cleanAmbassadorWhy(story?.day_personal?.summary_ru),
+      180,
+    ) || null
+  );
+}
+
 export function buildTodayDayBriefModel(input: {
   contract: TodayContractV1;
   dateLabel: string;
@@ -392,7 +417,10 @@ export function buildTodayDayBriefModel(input: {
       180,
     ) || null;
 
-  const skyStrip = input.loading ? null : buildTodaySkyStripModel(input.contract);
+  const skyPersonal = pickSkyPersonalOverlay(input.contract);
+  const skyStrip = input.loading
+    ? null
+    : buildTodaySkyStripModel(input.contract, skyPersonal);
 
   return {
     dateLabel: input.dateLabel,

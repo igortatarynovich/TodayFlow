@@ -45,7 +45,7 @@
 
 **Shared sky vs natal (2026-08-15):** соединения неба (Меркурий × Юпитер и т.п.) задают **погоду дня** — headline, thesis, fallback mood (`thesis.mode` → `visual_mode`). Сферы пользователя (`domain_verdicts` / `top_driver_v1`) остаются наложением транзита на натал.
 
-**Полоска Today (`sky_today`):** каждый день **Луна в знаке** (слой настроения неба) **плюс** одно headline-соединение («кто в каком знаке»). На экране только это. По тапу — полный ряд 10 тел в знаках и мажорные аспекты. Картинки: фото тел (`DsPlanet`) и иллюстрации знаков (`DsZodiac`). Не энциклопедия и не натал.
+**Полоска Today (`sky_today`):** два слоя смысла, не справочник. **Погода дня** — Луна как ежедневный климат (знак + градус; `exact_time_local` только если ингресс сегодня) + одно headline-соединение (orb + `exact_time_local`, если пара сходится сегодня). Окно VOC — если есть timed lunar + ингресс. **Для тебя** — наложение на натал (`why_personal` / `day_personal`), в sheet по тапу; гость = честный omit. **orb ≠ time:** полуденный орб не есть час; без `exact_time_local` часы не пишем ([TODAY_WAVE2_CONTRACT_V1](./today/TODAY_WAVE2_CONTRACT_V1.md) §4). Glance timeline остаётся natal-окнами; shared-часы кормят погоду дня и `day_events_pack.when`. На экране только погода; не выводить ряд из 10 тел и всех аспектов.
 
 **Catalog lunar phase vs Swiss lights:** mean-phase label из `LunarService` (например «новолуние» на 2-й день цикла) **не** конкурирует за `ranked_drivers`, пока Swiss элонгация Солнце–Луна не в пределах 15° от 0° / 90° / 180°. Иначе `priority_hint=ambient`. Реальный четверть-поворот остаётся `primary`.
 

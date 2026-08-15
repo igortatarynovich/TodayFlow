@@ -45,8 +45,12 @@ def test_sky_today_moon_plus_headline_in_sign():
     assert "Луна" not in (nest["headline"]["title_ru"] or "")
     assert "Меркурий во Льве" in nest["headline"]["title_ru"]
     assert "Юпитер во Льве" in nest["headline"]["title_ru"]
-    assert len(nest["positions"]) == 10
-    assert nest["aspects"]
+    assert nest["headline"].get("story_ru")
+    assert nest["headline"].get("exact_time_local") is None
+    assert nest["moon"].get("exact_time_local") is None
+    assert "window" not in nest
+    assert "positions" not in nest
+    assert "aspects" not in nest
 
 
 def test_sky_today_foundation_moon_only_when_sky_empty():
@@ -56,12 +60,67 @@ def test_sky_today_foundation_moon_only_when_sky_empty():
     assert nest is not None
     assert nest["moon"]["sign_ru"] == "Дева"
     assert nest["headline"] is None
-    assert nest["positions"] == []
+    assert "positions" not in nest
 
 
 def test_sky_today_omits_when_empty():
     assert build_sky_today_v1() is None
     assert build_sky_today_v1(celestial_events={}) is None
+
+
+def test_sky_today_attaches_degree_clocks_and_window():
+    bodies = positions_to_sky_bodies(_AUG15)
+    aspects = sky_aspects_from_bodies(bodies)
+    headline = pick_headline_sky(aspects)
+    assert headline is not None
+    headline["exact_time"] = "2026-08-15T11:40:00+03:00"
+    nest = build_sky_today_v1(
+        celestial_events={
+            "sky_positions": bodies,
+            "headline_sky": headline,
+            "ingresses": [
+                {
+                    "planet": "Moon",
+                    "sign": "Virgo",
+                    "exact_time": "2026-08-15T03:14:00+03:00",
+                }
+            ],
+            "void_of_course": {
+                "status": "ok",
+                "starts_at": "2026-08-15T18:10:00+03:00",
+                "ends_at": "2026-08-16T03:14:00+03:00",
+            },
+        },
+        target_date=date(2026, 8, 15),
+    )
+    assert nest is not None
+    assert nest["moon"]["degree"] == 28.7
+    assert nest["moon"]["exact_time_local"] == "2026-08-15T03:14:00+03:00"
+    assert nest["headline"]["exact_time_local"] == "2026-08-15T11:40:00+03:00"
+    assert nest["window"]["kind"] == "void_of_course"
+    assert nest["window"]["starts_at"].startswith("2026-08-15T18:10")
+
+
+def test_sky_today_omits_clock_when_exact_is_not_today():
+    bodies = positions_to_sky_bodies(_AUG15)
+    aspects = sky_aspects_from_bodies(bodies)
+    headline = pick_headline_sky(aspects)
+    assert headline is not None
+    headline["exact_time"] = "2026-08-16T11:40:00+03:00"
+    nest = build_sky_today_v1(
+        celestial_events={
+            "sky_positions": bodies,
+            "headline_sky": headline,
+            "ingresses": [
+                {"planet": "Moon", "exact_time": "2026-08-16T03:14:00+03:00"}
+            ],
+        },
+        target_date=date(2026, 8, 15),
+    )
+    assert nest is not None
+    assert nest["headline"]["exact_time_local"] is None
+    assert nest["moon"]["exact_time_local"] is None
+    assert "window" not in nest
 
 
 def test_attach_nests_includes_sky_today_from_morning():
