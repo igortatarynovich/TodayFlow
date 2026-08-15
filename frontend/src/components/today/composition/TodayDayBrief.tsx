@@ -206,9 +206,7 @@ function TodayDayDashboard({
       <p data-testid="today-day-brief-date">
         <DsCaption>{dateLabel}</DsCaption>
       </p>
-      {skyStrip ? <TodaySkyStrip model={skyStrip} /> : null}
-
-      {/* Open hero — no card plate; moon bleeds right; chips under copy */}
+      {/* Open hero — moon top aligns with title; sky weather between copy and chips */}
       <DsHeroBlock
         testId="today-day-brief-vibe"
         tone="none"
@@ -219,6 +217,7 @@ function TodayDayDashboard({
         detail={heroDetail}
         bleed={moonBleed}
         bleedClassName={showMoon ? layout.heroMoonBleed : undefined}
+        afterCopy={skyStrip ? <TodaySkyStrip model={skyStrip} /> : null}
         chips={
           chips.length ? (
             <DsChipCluster>

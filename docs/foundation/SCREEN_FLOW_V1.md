@@ -251,7 +251,7 @@ Without symbols: indices shift (5 steps). Re-entry: ordinary visit → **0**; de
 ### 2026-08-03 — Today mapping → SCENARIO v3.1
 
 - **§4 rows** replaced to match locked content jobs (no seed leakage · color house = Move · Reading ≤2 no action).
-- Content SoT remains [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md); this file = pager mechanics + index map.
+- Meaning SoT = [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md); presentation map = [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md); this file = pager mechanics + index map.
 
 ### 2026-07-30 — v1.2 (axis lock)
 

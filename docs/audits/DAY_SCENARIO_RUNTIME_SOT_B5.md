@@ -1,9 +1,10 @@
 # Day Scenario Runtime SoT B5
 
-**Status:** LANDED (exclusive meaning SoT; lifecycle GET/refresh unchanged)  
-**Date:** 2026-07-25  
+**Status:** ⚠️ **SUPERSEDED as Meaning SoT (2026-08-15)** — единственный Meaning SoT Today = [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md).  
+Этот файл остаётся **исторической runtime-политикой** текущего кода (exclusive projection until cutover). Не читать как канон смысла дня.  
+**Date:** 2026-07-25 · banner 2026-08-15  
 **Code:** `day_scenario_v1.py` · `day_scenario_project_v1.py` · `day_story_wire_v1.py` · `day_story_v1.py` (unavailable wipe)  
-**Canon:** [DAY_SCENARIO_V1.md](../DAY_SCENARIO_V1.md)  
+**Canon (meaning):** [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md) · **Legacy notes:** [DAY_SCENARIO_V1.md](../DAY_SCENARIO_V1.md)  
 **Prior:** [DAY_SCENARIO_WIRE_PROJECTION_B3.md](./DAY_SCENARIO_WIRE_PROJECTION_B3.md) · [DAY_SCENARIO_UI_PREFERENCE_B4.md](./DAY_SCENARIO_UI_PREFERENCE_B4.md)
 
 ## Architecture impact

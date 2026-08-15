@@ -57,7 +57,7 @@
  * Moon crops past the right edge; copy/chips stay left.
  */
 .heroOpen {
-  padding: var(--tf-ds-space-2, 0.35rem) 0 var(--tf-ds-space-4, 0.75rem);
+  padding: 0 0 var(--tf-ds-space-4, 0.75rem);
   border-radius: 0;
   overflow: visible;
   min-height: clamp(15rem, 40vw, 20rem);
@@ -76,7 +76,7 @@
 /* Kit / Day Brief: celestial sphere cropped past the right edge. */
 .heroMoonBleed {
   right: -18%;
-  top: -16%;
+  top: 0;
   width: min(58%, 17rem);
   opacity: 0.94;
   overflow: visible;
@@ -127,7 +127,13 @@
 .heroCopyFeature {
   max-width: min(22rem, 62%);
   gap: var(--tf-ds-space-3, 0.5rem);
-  padding-top: var(--tf-ds-space-2, 0.35rem);
+  padding-top: 0;
+}
+
+.heroAfterCopy {
+  position: relative;
+  z-index: 1;
+  max-width: min(22rem, 62%);
 }
 
 .heroOpen .heroFooter {

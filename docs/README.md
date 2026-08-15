@@ -48,7 +48,14 @@
 
 ## Today · Profile (experience)
 
-- [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) — **ACCEPTED** experience layer Today
+**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Global Day → Ritual → Personal Day. Не плодить второй канон смысла.
+
+- [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный канон смысла / content pipeline Today**
+- [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) — SoT **расчёта фактов** (не сюжет); питает Global Day
+- [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — **presentation** (блоки экрана); подчиняется pipeline
+- [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual** SoT (§11 Day Atmosphere)
+- [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) — legacy engine notes / I0–I8 hygiene (**не** Meaning SoT)
+- [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) — experience layer (ритуал/goal loop); meaning → pipeline
 - [today/TODAY_WAVE2_EXECUTION_PLAN.md](./today/TODAY_WAVE2_EXECUTION_PLAN.md) — Wave 2 action plan (Tap → Verdict → Glance)
 - [today/TODAY_WAVE2_CONTRACT_V1.md](./today/TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1` + slots (**CONTRACT LOCKED**)
 - [today/TODAY_MOTION_PILOT_V1.md](./today/TODAY_MOTION_PILOT_V1.md) — Today attention motion pilot (TapWidget)
@@ -56,12 +63,10 @@
 - [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) · [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) — **guest → onboarding → First Today** (route contract v2)
 - [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) — контракт, events, prompts (web + iOS)
 - [TODAY_CONTRACT_ASSEMBLER_MAPPING.md](./TODAY_CONTRACT_ASSEMBLER_MAPPING.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md)
-- [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md)
-- [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) — **SoT Source Families** · Sources → Foundation → Story
+- [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) — указатели → pipeline
 - [DAY_SOURCE_REGISTRY.md](./DAY_SOURCE_REGISTRY.md) · [PROFILE_DAY_SOURCE_MATRIX.md](./profile/PROFILE_DAY_SOURCE_MATRIX.md)
-- [PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) · [profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (единая модель личности) · [profile/PROFILE_NATAL_DECODE_DEPTH_V1.md](./profile/PROFILE_NATAL_DECODE_DEPTH_V1.md) — Natal Decode (opt-in depth) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual SoT** (статика + §11 Day Atmosphere; Figma вне контура; v0.3 · 2026-08-03)
+- [PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) · [profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (единая модель личности) · [profile/PROFILE_NATAL_DECODE_DEPTH_V1.md](./profile/PROFILE_NATAL_DECODE_DEPTH_V1.md) — Natal Decode (opt-in depth)
 - [foundation/SCREEN_FLOW_V1.md](./foundation/SCREEN_FLOW_V1.md) — **ScreenFlow** product step pager (transform · Glance-first · landing excluded)
-- [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — ScreenFlow **content jobs** per step (**v3.1 locked 2026-08-03**)
 - [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — **Практики** SoT: цикл состояния · locked need/format · сессия · music layer ([index](./practices/_INDEX.md))
 - [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md)
 - [EXPLAIN_MEANING_NOT_MECHANISM.md](./explainability/EXPLAIN_MEANING_NOT_MECHANISM.md)
@@ -84,12 +89,14 @@
 
 0. [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — **путь пользователя** (после A–E)
 1. [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md) — **канон продукта** (Personal Model, карта, законы, north star)
-2. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) — уровень экрана Today
-3. [profile/PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) — уровень UI Profile
-4. [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entity catalog / build order
-5. [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) — статус работ
+2. **Today смысл / content:** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный**; не DAY_SCENARIO_V1, не B5, не DayModel §10
+3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — experience / presentation (подчинены п.2 для смысла)
+4. [profile/PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) — уровень UI Profile
+5. [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entity catalog / build order
+6. [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) — статус работ
 
-Screen-level и PIM-слой (`pim/`, `today-language/`, `explainability/`) — уточняют unified, не заменяют его.
+Screen-level и PIM-слой (`pim/`, `today-language/`, `explainability/`) — уточняют unified, не заменяют его.  
+**Не плодить** второй «канон дня» / «Meaning SoT» рядом с `TODAY_CONTENT_PIPELINE_V1`.
 
 **Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §11–§15 (Day Atmosphere · DS audit · DS canon `--tf-*` / `Ds*`). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
 

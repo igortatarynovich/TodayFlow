@@ -3,7 +3,8 @@
 **Статус:** канон продуктово-инженерного направления (не маркетинг).  
 **Связь:** [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md), [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md). **Выполнение:** чеклист DE-1…DE-13 и порядок работ — [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) §4.7, §5.3.  
 **Паритет:** web и iOS должны опираться на одни и те же контракты данных и один смысл «дня».  
-**Центральная логика:** [§10 DayModel](#10-daymodel-и-decision-engine-закрытый-канон) — без этого слоя текст и UI не имеют опоры.
+**Today content SoT (LOCKED 2026-08-15):** только [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md). Этот файл — указатель / история DE-*; не параллельный канон смысла.  
+§10 DayModel **не** Meaning SoT Today.
 
 ---
 
@@ -51,7 +52,9 @@
 
 **Правило Day Engine (вход):** в LLM для поверхностей Today уходит **один согласованный пакет входа** (DayContext + версии), а не разрозненные догадки по отдельным полям.
 
-**Правило Day Engine (выход — целевое):** не пытаться получить **одним** широким запросом весь смысл дня и все блоки UI сразу: это вынуждает модель усреднять. Цель — **управляемая цепочка вывода** (узкая задача → ограниченный JSON → следующий шаг опирается на `parent_generation_id` / артефакты предыдущих логов). Текущий `surface=guide` — монолитный компромисс; декомпозиция — см. **§2.1** и **DE-13** в [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) §4.7.
+**Meaning SoT (LOCKED 2026-08-15):** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md) I0 — Global Day / Personal Day. Foundation и Brief — не сюжет. Guide generation — к удалению. LLM не выбирает energy/windows.
+
+**Правило Day Engine (выход — целевое):** не пытаться получить **одним** широким запросом весь смысл дня и все блоки UI сразу: это вынуждает модель усреднять. Цель — **управляемая цепочка вывода** (узкая задача → ограниченный JSON → следующий шаг опирается на `parent_generation_id` / артефакты предыдущих логов). Текущий `surface=guide` — нарушение I0 (второй сюжет). Today: два LLM только формулируют Global / Personal Profile. §2.1 ниже — исторический DE-чеклист, не content SoT.
 
 ### 2.1 Цепочка смыслов (не один промпт на всё)
 

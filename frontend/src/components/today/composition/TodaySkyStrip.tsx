@@ -127,8 +127,6 @@ export function TodaySkyStrip({ model }: { model: TodaySkyStripModel }) {
               <BodyInSign body={model.headline.planet_a} sign={model.headline.sign_a} />
               <BodyInSign body={model.headline.planet_b} sign={model.headline.sign_b} />
             </span>
-          ) : model.moon ? (
-            <BodyInSign body={model.moon.body} sign={model.moon.sign} />
           ) : null}
           <span className={layout.skyStripCopy}>
             <DsBody size="sm">

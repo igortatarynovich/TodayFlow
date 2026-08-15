@@ -1,20 +1,24 @@
 # Today — сценарий страницы (v3.4.2 · шесть блоков)
 
-**Status:** ACTIVE · **Updated 2026-08-10**  
+**Status:** ACTIVE · **Updated 2026-08-15** (Global → Ritual → Personal)  
 **Prior:** v3.4.1 atmosphere+orientation · v3.4 six blocks · v3.3 handoff 12-step · v3.2 story-deck · v3.1 content jobs  
+**Роль:** **presentation only** (нарезка блоков / jobs экрана). **Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md) — этот файл не решает energy, drivers, windows.
 
-## Presentation SoT — шесть блоков (LOCKED) · Block 1 = 2 кадра
+## Presentation map — шесть блоков (LOCKED) · Block 1 = 2 кадра
 
 Продуктовая нарезка Today. **Не расширять** без явного решения owner.  
-12-step handoff v3.3 = **deprecated** как presentation SoT (слишком много кадров = suite, не день).
+12-step handoff v3.3 = **deprecated** как presentation map (слишком много кадров = suite, не день).
+
+**Content layers (из pipeline):** до ритуала = **Global Day**. Ритуал = карта/число, не пересчёт. После = **Personal Day**.
 
 ```text
-1. День          — два кадра:
+1. День          — два кадра (Global Day):
                    (a) Атмосфера = dashboard (не длинная колонка):
                        дата + полоска неба (погода дня: Луна-климат + одно влияние; тап → общее и личное, не эфемериды) ·
                        hero режима (mode + atmosphere + cue) ·
                        «Почему так сегодня» (chips) · «Сегодня лучше» (≤3 карточки) ·
-                       Опора ‖ Ловушка · персональный мост + CTA.
+                       Опора ‖ Ловушка · CTA к ориентиру / ритуалу.
+                       **Не** personal overlay до ритуала (I0).
                        Tap по блоку → detail sheet поверх (без смены ScreenFlow-шага).
                        CTA «Посмотреть мой день» → кадр orientation.
                    (b) Ориентир: trap · do/avoid · энергия (+ cause) · timeline/поток
@@ -47,6 +51,8 @@
 | 4 | Визуальный якорь дня | Цвет + одна строка «зачем» |
 | 5 | Убрать паралич выбора | **≤2** чеклиста (daily streak + 1 точечное); не каталог |
 | 6 | Фиксация намерения → вечерний чекаут | Утро: манифест + **Принимаю**. Вечер: trap-check + итог + **Идти в сон** | Promise suggestions / dayGoal · trap · evening_closure |
+
+**Core vs depth (LOCKED 2026-08-15):** Block **1a+1b** = законченный продукт (DAY → POWER → RISK → MOVE) за 1–2 минуты. Блоки 2–6 = depth/engagement, не обязательны для «день был полезен». Смысл — один Day Scenario ([DAY_SCENARIO_V1](../DAY_SCENARIO_V1.md) I1–I8); UI не генерирует сюжет.
 
 **Запрет на блок 1:** простыни эфемерид, kitchen dumps, «прочитай всё чтобы понять день».  
 Смысл слотов — из live `day_story` / nests; внешние LLM-черновики **не** SoT и не hardcode.

@@ -17,6 +17,8 @@ type DsHeroBlockProps = {
   /** Optional quiet line under body (e.g. lunar caption — not an uppercase eyebrow). */
   detail?: string;
   chips?: ReactNode;
+  /** Between copy and chips (sky weather art — not nested in the title). */
+  afterCopy?: ReactNode;
   bleed?: ReactNode;
   /** Layout class for bleed wrapper (e.g. cropped moon vs small asset). */
   bleedClassName?: string;
@@ -37,6 +39,7 @@ export function DsHeroBlock({
   body,
   detail,
   chips,
+  afterCopy,
   bleed,
   bleedClassName,
   fab,
@@ -47,12 +50,13 @@ export function DsHeroBlock({
   testId,
 }: DsHeroBlockProps) {
   const feature = size === "feature";
+  const asButton = Boolean(onOpen) && !afterCopy;
   return (
     <DsCard
       tone={tone}
       size="default"
-      as={onOpen ? "button" : "article"}
-      onClick={onOpen}
+      as={asButton ? "button" : "article"}
+      onClick={asButton ? onOpen : undefined}
       className={joinClass(c.heroInner, feature ? c.heroFeature : null, className)}
       testId={testId}
     >
@@ -67,6 +71,7 @@ export function DsHeroBlock({
           </DsBody>
         ) : null}
       </div>
+      {afterCopy ? <div className={c.heroAfterCopy}>{afterCopy}</div> : null}
       {(chips || fab) && (
         <div className={c.heroFooter}>
           {chips ? <DsChipCluster>{chips}</DsChipCluster> : <span />}

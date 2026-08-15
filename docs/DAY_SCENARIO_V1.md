@@ -1,78 +1,183 @@
-# DAY_SCENARIO_V1 — драматургический каркас дня
+# DAY_SCENARIO_V1 — legacy engine notes (не Meaning SoT)
 
-**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6.3 + C4 + C4.1 delivery + C5–C5.3 lifecycle landed**  
-**Date:** 2026-07-26  
-**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_dramaturgy_brief_c4.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py` · `day_scenario_eval_pack_c35.py` · `day_scenario_eval_*_c351.py` · `day_scenario_gate_maturity_c36.py`  
-**Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
-**UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
-**Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
-**Native LLM:** [audits/DAY_SCENARIO_NATIVE_LLM_C1.md](./audits/DAY_SCENARIO_NATIVE_LLM_C1.md)  
-**Dramaturgy brief:** [audits/DAY_SCENARIO_DRAMATURGY_BRIEF_C4.md](./audits/DAY_SCENARIO_DRAMATURGY_BRIEF_C4.md)  
-**Day lifecycle:** [audits/DAY_LIFECYCLE_V1.md](./audits/DAY_LIFECYCLE_V1.md) — assemble once · ready_at gate · pre-warm · ready push · system close  
-**Chapters UI:** [audits/DAY_SCENARIO_CHAPTERS_C2.md](./audits/DAY_SCENARIO_CHAPTERS_C2.md)  
-**Everyday quality:** [audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md](./audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md)  
-**Style hook mechanics:** [audits/DAY_SCENARIO_STYLE_HOOK_MECHANICS_V1.md](./audits/DAY_SCENARIO_STYLE_HOOK_MECHANICS_V1.md) · contrast corpus [audits/day_scenario_style_calib_igor_v1/](./audits/day_scenario_style_calib_igor_v1/)  
-**Chorus quality:** [audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md](./audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md)  
-**Personalization:** [audits/DAY_SCENARIO_PERSONALIZATION_C33A.md](./audits/DAY_SCENARIO_PERSONALIZATION_C33A.md)  
-**Sphere selection:** [audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md](./audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md)  
-**Eval pack:** [audits/DAY_SCENARIO_EVAL_PACK_C35.md](./audits/DAY_SCENARIO_EVAL_PACK_C35.md) · [audits/DAY_SCENARIO_EVAL_HARDENING_C351.md](./audits/DAY_SCENARIO_EVAL_HARDENING_C351.md)  
-**Gate maturity:** [audits/DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md) · [audits/DAY_SCENARIO_GATE_CALIBRATION_C361.md](./audits/DAY_SCENARIO_GATE_CALIBRATION_C361.md) · [audits/DAY_SCENARIO_HUMAN_GOLDEN_C362.md](./audits/DAY_SCENARIO_HUMAN_GOLDEN_C362.md)  
-**Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
-**Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
+**Status:** **SUBORDINATE / MIGRATION** — код B1–C5 ещё живёт здесь; **Meaning SoT Today = только** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).  
+**Date:** 2026-08-15  
+**Не использовать этот файл как канон «почему показали это».** При конфликте с pipeline — побеждает pipeline.
+
+**Engine (current code):** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · …  
+**Wire / UI / eval notes:** audits `DAY_SCENARIO_*` (исторические landed phases).  
+**Lifecycle:** [audits/DAY_LIFECYCLE_V1.md](./audits/DAY_LIFECYCLE_V1.md)  
+**Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md)
 
 ---
 
-## Два уровня (не смешивать)
+## Историческая модель (superseded as Meaning SoT)
 
-| Уровень | Вопрос | Что это |
-|---------|--------|---------|
-| **1 — Что происходит** | Какая сегодня история? | **Сценарий** (`day_scenario`): конфликт → сцены → реквизит → UI |
-| **2 — Почему это происходит** | Какие факторы к ней привели? | **Интерпретационный хор**: астрология · карта дня · число дня · натал |
+Ниже — описание **текущего** native/B5 движка (conflict → scenes → chorus).  
+Целевая модель смысла: **Global Day → Ritual → Personal Day** — только в [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).
 
-Уровень 2 **усиливает** сценарий, а не конкурирует с ним.  
-Астрология / таро / нумерология — **язык объяснения одной истории**, не четыре независимых прогноза.
+| Было (B5 / C1) | Стало (pipeline I0) |
+|----------------|---------------------|
+| `day_scenario` = Meaning SoT | Global Day Profile + Personal Day Profile |
+| Хор astro+card+number+natal в одном вызове | Card/number только Personal; Global без них |
+| LLM `visual_mode` | Deterministic `primary_energy` |
 
-```text
-Факты (небо, циклы, натал, карта дня, число дня)
-        ↓
-Dramaturgy brief (C4) — must_dramatize + scene_slots; day_thesis demoted to Act III label
-        ↓
-Единый интерпретационный слой  ← «почему» (Уровень 2)
-        ↓
-Главный конфликт дня           ← «что» (Уровень 1)
-        ↓
-Сцены → Реквизит → UI
-```
-
-**Запрещено:** складывать рядом «гороскоп», «карту дня» и «число дня» как отдельные модули с разными сюжетами.  
-**Нужно:** четыре взгляда на **один** день.
+**Запрещено по-прежнему:** четыре независимых прогноза (гороскоп / карта / число / натал) как разные сюжеты.
 
 ---
 
-## Source of Truth rule
+## Source of Truth rule (актуально)
 
 ```text
-Факты → Dramaturgy brief (C4) → Интерпретационный хор → Главный конфликт → Сцены → Реквизит → UI
+TODAY_CONTENT_PIPELINE_V1  ← единственный Meaning SoT
+        ↑
+этот файл = hygiene I0–I8 + описание legacy code до cutover
 ```
 
-**Сценарий дня (`day_scenario`) — SoT Уровня 1** для пользовательских поверхностей Today.
+**`day_scenario` больше не Meaning SoT.** До cutover — literary/runtime scaffold; props/сцены не имеют права определять energy/windows в обход Global Day Engine.
 
-Ни один практический артефакт не генерируется отдельно от сцены:
+### Legacy runtime (код до cutover)
 
-- цвет / нежелательный цвет
-- цель дня
-- аффирмация
-- настроение / вайб
-- музыка / место / символ
-- юмор / сюжетный намёк
-
-Каждый элемент реквизита обязан иметь **происхождение** (`origin_scene_id` и/или `serves_conflict`).
+Пока native/B5 ещё в проде: практические артефакты (цвет, цель, аффирмация…) не invent вне сцены; provenance `origin_scene_id`.  
+**После cutover** provenance → Global/Personal Profile + enrichments (см. pipeline), не conflict/scenes.
 
 `day_thesis` — **ярлык / проекция Акта III**, не параллельный сюжет.  
 DomainLens / FE sphere cards — **проекции Акта V**.  
 Date-preset color catalog **не** meaning SoT (может остаться seed).
 
 Карта дня и число дня — **не** SoT сюжета и **не** отдельные продукты внутри Today.
+
+---
+
+## Meaning authority invariants (LOCKED 2026-08-15 · I0 refined same day)
+
+**Content pipeline SoT:** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → ритуал → Personal Day.  
+`day_scenario` **не** универсальный Meaning SoT. Максимум literary scaffold над уже зафиксированными Global/Personal Profile.
+
+Повторность: одинаковые входы + одинаковые версии правил → одинаковый смысл. LLM не выбирает energy, drivers, окна.
+
+### I0. Interpretation Layers
+
+Global interpretation completes **without** personal, tarot, or numerology evidence.  
+Personal interpretation **consumes** Global Day and may contextualize it, **never redefine** it.  
+Ritual symbols are overlays and **never** participate in Global Day determination.
+
+Два человека в одной day-location/TZ + одна версия правил → один Global Day.
+
+### I1. Две последовательные authority (не один контейнер)
+
+| Authority | Решает | Не решает |
+|-----------|--------|-----------|
+| **Global Day** | какой день, energy, strength, risk, windows, drivers | натал, карта, число, цели |
+| **Personal Day** | как день касается человека; focus; bridges | global mood/drivers/windows |
+
+Любой user-facing claim трассируется к Global Profile, Personal Overlay, ritual catalog, **или** persist narrative этих слоёв.  
+Запрещено: параллельный LLM-сюжет; fill-empty, вводящий новую тему; FE-астрология; карта/число, переписывающие Global energy.
+
+**Code now:** native C1 всё ещё один вызов (chorus+conflict+natal+card+number) — **нарушение I0**. Kimi timeline — нарушение. Guide generation — нарушение. B5 exclusive overwrite не спасает смешение слоёв.
+
+### I2. Projector MAY transform structure, NEVER meaning
+
+`project_day_scenario_onto_day_story_v1` — lossless mapping Scenario → public slots.  
+Разрешено: переименовать, сложить в legacy aliases, slim chorus для wire.  
+Запрещено: решать, какая сцена primary; склеивать новый prose; выбирать practice vs affirmation; invent evening_closure.
+
+**Code now:** projector picks primary via `role_in_story=="primary"` else first scene; `expect` = concat `what_happens`+`opportunity`; `practice_recommendation` всегда из `props.affirmations[0]`. Это **semantic decisions** — gap до I3 + typed actions.
+
+Canonical public theme field: **`day_story.theme`**. `headline_anchor`, `primary_conflict`, `day_thesis.label_ru`, `global_period` — **deprecated aliases** того же `conflict.title` / `conflict.short_name`. Не три разных semantic concept.
+
+### I3. Scenario несёт `primary_scene_id`
+
+LLM (или deterministic engine) **обязан** выставить `primary_scene_id`, существующий среди `scenes[].scene_id`. Quality gate rejects missing/unknown id.  
+Downstream (expect / trap / do / avoid / color / morning goal / evening trap-check) читает **только** эту сцену + её props. Projector не выбирает primary.
+
+**Code now:** prompt asks `role_in_story: primary|support|caution`; отдельного `primary_scene_id` в native schema **нет**.
+
+### I4. Timeline ∈ Global Day Engine (до любого narrative)
+
+Часы / intensity / `supports[]` / `cautions[]` = geometry + Astrology Canon. Существуют **до** LLM.  
+LLM #1 только формулирует уже готовые окна. Scenario не классифицирует окна.  
+**Запрещён** `day_flow_windows_kimi_v1`.
+
+### I5. Immutable DayPackage identity + version manifest
+
+После успешной native generation пакет дня неизменяем в пределах `(owner, local_date)`:
+
+```text
+identity = owner_key + local_date + scenario_version + evidence_version
+```
+
+Refresh / GET = retrieve + re-project + fill missing **deterministic** surfaces. Не regenerate narrative.  
+Regeneration — только admin / version-migration / explicit owner tool.
+
+Manifest (сохранять на записи, не только в логах): `sources_version` · ephemeris · `scenario_prompt_version` · `scenario_schema_version` · `persona_version` · `projector_version` · `card_catalog_version` · `number_catalog_version` · `color_catalog_version` · `practice_catalog_version` · `today_contract_version`.
+
+**Code now:** `day_story_fingerprint_v1` есть, но включает mood/goals/profile_snapshot/sky_digest/color — смена входа **может** инвалидировать тот же день. `kept_prior_native` при LLM fail. `REGENERATE_ON_MODEL_CHANGE = False`. Полного version manifest на пакете нет. Fingerprint **намеренно** исключает card/number (overlay).
+
+### I6. Timezone / rollover / precompute / invalidation — явные правила
+
+| Вопрос | Правило |
+|--------|---------|
+| Birth TZ / place | Только natal chart (L3). Не «сегодняшний день». |
+| Day TZ / location | Гражданский день Today = **day timezone** (push schedule TZ, иначе explicit request, иначе default). Device TZ не подменяет birth. |
+| Travel same calendar day | Не пересобирает Scenario. Часы timeline/VOC могут пересчитаться как deterministic overlay, если day TZ сменился **до** assemble; после ready — immutable narrative. |
+| Rollover | `local_date` меняется в **local midnight** day TZ. |
+| Precompute | TARGET: пакет **D** готов до midnight D−1. Текущий clock (assemble 03:00–05:00, `ready_at` 05:00, 00:00–ready = `day_not_ready`) — **не** менять без отдельного Architecture impact на [DAY_LIFECYCLE_V1](./audits/DAY_LIFECYCLE_V1.md). |
+| Profile facts mid-day (DOB/time/place added) | Narrative immutable today. Новые L3 overlays (why_personal / natal timeline) — **со следующего** local_date. Исключение: deterministic facts-only surfaces, которые не меняют conflict/scenes. |
+
+### I7. Capability matrix (Today)
+
+Sources → allowed fields → allowed screens. Не один ScreenFlow с пустыми слотами, притворяющимися персональными.
+
+| Depth | Sources | Allowed meaning | Honest omit |
+|-------|---------|-----------------|-------------|
+| **guest** | L1/L2 shared sky, universal day, prebaked card | atmosphere, sky strip, universal number, card base | why_personal, natal timeline, Personal Day, personalized instruction/promise |
+| **general** | + account, no/thin natal | shared story; chorus natal empty | why_personal, deep natal |
+| **light** | DOB (no time/place) | Personal Day; light why_personal; no houses/ASC claims | natal house/angle overlay |
+| **deep** | DOB + time + place | natal activations, why_personal, natal timeline | none of the above if evidence present |
+
+Sphere selection ranks **evidence relevance**, not UI diversity. Нельзя добивать work/people/self ради сетки.
+
+**Number (locked school):** masters **11, 22, 33** ([NUMBER_BASE_V1](./numerology/NUMBER_BASE_V1.md) · DAY_SOURCES_CANON §3). Nested PY→PM→PD. **UI identity:** Personal Day if `birth_date`; else Universal Day. Ritual prebake сегодня зовёт `NumerologyService.daily_number` (YYYYMMDD = universal) — **gap** vs this matrix; исправить к I7, не плодить вторую школу.
+
+**Card identity (already executable):** `sha256(owner_key \| local_date \| "day_card") % 78` + orientation digest. Deck version must enter I5 manifest.
+
+### I8. Provenance на каждом interpretive output
+
+Каждый meaning slot: `source_refs[]` (`origin_scene_id` · `origin_conflict_id` · `evidence_refs` · `source_kind`).  
+Gate: *Every user-facing interpretive claim traces to Scenario or deterministic evidence.* Orphan / untraced → reject or omit, не fallback-гороскоп.
+
+**Code now:** `editorial.slot_provenance` на B5 projection — минимум. Не покрывает timeline Kimi copy, color catalog why beyond `link_to_conflict`, guide payload.
+
+### Enrichment vs meaning (правило)
+
+Deterministic enrichment **может** конкретизировать уже существующий смысл (время окна, имя цвета из каталога, base meaning карты). **Не может** ввести тему, которой нет в Scenario (пример запрета: timeline «лучше обсудить деньги», если денег нет в scenes/conflict).
+
+Color engine / practice engine / number / card: selection + catalog lookup — OK; user-facing *why* — только chorus/props с provenance.
+
+`primary_energy` (тот же закрытый 8-set) считает Global Day Engine. `visual_mode` = UI map от energy (пока 1:1). **LLM не выбирает energy.** Code now: native LLM `visual_mode` — **удалить как decision** (pipeline § overlay).
+
+Fallback без LLM: **structurally poorer** (факты неба + omit сюжета), не второй template Narrative Engine. B5 `deterministic_engine_b5` обязан подчиняться этому (сейчас строит полный scenario spine из ranked facts — **риск** I1/I8).
+
+`practice_recommendation` как generic bucket — **legacy**. Target: typed `daily_actions[]` (`practice` \| `affirmation` \| `reflection` \| `goal`) с `origin_scene_id`. Не смешивать практику и аффирмацию в одном kind.
+
+### Core vs depth (метрика экрана)
+
+**Core answer (1–2 минуты):** Block 1a + 1b = **Global Day** (DAY → POWER → RISK → MOVE).  
+**Ritual:** карта/число — линзы, не пересчёт.  
+**Depth:** Personal Day (instruction / bridges) + color / tasks / loop.  
+Нельзя считать полезность как прохождение всех 6–7 шагов.
+
+---
+
+## Architecture impact (2026-08-15 — I0 + pipeline)
+
+- **SoT before:** I1 = один DayScenario Meaning SoT.
+- **SoT after:** I0 + [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md). Global Day / Personal Day — две authority. Scenario demoted. Energy и windows детерминированы до LLM.
+- **Public contract changed?** target yes — phased nests; no wire bump in this lock.
+- **Migration required?** yes — see pipeline overlay table.
+- **Canon updated?** yes — this section · pipeline doc · DAY_SOURCES §0 · DAY_ENGINE banner · SCENARIO_V3 · tracker.
+- **Backward compatible?** yes cached payloads.
 
 ---
 

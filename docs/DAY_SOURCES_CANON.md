@@ -1,8 +1,8 @@
 # Day Sources Canon
 
-**Статус:** принято (канон — единый Source of Truth для расчётных источников дня).  
-**Версия:** 1.0 (2026-07-24).  
-**Владелец:** Product + Engineering.
+**Статус:** принято — **SoT расчётных Source Families** (что считается в небе/числах). **Не** Meaning SoT сюжета дня.  
+Смысл Today: только [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).  
+**Версия:** 1.0 (2026-07-24) · pointer 2026-08-15.
 
 **Роль:** ответить на вопрос «из чего формируется день» — один раз, для всего движка.  
 Не список фич и не промпт. Это **реестр Source Families**: что считается, откуда, чем питается, куда идёт.
@@ -23,16 +23,24 @@
 ```text
 Day Sources          →  детерминированные расчёты по системам
         ↓
-Day Foundation       →  единый объективный контекст дня (синтез Sources)
+Day Foundation       →  сырьё общего неба (L1/L2) — не сюжет
         ↓
-Day Story            →  интерпретация Foundation → экран Today
+Global Day Engine    →  energy · drivers · windows  (без натала/карты/числа)
+        ↓
+Personal overlay     →  небо × натал  (не переписывает Global)
+        ↓
+Narratives / UI      →  LLM формулирует; Contract показывает
 ```
+
+**Today content SoT:** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md) (I0).  
+Foundation **не** Meaning SoT. «Day Story» как единый контейнер Global+Personal+ритуал — **deprecated**.
 
 | Слой | Что это | Чего это **не** |
 |------|---------|-----------------|
-| **Day Sources** | Отдельные Source Families (астрология, Луна, нумерология, Gan-Zhi, …) | Не текст для UI |
-| **Day Foundation** | Синтез **общего** характера дня из зарегистрированных Sources | Не натал, не «ваш гороскоп», не LLM-проза |
-| **Day Story** | Авторская / LLM интерпретация Foundation (+ Personal) для экрана | Не источник фактов |
+| **Day Sources** | Отдельные Source Families (астрология, Луна, нумерология, …) | Не текст для UI |
+| **Day Foundation** | Нормализованные L1/L2 факты общего неба | Не натал, не сюжет, не LLM-проза |
+| **Global Day** | Детерминированный профиль общего дня | Не карта/число/натал |
+| **Personal Day** | Overlay + формулировка «как это про меня» | Не переопределение Global |
 
 **Правило:** Foundation **не** импортирует знания о Панчанге, HD или Ба-цзы напрямую.  
 Он получает нормализованные payload'ы от Registry. Новая система = новый Source Family + регистрация, без переписывания Foundation.
