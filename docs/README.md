@@ -48,11 +48,13 @@
 
 ## Today · Profile (experience)
 
-**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. UX reveal (GLOBAL → RITUAL → PERSONAL) отдельно от authority. Не плодить второй канон смысла.
+**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation.  
+**Today product cycle (экраны):** [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — TODAY → RITUAL → MY DAY → EVENING. Не плодить второй канон смысла.
 
 - [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный канон смысла / content pipeline Today**
+- [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — **единственный канон продуктового цикла / ScreenFlow Today**
 - [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) — SoT **расчёта фактов** (не сюжет); питает Global Day
-- [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — **presentation** (блоки экрана); подчиняется pipeline
+- [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — **SUPERSEDED** как product map; current-code until cutover
 - [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual** SoT (§11 Day Atmosphere)
 - [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) — legacy engine notes / I0–I8 hygiene (**не** Meaning SoT)
 - [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) — experience layer (ритуал/goal loop); meaning → pipeline
@@ -90,7 +92,7 @@
 0. [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — **путь пользователя** (после A–E)
 1. [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md) — **канон продукта** (Personal Model, карта, законы, north star)
 2. **Today смысл / content:** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный**; не DAY_SCENARIO_V1, не B5, не DayModel §10
-3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — experience / presentation (подчинены п.2 для смысла)
+3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — experience / product cycle (подчинены п.2 для смысла; нарезка экрана — PRODUCT_FLOW)
 4. [profile/PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) — уровень UI Profile
 5. [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entity catalog / build order
 6. [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) — статус работ

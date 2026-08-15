@@ -1,8 +1,10 @@
 # Today — сценарий страницы (v3.4.2 · шесть блоков)
 
-**Status:** ACTIVE · **Updated 2026-08-15** (UX reveal: Global → Ritual → Personal; authority chain in pipeline)  
-**Prior:** v3.4.1 atmosphere+orientation · v3.4 six blocks · v3.3 handoff 12-step · v3.2 story-deck · v3.1 content jobs  
-**Роль:** **presentation only** (нарезка блоков / jobs экрана). **Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md) — этот файл не решает energy, drivers, windows.
+**Status:** SUPERSEDED as product map · **2026-08-15**  
+**Product cycle SoT:** [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) — `today` · `ritual` · `my_day` · `evening`.  
+Этот файл — **карта текущего кода** (1a/1b · color · tasks · loop) до ScreenFlow cutover. Не наращивать шесть блоков.
+
+**Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md).
 
 ## Presentation map — шесть блоков (LOCKED) · Block 1 = 2 кадра
 

@@ -12,14 +12,15 @@
 |--------|-------------------|--------------|
 | Почему пользователю показали *это*? | **этот файл** | — |
 | Как считаются сырые факты неба/числа? | → [DAY_SOURCES_CANON](../DAY_SOURCES_CANON.md) | подчинён: только facts, не сюжет |
-| Как нарезан экран (блоки/свайп)? | → [TODAY_SCREEN_SCENARIO_V3](./TODAY_SCREEN_SCENARIO_V3.md) | presentation only |
+| Как нарезан экран (какие шаги видит человек)? | → [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) | product cycle; не смысл |
 | Как выглядят токены/атмосфера? | → [TODAYFLOW_FOUNDATION_UI](../TODAYFLOW_FOUNDATION_UI.md) | visual only |
 | Старый движок conflict/scenes (код сегодня) | → [DAY_SCENARIO_V1](../DAY_SCENARIO_V1.md) | **миграция / hygiene**, не Meaning SoT |
 | B5 «scenario exclusive» | → [DAY_SCENARIO_RUNTIME_SOT_B5](../audits/DAY_SCENARIO_RUNTIME_SOT_B5.md) | **SUPERSEDED** как meaning; runtime note до cutover |
+| Шесть блоков / 1a+1b (код сегодня) | → [TODAY_SCREEN_SCENARIO_V3](./TODAY_SCREEN_SCENARIO_V3.md) | **SUPERSEDED** как product map; current-code until cutover |
 
 При конфликте формулировок: **побеждает этот файл**. Не заводить второй «канон дня», «Meaning SoT», «Day Story SoT».
 
-**Связь (подчинённые):** DAY_SOURCES · DAY_ENGINE (указатель сюда) · DAY_SCENARIO_V1 (I0–I8 hygiene) · SCENARIO_V3 · AMC (machine tags).
+**Связь (подчинённые):** DAY_SOURCES · DAY_ENGINE (указатель сюда) · DAY_SCENARIO_V1 (I0–I8 hygiene) · [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) (экраны) · SCENARIO_V3 (current-code map) · AMC (machine tags).
 
 ---
 
@@ -250,16 +251,20 @@ Strength + tension day → «силу сегодня лучше направит
 
 UI читает Contract. Не ранжирует, не invent.
 
-**Экран:**
+**Экран (product cycle):** [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) — `today` · `ritual` · `my_day` · `evening`. Не 1a/1b и не шесть блоков.
 
-| Когда | Что |
-|-------|-----|
-| До ритуала | Global Day: атмосфера, тема, сила, риск, небо, timeline |
-| Ритуал | карта + число (линзы) |
-| После ритуала | Personal Day: overlay + bridges + focus/priority/avoid |
+| Когда | Что | Показ |
+|-------|-----|-------|
+| TODAY | Global Day: energy · moon · main driver · strength/risk chips | **без** timeline |
+| RITUAL | карта, затем число (линзы; не пересчёт) | sequential reveal |
+| MY DAY | Personal Day: headline · focus · priority · cautions · personal timeline · optional color/practice/action | timeline **только здесь** |
+| EVENING | благодарность → Gratitude History | не trap-check / не «совпал ли прогноз» |
 
-Core answer = Global 1a+1b (погода дня). Personal = depth после ритуала.  
-Guest: только Global + universal number + card base; personal omit.
+Timeline **authority** = Global Engine `windows[]` (`supports` / `cautions`). **Показ** = Personal Timeline на `my_day` (небо × natal). UI hide на TODAY ≠ mutate.
+
+Guest: TODAY + ritual (universal number + card base) + evening. MY DAY omit.
+
+Core answer = TODAY (погода дня) за 1–2 минуты. MY DAY = «для меня». Ritual = две линзы. Evening = благодарность.
 
 ---
 
@@ -351,5 +356,5 @@ manifest:
 - **SoT after:** этот файл — content pipeline. I0: Global Day / Personal Day. Ownership-таблица смысловых результатов (один decision owner на поле). Downstream non-mutation. Energy и windows детерминированы до LLM. Карта/число — линзы Personal Day. Два LLM только формулируют. GET читает persist.
 - **Public contract changed?** target yes (phased): `global_day` / `personal_day` nests; `primary_energy`; windows with supports/cautions. Нет wire bump в lock-only.
 - **Migration required?** yes — native C1 monolith, Kimi windows, LLM visual_mode, ritual number, guide. Cached days keep old shape until regenerate/admin.
-- **Canon updated?** yes — this file · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · SCENARIO_V3 UX (reveal ≠ authority) · README · tracker.
+- **Canon updated?** yes — this file · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) (экраны) · SCENARIO_V3 superseded as product map · README · tracker.
 - **Backward compatible?** yes API until nests land; old clients ignore.

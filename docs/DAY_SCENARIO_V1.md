@@ -14,7 +14,8 @@
 ## Историческая модель (superseded as Meaning SoT)
 
 Ниже — описание **текущего** native/B5 движка (conflict → scenes → chorus).  
-Целевая модель смысла: **Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation** — только в [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md). UX reveal (GLOBAL → RITUAL → PERSONAL) не есть порядок authority.
+Целевая модель смысла: **Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation** — только в [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).  
+Product cycle: [TODAY_PRODUCT_FLOW_V1](./today/TODAY_PRODUCT_FLOW_V1.md) — TODAY → RITUAL → MY DAY → EVENING. UX reveal ≠ порядок authority. Natal Overlay — backend, не кадр.
 
 | Было (B5 / C1) | Стало (pipeline I0) |
 |----------------|---------------------|
@@ -165,7 +166,7 @@ Fallback без LLM: **structurally poorer** (факты неба + omit сюж�
 
 ### Core vs depth (метрика экрана)
 
-**Core answer (1–2 минуты):** Block 1a + 1b = **Global Day** (DAY → POWER → RISK → MOVE).  
+**Core answer (1–2 минуты):** экран **TODAY** = Global Day (ENERGY → MOON → DRIVER → STRENGTHS → RISKS). MY DAY = персональный слой. Ritual = линзы. Evening = благодарность. [TODAY_PRODUCT_FLOW_V1](./today/TODAY_PRODUCT_FLOW_V1.md).  
 **Ritual:** карта/число — линзы, не пересчёт.  
 **Depth:** Personal Day (instruction / bridges) + color / tasks / loop.  
 Нельзя считать полезность как прохождение всех 6–7 шагов.

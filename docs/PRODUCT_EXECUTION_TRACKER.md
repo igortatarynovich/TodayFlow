@@ -4,7 +4,17 @@ Last updated: 2026-08-15
 Owner: Product + Engineering
 Status: Active working document
 
-**CANON LOCKED (2026-08-15):** **Один Today Meaning SoT** = [TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md). DAY_SCENARIO_V1 / B5 demoted (не канон смысла). SCENARIO_V3 = presentation. DAY_SOURCES = facts only. Не плодить параллельный канон.
+**CANON LOCKED (2026-08-15):** **Один Today Meaning SoT** = [TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md). **Один product cycle** = [TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY → RITUAL → MY DAY → EVENING). SCENARIO_V3 six-block **superseded** as product map. DAY_SCENARIO_V1 / B5 demoted (не канон смысла). DAY_SOURCES = facts only.
+
+## Architecture impact — Today product flow (2026-08-15)
+
+- **SoT before:** presentation = SCENARIO_V3.4 six blocks (1a/1b, color, tasks, loop=promise); timeline could live on Global.
+- **SoT after:** TODAY_PRODUCT_FLOW_V1 — four surfaces. Timeline **shown** only on MY DAY. Evening = gratitude. Meaning unchanged (pipeline I0). Card/number remain lenses.
+- **Public contract changed?** target yes, phased — ScreenFlow ids; gratitude persist; Global UI without timeline.
+- **Migration required?** yes — FE cutover from six/seven steps; evening job.
+- **Canon updated?** yes — TODAY_PRODUCT_FLOW_V1 · pipeline § экран · SCENARIO_V3 banner · SCREEN_FLOW §4 · README · capability TS.
+- **Backward compatible?** yes API until gratitude/cutover; cached days keep old nests.
+- **Next:** ScreenFlow cutover (`today` · `ritual` · `my_day` · `evening`); TODAY dashboard; ritual A→B→C; MY DAY compose; evening gratitude.
 
 ## Architecture impact — Content pipeline + I0 (2026-08-15)
 
