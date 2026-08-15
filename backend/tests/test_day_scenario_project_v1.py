@@ -323,3 +323,43 @@ def test_serve_heal_kills_cached_seed_paste_chorus():
     assert "окрашивает прохождение" not in blob
     assert "какой ролью пройти" not in blob
     assert short.lower() not in blob
+
+
+def test_projector_does_not_guess_first_scene_as_primary():
+    story, scenario, _ = _scenario_and_fallback()
+    scenario = dict(scenario)
+    scenario.pop("primary_scene_id", None)
+    scenes = []
+    for sc in scenario["scenes"]:
+        row = dict(sc)
+        row["role_in_story"] = "support"
+        scenes.append(row)
+    scenario["scenes"] = scenes
+    projected = project_day_scenario_onto_day_story_v1(story, scenario)
+    assert projected["interpretation_status"] == "unavailable"
+    assert projected.get("expect") == ""
+
+
+def test_expect_is_fill_empty_not_concat():
+    story, scenario, _ = _scenario_and_fallback()
+    primary = next(
+        sc for sc in scenario["scenes"] if sc.get("role_in_story") == "primary"
+    )
+    what = str(primary.get("what_happens") or "").strip()
+    opp = str(primary.get("opportunity") or "").strip()
+    assert what and opp and opp not in what
+    projected = project_day_scenario_onto_day_story_v1(story, scenario)
+    assert projected["interpretation_status"] == "ok"
+    assert projected["expect"] == what
+    assert opp not in projected["expect"]
+
+
+def test_do_does_not_pull_second_scene_action():
+    story, scenario, _ = _scenario_and_fallback()
+    scenes = list(scenario["scenes"])
+    assert len(scenes) >= 2
+    second_action = str(scenes[1].get("recommended_action") or "").strip()
+    assert second_action
+    projected = project_day_scenario_onto_day_story_v1(story, scenario)
+    assert projected["interpretation_status"] == "ok"
+    assert second_action not in projected["do"]

@@ -9,11 +9,12 @@ Status: Active working document
 ## Architecture impact — Content pipeline + I0 (2026-08-15)
 
 - **SoT before:** I1–I8 = один DayScenario Meaning SoT.
-- **SoT after:** I0 + pipeline. Global Day / Personal Day. LLM только формулирует persist-once. Карта/число не определяют день.
+- **SoT after:** I0 + pipeline. Ownership-таблица (один decision owner на поле). Downstream non-mutation (enrich/verbalize only). Цепочка: Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. UX reveal (GLOBAL → RITUAL → PERSONAL) отдельно от authority. LLM только формулирует persist-once. Карта/число не определяют день.
 - **Public contract changed?** target yes, phased — lock-only no wire bump.
 - **Migration required?** yes — see pipeline overlay table.
 - **Canon updated?** yes — TODAY_CONTENT_PIPELINE_V1 · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · SCENARIO_V3 · README.
 - **Backward compatible?** yes cached payloads.
+- **Next (unchanged after I2/I3 hygiene):** I0 contract → затем Global Engine.
 
 
 **DONE (OPS+CODE, 2026-08-14):** **K2.6 primary · K3 complex-only** — `NEBIUS_MODEL=moonshotai/Kimi-K2.6` for day/prewarm/routine; `NEBIUS_COMPLEX_MODEL=moonshotai/Kimi-K3` + `resolve_complex_chat_model()` only for CE Stage 2–4, profile disclosure funnel, natal decode. Canon: LLM_QUALITY Nebius section.
@@ -1613,6 +1614,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-15 | Today / Canon | **I2/I3 hygiene** | **CODE** | `primary_scene_id` on native+scenario; gate reject missing/unknown; projector no first-scene pick / no expect concat / do from primary only. Next: I0 contract → Global Engine.
+- 2026-08-15 | Today / Canon | **Pipeline ownership + non-mutation** | **LOCKED** | [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md): один decision owner на поле; downstream enrich/verbalize only; цепочка Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation; UX reveal ≠ authority. Next: I2/I3 hygiene → I0 contract → Global Engine.
 - 2026-08-14 | Design System | **Form Kit full-sheet SoT** | **LIVE (FE)** | Chips statusTone=`--tf-semantic-*` only; `DsLinearProgress` + semantic `DsWaveMeter`; button `lg`; `DsSectionHeader` composition; quote highlight; `/design-system` 100% sheet specimen; DayBrief data-backed only + `DsCelestialMoon`. Next = Practices zone migration.
 - 2026-08-14 | Ops / LLM | **K2.6 primary · K3 complex-only** | **CODE→deploy** | `NEBIUS_MODEL=K2.6`; `NEBIUS_COMPLEX_MODEL=K3` for CE 2–4 / profile funnel / natal decode only. Day/prewarm stay on K2.6.
 - 2026-08-04 | Design System | **Day shell chrome fix** | **DONE (LIVE)** | PR #14 merged · frontend rebuild. Day-mode = shell routes; evening phase gated; sidebar stretch.

@@ -139,6 +139,7 @@ from todayflow_backend.services.day_scenario_v1 import (
     _month_from_ritual_or_today,
     build_scenario_foundation_v1,
     build_scenario_props_v1,
+    resolve_primary_scene_id_v1,
     validate_day_scenario_v1,
 )
 
@@ -154,7 +155,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c4.0"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c4.1"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -249,6 +250,7 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
       "required_movement": "a|b"
     }
   },
+  "primary_scene_id": "scene.relationships",
   "scenes": [
     {
       "scene_id": "scene.relationships",
@@ -301,6 +303,7 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
 Правила (жёстко):
 - одна история, один conflict;
 - 2–4 scenes; каждая связана с conflict (setup/opportunity/trap про тот же сюжет);
+- primary_scene_id — ровно один scene_id из scenes[]; это решение, какая сцена primary. Не опускай поле;
 - астрология объясняет внешнюю среду; карта — архетип; число — ритм; натал — личную реакцию;
 - ни один голос хора не создаёт отдельный прогноз или вторую историю;
 - формулировки вроде «Луна в Рыбах» желательны, если сразу переводятся в человеческое проявление и связаны с conflict;
@@ -562,11 +565,12 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
             continue
         seen_spheres.add(sphere)
         scene_id = _slug_scene_id(sc.get("scene_id"), sphere, idx)
+        role_raw = sc.get("role_in_story")
         scenes_out.append(
             {
                 "scene_id": scene_id,
                 "sphere": sphere,
-                "role_in_story": _clip(sc.get("role_in_story") or ("primary" if idx == 0 else "support"), 32),
+                "role_in_story": _clip(role_raw, 32) if role_raw else "",
                 "setup": _clip(sc.get("setup") or sc.get("what_happens"), 320),
                 "why_sphere": _clip(sc.get("why_sphere") or sc.get("why"), 220),
                 "opportunity": _clip(sc.get("opportunity"), 280),
@@ -608,6 +612,12 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
     if conflict_in.get("required_movement") and not conflict_pers.get("required_movement"):
         conflict_pers["required_movement"] = _clip(conflict_in.get("required_movement"), 16)
 
+    declared_pid = str(src.get("primary_scene_id") or "").strip()
+    primary_scene_id = declared_pid or resolve_primary_scene_id_v1(
+        scenes_out,
+        declared=None,
+    )
+
     return {
         "schema_version": NATIVE_LLM_SCHEMA_VERSION,
         "personalization_depth": depth,
@@ -635,6 +645,7 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
             "personalization": conflict_pers,
         },
         "scenes": scenes_out[:4],
+        "primary_scene_id": primary_scene_id,
         "prop_material": {
             "color_scene_candidates": [
                 str(x).strip() for x in _as_list(props_in.get("color_scene_candidates")) if str(x).strip()
@@ -736,6 +747,12 @@ def validate_native_scenario_llm_c1(
             # Soft: require chorus_refs include conflict
             if "conflict" not in _as_list(sc.get("chorus_refs")):
                 errors.append(f"scene_missing_conflict_link:{sid or sphere}")
+
+    pid = str(payload.get("primary_scene_id") or "").strip()
+    if not pid:
+        errors.append("primary_scene_id_missing")
+    elif pid not in scene_ids:
+        errors.append("primary_scene_id_unknown")
 
     # Evidence refs — only when we know the allow-list
     if allowed_evidence_ids:
@@ -908,7 +925,7 @@ def native_llm_to_day_scenario_v1(
 
     scenes: list[dict[str, Any]] = []
     why_today = str(conflict_n.get("why_today") or "").strip().lower()
-    for idx, sc in enumerate(_as_list(norm.get("scenes"))):
+    for sc in _as_list(norm.get("scenes")):
         if not isinstance(sc, dict):
             continue
         sphere = str(sc.get("sphere") or "")
@@ -923,7 +940,7 @@ def native_llm_to_day_scenario_v1(
                 "scene_id": sc.get("scene_id"),
                 "sphere": sphere,
                 "sphere_label_ru": _SPHERE_LABEL_RU.get(sphere, sphere),
-                "role_in_story": sc.get("role_in_story") or ("primary" if idx == 0 else "support"),
+                "role_in_story": sc.get("role_in_story") or "",
                 "what_happens": sc.get("setup"),
                 # Reading step 1 — why this sphere today (not Plot why_arose).
                 "why": why_sphere,
@@ -945,12 +962,17 @@ def native_llm_to_day_scenario_v1(
     day_favorable = day_favorable_from_activations(
         foundation.get("personal_natal_activations") or []
     )
+    primary_scene_id = resolve_primary_scene_id_v1(
+        scenes,
+        declared=norm.get("primary_scene_id"),
+    )
     props = build_scenario_props_v1(
         conflict=conflict,
         scenes=scenes,
         chorus=chorus,
         day_favorable=day_favorable,
         target_month=_month_from_ritual_or_today(ritual_context, foundation),
+        primary_scene_id=primary_scene_id,
     )
     # Attach LLM prop_material as diagnostics only (not SoT for final color)
     props["prop_material_llm"] = norm.get("prop_material")
@@ -979,6 +1001,8 @@ def native_llm_to_day_scenario_v1(
     }
     if visual_mode:
         out["visual_mode"] = visual_mode
+    if primary_scene_id:
+        out["primary_scene_id"] = primary_scene_id
     return out
 
 

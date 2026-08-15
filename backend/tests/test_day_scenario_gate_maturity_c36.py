@@ -131,6 +131,8 @@ def test_hard_scenario_validate_markers():
         "verbatim_seed_leak:'тащить старое или отпустить'@conflict.short_name+chorus.day_number.voice"
     )
     assert is_hard_scenario_validate_error("scene_serves_conflict_not_opaque:scene.relationships")
+    assert is_hard_scenario_validate_error("primary_scene_id_missing")
+    assert is_hard_scenario_validate_error("primary_scene_id_unknown")
 
 
 def test_seed_kill_codes_are_hard_retry():
@@ -153,6 +155,8 @@ def test_hard_native_validate_markers():
     assert is_hard_native_validate_error("orphan_prop_goal:scene_x")
     assert is_hard_native_validate_error("scenes_too_few")
     assert is_hard_native_validate_error("scene_missing_setup:s1")
+    assert is_hard_native_validate_error("primary_scene_id_missing")
+    assert is_hard_native_validate_error("primary_scene_id_unknown")
     assert not is_hard_native_validate_error("scenes_too_many")
     assert not is_hard_native_validate_error("day_card_missing_conflict_link")
     assert not is_hard_native_validate_error("scene_missing_conflict_link:s1")

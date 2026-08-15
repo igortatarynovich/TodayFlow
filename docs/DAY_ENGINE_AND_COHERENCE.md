@@ -52,7 +52,7 @@
 
 **Правило Day Engine (вход):** в LLM для поверхностей Today уходит **один согласованный пакет входа** (DayContext + версии), а не разрозненные догадки по отдельным полям.
 
-**Meaning SoT (LOCKED 2026-08-15):** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md) I0 — Global Day / Personal Day. Foundation и Brief — не сюжет. Guide generation — к удалению. LLM не выбирает energy/windows.
+**Meaning SoT (LOCKED 2026-08-15):** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md) I0 — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. UX reveal отдельно от authority. Foundation и Brief — не сюжет. Guide generation — к удалению. LLM не выбирает energy/windows.
 
 **Правило Day Engine (выход — целевое):** не пытаться получить **одним** широким запросом весь смысл дня и все блоки UI сразу: это вынуждает модель усреднять. Цель — **управляемая цепочка вывода** (узкая задача → ограниченный JSON → следующий шаг опирается на `parent_generation_id` / артефакты предыдущих логов). Текущий `surface=guide` — нарушение I0 (второй сюжет). Today: два LLM только формулируют Global / Personal Profile. §2.1 ниже — исторический DE-чеклист, не content SoT.
 

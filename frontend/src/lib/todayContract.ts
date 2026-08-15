@@ -466,12 +466,13 @@ export type TodayContractDayStoryV1 = {
    * Full day_scenario nest (B3+). Prefer for conflict/scenes/props when present;
    * public slots remain projections.
    */
-  day_scenario?: {
+    day_scenario?: {
     contract_version?: string;
     version?: string;
     runtime_sot?: boolean;
     ready?: boolean;
     generation_source?: string;
+    primary_scene_id?: string;
     conflict?: {
       short_name?: string;
       why_arose?: string;

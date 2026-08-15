@@ -27,9 +27,13 @@ Day Foundation       →  сырьё общего неба (L1/L2) — не сю
         ↓
 Global Day Engine    →  energy · drivers · windows  (без натала/карты/числа)
         ↓
-Personal overlay     →  небо × натал  (не переписывает Global)
+Natal Overlay        →  небо × натал  (не переписывает Global)
         ↓
-Narratives / UI      →  LLM формулирует; Contract показывает
+Ritual lenses        →  карта/число (не определяют день)
+        ↓
+Personal Day         →  contextualize, never redefine
+        ↓
+Presentation         →  LLM формулирует; Contract показывает
 ```
 
 **Today content SoT:** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md) (I0).  

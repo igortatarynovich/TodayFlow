@@ -159,10 +159,14 @@ function resolveVisualMode(contract: TodayContractV1): DayVisualMode | null {
 function sceneAccents(contract: TodayContractV1): string[] {
   const scenes = contract.day_story?.day_scenario?.scenes;
   if (!Array.isArray(scenes) || !scenes.length) return [];
-  const primary = scenes.filter((s) => String(s.role_in_story || "").toLowerCase() === "primary");
-  const pool = primary.length ? primary : scenes;
+  const pid = String(contract.day_story?.day_scenario?.primary_scene_id || "").trim();
+  const byId = pid ? scenes.filter((s) => String(s.scene_id || "") === pid) : [];
+  const primary =
+    byId.length > 0
+      ? byId
+      : scenes.filter((s) => String(s.role_in_story || "").toLowerCase() === "primary");
   return uniqTrim(
-    pool.map((s) => s.sphere_label_ru || s.sphere || null),
+    primary.map((s) => s.sphere_label_ru || s.sphere || null),
     3,
   );
 }

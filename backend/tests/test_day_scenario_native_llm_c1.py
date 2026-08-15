@@ -167,6 +167,7 @@ def _valid_native(**overrides):
         },
         "visual_mode": "tension",
         "generation_notes": "test",
+        "primary_scene_id": "scene.relationships",
     }
     base.update(overrides)
     return base
@@ -401,3 +402,26 @@ def test_scenes_too_few_rejected():
     native["scenes"] = native["scenes"][:1]
     errors = validate_native_scenario_llm_c1(normalize_native_scenario_llm_c1(native))
     assert "scenes_too_few" in errors
+
+
+def test_primary_scene_id_unknown_rejected():
+    native = _valid_native()
+    native["primary_scene_id"] = "scene.does-not-exist"
+    errors = validate_native_scenario_llm_c1(normalize_native_scenario_llm_c1(native))
+    assert "primary_scene_id_unknown" in errors
+
+
+def test_primary_scene_id_missing_rejected_without_unique_role():
+    native = _valid_native()
+    native.pop("primary_scene_id", None)
+    for sc in native["scenes"]:
+        sc["role_in_story"] = "support"
+    errors = validate_native_scenario_llm_c1(normalize_native_scenario_llm_c1(native))
+    assert "primary_scene_id_missing" in errors
+
+
+def test_normalize_fills_primary_scene_id_from_unique_role():
+    native = _valid_native()
+    native.pop("primary_scene_id", None)
+    norm = normalize_native_scenario_llm_c1(native)
+    assert norm.get("primary_scene_id") == "scene.relationships"

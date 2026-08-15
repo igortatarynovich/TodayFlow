@@ -1,6 +1,6 @@
 # Today — сценарий страницы (v3.4.2 · шесть блоков)
 
-**Status:** ACTIVE · **Updated 2026-08-15** (Global → Ritual → Personal)  
+**Status:** ACTIVE · **Updated 2026-08-15** (UX reveal: Global → Ritual → Personal; authority chain in pipeline)  
 **Prior:** v3.4.1 atmosphere+orientation · v3.4 six blocks · v3.3 handoff 12-step · v3.2 story-deck · v3.1 content jobs  
 **Роль:** **presentation only** (нарезка блоков / jobs экрана). **Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md) — этот файл не решает energy, drivers, windows.
 
@@ -9,7 +9,7 @@
 Продуктовая нарезка Today. **Не расширять** без явного решения owner.  
 12-step handoff v3.3 = **deprecated** как presentation map (слишком много кадров = suite, не день).
 
-**Content layers (из pipeline):** до ритуала = **Global Day**. Ритуал = карта/число, не пересчёт. После = **Personal Day**.
+**Content layers (из pipeline):** до ритуала = **Global Day**. Ритуал = карта/число, не пересчёт. После = **Personal Day**. Это **UX reveal**, не порядок authority (Natal Overlay считает backend между Global и Personal; отдельного кадра нет).
 
 ```text
 1. День          — два кадра (Global Day):

@@ -14,7 +14,7 @@
 ## Историческая модель (superseded as Meaning SoT)
 
 Ниже — описание **текущего** native/B5 движка (conflict → scenes → chorus).  
-Целевая модель смысла: **Global Day → Ritual → Personal Day** — только в [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).
+Целевая модель смысла: **Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation** — только в [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md). UX reveal (GLOBAL → RITUAL → PERSONAL) не есть порядок authority.
 
 | Было (B5 / C1) | Стало (pipeline I0) |
 |----------------|---------------------|
@@ -51,7 +51,7 @@ Date-preset color catalog **не** meaning SoT (может остаться seed
 
 ## Meaning authority invariants (LOCKED 2026-08-15 · I0 refined same day)
 
-**Content pipeline SoT:** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → ритуал → Personal Day.  
+**Content pipeline SoT:** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation.  
 `day_scenario` **не** универсальный Meaning SoT. Максимум literary scaffold над уже зафиксированными Global/Personal Profile.
 
 Повторность: одинаковые входы + одинаковые версии правил → одинаковый смысл. LLM не выбирает energy, drivers, окна.
@@ -63,6 +63,8 @@ Personal interpretation **consumes** Global Day and may contextualize it, **neve
 Ritual symbols are overlays and **never** participate in Global Day determination.
 
 Два человека в одной day-location/TZ + одна версия правил → один Global Day.
+
+Natal Overlay — детерминированный шаг цепочки (небо × натал) **между** Global и Personal. **Не** третья interpretation authority и **не** экран.
 
 ### I1. Две последовательные authority (не один контейнер)
 
@@ -82,7 +84,7 @@ Ritual symbols are overlays and **never** participate in Global Day determinatio
 Разрешено: переименовать, сложить в legacy aliases, slim chorus для wire.  
 Запрещено: решать, какая сцена primary; склеивать новый prose; выбирать practice vs affirmation; invent evening_closure.
 
-**Code now:** projector picks primary via `role_in_story=="primary"` else first scene; `expect` = concat `what_happens`+`opportunity`; `practice_recommendation` всегда из `props.affirmations[0]`. Это **semantic decisions** — gap до I3 + typed actions.
+**Code now:** projector maps `primary_scene_id` (fill-empty from unique `role_in_story==primary` on cached packages). Нет first-scene guess. `expect` = `what_happens` (fill-empty `opportunity`), без concat. `do` только из primary scene + её goals. `practice_recommendation.kind` с пропа, без выбора practice vs affirmation.
 
 Canonical public theme field: **`day_story.theme`**. `headline_anchor`, `primary_conflict`, `day_thesis.label_ru`, `global_period` — **deprecated aliases** того же `conflict.title` / `conflict.short_name`. Не три разных semantic concept.
 
@@ -91,7 +93,7 @@ Canonical public theme field: **`day_story.theme`**. `headline_anchor`, `primary
 LLM (или deterministic engine) **обязан** выставить `primary_scene_id`, существующий среди `scenes[].scene_id`. Quality gate rejects missing/unknown id.  
 Downstream (expect / trap / do / avoid / color / morning goal / evening trap-check) читает **только** эту сцену + её props. Projector не выбирает primary.
 
-**Code now:** prompt asks `role_in_story: primary|support|caution`; отдельного `primary_scene_id` в native schema **нет**.
+**Code now:** native schema несёт `primary_scene_id`; gate rejects missing/unknown. Fill-empty из unique `role_in_story==primary` на cached/normalize. Projector не выбирает primary.
 
 ### I4. Timeline ∈ Global Day Engine (до любого narrative)
 

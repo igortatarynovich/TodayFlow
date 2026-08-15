@@ -319,7 +319,7 @@ manifest:
 | `deterministic_engine_b5` полный spine | **упростить** | Poorer fallback = Global Facts + omit narrative, не второй гороскоп |
 | `day_story` theme aliases | **упростить** | `theme` ← Global headline; personal slots отдельно |
 | `practice_recommendation` bucket | **упростить** | typed `daily_actions[]` |
-| I2/I3 (`primary_scene_id`, projector) | **оставить как hygiene** | Не цементируют Scenario-как-SoT, если Scenario demoted |
+| I2/I3 (`primary_scene_id`, projector) | **hygiene landed 2026-08-15** | Не цементируют Scenario-как-SoT. Projector structure-only; gate rejects missing/unknown id |
 | I1 «один DayScenario SoT» | **заменён I0** | Два authority в одной причинной цепочке |
 | DayModel §10 (Vector/Tension/…) | **не Today content SoT** | Не конкурирует с Global/Personal Profile |
 | Capability / ScreenFlow matrix | **оставить, дописать** | Guest видит только Global |
@@ -351,5 +351,5 @@ manifest:
 - **SoT after:** этот файл — content pipeline. I0: Global Day / Personal Day. Ownership-таблица смысловых результатов (один decision owner на поле). Downstream non-mutation. Energy и windows детерминированы до LLM. Карта/число — линзы Personal Day. Два LLM только формулируют. GET читает persist.
 - **Public contract changed?** target yes (phased): `global_day` / `personal_day` nests; `primary_energy`; windows with supports/cautions. Нет wire bump в lock-only.
 - **Migration required?** yes — native C1 monolith, Kimi windows, LLM visual_mode, ritual number, guide. Cached days keep old shape until regenerate/admin.
-- **Canon updated?** yes — this file · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · SCENARIO_V3 UX · README · tracker.
+- **Canon updated?** yes — this file · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · SCENARIO_V3 UX (reveal ≠ authority) · README · tracker.
 - **Backward compatible?** yes API until nests land; old clients ignore.

@@ -48,7 +48,7 @@
 
 ## Today · Profile (experience)
 
-**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Global Day → Ritual → Personal Day. Не плодить второй канон смысла.
+**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. UX reveal (GLOBAL → RITUAL → PERSONAL) отдельно от authority. Не плодить второй канон смысла.
 
 - [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный канон смысла / content pipeline Today**
 - [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) — SoT **расчёта фактов** (не сюжет); питает Global Day

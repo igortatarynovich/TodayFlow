@@ -1144,12 +1144,53 @@ def _amplify_tags_for_trap(trap: str, force_a: str) -> set[str]:
     return tags
 
 
-def _pick_primary_scene(scenes: list[dict[str, Any]]) -> dict[str, Any] | None:
+def resolve_primary_scene_id_v1(
+    scenes: list[Any] | None,
+    *,
+    declared: Any = None,
+) -> str | None:
+    """I3 identity: declared id, else unique role_in_story==primary. Never first-scene guess."""
+    rows = [sc for sc in (scenes or []) if isinstance(sc, dict)]
+    ids = {str(sc.get("scene_id") or "").strip() for sc in rows if str(sc.get("scene_id") or "").strip()}
+    declared_s = str(declared or "").strip()
+    if declared_s:
+        return declared_s if declared_s in ids else None
+    primaries = [
+        str(sc.get("scene_id") or "").strip()
+        for sc in rows
+        if str(sc.get("role_in_story") or "").strip().lower() == "primary"
+        and str(sc.get("scene_id") or "").strip()
+    ]
+    if len(primaries) == 1:
+        return primaries[0]
+    return None
+
+
+def apply_primary_scene_id_v1(scenario: dict[str, Any] | None) -> dict[str, Any]:
+    """Fill-empty primary_scene_id onto a scenario copy. Does not invent or overwrite."""
+    if not isinstance(scenario, dict):
+        return {}
+    out = dict(scenario)
+    declared = str(out.get("primary_scene_id") or "").strip()
+    if declared:
+        out["primary_scene_id"] = declared
+        return out
+    sid = resolve_primary_scene_id_v1(_as_list(out.get("scenes")), declared=None)
+    if sid:
+        out["primary_scene_id"] = sid
+    return out
+
+
+def _pick_primary_scene(
+    scenes: list[dict[str, Any]],
+    *,
+    primary_scene_id: Any = None,
+) -> dict[str, Any] | None:
+    sid = resolve_primary_scene_id_v1(scenes, declared=primary_scene_id)
+    if not sid:
+        return None
     for sc in scenes:
-        if isinstance(sc, dict) and sc.get("role_in_story") == "primary":
-            return sc
-    for sc in scenes:
-        if isinstance(sc, dict):
+        if isinstance(sc, dict) and str(sc.get("scene_id") or "").strip() == sid:
             return sc
     return None
 
@@ -1190,6 +1231,7 @@ def build_scenario_props_v1(
     chorus: dict[str, Any] | None = None,
     day_favorable: bool = False,
     target_month: int | None = None,
+    primary_scene_id: Any = None,
 ) -> dict[str, Any]:
     """Derive color/avoid/goals/affirmations/humor from scenes (B2).
 
@@ -1205,7 +1247,7 @@ def build_scenario_props_v1(
         score_color_for_needs,
     )
 
-    primary = _pick_primary_scene(scenes)
+    primary = _pick_primary_scene(scenes, primary_scene_id=primary_scene_id)
     if not primary:
         return empty_props_v1()
 
@@ -1470,15 +1512,17 @@ def build_day_scenario_v1(
     day_favorable = day_favorable_from_activations(
         foundation.get("personal_natal_activations") or []
     )
+    primary_scene_id = resolve_primary_scene_id_v1(scenes)
     props = build_scenario_props_v1(
         conflict=conflict,
         scenes=scenes,
         chorus=chorus,
         day_favorable=day_favorable,
         target_month=_month_from_ritual_or_today(ritual_context, foundation),
+        primary_scene_id=primary_scene_id,
     )
     ready = bool(scenes) and bool(conflict.get("short_name"))
-    return {
+    out = {
         "contract_version": DAY_SCENARIO_V1_CONTRACT,
         "version": DAY_SCENARIO_V1_VERSION,
         "runtime_sot": True,
@@ -1494,6 +1538,9 @@ def build_day_scenario_v1(
             "note": "Legacy day_story slots are projections only; not meaning inputs.",
         },
     }
+    if primary_scene_id:
+        out["primary_scene_id"] = primary_scene_id
+    return out
 
 
 def _word_ngrams(text: str, *, min_words: int = 6) -> set[str]:
@@ -1655,6 +1702,14 @@ def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
         do = str(sc.get("recommended_action") or "")
         if re.search(r"\bТемп:\s*", do):
             errors.append(f"scene_tempo_paste:{sc.get('scene_id')}")
+
+    declared_primary = str(scenario.get("primary_scene_id") or "").strip()
+    if scenes:
+        resolved_primary = resolve_primary_scene_id_v1(scenes, declared=declared_primary or None)
+        if declared_primary and declared_primary not in scene_ids:
+            errors.append("primary_scene_id_unknown")
+        elif not resolved_primary:
+            errors.append("primary_scene_id_missing")
 
     props = _as_dict(scenario.get("props"))
     if props.get("status") == "ok":

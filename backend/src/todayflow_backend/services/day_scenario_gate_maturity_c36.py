@@ -215,6 +215,8 @@ HARD_SCENARIO_VALIDATE_ERRORS = frozenset(
         "chorus:seed_paste_bridge",
         # Malformed opposing_forces type (not incomplete pair — that is healable).
         "conflict_opposing_forces_not_dict",
+        "primary_scene_id_missing",
+        "primary_scene_id_unknown",
     }
 )
 
@@ -234,12 +236,14 @@ HARD_NATIVE_VALIDATE_MARKERS = (
     "bad_schema_version",
     "legacy_keys:",
     "conflict_missing_",
-    "scenes_too_few",  # content fullness — keep hard; scenes_too_many is heal-trim
+        "scenes_too_few",  # content fullness — keep hard; scenes_too_many is heal-trim
     "scene_not_dict",
     "scene_bad_sphere:",
     "scene_missing_id",
     "scene_duplicate_id:",
     "scene_missing_setup:",
+    "primary_scene_id_missing",
+    "primary_scene_id_unknown",
     "unknown_evidence:",
     "orphan_prop_",
 )
@@ -265,7 +269,7 @@ def apply_soft_native_heals(payload: dict[str, Any] | None) -> tuple[dict[str, A
     Does **not** invent meaning: only opaque «тон дня» anchors, trim extras,
     or clear incomplete force pairs.
     """
-    from todayflow_backend.services.day_scenario_v1 import _day_tone_anchor
+    from todayflow_backend.services.day_scenario_v1 import _day_tone_anchor, resolve_primary_scene_id_v1
 
     if not isinstance(payload, dict):
         return {}, []
@@ -338,15 +342,29 @@ def apply_soft_native_heals(payload: dict[str, Any] | None) -> tuple[dict[str, A
         if scenes_changed:
             out["scenes"] = new_scenes
 
+    if not str(out.get("primary_scene_id") or "").strip():
+        filled = resolve_primary_scene_id_v1(out.get("scenes") if isinstance(out.get("scenes"), list) else [])
+        if filled:
+            out["primary_scene_id"] = filled
+            heals.append("primary_scene_id_missing")
+
     return out, heals
 
 
 def apply_soft_scenario_heals(scenario: dict[str, Any] | None) -> tuple[dict[str, Any], list[str]]:
     """Auto-fix cheap scenario validate misses (props / incomplete forces)."""
+    from todayflow_backend.services.day_scenario_v1 import resolve_primary_scene_id_v1
+
     if not isinstance(scenario, dict):
         return {}, []
     out = dict(scenario)
     heals: list[str] = []
+
+    if not str(out.get("primary_scene_id") or "").strip():
+        filled = resolve_primary_scene_id_v1(out.get("scenes") if isinstance(out.get("scenes"), list) else [])
+        if filled:
+            out["primary_scene_id"] = filled
+            heals.append("primary_scene_id_missing")
 
     conflict = dict(out.get("conflict") or {}) if isinstance(out.get("conflict"), dict) else {}
     forces = conflict.get("opposing_forces")
