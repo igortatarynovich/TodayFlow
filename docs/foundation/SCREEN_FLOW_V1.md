@@ -163,7 +163,7 @@ Meaning events: см. [TODAY_PERSONALIZATION_CORE.md](../TODAY_PERSONALIZATION_C
 
 Детали — тап / sheet, не новые шаги. Timeline **не** на `today`. Color / practice / action — карточки внутри `my_day`.
 
-**Current code** still mounts six/seven blocks ([TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md)) until cutover. Do not add steps to the six-block map.
+**Code (2026-08-15):** `TodayProductScreenFlow.tsx` mounts these four ids. Guest/general omit `my_day`. [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md) remains a historical six-block map.
 
 **v3.3 12-step handoff — deprecated.** Six-block v3.4 — superseded as product map.
 
@@ -252,6 +252,8 @@ Guest must never see empty personal slots pretending to be “your day”.
 
 - **SoT:** [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md) — TODAY → RITUAL → MY DAY → EVENING.
 - Six-block v3.4 superseded as product map; pager mechanics unchanged.
+- **FE cutover:** `TodayProductScreenFlow` ids `today` · `ritual` · `my_day` · `evening`. Guest omits `my_day`. Timeline only on `my_day`. Evening = gratitude.
+- **First Today:** intent/reality gate, then the same four surfaces (capability). Not a separate conversation cycle.
 
 ### 2026-08-15 — Capability matrix (§4.1)
 

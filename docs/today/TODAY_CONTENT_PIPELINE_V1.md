@@ -16,11 +16,11 @@
 | Как выглядят токены/атмосфера? | → [TODAYFLOW_FOUNDATION_UI](../TODAYFLOW_FOUNDATION_UI.md) | visual only |
 | Старый движок conflict/scenes (код сегодня) | → [DAY_SCENARIO_V1](../DAY_SCENARIO_V1.md) | **миграция / hygiene**, не Meaning SoT |
 | B5 «scenario exclusive» | → [DAY_SCENARIO_RUNTIME_SOT_B5](../audits/DAY_SCENARIO_RUNTIME_SOT_B5.md) | **SUPERSEDED** как meaning; runtime note до cutover |
-| Шесть блоков / 1a+1b (код сегодня) | → [TODAY_SCREEN_SCENARIO_V3](./TODAY_SCREEN_SCENARIO_V3.md) | **SUPERSEDED** как product map; current-code until cutover |
+| Шесть блоков / 1a+1b | → [TODAY_SCREEN_SCENARIO_V3](./TODAY_SCREEN_SCENARIO_V3.md) | **SUPERSEDED**; historical map after FE cutover 2026-08-15 |
 
 При конфликте формулировок: **побеждает этот файл**. Не заводить второй «канон дня», «Meaning SoT», «Day Story SoT».
 
-**Связь (подчинённые):** DAY_SOURCES · DAY_ENGINE (указатель сюда) · DAY_SCENARIO_V1 (I0–I8 hygiene) · [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) (экраны) · SCENARIO_V3 (current-code map) · AMC (machine tags).
+**Связь (подчинённые):** DAY_SOURCES · DAY_ENGINE (указатель сюда) · DAY_SCENARIO_V1 (I0–I8 hygiene) · [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) (экраны) · SCENARIO_V3 (historical six-block map) · AMC (machine tags).
 
 ---
 

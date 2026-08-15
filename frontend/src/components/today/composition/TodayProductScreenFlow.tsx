@@ -1,37 +1,43 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
-import Link from "next/link";
 import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
 import { DsCaption, DsEyebrow, DsHeadline } from "@/design-system";
 import { joinClass } from "@/design-system/utils/joinClass";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import sfStyles from "@/design-system/primitives/ScreenFlow/ScreenFlow.module.css";
-import {
-  StoryNextAnchor,
-  TodayCloseFrame,
-  TodayPracticeFrame,
-} from "@/components/today/composition/TodayStoryDeckFrames";
+import { StoryNextAnchor } from "@/components/today/composition/TodayStoryDeckFrames";
 import type { ScreenFlowChangeReason } from "@/design-system/primitives/ScreenFlow";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TapResponseCode } from "@/lib/todayTapWidget";
 import { fetchDayFacts } from "@/lib/todayDayFacts";
 
 /**
- * Today presentation v3.4.2 — six product blocks; Block 1 = dashboard + orientation.
- * День (dashboard / sheet) → Ориентир → Ритуалы → Инструкция → Цвет → Задания → Петля
- * Canon: docs/today/TODAY_SCREEN_SCENARIO_V3.md
+ * Today product cycle — four surfaces.
+ * today → ritual → my_day → evening
+ * Canon: docs/today/TODAY_PRODUCT_FLOW_V1.md
  */
 
+export type TodayScreenFlowLayout = {
+  showSymbols: boolean;
+  showMyDay: boolean;
+};
+
 export type TodaySixBlockIndices = {
+  today: number;
+  ritual: number;
+  myDay: number;
+  evening: number;
   day: number;
+  /** Removed — Global TODAY has no orientation frame */
   orientation: number;
   rituals: number;
   instruction: number;
   color: number;
   tasks: number;
   loop: number;
-  /** @deprecated aliases → six-block ids */
+  /** @deprecated aliases → four-screen ids */
   welcome: number;
   number: number;
   card: number;
@@ -52,15 +58,17 @@ export type TodayProductScreenFlowProps = {
   dateISO: string;
   dateLabel: string;
   showSymbols: boolean;
-  showPersonalized: boolean;
-  /** Block 1a — atmosphere */
+  showMyDay?: boolean;
+  /** @deprecated ignored — first-today uses ConversationThread, not a 1-step collapse */
+  showPersonalized?: boolean;
   dayBody?: ReactNode;
-  /** Block 1b — trap / cues / energy */
+  /** @deprecated orientation folded; timeline lives on my_day */
   orientationBody?: ReactNode;
   numberBody?: ReactNode;
   cardBody?: ReactNode;
   /** @deprecated */
   symbolsBody?: ReactNode;
+  myDayBody?: ReactNode;
   instructionBody?: ReactNode;
   /** @deprecated alias */
   focusBody?: ReactNode;
@@ -73,8 +81,13 @@ export type TodayProductScreenFlowProps = {
   practiceCompleted?: boolean;
   practiceCompleting?: boolean;
   onPracticeAction?: () => void;
+  eveningBody?: ReactNode;
   promiseBody?: ReactNode;
-  /** When true, loop body owns accept/checkout — skip legacy CloseFrame. */
+  /** Ritual A→B: number hidden until the card is open */
+  ritualCardOpen?: boolean;
+  ritualNumberOpen?: boolean;
+  /** Ritual C: compact card + number results (replaces pick UIs) */
+  ritualResultBody?: ReactNode;
   loopOwnsClose?: boolean;
   contract: TodayContractV1;
   tapResponse?: TapResponseCode | null;
@@ -89,81 +102,75 @@ export type TodayProductScreenFlowProps = {
   greetingSection?: ReactNode;
 };
 
-export function todayHandoffIndices(showSymbols: boolean): TodaySixBlockIndices {
-  if (showSymbols) {
-    return {
-      day: 0,
-      orientation: 1,
-      rituals: 2,
-      instruction: 3,
-      color: 4,
-      tasks: 5,
-      loop: 6,
-      welcome: 0,
-      number: 2,
-      card: 2,
-      focus: 3,
-      practice: 5,
-      close: 6,
-      priority: -1,
-      promise: 6,
-      makeYours: 5,
-      dayFlow: 0,
-      recap: -1,
-    };
-  }
+export function todayHandoffIndices(layout: TodayScreenFlowLayout): TodaySixBlockIndices {
+  const showSymbols = Boolean(layout.showSymbols);
+  const showMyDay = Boolean(layout.showMyDay);
+  let n = 0;
+  const today = n++;
+  const ritual = showSymbols ? n++ : -1;
+  const myDay = showMyDay ? n++ : -1;
+  const evening = n++;
   return {
-    day: 0,
-    orientation: 1,
-    rituals: -1,
-    instruction: 2,
-    color: 3,
-    tasks: 4,
-    loop: 5,
-    welcome: 0,
-    number: -1,
-    card: -1,
-    focus: 2,
-    practice: 4,
-    close: 5,
+    today,
+    ritual,
+    myDay,
+    evening,
+    day: today,
+    orientation: -1,
+    rituals: ritual,
+    instruction: myDay,
+    color: myDay,
+    tasks: myDay,
+    loop: evening,
+    welcome: today,
+    number: ritual,
+    card: ritual,
+    focus: myDay,
+    practice: myDay,
+    close: evening,
     priority: -1,
-    promise: 5,
-    makeYours: 4,
-    dayFlow: 0,
+    promise: evening,
+    makeYours: myDay,
+    dayFlow: today,
     recap: -1,
   };
 }
 
 export function todayScreenFlowStepCount(opts: {
   showSymbols: boolean;
-  showPersonalized: boolean;
+  showMyDay?: boolean;
+  /** @deprecated ignored */
+  showPersonalized?: boolean;
 }): number {
-  if (!opts.showPersonalized) return 1;
-  return opts.showSymbols ? 7 : 6;
+  return 1 + (opts.showSymbols ? 1 : 0) + (opts.showMyDay ? 1 : 0) + 1;
 }
 
-export function todayScreenFlowReadingIndex(showSymbols: boolean): number {
-  return todayHandoffIndices(showSymbols).instruction;
+function layoutFromSymbols(showSymbols: boolean, showMyDay = true): TodayScreenFlowLayout {
+  return { showSymbols, showMyDay };
+}
+
+export function todayScreenFlowReadingIndex(showSymbols: boolean, showMyDay = true): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).instruction;
 }
 
 export function todayScreenFlowSymbolsIndex(): number {
-  return todayHandoffIndices(true).rituals;
+  return todayHandoffIndices({ showSymbols: true, showMyDay: false }).rituals;
 }
 
-export function todayScreenFlowAttributesIndex(showSymbols: boolean): number {
-  return todayHandoffIndices(showSymbols).color;
+export function todayScreenFlowAttributesIndex(showSymbols: boolean, showMyDay = true): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).color;
 }
 
-export function todayScreenFlowPracticeIndex(showSymbols: boolean): number {
-  return todayHandoffIndices(showSymbols).tasks;
+export function todayScreenFlowPracticeIndex(showSymbols: boolean, showMyDay = true): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).tasks;
 }
 
-export function todayScreenFlowInsightIndex(showSymbols: boolean): number {
-  return todayHandoffIndices(showSymbols).loop;
+export function todayScreenFlowInsightIndex(showSymbols: boolean, showMyDay = true): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).loop;
 }
 
-export function todayScreenFlowCloseIndex(showSymbols: boolean): number {
-  return todayHandoffIndices(showSymbols).loop;
+export function todayScreenFlowCloseIndex(showSymbols: boolean, showMyDay = true): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).loop;
 }
 
 function SlotStep({
@@ -185,11 +192,8 @@ function SlotStep({
   nextTitle: string;
   nextHint?: string;
   onNext: () => void;
-  /** Wider readable column for day / orientation prose */
   wide?: boolean;
-  /** Day dashboard owns its own continue CTA — do not duplicate StoryNextAnchor. */
   hideNext?: boolean;
-  /** Day step has no ScreenFlow chrome — skip reserved chrome band. */
   compactTop?: boolean;
 }) {
   return (
@@ -215,31 +219,22 @@ function SlotStep({
 export function TodayProductScreenFlow({
   dateISO,
   showSymbols,
+  showMyDay = false,
   symbolsBody = null,
   numberBody = null,
   cardBody = null,
-  showPersonalized,
   dayBody = null,
-  orientationBody = null,
+  myDayBody = null,
   instructionBody = null,
   focusBody = null,
   colorBody = null,
   tasksBody = null,
-  practiceTitle = null,
-  practiceMeta = null,
-  practiceActionLabel = copy.practiceStart,
-  practiceCompleted = false,
-  practiceCompleting = false,
-  onPracticeAction,
   practiceBody = null,
+  eveningBody = null,
   promiseBody = null,
-  loopOwnsClose = false,
-  contract,
-  tapResponse = null,
-  onTapRecorded,
-  onOpenEvening,
-  dayPromise = null,
-  onCloseOutcome,
+  ritualCardOpen = false,
+  ritualNumberOpen = false,
+  ritualResultBody = null,
   activeIndex,
   onIndexChange,
   embeddedInWebDashboard = false,
@@ -247,13 +242,35 @@ export function TodayProductScreenFlow({
   greetingSection = null,
 }: TodayProductScreenFlowProps) {
   const go = (index: number) => onIndexChange(index, { reason: "select" });
-  const idx = todayHandoffIndices(showSymbols);
+  const flowLayout = { showSymbols, showMyDay };
+  const idx = todayHandoffIndices(flowLayout);
   const showChrome = activeIndex > 0;
+  const extraDots = (showSymbols ? 1 : 0) + (showMyDay ? 1 : 0) + 1;
+  const dotClusters = Array.from({ length: extraDots }, () => 1);
   const instruction = instructionBody ?? focusBody;
   const numberSlot = numberBody ?? (showSymbols ? symbolsBody : null);
   const cardSlot = cardBody;
-  // Dots after day: orientation + rituals? + instruction + color + tasks + loop
-  const dotClusters = showSymbols ? [1, 1, 3, 1] : [1, 3, 1];
+  const composedMyDay =
+    myDayBody ??
+    (
+      <>
+        {instruction}
+        {colorBody}
+        {tasksBody ?? practiceBody}
+      </>
+    );
+  const eveningSlot = eveningBody ?? promiseBody;
+
+  const afterToday = showSymbols ? idx.ritual : showMyDay ? idx.myDay : idx.evening;
+  const afterRitual = showMyDay ? idx.myDay : idx.evening;
+  const afterMyDay = idx.evening;
+  const ritualComplete = Boolean(ritualCardOpen && ritualNumberOpen && ritualResultBody);
+  const ritualState = ritualNumberOpen ? "open" : ritualCardOpen ? "card" : "closed";
+  const ritualEyebrow = ritualNumberOpen
+    ? copy.ritualDoneEyebrow
+    : ritualCardOpen
+      ? copy.ritualStepNumber
+      : copy.ritualStepCard;
 
   useEffect(() => {
     if (!dateISO) return;
@@ -261,13 +278,6 @@ export function TodayProductScreenFlow({
       /* pane owns failure UI */
     });
   }, [dateISO]);
-
-  const afterDay = idx.orientation;
-  const afterOrientation = showSymbols ? idx.rituals : idx.instruction;
-  const afterRituals = idx.instruction;
-  const afterInstruction = idx.color;
-  const afterColor = idx.tasks;
-  const afterTasks = idx.loop;
 
   return (
     <div data-testid="today-zone-foundation" className={sfStyles.flowFoundation}>
@@ -281,151 +291,100 @@ export function TodayProductScreenFlow({
         showChrome={showChrome}
         showFrameArrows={showChrome}
         dotStartIndex={1}
-        dotClusters={showPersonalized ? dotClusters : undefined}
+        dotClusters={dotClusters}
         className={sfStyles.storyBleed}
         testId="today-screen-flow"
       >
-        <ScreenFlowStep id="day" label={copy.storyNext.day} scrollable>
+        <ScreenFlowStep id="today" label={copy.storyNext.day} scrollable>
           <SlotStep
             testId="today-frame-day"
             wide
             compactTop
-            hideNext={showPersonalized}
+            hideNext
             nextTitle={
-              showPersonalized ? copy.storyNext.orientation : copy.storyNext.further
+              showSymbols
+                ? copy.storyNext.rituals
+                : showMyDay
+                  ? copy.storyNext.myDay
+                  : copy.storyNext.evening
             }
-            nextHint={showPersonalized ? copy.storyNext.orientationHint : undefined}
-            onNext={() => go(showPersonalized ? afterDay : 0)}
+            nextHint={
+              showSymbols
+                ? copy.storyNext.ritualsHint
+                : showMyDay
+                  ? copy.storyNext.myDayHint
+                  : copy.storyNext.eveningHint
+            }
+            onNext={() => go(afterToday)}
           >
             {dayBody}
           </SlotStep>
         </ScreenFlowStep>
 
-        {showPersonalized ? (
-          <>
-            <ScreenFlowStep id="orientation" label={copy.storyNext.orientation} scrollable>
-              <SlotStep
-                testId="today-frame-orientation"
-                wide
-                nextTitle={showSymbols ? copy.storyNext.rituals : copy.storyNext.instruction}
-                nextHint={showSymbols ? copy.storyNext.ritualsHint : copy.storyNext.instructionHint}
-                onNext={() => go(afterOrientation)}
-              >
-                {orientationBody}
-              </SlotStep>
-            </ScreenFlowStep>
-
-            {showSymbols ? (
-              <ScreenFlowStep id="rituals" label={copy.storyNext.rituals} scrollable>
+        {showSymbols ? (
+          <ScreenFlowStep id="ritual" label={copy.storyNext.rituals} scrollable>
+            <div
+              className={joinClass(sfStyles.storyFrame, sfStyles.ritualFrame)}
+              data-testid="today-frame-rituals"
+              data-ritual-state={ritualState}
+              data-story-scroll="pane"
+            >
+              <div className={sfStyles.slotStack}>
+                <DsEyebrow>{copy.storyNext.rituals}</DsEyebrow>
+                <DsCaption>{ritualEyebrow}</DsCaption>
                 <div
-                  className={joinClass(sfStyles.storyFrame, sfStyles.ritualFrame)}
-                  data-testid="today-frame-rituals"
-                  data-story-scroll="pane"
-                >
-                  <div className={sfStyles.slotStack}>
-                    <DsEyebrow>{copy.storyNext.rituals}</DsEyebrow>
-                    <div data-testid="today-frame-number">{numberSlot}</div>
-                    <div data-testid="today-frame-card">{cardSlot}</div>
-                    <StoryNextAnchor
-                      title={copy.storyNext.instruction}
-                      hint={copy.storyNext.instructionHint}
-                      onNext={() => go(afterRituals)}
-                    />
-                  </div>
-                </div>
-              </ScreenFlowStep>
-            ) : null}
-
-            <ScreenFlowStep id="instruction" label={copy.storyNext.instruction} scrollable>
-              <SlotStep
-                testId="today-frame-instruction"
-                eyebrow={copy.storyNext.instruction}
-                title={copy.instructionTitle}
-                nextTitle={copy.storyNext.color}
-                nextHint={copy.storyNext.colorHint}
-                onNext={() => go(afterInstruction)}
-              >
-                {instruction}
-              </SlotStep>
-            </ScreenFlowStep>
-
-            <ScreenFlowStep id="color" label={copy.storyNext.color} scrollable={false}>
-              <SlotStep
-                testId="today-frame-color"
-                eyebrow={copy.storyNext.color}
-                nextTitle={copy.storyNext.tasks}
-                nextHint={copy.storyNext.tasksHint}
-                onNext={() => go(afterColor)}
-              >
-                {colorBody}
-              </SlotStep>
-            </ScreenFlowStep>
-
-            <ScreenFlowStep id="tasks" label={copy.storyNext.tasks} scrollable>
-              {tasksBody ? (
-                <SlotStep
-                  testId="today-frame-tasks"
-                  eyebrow={copy.storyNext.tasks}
-                  nextTitle={copy.storyNext.loop}
-                  nextHint={copy.storyNext.loopHint}
-                  onNext={() => go(afterTasks)}
-                >
-                  {tasksBody}
-                </SlotStep>
-              ) : practiceBody ? (
-                <SlotStep
-                  testId="today-frame-tasks"
-                  eyebrow={copy.storyNext.tasks}
-                  nextTitle={copy.storyNext.loop}
-                  nextHint={copy.storyNext.loopHint}
-                  onNext={() => go(afterTasks)}
-                >
-                  {practiceBody}
-                </SlotStep>
-              ) : (
-                <TodayPracticeFrame
-                  title={practiceTitle}
-                  meta={practiceMeta}
-                  actionLabel={practiceActionLabel}
-                  completed={practiceCompleted}
-                  completing={practiceCompleting}
-                  onAction={() => onPracticeAction?.()}
-                  onGoNext={() => go(afterTasks)}
-                  linkSlot={
-                    <DsCaption muted>
-                      <Link href="/practices" data-testid="today-setup-practices-link">
-                        {copy.setupPracticesLink} →
-                      </Link>
-                    </DsCaption>
+                  className={
+                    ritualComplete
+                      ? undefined
+                      : ritualCardOpen && ritualNumberOpen
+                        ? layout.pairGrid
+                        : layout.stack
                   }
-                />
-              )}
-            </ScreenFlowStep>
-
-            <ScreenFlowStep id="loop" label={copy.storyNext.loop} scrollable>
-              <div className={sfStyles.storyFrame} data-testid="today-frame-loop" data-story-scroll="pane">
-                <div className={sfStyles.slotStack}>
-                  <DsEyebrow>{copy.storyNext.loop}</DsEyebrow>
-                  <DsHeadline as="h2">
-                    {loopOwnsClose ? copy.storyNext.loop : copy.promiseTitle}
-                  </DsHeadline>
-                  <div className={sfStyles.slotBody}>{promiseBody}</div>
-                  {!loopOwnsClose ? (
-                    <TodayCloseFrame
-                      contract={contract}
-                      dateISO={dateISO}
-                      tapResponse={tapResponse}
-                      onTapRecorded={onTapRecorded}
-                      onOpenEvening={onOpenEvening}
-                      dayPromise={dayPromise}
-                      onPickOutcome={onCloseOutcome}
-                    />
-                  ) : null}
+                >
+                  {ritualComplete ? (
+                    ritualResultBody
+                  ) : (
+                    <>
+                      <div data-testid="today-frame-card">{cardSlot}</div>
+                      {ritualCardOpen ? (
+                        <div data-testid="today-frame-number">{numberSlot}</div>
+                      ) : null}
+                    </>
+                  )}
                 </div>
+                <StoryNextAnchor
+                  title={showMyDay ? copy.storyNext.myDay : copy.storyNext.evening}
+                  hint={showMyDay ? copy.storyNext.myDayHint : copy.storyNext.eveningHint}
+                  onNext={() => go(afterRitual)}
+                />
               </div>
-            </ScreenFlowStep>
-          </>
+            </div>
+          </ScreenFlowStep>
         ) : null}
+
+        {showMyDay ? (
+          <ScreenFlowStep id="my_day" label={copy.storyNext.myDay} scrollable>
+            <SlotStep
+              testId="today-frame-my-day"
+              eyebrow={copy.storyNext.myDay}
+              nextTitle={copy.storyNext.evening}
+              nextHint={copy.storyNext.eveningHint}
+              onNext={() => go(afterMyDay)}
+            >
+              {composedMyDay}
+            </SlotStep>
+          </ScreenFlowStep>
+        ) : null}
+
+        <ScreenFlowStep id="evening" label={copy.storyNext.evening} scrollable>
+          <div className={sfStyles.storyFrame} data-testid="today-frame-evening" data-story-scroll="pane">
+            <div className={sfStyles.slotStack}>
+              <DsEyebrow>{copy.storyNext.evening}</DsEyebrow>
+              <DsHeadline as="h2">{copy.eveningGratitudeTitle}</DsHeadline>
+              <div className={sfStyles.slotBody}>{eveningSlot}</div>
+            </div>
+          </div>
+        </ScreenFlowStep>
       </ScreenFlow>
     </div>
   );

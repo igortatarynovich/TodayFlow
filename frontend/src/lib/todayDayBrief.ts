@@ -1,13 +1,11 @@
 /**
- * Block 1 day ambassador model — assemble from existing contract fields only.
- * No invent. Honest omit when empty.
- *
- * Presentation (v3.4.2 dashboard):
- *   date · sky strip (day weather) · mode hero · why factors · better cards ·
- *   support ‖ trap · personal · (sky sheet: shared influence + personal overlay)
- * Canon: TODAY_SCREEN_SCENARIO_V3 · EXPLAIN_MEANING_NOT_MECHANISM
+ * TODAY dashboard model — Global Day only.
+ * Sequence: ENERGY → MOON → MAIN DRIVER → STRENGTHS → RISKS.
+ * No invent. Honest omit when empty. Natal/card/number stay off this screen.
+ * Canon: docs/today/TODAY_PRODUCT_FLOW_V1.md
  */
 
+import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import type { DayVisualMode } from "@/lib/dayAtmosphere";
 import { DAY_MODE_LABELS_RU, DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 import { resolveCelestialMoonPhase } from "@/lib/celestialMoonPhase";
@@ -26,6 +24,45 @@ export type TodayDayBetterCard = {
   title: string;
   body: string;
   detail: string | null;
+};
+
+/** Closed Global action types — not spheres. */
+export const GLOBAL_ACTION_TYPE_LABELS_RU: Record<string, string> = {
+  physical_action: "Физическое действие",
+  sensitive_conversation: "Тонкий разговор",
+  deep_work: "Глубокая работа",
+  admin_order: "Порядок",
+  rest: "Отдых",
+  emotional_processing: "Эмоции",
+  public_visibility: "На виду",
+  hard_negotiation: "Жёсткий торг",
+};
+
+export type TodayDaySheetRow = {
+  label: string;
+  value: string;
+};
+
+export type TodayDayMainDriver = {
+  id: string;
+  title: string;
+  body: string | null;
+  detail: string | null;
+  sheetRows: TodayDaySheetRow[];
+};
+
+export type TodayDayActionChip = {
+  id: string;
+  label: string;
+  sheetRows: TodayDaySheetRow[];
+};
+
+export type TodayDayMoonCard = {
+  title: string;
+  meta: string | null;
+  sheetBody: string;
+  sheetRows: TodayDaySheetRow[];
+  context: string | null;
 };
 
 export type TodayDayBriefModel = {
@@ -65,10 +102,16 @@ export type TodayDayBriefModel = {
   /** Опора дня */
   supportLine: string | null;
   supportDetail: string | null;
-  /** Personal bridge */
+  /** Personal bridge — MY DAY only, never on Global TODAY */
   personalLine: string | null;
-  /** Day weather (Moon + headline) + personal overlay on tap. Not an ephemeris. */
+  /** Shared sky (Moon + headline). No natal overlay on TODAY. */
   skyStrip: TodaySkyStripModel | null;
+  /** Compact moon card (sign · phase · cycle). Omit if empty. */
+  moonCard: TodayDayMoonCard | null;
+  /** Ranked Global driver #1 */
+  mainDriver: TodayDayMainDriver | null;
+  strengthChips: TodayDayActionChip[];
+  riskChips: TodayDayActionChip[];
 };
 
 const KITCHEN_MECHANISM_RE =
@@ -195,6 +238,63 @@ export type TodayDayBriefLunarHint = {
   name?: string | null;
   cycle_day?: number | null;
 };
+
+function formatCycleDay(cycle: number): string {
+  const day = Math.max(1, Math.round(cycle));
+  return `${day}-й день цикла`;
+}
+
+function pushSheetRow(rows: TodayDaySheetRow[], label: string, value: string | null | undefined) {
+  const v = clean(value);
+  if (!v) return;
+  if (rows.some((row) => row.label === label && row.value === v)) return;
+  rows.push({ label, value: v });
+}
+
+function buildMoonCard(
+  contract: TodayContractV1,
+  lunarHint: TodayDayBriefLunarHint | null | undefined,
+  skyStrip: TodaySkyStripModel | null,
+  lunarCaption: string | null,
+  context: string | null,
+): TodayDayMoonCard | null {
+  const lunar = contract.day_story?.day_foundation?.lunar;
+  const sign = clean(lunar?.moon_sign?.sign_ru) || clean(skyStrip?.moon?.sign_ru);
+  const title =
+    skyStrip?.moonLabel ||
+    inSign("Луна", sign) ||
+    lunarCaption;
+  const phase =
+    clean(lunar?.phase?.name) ||
+    clean(lunarHint?.name);
+  const cycleRaw =
+    typeof lunar?.phase?.cycle_day === "number" && Number.isFinite(lunar.phase.cycle_day)
+      ? lunar.phase.cycle_day
+      : typeof lunarHint?.cycle_day === "number" && Number.isFinite(lunarHint.cycle_day)
+        ? lunarHint.cycle_day
+        : null;
+  const cycle = cycleRaw != null ? formatCycleDay(cycleRaw) : null;
+  const metaParts = [phase, cycle].filter((part): part is string => Boolean(part));
+  const meta = metaParts.length ? metaParts.join(" · ") : null;
+  if (!title && !meta) return null;
+  const sheetRows: TodayDaySheetRow[] = [];
+  pushSheetRow(sheetRows, copy.sheetSign, sign);
+  pushSheetRow(sheetRows, copy.sheetPhase, phase);
+  pushSheetRow(sheetRows, copy.sheetCycle, cycle);
+  const moonContext =
+    cleanAmbassadorWhy(context) ||
+    cleanAmbassadorWhy(lunar?.phase?.themes) ||
+    cleanAmbassadorWhy(lunar?.phase?.guidance) ||
+    cleanAmbassadorWhy(lunar?.summary_ru);
+  const sheetBody = [title, meta, moonContext].filter((part, i, all) => part && all.indexOf(part) === i).join("\n\n");
+  return {
+    title: title || "Луна",
+    meta,
+    sheetBody: sheetBody || title || "Луна",
+    sheetRows,
+    context: moonContext,
+  };
+}
 
 function buildMoonPhase(
   contract: TodayContractV1,
@@ -342,29 +442,97 @@ function buildBetterCards(contract: TodayContractV1): TodayDayBetterCard[] {
   return cards.slice(0, 3);
 }
 
-function firstNatalTransitSoft(contract: TodayContractV1): string | null {
-  const beats = contract.day_story?.day_personal?.personal_astrology?.beats;
-  if (!Array.isArray(beats)) return null;
-  for (const beat of beats) {
-    if (String(beat?.kind || "") !== "natal_transit") continue;
-    const line = cleanAmbassadorWhy(beat?.story_ru || beat?.title);
-    if (line) return line;
-  }
-  return null;
+function actionChip(id: string | null | undefined): TodayDayActionChip | null {
+  const key = String(id || "")
+    .trim()
+    .toLowerCase()
+    .replace(/-/g, "_");
+  if (!key) return null;
+  const label = GLOBAL_ACTION_TYPE_LABELS_RU[key];
+  if (!label) return null;
+  return { id: key, label, sheetRows: [] };
 }
 
-/** Natal overlay for the sky sheet. Guest/no-natal = omit. Not development_point. */
-function pickSkyPersonalOverlay(contract: TodayContractV1): string | null {
-  const story = contract.day_story;
-  return (
-    clipCompassProse(
-      cleanAmbassadorWhy(story?.day_scenario?.conflict?.why_personal) ||
-        firstNatalTransitSoft(contract) ||
-        cleanAmbassadorWhy(story?.day_personal?.personal_astrology?.summary_ru) ||
-        cleanAmbassadorWhy(story?.day_personal?.summary_ru),
-      180,
-    ) || null
-  );
+function relatedFactsForAction(
+  contract: TodayContractV1,
+  actionId: string,
+  side: "supports" | "cautions",
+): string[] {
+  const windows = contract.global_day?.windows;
+  const drivers = contract.global_day?.drivers;
+  if (!Array.isArray(windows) || !windows.length) return [];
+  const driverIds = new Set<string>();
+  for (const win of windows) {
+    const bucket = side === "supports" ? win.supports : win.cautions;
+    if (!Array.isArray(bucket)) continue;
+    if (!bucket.map((x) => String(x || "").toLowerCase().replace(/-/g, "_")).includes(actionId)) continue;
+    const did = String(win.driver_id || "").trim();
+    if (did) driverIds.add(did);
+  }
+  const facts: string[] = [];
+  const seen = new Set<string>();
+  const pushFact = (raw: string | null | undefined) => {
+    const t = clean(raw);
+    if (!t) return;
+    const key = normalizeKey(t);
+    if (seen.has(key)) return;
+    seen.add(key);
+    facts.push(t);
+  };
+  if (Array.isArray(drivers)) {
+    for (const row of drivers) {
+      const id = String(row.id || "").trim();
+      if (id && driverIds.has(id)) pushFact(row.fact_ru);
+    }
+  }
+  return facts.slice(0, 3);
+}
+
+function buildActionChips(
+  raw: unknown,
+  max: number,
+  contract: TodayContractV1,
+  side: "supports" | "cautions",
+): TodayDayActionChip[] {
+  if (!Array.isArray(raw)) return [];
+  const out: TodayDayActionChip[] = [];
+  const seen = new Set<string>();
+  for (const item of raw) {
+    const chip = actionChip(typeof item === "string" ? item : null);
+    if (!chip || seen.has(chip.id)) continue;
+    seen.add(chip.id);
+    const related = relatedFactsForAction(contract, chip.id, side);
+    if (related.length) {
+      chip.sheetRows = [{ label: copy.sheetDrivers, value: related.join(" · ") }];
+    }
+    out.push(chip);
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
+function buildMainDriver(contract: TodayContractV1, energyLabel: string | null): TodayDayMainDriver | null {
+  const row = contract.global_day?.drivers?.[0];
+  if (!row) return null;
+  const id = String(row.id || row.kind || "").trim();
+  const title = clean(row.fact_ru) || clean(row.kind) || (id ? id : null);
+  if (!title) return null;
+  const kindLabel = actionChip(row.kind)?.label || clean(row.kind);
+  const windowTime = (contract.global_day?.windows || []).find(
+    (win) => String(win.driver_id || "").trim() === id && clean(win.time),
+  )?.time;
+  const sheetRows: TodayDaySheetRow[] = [];
+  pushSheetRow(sheetRows, copy.sheetEvent, clean(row.fact_ru));
+  pushSheetRow(sheetRows, copy.sheetTime, windowTime);
+  pushSheetRow(sheetRows, copy.sheetWhyRanked, copy.whyRankedDriver);
+  pushSheetRow(sheetRows, copy.sheetEnergyLink, energyLabel);
+  return {
+    id: id || title,
+    title,
+    body: kindLabel && kindLabel !== title ? kindLabel : null,
+    detail: [clean(row.fact_ru), kindLabel].filter(Boolean).join("\n\n") || title,
+    sheetRows,
+  };
 }
 
 export function buildTodayDayBriefModel(input: {
@@ -423,10 +591,10 @@ export function buildTodayDayBriefModel(input: {
       180,
     ) || null;
 
-  const skyPersonal = pickSkyPersonalOverlay(input.contract);
-  const skyStrip = input.loading
+  const skyStrip = input.loading ? null : buildTodaySkyStripModel(input.contract, null);
+  const lunarCaption = input.loading
     ? null
-    : buildTodaySkyStripModel(input.contract, skyPersonal);
+    : buildLunarCaption(input.contract, glass?.reasonLine ?? null, skyStrip);
 
   return {
     dateLabel: input.dateLabel,
@@ -447,15 +615,34 @@ export function buildTodayDayBriefModel(input: {
     vibeClosing: null,
     visualMode,
     modeLabel: visualMode ? DAY_MODE_LABELS_RU[visualMode] : null,
-    lunarCaption: buildLunarCaption(input.contract, glass?.reasonLine ?? null, skyStrip),
+    lunarCaption,
     moonPhase: input.loading
       ? null
       : buildMoonPhase(input.contract, input.lunarHint, glass?.reasonLine ?? null),
+    moonCard: input.loading
+      ? null
+      : buildMoonCard(
+          input.contract,
+          input.lunarHint,
+          skyStrip,
+          lunarCaption,
+          clipCompassProse(atmosphereLine, 160) ||
+            (visualMode ? DAY_MODE_LABELS_RU[visualMode] : null),
+        ),
     whyFactors: buildWhyFactors(input.contract, glass),
     betterCards: buildBetterCards(input.contract),
     supportLine,
     supportDetail,
     personalLine,
     skyStrip,
+    mainDriver: input.loading
+      ? null
+      : buildMainDriver(input.contract, visualMode ? DAY_MODE_LABELS_RU[visualMode] : null),
+    strengthChips: input.loading
+      ? []
+      : buildActionChips(input.contract.global_day?.strength, 6, input.contract, "supports"),
+    riskChips: input.loading
+      ? []
+      : buildActionChips(input.contract.global_day?.risk, 6, input.contract, "cautions"),
   };
 }

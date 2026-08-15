@@ -112,3 +112,49 @@ export function todayCapabilityAllowsPersonal(
 export function todayCapabilityShowsTimelineOnToday(): false {
   return false;
 }
+
+/** DOB evidence from Core Profile — not a UI wish. */
+export function profileHasBirthDate(profile?: {
+  astro?: { birth_date?: string | null };
+  numerology?: { birth_date?: string | null };
+} | null): boolean {
+  return Boolean(
+    String(profile?.astro?.birth_date || "").trim() ||
+      String(profile?.numerology?.birth_date || "").trim(),
+  );
+}
+
+/** Time + place on top of DOB. `time_unknown` blocks deep. */
+export function profileHasBirthTimePlace(profile?: {
+  astro?: {
+    birth_date?: string | null;
+    birth_time?: string | null;
+    time_unknown?: boolean | null;
+    location_name?: string | null;
+  };
+} | null): boolean {
+  const astro = profile?.astro;
+  if (!String(astro?.birth_date || "").trim()) return false;
+  if (astro?.time_unknown) return false;
+  if (!String(astro?.birth_time || "").trim()) return false;
+  return Boolean(String(astro?.location_name || "").trim());
+}
+
+export function resolveTodayCapabilityFromProfile(input: {
+  authenticated?: boolean;
+  coreProfile?: {
+    astro?: {
+      birth_date?: string | null;
+      birth_time?: string | null;
+      time_unknown?: boolean | null;
+      location_name?: string | null;
+    };
+    numerology?: { birth_date?: string | null };
+  } | null;
+}): TodayCapabilityDepth {
+  return resolveTodayCapabilityDepth({
+    authenticated: Boolean(input.authenticated),
+    hasBirthDate: profileHasBirthDate(input.coreProfile),
+    hasBirthTimePlace: profileHasBirthTimePlace(input.coreProfile),
+  });
+}

@@ -42,10 +42,12 @@ Guest: `today` + `ritual` (universal number + card base) + `evening`. `my_day` �
 
 | | Сейчас | Target |
 |--|--------|--------|
-| Шаги | 6–7 (day + orientation + rituals + instruction + color + tasks + loop) | **4** (`today` · `ritual` · `my_day` · `evening`) |
-| Timeline | на Global (orientation / glance) | **только** на `my_day`, персональный |
-| Вечер | обещание / trap-check / «совпал ли прогноз» | **благодарность** |
-| Color / practice / action | отдельные шаги | карточки **внутри** `my_day`, omit если пусто |
+| Шаги | **4** (`today` · `ritual` · `my_day` · `evening`) | 4 |
+| Timeline | только `my_day`: natal clocks × Engine `supports`/`cautions`; omit если нет активаций | **только** на `my_day`, персональный |
+| Вечер | благодарность (persist) | **благодарность** |
+| Color / practice / action | карточки **внутри** `my_day`, omit если пусто | внутри `my_day` |
+| Ritual C | compact card + number; tap → catalog then lens | оба остаются на экране |
+| First Today | reaction gate → те же 4 поверхности (capability) | не отдельный conversation-цикл |
 
 ---
 
@@ -239,4 +241,4 @@ USER RESPONSE           →  GRATITUDE HISTORY
 - **Public contract changed?** target yes, phased: gratitude payload; ScreenFlow step ids; Global screen без `windows` в UI (поля Engine остаются в `global_day`).
 - **Migration required?** yes — FE ScreenFlow cutover; evening job; cached UI that expects 1b/orientation/color steps.
 - **Canon updated?** yes — this file · pipeline § экран · SCENARIO_V3 superseded banner · SCREEN_FLOW_V1 §4 · README · tracker · capability TS.
-- **Backward compatible?** yes API until gratitude ships; old clients keep extra steps until FE cutover.
+- **Backward compatible?** yes API; old cached days keep nests. FE ScreenFlow ids are `today` · `ritual` · `my_day` · `evening`.

@@ -2,7 +2,7 @@
 
 **Status:** SUPERSEDED as product map · **2026-08-15**  
 **Product cycle SoT:** [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) — `today` · `ritual` · `my_day` · `evening`.  
-Этот файл — **карта текущего кода** (1a/1b · color · tasks · loop) до ScreenFlow cutover. Не наращивать шесть блоков.
+Этот файл — **историческая карта шести блоков**. FE cutover 2026-08-15. Не наращивать шесть блоков.
 
 **Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md).
 

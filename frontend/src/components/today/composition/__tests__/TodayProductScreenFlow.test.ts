@@ -9,43 +9,55 @@ import {
   todayScreenFlowSymbolsIndex,
 } from "@/components/today/composition/TodayProductScreenFlow";
 
-describe("todayScreenFlow six blocks v3.4.1 indices", () => {
-  it("welcome-only when not personalized", () => {
-    expect(todayScreenFlowStepCount({ showSymbols: false, showPersonalized: false })).toBe(1);
-    expect(todayScreenFlowStepCount({ showSymbols: true, showPersonalized: false })).toBe(1);
+describe("todayScreenFlow four surfaces", () => {
+  it("guest/general: today + ritual + evening, no my_day", () => {
+    expect(todayScreenFlowStepCount({ showSymbols: true, showMyDay: false })).toBe(3);
+    const idx = todayHandoffIndices({ showSymbols: true, showMyDay: false });
+    expect(idx.today).toBe(0);
+    expect(idx.ritual).toBe(1);
+    expect(idx.myDay).toBe(-1);
+    expect(idx.evening).toBe(2);
+    expect(idx.orientation).toBe(-1);
   });
 
-  it("counts 7 steps with symbols (day + orientation)", () => {
-    expect(todayScreenFlowStepCount({ showSymbols: true, showPersonalized: true })).toBe(7);
-    const idx = todayHandoffIndices(true);
+  it("does not collapse to a single step when personalized is false", () => {
+    expect(
+      todayScreenFlowStepCount({
+        showSymbols: true,
+        showMyDay: false,
+        showPersonalized: false,
+      }),
+    ).toBe(3);
+  });
+
+  it("light/deep with symbols: four steps", () => {
+    expect(todayScreenFlowStepCount({ showSymbols: true, showMyDay: true })).toBe(4);
+    const idx = todayHandoffIndices({ showSymbols: true, showMyDay: true });
     expect(idx.day).toBe(0);
-    expect(idx.orientation).toBe(1);
-    expect(idx.rituals).toBe(2);
-    expect(idx.instruction).toBe(3);
-    expect(idx.color).toBe(4);
-    expect(idx.tasks).toBe(5);
-    expect(idx.loop).toBe(6);
-    expect(idx.number).toBe(2);
-    expect(idx.card).toBe(2);
-    expect(idx.close).toBe(6);
-  });
-
-  it("counts 6 steps without symbols", () => {
-    expect(todayScreenFlowStepCount({ showSymbols: false, showPersonalized: true })).toBe(6);
-    const idx = todayHandoffIndices(false);
-    expect(idx.orientation).toBe(1);
-    expect(idx.rituals).toBe(-1);
+    expect(idx.rituals).toBe(1);
     expect(idx.instruction).toBe(2);
-    expect(idx.loop).toBe(5);
+    expect(idx.color).toBe(2);
+    expect(idx.tasks).toBe(2);
+    expect(idx.loop).toBe(3);
+    expect(idx.close).toBe(3);
   });
 
-  it("maps helpers onto block houses", () => {
-    expect(todayScreenFlowSymbolsIndex()).toBe(2);
-    expect(todayScreenFlowAttributesIndex(true)).toBe(4);
-    expect(todayScreenFlowReadingIndex(true)).toBe(3);
-    expect(todayScreenFlowPracticeIndex(true)).toBe(5);
-    expect(todayScreenFlowInsightIndex(true)).toBe(6);
-    expect(todayScreenFlowCloseIndex(true)).toBe(6);
-    expect(todayScreenFlowPracticeIndex(false)).toBe(4);
+  it("without symbols still has today + my_day + evening", () => {
+    expect(todayScreenFlowStepCount({ showSymbols: false, showMyDay: true })).toBe(3);
+    const idx = todayHandoffIndices({ showSymbols: false, showMyDay: true });
+    expect(idx.rituals).toBe(-1);
+    expect(idx.myDay).toBe(1);
+    expect(idx.evening).toBe(2);
+  });
+
+  it("maps helpers onto four-screen houses", () => {
+    expect(todayScreenFlowSymbolsIndex()).toBe(1);
+    expect(todayScreenFlowAttributesIndex(true)).toBe(2);
+    expect(todayScreenFlowReadingIndex(true)).toBe(2);
+    expect(todayScreenFlowPracticeIndex(true)).toBe(2);
+    expect(todayScreenFlowInsightIndex(true)).toBe(3);
+    expect(todayScreenFlowCloseIndex(true)).toBe(3);
+    expect(todayScreenFlowPracticeIndex(false)).toBe(1);
+    expect(todayScreenFlowCloseIndex(true, false)).toBe(2);
   });
 });

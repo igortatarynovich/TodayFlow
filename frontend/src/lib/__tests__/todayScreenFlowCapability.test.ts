@@ -1,6 +1,9 @@
 import {
   TODAY_SCREEN_FLOW_CAPABILITY,
+  profileHasBirthDate,
+  profileHasBirthTimePlace,
   resolveTodayCapabilityDepth,
+  resolveTodayCapabilityFromProfile,
   todayCapabilityAllowsPersonal,
   todayCapabilityShowsTimelineOnToday,
 } from "@/lib/todayScreenFlowCapability";
@@ -46,5 +49,34 @@ describe("Today ScreenFlow capability matrix", () => {
         hasBirthTimePlace: true,
       }),
     ).toBe("deep");
+  });
+
+  it("reads DOB / time+place from Core Profile", () => {
+    expect(profileHasBirthDate({ astro: { birth_date: "1990-01-01" } })).toBe(true);
+    expect(
+      profileHasBirthTimePlace({
+        astro: {
+          birth_date: "1990-01-01",
+          birth_time: "12:00",
+          location_name: "Москва",
+        },
+      }),
+    ).toBe(true);
+    expect(
+      profileHasBirthTimePlace({
+        astro: {
+          birth_date: "1990-01-01",
+          birth_time: "12:00",
+          time_unknown: true,
+          location_name: "Москва",
+        },
+      }),
+    ).toBe(false);
+    expect(
+      resolveTodayCapabilityFromProfile({
+        authenticated: true,
+        coreProfile: { astro: { birth_date: "1990-01-01" } },
+      }),
+    ).toBe("light");
   });
 });

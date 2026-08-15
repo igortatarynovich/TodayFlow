@@ -135,6 +135,13 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.visualMode).toBe("flow");
     expect(model.modeLabel).toBeTruthy();
     expect(model.lunarCaption).toBe("Растущая Луна в Весы");
+    expect(model.moonCard?.title).toBe("Луна в Весах");
+    expect(model.moonCard?.meta).toContain("Растущая Луна");
+    expect(model.moonCard?.meta).toContain("11-й день цикла");
+    expect(model.moonCard?.sheetRows.map((r) => r.label)).toEqual(
+      expect.arrayContaining(["Знак", "Фаза", "Цикл"]),
+    );
+    expect(model.moonCard?.context).toBeTruthy();
     expect(model.skyStrip).toBeNull();
     expect(model.moonPhase).toBeCloseTo(11 / 29.53058867, 5);
     expect(model.whyFactors.some((f) => f.id === "lunar")).toBe(true);
@@ -289,7 +296,7 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.skyStrip?.personalLine).toBeNull();
   });
 
-  it("puts natal overlay on the sky strip, not development_point", () => {
+  it("puts natal overlay on MY DAY personalLine, not the Global sky strip", () => {
     const model = buildTodayDayBriefModel({
       contract: {
         ...baseContract,
@@ -309,7 +316,42 @@ describe("buildTodayDayBriefModel", () => {
       dateLabel: "15 августа",
       salutation: "Привет",
     });
-    expect(model.skyStrip?.personalLine).toContain("держать слово");
-    expect(model.skyStrip?.personalLine).not.toContain("точка роста");
+    expect(model.skyStrip?.personalLine).toBeNull();
+    expect(model.personalLine).toContain("держать слово");
+    expect(model.personalLine).not.toContain("точка роста");
+  });
+
+  it("reads Global driver and strength/risk chips from global_day", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_day: {
+          primary_energy: "clarity",
+          drivers: [{ id: "moon-ingress", kind: "moon_ingress", fact_ru: "Луна вошла в Деву" }],
+          strength: ["deep_work", "admin_order"],
+          risk: ["hard_negotiation", "unknown_type"],
+          windows: [
+            {
+              time: "14:30",
+              driver_id: "moon-ingress",
+              supports: ["deep_work"],
+              cautions: ["hard_negotiation"],
+            },
+          ],
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.visualMode).toBe("clarity");
+    expect(model.mainDriver?.title).toContain("Луна вошла в Деву");
+    expect(model.mainDriver?.sheetRows.some((r) => r.label === "Время" && r.value === "14:30")).toBe(
+      true,
+    );
+    expect(model.mainDriver?.sheetRows.some((r) => r.label === "Связь с энергией")).toBe(true);
+    expect(model.strengthChips.map((c) => c.id)).toEqual(["deep_work", "admin_order"]);
+    expect(model.strengthChips[0]?.sheetRows[0]?.value).toContain("Луна вошла в Деву");
+    expect(model.riskChips.map((c) => c.id)).toEqual(["hard_negotiation"]);
+    expect(model.riskChips[0]?.sheetRows[0]?.value).toContain("Луна вошла в Деву");
   });
 });

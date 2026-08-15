@@ -14,7 +14,7 @@ Status: Active working document
 - **Migration required?** yes — FE cutover from six/seven steps; evening job.
 - **Canon updated?** yes — TODAY_PRODUCT_FLOW_V1 · pipeline § экран · SCENARIO_V3 banner · SCREEN_FLOW §4 · README · capability TS.
 - **Backward compatible?** yes API until gratitude/cutover; cached days keep old nests.
-- **Next:** ScreenFlow cutover (`today` · `ritual` · `my_day` · `evening`); TODAY dashboard; ritual A→B→C; MY DAY compose; evening gratitude.
+- **Next:** FE ScreenFlow cutover **deployed** to this host 2026-08-15 (`docker compose … frontend` recreate; live `/today` 200). Working tree not committed. Gratitude History → Month → Map still later.
 
 ## Architecture impact — Content pipeline + I0 (2026-08-15)
 
