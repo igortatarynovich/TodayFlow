@@ -146,7 +146,8 @@ describe("TodayCompositionSurface", () => {
     expect(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-brief")).toBeInTheDocument();
     expect(screen.getByTestId("today-frame-card")).toBeInTheDocument();
     expect(screen.queryByTestId("today-frame-number")).not.toBeInTheDocument();
-    expect(screen.getByTestId("ritual-tarot-pick-grid")).toBeInTheDocument();
+    expect(screen.getByTestId("today-ritual-tarot-gate")).toBeInTheDocument();
+    expect(screen.queryByTestId("ritual-tarot-pick-grid")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-why-story")).not.toBeInTheDocument();
   });
 
@@ -249,6 +250,10 @@ describe("TodayCompositionSurface", () => {
 
     await user.click(within(screen.getByTestId("today-frame-day")).getByTestId("today-day-personal-cta"));
     expect(screen.getByTestId("today-frame-rituals")).toBeInTheDocument();
+    expect(screen.getByTestId("today-ritual-tarot-gate")).toBeInTheDocument();
+    expect(screen.queryByTestId("ritual-tarot-pick-grid")).not.toBeInTheDocument();
+    await user.click(screen.getByTestId("today-ritual-tarot-gate"));
+    expect(screen.getByTestId("today-ritual-tarot-overlay")).toBeInTheDocument();
     expect(screen.getByTestId("ritual-tarot-pick-grid")).toBeInTheDocument();
     expect(screen.queryByTestId("today-frame-orientation")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
@@ -499,11 +504,74 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-frame-my-day")).toBeInTheDocument();
   });
 
+  it("opens number pick overlay from the ritual gate", async () => {
+    const user = userEvent.setup();
+    window.localStorage.setItem(
+      "todayflow.day_engagement.v1.2026-06-23",
+      JSON.stringify({
+        tarotPickedName: "Сила",
+        tarotPickedId: 8,
+        numberConfirmed: false,
+        dayGoal: null,
+        practiceStarted: false,
+        affirmationRead: false,
+        todayOpened: true,
+      }),
+    );
+    render(<TodayCompositionSurface {...baseProps} variant="default" />);
+    expect(screen.getByTestId("today-ritual-number-gate")).toBeInTheDocument();
+    await user.click(screen.getByTestId("today-ritual-number-gate"));
+    expect(await screen.findByTestId("today-ritual-number-overlay")).toBeInTheDocument();
+    expect(screen.getByTestId("ritual-number-pick-flower")).toBeInTheDocument();
+  });
+
+  it("opens number lens sheet after ritual", async () => {
+    const user = userEvent.setup();
+    window.localStorage.setItem(
+      "todayflow.day_engagement.v1.2026-06-23",
+      JSON.stringify({
+        tarotPickedName: "Сила",
+        tarotPickedId: 8,
+        numberConfirmed: true,
+        numberValue: "4",
+        dayGoal: null,
+        practiceStarted: false,
+        affirmationRead: false,
+        todayOpened: true,
+      }),
+    );
+    render(<TodayCompositionSurface {...baseProps} variant="default" />);
+    await user.click(screen.getByTestId("today-ritual-lens-number"));
+    expect(await screen.findByTestId("today-ritual-lens-sheet")).toBeInTheDocument();
+  });
+
+  it("shows kept card and number gate after tarot, before number", () => {
+    window.localStorage.setItem(
+      "todayflow.day_engagement.v1.2026-06-23",
+      JSON.stringify({
+        tarotPickedName: "Сила",
+        tarotPickedId: 8,
+        numberConfirmed: false,
+        dayGoal: null,
+        practiceStarted: false,
+        affirmationRead: false,
+        todayOpened: true,
+      }),
+    );
+    render(<TodayCompositionSurface {...baseProps} variant="default" />);
+    expect(screen.getByTestId("today-ritual-card-kept")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-number")).toBeInTheDocument();
+    expect(screen.getByTestId("today-ritual-number-gate")).toBeInTheDocument();
+    expect(screen.queryByTestId("ritual-tarot-pick-grid")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-ritual-result")).not.toBeInTheDocument();
+  });
+
   it("shows tarot gate at evening when ritual is still pending", () => {
     (resolveTodayDayPhase as jest.Mock).mockReturnValue("night");
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
     expect(screen.getByTestId("today-frame-card")).toBeInTheDocument();
-    expect(screen.getByTestId("ritual-tarot-pick-grid")).toBeInTheDocument();
+    expect(screen.getByTestId("today-ritual-tarot-gate")).toBeInTheDocument();
+    expect(screen.queryByTestId("ritual-tarot-pick-grid")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-growth")).not.toBeInTheDocument();
     (resolveTodayDayPhase as jest.Mock).mockReturnValue("morning");
   });

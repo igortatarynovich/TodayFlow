@@ -10,6 +10,7 @@ export const EVENING_GRATITUDE_CATEGORIES = [
   { id: "people", label: "За человека рядом" },
   { id: "work", label: "За то, что получилось" },
   { id: "quiet", label: "За спокойный момент" },
+  { id: "fresh", label: "За новый опыт" },
   { id: "self", label: "За себя" },
 ] as const;
 

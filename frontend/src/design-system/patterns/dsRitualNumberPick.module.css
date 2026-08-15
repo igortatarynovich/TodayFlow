@@ -234,6 +234,14 @@
   transform: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .numBtn {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .revealActions {
   margin-top: 1rem;
   display: flex;

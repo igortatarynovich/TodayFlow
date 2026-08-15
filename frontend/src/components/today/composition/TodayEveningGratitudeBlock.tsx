@@ -5,8 +5,8 @@ import {
   DsButton,
   DsCallout,
   DsCaption,
-  DsChip,
-  DsChipCluster,
+  DsListPanel,
+  DsListRow,
 } from "@/design-system";
 import { DsTextField } from "@/design-system/primitives/DsForm";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
@@ -66,18 +66,20 @@ export function TodayEveningGratitudeBlock({ dateISO, manifestVersion = null, on
       ) : (
         <DsCaption>{copy.eveningGratitudeLead}</DsCaption>
       )}
-      <DsChipCluster testId="today-evening-gratitude-categories">
-        {EVENING_GRATITUDE_CATEGORIES.map((row) => (
-          <DsChip
-            key={row.id}
-            selected={categories.includes(row.id)}
-            testId={`today-evening-gratitude-${row.id}`}
-            onClick={() => toggle(row.id)}
-          >
-            {row.label}
-          </DsChip>
-        ))}
-      </DsChipCluster>
+      <DsListPanel tone="glass" testId="today-evening-gratitude-categories">
+        {EVENING_GRATITUDE_CATEGORIES.map((row) => {
+          const selected = categories.includes(row.id);
+          return (
+            <DsListRow
+              key={row.id}
+              testId={`today-evening-gratitude-${row.id}`}
+              title={row.label}
+              subtitle={selected ? copy.eveningGratitudePicked : undefined}
+              onClick={() => toggle(row.id)}
+            />
+          );
+        })}
+      </DsListPanel>
       <DsTextField
         label={copy.eveningGratitudeOwn}
         value={text}

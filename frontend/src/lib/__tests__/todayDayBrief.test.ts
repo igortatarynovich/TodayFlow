@@ -91,6 +91,9 @@ describe("buildTodayDayBriefModel", () => {
           decor_variant: "default",
           time_phase: "day",
         },
+        global_day: {
+          drivers: [{ id: "moon-ingress", kind: "moon_ingress", fact_ru: "Луна вошла в Весы" }],
+        },
         day_story: {
           contract_version: "day_story_v1",
           theme: "Мягкий поток",
@@ -139,7 +142,7 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.moonCard?.meta).toContain("Растущая Луна");
     expect(model.moonCard?.meta).toContain("11-й день цикла");
     expect(model.moonCard?.sheetRows.map((r) => r.label)).toEqual(
-      expect.arrayContaining(["Знак", "Фаза", "Цикл"]),
+      expect.arrayContaining(["Знак", "Фаза", "Цикл", "Смена знака"]),
     );
     expect(model.moonCard?.context).toBeTruthy();
     expect(model.skyStrip).toBeNull();
@@ -348,9 +351,22 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.mainDriver?.sheetRows.some((r) => r.label === "Время" && r.value === "14:30")).toBe(
       true,
     );
+    expect(
+      model.mainDriver?.sheetRows.some(
+        (r) => r.label === "Поддерживает" && String(r.value).includes("Глубокая работа"),
+      ),
+    ).toBe(true);
+    expect(
+      model.mainDriver?.sheetRows.some(
+        (r) => r.label === "Осторожнее" && String(r.value).includes("Жёсткий торг"),
+      ),
+    ).toBe(true);
     expect(model.mainDriver?.sheetRows.some((r) => r.label === "Связь с энергией")).toBe(true);
     expect(model.strengthChips.map((c) => c.id)).toEqual(["deep_work", "admin_order"]);
     expect(model.strengthChips[0]?.sheetRows[0]?.value).toContain("Луна вошла в Деву");
+    expect(model.strengthChips[0]?.sheetRows.some((r) => r.label === "Время" && r.value === "14:30")).toBe(
+      true,
+    );
     expect(model.riskChips.map((c) => c.id)).toEqual(["hard_negotiation"]);
     expect(model.riskChips[0]?.sheetRows[0]?.value).toContain("Луна вошла в Деву");
   });

@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 import {
   DsBody,
   DsCard,
   DsEyebrow,
   DsListPanel,
   DsListRow,
+  DsOverlaySheet,
 } from "@/design-system";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
@@ -17,13 +18,15 @@ import {
   todaySlotFailureCopy,
   type TodaySlotLoadFailure,
 } from "@/lib/todaySlotAvailability";
-import { buildTodayMyDayRhythm } from "@/lib/todayMyDayRhythm";
+import { buildTodayMyDayRhythm, type TodayMyDayRhythmRow } from "@/lib/todayMyDayRhythm";
 
 type Props = {
   dateISO: string;
   windows?: TodayContractGlobalDayWindowV1[] | null;
   glanceRows?: GlanceTimelineItem[] | null;
 };
+
+type SheetState = TodayMyDayRhythmRow | null;
 
 /**
  * Personal timeline on MY DAY. Kit only.
@@ -36,6 +39,8 @@ export function TodayMyDayRhythm({ dateISO, windows = null, glanceRows }: Props)
   );
   const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
   const [loaded, setLoaded] = useState(fromParent);
+  const [sheet, setSheet] = useState<SheetState>(null);
+  const closeSheet = useCallback(() => setSheet(null), []);
 
   useEffect(() => {
     if (glanceRows != null) {
@@ -93,25 +98,72 @@ export function TodayMyDayRhythm({ dateISO, windows = null, glanceRows }: Props)
   if (rows.length === 0) return null;
 
   return (
-    <DsCard tone="glass" size="compact" testId="today-my-day-rhythm">
-      <DsEyebrow>{copy.myDayRhythmLabel}</DsEyebrow>
-      <DsListPanel tone="subtle" testId="today-my-day-rhythm-list">
-        {rows.map((row) => (
-          <DsListRow
-            key={row.id}
-            testId={`today-my-day-rhythm-${row.id}`}
-            title={`${row.time} · ${row.title}`}
-            subtitle={
-              [
-                row.supports.length ? `${copy.windowSupportLabel}: ${row.supports.join(", ")}` : null,
-                row.cautions.length ? `${copy.windowCautionLabel}: ${row.cautions.join(", ")}` : null,
-              ]
-                .filter(Boolean)
-                .join(" · ") || undefined
-            }
-          />
-        ))}
-      </DsListPanel>
-    </DsCard>
+    <>
+      <DsCard tone="glass" size="compact" testId="today-my-day-rhythm">
+        <DsEyebrow>{copy.myDayRhythmLabel}</DsEyebrow>
+        <DsListPanel tone="subtle" testId="today-my-day-rhythm-list">
+          {rows.map((row) => (
+            <DsListRow
+              key={row.id}
+              testId={`today-my-day-rhythm-${row.id}`}
+              title={row.timeLabel}
+              subtitle={row.title}
+              onClick={() => setSheet(row)}
+            />
+          ))}
+        </DsListPanel>
+      </DsCard>
+      <RhythmDetailSheet sheet={sheet} onClose={closeSheet} />
+    </>
+  );
+}
+
+function RhythmDetailSheet({ sheet, onClose }: { sheet: SheetState; onClose: () => void }) {
+  const titleId = useId();
+  useEffect(() => {
+    if (!sheet) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [sheet, onClose]);
+
+  if (!sheet) return null;
+
+  const rows: Array<{ label: string; value: string }> = [];
+  if (sheet.supports.length) {
+    rows.push({ label: copy.windowSupportLabel, value: sheet.supports.join(" · ") });
+  }
+  if (sheet.cautions.length) {
+    rows.push({ label: copy.windowCautionLabel, value: sheet.cautions.join(" · ") });
+  }
+  if (sheet.detail) {
+    rows.push({ label: copy.sheetContext, value: sheet.detail });
+  }
+
+  return (
+    <DsOverlaySheet
+      testId="today-my-day-rhythm-sheet"
+      titleId={titleId}
+      title={sheet.timeLabel}
+      kicker={copy.myDayRhythmLabel}
+      body={sheet.title}
+      closeLabel={copy.sheetClose}
+      onClose={onClose}
+    >
+      {rows.length ? (
+        <DsListPanel tone="subtle" testId="today-my-day-rhythm-sheet-rows">
+          {rows.map((row) => (
+            <DsListRow key={row.label} title={row.label} subtitle={row.value} />
+          ))}
+        </DsListPanel>
+      ) : null}
+    </DsOverlaySheet>
   );
 }

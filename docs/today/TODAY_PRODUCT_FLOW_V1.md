@@ -43,9 +43,10 @@ Guest: `today` + `ritual` (universal number + card base) + `evening`. `my_day` �
 | | Сейчас | Target |
 |--|--------|--------|
 | Шаги | **4** (`today` · `ritual` · `my_day` · `evening`) | 4 |
-| Timeline | только `my_day`: natal clocks × Engine `supports`/`cautions`; omit если нет активаций | **только** на `my_day`, персональный |
-| Вечер | благодарность (persist) | **благодарность** |
+| Timeline | только `my_day`: natal clocks как интервал до следующего часа; `supports`/`cautions` из Engine; omit если нет активаций | **только** на `my_day`, персональный |
+| Вечер | благодарность (persist); 5 категорий + «Написать своё» | **благодарность** |
 | Color / practice / action | карточки **внутри** `my_day`, omit если пусто | внутри `my_day` |
+| Ritual A/B | **A:** закрытая карта (`DsRitualGate`); pick в overlay. **B:** открытая карта + number gate | закрытая карта → открытая + число |
 | Ritual C | compact card + number; tap → catalog then lens | оба остаются на экране |
 | First Today | reaction gate → те же 4 поверхности (capability) | не отдельный conversation-цикл |
 

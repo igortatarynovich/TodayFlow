@@ -138,6 +138,7 @@ function TodayDayDashboard({
     mainDriver,
     strengthChips,
     riskChips,
+    energyCause,
   } = model;
 
   const line = atmosphereLine ?? vibe;
@@ -149,7 +150,7 @@ function TodayDayDashboard({
     openSheet({
       title: modeLabel || copy.pulseLabel,
       kicker: copy.pulseLabel,
-      body: [line, expect, atmosphereNote].filter(Boolean).join("\n\n") || copy.loadingDay,
+      body: [line, expect, atmosphereNote, energyCause].filter(Boolean).join("\n\n") || copy.loadingDay,
     });
 
   const openMoon = () => {
@@ -184,7 +185,7 @@ function TodayDayDashboard({
 
       <DsHeroBlock
         testId="today-day-brief-vibe"
-        tone="none"
+        tone="glass"
         size="feature"
         className={layout.heroOpen}
         eyebrow={copy.pulseLabel}
@@ -242,6 +243,8 @@ function TodayDayDashboard({
             {strengthChips.map((chip) => (
               <DsChip
                 key={chip.id}
+                variant="status"
+                statusTone="good"
                 testId={`today-day-strength-${chip.id}`}
                 onClick={() =>
                   openSheet({
@@ -266,6 +269,8 @@ function TodayDayDashboard({
             {riskChips.map((chip) => (
               <DsChip
                 key={chip.id}
+                variant="status"
+                statusTone="risk"
                 testId={`today-day-risk-${chip.id}`}
                 onClick={() =>
                   openSheet({

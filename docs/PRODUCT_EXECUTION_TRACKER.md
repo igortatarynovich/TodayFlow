@@ -14,7 +14,7 @@ Status: Active working document
 - **Migration required?** yes — FE cutover from six/seven steps; evening job.
 - **Canon updated?** yes — TODAY_PRODUCT_FLOW_V1 · pipeline § экран · SCENARIO_V3 banner · SCREEN_FLOW §4 · README · capability TS.
 - **Backward compatible?** yes API until gratitude/cutover; cached days keep old nests.
-- **Next:** FE ScreenFlow cutover **deployed** to this host 2026-08-15 (`docker compose … frontend` recreate; live `/today` 200). Working tree not committed. Gratitude History → Month → Map still later.
+- **Next:** FE **deployed** 2026-08-15 (`docker compose … --build --force-recreate frontend`; first attempt reused stale layers). Live `/today` 200 · image `d17bffd7`. Ritual A/B gates + overlay; evening list rows; rhythm sheet. Gratitude History → Month → Map still later. Hard-refresh.
 
 ## Architecture impact — Content pipeline + I0 (2026-08-15)
 
@@ -25,6 +25,8 @@ Status: Active working document
 - **Canon updated?** yes — TODAY_CONTENT_PIPELINE_V1 · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · SCENARIO_V3 · README.
 - **Backward compatible?** yes cached payloads.
 - **Next:** deploy when owner asks. Pipeline work order 0–11 landed in code 2026-08-15 (I0 nests, Global Engine, ritual number, manifest, guide read-only, daily_actions, poorer fallback, ScreenFlow capability, D−1 evening enqueue).
+
+- 2026-08-15 | Today / Ritual | **Число дня не открывалось** | **CODE** | ScreenFlow `transform` + `container-type: size` ловили `position: fixed`. `DsOverlaySheet` и pick-оверлеи карты/числа теперь portal в `document.body` (z-index 200). Тесты: gate → overlay, lens → sheet.
 
 
 **DONE (OPS+CODE, 2026-08-14):** **K2.6 primary · K3 complex-only** — `NEBIUS_MODEL=moonshotai/Kimi-K2.6` for day/prewarm/routine; `NEBIUS_COMPLEX_MODEL=moonshotai/Kimi-K3` + `resolve_complex_chat_model()` only for CE Stage 2–4, profile disclosure funnel, natal decode. Canon: LLM_QUALITY Nebius section.

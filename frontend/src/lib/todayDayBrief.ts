@@ -286,6 +286,14 @@ function buildMoonCard(
     cleanAmbassadorWhy(lunar?.phase?.themes) ||
     cleanAmbassadorWhy(lunar?.phase?.guidance) ||
     cleanAmbassadorWhy(lunar?.summary_ru);
+  const signChange = (contract.global_day?.drivers || []).find((row) => {
+    const kind = String(row.kind || "")
+      .trim()
+      .toLowerCase()
+      .replace(/-/g, "_");
+    return kind === "moon_ingress";
+  });
+  pushSheetRow(sheetRows, copy.sheetSignChange, clean(signChange?.fact_ru));
   const sheetBody = [title, meta, moonContext].filter((part, i, all) => part && all.indexOf(part) === i).join("\n\n");
   return {
     title: title || "Луна",
@@ -457,17 +465,24 @@ function relatedFactsForAction(
   contract: TodayContractV1,
   actionId: string,
   side: "supports" | "cautions",
-): string[] {
+): { facts: string[]; times: string[] } {
   const windows = contract.global_day?.windows;
   const drivers = contract.global_day?.drivers;
-  if (!Array.isArray(windows) || !windows.length) return [];
+  if (!Array.isArray(windows) || !windows.length) return { facts: [], times: [] };
   const driverIds = new Set<string>();
+  const times: string[] = [];
+  const seenTimes = new Set<string>();
   for (const win of windows) {
     const bucket = side === "supports" ? win.supports : win.cautions;
     if (!Array.isArray(bucket)) continue;
     if (!bucket.map((x) => String(x || "").toLowerCase().replace(/-/g, "_")).includes(actionId)) continue;
     const did = String(win.driver_id || "").trim();
     if (did) driverIds.add(did);
+    const time = clean(win.time);
+    if (time && !seenTimes.has(time)) {
+      seenTimes.add(time);
+      times.push(time);
+    }
   }
   const facts: string[] = [];
   const seen = new Set<string>();
@@ -485,7 +500,7 @@ function relatedFactsForAction(
       if (id && driverIds.has(id)) pushFact(row.fact_ru);
     }
   }
-  return facts.slice(0, 3);
+  return { facts: facts.slice(0, 3), times: times.slice(0, 3) };
 }
 
 function buildActionChips(
@@ -502,13 +517,31 @@ function buildActionChips(
     if (!chip || seen.has(chip.id)) continue;
     seen.add(chip.id);
     const related = relatedFactsForAction(contract, chip.id, side);
-    if (related.length) {
-      chip.sheetRows = [{ label: copy.sheetDrivers, value: related.join(" · ") }];
+    const rows: TodayDaySheetRow[] = [];
+    if (related.facts.length) {
+      rows.push({ label: copy.sheetDrivers, value: related.facts.join(" · ") });
     }
+    if (related.times.length) {
+      rows.push({ label: copy.sheetTime, value: related.times.join(" · ") });
+    }
+    chip.sheetRows = rows;
     out.push(chip);
     if (out.length >= max) break;
   }
   return out;
+}
+
+function actionLabelsFromList(raw: unknown): string | null {
+  if (!Array.isArray(raw)) return null;
+  const labels: string[] = [];
+  const seen = new Set<string>();
+  for (const item of raw) {
+    const chip = actionChip(typeof item === "string" ? item : null);
+    if (!chip || seen.has(chip.id)) continue;
+    seen.add(chip.id);
+    labels.push(chip.label);
+  }
+  return labels.length ? labels.join(" · ") : null;
 }
 
 function buildMainDriver(contract: TodayContractV1, energyLabel: string | null): TodayDayMainDriver | null {
@@ -518,14 +551,19 @@ function buildMainDriver(contract: TodayContractV1, energyLabel: string | null):
   const title = clean(row.fact_ru) || clean(row.kind) || (id ? id : null);
   if (!title) return null;
   const kindLabel = actionChip(row.kind)?.label || clean(row.kind);
-  const windowTime = (contract.global_day?.windows || []).find(
+  const matchedWindow = (contract.global_day?.windows || []).find(
     (win) => String(win.driver_id || "").trim() === id && clean(win.time),
-  )?.time;
+  );
+  const windowTime = matchedWindow?.time;
+  const supportLabels = actionLabelsFromList(matchedWindow?.supports);
+  const cautionLabels = actionLabelsFromList(matchedWindow?.cautions);
   const sheetRows: TodayDaySheetRow[] = [];
   pushSheetRow(sheetRows, copy.sheetEvent, clean(row.fact_ru));
   pushSheetRow(sheetRows, copy.sheetTime, windowTime);
   pushSheetRow(sheetRows, copy.sheetWhyRanked, copy.whyRankedDriver);
   pushSheetRow(sheetRows, copy.sheetEnergyLink, energyLabel);
+  pushSheetRow(sheetRows, copy.windowSupportLabel, supportLabels);
+  pushSheetRow(sheetRows, copy.windowCautionLabel, cautionLabels);
   return {
     id: id || title,
     title,

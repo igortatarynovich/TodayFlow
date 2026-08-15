@@ -1,4 +1,7 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import type { DsSurfaceTone } from "@/design-system/primitives/DsSurface";
@@ -339,6 +342,8 @@ type DsOverlaySheetProps = {
 /**
  * Modal / detail sheet — always `overlay` (opaque). Never glass:
  * stacked imagery must not show through body text.
+ * Portaled to `document.body` so ScreenFlow transform / container-type
+ * cannot trap `position: fixed`.
  */
 export function DsOverlaySheet({
   titleId,
@@ -351,21 +356,19 @@ export function DsOverlaySheet({
   children,
   testId = "ds-overlay-sheet",
 }: DsOverlaySheetProps) {
-  return (
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
       data-testid={testId}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 40,
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "center",
-        padding: "var(--tf-ds-space-4, 1rem)",
-      }}
+      className={fk.overlayRoot}
     >
       <button type="button" className={fk.overlayScrim} aria-label={closeLabel} onClick={onClose} />
       <DsCard tone="overlay" size="default" className={joinClass(fk.overlaySheet, c.stack)} testId={`${testId}-panel`}>
@@ -380,6 +383,7 @@ export function DsOverlaySheet({
           {closeLabel}
         </DsButton>
       </DsCard>
-    </div>
+    </div>,
+    document.body,
   );
 }

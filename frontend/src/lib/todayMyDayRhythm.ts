@@ -12,6 +12,9 @@ import type { TodayContractGlobalDayWindowV1 } from "@/lib/todayContract";
 export type TodayMyDayRhythmRow = {
   id: string;
   time: string;
+  /** Next clock, if any — presentation range, not a new Engine fact. */
+  timeEnd: string | null;
+  timeLabel: string;
   title: string;
   supports: string[];
   cautions: string[];
@@ -96,11 +99,19 @@ export function buildTodayMyDayRhythm(input: {
     out.push({
       id: String(row.driver_id || `window-${i}`),
       time,
+      timeEnd: null,
+      timeLabel: time,
       title,
       supports: actionLabels(win?.supports),
       cautions: actionLabels(win?.cautions),
       detail: clean(row.detail),
     });
+  }
+  for (let i = 0; i < out.length; i += 1) {
+    const next = out[i + 1];
+    if (!next) continue;
+    out[i].timeEnd = next.time;
+    out[i].timeLabel = `${out[i].time}–${next.time}`;
   }
   return out;
 }

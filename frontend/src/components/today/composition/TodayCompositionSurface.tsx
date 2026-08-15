@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { RitualNumberPickExperience } from "@/components/today/ritual/RitualNumberPickExperience";
 import { RitualTarotPickExperience } from "@/components/today/ritual/RitualTarotPickExperience";
 import type { PracticeResponse } from "@/components/today/todayPageUtils";
@@ -117,7 +118,7 @@ import {
   TAROT_DEEPEN_EVENT_SOURCE,
 } from "@/lib/tarotDeepenEvents";
 import styles from "@/design-system/compositions/dsCompositionSurface.module.css";
-import { DsButton, DsRitualGate, DsRitualGateSection } from "@/design-system";
+import { DsButton, DsListPanel, DsListRow, DsRitualGate, DsTarotFace } from "@/design-system";
 import { DsTextField } from "@/design-system/primitives/DsForm";
 import { joinClass } from "@/design-system/utils/joinClass";
 import ds from "@/design-system/primitives/dsPrimitives.module.css";
@@ -250,8 +251,13 @@ export function TodayCompositionSurface(props: Props) {
   const [habitMarking, setHabitMarking] = useState(false);
   const [asceticMarking, setAsceticMarking] = useState(false);
   const [ritualPickOpen, setRitualPickOpen] = useState<"tarot" | "number" | null>(null);
+  const [portalReady, setPortalReady] = useState(false);
   const [screenFlowIndex, setScreenFlowIndex] = useState(0);
   const screenFlowEntryApplied = useRef(false);
+
+  useEffect(() => {
+    setPortalReady(true);
+  }, []);
 
   const anchorTarotId = useMemo(
     () =>
@@ -1970,33 +1976,49 @@ export function TodayCompositionSurface(props: Props) {
       </div>
     ) : null;
 
-  const ritualGateSection =
-    useProductFoundation && showRitualSpine ? (
-      <DsRitualGateSection testId="today-zone-ritual-gates">
-        {zones.ritualTarot && !engagement.tarotPickedName ? (
-          <DsRitualGate
-            kind="tarot"
-            step="Шаг 1"
-            title={copy.ritualTarotPendingTitle}
-            body={copy.ritualTarotPendingBody}
-            cta={copy.ritualTarotOpenCta}
-            testId="today-ritual-tarot-gate"
-            onClick={() => setRitualPickOpen("tarot")}
-          />
-        ) : null}
-        {zones.ritualNumber && engagement.tarotPickedName && !engagement.numberConfirmed ? (
-          <DsRitualGate
-            kind="number"
-            step="Шаг 2"
-            title={copy.ritualNumberPendingTitle}
-            body={copy.ritualNumberPendingBody}
-            cta={copy.ritualNumberOpenCta}
-            testId="today-ritual-number-gate"
-            onClick={() => setRitualPickOpen("number")}
-          />
-        ) : null}
-      </DsRitualGateSection>
-    ) : null;
+  const ritualCardOpen = Boolean(engagement.tarotPickedName || engagement.tarotPickedId);
+  const ritualNumberOpen = Boolean(engagement.numberConfirmed);
+  const ritualCardTitle =
+    engagement.tarotPickedName ||
+    getTodayTarotCardRu(anchorTarotId)?.nameRu ||
+    props.cardName ||
+    copy.ritualCardLabel;
+  const ritualCardFace =
+    (engagement.tarotPickedId != null ? tarotCardFaceSrc(engagement.tarotPickedId) : null) ||
+    (anchorTarotId != null ? tarotCardFaceSrc(anchorTarotId) : null);
+
+  const ritualCardGate = (
+    <DsRitualGate
+      kind="tarot"
+      title={copy.ritualTarotOpenCta}
+      body={copy.ritualTarotPendingBody}
+      testId="today-ritual-tarot-gate"
+      onClick={() => setRitualPickOpen("tarot")}
+    />
+  );
+
+  const ritualNumberGate = (
+    <DsRitualGate
+      kind="number"
+      title={copy.ritualNumberOpenCta}
+      body={copy.ritualNumberPendingBody}
+      testId="today-ritual-number-gate"
+      onClick={() => setRitualPickOpen("number")}
+    />
+  );
+
+  const ritualCardKept = (
+    <DsListPanel tone="glass" testId="today-ritual-card-kept">
+      <DsListRow
+        testId="today-ritual-card-kept-row"
+        leading={
+          ritualCardFace ? <DsTarotFace src={ritualCardFace} alt={ritualCardTitle} /> : undefined
+        }
+        title={ritualCardTitle}
+        subtitle={copy.ritualCardLabel}
+      />
+    </DsListPanel>
+  );
 
   const ritualSpineStages = showRitualSpine ? (
     <>
@@ -2199,21 +2221,13 @@ export function TodayCompositionSurface(props: Props) {
       dayBody={dayStoryBrief}
       showSymbols={showSymbolsAct}
       showMyDay={showMyDayAct}
-      ritualCardOpen={Boolean(engagement.tarotPickedName || engagement.tarotPickedId)}
-      ritualNumberOpen={Boolean(engagement.numberConfirmed)}
+      ritualCardOpen={ritualCardOpen}
+      ritualNumberOpen={ritualNumberOpen}
       ritualResultBody={
-        engagement.numberConfirmed && (engagement.tarotPickedName || engagement.tarotPickedId) ? (
+        ritualNumberOpen && ritualCardOpen ? (
           <TodayRitualLensPair
-            cardTitle={
-              engagement.tarotPickedName ||
-              getTodayTarotCardRu(anchorTarotId)?.nameRu ||
-              props.cardName
-            }
-            cardFaceSrc={
-              (engagement.tarotPickedId != null
-                ? tarotCardFaceSrc(engagement.tarotPickedId)
-                : null) || (anchorTarotId != null ? tarotCardFaceSrc(anchorTarotId) : null)
-            }
+            cardTitle={ritualCardTitle}
+            cardFaceSrc={ritualCardFace}
             cardCatalog={ritualTarotMeaningText}
             cardLens={ritualTarotPersonalText}
             numberDisplay={engagement.numberValue || props.numerologyValue}
@@ -2223,8 +2237,8 @@ export function TodayCompositionSurface(props: Props) {
           />
         ) : null
       }
-      numberBody={numberPickExperience}
-      cardBody={tarotPickExperience}
+      numberBody={ritualNumberGate}
+      cardBody={ritualCardOpen ? ritualCardKept : ritualCardGate}
       myDayBody={myDayBody}
       eveningBody={handoffEveningBody}
       showPersonalized={useProductPersonalized}
@@ -2729,39 +2743,45 @@ export function TodayCompositionSurface(props: Props) {
         ) : null}
       </div>
 
-      {ritualPickOpen === "tarot" ? (
-        <div
-          className={styles.pickOverlay}
-          role="dialog"
-          aria-modal="true"
-          aria-label={copy.ritualTarotPendingTitle}
-          data-testid="today-ritual-tarot-overlay"
-        >
-          <div className={styles.pickSheet}>
-            <div data-testid="today-ritual-tarot-pick">{tarotPickExperience}</div>
-            <DsButton type="button" variant="secondary" className={styles.pickClose} onClick={() => setRitualPickOpen(null)}>
-              Закрыть
-            </DsButton>
-          </div>
-        </div>
-      ) : null}
+      {portalReady && ritualPickOpen === "tarot"
+        ? createPortal(
+            <div
+              className={styles.pickOverlay}
+              role="dialog"
+              aria-modal="true"
+              aria-label={copy.ritualTarotPendingTitle}
+              data-testid="today-ritual-tarot-overlay"
+            >
+              <div className={styles.pickSheet}>
+                <div data-testid="today-ritual-tarot-pick">{tarotPickExperience}</div>
+                <DsButton type="button" variant="secondary" className={styles.pickClose} onClick={() => setRitualPickOpen(null)}>
+                  Закрыть
+                </DsButton>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
 
-      {ritualPickOpen === "number" ? (
-        <div
-          className={styles.pickOverlay}
-          role="dialog"
-          aria-modal="true"
-          aria-label={copy.ritualNumberPendingTitle}
-          data-testid="today-ritual-number-overlay"
-        >
-          <div className={styles.pickSheet}>
-            <div data-testid="today-ritual-number-pick">{numberPickExperience}</div>
-            <DsButton type="button" variant="secondary" className={styles.pickClose} onClick={() => setRitualPickOpen(null)}>
-              Закрыть
-            </DsButton>
-          </div>
-        </div>
-      ) : null}
+      {portalReady && ritualPickOpen === "number"
+        ? createPortal(
+            <div
+              className={styles.pickOverlay}
+              role="dialog"
+              aria-modal="true"
+              aria-label={copy.ritualNumberPendingTitle}
+              data-testid="today-ritual-number-overlay"
+            >
+              <div className={styles.pickSheet}>
+                <div data-testid="today-ritual-number-pick">{numberPickExperience}</div>
+                <DsButton type="button" variant="secondary" className={styles.pickClose} onClick={() => setRitualPickOpen(null)}>
+                  Закрыть
+                </DsButton>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
 
     </>
   );

@@ -81,6 +81,17 @@
   -webkit-backdrop-filter: none;
 }
 
+/* Viewport-rooted: ScreenFlow transform / container-type steal `position:fixed`. */
+.overlayRoot {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--tf-ds-space-4, 1rem);
+}
+
 .overlayScrim {
   position: absolute;
   inset: 0;
