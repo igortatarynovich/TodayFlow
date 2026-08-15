@@ -322,11 +322,12 @@ export function DsListRow({ leading, title, subtitle, onClick, className, testId
 type DsOverlaySheetProps = {
   titleId: string;
   title: string;
-  body: string;
+  body?: string;
   kicker?: string;
   closeLabel: string;
   onClose: () => void;
   footer?: ReactNode;
+  children?: ReactNode;
   testId?: string;
 };
 
@@ -342,6 +343,7 @@ export function DsOverlaySheet({
   closeLabel,
   onClose,
   footer,
+  children,
   testId = "ds-overlay-sheet",
 }: DsOverlaySheetProps) {
   return (
@@ -366,7 +368,8 @@ export function DsOverlaySheet({
         <h3 id={titleId}>
           <DsBody>{title}</DsBody>
         </h3>
-        <DsBody size="sm">{body}</DsBody>
+        {body ? <DsBody size="sm">{body}</DsBody> : null}
+        {children}
         {footer}
         <DsButton variant="secondary" onClick={onClose}>
           {closeLabel}

@@ -135,6 +135,7 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.visualMode).toBe("flow");
     expect(model.modeLabel).toBeTruthy();
     expect(model.lunarCaption).toBe("Растущая Луна в Весы");
+    expect(model.skyStrip).toBeNull();
     expect(model.moonPhase).toBeCloseTo(11 / 29.53058867, 5);
     expect(model.whyFactors.some((f) => f.id === "lunar")).toBe(true);
     expect(model.whyFactors.some((f) => f.id === "number")).toBe(true);
@@ -242,5 +243,48 @@ describe("buildTodayDayBriefModel", () => {
     });
     expect(model.lunarCaption).toContain("Новолуние");
     expect(model.moonPhase).toBe(0);
+  });
+
+  it("prefers sky_today Moon-in-sign over catalog phase caption", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        sky_today: {
+          contract_version: "sky_today_v1",
+          moon: { body: "moon", body_ru: "Луна", sign: "Virgo", sign_ru: "Дева", degree: 28.7 },
+          headline: {
+            id: "sky-mercury-conjunction-jupiter",
+            planet_a: "mercury",
+            planet_b: "jupiter",
+            planet_a_ru: "Меркурий",
+            planet_b_ru: "Юпитер",
+            sign_a: "Leo",
+            sign_b: "Leo",
+            sign_a_ru: "Лев",
+            sign_b_ru: "Лев",
+            aspect: "conjunction",
+            aspect_ru: "соединение",
+              title_ru: "Меркурий во Льве — соединение — Юпитер во Льве",
+          },
+          positions: [],
+          aspects: [],
+        },
+        day_story: {
+          contract_version: "day_story_v1",
+          day_foundation: {
+            lunar: {
+              phase: { id: "new", name: "Новолуние" },
+              moon_sign: { sign_ru: "Дева" },
+            },
+          },
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.lunarCaption).toBe("Луна в Деве");
+    expect(model.skyStrip?.moonLabel).toBe("Луна в Деве");
+    expect(model.skyStrip?.headlineLabel).toContain("Меркурий во Льве");
+    expect(model.whyFactors.find((f) => f.id === "lunar")?.label).toBe("Луна в Деве");
   });
 });

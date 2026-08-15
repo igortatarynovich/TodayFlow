@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useState, type ReactNode } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
+import { TodaySkyStrip } from "@/components/today/composition/TodaySkyStrip";
 import type { TodayDayBriefModel } from "@/lib/todayDayBrief";
 import {
   DsActionCard,
@@ -153,6 +154,7 @@ function TodayDayDashboard({
     trap,
     personalLine,
     energy,
+    skyStrip,
   } = model;
 
   const line = atmosphereLine ?? vibe;
@@ -160,7 +162,12 @@ function TodayDayDashboard({
   const energyPct = parseEnergyPct(energy);
   const heroTitle = loading ? copy.loadingDay : modeLabel || "Сегодня";
   const heroBody = line || expect || undefined;
-  const heroDetail = lunarCaption && lunarCaption !== line ? lunarCaption : atmosphereNote || undefined;
+  const heroDetail =
+    skyStrip
+      ? atmosphereNote || undefined
+      : lunarCaption && lunarCaption !== line
+        ? lunarCaption
+        : atmosphereNote || undefined;
   const chips = (moodPills.length ? moodPills : []).slice(0, 3);
 
   const openHero = () =>
@@ -199,6 +206,7 @@ function TodayDayDashboard({
       <p data-testid="today-day-brief-date">
         <DsCaption>{dateLabel}</DsCaption>
       </p>
+      {skyStrip ? <TodaySkyStrip model={skyStrip} /> : null}
 
       {/* Open hero — no card plate; moon bleeds right; chips under copy */}
       <DsHeroBlock

@@ -11,7 +11,8 @@
 ```text
 1. День          — два кадра:
                    (a) Атмосфера = dashboard (не длинная колонка):
-                       дата + лунная подпись · hero режима (mode + atmosphere + cue) ·
+                       дата + полоска неба (Луна в знаке + одно headline-соединение; тап → sheet всех тел/аспектов) ·
+                       hero режима (mode + atmosphere + cue) ·
                        «Почему так сегодня» (chips) · «Сегодня лучше» (≤3 карточки) ·
                        Опора ‖ Ловушка · персональный мост + CTA.
                        Tap по блоку → detail sheet поверх (без смены ScreenFlow-шага).
@@ -54,7 +55,7 @@
 
 | # | Блок | ScreenFlow id | Что показывает | Откуда смысл (houses / nests) |
 |---|------|---------------|----------------|-------------------------------|
-| 1a | День · атмосфера | `day` | dashboard: date/lunar · mode hero · why chips · better cards · support‖trap · personal (+ sheet) | day_story · day_foundation · welcome_glass · day_atmosphere · domains/scenes |
+| 1a | День · атмосфера | `day` | dashboard: date · **sky strip** (Moon in sign + headline pair) · mode hero · why chips · better cards · support‖trap · personal; tap strip → overlay sheet (all bodies in signs + majors) | `sky_today` · day_story · day_foundation · welcome_glass · day_atmosphere · domains/scenes |
 | 1b | День · ориентир | `orientation` | trap · do/avoid · энергия (+ cause) · timeline | day_story · chorus energy · glance timeline |
 | 2 | Ритуалы | `rituals` | число + карта (если symbols) | Symbols·A |
 | 3 | Инструкция | `instruction` | персональный prioritize / avoid (+ deepen опц.) | Glance Daily Focus · depth_layer |
@@ -75,6 +76,15 @@
 | Focus отдельно от «инструкции» | = блок 3 |
 | Recap | Лишний; петля = promise+close |
 | 12 swipe-шагов | Распыляет день |
+
+### Architecture impact (2026-08-15 — sky strip · Moon every day + one headline)
+
+- **SoT before:** Block 1a date used catalog lunar caption (`phase · sign`); no shared-sky pair on the surface.
+- **SoT after:** Block 1a shows **Луна в знаке** every day plus **one** headline pair («кто в каком знаке»). Tap → overlay sheet with all 10 bodies in signs and major aspects. Mood still from `visual_mode` / `thesis.mode`, not from Moon sign alone.
+- **Public contract changed?** yes — additive nest `sky_today` on `today_contract_v1` (moon · headline · positions · aspects). Honest omit when empty.
+- **Migration required?** no — old clients ignore the nest.
+- **Canon updated?** yes — this file · [DAY_ENGINE_AND_COHERENCE.md](../DAY_ENGINE_AND_COHERENCE.md) §2
+- **Backward compatible?** yes API; FE without nest keeps previous lunar caption.
 
 ### Architecture impact (2026-08-10 — Block 1 dashboard + detail sheet · v3.4.2)
 

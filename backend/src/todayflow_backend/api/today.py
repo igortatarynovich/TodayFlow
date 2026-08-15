@@ -810,6 +810,55 @@ class TodayContractColorGuideV1(BaseModel):
     avoid_why: str | None = None
 
 
+class TodayContractSkyBodyV1(BaseModel):
+    body: str
+    body_ru: str
+    sign: str
+    sign_ru: str
+    degree: float | None = None
+    retrograde: bool = False
+
+
+class TodayContractSkyHeadlineV1(BaseModel):
+    id: str
+    planet_a: str
+    planet_b: str
+    planet_a_ru: str
+    planet_b_ru: str
+    sign_a: str | None = None
+    sign_b: str | None = None
+    sign_a_ru: str | None = None
+    sign_b_ru: str | None = None
+    aspect: str
+    aspect_ru: str
+    title_ru: str
+    orb_delta: float | None = None
+
+
+class TodayContractSkyAspectV1(BaseModel):
+    id: str
+    planet_a: str
+    planet_b: str
+    planet_a_ru: str
+    planet_b_ru: str
+    sign_a_ru: str | None = None
+    sign_b_ru: str | None = None
+    aspect: str
+    aspect_ru: str
+    title_ru: str
+    orb_delta: float | None = None
+
+
+class TodayContractSkyTodayV1(BaseModel):
+    """Shared-sky strip: Moon every day + one headline; sheet lists the rest."""
+
+    contract_version: str = "sky_today_v1"
+    moon: TodayContractSkyBodyV1 | None = None
+    headline: TodayContractSkyHeadlineV1 | None = None
+    positions: list[TodayContractSkyBodyV1] = Field(default_factory=list)
+    aspects: list[TodayContractSkyAspectV1] = Field(default_factory=list)
+
+
 class TodayContractV1Response(BaseModel):
     """P0.1 — Model B wire contract; legacy Today fields are not exposed."""
 
@@ -826,6 +875,7 @@ class TodayContractV1Response(BaseModel):
     welcome_glass: TodayContractWelcomeGlassV1 | None = None
     today_progress: TodayContractTodayProgressV1 | None = None
     color_guide: TodayContractColorGuideV1 | None = None
+    sky_today: TodayContractSkyTodayV1 | None = None
 
 
 def _attach_depth_layer_offer(contract: dict[str, Any], *, user: User, db, locale: str) -> dict[str, Any]:

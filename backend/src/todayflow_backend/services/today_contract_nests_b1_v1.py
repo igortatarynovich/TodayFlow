@@ -1,4 +1,4 @@
-"""Wave B1 P0 nests on today_contract_v1: welcome_glass · today_progress · color_guide.
+"""Wave B1 P0 nests on today_contract_v1: welcome_glass · today_progress · color_guide · sky_today.
 
 Canon: docs/today/TODAY_MAKE_YOURS_AND_WELCOME_SOT.md
 Fill-empty / omit-empty only — never invent calm or product copy.
@@ -487,6 +487,27 @@ def attach_today_progress_to_contract(
     return out
 
 
+def attach_sky_today_to_contract(
+    contract: dict[str, Any],
+    *,
+    morning: Any | None = None,
+) -> dict[str, Any]:
+    """Additive sky_today nest — Moon in sign + headline pair. Honest omit."""
+    from todayflow_backend.services.sky_today_v1 import (
+        build_sky_today_v1,
+        celestial_events_from_morning,
+    )
+
+    out = contract if isinstance(contract, dict) else {}
+    foundation = _as_dict(_as_dict(out.get("day_story")).get("day_foundation"))
+    nest = build_sky_today_v1(
+        celestial_events=celestial_events_from_morning(morning),
+        day_foundation=foundation or None,
+    )
+    out["sky_today"] = nest
+    return out
+
+
 def attach_b1_nests_to_contract(
     contract: dict[str, Any],
     *,
@@ -498,6 +519,7 @@ def attach_b1_nests_to_contract(
     """Attach all Wave B1 nests. today_progress requires db+user."""
     out = attach_welcome_glass_to_contract(contract, morning=morning)
     out = attach_color_guide_to_contract(out, target_date=target_date)
+    out = attach_sky_today_to_contract(out, morning=morning)
     if db is not None and user is not None and target_date is not None:
         out = attach_today_progress_to_contract(out, db, user=user, target_date=target_date)
     else:

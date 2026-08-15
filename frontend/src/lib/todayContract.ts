@@ -748,6 +748,54 @@ export type TodayContractColorGuideV1 = {
   avoid_why?: string | null;
 };
 
+export type TodayContractSkyBodyV1 = {
+  body: string;
+  body_ru: string;
+  sign: string;
+  sign_ru: string;
+  degree?: number | null;
+  retrograde?: boolean;
+};
+
+export type TodayContractSkyHeadlineV1 = {
+  id: string;
+  planet_a: string;
+  planet_b: string;
+  planet_a_ru: string;
+  planet_b_ru: string;
+  sign_a?: string | null;
+  sign_b?: string | null;
+  sign_a_ru?: string | null;
+  sign_b_ru?: string | null;
+  aspect: string;
+  aspect_ru: string;
+  title_ru: string;
+  orb_delta?: number | null;
+};
+
+export type TodayContractSkyAspectV1 = {
+  id: string;
+  planet_a: string;
+  planet_b: string;
+  planet_a_ru: string;
+  planet_b_ru: string;
+  sign_a_ru?: string | null;
+  sign_b_ru?: string | null;
+  aspect: string;
+  aspect_ru: string;
+  title_ru: string;
+  orb_delta?: number | null;
+};
+
+/** Shared sky strip + sheet. Moon every day; headline is the extra body-pair. */
+export type TodayContractSkyTodayV1 = {
+  contract_version?: string;
+  moon?: TodayContractSkyBodyV1 | null;
+  headline?: TodayContractSkyHeadlineV1 | null;
+  positions?: TodayContractSkyBodyV1[];
+  aspects?: TodayContractSkyAspectV1[];
+};
+
 export type TodayContractV1 = {
   contract_version: typeof TODAY_CONTRACT_V1 | string;
   global_context: { period: string };
@@ -763,6 +811,8 @@ export type TodayContractV1 = {
   welcome_glass?: TodayContractWelcomeGlassV1 | null;
   today_progress?: TodayContractTodayProgressV1 | null;
   color_guide?: TodayContractColorGuideV1 | null;
+  /** Shared sky: Moon in sign every day + one headline pair. Sheet lists the rest. */
+  sky_today?: TodayContractSkyTodayV1 | null;
 };
 
 export const DAY_ATMOSPHERE_ENGINE_EVENT = "todayflow:day-atmosphere";

@@ -3,7 +3,7 @@
  * No invent. Honest omit when empty.
  *
  * Presentation (v3.4.2 dashboard):
- *   date · lunar caption · mode hero · why factors · better cards ·
+ *   date · sky strip (Moon in sign + headline) · mode hero · why factors · better cards ·
  *   support ‖ trap · personal · (detail sheet on tap)
  * Canon: TODAY_SCREEN_SCENARIO_V3 · EXPLAIN_MEANING_NOT_MECHANISM
  */
@@ -13,6 +13,7 @@ import { DAY_MODE_LABELS_RU, DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 import { resolveCelestialMoonPhase } from "@/lib/celestialMoonPhase";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { HandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
+import { buildTodaySkyStripModel, inSign, type TodaySkyStripModel } from "@/lib/todaySkyToday";
 
 export type TodayDayWhyFactor = {
   id: string;
@@ -66,6 +67,8 @@ export type TodayDayBriefModel = {
   supportDetail: string | null;
   /** Personal bridge */
   personalLine: string | null;
+  /** Moon in sign + headline pair; tap sheet lists the rest. */
+  skyStrip: TodaySkyStripModel | null;
 };
 
 const KITCHEN_MECHANISM_RE =
@@ -164,7 +167,12 @@ function sceneAccents(contract: TodayContractV1): string[] {
   );
 }
 
-function buildLunarCaption(contract: TodayContractV1, glassReason: string | null): string | null {
+function buildLunarCaption(
+  contract: TodayContractV1,
+  glassReason: string | null,
+  skyStrip: TodaySkyStripModel | null,
+): string | null {
+  if (skyStrip?.moonLabel) return skyStrip.moonLabel;
   const lunar = contract.day_story?.day_foundation?.lunar;
   const phase = clean(lunar?.phase?.name);
   const sign =
@@ -218,9 +226,19 @@ function buildWhyFactors(
   };
 
   const lunar = contract.day_story?.day_foundation?.lunar;
+  const skyMoon = contract.sky_today?.moon;
   const phase = clean(lunar?.phase?.name);
-  const sign = clean(lunar?.moon_sign?.sign_ru) || clean(lunar?.moon_sign?.sign);
-  if (phase || sign) {
+  const sign =
+    clean(skyMoon?.sign_ru) ||
+    clean(lunar?.moon_sign?.sign_ru) ||
+    clean(lunar?.moon_sign?.sign);
+  if (skyMoon && sign) {
+    push(
+      "lunar",
+      inSign(skyMoon.body_ru || "Луна", sign) || `Луна в ${sign}`,
+      clean(lunar?.phase?.themes) || clean(lunar?.phase?.guidance) || clean(lunar?.summary_ru),
+    );
+  } else if (phase || sign) {
     push(
       "lunar",
       phase && sign ? `${phase} · ${sign}` : phase || `Луна в ${sign}`,
@@ -374,6 +392,8 @@ export function buildTodayDayBriefModel(input: {
       180,
     ) || null;
 
+  const skyStrip = input.loading ? null : buildTodaySkyStripModel(input.contract);
+
   return {
     dateLabel: input.dateLabel,
     salutation: input.salutation,
@@ -393,7 +413,7 @@ export function buildTodayDayBriefModel(input: {
     vibeClosing: null,
     visualMode,
     modeLabel: visualMode ? DAY_MODE_LABELS_RU[visualMode] : null,
-    lunarCaption: buildLunarCaption(input.contract, glass?.reasonLine ?? null),
+    lunarCaption: buildLunarCaption(input.contract, glass?.reasonLine ?? null, skyStrip),
     moonPhase: input.loading
       ? null
       : buildMoonPhase(input.contract, input.lunarHint, glass?.reasonLine ?? null),
@@ -402,5 +422,6 @@ export function buildTodayDayBriefModel(input: {
     supportLine,
     supportDetail,
     personalLine,
+    skyStrip,
   };
 }

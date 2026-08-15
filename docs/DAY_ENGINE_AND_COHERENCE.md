@@ -43,7 +43,9 @@
 
 **Инвариант (2026-07):** `day_events_pack` — evidence; `day_thesis` — один сюжет; `day_story` / Day Map / Hero / Instructions — проекции thesis. Запрещено параллельно вести conflict/headline/funnel thesis как независимые SoT.
 
-**Shared sky vs natal (2026-08-15):** соединения неба (Меркурий × Юпитер и т.п.) задают **погоду дня** — headline, thesis, fallback mood (`thesis.mode` → `visual_mode`). Сферы пользователя (`domain_verdicts` / `top_driver_v1`) остаются наложением транзита на натал. Не справочник: в UI одно соединение; полный ряд знаков и аспектов — в sheet по тапу.
+**Shared sky vs natal (2026-08-15):** соединения неба (Меркурий × Юпитер и т.п.) задают **погоду дня** — headline, thesis, fallback mood (`thesis.mode` → `visual_mode`). Сферы пользователя (`domain_verdicts` / `top_driver_v1`) остаются наложением транзита на натал.
+
+**Полоска Today (`sky_today`):** каждый день **Луна в знаке** (слой настроения неба) **плюс** одно headline-соединение («кто в каком знаке»). На экране только это. По тапу — полный ряд 10 тел в знаках и мажорные аспекты. Картинки: фото тел (`DsPlanet`) и иллюстрации знаков (`DsZodiac`). Не энциклопедия и не натал.
 
 **Catalog lunar phase vs Swiss lights:** mean-phase label из `LunarService` (например «новолуние» на 2-й день цикла) **не** конкурирует за `ranked_drivers`, пока Swiss элонгация Солнце–Луна не в пределах 15° от 0° / 90° / 180°. Иначе `priority_hint=ambient`. Реальный четверть-поворот остаётся `primary`.
 

@@ -250,6 +250,51 @@
   opacity: 0.55;
 }
 
+.skyStrip {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.skyStripRow {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  width: 100%;
+  min-width: 0;
+}
+
+.skyStripCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.skyStripHeadlineArt {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  flex-shrink: 0;
+}
+
+.skyPair {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
 .pilotStack {
   display: flex;
   flex-direction: column;

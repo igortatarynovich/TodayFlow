@@ -14,6 +14,13 @@ describe("ZodiacIcon", () => {
     expect(screen.getByTestId("zodiac-symbol")).toBeInTheDocument();
   });
 
+  it("renders illustration variant from painterly portraits", () => {
+    render(<ZodiacIcon sign="Leo" size={32} variant="illustration" />);
+    const symbol = screen.getByTestId("zodiac-symbol");
+    expect(symbol).toHaveAttribute("data-visual", "illustration");
+    expect(symbol.querySelector("img")).toHaveAttribute("src", expect.stringContaining("/images/zodiac/leo.webp"));
+  });
+
   it("returns null for unknown signs", () => {
     const { container } = render(<ZodiacIcon sign="Ophiuchus" />);
     expect(container.firstChild).toBeNull();
