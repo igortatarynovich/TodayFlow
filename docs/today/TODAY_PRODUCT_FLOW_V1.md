@@ -43,7 +43,7 @@ Guest: `today` + `ritual` (universal number + card base) + `evening`. `my_day` �
 | | Сейчас | Target |
 |--|--------|--------|
 | Шаги | **4** (`today` · `ritual` · `my_day` · `evening`) | 4 |
-| Timeline | только `my_day`: natal clocks как интервал до следующего часа; `supports`/`cautions` из Engine; omit если нет активаций | **только** на `my_day`, персональный |
+| Timeline | **TODAY:** Global clock. **MY DAY:** natal clocks если есть, иначе `windows[]` × `fact_ru` как «Ритм дня» | Global clock ≠ «мой» natal timeline |
 | Вечер | благодарность (persist); 5 категорий + «Написать своё» | **благодарность** |
 | Color / practice / action | карточки **внутри** `my_day`, omit если пусто | внутри `my_day` |
 | Ritual A/B | **A:** закрытая карта (`DsRitualGate`); pick в overlay. **B:** открытая карта + number gate | закрытая карта → открытая + число |
@@ -57,7 +57,7 @@ Guest: `today` + `ritual` (universal number + card base) + `evening`. `my_day` �
 Один экран. Один dashboard.
 
 ```text
-ENERGY → MOON → MAIN DRIVER → STRENGTHS → RISKS
+ENERGY% + mood → Global day clock → timed transits → STRENGTHS → RISKS
 ```
 
 Одинаков для одной `local_date` / day-TZ / версии правил.  
@@ -66,20 +66,18 @@ ENERGY → MOON → MAIN DRIVER → STRENGTHS → RISKS
 ### Верх
 
 - Дата: «Сегодня · 15 августа» (локаль).  
-- **Главная энергия** = `primary_energy` (закрытый 8-set). Считает Day Engine. LLM только формулирует.  
+- Луна — один backdrop, **~40% сферы за верхним краем** экрана (kit bleed). Не дублировать мини-луной в ряду.  
+- **Главная энергия (слово)** = `primary_energy` (закрытый 8-set). Считает Day Engine. LLM только формулирует.  
+- **Энергия %** = `round(energy_scores[primary_energy] * 100)` когда score есть. Honest omit, если scores нет. Не invent.  
+- **Настроение** = тот же 8-set, отдельная метрика (kit Data).  
 - Одна короткая человеческая строка про уже установленную энергию.
 
-### Луна
+### Часы неба (Global day clock)
 
-Компактный факт (не энциклопедия): знак · фаза · день цикла.  
-Тап → sheet: фаза, знак, смена знака если сегодня, значение **в контексте сегодняшнего Global Day**.
+Не Personal Timeline.
 
-### Главный драйвер
-
-Один (на экране). Engine ранжирует 1–3; UI показывает главного.  
-Подпись — canonical meaning, не десять аспектов.  
-Тап → событие, время, canonical meaning, почему в ranked drivers, связь с `primary_energy`.
-
+- **Окно дня** (`DsWindowCard`): start–end из Engine `windows[]` (пик intensity → следующий timed clock; один clock → omit range, не invent +90 мин). Spectrum = позиция start на шкале 06:00–24:00.  
+- **Влияния дня** (list rows): Луна (знак · фаза) + ranked drivers 1–3. Leading = `DsPlanet`. **Время на строке**, если Engine дал `windows[].time` для `driver_id`. Тап по планете/строке → sheet: событие, время, canonical meaning, почему в ranked, связь с `primary_energy`.  
 Пользователь всегда может ответить: *почему TodayFlow считает день именно таким?*
 
 ### Сильные стороны / риски
@@ -90,9 +88,9 @@ Chips / иконки из Global `strength[]` / `risk[]` (типы действ�
 
 ### Здесь нет
 
-Персональный прогноз · натал · Personal Day Number · карта · персональный timeline · гороскоп work/money/relationships/health · простыня аспектов · отдельный кадр «ориентир».
+Персональный прогноз · натал · Personal Day Number · карта · **персональный** timeline · гороскоп work/money/relationships/health · простыня аспектов · отдельный кадр «ориентир».
 
-**Timeline на этом экране запрещён.** Окна считает Engine (authority); **показ** — только Personal Timeline на `my_day`. UI hide ≠ mutate.
+**Personal Timeline на этом экране запрещён.** Окна считает Engine (authority). **Показ Global clock** (окно + timed transits) — здесь. **Показ Personal Timeline** — только на `my_day` (небо × natal). UI hide ≠ mutate.
 
 ---
 
@@ -140,14 +138,15 @@ Global Day × Natal Overlay → Personal Day
 | Color / practice / affirmation / action | опциональные карточки; не источники смысла |
 | Trackers / streaks | показать релевантное; **не** участвуют в Global / Personal / energy / drivers / timeline |
 
-### Personal Timeline
+### Personal Timeline / ритм дня
 
-Единственный timeline продукта. Внутри `my_day`, не отдельный шаг.
+Внутри `my_day`, не отдельный шаг.
 
-Основа: точные события общего неба × natal activations.  
-Не бинарное хорошо/плохо: окно несёт `supports[]` / `cautions[]` (уже решённые Engine; Personal только отбирает и формулирует).
+**Если есть natal activations** — Personal Timeline: точные часы натала × Engine `windows[]` (`supports` / `cautions`). Подпись «Мой ритм дня».
 
-Нет значимых персональных активаций → **omit**, не invent.
+**Если натальных часов нет** — показать **Global day clock**: те же timed `windows[]` × ranked `drivers.fact_ru`. Подпись «Ритм дня», не «мой». Это часы неба, не персональная геометрия. Untitled window (нет факта драйвера) — omit, не invent.
+
+Нет ни natal clocks, ни timed windows с фактами → **omit**.
 
 ### Дополнительные карточки (не шаги)
 
@@ -214,10 +213,10 @@ USER RESPONSE           →  GRATITUDE HISTORY
 |-------|----------|---------|----------|----------|-----------|-------------------|
 | guest | shared sky | да | card + universal number | omit | да | omit |
 | general | account, thin natal | да | да | omit | да | omit |
-| light | DOB | да | да | да (без домов/ASC) | да | omit |
-| deep | DOB + time + place | да | да | да | да | если есть активации |
+| light | DOB | да | да | да (без домов/ASC) | да | natal omit; **Global «Ритм дня»** если есть windows |
+| deep | DOB + time + place | да | да | да | да | natal если есть активации; иначе Global clock |
 
-Пустые персональные слоты, притворяющиеся «твоим днём», запрещены.
+Пустые персональные слоты, притворяющиеся «твоим днём», запрещены. Global `windows[]` на `my_day` — часы неба, не «мой натал».
 
 ---
 
@@ -227,7 +226,7 @@ USER RESPONSE           →  GRATITUDE HISTORY
 
 0. **Этот документ** — product flow.  
 1. Схлопнуть ScreenFlow ids → `today` · `ritual` · `my_day` · `evening`.  
-2. TODAY dashboard: energy · moon · driver · strength/risk chips; sheets on tap; **убрать timeline с Global**.  
+2. TODAY dashboard: energy% · mood · Global day clock · timed transits · strength/risk chips; sheets on tap; Personal Timeline только на `my_day`.  
 3. Ritual A→B→C (карта, затем число; оба остаются).  
 4. MY DAY: headline · focus · priority · cautions · personal timeline · optional cards.  
 5. Evening gratitude persist (замена evening-job «обещание/ловушка»).  
@@ -238,8 +237,26 @@ USER RESPONSE           →  GRATITUDE HISTORY
 ## Architecture impact (2026-08-15)
 
 - **SoT before:** presentation = SCENARIO_V3.4 шесть блоков (day+orientation, color, tasks, loop=promise). Timeline мог жить на Global. Evening = close/trap/promise.
-- **SoT after:** этот файл — product cycle. 4 поверхности. Timeline **показ** только Personal. Evening = gratitude. Meaning без изменений (pipeline I0).
-- **Public contract changed?** target yes, phased: gratitude payload; ScreenFlow step ids; Global screen без `windows` в UI (поля Engine остаются в `global_day`).
+- **SoT after:** этот файл — product cycle. 4 поверхности. Personal Timeline **показ** только на `my_day`. Evening = gratitude. Meaning без изменений (pipeline I0).
+- **Public contract changed?** target yes, phased: gratitude payload; ScreenFlow step ids. (Global `windows[]` UI: see 2026-08-15 day-clock note below.)
 - **Migration required?** yes — FE ScreenFlow cutover; evening job; cached UI that expects 1b/orientation/color steps.
 - **Canon updated?** yes — this file · pipeline § экран · SCENARIO_V3 superseded banner · SCREEN_FLOW_V1 §4 · README · tracker · capability TS.
 - **Backward compatible?** yes API; old cached days keep nests. FE ScreenFlow ids are `today` · `ritual` · `my_day` · `evening`.
+
+## Architecture impact (2026-08-15 · Global day clock on TODAY)
+
+- **SoT before:** TODAY sequence ENERGY → MOON → MAIN DRIVER → STRENGTHS → RISKS. UI показывал одного драйвера; energy = 8-set label; `windows[]` скрыты на TODAY (Personal Timeline only on `my_day`).
+- **SoT after:** TODAY sequence ENERGY% + mood → Global day clock (`DsWindowCard` from `windows[]`) → timed transits (moon + ranked drivers, tap → sheet) → STRENGTHS → RISKS. Луна = один backdrop, ~40% за верхним краем. **Personal Timeline** = natal × windows на `my_day`. Если natal clocks нет — `my_day` показывает Global `windows[]` × `fact_ru` как «Ритм дня».
+- **Public contract changed?** no JSON fields; UI reads existing `global_day.energy_scores`, `windows[]`, `drivers[]`.
+- **Migration required?** no — omit metric/window/time when Engine left them empty.
+- **Canon updated?** yes — this file §1 · §3 · pipeline § экран · tracker.
+- **Backward compatible?** yes; days without scores/windows honest-omit those blocks.
+
+## Architecture impact (2026-08-15 · MY DAY Global rhythm fallback)
+
+- **SoT before:** MY DAY timeline omit unless deep natal `glance_timeline`. Light `my_day` had no clock. Empty natal → empty block.
+- **SoT after:** MY DAY mounts the rhythm whenever the screen is shown. Natal clocks win. Else Engine `windows[]` × driver `fact_ru`, label «Ритм дня» (not «Мой»). Untitled windows omit.
+- **Public contract changed?** no.
+- **Migration required?** no.
+- **Canon updated?** yes — this file §3 · capability table · pipeline § экран.
+- **Backward compatible?** yes; no windows/facts → still omit.

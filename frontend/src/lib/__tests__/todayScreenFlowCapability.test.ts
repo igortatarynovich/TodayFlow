@@ -19,7 +19,7 @@ describe("Today ScreenFlow capability matrix", () => {
     expect(todayCapabilityAllowsPersonal("guest")).toBe(false);
   });
 
-  it("never shows a timeline on the Global TODAY screen", () => {
+  it("never shows a natal personal timeline on the Global TODAY screen", () => {
     expect(todayCapabilityShowsTimelineOnToday()).toBe(false);
   });
 

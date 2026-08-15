@@ -4,7 +4,8 @@
  *
  * Four surfaces: today · ritual · my_day · evening.
  * Presentation may hide a house. It must not invent Personal Day for guests.
- * Timeline is never shown on `today` (Global). Personal timeline only on `my_day`.
+ * Personal natal timeline never on `today`. Global day clock (windows[]) may show on TODAY.
+ * MY DAY: natal clocks when present, else Global windows × driver facts as «Ритм дня».
  */
 
 export type TodayCapabilityDepth = "guest" | "general" | "light" | "deep";

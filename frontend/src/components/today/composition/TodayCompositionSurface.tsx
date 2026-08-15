@@ -2183,10 +2183,12 @@ export function TodayCompositionSurface(props: Props) {
       priorities={myDayPriorities}
       cautions={myDayCautions}
       timeline={
-        showPersonalTimeline ? (
+        showMyDayAct ? (
           <TodayMyDayRhythm
             dateISO={dateISO}
             windows={props.contract.global_day?.windows ?? null}
+            drivers={props.contract.global_day?.drivers ?? null}
+            allowNatalFetch={showPersonalTimeline}
           />
         ) : null
       }

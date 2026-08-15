@@ -330,13 +330,25 @@ describe("buildTodayDayBriefModel", () => {
         ...baseContract,
         global_day: {
           primary_energy: "clarity",
-          drivers: [{ id: "moon-ingress", kind: "moon_ingress", fact_ru: "Луна вошла в Деву" }],
+          energy_scores: { clarity: 0.78, tension: 0.2 },
+          drivers: [
+            { id: "moon-ingress", kind: "moon_ingress", fact_ru: "Луна вошла в Деву" },
+            { id: "mars-sat", kind: "sky_aspect", fact_ru: "Марс в квадрате к Сатурну" },
+          ],
           strength: ["deep_work", "admin_order"],
           risk: ["hard_negotiation", "unknown_type"],
           windows: [
             {
-              time: "14:30",
+              time: "08:30",
               driver_id: "moon-ingress",
+              intensity: 0.4,
+              supports: ["deep_work"],
+              cautions: ["hard_negotiation"],
+            },
+            {
+              time: "14:30",
+              driver_id: "mars-sat",
+              intensity: 0.8,
               supports: ["deep_work"],
               cautions: ["hard_negotiation"],
             },
@@ -347,10 +359,12 @@ describe("buildTodayDayBriefModel", () => {
       salutation: "Привет",
     });
     expect(model.visualMode).toBe("clarity");
+    expect(model.energyPct).toBe(78);
+    expect(model.modeLabel).toBe("Ясность");
     expect(model.mainDriver?.title).toContain("Луна вошла в Деву");
     expect(model.mainDriver?.body).toBe("Смена знака");
     expect(model.mainDriver?.planets).toEqual(["moon"]);
-    expect(model.mainDriver?.sheetRows.some((r) => r.label === "Время" && r.value === "14:30")).toBe(
+    expect(model.mainDriver?.sheetRows.some((r) => r.label === "Время" && r.value === "08:30")).toBe(
       true,
     );
     expect(
@@ -364,11 +378,19 @@ describe("buildTodayDayBriefModel", () => {
       ),
     ).toBe(true);
     expect(model.mainDriver?.sheetRows.some((r) => r.label === "Связь с энергией")).toBe(true);
+    expect(model.transits.map((t) => t.title)).toEqual(
+      expect.arrayContaining(["Луна вошла в Деву", "Марс в квадрате к Сатурну"]),
+    );
+    expect(model.transits.find((t) => t.id === "mars-sat")?.time).toBe("14:30");
+    expect(model.transits.find((t) => t.id === "mars-sat")?.planets).toEqual(
+      expect.arrayContaining(["mars", "saturn"]),
+    );
+    expect(model.dayWindow?.start).toBe("08:30");
+    expect(model.dayWindow?.end).toBe("14:30");
+    expect(model.dayWindow?.mark).toBeCloseTo((8 * 60 + 30 - 6 * 60) / (18 * 60), 5);
     expect(model.strengthChips.map((c) => c.id)).toEqual(["deep_work", "admin_order"]);
     expect(model.strengthChips[0]?.sheetRows[0]?.value).toContain("Луна вошла в Деву");
-    expect(model.strengthChips[0]?.sheetRows.some((r) => r.label === "Время" && r.value === "14:30")).toBe(
-      true,
-    );
+    expect(model.strengthChips[0]?.sheetRows.some((r) => r.label === "Время")).toBe(true);
     expect(model.riskChips.map((c) => c.id)).toEqual(["hard_negotiation"]);
     expect(model.riskChips[0]?.sheetRows[0]?.value).toContain("Луна вошла в Деву");
   });
@@ -390,5 +412,25 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.mainDriver?.body).toBe("Смена фазы");
     expect(model.mainDriver?.body).not.toMatch(/phase_change/);
     expect(model.mainDriver?.planets).toEqual(["moon"]);
+  });
+
+  it("omits energy percent and day window when Engine left them empty", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_day: {
+          primary_energy: "tension",
+          drivers: [{ id: "d1", kind: "sky_aspect", fact_ru: "Марс в соединении с Венерой" }],
+          windows: [{ time: "11:00", driver_id: "d1" }],
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.energyPct).toBeNull();
+    expect(model.dayWindow).toBeNull();
+    expect(model.transits[0]?.title).toContain("Марс в соединении с Венерой");
+    expect(model.transits[0]?.time).toBe("11:00");
+    expect(model.transits[0]?.planets).toEqual(expect.arrayContaining(["mars", "venus"]));
   });
 });

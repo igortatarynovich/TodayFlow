@@ -60,7 +60,7 @@
   padding: 0 0 var(--tf-ds-space-4, 0.75rem);
   border-radius: 0;
   overflow: visible;
-  min-height: clamp(15rem, 40vw, 20rem);
+  min-height: 0;
 }
 
 /* Generic bleed slot — small corner asset. */
@@ -90,19 +90,19 @@
   max-width: none;
 }
 
-/* Large rotating moon sits under TODAY cards — one instance, not a row thumbnail. */
+/* Large rotating moon: ~40% of the sphere sits above the pane top edge. */
 .dayBriefMoonStage {
   position: relative;
   isolation: isolate;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .dayBriefMoonBackdrop {
   position: absolute;
   left: 50%;
-  top: 1.25rem;
-  width: min(120%, 26rem);
-  transform: translateX(-46%);
+  top: 0;
+  width: min(140%, 28rem);
+  transform: translate(-50%, -40%);
   aspect-ratio: 1;
   pointer-events: none;
   z-index: 0;

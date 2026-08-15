@@ -14,7 +14,25 @@ Status: Active working document
 - **Migration required?** yes — FE cutover from six/seven steps; evening job.
 - **Canon updated?** yes — TODAY_PRODUCT_FLOW_V1 · pipeline § экран · SCENARIO_V3 banner · SCREEN_FLOW §4 · README · capability TS.
 - **Backward compatible?** yes API until gratitude/cutover; cached days keep old nests.
-- **Next:** FE **deployed** 2026-08-15 (`docker compose … --build --force-recreate frontend`; first attempt reused stale layers). Live `/today` 200 · image `d17bffd7`. Ritual A/B gates + overlay; evening list rows; rhythm sheet. Gratitude History → Month → Map still later. Hard-refresh.
+- **Next:** FE rebuilt 2026-08-15 (`docker compose … --build --force-recreate frontend`). Live `/today` 200 · image `551d5764`. TODAY Global clock + MY DAY «Ритм дня» from windows when natal empty. Hard-refresh. Gratitude History → Month → Map still later.
+
+## Architecture impact — MY DAY Global rhythm fallback (2026-08-15)
+
+- **SoT before:** MY DAY timeline only if `personalTimeline` (deep) and natal `glance_timeline`. Light users and empty natal saw no clock.
+- **SoT after:** Rhythm mounts on any `my_day`. Natal clocks if present («Мой ритм дня»). Else Global windows × driver facts («Ритм дня»).
+- **Public contract changed?** no.
+- **Migration required?** no.
+- **Canon updated?** yes — TODAY_PRODUCT_FLOW_V1 §3 · pipeline § экран.
+- **Backward compatible?** yes; untitled windows omit.
+
+## Architecture impact — Global day clock on TODAY (2026-08-15)
+
+- **SoT before:** TODAY hid `windows[]`; one ranked driver; energy = 8-set label; Personal Timeline only on MY DAY.
+- **SoT after:** TODAY shows Global clock from existing `global_day.windows[]` + timed transit rows (moon + drivers) + `energy_scores[primary]` as %. Personal Timeline still MY DAY only (natal × windows). Form kit blocks (`DsMetricCard`, `DsWindowCard`, `DsListRow`+`DsPlanet`).
+- **Public contract changed?** no — UI reads existing nests.
+- **Migration required?** no.
+- **Canon updated?** yes — TODAY_PRODUCT_FLOW_V1 §1 · pipeline § экран.
+- **Backward compatible?** yes; omit empty scores/windows.
 
 ## Architecture impact — Content pipeline + I0 (2026-08-15)
 

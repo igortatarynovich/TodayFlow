@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useState, type ReactNode } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import type { TodayDayBriefModel } from "@/lib/todayDayBrief";
+import type { TodayDayBriefModel, TodayDayTransitRow } from "@/lib/todayDayBrief";
 import {
   DsActionCard,
   DsCallout,
@@ -23,14 +23,17 @@ import {
   DsPlanet,
   DsRadialMeter,
   DsSectionHeader,
+  DsSpectrum,
   DsWaveMeter,
+  DsWindowCard,
 } from "@/design-system";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
 import { joinClass } from "@/design-system/utils/joinClass";
 
 /**
- * TODAY dashboard — ENERGY → MOON → MAIN DRIVER → STRENGTHS → RISKS.
- * Layout: docs/today/TODAY_PRODUCT_FLOW_V1.md · kit only.
+ * TODAY dashboard — ENERGY% + mood → Global day clock → timed transits → STRENGTHS → RISKS.
+ * Layout: docs/today/TODAY_PRODUCT_FLOW_V1.md · form kit only.
+ * Global clock ≠ Personal Timeline (MY DAY).
  */
 
 export type TodayDayBriefPane = "atmosphere" | "orientation";
@@ -115,6 +118,18 @@ function TodayDayDetailSheet({
   );
 }
 
+function moodStatusTone(mode: string | null | undefined): "good" | "warn" | "risk" | "neutral" {
+  if (mode === "tension") return "risk";
+  if (mode === "momentum") return "warn";
+  if (mode === "renewal" || mode === "flow" || mode === "grounded" || mode === "clarity") return "good";
+  return "neutral";
+}
+
+function transitRowTestId(row: TodayDayTransitRow): string {
+  if (row.id === "moon") return "today-day-brief-moon-row";
+  return `today-day-brief-transit-${row.id}`;
+}
+
 function TodayDayDashboard({
   model,
   loading,
@@ -135,18 +150,24 @@ function TodayDayDashboard({
     atmosphereNote,
     expect,
     modeLabel,
+    visualMode,
     moonPhase,
     moonCard,
-    mainDriver,
+    transits,
+    dayWindow,
+    energyPct,
     strengthChips,
     riskChips,
     energyCause,
   } = model;
+  const transitRows = transits || [];
 
   const line = atmosphereLine ?? vibe;
   const showMoon = typeof moonPhase === "number" && Number.isFinite(moonPhase);
   const heroTitle = loading ? copy.loadingDay : modeLabel || "Сегодня";
   const heroBody = line || expect || undefined;
+  const showPulse = energyPct !== null || Boolean(modeLabel);
+  const firstDriverId = transitRows.find((item) => item.id !== "moon")?.id;
 
   const openHero = () =>
     openSheet({
@@ -155,23 +176,12 @@ function TodayDayDashboard({
       body: [line, expect, atmosphereNote, energyCause].filter(Boolean).join("\n\n") || copy.loadingDay,
     });
 
-  const openMoon = () => {
-    if (!moonCard) return;
+  const openTransit = (row: TodayDayTransitRow) => {
     openSheet({
-      title: moonCard.title,
-      kicker: copy.moonLabel,
-      body: moonCard.context || undefined,
-      rows: moonCard.sheetRows,
-    });
-  };
-
-  const openDriver = () => {
-    if (!mainDriver) return;
-    openSheet({
-      title: mainDriver.title,
-      kicker: copy.mainDriverLabel,
-      body: undefined,
-      rows: mainDriver.sheetRows.length ? mainDriver.sheetRows : undefined,
+      title: row.title,
+      kicker: row.time || (row.id === "moon" ? copy.moonLabel : copy.transitsLabel),
+      body: row.id === "moon" ? moonCard?.context || undefined : undefined,
+      rows: row.sheetRows.length ? row.sheetRows : undefined,
     });
   };
 
@@ -184,7 +194,7 @@ function TodayDayDashboard({
       data-has-moon={showMoon ? "true" : "false"}
     >
       {showMoon ? (
-        <div className={layout.dayBriefMoonBackdrop} aria-hidden>
+        <div className={layout.dayBriefMoonBackdrop} aria-hidden data-moon-crop="top-40">
           <DsCelestialMoon
             phase={moonPhase}
             size={440}
@@ -218,34 +228,82 @@ function TodayDayDashboard({
         onOpen={openHero}
       />
 
-      {moonCard ? (
-        <DsListPanel tone="glass" testId="today-day-brief-moon-card">
-          <DsListRow
-            testId="today-day-brief-moon-row"
-            title={moonCard.title}
-            subtitle={moonCard.meta || undefined}
-            onClick={openMoon}
-          />
-        </DsListPanel>
+      {showPulse ? (
+        <div className={layout.pairGrid} data-testid="today-day-brief-pulse">
+          {energyPct !== null ? (
+            <DsMetricCard
+              tone="solid"
+              testId="today-day-brief-energy"
+              value={`${energyPct}%`}
+              label={copy.pulseLabel}
+              meter={
+                <div className={layout.stackTight}>
+                  <DsRadialMeter value={energyPct} size={72} />
+                  <DsWaveMeter value={energyPct} />
+                </div>
+              }
+            />
+          ) : null}
+          {modeLabel ? (
+            <DsMetricCard
+              tone="solid"
+              testId="today-day-brief-mood"
+              value={modeLabel}
+              label={copy.moodLabel}
+              meter={
+                <DsChip variant="status" statusTone={moodStatusTone(visualMode)}>
+                  {modeLabel}
+                </DsChip>
+              }
+            />
+          ) : null}
+        </div>
       ) : null}
 
-      {mainDriver ? (
-        <DsListPanel tone="glass" testId="today-day-brief-driver">
-          <DsListRow
-            testId="today-day-brief-driver-row"
-            leading={
-              mainDriver.planets.length ? (
-                <span className={layout.planetPair}>
-                  {mainDriver.planets.map((planet) => (
-                    <DsPlanet key={planet} planet={planet} size={44} />
-                  ))}
-                </span>
-              ) : undefined
-            }
-            title={mainDriver.title}
-            subtitle={mainDriver.body || copy.mainDriverLabel}
-            onClick={openDriver}
-          />
+      {dayWindow ? (
+        <DsWindowCard
+          tone="solid"
+          testId="today-day-brief-window"
+          title={copy.bestWindowLabel}
+          startLabel={dayWindow.start}
+          endLabel={dayWindow.end}
+          spectrum={
+            <DsSpectrum
+              value={dayWindow.mark}
+              lowLabel={copy.spectrumDawn}
+              highLabel={copy.spectrumNight}
+              testId="today-day-brief-spectrum"
+            />
+          }
+        />
+      ) : null}
+
+      {transitRows.length > 0 ? (
+        <DsListPanel tone="glass" title={copy.transitsLabel} testId="today-day-brief-transits">
+          {transitRows.map((row) => (
+            <DsListRow
+              key={row.id}
+              testId={
+                row.id === "moon"
+                  ? "today-day-brief-moon-row"
+                  : row.id === firstDriverId
+                    ? "today-day-brief-driver-row"
+                    : transitRowTestId(row)
+              }
+              leading={
+                row.planets.length ? (
+                  <span className={layout.planetPair}>
+                    {row.planets.map((planet) => (
+                      <DsPlanet key={planet} planet={planet} size={44} />
+                    ))}
+                  </span>
+                ) : undefined
+              }
+              title={row.title}
+              subtitle={row.time || (row.id === "moon" ? moonCard?.meta || undefined : undefined)}
+              onClick={() => openTransit(row)}
+            />
+          ))}
         </DsListPanel>
       ) : null}
 

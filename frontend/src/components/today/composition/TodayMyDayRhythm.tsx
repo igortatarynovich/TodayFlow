@@ -8,6 +8,7 @@ import {
   DsListPanel,
   DsListRow,
   DsOverlaySheet,
+  DsPlanet,
 } from "@/design-system";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
@@ -18,34 +19,57 @@ import {
   todaySlotFailureCopy,
   type TodaySlotLoadFailure,
 } from "@/lib/todaySlotAvailability";
-import { buildTodayMyDayRhythm, type TodayMyDayRhythmRow } from "@/lib/todayMyDayRhythm";
+import {
+  buildTodayMyDayRhythm,
+  type TodayMyDayRhythmRow,
+  type TodayRhythmDriver,
+} from "@/lib/todayMyDayRhythm";
 
 type Props = {
   dateISO: string;
   windows?: TodayContractGlobalDayWindowV1[] | null;
+  drivers?: TodayRhythmDriver[] | null;
   glanceRows?: GlanceTimelineItem[] | null;
+  /** Fetch natal glance clocks. Off for light/guest — Global windows still show. */
+  allowNatalFetch?: boolean;
 };
 
 type SheetState = TodayMyDayRhythmRow | null;
 
 /**
- * Personal timeline on MY DAY. Kit only.
- * Omit when no natal clocks. Failure copy is transport-only — no invent.
+ * Day clock on MY DAY. Kit only.
+ * Natal clocks when present; otherwise Engine windows × driver facts.
+ * Failure copy is transport-only — no invent.
  */
-export function TodayMyDayRhythm({ dateISO, windows = null, glanceRows }: Props) {
+export function TodayMyDayRhythm({
+  dateISO,
+  windows = null,
+  drivers = null,
+  glanceRows,
+  allowNatalFetch = false,
+}: Props) {
   const fromParent = glanceRows != null;
   const [rows, setRows] = useState(() =>
-    fromParent ? buildTodayMyDayRhythm({ glanceRows, windows }) : [],
+    fromParent
+      ? buildTodayMyDayRhythm({ glanceRows, windows, drivers })
+      : buildTodayMyDayRhythm({ windows, drivers }),
   );
   const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
-  const [loaded, setLoaded] = useState(fromParent);
+  const [loaded, setLoaded] = useState(fromParent || !allowNatalFetch);
   const [sheet, setSheet] = useState<SheetState>(null);
   const closeSheet = useCallback(() => setSheet(null), []);
 
   useEffect(() => {
     if (glanceRows != null) {
       setFailure(null);
-      setRows(buildTodayMyDayRhythm({ glanceRows, windows }));
+      setRows(buildTodayMyDayRhythm({ glanceRows, windows, drivers }));
+      setLoaded(true);
+      return;
+    }
+
+    if (!allowNatalFetch) {
+      setFailure(null);
+      setRows(buildTodayMyDayRhythm({ windows, drivers }));
       setLoaded(true);
       return;
     }
@@ -58,23 +82,32 @@ export function TodayMyDayRhythm({ dateISO, windows = null, glanceRows }: Props)
         if (cancelled) return;
         if (data.is_fallback ?? data.degraded) {
           setFailure("unavailable");
-          setRows([]);
+          setRows(buildTodayMyDayRhythm({ windows, drivers }));
         } else {
           setFailure(null);
-          setRows(buildTodayMyDayRhythm({ glanceRows: data.glance_timeline ?? [], windows }));
+          setRows(
+            buildTodayMyDayRhythm({
+              glanceRows: data.glance_timeline ?? [],
+              windows,
+              drivers,
+            }),
+          );
         }
         setLoaded(true);
       })
       .catch(() => {
         if (cancelled) return;
         setFailure("no_connection");
-        setRows([]);
+        setRows(buildTodayMyDayRhythm({ windows, drivers }));
         setLoaded(true);
       });
     return () => {
       cancelled = true;
     };
-  }, [dateISO, glanceRows, windows]);
+  }, [dateISO, glanceRows, windows, drivers, allowNatalFetch]);
+
+  const personal = rows.some((row) => row.source === "natal");
+  const rhythmLabel = personal ? copy.myDayRhythmLabel : copy.dayRhythmLabel;
 
   if (!loaded) {
     return (
@@ -82,10 +115,10 @@ export function TodayMyDayRhythm({ dateISO, windows = null, glanceRows }: Props)
     );
   }
 
-  if (failure) {
+  if (failure && rows.length === 0) {
     return (
       <DsCard tone="glass" size="compact" testId="today-my-day-rhythm">
-        <DsEyebrow>{copy.myDayRhythmLabel}</DsEyebrow>
+        <DsEyebrow>{rhythmLabel}</DsEyebrow>
         <p data-testid="today-my-day-rhythm-failure" role="status">
           <DsBody size="sm" muted>
             {todaySlotFailureCopy(failure)}
@@ -100,12 +133,21 @@ export function TodayMyDayRhythm({ dateISO, windows = null, glanceRows }: Props)
   return (
     <>
       <DsCard tone="glass" size="compact" testId="today-my-day-rhythm">
-        <DsEyebrow>{copy.myDayRhythmLabel}</DsEyebrow>
+        <DsEyebrow>{rhythmLabel}</DsEyebrow>
         <DsListPanel tone="subtle" testId="today-my-day-rhythm-list">
           {rows.map((row) => (
             <DsListRow
               key={row.id}
               testId={`today-my-day-rhythm-${row.id}`}
+              leading={
+                row.planets.length ? (
+                  <span className={layout.planetPair}>
+                    {row.planets.map((planet) => (
+                      <DsPlanet key={planet} planet={planet} size={36} />
+                    ))}
+                  </span>
+                ) : undefined
+              }
               title={row.timeLabel}
               subtitle={row.title}
               onClick={() => setSheet(row)}
@@ -113,12 +155,20 @@ export function TodayMyDayRhythm({ dateISO, windows = null, glanceRows }: Props)
           ))}
         </DsListPanel>
       </DsCard>
-      <RhythmDetailSheet sheet={sheet} onClose={closeSheet} />
+      <RhythmDetailSheet sheet={sheet} label={rhythmLabel} onClose={closeSheet} />
     </>
   );
 }
 
-function RhythmDetailSheet({ sheet, onClose }: { sheet: SheetState; onClose: () => void }) {
+function RhythmDetailSheet({
+  sheet,
+  label,
+  onClose,
+}: {
+  sheet: SheetState;
+  label: string;
+  onClose: () => void;
+}) {
   const titleId = useId();
   useEffect(() => {
     if (!sheet) return;
@@ -152,7 +202,7 @@ function RhythmDetailSheet({ sheet, onClose }: { sheet: SheetState; onClose: () 
       testId="today-my-day-rhythm-sheet"
       titleId={titleId}
       title={sheet.timeLabel}
-      kicker={copy.myDayRhythmLabel}
+      kicker={label}
       body={sheet.title}
       closeLabel={copy.sheetClose}
       onClose={onClose}

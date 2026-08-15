@@ -255,12 +255,12 @@ UI читает Contract. Не ранжирует, не invent.
 
 | Когда | Что | Показ |
 |-------|-----|-------|
-| TODAY | Global Day: energy · moon · main driver · strength/risk chips | **без** timeline |
+| TODAY | Global Day: energy% · mood · Global day clock · timed transits · strength/risk | Global clock; **не** Personal Timeline |
 | RITUAL | карта, затем число (линзы; не пересчёт) | sequential reveal |
-| MY DAY | Personal Day: headline · focus · priority · cautions · personal timeline · optional color/practice/action | timeline **только здесь** |
+| MY DAY | Personal Day: headline · focus · priority · cautions · rhythm · optional color/practice/action | natal timeline если есть; иначе Global `windows[]` как «Ритм дня» |
 | EVENING | благодарность → Gratitude History | не trap-check / не «совпал ли прогноз» |
 
-Timeline **authority** = Global Engine `windows[]` (`supports` / `cautions`). **Показ** = Personal Timeline на `my_day` (небо × natal). UI hide на TODAY ≠ mutate.
+Timeline **authority** = Global Engine `windows[]` (`supports` / `cautions`). **Показ Global clock** = TODAY (окно + timed transits) и, если нет natal clocks, `my_day` («Ритм дня»). **Показ Personal Timeline** = `my_day` только при natal activations («Мой ритм дня»). UI hide ≠ mutate.
 
 Guest: TODAY + ritual (universal number + card base) + evening. MY DAY omit.
 

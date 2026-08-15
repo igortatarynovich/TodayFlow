@@ -1,6 +1,7 @@
 /**
  * TODAY dashboard model — Global Day only.
- * Sequence: ENERGY → MOON → MAIN DRIVER → STRENGTHS → RISKS.
+ * Sequence: ENERGY% + mood → Global day clock → timed transits → STRENGTHS → RISKS.
+ * Global clock = Engine windows[] (not Personal Timeline).
  * No invent. Honest omit when empty. Natal/card/number stay off this screen.
  * Canon: docs/today/TODAY_PRODUCT_FLOW_V1.md
  */
@@ -9,7 +10,7 @@ import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/t
 import type { DayVisualMode } from "@/lib/dayAtmosphere";
 import { DAY_MODE_LABELS_RU, DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 import { resolveCelestialMoonPhase } from "@/lib/celestialMoonPhase";
-import type { TodayContractV1 } from "@/lib/todayContract";
+import type { TodayContractGlobalDayWindowV1, TodayContractV1 } from "@/lib/todayContract";
 import type { HandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 import { buildTodaySkyStripModel, inSign, type TodaySkyStripModel } from "@/lib/todaySkyToday";
 
@@ -112,8 +113,28 @@ export type TodayDayBriefModel = {
   moonCard: TodayDayMoonCard | null;
   /** Ranked Global driver #1 */
   mainDriver: TodayDayMainDriver | null;
+  /** Timed sky transits (drivers + moon) — tap opens sheet. */
+  transits: TodayDayTransitRow[];
+  /** Global day clock from Engine windows. Not the personal MY DAY timeline. */
+  dayWindow: TodayDayWindowMark | null;
+  /** 0–100 from energy_scores[primary_energy]. Omit when missing. */
+  energyPct: number | null;
   strengthChips: TodayDayActionChip[];
   riskChips: TodayDayActionChip[];
+};
+
+export type TodayDayTransitRow = {
+  id: string;
+  title: string;
+  time: string | null;
+  planets: string[];
+  sheetRows: TodayDaySheetRow[];
+};
+
+export type TodayDayWindowMark = {
+  start: string;
+  end: string;
+  mark: number;
 };
 
 const KITCHEN_MECHANISM_RE =
@@ -488,7 +509,7 @@ const PLANET_HINTS: Array<[RegExp, string]> = [
   [/плутон|\bpluto\b/i, "pluto"],
 ];
 
-function driverKindLabel(kind: string | null | undefined): string | null {
+export function driverKindLabel(kind: string | null | undefined): string | null {
   const key = String(kind || "")
     .trim()
     .toLowerCase()
@@ -497,7 +518,7 @@ function driverKindLabel(kind: string | null | undefined): string | null {
   return GLOBAL_DRIVER_KIND_LABELS_RU[key] || null;
 }
 
-function driverPlanets(kind: string | null | undefined, fact: string | null | undefined, id: string): string[] {
+export function driverPlanets(kind: string | null | undefined, fact: string | null | undefined, id: string): string[] {
   const key = String(kind || "")
     .trim()
     .toLowerCase()
@@ -614,34 +635,171 @@ function actionLabelsFromList(raw: unknown): string | null {
   return labels.length ? labels.join(" · ") : null;
 }
 
-function buildMainDriver(contract: TodayContractV1, energyLabel: string | null): TodayDayMainDriver | null {
-  const row = contract.global_day?.drivers?.[0];
-  if (!row) return null;
+function hhmmToMinutes(hhmm: string): number | null {
+  const m = String(hhmm || "").trim().match(/^(\d{1,2}):(\d{2})$/);
+  if (!m) return null;
+  return Number(m[1]) * 60 + Number(m[2]);
+}
+
+/** Position of a clock on the kit 06:00–24:00 spectrum. */
+function clockToMark(hhmm: string): number {
+  const minutes = hhmmToMinutes(hhmm);
+  if (minutes == null) return 0.5;
+  const start = 6 * 60;
+  const span = 18 * 60;
+  return Math.min(1, Math.max(0, (minutes - start) / span));
+}
+
+export function buildEnergyPct(contract: TodayContractV1): number | null {
+  const visualMode = resolveVisualMode(contract);
+  const primary =
+    visualMode ||
+    String(contract.global_day?.primary_energy || "")
+      .trim()
+      .toLowerCase()
+      .replace(/-/g, "_");
+  const scores = contract.global_day?.energy_scores;
+  if (!primary || !scores || typeof scores !== "object") return null;
+  const raw = (scores as Record<string, unknown>)[primary];
+  if (typeof raw !== "number" || !Number.isFinite(raw)) return null;
+  return Math.round(Math.max(0, Math.min(1, raw)) * 100);
+}
+
+export function buildDayWindow(
+  windows: TodayContractGlobalDayWindowV1[] | null | undefined,
+): TodayDayWindowMark | null {
+  if (!Array.isArray(windows) || windows.length < 2) return null;
+  const timed: Array<{ time: string; intensity: number }> = [];
+  for (const win of windows) {
+    const time = clean(win.time);
+    if (!time || hhmmToMinutes(time) == null) continue;
+    timed.push({
+      time,
+      intensity: typeof win.intensity === "number" && Number.isFinite(win.intensity) ? win.intensity : -1,
+    });
+  }
+  if (timed.length < 2) return null;
+  timed.sort((a, b) => (hhmmToMinutes(a.time) || 0) - (hhmmToMinutes(b.time) || 0));
+  let bestIdx = 0;
+  let bestIntensity = -1;
+  for (let i = 0; i < timed.length; i += 1) {
+    if (timed[i].intensity > bestIntensity) {
+      bestIntensity = timed[i].intensity;
+      bestIdx = i;
+    }
+  }
+  const peak = timed[bestIdx];
+  const next = timed[bestIdx + 1];
+  if (next) {
+    return { start: peak.time, end: next.time, mark: clockToMark(peak.time) };
+  }
+  const prev = timed[bestIdx - 1];
+  if (!prev) return null;
+  return { start: prev.time, end: peak.time, mark: clockToMark(prev.time) };
+}
+
+function lunarWindowTime(contract: TodayContractV1): string | null {
+  const drivers = contract.global_day?.drivers;
+  const windows = contract.global_day?.windows;
+  if (!Array.isArray(drivers) || !Array.isArray(windows)) return null;
+  for (const row of drivers) {
+    const key = String(row.kind || "")
+      .trim()
+      .toLowerCase()
+      .replace(/-/g, "_");
+    if (!LUNAR_DRIVER_KINDS.has(key)) continue;
+    const id = String(row.id || "").trim();
+    if (!id) continue;
+    const hit = windows.find((win) => String(win.driver_id || "").trim() === id && clean(win.time));
+    const time = hit ? clean(hit.time) : null;
+    if (time) return time;
+  }
+  return null;
+}
+
+function buildDriverTransit(
+  contract: TodayContractV1,
+  row: { id?: string; kind?: string; fact_ru?: string },
+  index: number,
+  energyLabel: string | null,
+): TodayDayTransitRow | null {
   const id = String(row.id || row.kind || "").trim();
   const title = clean(row.fact_ru) || driverKindLabel(row.kind);
   if (!title) return null;
-  const kindLabel = driverKindLabel(row.kind);
   const planets = driverPlanets(row.kind, row.fact_ru, id);
   const matchedWindow = (contract.global_day?.windows || []).find(
     (win) => String(win.driver_id || "").trim() === id && clean(win.time),
   );
-  const windowTime = matchedWindow?.time;
-  const supportLabels = actionLabelsFromList(matchedWindow?.supports);
-  const cautionLabels = actionLabelsFromList(matchedWindow?.cautions);
+  const windowTime = matchedWindow ? clean(matchedWindow.time) : null;
   const sheetRows: TodayDaySheetRow[] = [];
   pushSheetRow(sheetRows, copy.sheetEvent, clean(row.fact_ru));
   pushSheetRow(sheetRows, copy.sheetTime, windowTime);
-  pushSheetRow(sheetRows, copy.sheetWhyRanked, copy.whyRankedDriver);
-  pushSheetRow(sheetRows, copy.sheetEnergyLink, energyLabel);
-  pushSheetRow(sheetRows, copy.windowSupportLabel, supportLabels);
-  pushSheetRow(sheetRows, copy.windowCautionLabel, cautionLabels);
-  return {
-    id: id || title,
-    title,
-    body: kindLabel && kindLabel !== title ? kindLabel : null,
-    detail: [clean(row.fact_ru), kindLabel].filter(Boolean).join("\n\n") || title,
-    planets,
+  pushSheetRow(
     sheetRows,
+    copy.sheetWhyRanked,
+    index === 0 ? copy.whyRankedDriver : copy.whyRankedAlso,
+  );
+  pushSheetRow(sheetRows, copy.sheetEnergyLink, energyLabel);
+  pushSheetRow(sheetRows, copy.windowSupportLabel, actionLabelsFromList(matchedWindow?.supports));
+  pushSheetRow(sheetRows, copy.windowCautionLabel, actionLabelsFromList(matchedWindow?.cautions));
+  return { id: id || title, title, time: windowTime, planets, sheetRows };
+}
+
+function buildTransitRows(
+  contract: TodayContractV1,
+  moonCard: TodayDayMoonCard | null,
+  energyLabel: string | null,
+): TodayDayTransitRow[] {
+  const out: TodayDayTransitRow[] = [];
+  const seen = new Set<string>();
+  if (moonCard) {
+    const time = lunarWindowTime(contract);
+    const sheetRows = moonCard.sheetRows.slice();
+    if (time && !sheetRows.some((row) => row.label === copy.sheetTime)) {
+      pushSheetRow(sheetRows, copy.sheetTime, time);
+    }
+    out.push({
+      id: "moon",
+      title: moonCard.title,
+      time,
+      planets: ["moon"],
+      sheetRows,
+    });
+    seen.add(normalizeKey(moonCard.title));
+  }
+  const drivers = contract.global_day?.drivers;
+  if (!Array.isArray(drivers)) return out;
+  for (let i = 0; i < drivers.length; i += 1) {
+    if (out.length >= 5) break;
+    const transit = buildDriverTransit(contract, drivers[i], i, energyLabel);
+    if (!transit) continue;
+    const key = normalizeKey(transit.title);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(transit);
+  }
+  out.sort((a, b) => {
+    const am = (a.time ? hhmmToMinutes(a.time) : null) ?? Number.POSITIVE_INFINITY;
+    const bm = (b.time ? hhmmToMinutes(b.time) : null) ?? Number.POSITIVE_INFINITY;
+    if (am === bm) return 0;
+    return am - bm;
+  });
+  return out;
+}
+
+function buildMainDriver(contract: TodayContractV1, energyLabel: string | null): TodayDayMainDriver | null {
+  const row = contract.global_day?.drivers?.[0];
+  if (!row) return null;
+  const transit = buildDriverTransit(contract, row, 0, energyLabel);
+  if (!transit) return null;
+  const kindLabel = driverKindLabel(row.kind);
+  return {
+    id: transit.id,
+    title: transit.title,
+    body: kindLabel && kindLabel !== transit.title ? kindLabel : null,
+    detail: [clean(row.fact_ru), kindLabel].filter(Boolean).join("\n\n") || transit.title,
+    planets: transit.planets,
+    sheetRows: transit.sheetRows,
   };
 }
 
@@ -705,6 +863,16 @@ export function buildTodayDayBriefModel(input: {
   const lunarCaption = input.loading
     ? null
     : buildLunarCaption(input.contract, glass?.reasonLine ?? null, skyStrip);
+  const energyLabel = visualMode ? DAY_MODE_LABELS_RU[visualMode] : null;
+  const moonCard = input.loading
+    ? null
+    : buildMoonCard(
+        input.contract,
+        input.lunarHint,
+        skyStrip,
+        lunarCaption,
+        clipCompassProse(atmosphereLine, 160) || energyLabel,
+      );
 
   return {
     dateLabel: input.dateLabel,
@@ -729,25 +897,17 @@ export function buildTodayDayBriefModel(input: {
     moonPhase: input.loading
       ? null
       : buildMoonPhase(input.contract, input.lunarHint, glass?.reasonLine ?? null),
-    moonCard: input.loading
-      ? null
-      : buildMoonCard(
-          input.contract,
-          input.lunarHint,
-          skyStrip,
-          lunarCaption,
-          clipCompassProse(atmosphereLine, 160) ||
-            (visualMode ? DAY_MODE_LABELS_RU[visualMode] : null),
-        ),
+    moonCard,
     whyFactors: buildWhyFactors(input.contract, glass),
     betterCards: buildBetterCards(input.contract),
     supportLine,
     supportDetail,
     personalLine,
     skyStrip,
-    mainDriver: input.loading
-      ? null
-      : buildMainDriver(input.contract, visualMode ? DAY_MODE_LABELS_RU[visualMode] : null),
+    mainDriver: input.loading ? null : buildMainDriver(input.contract, energyLabel),
+    transits: input.loading ? [] : buildTransitRows(input.contract, moonCard, energyLabel),
+    dayWindow: input.loading ? null : buildDayWindow(input.contract.global_day?.windows),
+    energyPct: input.loading ? null : buildEnergyPct(input.contract),
     strengthChips: input.loading
       ? []
       : buildActionChips(input.contract.global_day?.strength, 6, input.contract, "supports"),

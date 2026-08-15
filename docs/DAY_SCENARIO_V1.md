@@ -166,7 +166,7 @@ Fallback без LLM: **structurally poorer** (факты неба + omit сюж�
 
 ### Core vs depth (метрика экрана)
 
-**Core answer (1–2 минуты):** экран **TODAY** = Global Day (ENERGY → MOON → DRIVER → STRENGTHS → RISKS). MY DAY = персональный слой. Ritual = линзы. Evening = благодарность. [TODAY_PRODUCT_FLOW_V1](./today/TODAY_PRODUCT_FLOW_V1.md).  
+**Core answer (1–2 минуты):** экран **TODAY** = Global Day (ENERGY% + mood → Global clock → timed transits → STRENGTHS → RISKS). MY DAY = персональный слой. Ritual = линзы. Evening = благодарность. [TODAY_PRODUCT_FLOW_V1](./today/TODAY_PRODUCT_FLOW_V1.md).  
 **Ritual:** карта/число — линзы, не пересчёт.  
 **Depth:** Personal Day (instruction / bridges) + color / tasks / loop.  
 Нельзя считать полезность как прохождение всех 6–7 шагов.
