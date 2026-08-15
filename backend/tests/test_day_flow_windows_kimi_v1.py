@@ -99,3 +99,19 @@ def test_merge_prefers_kimi_then_bank():
     assert merged[0]["copy_source"] == COPY_SOURCE_KIMI
     assert merged[1]["label_short"] == "Живой контакт"
     assert merged[1]["copy_source"] == COPY_SOURCE_BANK
+
+
+def test_ensure_skips_kimi_engine_owns_windows():
+    from todayflow_backend.services.day_flow_windows_kimi_v1 import (
+        ensure_day_flow_windows_for_user,
+    )
+
+    class _U:
+        id = 1
+
+    assert (
+        ensure_day_flow_windows_for_user(
+            None, user=_U(), local_date=__import__("datetime").date(2026, 8, 15), timezone_name="UTC"
+        )
+        == "skipped_engine_owns_windows"
+    )

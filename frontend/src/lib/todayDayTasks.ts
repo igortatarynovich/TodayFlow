@@ -94,6 +94,23 @@ export function buildTodayDayTasks(input: {
   const rec = input.contract?.day_story?.practice_recommendation;
   const recKind = kindFromRec(rec?.kind);
   const recText = clean(rec?.text);
+  const typed = Array.isArray(input.contract?.daily_actions) ? input.contract.daily_actions : [];
+  for (const action of typed) {
+    const k = kindFromRec(action?.kind) || (action?.kind === "reflection" ? "practice" : null);
+    const text = clean(action?.text);
+    if (!k || !text) continue;
+    const already =
+      (k === "practice" && practiceTitle) || (k === "affirmation" && affirmationTitle);
+    if (already) continue;
+    pushToday({
+      id: `today-action-${k}-${today.length}`,
+      kind: k,
+      kindLabel: KIND_LABEL[k],
+      title: text,
+      detail: null,
+      cadence: "today",
+    });
+  }
   if (recKind && recText) {
     // Skip if already covered by gift practice/affirmation of same kind.
     const already =

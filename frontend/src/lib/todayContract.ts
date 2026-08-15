@@ -807,6 +807,46 @@ export type TodayContractSkyTodayV1 = {
   aspects?: TodayContractSkyAspectV1[];
 };
 
+export type TodayContractGlobalDayWindowV1 = {
+  time?: string;
+  driver_id?: string;
+  intensity?: number;
+  supports?: string[];
+  cautions?: string[];
+};
+
+export type TodayContractGlobalDayV1 = {
+  contract_version?: string;
+  scoring_version?: string;
+  primary_energy?: string;
+  energy_scores?: Record<string, number>;
+  drivers?: Array<{ id?: string; kind?: string; fact_ru?: string; strength?: number }>;
+  strength?: string[];
+  risk?: string[];
+  windows?: TodayContractGlobalDayWindowV1[];
+};
+
+export type TodayContractPersonalDayV1 = {
+  contract_version?: string;
+  mutates_global?: boolean;
+  natal_overlay?: Record<string, unknown> | null;
+};
+
+export type TodayContractDayPackageManifestV1 = {
+  contract_version?: string;
+  immutable?: boolean;
+  scoring_version?: string;
+  timeline_rules_version?: string;
+  today_contract_version?: string;
+  [key: string]: unknown;
+};
+
+export type TodayContractDailyActionV1 = {
+  kind: "practice" | "affirmation" | "reflection" | "goal" | string;
+  text: string;
+  origin_scene_id?: string;
+};
+
 export type TodayContractV1 = {
   contract_version: typeof TODAY_CONTRACT_V1 | string;
   global_context: { period: string };
@@ -824,6 +864,14 @@ export type TodayContractV1 = {
   color_guide?: TodayContractColorGuideV1 | null;
   /** Shared sky influence: Moon climate + one headline. Not an ephemeris dump. */
   sky_today?: TodayContractSkyTodayV1 | null;
+  /** Deterministic Global Day Profile (I0). Downstream must not mutate. */
+  global_day?: TodayContractGlobalDayV1 | null;
+  /** Personal Day nest. Omit for guest. Must not mutate global_day. */
+  personal_day?: TodayContractPersonalDayV1 | null;
+  /** Version stamps; GET reads persist and does not recompute. */
+  day_package_manifest?: TodayContractDayPackageManifestV1 | null;
+  /** Typed actions (practice | affirmation | reflection | goal). */
+  daily_actions?: TodayContractDailyActionV1[] | null;
 };
 
 export const DAY_ATMOSPHERE_ENGINE_EVENT = "todayflow:day-atmosphere";

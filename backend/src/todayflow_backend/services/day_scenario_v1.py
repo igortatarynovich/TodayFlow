@@ -1480,8 +1480,12 @@ def build_day_scenario_v1(
     celestial_events: dict[str, Any] | None = None,
     max_scenes: int = 4,
     person_name: str | None = None,
+    omit_narrative: bool = False,
 ) -> dict[str, Any]:
-    """Assemble day_scenario_v1 spine + props. Exclusive meaning SoT (B5)."""
+    """Assemble day_scenario_v1 spine + props.
+
+    ``omit_narrative=True`` — poorer fallback: Global Facts only, no invented plot.
+    """
     interp = _as_dict(interpretation)
     foundation = build_scenario_foundation_v1(
         interpretation=interp,
@@ -1489,6 +1493,24 @@ def build_day_scenario_v1(
         ritual_context=ritual_context,
         celestial_events=celestial_events,
     )
+    if omit_narrative:
+        return {
+            "contract_version": DAY_SCENARIO_V1_CONTRACT,
+            "version": DAY_SCENARIO_V1_VERSION,
+            "runtime_sot": False,
+            "ready": True,
+            "narrative_omitted": True,
+            "generation_source": "deterministic_engine_b5",
+            "foundation": foundation,
+            "chorus": {},
+            "conflict": {},
+            "scenes": [],
+            "props": {},
+            "projections": {
+                "status": "facts_only_poorer_fallback",
+                "note": "No invented scenario spine; Global Day Engine owns meaning.",
+            },
+        }
     conflict = build_scenario_conflict_v1(
         foundation=foundation,
         day_thesis=day_thesis,

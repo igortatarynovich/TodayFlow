@@ -314,7 +314,7 @@ def test_native_maps_to_scenario_and_b5_projector():
     story["interpretation_status"] = "ok"
     story["expect"] = "LLM legacy expect"
     projected = project_day_scenario_onto_day_story_v1(story, scenario)
-    assert projected.get("visual_mode") == "tension"
+    assert not projected.get("visual_mode")
     assert projected["interpretation_status"] == "ok"
     assert not str(projected["expect"]).startswith("LLM legacy")
     assert "Прояснение" in projected["primary_conflict"] or "Прояснение" in projected["theme"]
@@ -323,7 +323,20 @@ def test_native_maps_to_scenario_and_b5_projector():
     contract = day_story_to_today_contract_v1(projected)
     assert contract["day_story"]["expect"]
     assert contract["day_story"]["talisman"]["color"] == scenario["props"]["color"]["name"]
-    assert (contract.get("day_atmosphere") or {}).get("visual_mode") == "tension"
+    atm = contract.get("day_atmosphere") or {}
+    gd = contract.get("global_day") or {}
+    assert atm.get("visual_mode") in {
+        "grounded",
+        "flow",
+        "radiance",
+        "momentum",
+        "clarity",
+        "tension",
+        "renewal",
+        "depth",
+    }
+    assert gd.get("primary_energy") == atm.get("visual_mode")
+    assert isinstance(gd.get("windows"), list)
 
 
 def test_native_invalid_visual_mode_dropped_atmosphere_falls_back():

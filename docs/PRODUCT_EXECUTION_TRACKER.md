@@ -14,7 +14,7 @@ Status: Active working document
 - **Migration required?** yes — see pipeline overlay table.
 - **Canon updated?** yes — TODAY_CONTENT_PIPELINE_V1 · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · SCENARIO_V3 · README.
 - **Backward compatible?** yes cached payloads.
-- **Next (unchanged after I2/I3 hygiene):** I0 contract → затем Global Engine.
+- **Next:** deploy when owner asks. Pipeline work order 0–11 landed in code 2026-08-15 (I0 nests, Global Engine, ritual number, manifest, guide read-only, daily_actions, poorer fallback, ScreenFlow capability, D−1 evening enqueue).
 
 
 **DONE (OPS+CODE, 2026-08-14):** **K2.6 primary · K3 complex-only** — `NEBIUS_MODEL=moonshotai/Kimi-K2.6` for day/prewarm/routine; `NEBIUS_COMPLEX_MODEL=moonshotai/Kimi-K3` + `resolve_complex_chat_model()` only for CE Stage 2–4, profile disclosure funnel, natal decode. Canon: LLM_QUALITY Nebius section.

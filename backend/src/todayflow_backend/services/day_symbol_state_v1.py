@@ -39,6 +39,50 @@ STATUS_ERROR = "error"
 _REVEALED_OK = frozenset({STATUS_REVEALED, STATUS_READY})
 
 
+def _birth_date_for_user(db: Session, user_id: int | None) -> date | None:
+    if not user_id:
+        return None
+    row = (
+        db.query(db_models.AstroProfile)
+        .filter(db_models.AstroProfile.user_id == int(user_id))
+        .order_by(
+            db_models.AstroProfile.is_primary.desc(),
+            db_models.AstroProfile.id.asc(),
+        )
+        .first()
+    )
+    if row is not None and row.birth_date is not None:
+        return row.birth_date
+    return None
+
+
+def _stamp_ritual_number(
+    row: db_models.DaySymbolState,
+    *,
+    local_date: date,
+    birth_date: date | None,
+    locale: str,
+    numerology_service: NumerologyService | None,
+    now: datetime,
+) -> bool:
+    """Fill number identity from Personal Day (if DOB) else Universal Day."""
+    from todayflow_backend.services.day_sources.adapters.numerology import ritual_day_number
+
+    ritual = ritual_day_number(target=local_date, birth_date=birth_date)
+    value = int(ritual["value"])
+    svc = numerology_service or get_numerology_service()
+    number = svc._build_number("life_path", value, locale=locale or "ru")
+    row.number_value = value
+    row.number_reduced = value
+    row.number_is_master = bool(ritual["is_master"])
+    title = str(number.title or "")
+    kind_label = "Personal Day" if ritual["kind"] == "personal_day" else "Universal Day"
+    row.number_title = (title or kind_label)[:120]
+    row.number_summary = str(number.summary or "")
+    row.number_generated_at = now
+    return True
+
+
 def owner_key_for_user(user_id: int) -> str:
     return f"u:{int(user_id)}"
 
@@ -290,20 +334,18 @@ def ensure_symbols_prebaked(
     changed = False
 
     if row.number_reduced is None and not is_number_revealed(row):
-        svc = numerology_service or get_numerology_service()
-        insight = svc.daily_number(reference_date=local_date, locale=locale or "ru", reveal=True)
-        number = insight.number
-        if number is not None:
-            row.number_value = int(number.value) if number.value is not None else int(number.reduced_value)
-            row.number_reduced = int(number.reduced_value)
-            row.number_is_master = bool(number.is_master)
-            row.number_title = str(number.title or "")[:120]
-            row.number_summary = str(number.summary or "")
-            row.number_generated_at = now
-            # Keep hidden until ritual reveal.
-            row.number_status = STATUS_NOT_REVEALED
-            row.number_revealed_at = None
-            changed = True
+        birth = _birth_date_for_user(db, user_id)
+        _stamp_ritual_number(
+            row,
+            local_date=local_date,
+            birth_date=birth,
+            locale=locale or "ru",
+            numerology_service=numerology_service,
+            now=now,
+        )
+        row.number_status = STATUS_NOT_REVEALED
+        row.number_revealed_at = None
+        changed = True
 
     if not row.card_id and not is_card_revealed(row):
         row.card_id = str(_stable_day_card_id(owner_key=owner_key, local_date=local_date))
@@ -461,20 +503,20 @@ def reveal_number(
     now = utc_naive_now()
     # Prefer prebaked identity from assemble; compute only if missing.
     if row.number_reduced is None:
-        svc = numerology_service or get_numerology_service()
-        insight = svc.daily_number(reference_date=local_date, locale="ru", reveal=True)
-        number = insight.number
-        if number is None:
+        birth = _birth_date_for_user(db, user_id)
+        _stamp_ritual_number(
+            row,
+            local_date=local_date,
+            birth_date=birth,
+            locale="ru",
+            numerology_service=numerology_service,
+            now=now,
+        )
+        if row.number_reduced is None:
             row.number_status = STATUS_ERROR
             db.add(row)
             db.commit()
             raise ValueError("number_generation_failed")
-        row.number_value = int(number.value) if number.value is not None else int(number.reduced_value)
-        row.number_reduced = int(number.reduced_value)
-        row.number_is_master = bool(number.is_master)
-        row.number_title = str(number.title or "")[:120]
-        row.number_summary = str(number.summary or "")
-        row.number_generated_at = now
 
     row.number_revealed_at = now
     row.number_reveal_source = (reveal_source or "ritual")[:64]

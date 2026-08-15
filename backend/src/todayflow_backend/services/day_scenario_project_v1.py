@@ -558,14 +558,8 @@ def project_day_scenario_onto_day_story_v1(
             "composition_ids": list(thesis.get("composition_ids") or [])[:3],
         }
 
-    # Day mood (visual_mode) — closed enum from native LLM; invalid ignored (atmosphere fallback)
-    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
-
-    mood = normalize_visual_mode(scen.get("visual_mode"))
-    if mood:
-        base["visual_mode"] = mood
-    else:
-        base.pop("visual_mode", None)
+    # Energy is Global Day Engine only — never copy LLM visual_mode as SoT.
+    base.pop("visual_mode", None)
 
     facts = [
         str(d.get("fact_ru") or "").strip()
@@ -772,5 +766,14 @@ def build_and_project_day_scenario_v1(
         ritual_context=ritual_context,
         celestial_events=celestial_events,
         person_name=person_name,
+        omit_narrative=True,
     )
+    if scenario.get("narrative_omitted"):
+        out = dict(story) if isinstance(story, dict) else {}
+        out["day_scenario"] = scenario
+        editorial = dict(out.get("editorial") or {})
+        editorial["runtime_source"] = "facts_only_poorer_fallback"
+        editorial["narrative_omitted"] = True
+        out["editorial"] = editorial
+        return out
     return project_day_scenario_onto_day_story_v1(story, scenario, person_name=person_name)

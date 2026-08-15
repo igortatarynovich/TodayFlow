@@ -1019,9 +1019,21 @@ def day_story_to_today_contract_v1(
         ),
         "trace": trace,
     }
+    from todayflow_backend.services.global_day_engine_v1 import (
+        build_daily_actions_v1,
+        build_day_package_manifest_v1,
+        build_global_day_profile_v1,
+        build_personal_day_nest_v1,
+        extract_pack_and_sky,
+    )
     from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
 
-    mood = normalize_visual_mode(story.get("visual_mode"))
+    pack, celestial = extract_pack_and_sky(story)
+    global_day = build_global_day_profile_v1(
+        day_events_pack=pack, celestial_events=celestial
+    )
+    # visual_mode is a 1:1 UI map of Engine primary_energy — never LLM mood.
+    mood = normalize_visual_mode(global_day.get("primary_energy"))
     if mood and not unavailable:
         day_story_out["visual_mode"] = mood
     progress_out = dict(progress) if isinstance(progress, dict) else {}
@@ -1067,11 +1079,18 @@ def day_story_to_today_contract_v1(
         "generation_id": generation_id or "",
         "day_story": day_story_out,
     }
-    # Day Atmosphere nest (FOUNDATION_UI §11–§13) — closed visual config, not colors.
     if not unavailable:
+        contract["global_day"] = global_day
+        personal_day = build_personal_day_nest_v1(story)
+        if personal_day is not None:
+            contract["personal_day"] = personal_day
+        contract["day_package_manifest"] = build_day_package_manifest_v1(story, global_day)
+        contract["daily_actions"] = build_daily_actions_v1(story)
         from todayflow_backend.services.day_atmosphere_v1 import day_atmosphere_from_story
 
-        atmosphere = day_atmosphere_from_story(story)
+        story_for_atm = dict(story)
+        story_for_atm["global_day"] = global_day
+        atmosphere = day_atmosphere_from_story(story_for_atm)
         if atmosphere is not None:
             contract["day_atmosphere"] = atmosphere
     # Wave B1 presentation nests (welcome_glass / color_guide). today_progress needs auth db.

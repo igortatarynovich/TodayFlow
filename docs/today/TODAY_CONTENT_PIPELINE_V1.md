@@ -330,18 +330,18 @@ manifest:
 
 Не чинить `day_story` по частям поверх старой модели.
 
-0. **Этот документ** — pipeline + I0.  
-1. I3 + I2 hygiene (можно параллельно; не новый SoT).  
-2. **I0 contract** в коде: `global_day_profile` ≠ personal nest; Scenario не пишет energy/windows.  
-3. Удалить Kimi timeline; windows ∈ Global Engine.  
-4. Energy/mood = deterministic scoring (`primary_energy`).  
-5. Personal vs Universal number.  
-6. Manifest + immutable GET.  
-7. Guide read-only.  
-8. typed `daily_actions[]`.  
-9. poorer fallback.  
-10. capability matrix в ScreenFlow.  
-11. D−1 lifecycle (отдельный AI на clock).
+0. **Этот документ** — pipeline + I0. **landed**
+1. I3 + I2 hygiene. **landed 2026-08-15**
+2. **I0 contract** в коде: `global_day` ≠ `personal_day`; Scenario не пишет energy/windows. **landed 2026-08-15**
+3. Удалить Kimi timeline как decision; windows ∈ Global Engine. **landed 2026-08-15**
+4. Energy/mood = deterministic scoring (`primary_energy`). **landed 2026-08-15**
+5. Personal vs Universal number. **landed 2026-08-15**
+6. Manifest + immutable GET. **landed 2026-08-15** (`day_package_manifest`; GET `allow_rebuild_on_miss=False`)
+7. Guide read-only. **landed 2026-08-15** (POST `/today/narrative` consumes persist)
+8. typed `daily_actions[]`. **landed 2026-08-15**
+9. poorer fallback. **landed 2026-08-15** (`omit_narrative` on B5 convenience path)
+10. capability matrix в ScreenFlow. **landed 2026-08-15**
+11. D−1 lifecycle. **landed 2026-08-15** (additive evening enqueue; clock details in DAY_LIFECYCLE_V1)
 
 ---
 

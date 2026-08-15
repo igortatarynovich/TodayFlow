@@ -168,6 +168,22 @@ Without symbols: indices shift (5 steps). Re-entry: ordinary visit → **0**; de
 
 **v3.3 12-step handoff — deprecated** (see SCENARIO_V3.4).
 
+### 4.1 Capability matrix (who may see which house)
+
+Canon meaning: [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md) I0 · [DAY_SCENARIO_V1 I7](../DAY_SCENARIO_V1.md).  
+Code: `frontend/src/lib/todayScreenFlowCapability.ts`.
+
+ScreenFlow **hides** houses. It does **not** invent Personal Day.
+
+| Depth | Evidence | Houses on | Honest omit |
+|-------|----------|-----------|-------------|
+| **guest** | shared sky only | Global Day (day + orientation) · ritual card/universal number | Personal Day, natal timeline, why_personal, personalized instruction |
+| **general** | account, thin/no natal | same as guest + account ritual | why_personal, deep natal |
+| **light** | DOB, no time/place | + Personal Day (light) | natal house/angle overlay |
+| **deep** | DOB + time + place | + natal timeline / why_personal | — |
+
+Guest must never see empty personal slots pretending to be “your day”.
+
 **Contract:** [TODAY_WAVE2_CONTRACT_V1.md](../today/TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1` + `day_story` → Today Contract Assembler.
 
 **Композиция:** `TodayProductScreenFlow.tsx` — ScreenFlow dots + swipe.
@@ -232,6 +248,11 @@ Without symbols: indices shift (5 steps). Re-entry: ordinary visit → **0**; de
 ---
 
 ## 7. Changelog
+
+### 2026-08-15 — Capability matrix (§4.1)
+
+- **Added §4.1** — guest / general / light / deep: Global Day always; Personal Day omitted without natal evidence.
+- **Code:** `todayScreenFlowCapability.ts`
 
 ### 2026-08-03 — Chrome: drop visible step numbers (§1.5)
 

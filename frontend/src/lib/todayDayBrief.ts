@@ -149,6 +149,8 @@ function isDayVisualMode(value: unknown): value is DayVisualMode {
 }
 
 function resolveVisualMode(contract: TodayContractV1): DayVisualMode | null {
+  const fromEngine = contract.global_day?.primary_energy;
+  if (isDayVisualMode(fromEngine)) return fromEngine;
   const fromAtm = contract.day_atmosphere?.visual_mode;
   if (isDayVisualMode(fromAtm)) return fromAtm;
   const fromStory = (contract.day_story as { visual_mode?: string } | undefined)?.visual_mode;

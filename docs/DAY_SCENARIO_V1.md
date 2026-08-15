@@ -140,7 +140,7 @@ Sources → allowed fields → allowed screens. Не один ScreenFlow с пу
 
 Sphere selection ranks **evidence relevance**, not UI diversity. Нельзя добивать work/people/self ради сетки.
 
-**Number (locked school):** masters **11, 22, 33** ([NUMBER_BASE_V1](./numerology/NUMBER_BASE_V1.md) · DAY_SOURCES_CANON §3). Nested PY→PM→PD. **UI identity:** Personal Day if `birth_date`; else Universal Day. Ritual prebake сегодня зовёт `NumerologyService.daily_number` (YYYYMMDD = universal) — **gap** vs this matrix; исправить к I7, не плодить вторую школу.
+**Number (locked school):** masters **11, 22, 33** ([NUMBER_BASE_V1](./numerology/NUMBER_BASE_V1.md) · DAY_SOURCES_CANON §3). Nested PY→PM→PD. **UI identity:** Personal Day if `birth_date`; else Universal Day. Ritual prebake uses `ritual_day_number` (DAY_SOURCES numerology adapter) — **landed 2026-08-15**.
 
 **Card identity (already executable):** `sha256(owner_key \| local_date \| "day_card") % 78` + orientation digest. Deck version must enter I5 manifest.
 

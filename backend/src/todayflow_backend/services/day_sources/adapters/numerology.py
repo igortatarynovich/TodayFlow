@@ -70,3 +70,27 @@ def run_numerology(inputs: DaySourceInputs) -> SourceResult:
         evidence_refs=evidence,
         calculation_version=_CALC,
     )
+
+
+def ritual_day_number(*, target: date, birth_date: date | None) -> dict:
+    """Ritual identity: Personal Day if birth_date, else Universal Day.
+
+    Canon: TODAY_CONTENT_PIPELINE_V1 §6 · DAY_SCENARIO_V1 I7.
+    """
+    result = run_numerology(DaySourceInputs(target_date=target, birth_date=birth_date))
+    payload = result.payload
+    if birth_date is not None and payload.get("personal_day") is not None:
+        value = int(payload["personal_day"])
+        return {
+            "value": value,
+            "kind": "personal_day",
+            "is_master": value in _MASTER,
+            "universal_day": int(payload["universal_day"]),
+        }
+    value = int(payload["universal_day"])
+    return {
+        "value": value,
+        "kind": "universal_day",
+        "is_master": value in _MASTER,
+        "universal_day": value,
+    }

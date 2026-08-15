@@ -870,6 +870,8 @@ class TodayContractSkyTodayV1(BaseModel):
 class TodayContractV1Response(BaseModel):
     """P0.1 — Model B wire contract; legacy Today fields are not exposed."""
 
+    model_config = ConfigDict(extra="allow")
+
     contract_version: str
     global_context: TodayContractGlobalContextV1
     personal_growth: TodayContractPersonalGrowthV1
@@ -884,6 +886,10 @@ class TodayContractV1Response(BaseModel):
     today_progress: TodayContractTodayProgressV1 | None = None
     color_guide: TodayContractColorGuideV1 | None = None
     sky_today: TodayContractSkyTodayV1 | None = None
+    global_day: dict[str, Any] | None = None
+    personal_day: dict[str, Any] | None = None
+    day_package_manifest: dict[str, Any] | None = None
+    daily_actions: list[dict[str, Any]] | None = None
 
 
 def _attach_depth_layer_offer(contract: dict[str, Any], *, user: User, db, locale: str) -> dict[str, Any]:
@@ -1177,6 +1183,8 @@ def post_today_narrative(
 ) -> TodayNarrativeResponse:
     """
     Генерирует (или отдаёт из кэша) тексты для экрана «Сегодня».
+    Guide / day_layer / spheres / evening: если пакет дня уже persist — **read-only**
+    (``day_story_to_legacy_narrative``), без нового LLM. Deepen остаётся отдельным слоем.
     Для surface=guide при настроенном LLM: воронка из трёх узких вызовов (interpretation → core text → satellites);
     при сбое step3 ядро подставляется из ``guide_decision_v0``; при сбое воронки — монолитный guide.
     Цепочка: сначала surface=guide, затем day_layer/spheres/evening с тем же target_date и parent_generation_id=id ответа guide.
@@ -1193,6 +1201,31 @@ def post_today_narrative(
     allowed = {"guide", "day_layer", "spheres", "evening", "deepen"}
     if surface not in allowed:
         raise HTTPException(status_code=400, detail=f"surface must be one of {sorted(allowed)}")
+
+    if surface in {"guide", "day_layer", "spheres", "evening"}:
+        from todayflow_backend.services.day_story_v1 import day_story_to_legacy_narrative
+        from todayflow_backend.services.day_story_wire_v1 import _load_cached_day_story
+
+        hit = _load_cached_day_story(
+            db, user_id=int(user.id), target_date=d0, any_for_date=True
+        )
+        if hit is not None:
+            story, gen_id_cached, _ = hit
+            if isinstance(story, dict) and str(story.get("interpretation_status") or "ok") != "unavailable":
+                derived = day_story_to_legacy_narrative(
+                    story, generation_id=str(gen_id_cached or 0)
+                )
+                packed = derived.get(surface) if isinstance(derived, dict) else None
+                if isinstance(packed, dict) and packed:
+                    gid = int(gen_id_cached) if isinstance(gen_id_cached, int) else 0
+                    return TodayNarrativeResponse(
+                        generation_id=gid,
+                        generation_log_id=gid,
+                        surface=surface,
+                        used_fallback=False,
+                        payload=packed,
+                        profile_selector=None,
+                    )
 
     if surface == "deepen":
         from todayflow_backend.services.today_depth_layer_v1 import (

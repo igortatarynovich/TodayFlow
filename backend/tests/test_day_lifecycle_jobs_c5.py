@@ -20,6 +20,7 @@ from todayflow_backend.services.day_lifecycle_clock_c5 import (
     build_day_assembling_contract,
     compute_day_lifecycle_c5,
     in_assemble_window,
+    in_d_minus_1_window,
     should_system_close_date,
 )
 from todayflow_backend.services.day_lifecycle_jobs_c5 import (
@@ -65,6 +66,8 @@ def test_assemble_window_and_close_deadline() -> None:
 
     late = datetime(2026, 7, 27, 23, 5, tzinfo=tz)
     assert should_system_close_date(now_local=late, candidate=late.date()) is True
+    assert in_d_minus_1_window(late) is True
+    assert in_d_minus_1_window(morning) is False
 
 
 def test_system_close_marks_evening() -> None:

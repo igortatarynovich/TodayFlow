@@ -21,6 +21,7 @@ from todayflow_backend.services.day_lifecycle_clock_c5 import (
     DEFAULT_READY_TIME,
     DEFAULT_TIMEZONE,
     in_assemble_window,
+    in_d_minus_1_window,
     local_now,
     parse_hhmm,
     should_system_close_date,
@@ -47,7 +48,12 @@ def day_story_is_product_ready(db: Session, *, user_id: int, local_date: date) -
         return False
     story, _, _ = hit
     sc = story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else {}
-    return bool(sc.get("ready") and sc.get("scenes") and str(sc.get("generation_source") or "") in READY_SOURCES)
+    source = str(sc.get("generation_source") or "")
+    if source not in READY_SOURCES:
+        return False
+    if sc.get("narrative_omitted"):
+        return True
+    return bool(sc.get("ready") and sc.get("scenes"))
 
 
 def _minimal_morning(target_date: date, *, celestial_events: dict[str, Any] | None = None):
@@ -371,6 +377,7 @@ def run_day_lifecycle_due(
         "prewarm_error": 0,
         "prewarm_enqueued": 0,
         "prewarm_candidates": 0,
+        "prewarm_d_minus_1": 0,
         "system_closed": 0,
         "system_already_closed": 0,
         "system_close_candidates": 0,
@@ -408,7 +415,7 @@ def run_day_lifecycle_due(
             elif outcome == "already_closed":
                 counts["system_already_closed"] += 1
 
-        # C5.1 pre-warm — enqueue background jobs (never hold cron DB session on LLM).
+        # C5.1 pre-warm — today assemble/catch-up, plus D−1 evening for tomorrow.
         if prewarm_budget <= 0:
             continue
         ready_t = parse_hhmm(sch.get("morning_time"), fallback=DEFAULT_READY_TIME)
@@ -416,26 +423,46 @@ def run_day_lifecycle_due(
         needs_catchup = past_ready and not day_story_is_product_ready(
             db, user_id=uid, local_date=local_date
         )
-        if not in_assemble_window(
+        in_today_assemble = in_assemble_window(
             now_local,
             assemble_start=DEFAULT_ASSEMBLE_START,
             assemble_end=DEFAULT_ASSEMBLE_END,
-        ) and not needs_catchup:
-            continue
-        counts["prewarm_candidates"] += 1
-        if day_story_is_product_ready(db, user_id=uid, local_date=local_date):
-            counts["prewarm_skipped_ready"] += 1
+        ) or needs_catchup
+        d_minus_1 = in_d_minus_1_window(now_local)
+        if not in_today_assemble and not d_minus_1:
             continue
         from todayflow_backend.services.day_prewarm_job_c5 import enqueue_day_prewarm
 
-        enqueue_day_prewarm(
-            db,
-            user_id=uid,
-            local_date=local_date,
-            locale=locale,
-            timezone_name=tz_name,
-        )
-        counts["prewarm_enqueued"] += 1
-        prewarm_budget -= 1
+        if in_today_assemble:
+            counts["prewarm_candidates"] += 1
+            if day_story_is_product_ready(db, user_id=uid, local_date=local_date):
+                counts["prewarm_skipped_ready"] += 1
+            elif prewarm_budget > 0:
+                enqueue_day_prewarm(
+                    db,
+                    user_id=uid,
+                    local_date=local_date,
+                    locale=locale,
+                    timezone_name=tz_name,
+                )
+                counts["prewarm_enqueued"] += 1
+                prewarm_budget -= 1
+
+        if d_minus_1 and prewarm_budget > 0:
+            tomorrow = local_date + timedelta(days=1)
+            counts["prewarm_candidates"] += 1
+            if day_story_is_product_ready(db, user_id=uid, local_date=tomorrow):
+                counts["prewarm_skipped_ready"] += 1
+            else:
+                enqueue_day_prewarm(
+                    db,
+                    user_id=uid,
+                    local_date=tomorrow,
+                    locale=locale,
+                    timezone_name=tz_name,
+                )
+                counts["prewarm_enqueued"] += 1
+                counts["prewarm_d_minus_1"] += 1
+                prewarm_budget -= 1
 
     return counts
