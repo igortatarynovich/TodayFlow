@@ -23,7 +23,6 @@ import {
   DsOverlaySheet,
   DsQuote,
   DsRadialMeter,
-  DsSectionHeader,
   DsStarDivider,
   DsWaveMeter,
 } from "@/design-system";
@@ -31,8 +30,8 @@ import { TODAY_DOMAIN_ICON_MAP } from "@/design-system/icons/DsIcons";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 /**
- * Form Kit DayBrief — rebuilt as composition roles (FOUNDATION_UI §15.8).
- * Sequence: Hero → Mid(list + support/trap) → Insight → Action.
+ * Form Kit DayBrief — composition roles (FOUNDATION_UI §15.8).
+ * Sequence: Open hero (no card) → Focus(spheres ‖ energy) → Support/trap → Insight → Action.
  * Data + product order only; no invented content. UI from design-system/**.
  */
 
@@ -143,7 +142,6 @@ function TodayDayDashboard({
     atmosphereLine,
     vibe,
     moodPills,
-    activityTags,
     atmosphereNote,
     expect,
     modeLabel,
@@ -164,7 +162,6 @@ function TodayDayDashboard({
   const heroBody = line || expect || undefined;
   const heroDetail = lunarCaption && lunarCaption !== line ? lunarCaption : atmosphereNote || undefined;
   const chips = (moodPills.length ? moodPills : []).slice(0, 3);
-  const timeChips = activityTags.slice(0, 2);
 
   const openHero = () =>
     openSheet({
@@ -178,15 +175,17 @@ function TodayDayDashboard({
   const moonBleed = showMoon ? (
     <DsCelestialMoon
       phase={moonPhase}
-      size={300}
+      size={280}
       spin={0.014}
-      glow={1.15}
+      glow={1.05}
       animated
       textureSrc="/images/celestial/moon_lro_2k.jpg"
+      testId="today-day-brief-moon"
     />
   ) : null;
 
-  const hasMid = betterCards.length > 0 || Boolean(supportLine || trap) || energyPct !== null;
+  const hasFocus = betterCards.length > 0 || energyPct !== null;
+  const hasMid = hasFocus || Boolean(supportLine || trap);
   const hasClose = Boolean(personalLine) || Boolean(onContinue);
 
   return (
@@ -201,18 +200,19 @@ function TodayDayDashboard({
         <DsCaption>{dateLabel}</DsCaption>
       </p>
 
-      {/* Role: Hero — glass + bleed moon; title dominates */}
+      {/* Open hero — no card plate; moon bleeds right; chips under copy */}
       <DsHeroBlock
         testId="today-day-brief-vibe"
-        tone="glass"
+        tone="none"
         size="feature"
+        className={layout.heroOpen}
         title={heroTitle}
         body={heroBody}
         detail={heroDetail}
         bleed={moonBleed}
         bleedClassName={showMoon ? layout.heroMoonBleed : undefined}
         chips={
-          chips.length || timeChips.length ? (
+          chips.length ? (
             <DsChipCluster>
               {chips.map((pill, i) => (
                 <DsChip
@@ -222,11 +222,6 @@ function TodayDayDashboard({
                   testId={i === 0 ? "today-day-brief-mood" : undefined}
                 >
                   {pill}
-                </DsChip>
-              ))}
-              {timeChips.map((tag) => (
-                <DsChip key={tag} variant="time">
-                  {tag}
                 </DsChip>
               ))}
             </DsChipCluster>
@@ -242,46 +237,56 @@ function TodayDayDashboard({
         onOpen={openHero}
       />
 
-      {/* Role: Mid band — denser List + Support/Risk (+ Metric if real %) */}
+      {/* Focus: spheres ‖ energy — then support/trap */}
       {hasMid ? (
         <section className={layout.dayBriefMid} data-testid="today-day-brief-mid">
-          {energyPct !== null ? (
-            <DsMetricCard
-              testId="today-day-brief-energy-metric"
-              tone="solid"
-              value={`${Math.round(energyPct)}%`}
-              label={copy.pulseLabel}
-              meter={
-                <div className={layout.stackTight}>
-                  <DsRadialMeter value={energyPct} size={72} />
-                  <DsWaveMeter value={energyPct} testId="today-day-brief-energy-wave" />
-                </div>
-              }
-            />
-          ) : null}
+          {hasFocus ? (
+            <div
+              className={[
+                layout.dayBriefFocus,
+                betterCards.length === 0 || energyPct === null ? layout.dayBriefFocusSingle : null,
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              data-testid="today-day-brief-focus"
+            >
+              {betterCards.length > 0 ? (
+                <DsListPanel tone="solid" title={copy.betterTodayLabel} testId="today-day-brief-better">
+                  {betterCards.map((card) => (
+                    <DsListRow
+                      key={card.id}
+                      testId={`today-day-better-${card.id}`}
+                      leading={<BetterDomainLeading id={card.id} />}
+                      title={card.title}
+                      subtitle={card.body}
+                      onClick={() =>
+                        openSheet({
+                          title: card.title,
+                          kicker: copy.betterTodayLabel,
+                          body: card.detail || card.body,
+                        })
+                      }
+                    />
+                  ))}
+                </DsListPanel>
+              ) : null}
 
-          {betterCards.length > 0 ? (
-            <>
-              <DsSectionHeader title={copy.betterTodayLabel} />
-              <DsListPanel tone="glass" testId="today-day-brief-better">
-                {betterCards.map((card) => (
-                  <DsListRow
-                    key={card.id}
-                    testId={`today-day-better-${card.id}`}
-                    leading={<BetterDomainLeading id={card.id} />}
-                    title={card.title}
-                    subtitle={card.body}
-                    onClick={() =>
-                      openSheet({
-                        title: card.title,
-                        kicker: copy.betterTodayLabel,
-                        body: card.detail || card.body,
-                      })
-                    }
-                  />
-                ))}
-              </DsListPanel>
-            </>
+              {energyPct !== null ? (
+                <DsMetricCard
+                  testId="today-day-brief-energy-metric"
+                  tone="solid"
+                  className={layout.dayBriefEnergy}
+                  value={`${Math.round(energyPct)}%`}
+                  label={copy.pulseLabel}
+                  meter={
+                    <div className={layout.stackTight}>
+                      <DsRadialMeter value={energyPct} size={72} />
+                      <DsWaveMeter value={energyPct} testId="today-day-brief-energy-wave" />
+                    </div>
+                  }
+                />
+              ) : null}
+            </div>
           ) : null}
 
           {(supportLine || trap) && (

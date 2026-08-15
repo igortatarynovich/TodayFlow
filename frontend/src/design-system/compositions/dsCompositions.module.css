@@ -47,8 +47,20 @@
 .heroFeature {
   min-height: clamp(16rem, 38vw, 22rem);
   overflow: visible;
+  isolation: isolate;
   gap: var(--tf-ds-space-5, 1rem);
   padding-block: var(--tf-ds-space-6, 1.25rem);
+}
+
+/**
+ * Open hero (Day Brief mockup): no card plate — sits on atmosphere.
+ * Moon crops past the right edge; copy/chips stay left.
+ */
+.heroOpen {
+  padding: var(--tf-ds-space-2, 0.35rem) 0 var(--tf-ds-space-4, 0.75rem);
+  border-radius: 0;
+  overflow: visible;
+  min-height: clamp(15rem, 40vw, 20rem);
 }
 
 /* Generic bleed slot — small corner asset. */
@@ -61,14 +73,15 @@
   z-index: 0;
 }
 
-/* Kit Hero: celestial sphere cropped / bleeding past the glass edge. */
+/* Kit / Day Brief: celestial sphere cropped past the right edge. */
 .heroMoonBleed {
-  right: -14%;
-  top: -28%;
-  width: min(58%, 18rem);
-  opacity: 0.92;
+  right: -18%;
+  top: -16%;
+  width: min(58%, 17rem);
+  opacity: 0.94;
   overflow: visible;
   z-index: 0;
+  pointer-events: none;
 }
 
 .heroMoonBleed > * {
@@ -112,9 +125,13 @@
 }
 
 .heroCopyFeature {
-  max-width: min(22rem, 68%);
+  max-width: min(22rem, 62%);
   gap: var(--tf-ds-space-3, 0.5rem);
   padding-top: var(--tf-ds-space-2, 0.35rem);
+}
+
+.heroOpen .heroFooter {
+  max-width: min(26rem, 78%);
 }
 
 .heroFooter {
@@ -253,6 +270,39 @@
   display: flex;
   flex-direction: column;
   gap: var(--tf-ds-space-3, 0.5rem);
+  width: 100%;
+}
+
+/* Spheres ‖ energy — side-by-side like Day Brief mockup (even on narrow). */
+.dayBriefFocus {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--tf-ds-space-3, 0.5rem);
+  align-items: stretch;
+  width: 100%;
+}
+
+.dayBriefFocusSingle {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 360px) {
+  .dayBriefFocus {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Energy plate in the focus grid — stack value → meters. */
+.dayBriefEnergy {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  min-height: 0;
+  height: 100%;
+}
+
+.dayBriefEnergy .metricStack {
   width: 100%;
 }
 
