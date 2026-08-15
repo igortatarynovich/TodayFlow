@@ -118,7 +118,8 @@ import {
   TAROT_DEEPEN_EVENT_SOURCE,
 } from "@/lib/tarotDeepenEvents";
 import styles from "@/design-system/compositions/dsCompositionSurface.module.css";
-import { DsButton, DsListPanel, DsListRow, DsRitualGate, DsTarotFace } from "@/design-system";
+import kitLayout from "@/design-system/compositions/dsCompositions.module.css";
+import { DsButton, DsCard, DsListPanel, DsListRow, DsRitualGate, DsTarotFace } from "@/design-system";
 import { DsTextField } from "@/design-system/primitives/DsForm";
 import { joinClass } from "@/design-system/utils/joinClass";
 import ds from "@/design-system/primitives/dsPrimitives.module.css";
@@ -2008,16 +2009,12 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const ritualCardKept = (
-    <DsListPanel tone="glass" testId="today-ritual-card-kept">
-      <DsListRow
-        testId="today-ritual-card-kept-row"
-        leading={
-          ritualCardFace ? <DsTarotFace src={ritualCardFace} alt={ritualCardTitle} /> : undefined
-        }
-        title={ritualCardTitle}
-        subtitle={copy.ritualCardLabel}
-      />
-    </DsListPanel>
+    <DsCard tone="glass" size="compact" className={kitLayout.ritualResultCard} testId="today-ritual-card-kept">
+      {ritualCardFace ? (
+        <DsTarotFace src={ritualCardFace} alt={ritualCardTitle} className={kitLayout.ritualResultFace} />
+      ) : null}
+      <DsListRow testId="today-ritual-card-kept-row" title={ritualCardTitle} subtitle={copy.ritualCardLabel} />
+    </DsCard>
   );
 
   const ritualSpineStages = showRitualSpine ? (

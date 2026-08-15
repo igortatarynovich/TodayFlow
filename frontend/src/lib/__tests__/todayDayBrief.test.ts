@@ -348,6 +348,8 @@ describe("buildTodayDayBriefModel", () => {
     });
     expect(model.visualMode).toBe("clarity");
     expect(model.mainDriver?.title).toContain("Луна вошла в Деву");
+    expect(model.mainDriver?.body).toBe("Смена знака");
+    expect(model.mainDriver?.planets).toEqual(["moon"]);
     expect(model.mainDriver?.sheetRows.some((r) => r.label === "Время" && r.value === "14:30")).toBe(
       true,
     );
@@ -369,5 +371,24 @@ describe("buildTodayDayBriefModel", () => {
     );
     expect(model.riskChips.map((c) => c.id)).toEqual(["hard_negotiation"]);
     expect(model.riskChips[0]?.sheetRows[0]?.value).toContain("Луна вошла в Деву");
+  });
+
+  it("does not leak driver kind ids and maps lunar drivers to the moon image", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_day: {
+          primary_energy: "renewal",
+          drivers: [{ id: "lun-1", kind: "phase_change", fact_ru: "Новолуние." }],
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.modeLabel).toBe("Обновление");
+    expect(model.mainDriver?.title).toBe("Новолуние.");
+    expect(model.mainDriver?.body).toBe("Смена фазы");
+    expect(model.mainDriver?.body).not.toMatch(/phase_change/);
+    expect(model.mainDriver?.planets).toEqual(["moon"]);
   });
 });

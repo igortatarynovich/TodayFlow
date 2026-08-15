@@ -4,8 +4,8 @@ import { useCallback, useEffect, useId, useState } from "react";
 import {
   DsBody,
   DsCallout,
-  DsListPanel,
-  DsListRow,
+  DsCaption,
+  DsCard,
   DsNumber,
   DsOverlaySheet,
   DsTarotFace,
@@ -67,30 +67,39 @@ export function TodayRitualLensPair({
     <>
       <div className={layout.pairGrid} data-testid="today-ritual-result">
         <div data-testid="today-frame-card">
-          <DsListPanel tone="glass" testId="today-ritual-lens-card-panel">
-            <DsListRow
-              testId="today-ritual-lens-card"
-              leading={
-                cardFaceSrc ? (
-                  <DsTarotFace src={cardFaceSrc} alt={cardTitle} testId="today-ritual-lens-card-face" />
-                ) : undefined
-              }
-              title={cardTitle}
-              subtitle={copy.ritualCardLabel}
-              onClick={openCard}
-            />
-          </DsListPanel>
+          <DsCard
+            tone="glass"
+            size="compact"
+            as="button"
+            onClick={openCard}
+            className={layout.ritualResultCard}
+            testId="today-ritual-lens-card"
+          >
+            {cardFaceSrc ? (
+              <DsTarotFace
+                src={cardFaceSrc}
+                alt={cardTitle}
+                className={layout.ritualResultFace}
+                testId="today-ritual-lens-card-face"
+              />
+            ) : null}
+            <DsBody>{cardTitle}</DsBody>
+            <DsCaption>{copy.ritualCardLabel}</DsCaption>
+          </DsCard>
         </div>
         <div data-testid="today-frame-number">
-          <DsListPanel tone="glass" testId="today-ritual-lens-number-panel">
-            <DsListRow
-              testId="today-ritual-lens-number"
-              leading={<DsNumber value={numberDisplay} size={44} alt={numberDisplay} />}
-              title={numberTitle || numberDisplay}
-              subtitle={copy.ritualNumberLabel}
-              onClick={openNumber}
-            />
-          </DsListPanel>
+          <DsCard
+            tone="glass"
+            size="compact"
+            as="button"
+            onClick={openNumber}
+            className={layout.ritualResultCard}
+            testId="today-ritual-lens-number"
+          >
+            <DsNumber value={numberDisplay} size={88} alt={numberDisplay} />
+            <DsBody>{numberTitle || numberDisplay}</DsBody>
+            <DsCaption>{copy.ritualNumberLabel}</DsCaption>
+          </DsCard>
         </div>
       </div>
       <RitualLensSheet sheet={sheet} onClose={() => setSheet(null)} />
@@ -129,9 +138,9 @@ function RitualLensSheet({ sheet, onClose }: { sheet: SheetState; onClose: () =>
       onClose={onClose}
     >
       {catalog ? (
-        <DsListPanel tone="subtle" testId="today-ritual-lens-catalog">
-          <DsListRow title={copy.ritualCatalogLabel} subtitle={catalog} />
-        </DsListPanel>
+        <DsCallout tone="insight" label="thought" title={copy.ritualCatalogLabel} testId="today-ritual-lens-catalog">
+          <DsBody size="sm">{catalog}</DsBody>
+        </DsCallout>
       ) : null}
       {lens ? (
         <DsCallout tone="insight" label="main" title={copy.ritualLensTodayLabel} testId="today-ritual-lens-today">

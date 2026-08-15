@@ -66,20 +66,21 @@ export function TodayEveningGratitudeBlock({ dateISO, manifestVersion = null, on
       ) : (
         <DsCaption>{copy.eveningGratitudeLead}</DsCaption>
       )}
-      <DsListPanel tone="glass" testId="today-evening-gratitude-categories">
+      <div className={layout.pairGrid} data-testid="today-evening-gratitude-categories">
         {EVENING_GRATITUDE_CATEGORIES.map((row) => {
           const selected = categories.includes(row.id);
           return (
-            <DsListRow
-              key={row.id}
-              testId={`today-evening-gratitude-${row.id}`}
-              title={row.label}
-              subtitle={selected ? copy.eveningGratitudePicked : undefined}
-              onClick={() => toggle(row.id)}
-            />
+            <DsListPanel key={row.id} tone={selected ? "accent" : "glass"}>
+              <DsListRow
+                testId={`today-evening-gratitude-${row.id}`}
+                title={row.label}
+                subtitle={selected ? copy.eveningGratitudePicked : undefined}
+                onClick={() => toggle(row.id)}
+              />
+            </DsListPanel>
           );
         })}
-      </DsListPanel>
+      </div>
       <DsTextField
         label={copy.eveningGratitudeOwn}
         value={text}

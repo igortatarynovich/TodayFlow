@@ -20,11 +20,13 @@ import {
   DsListRow,
   DsMetricCard,
   DsOverlaySheet,
+  DsPlanet,
   DsRadialMeter,
   DsSectionHeader,
   DsWaveMeter,
 } from "@/design-system";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
+import { joinClass } from "@/design-system/utils/joinClass";
 
 /**
  * TODAY dashboard — ENERGY → MOON → MAIN DRIVER → STRENGTHS → RISKS.
@@ -175,17 +177,32 @@ function TodayDayDashboard({
 
   return (
     <div
-      className={layout.pilotStack}
+      className={layout.dayBriefMoonStage}
       data-testid="today-day-brief"
       data-pane="atmosphere"
       data-form-kit="composition"
       data-has-moon={showMoon ? "true" : "false"}
     >
+      {showMoon ? (
+        <div className={layout.dayBriefMoonBackdrop} aria-hidden>
+          <DsCelestialMoon
+            phase={moonPhase}
+            size={440}
+            spin={0.035}
+            glow={0.55}
+            animated
+            textureSrc="/images/celestial/moon_lro_2k.jpg"
+            testId="today-day-brief-moon"
+          />
+        </div>
+      ) : null}
+
+      <div className={joinClass(layout.pilotStack, layout.dayBriefMoonForeground)}>
       <DsSectionHeader eyebrow={copy.storyNext.day} title={dateLabel} testId="today-day-brief-date" />
 
       <DsHeroBlock
         testId="today-day-brief-vibe"
-        tone="glass"
+        tone="none"
         size="feature"
         className={layout.heroOpen}
         eyebrow={copy.pulseLabel}
@@ -205,19 +222,6 @@ function TodayDayDashboard({
         <DsListPanel tone="glass" testId="today-day-brief-moon-card">
           <DsListRow
             testId="today-day-brief-moon-row"
-            leading={
-              showMoon ? (
-                <DsCelestialMoon
-                  phase={moonPhase}
-                  size={56}
-                  spin={0}
-                  glow={0.6}
-                  animated={false}
-                  textureSrc="/images/celestial/moon_lro_2k.jpg"
-                  testId="today-day-brief-moon"
-                />
-              ) : undefined
-            }
             title={moonCard.title}
             subtitle={moonCard.meta || undefined}
             onClick={openMoon}
@@ -226,14 +230,23 @@ function TodayDayDashboard({
       ) : null}
 
       {mainDriver ? (
-        <DsContentCard
-          tone="glass"
-          testId="today-day-brief-driver"
-          eyebrow={copy.mainDriverLabel}
-          title={mainDriver.title}
-          body={mainDriver.body || undefined}
-          onClick={openDriver}
-        />
+        <DsListPanel tone="glass" testId="today-day-brief-driver">
+          <DsListRow
+            testId="today-day-brief-driver-row"
+            leading={
+              mainDriver.planets.length ? (
+                <span className={layout.planetPair}>
+                  {mainDriver.planets.map((planet) => (
+                    <DsPlanet key={planet} planet={planet} size={44} />
+                  ))}
+                </span>
+              ) : undefined
+            }
+            title={mainDriver.title}
+            subtitle={mainDriver.body || copy.mainDriverLabel}
+            onClick={openDriver}
+          />
+        </DsListPanel>
       ) : null}
 
       {strengthChips.length > 0 ? (
@@ -310,6 +323,7 @@ function TodayDayDashboard({
       ) : null}
 
       <TodayDayDetailSheet sheet={sheet} onClose={closeSheet} />
+      </div>
     </div>
   );
 }

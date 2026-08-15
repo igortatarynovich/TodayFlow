@@ -48,6 +48,8 @@ export type TodayDayMainDriver = {
   title: string;
   body: string | null;
   detail: string | null;
+  /** Closed planet slugs for DsPlanet — omit when unknown. */
+  planets: string[];
   sheetRows: TodayDaySheetRow[];
 };
 
@@ -450,6 +452,74 @@ function buildBetterCards(contract: TodayContractV1): TodayDayBetterCard[] {
   return cards.slice(0, 3);
 }
 
+/** Closed Global driver kinds — never print snake_case to the user. */
+export const GLOBAL_DRIVER_KIND_LABELS_RU: Record<string, string> = {
+  moon_ingress: "Смена знака",
+  planet_ingress: "Вход планеты",
+  phase_change: "Смена фазы",
+  station_direct: "Станция",
+  station: "Станция",
+  retrograde_edge: "Ретроград",
+  lunar_aspect: "Лунный аспект",
+  sky_aspect: "Аспект",
+  cycle_aspect: "Цикл",
+  perigee: "Перигей",
+  apogee: "Апогей",
+};
+
+const LUNAR_DRIVER_KINDS = new Set([
+  "phase_change",
+  "moon_ingress",
+  "lunar_aspect",
+  "perigee",
+  "apogee",
+]);
+
+const PLANET_HINTS: Array<[RegExp, string]> = [
+  [/лун[аеуы]|новолун|полнолун|\bmoon\b/i, "moon"],
+  [/солнц|\bsun\b/i, "sun"],
+  [/меркур|\bmercury\b/i, "mercury"],
+  [/венер|\bvenus\b/i, "venus"],
+  [/марс|\bmars\b/i, "mars"],
+  [/юпитер|\bjupiter\b/i, "jupiter"],
+  [/сатурн|\bsaturn\b/i, "saturn"],
+  [/уран|\buranus\b/i, "uranus"],
+  [/нептун|\bneptune\b/i, "neptune"],
+  [/плутон|\bpluto\b/i, "pluto"],
+];
+
+function driverKindLabel(kind: string | null | undefined): string | null {
+  const key = String(kind || "")
+    .trim()
+    .toLowerCase()
+    .replace(/-/g, "_");
+  if (!key) return null;
+  return GLOBAL_DRIVER_KIND_LABELS_RU[key] || null;
+}
+
+function driverPlanets(kind: string | null | undefined, fact: string | null | undefined, id: string): string[] {
+  const key = String(kind || "")
+    .trim()
+    .toLowerCase()
+    .replace(/-/g, "_");
+  const blob = `${kind || ""} ${fact || ""} ${id}`;
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const push = (slug: string) => {
+    if (seen.has(slug)) return;
+    seen.add(slug);
+    out.push(slug);
+  };
+  if (LUNAR_DRIVER_KINDS.has(key)) push("moon");
+  for (let i = 0; i < PLANET_HINTS.length; i += 1) {
+    const pair = PLANET_HINTS[i];
+    if (!pair[0].test(blob)) continue;
+    push(pair[1]);
+    if (out.length >= 2) break;
+  }
+  return out;
+}
+
 function actionChip(id: string | null | undefined): TodayDayActionChip | null {
   const key = String(id || "")
     .trim()
@@ -548,9 +618,10 @@ function buildMainDriver(contract: TodayContractV1, energyLabel: string | null):
   const row = contract.global_day?.drivers?.[0];
   if (!row) return null;
   const id = String(row.id || row.kind || "").trim();
-  const title = clean(row.fact_ru) || clean(row.kind) || (id ? id : null);
+  const title = clean(row.fact_ru) || driverKindLabel(row.kind);
   if (!title) return null;
-  const kindLabel = actionChip(row.kind)?.label || clean(row.kind);
+  const kindLabel = driverKindLabel(row.kind);
+  const planets = driverPlanets(row.kind, row.fact_ru, id);
   const matchedWindow = (contract.global_day?.windows || []).find(
     (win) => String(win.driver_id || "").trim() === id && clean(win.time),
   );
@@ -569,6 +640,7 @@ function buildMainDriver(contract: TodayContractV1, energyLabel: string | null):
     title,
     body: kindLabel && kindLabel !== title ? kindLabel : null,
     detail: [clean(row.fact_ru), kindLabel].filter(Boolean).join("\n\n") || title,
+    planets,
     sheetRows,
   };
 }

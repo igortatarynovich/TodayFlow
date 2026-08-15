@@ -69,11 +69,7 @@ export function DsRitualGate({
       ) : null}
       {kind === "number" && !step ? (
         <span className={m.numberTiles} aria-hidden>
-          {[0, 1, 2].map((i) => (
-            <span key={i} className={m.numberTile}>
-              ?
-            </span>
-          ))}
+          <span className={m.numberTile}>?</span>
         </span>
       ) : null}
       <span className={m.gateTitle}>{title}</span>

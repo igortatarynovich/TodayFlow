@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import {
   DsCallout,
+  DsChip,
   DsContentCard,
   DsListPanel,
   DsListRow,
@@ -47,6 +48,7 @@ export function TodayMyDayPane({
         <DsCallout
           tone="insight"
           label="main"
+          icon="spark"
           title={focusTitle || copy.myDayFocusLabel}
           testId="today-handoff-focus"
         >
@@ -57,7 +59,11 @@ export function TodayMyDayPane({
       {priorities.length > 0 ? (
         <DsListPanel tone="subtle" title={copy.myDayPriorityLabel} testId="today-handoff-focus-prioritize">
           {priorities.map((item) => (
-            <DsListRow key={item} title={item} />
+            <DsListRow
+              key={item}
+              leading={<DsChip variant="status" statusTone="good"> </DsChip>}
+              title={item}
+            />
           ))}
         </DsListPanel>
       ) : null}
@@ -65,7 +71,11 @@ export function TodayMyDayPane({
       {cautions.length > 0 ? (
         <DsListPanel tone="solid" title={copy.myDayCautionLabel} testId="today-handoff-focus-avoid">
           {cautions.map((item) => (
-            <DsListRow key={item} title={item} />
+            <DsListRow
+              key={item}
+              leading={<DsChip variant="status" statusTone="risk"> </DsChip>}
+              title={item}
+            />
           ))}
         </DsListPanel>
       ) : null}
