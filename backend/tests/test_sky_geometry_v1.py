@@ -44,17 +44,19 @@ def test_aug15_headline_is_mercury_jupiter_conjunction():
     assert headline["thesis_hint"] == "communication/restart_messages"
 
 
-def test_exact_sky_conjunction_outranks_distant_phase():
+def test_exact_sky_conjunction_outranks_mislabelled_new_moon():
     bodies = positions_to_sky_bodies(_AUG15)
     aspects = sky_aspects_from_bodies(bodies)
     ce = {
         "lunar_phase": {
-            "id": "waxing",
-            "name": "Растущая",
-            "guidance": "набирай темп",
-            "next_phase": {"name": "Полнолуние", "date": "2026-08-28", "in_days": 13},
+            "id": "new",
+            "name": "Новолуние",
+            "guidance": "Снизь нагрузку",
+            "next_phase": {"name": "Растущий серп", "date": "2026-08-17", "in_days": 1.51},
         },
-        "moon_sign": {"sign": "Virgo", "sign_ru": "Дева"},
+        "moon_sign": {"sign": "Virgo", "sign_ru": "Дева", "degree": 28.7},
+        "sun_sign": {"sign": "Leo", "sign_ru": "Лев", "degree": 22.69},
+        "sky_positions": bodies,
         "sky_aspects": aspects,
         "timed_lunar_aspects": [],
         "ingresses": [],
@@ -62,9 +64,33 @@ def test_exact_sky_conjunction_outranks_distant_phase():
         "personal_transits": [],
     }
     pack = build_day_events_pack_v1(ce, target_date=date(2026, 8, 15))
-    assert pack["ranked_drivers"]
+    phase = next(e for e in pack["events"] if str(e.get("id") or "").startswith("phase-"))
+    assert phase.get("priority_hint") == "ambient"
     top_id = pack["ranked_drivers"][0]
     assert "mercury" in top_id and "jupiter" in top_id
     thesis = build_day_thesis_v1(day_events_pack=pack)
     assert thesis["family"] == "communication"
     assert thesis["variant"] == "restart_messages"
+
+
+def test_real_new_moon_geometry_stays_primary():
+    """Swiss elongation ~0° may compete; catalog label is not enough by itself."""
+    ce = {
+        "lunar_phase": {
+            "id": "new",
+            "name": "Новолуние",
+            "guidance": "Снизь нагрузку",
+            "next_phase": {"name": "Растущий серп", "date": "2026-08-16", "in_days": 0.4},
+        },
+        "moon_sign": {"sign": "Leo", "sign_ru": "Лев", "degree": 22.7, "longitude": 142.7},
+        "sun_sign": {"sign": "Leo", "sign_ru": "Лев", "degree": 22.69, "longitude": 142.69},
+        "sky_aspects": [],
+        "timed_lunar_aspects": [],
+        "ingresses": [],
+        "retrogrades": [],
+        "personal_transits": [],
+    }
+    pack = build_day_events_pack_v1(ce, target_date=date(2026, 8, 15))
+    phase = next(e for e in pack["events"] if str(e.get("id") or "").startswith("phase-"))
+    assert phase.get("priority_hint") == "primary"
+    assert pack["ranked_drivers"][0].startswith("phase-")
