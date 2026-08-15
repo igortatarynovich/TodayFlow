@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta
 from typing import Any, Protocol
+from zoneinfo import ZoneInfo
 
 MAJOR_ASPECTS: tuple[tuple[str, float], ...] = (
     ("conjunction", 0.0),
@@ -115,6 +116,8 @@ async def _longitudes_at(
         offset = when.utcoffset()
         if offset is not None:
             birth_payload["timezone_offset_minutes"] = int(offset.total_seconds() // 60)
+    else:
+        birth_payload["timezone_name"] = "UTC"
     chart = await astro_service.compute_chart(
         birth_payload=birth_payload,
         coordinates=coordinates or {"latitude": 0.0, "longitude": 0.0},
@@ -168,6 +171,14 @@ async def _bisect_aspect_time(
     return (lo + (hi - lo) / 2).replace(microsecond=0)
 
 
+def _zone(timezone_name: str | None) -> ZoneInfo:
+    raw = (timezone_name or "UTC").strip() or "UTC"
+    try:
+        return ZoneInfo(raw)
+    except Exception:
+        return ZoneInfo("UTC")
+
+
 async def find_timed_major_moon_aspects(
     astro_service: _ChartClient,
     *,
@@ -176,11 +187,13 @@ async def find_timed_major_moon_aspects(
     lookahead_days: int = 3,
     step_hours: int = 2,
     coordinates: dict[str, float] | None = None,
+    timezone_name: str | None = None,
 ) -> list[dict[str, Any]]:
     """Return major Moon aspects with exact_time in [target−lookback, target+lookahead]."""
-    start = datetime.combine(target_date - timedelta(days=lookback_days), datetime.min.time())
+    tz = _zone(timezone_name)
+    start = datetime.combine(target_date - timedelta(days=lookback_days), datetime.min.time(), tzinfo=tz)
     end = datetime.combine(
-        target_date + timedelta(days=lookahead_days), datetime.min.time()
+        target_date + timedelta(days=lookahead_days), datetime.min.time(), tzinfo=tz
     ) + timedelta(days=1)
     step = timedelta(hours=max(1, step_hours))
 
@@ -254,9 +267,11 @@ async def find_moon_sign_ingress_time(
     *,
     around_date: date,
     coordinates: dict[str, float] | None = None,
+    timezone_name: str | None = None,
 ) -> datetime | None:
     """Bisect Moon crossing into a new sign near around_date (noon ± 36h)."""
-    center = datetime.combine(around_date, datetime.min.time().replace(hour=12))
+    tz = _zone(timezone_name)
+    center = datetime.combine(around_date, datetime.min.time().replace(hour=12), tzinfo=tz)
     left = center - timedelta(hours=36)
     right = center + timedelta(hours=36)
     step = timedelta(hours=2)

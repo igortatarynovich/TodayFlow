@@ -225,15 +225,27 @@ def _events_from_ingresses(ingresses: list[Any], target: date) -> list[dict[str,
 
 def _events_from_sky_aspects(aspects: list[Any]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
-    for i, row in enumerate(aspects[:6]):
+    for i, row in enumerate(aspects[:8]):
         if not isinstance(row, dict):
             continue
-        title = str(row.get("title") or "").strip()
+        title = str(row.get("title_ru") or row.get("title") or "").strip()
         story = str(row.get("story_ru") or "").strip()
         if not title and not story:
             continue
         eid = str(row.get("id") or f"sky-aspect-{i}")
         fact = story or title
+        planet_a = str(row.get("planet_a") or "").strip() or None
+        planet_b = str(row.get("planet_b") or "").strip() or None
+        aspect = str(row.get("aspect") or "").strip() or None
+        hint = str(row.get("priority_hint") or "").strip() or None
+        meta = {
+            "aspect": aspect,
+            "planet_a": planet_a,
+            "planet_b": planet_b,
+            "thesis_hint": row.get("thesis_hint"),
+            "domain_weights": row.get("domain_weights"),
+            "daily_score": row.get("daily_score"),
+        }
         out.append(
             _event(
                 eid=eid,
@@ -243,6 +255,12 @@ def _events_from_sky_aspects(aspects: list[Any]) -> list[dict[str, Any]]:
                 orb_delta=row.get("orb_delta"),
                 tension_level=str(row.get("tension_level") or "") or None,
                 strength_label=str(row.get("strength") or "") or None,
+                priority_hint=hint,
+                body=planet_a,
+                target_body=planet_b,
+                aspect=aspect,
+                fact_key="sky_aspect",
+                meta={k: v for k, v in meta.items() if v is not None},
             )
         )
     return out
@@ -335,21 +353,15 @@ def _events_from_phase(
             fact = f"{fact}: {guidance}"
     else:
         fact = f"{title}" + (f": {guidance}" if guidance else "")
-    # Treat as phase_change when next phase is today or tomorrow.
+    # Current phase is texture. Only a nearby quarter-turn competes for the plot.
     kind = "phase_change"
     next_phase = lunar_phase.get("next_phase") if isinstance(lunar_phase.get("next_phase"), dict) else {}
     in_days = next_phase.get("in_days")
-    try:
-        if in_days is not None and float(in_days) > 1.5:
-            kind = "phase_change"  # still name the current phase as a soft driver
-            # Downgrade when far from quarter turn — ranker will use strength.
-    except (TypeError, ValueError):
-        pass
-    priority = "primary"
+    priority = "ambient"
     try:
         if in_days is not None and float(in_days) <= 1.0:
             priority = "primary"
-        elif in_days is not None and float(in_days) > 3.0:
+        elif in_days is not None and float(in_days) <= 3.0:
             priority = "secondary"
     except (TypeError, ValueError):
         pass

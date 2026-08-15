@@ -94,8 +94,6 @@ def test_build_celestial_events_wires_timed_aspects_into_voc():
     with patch("todayflow_backend.services.celestial_events_builder.LunarService") as lunar_cls, patch(
         "todayflow_backend.services.celestial_events_builder.RetrogradeService"
     ) as retro_cls, patch(
-        "todayflow_backend.services.celestial_events_builder.AspectEngine"
-    ) as aspect_cls, patch(
         "todayflow_backend.services.celestial_events_builder.find_timed_major_moon_aspects",
         new=AsyncMock(return_value=timed),
     ), patch(
@@ -105,7 +103,6 @@ def test_build_celestial_events_wires_timed_aspects_into_voc():
         lunar_cls.return_value.phase_at.return_value = mock_lunar
         lunar_cls.return_value.current_phase.return_value = mock_lunar
         retro_cls.return_value.get_retrograde_status = AsyncMock(return_value=mock_retro)
-        aspect_cls.return_value.callouts.return_value = MagicMock(callouts=[])
 
         payload = asyncio.run(
             build_celestial_events(date(2026, 7, 24), "ru", astro_service=mock_astro)

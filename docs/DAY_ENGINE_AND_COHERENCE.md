@@ -38,9 +38,12 @@
 | `rhythm` | Цели, привычки, аскезы, отметки, **сводка дневника** | `fusion.rhythm_context` в промпте narrative; дневник как факт, не выдумка |
 | `health_signals` | Сон, активность (с согласия пользователя) | **пробел:** интеграция Health |
 | `evidence.celestial_events` | `day_events_pack_v1` — structured sky evidence + ranked drivers + compositions | **вложено в DayContext**, не второй SoT дня |
+| `headline_sky` | Одно shared-sky соединение дня (мажоры, Swiss noon) — что показать на полоске Today | `sky_geometry_v1` → `celestial_events.headline_sky`; pack `ranked_drivers[0]` |
 | `day_thesis` | Единый сюжет дня (family/variant/mode/label) для всех поверхностей Today | `day_thesis_v1` из drivers + compositions + day_model |
 
 **Инвариант (2026-07):** `day_events_pack` — evidence; `day_thesis` — один сюжет; `day_story` / Day Map / Hero / Instructions — проекции thesis. Запрещено параллельно вести conflict/headline/funnel thesis как независимые SoT.
+
+**Shared sky vs natal (2026-08-15):** соединения неба (Меркурий × Юпитер и т.п.) задают **погоду дня** — headline, thesis, fallback mood (`thesis.mode` → `visual_mode`). Сферы пользователя (`domain_verdicts` / `top_driver_v1`) остаются наложением транзита на натал. Не справочник: в UI одно соединение; полный ряд знаков и аспектов — в sheet по тапу.
 
 **Правило Day Engine (вход):** в LLM для поверхностей Today уходит **один согласованный пакет входа** (DayContext + версии), а не разрозненные догадки по отдельным полям.
 
