@@ -45,24 +45,83 @@ LLM не выбирает mood/energy, главных drivers, окна врем
 
 Два человека в одной **day-location / timezone** + одна версия правил → **один и тот же Global Day**.
 
+### Downstream non-mutation (LOCKED)
+
+```text
+Downstream layer may enrich or verbalize upstream meaning,
+but may never mutate an upstream semantic decision.
+```
+
+| Слой | Может | Не может |
+|------|--------|----------|
+| Personal | объяснить global risk / strength | заменить `primary_energy`, drivers, windows |
+| Card / number | дать lens / bridge | изменить Global Day |
+| Narrative LLM | переформулировать окно / силу | поменять `supports[]` / `cautions[]` / scores |
+| UI | скрыть / не показать значение | вычислить другое |
+
+Проверка (ручная в ревью; цель — автоматом в CI): любое поле Today либо **owned** таблицей ниже, либо **derived view** без новой семантики. Если owner неоднозначен — архитектурная дыра, не «потом разберёмся».
+
+---
+
+## Ownership смысловых результатов (LOCKED)
+
+Не компоненты и не экраны — **кто имеет право определить значение**.  
+Правило ревью: **для каждого поля Today — ровно один decision owner.**
+
+| Результат | Authority |
+|-----------|-----------|
+| Sky facts | Day Sources |
+| Canonical meaning факта | Astrology Canon |
+| Driver ranking | Global Day Engine |
+| Primary energy | Global Day Engine |
+| Strength / risk | Global Day Engine |
+| Timeline windows (`supports[]` / `cautions[]`) | Global Day Engine |
+| Global prose | Global Narrative LLM |
+| Natal activations | Personal / Natal Engine |
+| Card identity | Ritual Engine |
+| Number identity | Numerology Engine |
+| Card / number base meaning | Catalogs |
+| Personal focus | Personal Day |
+| Priority / avoid | Personal Day |
+| Card / number bridge | Personal Day |
+| Color / practice / action | Downstream enrichment |
+| Формулировка текста | Соответствующий Narrative LLM |
+| Что и где показывать | Today presentation contract |
+
+**Не путать:**
+
+- **Authority** = кто *решает* смысл.  
+- **Narrative LLM** = кто *формулирует* уже решённое.  
+- **Presentation contract** = кто *раскладывает* по UI, не invent.
+
+Projector / ScreenFlow / FE **не** появляются в колонке Authority для смысловых полей.
+
 ---
 
 ## Цепочка (10 шагов)
+
+Причинный порядок (смысл):
+
+```text
+Небо → Global Day → Natal Overlay → Ritual lenses → Personal Day → Presentation
+```
+
+Каждый следующий слой **использует** предыдущий и **не переписывает** его.
 
 ```text
 1  Astronomy Facts          Swiss / day interval — только расчёт
 2  Astrology Interpretation Canon   фиксированные значения (не в prompt целиком)
 3  Global Day Engine        drivers · energy · strength · risk · windows
 4  Global Day Narrative     LLM #1 — только человеческий язык Global Profile
-5  Ritual                   карта + число уже выбраны; reveal не пересчитывает день
-6  Natal Overlay            today sky × natal — детерминированно
+5  Natal Overlay            today sky × natal — детерминированно
+6  Ritual                   карта + число уже выбраны; reveal не пересчитывает день
 7  Personal Day bind        Global + overlay + card + number (+ goals optional)
 8  Personal Narrative       LLM #2 — why you · focus · priority · avoid · bridges
 9  Deterministic enrichments цвет / практика / goal — из уже установленного смысла
 10 Contract → UI            UI ничего не интерпретирует
 ```
 
-UX: **GLOBAL → RITUAL → PERSONAL**.  
+UX reveal: **GLOBAL → RITUAL → PERSONAL** (порядок показа; не порядок authority).  
 Backend: ночной prebake обоих пакетов. Клик не запускает LLM.
 
 ```text
@@ -155,7 +214,14 @@ Window { time, driver_id, intensity, supports[], cautions[] }
 
 ---
 
-## 5. Ritual
+## 5. Natal Overlay
+
+Natal overlay = today sky × natal (детерминированно). Не второй гороскоп.  
+**Не** меняет Global Day Profile. Только activations для Personal Day.
+
+---
+
+## 6. Ritual
 
 Карта: `sha256(owner_key|local_date|"day_card") % 78` + orientation digest.  
 Число: Personal Day если есть `birth_date`, иначе Universal Day (masters 11/22/33).
@@ -165,9 +231,8 @@ Base meaning = catalog. Bridge пишется только в Personal Narrative
 
 ---
 
-## 6–8. Personal overlay + Personal Narrative — LLM #2
+## 7–8. Personal Day bind + Personal Narrative — LLM #2
 
-Natal overlay = today sky × natal (детерминированно). Не второй гороскоп.
 
 **Вход LLM #2:** готовый Global Day + natal overlay + card (id, orientation, base) + day number (value, base) + optional goals/history.
 
@@ -283,7 +348,7 @@ manifest:
 ## Architecture impact (2026-08-15)
 
 - **SoT before:** I1–I8 — один DayScenario как Meaning SoT; LLM `visual_mode`; timeline copy из Scenario или Kimi; personal/card/number могли участвовать в одном native call.
-- **SoT after:** этот файл — content pipeline. I0: Global Day authority / Personal Day authority. Energy и windows детерминированы до LLM. Карта/число — линзы Personal Day. Два LLM-вызова только формулируют. GET читает persist.
+- **SoT after:** этот файл — content pipeline. I0: Global Day / Personal Day. Ownership-таблица смысловых результатов (один decision owner на поле). Downstream non-mutation. Energy и windows детерминированы до LLM. Карта/число — линзы Personal Day. Два LLM только формулируют. GET читает persist.
 - **Public contract changed?** target yes (phased): `global_day` / `personal_day` nests; `primary_energy`; windows with supports/cautions. Нет wire bump в lock-only.
 - **Migration required?** yes — native C1 monolith, Kimi windows, LLM visual_mode, ritual number, guide. Cached days keep old shape until regenerate/admin.
 - **Canon updated?** yes — this file · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · SCENARIO_V3 UX · README · tracker.
