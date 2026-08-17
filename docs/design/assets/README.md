@@ -29,5 +29,8 @@ Form from `ui-kit-form-sheet.png`; color from `--tf-*` / `--day-*`.
 | Visual (only feature import path) | `DsPlanet`, `DsZodiac`, `DsNumber`, `DsTarotFace`, `DsAngle` |
 | Compositions | `DsHeroBlock`, `DsWindowCard`, `DsMetricCard`, `DsActionCard`, `DsListRow` |
 
+Symbol language SoT: [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) §2 (ten layers · information vs identity).  
+Transitional: `celestial-kit/angles/*`, decorative element SVGs, planet photos used as **icons**, natal starfield/jewels. Target: ASC/MC as type; elements as alchemical △ ▽; houses as I–XII; planet **images** only in XL/share (unified restyle); natal assembled from the same primitives.
+
 Gate: `scripts/check_ds_style_gate.py` + `scripts/ds_form_kit_zone_allowlist.json`.
 Pilot: Today day brief (no local `TodayDayBrief.module.css`).

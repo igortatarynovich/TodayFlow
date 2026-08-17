@@ -55,7 +55,7 @@
 - [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — **единственный канон продуктового цикла / ScreenFlow Today**
 - [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) — SoT **расчёта фактов** (не сюжет); питает Global Day
 - [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — **SUPERSEDED** как product map; current-code until cutover
-- [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual** SoT (§11 Day Atmosphere)
+- [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual** SoT (§2 ten-layer language · natal as composition · §11 Day Atmosphere)
 - [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) — legacy engine notes / I0–I8 hygiene (**не** Meaning SoT)
 - [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) — experience layer (ритуал/goal loop); meaning → pipeline
 - [today/TODAY_WAVE2_EXECUTION_PLAN.md](./today/TODAY_WAVE2_EXECUTION_PLAN.md) — Wave 2 action plan (Tap → Verdict → Glance)
@@ -100,7 +100,7 @@
 Screen-level и PIM-слой (`pim/`, `today-language/`, `explainability/`) — уточняют unified, не заменяют его.  
 **Не плодить** второй «канон дня» / «Meaning SoT» рядом с `TODAY_CONTENT_PIPELINE_V1`.
 
-**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §11–§15 (Day Atmosphere · DS audit · DS canon `--tf-*` / `Ds*`). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
+**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §2 ten-layer language (information glyphs vs identity planet images; natal = composition) + §11–§15 (Day Atmosphere · DS audit · DS canon `--tf-*` / `Ds*`). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
 
 ## Правило записи (обязательно)
 

@@ -1,8 +1,21 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-15
+Last updated: 2026-08-17
 Owner: Product + Engineering
 Status: Active working document
+
+**NOW (VISUAL LANGUAGE, 2026-08-17):** FOUNDATION_UI §2 v0.5 — ten-layer language + two registers (information glyphs vs identity planet images) + natal as branded composition of the same primitives (not a traditional wheel). Cross-surface literacy: `♀ → ♉︎ → VII → △ → ♄` in Profile / Today / Compat / chart. Next DS (not this commit): planet restyle · glyph set · natal rebuild from atoms. Profile viewport 1 unchanged.
+
+## Architecture impact — Natal visual language v0.5 (2026-08-17)
+
+- **SoT before:** §2 v0.4 = two glyph tiers + families; natal wheel still a separate decorated object (starfield, jewels, photo discs, zodiac orbs). Planet photos used as icons.
+- **SoT after:** Ten layers. Information vs identity registers must not share a slot. Natal chart = thin geometry assembled from layers 1–7; no constellations/ornament. Planet images = XL/share only, unified style (not NASA crop). Extra points (Chiron/Lilith/PoF) stay out until product canon lock. Screens stop inventing per-page illustrations once the set exists.
+- **Public contract changed?** no
+- **Migration required?** no runtime; DS later. Transitional: `DsPlanet` photo-as-icon, `DsAngle` badges, `ElementIcon` decorative, `NatalChartWheel` decor.
+- **Canon updated?** yes — FOUNDATION_UI v0.5 §2. No new docs file.
+- **Backward compatible?** yes — UI unchanged until DS pass
+- **Next:** owner asks → primitives + planet restyle + natal rebuild together (chart must not get a third art language). Do not open Profile viewport 2 for this.
+
 
 **CANON LOCKED (2026-08-15):** **Один Today Meaning SoT** = [TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md). **Один product cycle** = [TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY → RITUAL → MY DAY → EVENING). SCENARIO_V3 six-block **superseded** as product map. DAY_SCENARIO_V1 / B5 demoted (не канон смысла). DAY_SOURCES = facts only.
 
