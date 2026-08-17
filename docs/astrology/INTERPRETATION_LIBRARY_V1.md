@@ -1,6 +1,6 @@
 # Interpretation Library v1 — ontology / schema
 
-**Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (24 draft objects: classical seven · 12 houses · 5 major aspects; no sign objects yet; nothing `active`).  
+**Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (24 draft objects: classical seven · 12 houses · 5 major aspects; 12 sign *claims* without objects; nothing `active`).  
 **Версия:** 1.3 (2026-08-17).  
 **Методология:** **LOCKED** до закрытия IL-1 (~100 объектов). Не переоткрывать схему слоёв / evidence / provenance / ingest, пока модель не столкнётся с источниками.  
 **Владелец:** Product + Research.  
@@ -182,6 +182,8 @@ Identity (ruler, dates) остаётся в Foundation §2.1 — **не копи
 
 `element` и `mode` **не унифицировать** задним числом: Lilly fiery/earthly/airy/watry и Ptolemy winds/rulers — разные системы; Ptolemy tropical/equinoctial ≠ Lilly moveable/cardinal. Mismatch со schema (`cardinal|fixed|mutable`, четыре стихии) — gap_note, не silent collapse.
 
+**Commanding / obeying:** группировка summer/winter (Aries–Virgo vs Libra–Pisces) compared (Ptolemy I.17 + Lilly CA I.16 p.91). Pair-relation Ptolemy I.17 (равное расстояние от равноденствия) Lilly list не подтверждает — не схлопывать. Ptolemy I.18 beholding ≠ Lilly Antiscion/Contrantiscion; ссылка Lilly на «PTOL. APHO.» не consensus.
+
 ### Layer 3 — Houses
 
 1–12.
@@ -206,7 +208,7 @@ Conjunction · Opposition · Square · Trine · Sextile.
 
 Таблица — **смысл слота**, когда локус его подтвердит. Не default для копирования в объект.
 
-**IL-1 fill:** Ptolemy I.16 даёт только harmonious / discordant. `requires_action` в схеме — boolean (нет `unknown` / `not_evidenced`). `false` = свойство **не установлено данным локусом**, не утверждение «square не требует действия». Схему из-за этого не расширять.
+**IL-1 fill:** Ptolemy I.16 даёт только harmonious / discordant. Lilly CA I.1 даёт good / enmity / concord — другая качественная система; в `object.interaction` не копировать. Geometry 0/60/90/120/180 compared. `requires_action` в схеме — boolean (нет `unknown` / `not_evidenced`). `false` = свойство **не установлено данным локусом**, не утверждение «square не требует действия». Схему из-за этого не расширять.
 
 Миноры (Foundation §2.4) — не Layer 4 v1.
 
@@ -522,6 +524,8 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 10. Changelog
 
+- **1.3.6 (2026-08-17)** — Ptolemy I.17 + Lilly CA I.16 p.91: commanding *grouping* compared; equinox pair-relation stays school_specific. Ptolemy I.18 beholding not collapsed into Lilly Antiscion. Copy-paste Aries gap_note removed from other sign QUALITY files. No Layer 2 objects. No methodology change.
+- **1.3.5 (2026-08-17)** — Lilly CA I.1 opened: aspect *geometry* compared with Ptolemy; qualitative labels remain school_specific (good/enmity ≠ harmonious-by-sex). Lilly CA I.16 sign *quality* claims for 12 signs; still no Layer 2 objects. `requires_action` stays false/not-evidenced. No methodology change.
 - **1.3.4 (2026-08-17)** — Fill-rules from corpus collisions (no schema change): Layer 2 psych slots wait later loci; element/mode are distinct descriptive systems; houses = Lilly I.7 only; `requires_action: false` = not evidenced. Do not polish existing objects to a modern average.
 - **1.3.3 (2026-08-17)** — Houses 1–12 from Lilly CA I.7 (not compared to Ptolemy I.13). Major aspects from Ptolemy I.16/I.27; `requires_action` left false. Sign *objects* withheld: Layer 2 required psych slots unattested; element/mode conflicts logged. No ASC/MC/outers. No methodology change.
 - **1.3.2 (2026-08-17)** — IL-1 classical seven drafts (Sun–Saturn) from Ptolemy I.4–I.7 + Lilly CA I.8–I.14. Concrete gaps: Moon/Venus temperature mismatch; Mercury native quality vs convertibility; CORE still blocked. No methodology change.

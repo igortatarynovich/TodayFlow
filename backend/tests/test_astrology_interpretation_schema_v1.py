@@ -189,10 +189,24 @@ def test_houses_and_aspects_from_opened_loci_only():
         assert any("not Ptolemy+Lilly consensus" in n for n in notes)
     for obj in aspects:
         used = {row["source_id"] for row in obj["provenance"]}
-        assert used == {"src.classical.ptolemy_tetrabiblos"}
+        assert used == {
+            "src.classical.ptolemy_tetrabiblos",
+            "src.classical.lilly_christian_astrology",
+        }
         assert obj["requires_action"] is False
-        notes = json.loads((CLAIMS_DIR / f"{obj['object_id']}.json").read_text(encoding="utf-8"))["gap_notes"]
+        claims = json.loads((CLAIMS_DIR / f"{obj['object_id']}.json").read_text(encoding="utf-8"))
+        assert "src.classical.lilly_christian_astrology" not in claims["pending_source_ids"]
+        notes = claims["gap_notes"]
         assert any("does not establish the property" in n for n in notes)
+        compared_angles = [
+            row for row in claims["claims"]
+            if row["field"] == "angle" and row["review_status"] == "compared"
+        ]
+        assert {row["source_id"] for row in compared_angles} == {
+            "src.classical.ptolemy_tetrabiblos",
+            "src.classical.lilly_christian_astrology",
+        }
+        assert all(row["evidence_tier"] != "core" for row in claims["claims"] if row["field"] == "interaction")
     square = by_id["astro.aspect.square"]
     assert square["interaction"] == "friction"
     assert square["angle"] == 90
@@ -209,4 +223,21 @@ def test_sign_classifications_do_not_invent_layer2_psychology():
     assert "Mode conflict" in notes
     compared = {row["concept_id"] for row in claims["claims"] if row["review_status"] == "compared"}
     assert "claim.sign.masculine_alternate" in compared
+    assert "claim.sign.commanding_summer_semicircle" in compared
     assert "claim.sign.fire_triangle_elements" not in compared
+    assert "claim.sign.commanding_equinox_pairs" not in compared
+    assert "claim.sign.beholding_tropical_distance" not in compared
+    assert "claim.sign.antiscion_tropical_distance" not in compared
+    notes_joined = " ".join(claims["gap_notes"])
+    assert "pair-relation" in notes_joined
+    assert "Antiscion" in notes_joined
+    for sign in (
+        "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+        "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces",
+    ):
+        sign_claims = json.loads((CLAIMS_DIR / f"astro.sign.{sign}.json").read_text(encoding="utf-8"))
+        jsonschema.validate(sign_claims, schema)
+        assert all(row["source_id"] == "src.classical.lilly_christian_astrology" for row in sign_claims["claims"])
+        assert all(row["evidence_tier"] != "core" for row in sign_claims["claims"])
+        assert any("No Layer 2 object" in n for n in sign_claims["gap_notes"])
+        assert not any("fiery/cardinal/equinoctial here" in n for n in sign_claims["gap_notes"])

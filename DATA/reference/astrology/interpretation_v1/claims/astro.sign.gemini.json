@@ -1,0 +1,36 @@
+{
+  "contract_version": "astrology_claims_v1",
+  "object_id": "astro.sign.gemini",
+  "calc_entity": "astrology.sign.gemini",
+  "pending_source_ids": [
+    "src.classical.valens_anthologies",
+    "src.traditional.skyscript",
+    "src.psychological.arroyo_four_elements",
+    "src.psychological.rudhyar_personality"
+  ],
+  "gap_notes": [
+    "No Layer 2 object: Lilly CA I.16 nature/quality is opened, but schema still requires motivation / strengths / excess / deficiency / behavioral_tendencies which this QUALITY line does not fill without invention.",
+    "Element and mode remain two-system: this Lilly QUALITY line is not Ptolemy winds / tropical-vs-equinoctial. Do not collapse into one taxonomy.",
+    "Diseases, places, kingdoms, corporature from the same chapter are horary accidentalia — not copied into a sign knowledge object.",
+    "Rulership/exaltation identity stays in Foundation §2.5 — not duplicated here as meaning.",
+    "CORE cannot be scored."
+  ],
+  "claims": [
+    {
+      "concept_id": "claim.sign.gemini.lilly_quality",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource p.93–98",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter XVI Nature of the twelve signs (1659 p.93–98)",
+      "original_claim": "Gemini is aerial, hot, moist, sanguine, diurnal, common or double-bodied, human, masculine, western.",
+      "normalized_claim": "Lilly's Gemini is aerial, sanguine, common, human",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "expression"
+    }
+  ]
+}

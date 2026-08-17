@@ -6,14 +6,13 @@
     "src.classical.valens_anthologies",
     "src.traditional.skyscript",
     "src.traditional.houlding_aspects",
-    "src.professional.tierney_aspect_analysis",
-    "src.classical.lilly_christian_astrology"
+    "src.professional.tierney_aspect_analysis"
   ],
   "gap_notes": [
-    "CORE cannot be scored: geometry and harmonious/discordant labels are from Ptolemy I.16 (conjunction from I.27). Lilly's chapter of terms/aspects (CA ~p.105) is not opened this pass — listed pending, not backfilled.",
-    "Ptolemy I.16 names opposition, trine, quartile, sextile. Conjunction is bodily application in I.27, not a sign-configuration in I.16.",
-    "Ptolemy's only qualitative split is harmonious (trine, sextile: same sex) vs discordant (quartile, opposition: different sex). Schema interaction enum is finer. Mapping is the thinnest fit; do not add modern 'growth edge' or 'opportunity mindset'.",
-    "requires_action is boolean in schema (no unknown/not_evidenced). false here means the opened locus does not establish the property — not the assertion 'this aspect does not require action'. Do not copy the Layer 4 table ('square requires action') into the object without a locus. Schema not expanded."
+    "CORE cannot be scored for aspect *meaning*. Geometry of 0/60/90/120/180 is now compared (Ptolemy I.16/I.27 + Lilly CA I.1). Qualitative labels are not the same system: Ptolemy harmonious/discordant-by-sex vs Lilly good/enmity/concord. Do not collapse.",
+    "Lilly CA I.1 opened. CA ~p.105 terms/aspects table still unopened; not backfilled.",
+    "Lilly: sextile indifferent good; square enmity and not good; trine unity/concord/friendship; opposition a bad aspect; conjunction good or ill according to the question. None of these attest requires_action.",
+    "requires_action is boolean in schema (no unknown/not_evidenced). false here means the opened locus does not establish the property — not the assertion 'this aspect does not require action'. Schema not expanded."
   ],
   "claims": [
     {
@@ -44,9 +43,41 @@
       "locus": "Tetrabiblos Book I Chapter XVI (Ashmand p.24–26)",
       "original_claim": "Diametrical distance of a hundred and eighty degrees is a configuration. Opposition and quartile are discordant, between signs of different sexes.",
       "normalized_claim": "opposition is 180 degrees",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "angle"
+    },
+    {
+      "concept_id": "claim.aspect.opposition.angle",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource p.25–26",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter I Aspects (1659 p.25–26)",
+      "original_claim": "When two Planets are 180 degrees distant, that Aspect is Opposition.",
+      "normalized_claim": "Opposition is 180 degrees",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "angle"
+    },
+    {
+      "concept_id": "claim.aspect.opposition.lilly_quality",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource p.25–26",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter I Aspects (1659 p.25–26)",
+      "original_claim": "Opposition is a bad Aspect.",
+      "normalized_claim": "Lilly classes opposition as a bad aspect",
       "evidence_tier": "school_specific",
       "review_status": "extracted",
-      "field": "angle"
+      "field": "interaction"
     }
   ]
 }

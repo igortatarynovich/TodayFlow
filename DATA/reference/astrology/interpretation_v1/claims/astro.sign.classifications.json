@@ -13,8 +13,12 @@
     "Element conflict: Lilly assigns fire/earth/air/water triplicities. Ptolemy I.21 groups the same four triangles but by winds/directions and planetary lords, not Aristotelian elements on the signs. Do not treat Ptolemy as attesting Aries=fire.",
     "Mode conflict: schema has cardinal|fixed|mutable. Lilly names Aries/Cancer/Libra/Capricorn moveable and cardinal. Ptolemy splits tropical (Cancer, Capricorn) from equinoctial (Aries, Libra). Schema cannot store that split; do not silently collapse Ptolemy into cardinal.",
     "Ptolemy I.15 dismisses quadrupedal/terrestrial/fruitful labels as unimportant. Lilly CA I.16 uses them (e.g. significator in Aries: rash, hardy, lascivious). Not compared.",
-    "Individual Lilly sign-nature chapters (body, diseases, places per sign) are not opened this pass. Do not backfill from memory.",
-    "CORE cannot be scored for sign meaning packages."
+    "Lilly CA I.16 nature/quality of all twelve signs is now opened. Diseases/places/kingdoms/corporature remain horary accidentalia. Layer 2 objects still withheld (required psych slots unattested).",
+    "CORE cannot be scored for sign meaning packages.",
+    "Commanding/obeying: Lilly's Aries–Virgo vs Libra–Pisces list matches Ptolemy I.17 summer/winter semicircle grouping (compared). Ptolemy also defines a pair-relation by equal distance from the equinox; Lilly's list does not attest that geometry. Do not collapse.",
+    "Ptolemy I.18 beholding/equal power (equal distance from a tropic) is not the same lemma as Lilly Antiscion (CA I.16 p.89–91). Lilly cites 'PTOL. APHO.' and adds Contrantiscion as square/opposition. Attribution is not consensus.",
+    "Lilly's Northern list in the same chapter says six signs but names five (Leo omitted in this scan). The commanding list on printed p.91 is complete; that is the compared grouping.",
+    "Lilly long/short ascension is rising-time technique, not Layer 2 meaning. Opened list puts Aquarius in both columns; not normalized."
   ],
   "claims": [
     {
@@ -176,6 +180,86 @@
       "evidence_tier": "supported",
       "review_status": "compared",
       "field": "mode"
+    },
+    {
+      "source_id": "src.classical.ptolemy_tetrabiblos",
+      "source_class": "classical",
+      "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+      "edition": "Ashmand 1822; Gutenberg ebook 70850",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sign.commanding_summer_semicircle",
+      "locus": "Tetrabiblos Book I Chapter XVII (Ashmand p.26)",
+      "original_claim": "The signs in the summer semicircle are commanding; those in the winter semicircle, obeying: when the Sun is in the former he makes the day longer than the night.",
+      "normalized_claim": "Summer-semicircle signs command; winter-semicircle signs obey",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "orientation"
+    },
+    {
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource p.89–91",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sign.commanding_summer_semicircle",
+      "locus": "Book I Chapter XVI Commanding (1659 p.91; djvu 117)",
+      "original_claim": "Signs commanding: Aries, Taurus, Gemini, Cancer, Leo, Virgo. Signs obeying: Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces.",
+      "normalized_claim": "Summer-semicircle signs command; winter-semicircle signs obey",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "orientation"
+    },
+    {
+      "source_id": "src.classical.ptolemy_tetrabiblos",
+      "source_class": "classical",
+      "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+      "edition": "Ashmand 1822; Gutenberg ebook 70850",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sign.commanding_equinox_pairs",
+      "locus": "Tetrabiblos Book I Chapter XVII (Ashmand p.26)",
+      "original_claim": "Any two signs configurated at equal distance from the same or either equinoctial point are termed commanding and obeying: equal ascensional times and equal parallels.",
+      "normalized_claim": "Ptolemy's commanding/obeying is also a pair-relation by equal distance from the equinox",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "orientation"
+    },
+    {
+      "source_id": "src.classical.ptolemy_tetrabiblos",
+      "source_class": "classical",
+      "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+      "edition": "Ashmand 1822; Gutenberg ebook 70850",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sign.beholding_tropical_distance",
+      "locus": "Tetrabiblos Book I Chapter XVIII (Ashmand p.26–27)",
+      "original_claim": "Any two signs equally distant from either tropical sign are equal in power; they also behold each other, rising and setting from the same parts of the horizon.",
+      "normalized_claim": "Ptolemy's beholding/equal-power signs are pairs equally distant from a tropic",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "expression"
+    },
+    {
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource p.89–91",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sign.antiscion_tropical_distance",
+      "locus": "Book I Chapter XVI Antiscion (1659 p.89–91; djvu 114–117)",
+      "original_claim": "Antiscion signs are of the same virtue and equally distant from the first degree of Cancer or Capricorn. Contrantiscion is of the nature of a square or opposition.",
+      "normalized_claim": "Lilly's Antiscion is tropical-distance sympathy; Contrantiscion is classed with square/opposition",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "expression"
     }
   ]
 }

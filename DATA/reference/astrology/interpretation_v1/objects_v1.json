@@ -1694,8 +1694,24 @@
           "locus": "Tetrabiblos Book I Chapter XXVII (Ashmand p.38–39)",
           "original_claim": "When distances are trifling, the preceding planet applies to the following; the same rule holds for bodily conjunction, for which latitudes must also agree.",
           "normalized_claim": "conjunction is 0 degrees",
-          "evidence_tier": "school_specific",
-          "review_status": "extracted",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "angle"
+        },
+        {
+          "concept_id": "claim.aspect.conjunction.angle",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource p.25–26",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter I Aspects (1659 p.25–26)",
+          "original_claim": "When two planets are in one and the same degree and minute of any sign, they are in Conjunction.",
+          "normalized_claim": "Conjunction is 0 degrees: same degree and minute",
+          "evidence_tier": "supported",
+          "review_status": "compared",
           "field": "angle"
         }
       ]
@@ -1750,8 +1766,24 @@
           "locus": "Tetrabiblos Book I Chapter XVI (Ashmand p.24–26)",
           "original_claim": "Hexagonal distance of sixty degrees is a configuration. Trine and sextile are called harmonious, being between signs of the same sex.",
           "normalized_claim": "sextile is 60 degrees",
-          "evidence_tier": "school_specific",
-          "review_status": "extracted",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "angle"
+        },
+        {
+          "concept_id": "claim.aspect.sextile.angle",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource p.25–26",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter I Aspects (1659 p.25–26)",
+          "original_claim": "When two Planets are equally distant 60 degrees, they are in Sextile Aspect.",
+          "normalized_claim": "Sextile is 60 degrees",
+          "evidence_tier": "supported",
+          "review_status": "compared",
           "field": "angle"
         }
       ]
@@ -1807,8 +1839,24 @@
           "locus": "Tetrabiblos Book I Chapter XVI (Ashmand p.24–26)",
           "original_claim": "Quadrate distance of ninety degrees is a configuration. Opposition and quartile are discordant, made between signs of different sexes.",
           "normalized_claim": "square is 90 degrees",
-          "evidence_tier": "school_specific",
-          "review_status": "extracted",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "angle"
+        },
+        {
+          "concept_id": "claim.aspect.square.angle",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource p.25–26",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter I Aspects (1659 p.25–26)",
+          "original_claim": "When two Planets are 90 degrees distant, that Aspect is a Quartile (Square) Aspect.",
+          "normalized_claim": "Square is 90 degrees",
+          "evidence_tier": "supported",
+          "review_status": "compared",
           "field": "angle"
         }
       ]
@@ -1863,8 +1911,24 @@
           "locus": "Tetrabiblos Book I Chapter XVI (Ashmand p.24–26)",
           "original_claim": "Triangular distance of a hundred and twenty degrees is a configuration. Trine and sextile are called harmonious, being between signs of the same sex.",
           "normalized_claim": "trine is 120 degrees",
-          "evidence_tier": "school_specific",
-          "review_status": "extracted",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "angle"
+        },
+        {
+          "concept_id": "claim.aspect.trine.angle",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource p.25–26",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter I Aspects (1659 p.25–26)",
+          "original_claim": "When two Planets are 120 degrees distant, they are in Trine Aspect.",
+          "normalized_claim": "Trine is 120 degrees",
+          "evidence_tier": "supported",
+          "review_status": "compared",
           "field": "angle"
         }
       ]
@@ -1919,8 +1983,24 @@
           "locus": "Tetrabiblos Book I Chapter XVI (Ashmand p.24–26)",
           "original_claim": "Diametrical distance of a hundred and eighty degrees is a configuration. Opposition and quartile are discordant, between signs of different sexes.",
           "normalized_claim": "opposition is 180 degrees",
-          "evidence_tier": "school_specific",
-          "review_status": "extracted",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "angle"
+        },
+        {
+          "concept_id": "claim.aspect.opposition.angle",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource p.25–26",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter I Aspects (1659 p.25–26)",
+          "original_claim": "When two Planets are 180 degrees distant, that Aspect is Opposition.",
+          "normalized_claim": "Opposition is 180 degrees",
+          "evidence_tier": "supported",
+          "review_status": "compared",
           "field": "angle"
         }
       ]
