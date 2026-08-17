@@ -439,7 +439,11 @@ def test_watters_greene_luminaries_not_averaged():
         assert "sciatic" not in domains_text
         assert "blood sugar" not in domains_text
         assert all(row["evidence_tier"] != "core" for row in claims["claims"])
-        assert "src.professional.hand_horoscope_symbols" in pending
+        if object_id in ("astro.object.venus", "astro.object.mars", "astro.object.jupiter"):
+            assert "src.professional.hand_horoscope_symbols" in used
+            assert "src.professional.hand_horoscope_symbols" not in pending
+        else:
+            assert "src.professional.hand_horoscope_symbols" in pending
         notes = " ".join(claims["gap_notes"]).lower()
         assert "modern general practical" in notes or "classification gap" in notes
         assert all("do_not_compare_with" not in row for row in claims["claims"])
@@ -474,6 +478,33 @@ def test_watters_greene_luminaries_not_averaged():
     }
     assert "claim.venus.love_desire_function" in venus_ids
     assert "claim.venus.venus_mercury_contrast" in venus_ids
+    assert "claim.venus.hand_noncoercive_bonding" in venus_ids
+    assert "claim.venus.hand_complementary_union" in venus_ids
+    assert "claim.venus.hand_love_as_bonding" in venus_ids
+    assert "claim.venus.hand_relationship_self_expression" in venus_ids
+    assert "claim.venus.hand_beauty_harmony" in venus_ids
+    assert "claim.venus.hand_creation" in venus_ids
+    assert "claim.venus.hand_spontaneous_attraction" in venus_ids
+    assert "claim.venus.hand_mars_polarity" in venus_ids
+    assert "claim.venus.hand_excess_loss_of_separateness" in venus_ids
+    assert "claim.venus.hand_mother_love" in venus_ids
+    assert "claim.venus.hand_flashy_aesthetic_shadow" in venus_ids
+    assert "claim.venus.hand_venusian_traits" in venus_ids
+    venus_claims = json.loads((CLAIMS_DIR / "astro.object.venus.json").read_text(encoding="utf-8"))
+    assert "src.psychological.greene_inner_planets" in set(venus_claims["pending_source_ids"])
+    assert "src.psychological.greene_inner_planets" not in {row["source_id"] for row in venus_claims["claims"]}
+    assert "src.professional.hand_horoscope_symbols" not in set(venus_claims["pending_source_ids"])
+    hand_venus = [row for row in venus_claims["claims"] if row["source_id"] == "src.professional.hand_horoscope_symbols"]
+    assert len(hand_venus) == 12
+    assert all(row["source_class"] == "professional" for row in hand_venus)
+    assert all(row["evidence_tier"] == "school_specific" for row in hand_venus)
+    assert all(row["school"] == "modern_professional" for row in hand_venus)
+    assert all("runtime_semantic_candidate" not in row for row in hand_venus)
+    assert "moist temperate quality disposed to pleasure and company" == by_id["astro.object.venus"]["function"]
+    assert "claim.venus.hand_noncoercive_bonding" in {row["concept_id"] for row in by_id["astro.object.venus"]["provenance"]}
+    assert "voluntary" not in by_id["astro.object.venus"]["function"]
+    assert any("p.69" in note and "not opened" in note.lower() for note in venus_claims["gap_notes"])
+    assert any("carolina de pedro" in note.lower() for note in venus_claims["gap_notes"])
     mercury_claims = json.loads((CLAIMS_DIR / "astro.object.mercury.json").read_text(encoding="utf-8"))
     mercury_ids = {row["concept_id"] for row in mercury_claims["claims"]}
     assert "claim.mercury.mind_curiosity" in mercury_ids
@@ -508,3 +539,320 @@ def test_watters_greene_luminaries_not_averaged():
     assert "claim.mercury.hermes_spontaneity" in mercury_prov
     inner = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_inner_planets")
     assert inner["source_class"] == "psychological"
+    mars_claims = json.loads((CLAIMS_DIR / "astro.object.mars.json").read_text(encoding="utf-8"))
+    mars_ids = {row["concept_id"] for row in mars_claims["claims"]}
+    assert "claim.mars.hand_survival_energy" in mars_ids
+    assert "claim.mars.hand_individuality" in mars_ids
+    assert "claim.mars.hand_identification" in mars_ids
+    assert "claim.mars.hand_effective_action" in mars_ids
+    assert "claim.mars.hand_conflict" in mars_ids
+    assert "claim.mars.hand_excess_aggression" in mars_ids
+    assert "claim.mars.hand_venus_polarity" in mars_ids
+    assert "claim.mars.hand_individuation_enables_love" in mars_ids
+    assert "claim.mars.hand_fight_or_flight" in mars_ids
+    assert "claim.mars.hand_force_register" in mars_ids
+    assert "claim.mars.hand_iron_steel" in mars_ids
+    assert "claim.mars.hand_body_muscular_vigor" in mars_ids
+    assert "claim.mars.hand_blocked_health_manifestation" in mars_ids
+    assert "src.psychological.greene_inner_planets" in set(mars_claims["pending_source_ids"])
+    assert "src.psychological.greene_inner_planets" not in {row["source_id"] for row in mars_claims["claims"]}
+    assert "src.professional.hand_horoscope_symbols" not in set(mars_claims["pending_source_ids"])
+    hand_mars = [row for row in mars_claims["claims"] if row["source_id"] == "src.professional.hand_horoscope_symbols"]
+    assert len(hand_mars) == 13
+    assert all(row["source_class"] == "professional" for row in hand_mars)
+    assert all(row["evidence_tier"] == "school_specific" for row in hand_mars)
+    assert all(row["school"] == "modern_professional" for row in hand_mars)
+    assert all("runtime_semantic_candidate" not in row for row in hand_mars)
+    assert "heating and drying quality that contends" == by_id["astro.object.mars"]["function"]
+    assert "survival" not in by_id["astro.object.mars"]["function"]
+    assert "claim.mars.hand_survival_energy" in {row["concept_id"] for row in by_id["astro.object.mars"]["provenance"]}
+    assert "claim.mars.hand_body_muscular_vigor" not in {row["concept_id"] for row in by_id["astro.object.mars"]["provenance"]}
+    assert "claim.mars.hand_blocked_health_manifestation" not in {row["concept_id"] for row in by_id["astro.object.mars"]["provenance"]}
+    mars_domains = json.dumps(by_id["astro.object.mars"]["domains"]).lower()
+    assert "inflammation" not in mars_domains
+    assert "iron" not in mars_domains
+    assert any("p.138" in note and "not opened" in note.lower() for note in mars_claims["gap_notes"])
+    jupiter_claims = json.loads((CLAIMS_DIR / "astro.object.jupiter.json").read_text(encoding="utf-8"))
+    jupiter_ids = {row["concept_id"] for row in jupiter_claims["claims"]}
+    assert "claim.jupiter.benefic_assumption_contingent" in jupiter_ids
+    assert "claim.jupiter.return_life_development_doorways" in jupiter_ids
+    assert "claim.jupiter.seven_sins_gluttony_tradition" in jupiter_ids
+    cpa_rows = [row for row in jupiter_claims["claims"] if row["source_id"] == "src.psychological.greene_jupiter_cpa"]
+    assert cpa_rows
+    assert all(row["source_class"] == "psychological" for row in cpa_rows)
+    assert all(row["evidence_tier"] == "school_specific" for row in cpa_rows)
+    assert "src.psychological.greene_jupiter_cpa" not in set(jupiter_claims["pending_source_ids"])
+    assert "src.psychological.greene_relating" in set(jupiter_claims["pending_source_ids"])
+    assert any("seminar description" in note.lower() or "not the transcript" in note.lower() for note in jupiter_claims["gap_notes"])
+    assert "claim.jupiter.hand_expansion" in jupiter_ids
+    assert "claim.jupiter.hand_integration" in jupiter_ids
+    assert "claim.jupiter.hand_becoming" in jupiter_ids
+    assert "claim.jupiter.hand_exploration_learning" in jupiter_ids
+    assert "claim.jupiter.hand_autonomy_freedom" in jupiter_ids
+    assert "claim.jupiter.hand_incorporation" in jupiter_ids
+    assert "claim.jupiter.hand_parental_encouragement" in jupiter_ids
+    assert "claim.jupiter.hand_place_in_world" in jupiter_ids
+    assert "claim.jupiter.hand_integrative_mind" in jupiter_ids
+    assert "claim.jupiter.hand_social_consciousness" in jupiter_ids
+    assert "claim.jupiter.hand_excess_growth" in jupiter_ids
+    assert "claim.jupiter.hand_detail_neglect" in jupiter_ids
+    assert "claim.jupiter.hand_possessive_expansion" in jupiter_ids
+    assert "claim.jupiter.hand_integration_arrogance" in jupiter_ids
+    assert "claim.jupiter.hand_saturn_polarity" in jupiter_ids
+    assert "claim.jupiter.hand_healing_reintegration" in jupiter_ids
+    assert "src.professional.hand_horoscope_symbols" not in set(jupiter_claims["pending_source_ids"])
+    hand_jupiter = [row for row in jupiter_claims["claims"] if row["source_id"] == "src.professional.hand_horoscope_symbols"]
+    assert len(hand_jupiter) == 16
+    assert all(row["source_class"] == "professional" for row in hand_jupiter)
+    assert all(row["evidence_tier"] == "school_specific" for row in hand_jupiter)
+    assert all(row["school"] == "modern_professional" for row in hand_jupiter)
+    assert all("runtime_semantic_candidate" not in row for row in hand_jupiter)
+    jupiter_prov = {row["concept_id"] for row in by_id["astro.object.jupiter"]["provenance"]}
+    assert "claim.jupiter.hand_expansion" in jupiter_prov
+    assert "claim.jupiter.hand_integration" in jupiter_prov
+    assert "claim.jupiter.hand_healing_reintegration" not in jupiter_prov
+    jupiter_domains = json.dumps(by_id["astro.object.jupiter"]["domains"]).lower()
+    assert "healing" not in jupiter_domains
+    assert "medicine" not in jupiter_domains
+    mercury_notes = " ".join(json.loads((CLAIMS_DIR / "astro.object.mercury.json").read_text(encoding="utf-8"))["gap_notes"]).lower()
+    assert "breadth-over-depth" in mercury_notes or "breadth over depth" in mercury_notes
+    assert "expansion" not in by_id["astro.object.jupiter"]["function"]
+    assert "integration" not in by_id["astro.object.jupiter"]["function"]
+    assert "temperate warming and moistening quality" == by_id["astro.object.jupiter"]["function"]
+    saturn_claims = json.loads((CLAIMS_DIR / "astro.object.saturn.json").read_text(encoding="utf-8"))
+    saturn_ids = {row["concept_id"] for row in saturn_claims["claims"]}
+    for concept_id in (
+        "claim.saturn.hand_resistance",
+        "claim.saturn.hand_structure_limits",
+        "claim.saturn.hand_exclusion_definition",
+        "claim.saturn.hand_consensus_reality",
+        "claim.saturn.hand_social_rules_obligations",
+        "claim.saturn.hand_consequences",
+        "claim.saturn.hand_maturation",
+        "claim.saturn.hand_responsibility_discipline",
+        "claim.saturn.hand_reality_not_truth",
+        "claim.saturn.hand_structure_addiction",
+        "claim.saturn.hand_rigidity",
+        "claim.saturn.hand_actualization",
+        "claim.saturn.hand_conformity_self_betrayal",
+        "claim.saturn.hand_guilt_shadow",
+        "claim.saturn.hand_jupiter_polarity",
+        "claim.saturn.hand_ordinary_reality_boundary",
+    ):
+        assert concept_id in saturn_ids
+    assert "src.professional.hand_horoscope_symbols" not in set(saturn_claims["pending_source_ids"])
+    hand_saturn = [row for row in saturn_claims["claims"] if row["source_id"] == "src.professional.hand_horoscope_symbols"]
+    assert len(hand_saturn) == 16
+    assert all(row["source_class"] == "professional" for row in hand_saturn)
+    assert all(row["evidence_tier"] == "school_specific" for row in hand_saturn)
+    assert all(row["school"] == "modern_professional" for row in hand_saturn)
+    assert all("runtime_semantic_candidate" not in row for row in hand_saturn)
+    assert "cooling quality operating by distance from heat" == by_id["astro.object.saturn"]["function"]
+    assert "resistance" not in by_id["astro.object.saturn"]["function"]
+    assert "structure" not in by_id["astro.object.saturn"]["function"]
+    assert by_id["astro.object.saturn"]["themes"] == ["cold", "dryness", "slowness", "solitude", "austerity"]
+    assert "claim.saturn.hand_resistance" in {row["concept_id"] for row in by_id["astro.object.saturn"]["provenance"]}
+    assert not any("structure" in theme for theme in by_id["astro.object.saturn"]["themes"])
+    hand_claim_files = {
+        path.name
+        for path in CLAIMS_DIR.glob("astro.object.*.json")
+        if any(
+            row["source_id"] == "src.professional.hand_horoscope_symbols"
+            for row in json.loads(path.read_text(encoding="utf-8"))["claims"]
+        )
+    }
+    assert hand_claim_files == {
+        "astro.object.venus.json",
+        "astro.object.mars.json",
+        "astro.object.jupiter.json",
+        "astro.object.saturn.json",
+        "astro.object.uranus.json",
+        "astro.object.neptune.json",
+        "astro.object.pluto.json",
+    }
+    hand = next(src for src in corpus["sources"] if src["source_id"] == "src.professional.hand_horoscope_symbols")
+    assert "not Planets in Transit" in hand["notes"]
+    assert "Neptune and Pluto Ch.4 extracted" in hand["notes"]
+    assert "Sun/Moon/Mercury" in hand["notes"]
+    cpa = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_jupiter_cpa")
+    assert cpa["source_class"] == "psychological"
+    assert cpa["legal_status"] == "copyrighted_site"
+
+
+def test_hand_uranus_claims_not_core():
+    """Hand Ch.4 Uranus is professional school_specific ledger-only; object withheld; not CORE."""
+    object_schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, object_schema)
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert "astro.object.uranus" not in by_id
+    assert "astro.object.neptune" not in by_id
+    assert "astro.object.pluto" not in by_id
+    claims = json.loads((CLAIMS_DIR / "astro.object.uranus.json").read_text(encoding="utf-8"))
+    jsonschema.validate(claims, claims_schema)
+    assert claims["object_id"] == "astro.object.uranus"
+    assert claims["calc_entity"] == "astrology.planet.uranus"
+    expected_ids = {
+        "claim.uranus.disrupts_saturnine_structure",
+        "claim.uranus.random_mutation",
+        "claim.uranus.freedom_drive",
+        "claim.uranus.insight_enlightenment",
+        "claim.uranus.peripheral_awareness",
+        "claim.uranus.alien_world_expansion",
+        "claim.uranus.altered_consciousness",
+        "claim.uranus.eccentric_unusual_expression",
+        "claim.uranus.collective_disruption",
+        "claim.uranus.science_technology",
+        "claim.uranus.saturn_balance",
+        "claim.uranus.chaos_life_function",
+    }
+    got_ids = {row["concept_id"] for row in claims["claims"]}
+    assert got_ids == expected_ids
+    assert len(claims["claims"]) == 12
+    assert all(row["source_id"] == "src.professional.hand_horoscope_symbols" for row in claims["claims"])
+    assert all(row["source_class"] == "professional" for row in claims["claims"])
+    assert all(row["evidence_tier"] == "school_specific" for row in claims["claims"])
+    assert all(row["school"] == "modern_professional" for row in claims["claims"])
+    assert all(row["review_status"] == "extracted" for row in claims["claims"])
+    assert all("runtime_semantic_candidate" not in row for row in claims["claims"])
+    assert all("do_not_compare_with" not in row for row in claims["claims"])
+    assert all("classification_gap" not in row for row in claims["claims"])
+    assert "modern_structural" not in {row["source_class"] for row in claims["claims"]}
+    pending = set(claims["pending_source_ids"])
+    used = {row["source_id"] for row in claims["claims"]}
+    assert "src.psychological.greene_outer_planets" in pending
+    assert "src.professional.hand_planets_in_transit" in pending
+    assert "src.professional.hand_horoscope_symbols" not in pending
+    assert "src.psychological.greene_outer_planets" not in used
+    notes = " ".join(claims["gap_notes"]).lower()
+    assert "object withheld" in notes
+    assert "jupiter" in notes and "alien" in notes
+    assert "1981" in notes
+    assert "not core" in notes or "cannot be scored" in notes
+    assert all(row["evidence_tier"] != "core" for row in claims["claims"])
+    assert len(objects["objects"]) == 24
+
+
+def test_hand_neptune_claims_not_core():
+    """Hand Ch.4 Neptune is professional school_specific ledger-only; object withheld; not CORE."""
+    object_schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, object_schema)
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert "astro.object.neptune" not in by_id
+    assert "astro.object.pluto" not in by_id
+    claims = json.loads((CLAIMS_DIR / "astro.object.neptune.json").read_text(encoding="utf-8"))
+    jsonschema.validate(claims, claims_schema)
+    assert claims["object_id"] == "astro.object.neptune"
+    assert claims["calc_entity"] == "astrology.planet.neptune"
+    expected_ids = {
+        "claim.neptune.ultimate_reality",
+        "claim.neptune.dissolves_distinctions",
+        "claim.neptune.nirvana",
+        "claim.neptune.mystical_perception",
+        "claim.neptune.nonattachment",
+        "claim.neptune.maya_with_saturn",
+        "claim.neptune.imagination",
+        "claim.neptune.abstract_arts",
+        "claim.neptune.artistic_creativity_with_venus",
+        "claim.neptune.ideals",
+        "claim.neptune.illusion_of_perfection",
+        "claim.neptune.sacrifice_higher_causes",
+        "claim.neptune.martyr_expression",
+        "claim.neptune.victim_expression",
+        "claim.neptune.unreality_illusion",
+        "claim.neptune.mystery_confusion",
+        "claim.neptune.ego_denial_defeat",
+    }
+    got_ids = {row["concept_id"] for row in claims["claims"]}
+    assert got_ids == expected_ids
+    assert len(claims["claims"]) == 17
+    assert all(row["source_id"] == "src.professional.hand_horoscope_symbols" for row in claims["claims"])
+    assert all(row["source_class"] == "professional" for row in claims["claims"])
+    assert all(row["evidence_tier"] == "school_specific" for row in claims["claims"])
+    assert all(row["school"] == "modern_professional" for row in claims["claims"])
+    assert all(row["review_status"] == "extracted" for row in claims["claims"])
+    assert all("runtime_semantic_candidate" not in row for row in claims["claims"])
+    assert all("do_not_compare_with" not in row for row in claims["claims"])
+    assert all("classification_gap" not in row for row in claims["claims"])
+    assert "modern_structural" not in {row["source_class"] for row in claims["claims"]}
+    pending = set(claims["pending_source_ids"])
+    used = {row["source_id"] for row in claims["claims"]}
+    assert "src.psychological.greene_outer_planets" in pending
+    assert "src.professional.hand_planets_in_transit" in pending
+    assert "src.professional.hand_horoscope_symbols" not in pending
+    assert "src.psychological.greene_outer_planets" not in used
+    combo_ids = {"claim.neptune.maya_with_saturn", "claim.neptune.artistic_creativity_with_venus"}
+    assert combo_ids <= got_ids
+    notes = " ".join(claims["gap_notes"]).lower()
+    assert "object withheld" in notes
+    assert "dreams" in notes and "intuition" in notes
+    assert "maya" in notes and "neptune+saturn" in notes.replace(" ", "")
+    assert "venus" in notes
+    assert "1981" in notes
+    assert "not core" in notes or "cannot be scored" in notes
+    assert all(row["evidence_tier"] != "core" for row in claims["claims"])
+    assert len(objects["objects"]) == 24
+
+
+def test_hand_pluto_claims_not_core():
+    """Hand Ch.4 Pluto is professional school_specific ledger-only; object withheld; not CORE."""
+    object_schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, object_schema)
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert "astro.object.pluto" not in by_id
+    claims = json.loads((CLAIMS_DIR / "astro.object.pluto.json").read_text(encoding="utf-8"))
+    jsonschema.validate(claims, claims_schema)
+    assert claims["object_id"] == "astro.object.pluto"
+    assert claims["calc_entity"] == "astrology.planet.pluto"
+    expected_ids = {
+        "claim.pluto.completes_outer_planet_process",
+        "claim.pluto.radical_transformation",
+        "claim.pluto.death_resurrection_archetype",
+        "claim.pluto.decompose_reconstitute",
+        "claim.pluto.total_reality_crisis",
+        "claim.pluto.requires_new_reality",
+        "claim.pluto.transpersonal_power",
+        "claim.pluto.resistance_intensifies_crisis",
+        "claim.pluto.detachment_requirement",
+        "claim.pluto.evolutionary_power",
+        "claim.pluto.gradual_not_uranian_sudden",
+        "claim.pluto.help_transformation",
+        "claim.pluto.power_over_vulnerable",
+        "claim.pluto.decay_corruption_death",
+        "claim.pluto.purifying_fire",
+    }
+    got_ids = {row["concept_id"] for row in claims["claims"]}
+    assert got_ids == expected_ids
+    assert len(claims["claims"]) == 15
+    assert all(row["source_id"] == "src.professional.hand_horoscope_symbols" for row in claims["claims"])
+    assert all(row["source_class"] == "professional" for row in claims["claims"])
+    assert all(row["evidence_tier"] == "school_specific" for row in claims["claims"])
+    assert all(row["school"] == "modern_professional" for row in claims["claims"])
+    assert all(row["review_status"] == "extracted" for row in claims["claims"])
+    assert all("runtime_semantic_candidate" not in row for row in claims["claims"])
+    assert all("do_not_compare_with" not in row for row in claims["claims"])
+    assert all("classification_gap" not in row for row in claims["claims"])
+    assert "modern_structural" not in {row["source_class"] for row in claims["claims"]}
+    pending = set(claims["pending_source_ids"])
+    used = {row["source_id"] for row in claims["claims"]}
+    assert "src.psychological.greene_outer_planets" in pending
+    assert "src.professional.hand_planets_in_transit" in pending
+    assert "src.professional.hand_horoscope_symbols" not in pending
+    assert "src.psychological.greene_outer_planets" not in used
+    notes = " ".join(claims["gap_notes"]).lower()
+    assert "object withheld" in notes
+    assert "psychotic" in notes and "excluded" in notes
+    assert "generic transformation" in notes or "big-transformation" in notes or "big transformation" in notes
+    assert "uranus" in notes and "neptune" in notes
+    assert "1981" in notes
+    assert "not core" in notes or "cannot be scored" in notes
+    assert all(row["evidence_tier"] != "core" for row in claims["claims"])
+    concept_fields = {row["concept_id"]: row["field"] for row in claims["claims"]}
+    assert concept_fields["claim.pluto.gradual_not_uranian_sudden"] == "tempo"
+    assert len(objects["objects"]) == 24
+

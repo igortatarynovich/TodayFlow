@@ -304,7 +304,7 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Publisher preview reaches the ego/unconscious opening only. Venus / 7th-house-as-relating section not opened. NEED_OWNER: Weiser 2nd ed. ISBN 0-87728-418-0, that section. Do not backfill."
+      "notes": "No longer the Venus psych blocker (Inner Planets p.69). Relating 'Jupiter and Saturn' p.39 is an unread candidate, not evidence. Venus/7th preview still unopened. Do not backfill."
     },
     {
       "source_id": "src.psychological.greene_luminaries",
@@ -334,7 +334,22 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Opened publisher preview: Mercury / young-Hermes spontaneity. Paraphrase only. Do not backfill unread planet sections."
+      "notes": "Mercury Hermes opened. Venus p.69 and Mars Greene p.138 identified_but_unreadable (bodies not opened). Sasportas Mars p.184 reserve. Book does not cover Jupiter. NEED_OWNER: Weiser 1993 ISBN 0-87728-741-4, p.69– / p.138–."
+    },
+    {
+      "source_id": "src.psychological.greene_jupiter_cpa",
+      "source_class": "psychological",
+      "title": "Jupiter webinars / By Jove! The Meaning of the Astrological Jupiter",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened CPA webinar page and By Jove! blurb only, not the 7h transcript. Claims only from those pages. Relating p.39 unread candidate. Do not reconstruct a full Jupiter psychology from the seminar title."
     },
     {
       "source_id": "src.psychological.greene_outer_planets",
@@ -424,7 +439,7 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Legal previews stop inside Ch.3. Ch.4 Planets: Core Meanings and Ch.7 Aspects: Core Meanings not opened. NEED_OWNER: Schiffer 1997 pb ISBN 9780914918165, those chapters. Do not backfill from memory."
+      "notes": "Ch.4 = Horoscope Symbols (not Planets in Transit). Venus, Mars, Jupiter, Saturn, Uranus, Neptune and Pluto Ch.4 extracted (professional school_specific). Sun/Moon/Mercury Ch.4 not extracted. Hand 1981 is dated; not later Hand, not CORE. NEED_OWNER remaining: ISBN 9780914918165, Sun/Moon/Mercury sections if later opened."
     },
     {
       "source_id": "src.psychological.arroyo_four_elements",

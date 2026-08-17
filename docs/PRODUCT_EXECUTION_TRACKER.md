@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-17):** **Interpretation Library IL-1** — methodology LOCKED. 1.3.14 ingest: Watters Sun–Jupiter atomic refine (professional/modern practical, not traditional) + Greene Luminaries Sun/Moon + Inner Planets Mercury. Catalog still 24 draft / 0 active / CORE unscored. Next = targeted closed loci (Hand Ch.4; Relating Venus; Mars/Jupiter psych), not a blind planet search. Canon: `docs/astrology/INTERPRETATION_LIBRARY_V1.md`.
+**NOW (FOUNDATION, 2026-08-17):** **Interpretation Library IL-1** — methodology LOCKED. **1.3.23:** Hand Ch.4 Pluto claims ingested (`professional` / `school_specific`); object withheld; not CORE. Next = Sun→Pluto corpus gap audit (convergence / school-specific / missing layers / what is needed before CORE). Do not rescore CORE. Canon: `docs/astrology/INTERPRETATION_LIBRARY_V1.md`.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 

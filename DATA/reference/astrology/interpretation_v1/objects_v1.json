@@ -513,6 +513,22 @@
           "field": "function",
           "original_claim": "Venus governs love, desire and attraction, experienced through joy, rapture, lust and sexuality.",
           "normalized_claim": "Venus = love/desire/attraction function."
+        },
+        {
+          "concept_id": "claim.venus.hand_noncoercive_bonding",
+          "source_id": "src.professional.hand_horoscope_symbols",
+          "source_class": "professional",
+          "author": "Robert Hand",
+          "edition": "Horoscope Symbols, 1981 Para Research / Schiffer ISBN 9780914918165",
+          "school": "modern_professional",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Ch.4 The Planets: Core Meanings — Venus",
+          "original_claim": "Hand distinguishes Venus from coercive forces: Venus represents an intrinsic, voluntary bonding force arising from the natures of the entities themselves.",
+          "normalized_claim": "Venus = intrinsic, voluntary, non-coercive bonding.",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "function"
         }
       ]
     },
@@ -649,6 +665,22 @@
           "field": "function",
           "original_claim": "Mars governs assertive/confrontational drive and urgency: how a person goes into battle and handles friction.",
           "normalized_claim": "Mars = assertive/confrontational drive and urgency."
+        },
+        {
+          "concept_id": "claim.mars.hand_survival_energy",
+          "source_id": "src.professional.hand_horoscope_symbols",
+          "source_class": "professional",
+          "author": "Robert Hand",
+          "edition": "Horoscope Symbols, 1981 Para Research / Schiffer ISBN 9780914918165",
+          "school": "modern_professional",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Ch.4 The Planets: Core Meanings — Mars",
+          "original_claim": "Mars is fundamentally the energy through which an entity survives and maintains its own nature.",
+          "normalized_claim": "Mars = survival energy that enables an entity to preserve its own nature.",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "function"
         }
       ]
     },
@@ -785,6 +817,38 @@
           "field": "function",
           "original_claim": "Jupiter's core principle is enlargement/expansion.",
           "normalized_claim": "Jupiter = enlargement/expansion principle."
+        },
+        {
+          "concept_id": "claim.jupiter.hand_expansion",
+          "source_id": "src.professional.hand_horoscope_symbols",
+          "source_class": "professional",
+          "author": "Robert Hand",
+          "edition": "Horoscope Symbols, 1981 Para Research / Schiffer ISBN 9780914918165",
+          "school": "modern_professional",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Ch.4 The Planets: Core Meanings — Jupiter",
+          "original_claim": "Jupiter is one of two closely related energies identified by Hand: expansion of the sphere of action and experience in which the individual lives.",
+          "normalized_claim": "Jupiter = expansion of one's sphere of action and experience.",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.jupiter.hand_integration",
+          "source_id": "src.professional.hand_horoscope_symbols",
+          "source_class": "professional",
+          "author": "Robert Hand",
+          "edition": "Horoscope Symbols, 1981 Para Research / Schiffer ISBN 9780914918165",
+          "school": "modern_professional",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Ch.4 The Planets: Core Meanings — Jupiter",
+          "original_claim": "The second fundamental Jupiter energy is integration: becoming part of a larger social order or system and finding one's place within it.",
+          "normalized_claim": "Jupiter = integration of the individual into a larger world/social order.",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "function"
         }
       ]
     },
@@ -985,6 +1049,22 @@
           "field": "themes",
           "reviewer": null,
           "reviewed_at": null
+        },
+        {
+          "concept_id": "claim.saturn.hand_resistance",
+          "source_id": "src.professional.hand_horoscope_symbols",
+          "source_class": "professional",
+          "author": "Robert Hand",
+          "edition": "Horoscope Symbols, 1981 Para Research / Schiffer ISBN 9780914918165",
+          "school": "modern_professional",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Ch.4 The Planets: Core Meanings — Saturn",
+          "original_claim": "Saturn is presented as the archetype of resistance: the force that says expansion cannot proceed indefinitely and must be encountered in taking one's place in the world.",
+          "normalized_claim": "Saturn = resistance that limits unrestricted expansion and must be negotiated in engagement with reality.",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "function"
         }
       ]
     },

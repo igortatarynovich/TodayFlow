@@ -1,13 +1,13 @@
 # IL-1 handoff — next agent
 
 **Date:** 2026-08-17  
-**Owner intent:** IL-1 catalog is **frozen for conceptual additions**. Catalog/priority transfer SHA: **`ecb4cbe4`**. Do not start another blind planet research pass. The ingest of the Sun–Jupiter research rows is closed; remaining work is **targeted** closed loci named below. Do not redesign TodayFlow. Do not polish the methodology document. Do not reopen sequence / ontology / evidence.
+**Owner intent:** IL-1 catalog is **frozen for conceptual additions**. Catalog/priority transfer SHA: **`ecb4cbe4`**. **1.3.23 is closed.** Hand Ch.4 Venus–Saturn ingested as objects; Uranus, Neptune and Pluto Ch.4 ingested as **claims only** (`professional` / `school_specific`). Calc emits the three outers; objects withheld (required celestial_object slots would force a single-school fill). Psychological *discovery* Sun–Saturn is done. Sun/Moon/Mercury Hand remain unextracted in the ledger. Venus p.69 and Mars p.138 unread. Next: **gap audit** of the accumulated Sun→Pluto corpus (convergence / genuine disagreement / school-specific / missing psychological or traditional layers / what is still needed before a first CORE pass). Do **not** start a new bibliography. Do **not** rescore CORE. Do **not** activate the outer-planet runtime divider. Rule: no readable locus → leave the gap.
 
-**Catalog state (correct, not a gap):** 24 draft / 0 active / 0 sign objects / CORE unscored. Planet `function` slots remain classical elemental. Watters 2003 is **not** traditional. Greene Luminaries Sun/Moon are psychological `school_specific`, not CORE.
+**Catalog state (correct, not a gap):** 24 draft / 0 active / 0 sign objects / CORE unscored. Uranus, Neptune and Pluto Hand-1981 claims exist without objects (same pattern as signs). Planet `function` slots remain classical elemental for Sun–Saturn. Saturn `themes` remain cold/dryness/slowness/solitude/austerity. Watters 2003 is a classification gap (`professional` / `modern_general_practical`), not a new school enum. Layer 1 landscape: Sun/Moon = classical + modern general + Luminaries; Mercury = classical + modern general + Inner Planets Hermes; Venus = classical + modern general + Hand Ch.4, psych p.69 unread; Mars = classical + modern general + Hand Ch.4, psych p.138 unread; Jupiter = classical + modern general + CPA page + Hand Ch.4; Saturn = classical + traditional + Greene Introduction + Hand Ch.4; Uranus/Neptune/Pluto = Hand Ch.4 1981 claims only.
 
 **Research-first (operational):** search legally available loci before asking the owner. Order: Google Books preview → publisher previews (Calaméo / Weiser) → Open Library / controlled borrowing → library sources. Owner is asked only when a **specific** needed locus (edition + pages X–Y) is closed. Do not ask the owner to buy, photograph, or paraphrase a book as the default step.
 
-Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.14** Watters/Greene atomic refine + Inner Planets Mercury).  
+Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.23** Hand Ch.4 Pluto claims ingested, object withheld; next = Sun→Pluto corpus gap audit).  
 Today Meaning SoT remains [`docs/today/TODAY_CONTENT_PIPELINE_V1.md`](../today/TODAY_CONTENT_PIPELINE_V1.md). IL is pipeline step 2 lookup only.
 
 Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
@@ -19,12 +19,12 @@ Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
 1. Read this file + IL § Sequence + **Activation gates** + §6 ingest + Layer 1–4 fill-rules.
 2. 1.3.8 activation gates are **committed** (`3c62a5c6`). Do not reopen them.
 3. IL ingest lives on short-lived `il/il-1-ingest` (from that tip). Do **not** mix Profile v2 / Foundation UI / landing / Trust / motion into IL commits. Working tree on the host often has those dirty; leave them.
-4. Search a legally available next locus yourself (research-first rule above). If found: ingest (`locus → claims → normalization → draft`). If a **specific** page is closed: ask the owner for pages X–Y of that edition. If nothing is needed: **stop**. Do not pad classical/traditional ingest. Do not invent work.
+4. **Stop unless the owner names one gap from the queue below.** Do not invent the next research pass. If a named page is legally readable: ingest (`locus → claims → normalization → draft`). If that specific page is closed: ask for edition + pages X–Y. No readable locus → leave the gap. Do not pad classical/traditional ingest.
 
 v1.3.8 is closed: `requires_action` and Layer 5 stay draft→active gates, not IL-1 re-ontology.  
 `876e6f98` is closed as first traditional class: classical layer not rewritten.  
 `ecb4cbe4` is the catalog/priority transfer: do not pad traditional.  
-`9a0fe7c2` closed leftover busywork only; catalog unchanged. First psychological class = Greene Introduction (1.3.11). Houlding *Saturn: The Great Teacher* = 1.3.12. **1.3.13** = Watters Sun–Jupiter (professional/modern practical) + Greene *The Luminaries* Sun/Moon. **1.3.14** = atomic refine + Greene *Inner Planets* Mercury.
+`9a0fe7c2` closed leftover busywork only; catalog unchanged. First psychological class = Greene Introduction (1.3.11). Houlding *Saturn: The Great Teacher* = 1.3.12. **1.3.13** = Watters Sun–Jupiter (professional/modern practical) + Greene *The Luminaries* Sun/Moon. **1.3.14** = atomic refine + Greene *Inner Planets* Mercury. **1.3.15** = Venus p.69 found, unread. **1.3.16** = Mars p.138 unread; Jupiter CPA page. **1.3.17** = Hand Ch.4 Venus only. **1.3.18** = Hand Ch.4 Mars only. **1.3.19** = Hand Ch.4 Jupiter only. **1.3.20** = Hand Ch.4 Saturn only. **1.3.21** = Hand Ch.4 Uranus claims only (object withheld). **1.3.22** = Hand Ch.4 Neptune claims only (object withheld). **1.3.23** = Hand Ch.4 Pluto claims only (object withheld).
 
 ---
 
@@ -35,7 +35,7 @@ Sequence: **IL-0 ✅ → IL-1 now → IL-2 composition rules → IL-3 engine →
 This sequence *is* the knowledge engine (atoms + provenance → composition rules → themes → expression). It is not a library of texts. Do not add a second vision document.
 
 - IL-1 is **surface-neutral**: no `today_message` / `profile_blurb` / `compatibility_line`. `surface` exists only on expression packs (IL-4).
-- Objects must map to entities the **current Swiss + Astro/calculation layer can emit**. No Uranus/Neptune/Pluto/ASC/MC until a real opened locus **and** calc emits them.
+- Objects must map to entities the **current Swiss + Astro/calculation layer can emit**. Uranus, Neptune and Pluto loci opened (Hand Ch.4 1981; calc already emits all three) — **claims only**; objects withheld until required celestial_object slots can be filled without a single-school fake or invented natal domains. No ASC/MC until a real opened locus **and** calc emits them.
 - Swiss = runtime ephemeris input. **Licensing** is a parallel legal gate, not a research blocker. Do not write “Swiss outside IL.”
 - If sources do not fit the ontology: **log a concrete gap** from real material. Do **not** expand the schema “just in case.”
 - Canonical objects must **not be richer than the evidence base**. Do not polish drafts into a modern average.
@@ -69,7 +69,7 @@ Public brand copy SoT: [`docs/content/TODAYFLOW_TRUST_LAYER.md`](../content/TODA
 | `3c62a5c6` | Activation gates 1.3.8 (requires_action / Layer 5 candidates) + handoff |
 | `5dee20a5` | Trust Layer (brand) — **not** IL ingest |
 
-IL ingest after 1.3.8: branch `il/il-1-ingest`. `edc37221` Valens/Lilly I.19. `876e6f98` Houlding traditional class. **`ecb4cbe4` = catalog/priority transfer** (do not pad traditional). `9a0fe7c2` leftover freeze only. **1.3.11** = first psychological class (Greene Introduction). **1.3.12** = Houlding Saturn article (living-traditional planet locus; not a T1–T4 import). **1.3.13** = Watters Sun–Jupiter (professional/modern practical, not traditional) + Greene *Luminaries* Sun/Moon. **1.3.14** = atomic refine + Inner Planets Mercury.
+IL ingest after 1.3.8: branch `il/il-1-ingest`. `edc37221` Valens/Lilly I.19. `876e6f98` Houlding traditional class. **`ecb4cbe4` = catalog/priority transfer** (do not pad traditional). `9a0fe7c2` leftover freeze only. **1.3.11** = first psychological class (Greene Introduction). **1.3.12** = Houlding Saturn article (living-traditional planet locus; not a T1–T4 import). **1.3.13** = Watters Sun–Jupiter (professional/modern practical, not traditional) + Greene *Luminaries* Sun/Moon. **1.3.14** = atomic refine + Inner Planets Mercury. **1.3.15** = Venus p.69 unread. **1.3.16** = Mars p.138 unread; Jupiter CPA page. **1.3.17** = Hand Ch.4 Venus only. **1.3.18** = Hand Ch.4 Mars only. **1.3.19** = Hand Ch.4 Jupiter only. **1.3.20** = Hand Ch.4 Saturn only. **1.3.21** = Hand Ch.4 Uranus claims only (object withheld). **1.3.22** = Hand Ch.4 Neptune claims only (object withheld). **1.3.23** = Hand Ch.4 Pluto claims only (object withheld).
 
 ### Catalog (all `draft`, nothing `active`)
 
@@ -82,7 +82,7 @@ Runtime: `DATA/reference/astrology/interpretation_v1/`
 
 | Layer | IDs | Provenance honesty |
 |-------|-----|--------------------|
-| 1 planets | `astro.object.{sun,moon,mercury,venus,mars,jupiter,saturn}` | Ptolemy I.4–I.7 + Lilly CA I.8–I.14 + Valens I.1. Saturn also Greene Introduction (psychic-process `school_specific`) and Houlding *Great Teacher* (boundary/constraint `school_specific`; cold/dry/malefic/slow compared). Sun–Jupiter also Watters 2003 (`professional` / `modern_general_practical`, `school_specific` — **not** traditional). Sun/Moon also Greene *Luminaries* preview; Mercury also Greene *Inner Planets* Hermes-spontaneity (`psychological`, `school_specific`). `function` still elemental (Ptolemy/Lilly), not a Valens, Watters, Greene, or Houlding average |
+| 1 planets | `astro.object.{sun,moon,mercury,venus,mars,jupiter,saturn}` | Ptolemy I.4–I.7 + Lilly CA I.8–I.14 + Valens I.1. Saturn also Greene Introduction (psychic-process `school_specific`) and Houlding *Great Teacher* (boundary/constraint `school_specific`; cold/dry/malefic/slow compared). Sun–Jupiter also Watters 2003 (`professional` / `modern_general_practical`, `school_specific` — **not** traditional). Sun/Moon also Greene *Luminaries* preview; Mercury also Greene *Inner Planets* Hermes-spontaneity (`psychological`, `school_specific`). Venus also Hand *Horoscope Symbols* Ch.4 (`professional` / `school_specific`; not merged with Watters). Mars also Hand Ch.4 (`professional` / `school_specific`; not merged with Watters assertive-drive; body/iron ledger-only). Venus Inner Planets p.69 found by TOC, chapter body not opened. Mars Inner Planets p.138 found by TOC, chapter body not opened (Sasportas p.184 reserve). Jupiter CPA webinar/By Jove! page ingested as limited `school_specific` (not transcript). Jupiter also Hand Ch.4 (`professional` / `school_specific`; expansion ≠ integration; healing ledger-only). Saturn also Hand Ch.4 (`professional` / `school_specific`; resistance/structure/consensus-reality; not merged with Houlding or Greene; object themes unchanged). `function` still elemental (Ptolemy/Lilly), not a Valens, Watters, Greene, Hand, or Houlding average |
 | 2 signs | **claims only** `astro.sign.{aries…pisces}` + `astro.sign.classifications` | Lilly QUALITY; Valens I.2 Aries fiery *and* watery. Psych slots unattested |
 | 3 houses | `astro.house.01`–`12` | Object `domain` still Lilly CA I.7. Valens IX compared on thin lemmas. Houlding houses extract opened for 1/6/7/12 only — personality and known-enemies rule not copied into `domain` |
 | 4 aspects | conjunction / sextile / square / trine / opposition | Geometry compared. Planetary orbs compared (Lilly I.19 + Houlding). Square-not-simply-bad is school_specific. `interaction` not rewritten |
@@ -138,7 +138,19 @@ Saturn object slots stay classical: cooling quality / cold / dryness / slowness 
 
 **Greene / Sasportas, The Inner Planets** (copyrighted; paraphrase only):
 
-- 1993 Samuel Weiser, ISBN 0-87728-741-4. Publisher preview opened: Part One Mercury (young-Hermes spontaneity). Psychological `school_specific` only. Unread planet sections not backfilled.
+- 1993 Samuel Weiser, ISBN 0-87728-741-4. Publisher preview opened: Part One Mercury (young-Hermes spontaneity). Psychological `school_specific` only.
+- Part Two Venus TOC found: *The Great Harlot: The Mythology and Psychology of Venus* (Liz Greene) starts p.69; separate sexuality discussion follows. **Chapter body not opened** (Google Books / Weiser / Archive.org borrow-restricted). Relating is no longer the Venus psych blocker. NEED_OWNER: that edition, p.69–. Do not extract from TOC or pirate dumps. Jacket “inner planets = ego” is not a Venus-specific claim.
+- Mars TOC identified (*The Mythology and Psychology of Mars*, Greene, p.138 primary; Sasportas *Mars in the Horoscope* p.184 reserve). **Chapter body not opened** — `identified_but_unreadable`, not a fabricated extraction. Do not mix with Watters.
+
+**Greene, CPA Jupiter webinars / By Jove!** (copyrighted; paraphrase only):
+
+- Opened: https://cpalondon.com/video/liz-greene-jupiter-webinars/ and the By Jove! book blurb. CPA is a psychological-school publisher (astrology × depth/humanistic/transpersonal psychology). Page is a series/seminar description, **not** the 7-hour transcript.
+- Ingested only what those pages state (contingent benefic; contradictory transits; natal aspects not always benign; enigmatic framing; 12-year return; return examined as life-development / dark-and-light doorways; older Seven Sins gluttony tradition as reported). Do not reconstruct a full Jupiter psychology from the webinar title. Relating p.39 unread candidate.
+
+**Hand, Horoscope Symbols** (copyrighted; not *Planets in Transit*):
+
+- Ch.4 “The Planets: Core Meanings” is the professional locus (TOC Sun → Saturn, then outers). **Venus, Mars, Jupiter, Saturn, Uranus, Neptune and Pluto Ch.4 ingested** (`professional` / `school_specific`). Saturn: resistance ≠ punishment; consensus reality ≠ truth; consequences ≠ karma. Object `function`/`themes` not rewritten. Outers: claims ledger only; objects withheld. Hand sequence (not CORE): Uranus disrupts; Neptune dissolves; Pluto reconstructs. Psychotic-crisis/medication example excluded. Hand 1981 dated, not later Hand. `runtime_semantic_candidate` not a schema field.
+- Sun/Moon/Mercury Ch.4 **not extracted** in the ledger — coverage gap for the audit, do not backfill. Next: Sun→Pluto corpus gap audit.
 
 **Greene / Sasportas, The Luminaries** (copyrighted; paraphrase only):
 
@@ -181,23 +193,48 @@ Saturn object slots stay classical: cooling quality / cold / dryness / slowness 
 33. Sun function registers are different categories: Ptolemy/Lilly heat; Watters essential-self / becoming; Greene solar-consciousness / eternal. Do not average to “Sun = consciousness” or one core-self lemma.
 34. Moon function registers are different categories: Ptolemy/Lilly moisture; Watters night-world / emotion / habit; Greene embodiment / involuntary / numinous. Same-book Sun/Moon polarity is intentional. Do not average to “Moon = unconscious” as CORE.
 35. Watters body/medical and planet-in-sign fertility rows (heart/spine, gynecological flag, diabetes, infections, liver-from-excess, etc.) are source evidence in the ledger only. Not `object.domains`. Not runtime meaning. IL-2/IL-3 must not treat them as product copy.
-36. Hand *Horoscope Symbols* Ch.4 / Ch.7 still closed (previews stop inside Ch.3). Greene *Relating* Venus/7th section still closed. Arroyo *Four Elements* planet-section text still closed. Mars/Jupiter psychological still empty. No placeholder meaning.
+36. Hand *Horoscope Symbols* Ch.4 Venus, Mars, Jupiter, Saturn, Uranus, Neptune and Pluto are ingested (`professional` / `school_specific`). Outers are claims-only (objects withheld). Sun/Moon/Mercury Ch.4 still unextracted in the ledger. Inner Planets Venus p.69 and Mars p.138 found by TOC; chapter bodies not opened. Relating is no longer the Venus psych blocker. Arroyo *Four Elements* planet-section text still closed. No placeholder meaning.
 37. Mercury psychological is no longer empty: Greene *Inner Planets* young-Hermes spontaneity is `school_specific`. Do not average with Watters mind/curiosity or Ptolemy convertibility.
+38. Astro.com `in_cdp_venus_e.htm` is Carolina de Pedro 2025, not Liz Greene. Do not ingest it as a Greene Venus locus.
+39. Jupiter psychological is no longer empty: CPA Greene webinar/By Jove! **page** only. Different category from Watters expansion and from Ptolemy/Lilly temperate. Do not average. Relating p.39 is not evidence until opened.
+40. Do not search further psychological books for Sun–Saturn. Remaining work is readable extraction on already-named Greene/CPA/Hand loci.
+41. Venus function registers are different categories: Ptolemy/Lilly moisture; Watters love/desire/attraction; Hand voluntary non-coercive bonding / complementary union. Do not average to “Venus = romantic love”. Hand attraction overlap with Watters is not equivalence. Psychological Venus (Inner Planets p.69) still empty.
+42. Mars function registers are different categories: Ptolemy/Lilly heat/dryness; Watters assertive-drive; Hand survival energy / individuality. Do not average to “Mars = aggression”. Conflict/excess are Hand mechanisms, not intrinsic nature. Fight-or-flight is symbolic, not medical. Psychological Mars (Inner Planets p.138) still empty. Body/iron rows ledger-only.
+43. Jupiter function registers are different categories: Ptolemy/Lilly temperate; Watters enlargement; Hand expansion + integration (separate); CPA page lemmas. Do not collapse expansion into integration, or incorporation into integration. Healing is ledger-only. Watters Mercury breadth-over-depth vs Hand Jupiter overview is a future reconciliation, not a rewrite. Relating p.39 unread.
+44. Saturn function registers are different categories: Ptolemy/Lilly cold; Houlding boundary/constraint; Greene psychic-process; Hand resistance / consensus-reality / actualization. Do not teach Saturn=structure as CORE. Resistance ≠ punishment. Consensus reality ≠ truth. Consequences ≠ karma. Responsibility ≠ guilt. Visibility-boundary is symbolic, not astronomy fact.
+45. Uranus (Hand 1981 only): disruption of over-stabilized Saturnine structure / random mutation / alien-frame expansion. Not generic change. Not an independence trait. Jupiter expansion ≠ Uranus expansion. Saturn/Uranus polarity treats both as necessary. Collective/science/altered-consciousness ledger-only. Object withheld (required celestial_object slots). Hand 1981 ≠ later Hand. Not CORE.
+46. Neptune (Hand 1981 only): undifferentiated ultimate reality / dissolution of distinction. Not dreams, intuition, or spirituality. Constructive branch (non-attachment, mystical perception, ideals) ≠ destructive branch (illusion, confusion, victimhood, ego-defeat). Maya = Neptune+Saturn; artistic creativity = Neptune+Venus — combination claims, not Neptune-alone, no Layer 5 objects. Ideals ≠ illusion of perfection; martyr ≠ victim. Object withheld. Hand 1981 ≠ later Hand. Not CORE.
+47. Pluto (Hand 1981 only): completes the Uranus-begun process; decomposition→recombination; total crisis of ordinary reality requiring a new workable reality. Not generic transformation. Death/rebirth is symbolic, not mortality prediction. Evolutionary tempo ≠ Uranian suddenness. Helping-through-transformation paired with exploiting vulnerability. Decay/corruption is the lower register only. Psychotic-crisis/medication example excluded. Object withheld. Hand 1981 ≠ later Hand. Not CORE.
 
-CORE cannot be scored yet. Do not teach “Saturn = structure” or “Sun = consciousness / Moon = unconscious” as CORE.
+CORE cannot be scored yet. Do not teach “Saturn = structure” or “Sun = consciousness / Moon = unconscious” as CORE. Do not teach “Uranus = change / rebellion / freedom”, “Neptune = dreams / intuition / spirituality”, or “Pluto = transformation / death”.
 
 ---
 
 ## 3. What to do next
 
-**Do not run another blind planet literature pass.** Ingest of the opened Sun–Jupiter rows is closed. Next research is **one named gap** only, if the owner asks or a specific page actually opens:
+Psychological *discovery* Sun–Saturn is done. Do **not** add more psychological titles.
 
-1. Venus / Mars / Jupiter **psychological function** (Greene *Relating* Venus/7th if that chapter opens; otherwise Arroyo planet sections if preview text appears). Mercury psychological is no longer empty (Inner Planets Hermes). Corpus notes remaining closures.
-2. Robert Hand *Horoscope Symbols* Ch.4 “The Planets: Core Meanings” (Sun→Saturn) **if** pages past Ch.3 are readable. Same book Ch.7 Aspects — same closed boundary; do not burn a second call to confirm it.
+**Next (one task):** **Gap audit** of the accumulated Sun→Pluto corpus already in the ledger. Output: independent convergence, genuine disagreement, school-specific additions, missing psychological/traditional layers, and what is still needed before a first CORE pass. Do **not** rescore CORE. Do **not** rewrite `function`. Do **not** start a new book search. Do **not** activate the Uranus/Neptune/Pluto runtime divider. Sun/Moon/Mercury Hand remain unextracted in the ledger — log that as a coverage gap, do not backfill.
 
-If those pages stay closed: ask the owner for **edition + pages X–Y**, not “find more astrology.”
+Still unread, do not fabricate:
 
-Do not pad Greene watery houses. Do not copy Houlding Mundane Signification as a catalog. Do not ingest T2 secondary excerpts as object fields. Do not treat Watters as traditional. Do not rescore CORE because more rows exist.
+- Inner Planets Venus p.69 (Greene)
+- Inner Planets Mars p.138 (Greene primary; Sasportas p.184 reserve)
+- Relating p.39 Jupiter and Saturn
+- CPA Jupiter **transcript** / *By Jove!* book body (page already ingested)
+- Hand Ch.4 Sun / Moon / Mercury
+
+When those pages are readable: extract only directly readable claims. `school_specific`. Do not mix with Watters. Do not rewrite `function`. Do not score CORE. Do not set `active`.
+
+NEED_OWNER (specific closed loci): Weiser 1993 ISBN 0-87728-741-4 **p.69–** and **p.138–**.
+
+Queue after the Hand audit:
+
+1. Inner Planets Venus p.69 / Mars p.138 when readable
+2. Relating p.39 only after the chapter is read
+3. Hand Ch.4 Sun / Moon / Mercury if those sections are later opened
+
+Rule: **no readable locus → leave the gap.** Do not ask the owner to buy a book as the default step.
 
 Do **not**:
 
@@ -238,7 +275,7 @@ Author for commits (do not `git config`): `TodayFlow Agent <agent@todayflow.app>
 - Aries fiery remains `school_specific`, not compared to Ptolemy fire **or** Valens fire (Valens also watery)
 - Lilly I.19 / Houlding orbs not copied onto aspect objects; square-not-simply-bad stays school_specific
 - Saturn `function` remains cooling/cold; Greene psychic-process stays `school_specific`; Houlding personal-boundary / mature-through-constraint stay `school_specific`; no `structure` in object themes
-- Watters `source_class=professional` (not traditional); Greene Luminaries Sun/Moon `school_specific`; medical/body rows not in `object.domains`; no `evidence_tier: core`; functions unchanged
+- Watters `source_class=professional` (not traditional); Greene Luminaries Sun/Moon `school_specific`; CPA Jupiter page `school_specific` (not transcript); Hand Ch.4 Venus–Saturn `school_specific` (not merged with Watters/Houlding/Greene); Uranus, Neptune and Pluto Hand 1981 claims-only (no objects); medical/body/iron/healing/collective-Uranus/psychotic-crisis rows not in `object.domains`; Saturn themes unchanged; no `evidence_tier: core`; Sun–Saturn functions unchanged
 
 ---
 
@@ -269,13 +306,10 @@ Do not materialize 12 sign objects. Do not set status=active.
 Do not mix Profile/Trust/landing/motion into IL commits.
 
 Transfer SHA: ecb4cbe4. Catalog 24 draft / 0 active / 0 signs / CORE unscored is correct.
-Do not add conceptually. Do not pad classical/traditional ingest.
-Watters 2003 is professional/modern practical, not traditional. Do not CORE-score it.
-Do not start a blind planet research pass. Remaining NEED_OWNER:
-  Hand Horoscope Symbols Ch.4/Ch.7 (preview stops in Ch.3);
-  Greene Relating Venus/7th; Arroyo Four Elements planet sections;
-  Mars/Jupiter psychological still empty.
-Mercury psychological = Inner Planets Hermes spontaneity only; do not backfill unread chapters.
+1.3.23 is closed. Hand Ch.4 Venus–Saturn ingested as objects; Uranus, Neptune and Pluto Ch.4 as claims only (professional school_specific).
+Do not teach Saturn=structure, Uranus=change, Neptune=intuition, or Pluto=transformation as CORE.
+Next: Sun→Pluto corpus gap audit. Do not rescore CORE. Do not activate the outer-planet runtime divider.
+No readable locus → leave the gap. Do not add a modern_general_practical source_class enum.
 Research-first: Google Books → publisher preview → Open Library/CDL → libraries.
 Ask the owner only for a specific closed locus (edition + pages).
 Do not ingest Greene watery houses or Houlding Mundane Signification as a catalog.
