@@ -7,7 +7,9 @@
     "src.professional.hand_planets_in_transit",
     "src.psychological.george_ancient_practice",
     "src.psychological.arroyo_four_elements",
-    "src.psychological.greene_inner_planets"
+    "src.psychological.greene_inner_planets",
+    "src.psychological.greene_mars_cpa",
+    "src.psychological.bell_mars_quartet"
   ],
   "gap_notes": [
     "Valens I.1 is a topical/significator catalog (sect, colour, taste, body parts), not Ptolemy/Lilly elemental qualities. Do not backfill heat/cold/dry/moist from Valens, and do not average catalogs into function.",
@@ -23,7 +25,11 @@
     "Hand fight-or-flight is astrological symbolism, not medical/neuroscientific causation. Body/inflammation/accident rows and iron/steel stay ledger-only — not object.domains, not runtime meaning. runtime_semantic_candidate is not a schema field.",
     "1.3.31: Rudhyar New Mansions Mars (Khaldea) ingested as humanistic, not psychological. Author categories: first-gesture / energy-release / desire-as-life-movement. Do not merge with Watters assertive-drive, Hand survival, or Greene warrior. Psychological Mars still Inner Planets p.138 NEED_OWNER.",
     "Discovery this pass: Martin Mapping the Psyche Lesson 3 Venus-and-Mars unread (Perlego snippet is astronomy/naming, not ingested). Lynn Bell Mars Quartet and CPA Greene Mars webinars = jacket/page only. Do not ingest seminar descriptions as Mars psychology.",
-    "Rudhyar outside-Earth-orbit / exile framing is symbolic inference, not Day Sources astronomy. Gender-initiation and homosexuality remarks in this 1938 chapter are not Mars-alone lemmas and were not ingested. Pluto handoff and Mars-Venus-Moon meeting stay combination, not Layer 5."
+    "Rudhyar outside-Earth-orbit / exile framing is symbolic inference, not Day Sources astronomy. Gender-initiation and homosexuality remarks in this 1938 chapter are not Mars-alone lemmas and were not ingested. Pluto handoff and Mars-Venus-Moon meeting stay combination, not Layer 5.",
+    "1.3.42: Psych Mars discovery. Inner Planets p.138 still NEED_OWNER (Google Books empty). Pirate dumps unused. Do not replace that page with a Greene summary. Third-party quotes of p.185/p.188 not ingested.",
+    "Same-author densification skipped: CPA Mars webinars 2024 page re-checked (still description, not 7h11m transcript) — not ingested, 1.3.31 rule holds. astro.com Mythic Astrology Mars extract opened (advent) — mythology snippet, not ingested because p.138 is the dedicated psych Mars chapter.",
+    "Independent field: Mars Quartet still jacket only (CPA page/reviews not claims). Martin Lesson 3 unread. Dana Gerhardt astro.com Mars article is not Greene — not ingested. Hand transits Mars intro is professional densification, not this psych fill.",
+    "Psychological Mars still empty. object.function unchanged (heating and drying quality that contends). Iron/inflammation stay out of object.domains. Next: Uranus psychological, same discovery rule."
   ],
   "claims": [
     {

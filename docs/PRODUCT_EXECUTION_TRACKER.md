@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-17):** IL-1 **1.3.36:** Rudhyar Moon ingested (`humanistic`). `object.function` unchanged. Costello *The Astrological Moon* NEED_OWNER. Next: Mercury discovery, one locus — do not auto-pick Rudhyar. Parent order: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`. CORE blocked.
+**NOW (FOUNDATION, 2026-08-17):** IL-1 **1.3.44:** Neptune psychological discovery, no ingest. *The Astrological Neptune* NEED_OWNER remains. Next: Pluto psychological, one locus — Outer Planets NEED_OWNER remains; check the field. Parent order: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`. CORE blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 

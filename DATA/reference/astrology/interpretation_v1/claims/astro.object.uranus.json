@@ -5,7 +5,10 @@
   "pending_source_ids": [
     "src.professional.hand_planets_in_transit",
     "src.psychological.greene_outer_planets",
-    "src.psychological.sasportas_gods_of_change"
+    "src.psychological.sasportas_gods_of_change",
+    "src.psychological.greene_uranus_cpa",
+    "src.psychological.greene_art_of_stealing_fire",
+    "src.psychological.tarnas_prometheus"
   ],
   "gap_notes": [
     "CORE cannot be scored. Uranus has no Ptolemy/Lilly elemental quality. Hand Horoscope Symbols Ch.4 1981 is one professional school, not consensus and not later Hand. Do not promote disruption/mutation to CORE.",
@@ -20,7 +23,11 @@
     "Greene Outer Planets unread. 1.3.26: volume physically closed (CPA 2005 no Google Books preview; CRCS Archive printdisabled). Do not ingest jacket/TOC/reviews. Do not substitute Art of Stealing Fire. Planets in Transit unread. Pluto has its own Hand Ch.4 claims ledger. Sun/Moon/Mercury Hand Ch.4 remain unextracted.",
     "1.3.32: Discovery checked psych pool first (Greene Outer Planets NEED_OWNER; Sasportas Gods of Change Archive printdisabled / Google Books jacket; Martin Lesson 5 unread; CPA Uranus webinars page-only). Best accessible primary: Rudhyar NMNM Uranus, humanistic, not auto-picked because Venus/Mars used the same book.",
     "Rudhyar Uranus lemmas are transform / through / reconstruct-form / not-regeneration. Do not merge with Hand disruption, mutation, or freedom-drive. Jupiter-expands-Saturn-form vs Uranus-challenges-Saturn is this locus's distinction, not Hand alien-frame expansion.",
-    "Object still withheld: a second school class on the ledger does not fill celestial_object required slots without inventing natal domains. Dreams/Shiva/civilization-gold vs God stay out of a fake object. No CORE. Next: Neptune, same discovery rule."
+    "Object still withheld: a second school class on the ledger does not fill celestial_object required slots without inventing natal domains. Dreams/Shiva/civilization-gold vs God stay out of a fake object. No CORE. Next: Neptune, same discovery rule.",
+    "1.3.43: Psych Uranus discovery. Outer Planets volume still NEED_OWNER (CPA 2005 no preview; CRCS Archive printdisabled). Pirate dumps unused. Do not replace that volume with a Greene summary. Art of Stealing Fire is not a substitute.",
+    "Same-author densification skipped: CPA Uranus webinars 2019 page re-checked (still description, not 7h07m transcript) — not ingested, 1.3.32 rule holds. astro.com Mythic Astrology Uranus extract opened (advent2321mqp) — mythology snippet, not ingested because Outer Planets is the dedicated psych Uranus chapter.",
+    "Independent field: Sasportas Gods of Change still jacket/printdisabled. Martin Lesson 5 unread (WeLib pirate unused). Tarnas Prometheus the Awakener cataloged unread; 1987 client-brief intro not ingested as a substitute for that monograph. CPA Art of Stealing Fire page+reviews cataloged, not ingested.",
+    "Psychological Uranus still empty. Object still withheld. Do not materialize a Uranus object. Next: Neptune psychological, same discovery rule."
   ],
   "claims": [
     {

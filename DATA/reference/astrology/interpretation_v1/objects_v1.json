@@ -409,6 +409,22 @@
           "field": "function",
           "original_claim": "Via the myth of newborn Hermes setting off without knowing where he was headed, Mercury is linked to spontaneity and openness to the unplanned.",
           "normalized_claim": "Mercury linked (via young-Hermes myth) to spontaneity and openness to the unexpected."
+        },
+        {
+          "source_id": "src.humanistic.rudhyar_new_mansions",
+          "source_class": "humanistic",
+          "author": "Dane Rudhyar",
+          "edition": "New Mansions for New Men, Lucis Press 1938; Khaldea archival ed. 2008",
+          "school": "humanistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Pt.2 Music of the Spheres — Mercury, Weaver of the Threads of Life",
+          "concept_id": "claim.mercury.rudhyar_weaver",
+          "field": "function",
+          "original_claim": "The weaver of this pattern of relationship is, in astrological symbolism, Mercury. The many beings within Saturnian Law come to realize they belong together as aspects of one tribal Whole.",
+          "normalized_claim": "Mercury = weaver of the pattern of relationship that makes the Saturn-bounded group one Whole."
         }
       ]
     },
@@ -913,6 +929,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "function"
+        },
+        {
+          "source_id": "src.psychological.greene_by_jove",
+          "source_class": "psychological",
+          "author": "Liz Greene",
+          "edition": "By Jove!, Wessex Astrologer 2025 ISBN 9781916625242; astro.com extract",
+          "school": "psychological_jungian",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "astro.com in_lgbyjove2_e.htm — Psychology of Jupiter (authorized extract)",
+          "concept_id": "claim.jupiter.greene_individuation_teleology",
+          "field": "function",
+          "original_claim": "The astrological Jupiter reflects an important dimension of individuation: the capacity to recognise that a teleology is unfolding in our lives.",
+          "normalized_claim": "Jupiter = capacity to recognise an individuation process / teleology unfolding in a life."
+        },
+        {
+          "concept_id": "claim.jupiter.rudhyar_organizer",
+          "source_id": "src.humanistic.rudhyar_new_mansions",
+          "source_class": "humanistic",
+          "author": "Dane Rudhyar",
+          "edition": "New Mansions for New Men, Lucis Press 1938; Khaldea archival ed. 2008",
+          "school": "humanistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Pt.2 Music of the Spheres — Jupiter, Organizer of Functions",
+          "field": "function",
+          "original_claim": "Jupiter's meaning is organic function: unfoldment, development, and growth. Function complements Saturn's structure — the latter static, the former dynamic and unfolding.",
+          "normalized_claim": "Jupiter = organizer of organic function (dynamic unfoldment); Saturn = structure. Complements; not intelligible alone."
         }
       ]
     },
@@ -1129,6 +1177,22 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "function"
+        },
+        {
+          "source_id": "src.humanistic.rudhyar_new_mansions",
+          "source_class": "humanistic",
+          "author": "Dane Rudhyar",
+          "edition": "New Mansions for New Men, Lucis Press 1938; Khaldea archival ed. 2008",
+          "school": "humanistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Pt.2 Music of the Spheres — Saturn, Lord of Boundaries",
+          "concept_id": "claim.saturn.rudhyar_i_am_i",
+          "field": "function",
+          "original_claim": "I am I — such is the great mantram of Saturn, Lord of Boundaries, Lord of Form.",
+          "normalized_claim": "Saturn mantram: I am I. Lord of Boundaries / Lord of Form."
         }
       ]
     },
