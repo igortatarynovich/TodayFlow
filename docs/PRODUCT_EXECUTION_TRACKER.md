@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-17):** **Interpretation Library IL-1** — methodology LOCKED. **1.3.23:** Hand Ch.4 Pluto claims ingested (`professional` / `school_specific`); object withheld; not CORE. Next = Sun→Pluto corpus gap audit (convergence / school-specific / missing layers / what is needed before CORE). Do not rescore CORE. Canon: `docs/astrology/INTERPRETATION_LIBRARY_V1.md`.
+**NOW (FOUNDATION, 2026-08-17):** IL-1 **1.3.36:** Rudhyar Moon ingested (`humanistic`). `object.function` unchanged. Costello *The Astrological Moon* NEED_OWNER. Next: Mercury discovery, one locus — do not auto-pick Rudhyar. Parent order: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`. CORE blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -80,10 +80,28 @@ Status: Active working document
 ## Architecture impact — Interpretation Library corpus (2026-08-17)
 
 - **SoT before:** IL-0 named source *classes*; no corpus, no evidence tiers, provenance was thin.
-- **SoT after:** claims extracted from a multi-school corpus (classical / traditional / psychological / professional); consensus → `core|supported|school_specific|editorial`; no copyrighted dump; astronomy separate (Swiss facts-only). Today Meaning SoT remains the pipeline.
+- **SoT after:** claims extracted from a multi-school corpus (classical / traditional / psychological / humanistic / professional); consensus → `core|supported|school_specific|editorial`; no copyrighted dump; astronomy separate (Swiss facts-only). Today Meaning SoT remains the pipeline.
 - **Public contract changed?** no
 - **Migration required?** no
 - **Canon updated?** yes — IL v1.1 §6 · source_corpus_v1.json · Foundation §1.4 (Swiss license OPEN)
+- **Backward compatible?** yes
+
+## Architecture impact — IL-1 1.3.29 source discovery (2026-08-17)
+
+- **SoT before:** author-first Greene+Hand queue; NEED_OWNER(locus) treated as blocking the semantic slot; Rudhyar listed as psychological.
+- **SoT after:** school → coverage → best accessible primary. NEED_OWNER ≠ NEED_EVIDENCE. `source_class=humanistic`. New authors allowed until semantic saturation. Rudhyar Venus ingested independently.
+- **Public contract changed?** no
+- **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
+- **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
+- **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — Knowledge-core research order (2026-08-17)
+
+- **SoT before:** meaning libraries could start from the first strong accessible author (IL-1: Greene/Hand became obligatory).
+- **SoT after:** `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md` — предмет → границы → составляющие → определения → школы → типы источников → карта литературы → критерии → shortlist → ingest. Applies to the next semantic core in any domain. IL-1 planet fill may continue; CORE is not scored from availability. Psychology/medicine evidence hierarchy is a separate axis from IL school-convergence.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — new doc · IL 1.3.30 · README · AGENTS related canons
 - **Backward compatible?** yes
 
 ## Architecture impact — Interpretation Library (2026-08-17)

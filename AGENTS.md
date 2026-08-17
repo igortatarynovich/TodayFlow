@@ -102,6 +102,7 @@ Report facts, not literary summary:
 
 ## Related canons (start here; do not invent a fifth)
 
+- `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md` — **semantic core research order** (model → literature landscape → shortlist → ingest). Mandatory before a new meaning core; do not lock authors first. Psychology/medicine: evidence hierarchy ≠ astrology school-convergence
 - `docs/foundation_v1.md` — **Foundation v1** (geometry · atomic constants · single-source routing); gate before hooks/semantics
 - `docs/SCREEN_CONTRACTS_V1.md` — screen / today_contract / day_story nests
 - `docs/content/TODAYFLOW_VOICE_CANON.md` — person-not-system

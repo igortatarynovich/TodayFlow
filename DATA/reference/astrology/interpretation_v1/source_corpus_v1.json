@@ -322,6 +322,52 @@
       "notes": "Opened publisher preview: Pt.1 Mothers and Matriarchy (Moon); Pt.2 Hero with a Thousand Faces (Sun). Paraphrase only. Relating Venus chapter still closed."
     },
     {
+      "source_id": "src.psychological.costello_astrological_moon",
+      "source_class": "psychological",
+      "title": "The Astrological Moon",
+      "author": "Darby Costello",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal",
+        "transits"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Unread. CPA Press 1996 ISBN 1900869241; Raven Dreams 2017 ISBN 9780984047499. Official CPA page = jacket + 1997 Harvey review, not chapter body. Jacket/review not ingested. NEED_OWNER. Pirate dumps unused."
+    },
+    {
+      "source_id": "src.psychological.greene_apollos_chariot",
+      "source_class": "psychological",
+      "title": "Apollo's Chariot: The Meaning of the Astrological Sun",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Unread. CPA Press 2001 ISBN 1900869179 (seminars 1 and 8 Nov 1998). Jacket/review only. Jacket claims not ingested. NEED_OWNER. Not substituted by Apollon Issue 1 article."
+    },
+    {
+      "source_id": "src.psychological.greene_apollon_sun",
+      "source_class": "psychological",
+      "title": "The Sun-god and the Astrological Sun (Apollon Issue 1)",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "1.3.35: official CPA PDF opened (Issue 1 Oct 1998). Greene Apollo article from p.6 is a function-level psych locus. Not ingested this pass: same-author densification after Luminaries; empty humanistic class took priority. Independent extraction later. Not Apollo's Chariot."
+    },
+    {
       "source_id": "src.psychological.greene_inner_planets",
       "source_class": "psychological",
       "title": "The Inner Planets: Building Blocks of Personal Reality",
@@ -334,7 +380,7 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Mercury Hermes opened. Venus p.69 and Mars Greene p.138 identified_but_unreadable (bodies not opened). Sasportas Mars p.184 reserve. Book does not cover Jupiter. NEED_OWNER: Weiser 1993 ISBN 0-87728-741-4, p.69– / p.138–."
+      "notes": "Mercury Hermes opened. Venus p.69 and Mars Greene p.138 identified_but_unreadable (Google Books viewport empty at both pages; no Weiser Calaméo for Part Two/Three). Sasportas Mars p.184 reserve. Book does not cover Jupiter. 1.3.26: Venus stays first unclosed gap — no surrogate sources. Mars left pending, not ranked ahead of Venus. NEED_OWNER: Weiser 1993 ISBN 0-87728-741-4, p.69– / p.138–."
     },
     {
       "source_id": "src.psychological.greene_jupiter_cpa",
@@ -352,6 +398,66 @@
       "notes": "Opened CPA webinar page and By Jove! blurb only, not the 7h transcript. Claims only from those pages. Relating p.39 unread candidate. Do not reconstruct a full Jupiter psychology from the seminar title."
     },
     {
+      "source_id": "src.psychological.greene_mars_cpa",
+      "source_class": "psychological",
+      "title": "Mars webinars: The Astrology and Psychology of The Red One",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/MISPA 2024 webinar page opened 1.3.31. Series description only, not the 7h11m transcript. Do not reconstruct Mars psychology from the page. Inner Planets p.138 remains NEED_OWNER."
+    },
+    {
+      "source_id": "src.psychological.greene_uranus_cpa",
+      "source_class": "psychological",
+      "title": "Uranus webinars: Stranger in a Strange Land",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/MISPA 2019 webinar page opened 1.3.32. Series description only, not the 7h7m transcript. Do not reconstruct Uranus psychology from the page. Outer Planets volume remains NEED_OWNER."
+    },
+    {
+      "source_id": "src.psychological.greene_neptune_cpa",
+      "source_class": "psychological",
+      "title": "Neptune webinars: The Hill of Dreams",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/MISPA 2018 webinar page opened 1.3.33. Series description only, not the 7h11m transcript. Do not reconstruct Neptune psychology from the page. The Astrological Neptune remains NEED_OWNER."
+    },
+    {
+      "source_id": "src.psychological.greene_pluto_cpa",
+      "source_class": "psychological",
+      "title": "Pluto webinars",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/MISPA 2016 webinar page opened 1.3.34. Series description only, not the 6h53m transcript. Do not reconstruct Pluto psychology from the page. Outer Planets volume remains NEED_OWNER."
+    },
+    {
       "source_id": "src.psychological.greene_outer_planets",
       "source_class": "psychological",
       "title": "The Outer Planets and Their Cycles",
@@ -363,7 +469,23 @@
       ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Unread. 1.3.26: physical access closed (CPA Press 2005 ISBN 1900869314 Google Books no preview; CRCS 1983/1996 ISBN 0916360172 / 0916360601 Archive printdisabled). Jacket/TOC/reviews not claims. Do not substitute Art of Stealing Fire. Uranus/Neptune/Pluto lectures are one volume NEED_OWNER. Extract independently of Hand when opened."
+    },
+    {
+      "source_id": "src.psychological.greene_astrological_neptune",
+      "source_class": "psychological",
+      "title": "The Astrological Neptune and the Quest for Redemption",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Unread. 1.3.33: Weiser 1996/2000 ISBN 0877288577 / 1578631971. Archive printdisabled; Google Books Zo77spK78yoC cover only. Jacket/secondary paraphrase (espirited.com) not claims. Dedicated psych Neptune NEED_OWNER. Do not substitute Outer Planets."
     },
     {
       "source_id": "src.psychological.sasportas_twelve_houses",
@@ -391,7 +513,8 @@
       ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Psych-pool Uranus/Neptune/Pluto candidate. Archive printdisabled; Google Books 2012 jacket. Chapter body not opened. Do not ingest reviews. Do not substitute for Greene Outer Planets."
     },
     {
       "source_id": "src.professional.watters_today",
@@ -439,7 +562,7 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Ch.4 = Horoscope Symbols (not Planets in Transit). Venus, Mars, Jupiter, Saturn, Uranus, Neptune and Pluto Ch.4 extracted (professional school_specific). Sun/Moon/Mercury Ch.4 not extracted. Hand 1981 is dated; not later Hand, not CORE. NEED_OWNER remaining: ISBN 9780914918165, Sun/Moon/Mercury sections if later opened."
+      "notes": "Ch.4 = Horoscope Symbols (not Planets in Transit). Venus–Pluto Ch.4 extracted (professional school_specific). Sun/Moon/Mercury Ch.4 unread here (Google Books jacket only). Hand 1981 dated; not later Hand, not CORE. 1.3.27 NEED_OWNER: ISBN 9780914918165 Ch.4 Sun then Moon/Mercury, same direct_read path."
     },
     {
       "source_id": "src.psychological.arroyo_four_elements",
@@ -454,7 +577,7 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Google Books preview surfaces front matter/index only. Planet-section text not opened. Do not backfill Mercury/Mars/Jupiter psychological function from memory."
+      "notes": "Google Books preview: front matter/index only; planet-section unread. Cataloged as psychological. 1.3.29 professional/synthesis pool: classify from the opened locus, not this unused row."
     },
     {
       "source_id": "src.psychological.arroyo_chart_handbook",
@@ -499,7 +622,8 @@
       ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Cataloged as psychological before 1.3.29. New Rudhyar planet ingest uses source_class=humanistic. Do not treat this row as a second psychological school class. Dedicated reclass later; do not mass-rewrite unused sign pending ids this pass."
     },
     {
       "source_id": "src.psychological.rudhyar_lunation",
@@ -514,6 +638,52 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
+    },
+    {
+      "source_id": "src.humanistic.rudhyar_new_mansions",
+      "source_class": "humanistic",
+      "title": "New Mansions for New Men",
+      "author": "Dane Rudhyar",
+      "role": "humanistic",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Authorized Khaldea archive (Meyer). 1938 Lucis Press. Venus 1.3.29, Mars 1.3.31, Uranus 1.3.32, Neptune 1.3.33, Pluto 1.3.34, Sun 1.3.35, Moon 1.3.36 opened. Paraphrase only. Humanistic, not psychological."
+    },
+    {
+      "source_id": "src.psychological.martin_mapping_psyche",
+      "source_class": "psychological",
+      "title": "Mapping the Psyche Vol. 1: The Planets and the Zodiac Signs",
+      "author": "Clare Martin",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "signs",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/Wessex course transcript. Lesson 2 The Sun/Moon, Lesson 3 Venus-Mars and Lesson 5 Outer Planets identified; chapter bodies unread. Perlego snippets (orbit/naming; 1781 discovery) not ingested."
+    },
+    {
+      "source_id": "src.psychological.bell_mars_quartet",
+      "source_class": "psychological",
+      "title": "The Mars Quartet: Four Seminars on the Astrology of the Red Planet",
+      "author": "Lynn Bell / Darby Costello / Liz Greene / Melanie Reinhart",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA Press 2001 ISBN 1900869187. Psych-pool candidate. 1.3.31: CPA/author pages are jacket only; chapter body not opened. Out of print. Do not ingest jacket (withheld Mars, Iliad, Capricorn exaltation)."
     },
     {
       "source_id": "src.psychological.george_authentic_self",

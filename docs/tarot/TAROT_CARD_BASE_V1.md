@@ -4,7 +4,7 @@
 **Type:** static user-facing base meanings (lookup)  
 **Data:** `DATA/reference/tarot/card_base_v1/cards.json`  
 **Loader:** `todayflow_backend.data.card_base_v1`  
-**Related:** [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) (semantic facts for LLM packs) · [DAY_SYMBOL_REVEAL_CANON_V1.md](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md)
+**Related:** [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) (semantic facts for LLM packs) · [DAY_SYMBOL_REVEAL_CANON_V1.md](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md) · [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (any *rebuild* of this meaning core: model before literature)
 
 ---
 

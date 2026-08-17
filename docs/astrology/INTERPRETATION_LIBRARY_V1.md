@@ -1,11 +1,12 @@
 # Interpretation Library v1 — ontology / schema
 
-**Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (24 draft objects: classical seven · 12 houses · 5 major aspects; 12 sign *claims* without objects; Uranus, Neptune and Pluto Hand-1981 *claims* without objects; nothing `active`).  
-**Версия:** 1.3 (2026-08-17).  
-**Методология:** **LOCKED** до закрытия IL-1 (~100 объектов). Не переоткрывать схему слоёв / evidence / provenance / ingest, пока модель не столкнётся с источниками.  
+**Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (24 draft objects: classical seven · 12 houses · 5 major aspects; 12 sign *claims* without objects; Uranus, Neptune and Pluto Hand-1981 + Rudhyar NMNM *claims* without objects; nothing `active`).  
+**Версия:** 1.3.36 (2026-08-17).  
+**Методология:** слои / evidence tiers / provenance **LOCKED** до закрытия IL-1. Parent research order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — модель знания **до** литературы. **1.3.29** discovery (school-first) остаётся для IL-1 in-flight. **1.3.30** запрещает строить следующее ядро / CORE от первого доступного автора. `source_class=humanistic` с 1.3.29. Дальше — только баги модели.  
 **Владелец:** Product + Research.  
 **Данные:** `DATA/reference/astrology/interpretation_v1/` — corpus · `claims/` · `objects_v1.json` (draft).  
 **Handoff (next agent):** [IL1_HANDOFF.md](./IL1_HANDOFF.md) — что сделано, что locked, откуда продолжать ingest.  
+**Gap audit (Sun→Pluto, 1.3.24):** [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md). Owner queue **1.3.25** superseded for *discovery* by **1.3.29**. NEED_OWNER-blocks-locus **1.3.26** still holds for named closed pages. Hand Ch.4 Sun unread **1.3.27**. Corpus QA snapshot **1.3.28** — [IL1_CORPUS_QA.md](./IL1_CORPUS_QA.md). **1.3.29** reopens source discovery (school-first). **1.3.30** parent: knowledge-core research order. **1.3.31** Rudhyar Mars humanistic. **1.3.32** Rudhyar Uranus humanistic. **1.3.33** Rudhyar Neptune humanistic. **1.3.34** Rudhyar Pluto humanistic. **1.3.35** Rudhyar Sun humanistic. **1.3.36** Rudhyar Moon humanistic. CORE still unscored.  
 **Схема:** [astrology_interpretation_v1.schema.json](../schemas/astrology_interpretation_v1.schema.json) · claims ledger [astrology_claims_v1.schema.json](../schemas/astrology_claims_v1.schema.json).  
 **Пример формы (не SoT смысла):** [astrology_interpretation_v1.example.json](../schemas/fixtures/astrology_interpretation_v1.example.json).
 
@@ -24,6 +25,24 @@
 - **Canon updated?** this doc · pipeline §2 · AMC §2.2 · ACM · Foundation §2 compose rule · DAY_SOURCES цепочка · tracker freeze.
 - **Backward compatible?** yes — generators continue until Engine consumes packs.
 
+### Architecture impact — 1.3.29 source discovery
+
+- **SoT before:** author-first queue (Greene then Hand) treated `NEED_OWNER(author/locus)` as blocking the semantic slot; psychological Venus bound to Greene p.69; Rudhyar listed as `psychological` in §6.1; freeze “no new books/authors.”
+- **SoT after:** discovery = school class → missing semantic coverage → best accessible primary/direct-read source. `NEED_OWNER(author/locus)` ≠ `NEED_EVIDENCE(semantic slot)` until other independent authorities of that school class are checked. `source_class=humanistic` added so Rudhyar is not parked as psychological (no false CORE with Greene). New reputable authors allowed until semantic saturation. Existing Greene/Hand NEED_OWNER loci remain pending; do not replace them with summaries of those authors.
+- **Public contract changed?** no (no runtime wiring).
+- **Migration required?** no — unused catalog rows `src.psychological.rudhyar_personality` / `rudhyar_lunation` stay `psychological` until a dedicated reclass. New Rudhyar planet ingest uses `humanistic`.
+- **Canon updated?** yes — this doc §6.1 · §6.9 · changelog 1.3.29; `source_class` enum in claims / objects / corpus schemas.
+- **Backward compatible?** yes for product JSON. 1.3.25–1.3.28 Greene-first *discovery* queue is superseded; those closed loci stay NEED_OWNER.
+
+### Architecture impact — 1.3.30 knowledge-core research order
+
+- **SoT before:** IL §6.9 school-first discovery inside an already-started author landscape; next cores had no locked research sequence.
+- **SoT after:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) is the parent: предмет → границы → составляющие → определения → школы → типы источников → карта литературы → критерии → shortlist → ingest. IL-1 planet fill continues §6.9. CORE / next domain cores cannot be architected around whoever was readable first. Psychology/medicine evidence hierarchy ≠ IL school-convergence.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — new doc + this changelog 1.3.30
+- **Backward compatible?** yes — no runtime wiring; IL-1 claims unchanged
+
 ---
 
 ## 0. Зачем останавливать Today-контент
@@ -37,7 +56,7 @@ Pipeline уже назвал дыру: **Astrology Interpretation Canon (lookup)
 
 **Freeze (Today content):** не расширять narrative prompts / formula banks / slot-polish, пока нет IL-3 Engine (темы выбираются до LLM). I0 и product cycle **не** переоткрываются.
 
-**Freeze (методология IL):** не менять corpus method / evidence tiers / provenance / ingest rules до первых ~100 объектов (IL-1). Дальше — только баги модели, которые вскроет столкновение с источниками.
+**Freeze (методология IL):** не менять слои / evidence tiers / provenance shape до первых ~100 объектов (IL-1). **1.3.29–1.3.30** — исключения, которые вскрыло столкновение с источниками: author-first очередь и фиксация ядра от доступных книг. In-flight IL-1: school-first discovery. Следующее ядро: полный research order. Дальше — только баги модели.
 
 **Разрешено параллельно:** транспортная честность, routing, visual foundation, DS, баги, геометрия, ScreenFlow без новой семантики, **Swiss licensing gate** (не блокирует research IL-1).
 
@@ -182,7 +201,7 @@ v1.1: North Node · South Node · Chiron · Lilith (Mean Apogee) — identity у
 
 Не статья «Что такое Сатурн».
 
-**IL-1 fill:** Valens I.1 — topical/significator catalog (sect, colour, taste), не Ptolemy/Lilly elemental qualities. Saturn injuries from cold+moisture не схлопывать в dryness. Greene Weiser Classics 2021 Introduction — первый `psychological` school_class: psychic process / pain-toward-self-discovery остаются `school_specific`. Houlding *Saturn: The Great Teacher* (Skyscript 2003) — living-traditional: cold/dry/malefic/slow compared; personal boundary and mature-through-constraint остаются `school_specific`. Watters *Astrology For Today* 2003 (Skyscript planet intros) — classification gap: modern general practical, parked `source_class=professional` / `school=modern_general_practical`, not Houlding traditional and not Hand; `school_specific` only. Greene *The Luminaries* preview — Sun/Moon psychological `school_specific` (solar consciousness / embodiment); Greene *The Inner Planets* preview — Mercury Hermes-spontaneity `school_specific`. Do not collapse to consciousness vs unconscious as CORE. Body/health/fertility rows stay in the claims ledger, not `object.domains`. `function` черновиков не усреднять. Не записывать Ptolemy в подтверждающие structure-setting. Uranus, Neptune and Pluto Hand *Horoscope Symbols* Ch.4 1981: claims ledger only (calc already emits all three). Objects withheld — celestial_object slots would force a single-school fill. Hand sequence (not CORE): Uranus disrupts; Neptune dissolves distinction; Pluto reconstructs after total crisis. Do not flatten outers to generic transformation. Psychotic-crisis/medication example excluded (not a medical causal model). Not later Hand. ASC/MC still closed.
+**IL-1 fill:** Valens I.1 — topical/significator catalog (sect, colour, taste), не Ptolemy/Lilly elemental qualities. Saturn injuries from cold+moisture не схлопывать в dryness. Greene Weiser Classics 2021 Introduction — первый `psychological` school_class: psychic process / pain-toward-self-discovery остаются `school_specific`. Houlding *Saturn: The Great Teacher* (Skyscript 2003) — living-traditional: cold/dry/malefic/slow compared; personal boundary and mature-through-constraint остаются `school_specific`. Watters *Astrology For Today* 2003 (Skyscript planet intros) — classification gap: modern general practical, parked `source_class=professional` / `school=modern_general_practical`, not Houlding traditional and not Hand; `school_specific` only. Greene *The Luminaries* preview — Sun/Moon psychological `school_specific` (solar consciousness / embodiment); Greene *The Inner Planets* preview — Mercury Hermes-spontaneity `school_specific`. Rudhyar *New Mansions for New Men* (1938; Khaldea archival) Venus, Mars, Uranus, Neptune, Pluto, Sun, Moon — `humanistic` school_class: inward way / first-gesture / transform-through / ecstasy-realm / celestial-seed / light-as-integration / song-of-life `school_specific`; не psychological и не CORE с Greene или Hand. Do not collapse to consciousness vs unconscious as CORE. Body/health/fertility rows stay in the claims ledger, not `object.domains`. `function` черновиков не усреднять. Не записывать Ptolemy в подтверждающие structure-setting. Uranus, Neptune and Pluto: Hand 1981 + Rudhyar NMNM claims ledger only (objects withheld). Calc already emits all three. Objects withheld — celestial_object slots would force a school fill or invent natal domains. Hand sequence (not CORE): Uranus disrupts; Neptune dissolves distinction; Pluto reconstructs after total crisis. Rudhyar sequence (not CORE, not merged with Hand): Uranus transforms; Neptune ecstasy/prenatal; Pluto sows seed / hierophant of birth. Do not flatten outers to generic transformation. Psychotic-crisis/medication example excluded (not a medical causal model). Not later Hand. ASC/MC still closed.
 
 ### Layer 2 — Signs
 
@@ -351,25 +370,26 @@ surface: today
 
 Готовой Interpretation Library не существует. Её нужно **собрать**: традиционная основа + современная интерпретация + собственная нормализация.
 
-Реестр кандидатов: [`DATA/reference/astrology/interpretation_v1/source_corpus_v1.json`](../../DATA/reference/astrology/interpretation_v1/source_corpus_v1.json) (~35 источников, все `status: candidate`).  
+Реестр кандидатов: [`DATA/reference/astrology/interpretation_v1/source_corpus_v1.json`](../../DATA/reference/astrology/interpretation_v1/source_corpus_v1.json) (все `status: candidate`).  
 Схема: [astrology_source_corpus_v1.schema.json](../schemas/astrology_source_corpus_v1.schema.json).
 
-Ни один источник не `approved` как закрытый product-SoT, пока строка не прошла legal review. **IL-1 не ждёт этого для всех 36 строк:** при `ingest_rule: research_paraphrase` можно извлекать claims из `candidate`. Копирование текста запрещено. Swiss dual-license **не** условие старта IL-1.
+Ни один источник не `approved` как закрытый product-SoT, пока строка не прошла legal review. **IL-1 не ждёт legal `approved` для research ingest:** при `ingest_rule: research_paraphrase` можно извлекать claims из `candidate`. Копирование текста запрещено. Swiss dual-license **не** условие старта IL-1.
 
-### 6.1 Четыре уровня источников (смысл)
+### 6.1 School classes (смысл)
 
-| Уровень | `source_class` | Зачем | Примеры в корпусе |
-|---------|----------------|-------|-------------------|
+| Уровень | `source_class` | Зачем | Примеры в корпусе / пуле |
+|---------|----------------|-------|--------------------------|
 | Первоисточники | `classical` | исторический фундамент западной традиции | Ptolemy *Tetrabiblos* · Valens *Anthologies* · Dorotheus *Carmen* · Firmicus *Matheseos* · Lilly *Christian Astrology* |
 | Живая традиционная школа | `traditional` | нормализация ontology (аспект ≠ «плохо») | Skyscript · Deborah Houlding (houses, aspects/orbs) |
-| Психологическая | `psychological` | человеческая динамика | Greene · Sasportas · Arroyo · Rudhyar · Demetra George |
-| Практические транзиты | `professional` | язык Today (transit-to-natal) | Robert Hand *Planets in Transit* · Tierney · Sullivan |
+| Психологическая / depth | `psychological` | человеческая динамика (CPA / Jungian / depth) | Greene · Sasportas · Clare Martin · Lynn Bell · Demetra George. CPA определяет направление шире, чем «метод Greene» (astrology × depth, humanistic and transpersonal psychology) |
+| Гуманистическая | `humanistic` | humanistic astrology как отдельная интеллектуальная традиция | Dane Rudhyar (*New Mansions…* и последующая линия). **Не** парковать как `psychological` — иначе ложный CORE с Greene |
+| Современный professional / synthesis | `professional` | язык практики / синтеза | Robert Hand · (пул) Stephen Arroyo. Arroyo в каталоге ещё числится `psychological` — unused row; новый ingest классифицирует по открытому локусу, не по фамилии |
 
 **Project Hindsight** (с 1993) — доступ к эллинистическим текстам. Это **программа переводов**, не один том. Древний оригинал может быть public domain; **современный перевод защищён**. Hindsight = research, не копипаст в JSON.
 
 Skyscript: структурированная библиотека (planets, houses, aspects, natal, predictive, stars, rulerships, orbs, history). Houlding по аспектам/орбам нужна именно ontology: planetary orbs vs modern aspect orbs. **Статьи не копировать** — концепт → сверка → своя запись.
 
-Несколько независимых школ обязательны. Не выбираем одного «правильного» автора.
+Несколько независимых школ обязательны. Не выбираем одного «правильного» автора. Авторы внутри пула **не** взаимозаменяемы (Arroyo ≠ Greene — полезный конфликт, не баг). `source_class` отражает традицию локуса, а не удобство для конвергенции.
 
 ### 6.2 Астрономия — вход IL, не источник смысла
 
@@ -435,7 +455,7 @@ IL-1 research artifacts (pipeline, not a new ontology): `DATA/reference/astrolog
 - Пока CORE по Saturn **не scored**: classical cold/dry/malefic, Houlding boundary/constraint и Greene psychic-process — разные категории, не пересечение. Не записывать Ptolemy в `schools_confirming` для structure-setting.
 - не CORE: *Saturn square Venus значит, что партнёр отдалится*
 
-Канон — не усреднённая «одна астрология». Provenance держит слои различимыми. Когда придут Greene, Hand, Sasportas, Arroyo, George: смотреть, что с классическим claim произошло (продолжено / переосмыслено / психологизировано / заменено). Классические lemmas **не затирать** современным пакетом.
+Канон — не усреднённая «одна астрология». Provenance держит слои различимыми. Когда приходят Greene, Hand, Rudhyar, Sasportas, Martin, Arroyo, George: смотреть, что с классическим claim произошло (продолжено / переосмыслено / психологизировано / заменено). Классические lemmas **не затирать** современным пакетом. Не объявлять два современных автора одной school class, чтобы получить CORE.
 
 Это следствие **публичное**: бренд не продаёт одну современную трактовку как единственную истину. Копирайт (лендинг, реклама) — [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md), не этот §6.
 
@@ -444,7 +464,7 @@ Engine: primary theme только из `core` ∪ `supported`. `editorial` не
 ### 6.7 Пайплайн (не 50 книг вручную в таблицу)
 
 ```text
-corpus (classical + traditional + psychological + transit)
+corpus (classical + traditional + psychological + humanistic + professional)
         ↓
 извлечение утверждений
         ↓
@@ -470,6 +490,29 @@ LLM в этом пайплайне **может** помогать извлек�
 `concept_id` · `source` · `author` · `edition` · `locus` · `original_claim` (paraphrase) · `normalized_claim` · `school` · `evidence_tier` · `review_status` · `field`
 
 `review_status`: `extracted` → `compared` → `reviewed` | `rejected`.
+
+### 6.9 Source discovery (1.3.29; parent 1.3.30)
+
+Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Модель знания (составляющие + определения) проектируется **до** карты литературы. §6.9 — правило *внутри уже начатого* IL-1 planet fill: не фиксировать обязательных авторов. Это не шаблон для следующего ядра.
+
+Author-first очередь Greene → Hand была методологической ошибкой: сильный источник ≠ обязательный источник. Psychological astrology — не «метод Greene»; CPA описывает школу как соединение astrology с depth, humanistic и transpersonal psychology.
+
+**`NEED_OWNER(author/locus)`** означает только отсутствие этого конкретного источника. Он **не** означает `NEED_EVIDENCE(semantic slot)`, пока не проверены другие независимые авторитетные источники той же school class.
+
+**Порядок выбора локуса:** качество × независимость × релевантность × легальная доступность. Поиск: официальный сайт автора/школы → издательский preview → профессиональная астрологическая организация / авторизованный архив с авторским текстом → легально читаемая книга/статья. В evidence **не** идут: SEO-астрология, анонимные explainer'ы, рецензии, jacket copy, bookseller TOC, агрегаторы, pirate dumps, reconstruction из памяти модели.
+
+**Пулы (не жёсткая очередь фамилий):**
+
+- psychological/depth: Greene, Sasportas, Clare Martin, Lynn Bell и другие этой линии
+- humanistic: Dane Rudhyar и последующая humanistic tradition (не auto-`psychological`)
+- modern professional/synthesis: Robert Hand, Stephen Arroyo и др.
+- traditional/classical: существующие линии отдельно
+
+Новые reputable авторы/книги **разрешены**. Расширять discovery до **semantic saturation**: новый качественный источник перестаёт давать существенно новые lemmas и не меняет картину конвергенций/конфликтов. Не ставить произвольное «ещё N авторов».
+
+Существующие NEED_OWNER локусы Greene/Hand остаются pending. Другой независимый автор той же school class **может** закрыть semantic gap. Не заменять закрытую страницу пересказом того же автора.
+
+Extraction first. Cross-source comparison только после extraction. No `object.function` rewrite. No automatic CORE promotion.
 
 ---
 
@@ -540,6 +583,19 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 10. Changelog
 
+- **1.3.36 (2026-08-17)** — IL-1 ingest (no CORE): Moon psych/humanistic discovery. Psychological pool: Luminaries Moon preview already ingested (not re-ingested); no CPA Moon webinar; Darby Costello *The Astrological Moon* jacket+review NEED_OWNER (pirate dumps unused); Martin Lesson 2 unread. Missing school class was humanistic. Best accessible primary after field check: Rudhyar *New Mansions* The Song of Life (Khaldea) as humanistic `school_specific` (song-of-life / resurrected-past / not-dead-weight / raw-unindividuated-response / gestation-individuation — author's categories, not Watters night-world, Greene embodiment, or Ptolemy moisture). `object.function` unchanged. Alchemical-womb not copied into object.domains. Next: Mercury, same discovery rule, one locus; do not auto-pick Rudhyar. Nothing `active`. CORE still unscored.
+- **1.3.35 (2026-08-17)** — IL-1 ingest (no CORE): Sun psych/humanistic discovery. Psychological pool: Luminaries Sun preview already ingested (not re-ingested); Apollo's Chariot CPA 2001 jacket only NEED_OWNER; CPA *Apollon* Issue 1 PDF opened (Greene Apollo article) but same-author densification after Luminaries — not this locus; Martin Lesson 2 unread; no CPA Sun webinar. Missing school class was humanistic. Best accessible primary after field check: Rudhyar *New Mansions* The Song of Light (Khaldea) as humanistic `school_specific` (Heart-vs-photosphere / light-as-integration / light-vs-life / will-as-directed-energy / our-Sun-as-Source — author's categories, not Watters essential-self, Greene solar-consciousness, or Ptolemy heat). `object.function` unchanged. Endocrine/nerve dump and 28-year cycles not copied into object slots. Next: Moon, same discovery rule, one locus; do not auto-pick Rudhyar. Nothing `active`. CORE still unscored.
+- **1.3.34 (2026-08-17)** — IL-1 ingest (no CORE): Pluto psych/humanistic discovery. Psychological pool (Greene Outer Planets NEED_OWNER; CPA Pluto webinars page-only; Sasportas *Gods of Change* unread; Martin Lesson 5 unread; no dedicated Greene Pluto book) not ingested. Best accessible primary after field check: Rudhyar *New Mansions* Pluto (Khaldea) as humanistic `school_specific` (celestial-seed / hierophant-of-birth / God-in-the-lowest / penetration-of-depths — author's categories, not Hand reconstruction/decomposition). Object still withheld. Psychological Pluto still empty. Next: Sun, same discovery rule, one locus; do not auto-pick Rudhyar. Nothing `active`. CORE still unscored.
+- **1.3.33 (2026-08-17)** — IL-1 ingest (no CORE): Neptune psych/humanistic discovery. Psychological pool (Greene Outer Planets NEED_OWNER; Greene *The Astrological Neptune* Archive printdisabled / Google Books cover; CPA Neptune webinars page-only; Sasportas *Gods of Change* unread; Martin Lesson 5 unread) not ingested. Best accessible primary after field check: Rudhyar *New Mansions* Neptune (Khaldea) as humanistic `school_specific` (ecstasy-realm / end-of-journey / prenatal-Great-Mother / compassion-atonement — author's categories, not Hand ultimate-reality/dissolution). Object still withheld. Psychological Neptune still empty. Next: Pluto, same discovery rule, one locus; do not auto-pick Rudhyar. Nothing `active`. CORE still unscored.
+- **1.3.32 (2026-08-17)** — IL-1 ingest (no CORE): Uranus psych/humanistic discovery. Psychological pool (Greene Outer Planets NEED_OWNER; Sasportas *Gods of Change* jacket; Martin Lesson 5 unread; CPA Greene Uranus webinars page-only) not ingested. Best accessible primary after field check: Rudhyar *New Mansions* Uranus (Khaldea) as humanistic `school_specific` (transform / through / reconstruct-form / not-regeneration — author's categories, not Hand disruption/mutation). Object still withheld. Psychological Uranus still empty. Next: Neptune, same discovery rule, one locus; do not auto-pick Rudhyar. Nothing `active`. CORE still unscored.
+- **1.3.31 (2026-08-17)** — IL-1 ingest (no CORE): Mars psych/humanistic discovery. Psychological pool (Greene p.138, Sasportas p.184, Martin Lesson 3, Bell *Mars Quartet*, CPA Greene Mars webinars) closed or jacket-only — not ingested. Best accessible primary: Rudhyar *New Mansions* Mars (Khaldea) as humanistic `school_specific` (first-gesture / surplus-energy release / desire-as-life-movement — author's categories, not Watters assertive-drive, Hand survival, or Greene warrior). `object.function` unchanged. Psychological Mars still empty. Next: Uranus, same discovery rule, one locus. Nothing `active`. CORE still unscored.
+- **1.3.30 (2026-08-17)** — Parent research order for semantic cores (methodology, not ingest, not CORE): `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`. Sequence: subject → bounds → constituents → definitions → schools → source types → literature map → selection criteria → shortlist → ingest/compare. IL-1 planet fill continues §6.9. Do not build the next core (or score CORE) from the first readable author. Psychology/medicine: evidence hierarchy is separate from school-convergence. Claims/`function` unchanged. Nothing `active`. CORE still unscored.
+- **1.3.29 (2026-08-17)** — IL-1 source discovery reopen (methodology correction, not CORE): `NEED_OWNER(author/locus)` ≠ `NEED_EVIDENCE(semantic slot)`. Discovery = school → coverage → best accessible primary. Lift “no new books/authors.” Add `source_class=humanistic`. Rudhyar *New Mansions for New Men* Venus (Khaldea archival primary) ingested as humanistic `school_specific` (inward way / quintessence — author's categories, not Watters love/desire, Hand bonding, or Greene harlot). Clare Martin *Mapping the Psyche* Vol.1 cataloged as psychological-pool candidate; chapter body unread. Greene p.69 / Hand Ch.4 Sun–Mercury remain NEED_OWNER. No `function` rewrite. No CORE. Next: Mars (same discovery rule, one locus). Nothing `active`. CORE still unscored.
+- **1.3.28 (2026-08-17)** — IL-1 Phase 1 research boundary + corpus QA (no methodology change, no new sources, no CORE): remaining queue is physical NEED_OWNER (Inner Planets Venus p.69 / Mars p.138; Outer Planets volume; Hand Ch.4 Sun/Moon/Mercury). CORE scoring blocked; CORE-candidate audit premature. Existing claims and `object.function` unchanged. QA of 303 planet rows recorded in `docs/astrology/IL1_CORPUS_QA.md` (atomization, false equivalence, fact/symbolic/medical/runtime hygiene). Do not pad bibliography. Next ingest = owner direct-read in locked order. Nothing `active`. CORE still unscored.
+- **1.3.27 (2026-08-17)** — IL-1 ingest discipline (no methodology change, no CORE pass, no new bibliography): Hand Ch.4 Sun probed as next extractable declared locus. This host: Google Books `ZPhRV8aFQqcC` still jacket/match-index only; Open Library unavailable; pirate dumps unused. No Sun claims added. Do not backfill from model memory or toward Watters/Greene Sun lemmas. NEED_OWNER: ISBN 9780914918165, Ch.4 The Sun — same owner direct_read path as Venus–Pluto. Moon/Mercury Ch.4 share this unread window; do not start CORE-candidate audit on an incomplete Hand coverage. Nothing `active`. CORE still unscored.
+- **1.3.26 (2026-08-17)** — IL-1 ingest discipline (no methodology change, no CORE pass, no new bibliography, no surrogate fill): NEED_OWNER blocks a **locus**, not the research pipeline. Venus p.69 stays first unclosed gap; do not bypass with secondary sources. Mars Inner Planets p.138 probed in the same legal corpus (Google Books viewport empty) and left pending — not ranked ahead of Venus. Greene *Outer Planets* Uranus probed: CPA 2005 Google Books has no preview; Archive CRCS `printdisabled`; jacket/TOC/reviews not ingested; *The Art of Stealing Fire* not used. Outer Planets Uranus/Neptune/Pluto = one physical-access NEED_OWNER for the volume. Next extractable declared locus while those Greene volumes stay closed: Hand Ch.4 Sun. Nothing `active`. CORE still unscored.
+- **1.3.25 (2026-08-17)** — IL-1 ingest discipline (no methodology change, no CORE pass, no new bibliography): owner fetch order locked — Greene Inner Planets Venus p.69 → Mars p.138 → Outer Planets Uranus → Neptune → Pluto → Hand Ch.4 Sun → Moon → Mercury → new gap audit + first CORE-candidate audit without automatic promotion. Greene Outers before Hand luminaries/Mercury because outers are Hand monopoly. Independent extraction locked: extract Greene from the opened locus without aiming to confirm Hand lemmas; compare only after extraction. Venus p.69 still unread (Google Books viewport empty; Archive printdisabled; no Weiser Calaméo for Part Two). NEED_OWNER: Weiser 1993 ISBN 0-87728-741-4, Greene “The Great Harlot” p.69–. No pirate-dump ingest. Nothing `active`. CORE still unscored.
+- **1.3.24 (2026-08-17)** — IL-1 research audit (no methodology change): Sun→Pluto corpus gap audit recorded in `docs/astrology/IL1_SUN_PLUTO_GAP_AUDIT.md`. 303 planet claims; 0 `core`. Closest two-class overlap = Saturn cold/dry/malefic (classical+traditional), still not CORE. Hand Sun/Moon/Mercury unextracted. Venus p.69 / Mars p.138 unread. Outers Hand-only. No `function` rewrite. Nothing `active`. Next locus must be named from the ranked already-open list, not a new book.
 - **1.3.23 (2026-08-17)** — IL-1 ingest (no methodology change): Hand *Horoscope Symbols* Ch.4 Pluto only (15 atomic `professional` / `school_specific` claims). Calc already emits `astrology.planet.pluto`. Object **not** materialized. Completes Hand outer sequence (Uranus disruption → Neptune dissolution → Pluto reconstruction); not generic transformation. Death/rebirth symbolic, not mortality prediction. Psychotic-crisis/medication example excluded. Hand 1981 dated, not later Hand, not CORE. Catalog stays 24. ASC/MC still closed. Next = Sun→Pluto corpus gap audit, not another book. Nothing `active`.
 - **1.3.22 (2026-08-17)** — IL-1 ingest (no methodology change): Hand *Horoscope Symbols* Ch.4 Neptune only (17 atomic `professional` / `school_specific` claims). Calc already emits `astrology.planet.neptune`. Object **not** materialized. Dissolution of distinction ≠ dreams/intuition/spirituality. Maya = Neptune+Saturn; artistic creativity = Neptune+Venus (combination claims, not Neptune-alone; no Layer 5 objects). Ideals ≠ illusion of perfection; martyr ≠ victim. Hand 1981 dated, not later Hand, not CORE. Catalog stays 24. Pluto still closed. Nothing `active`.
 - **1.3.21 (2026-08-17)** — IL-1 ingest (no methodology change): Hand *Horoscope Symbols* Ch.4 Uranus only (12 atomic `professional` / `school_specific` claims; pp.72–75). Calc already emits `astrology.planet.uranus`. Object **not** materialized: celestial_object required slots would force Hand 1981 into `function`/`domains` or invent natal copy. Disruption ≠ generic change; mutation ≠ rebellion; Jupiter expansion ≠ Uranus alien-frame expansion. Collective/science/altered-consciousness ledger-only. Hand 1981 dated, not later Hand, not CORE. Catalog stays 24. Neptune/Pluto still closed. Nothing `active`.

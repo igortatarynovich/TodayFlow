@@ -121,6 +121,22 @@
           "field": "function",
           "original_claim": "Solar consciousness is presented as oriented toward what is eternal/timeless.",
           "normalized_claim": "Solar consciousness (Greene) orients to the eternal/timeless."
+        },
+        {
+          "source_id": "src.humanistic.rudhyar_new_mansions",
+          "source_class": "humanistic",
+          "author": "Dane Rudhyar",
+          "edition": "New Mansions for New Men, Lucis Press 1938; Khaldea archival ed. 2008",
+          "school": "humanistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Pt.2 Music of the Spheres — The Song of Light",
+          "concept_id": "claim.sun.rudhyar_light_as_integration",
+          "field": "function",
+          "original_claim": "Light is the compassionate gesture of God toward matter: the eternal power of integration that gathers chaotic elements into living organisms.",
+          "normalized_claim": "Solar light = compassionate integration: gathering chaotic matter into living organisms."
         }
       ]
     },
@@ -241,6 +257,22 @@
           "field": "function",
           "original_claim": "Via Gaia and Demeter, the Moon is linked to nature as a living whole, and to the body as direct experience of that principle.",
           "normalized_claim": "Moon linked (via Gaia/Demeter) to nature-as-life-force and to the body as direct experience of it."
+        },
+        {
+          "source_id": "src.humanistic.rudhyar_new_mansions",
+          "source_class": "humanistic",
+          "author": "Dane Rudhyar",
+          "edition": "New Mansions for New Men, Lucis Press 1938; Khaldea archival ed. 2008",
+          "school": "humanistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Pt.2 Music of the Spheres — The Song of Life",
+          "concept_id": "claim.moon.rudhyar_song_of_life",
+          "field": "function",
+          "original_claim": "What people call imprecisely life, more exactly cyclic becoming, is the eonic relationship of the songs of light and life: a vast duo between the Sun and the Moon.",
+          "normalized_claim": "Moon = song of life in antiphony with the Sun's song of light; cyclic becoming is their duo."
         }
       ]
     },
@@ -529,6 +561,22 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "function"
+        },
+        {
+          "concept_id": "claim.venus.rudhyar_inward_way",
+          "source_id": "src.humanistic.rudhyar_new_mansions",
+          "source_class": "humanistic",
+          "author": "Dane Rudhyar",
+          "edition": "New Mansions for New Men, Lucis Press 1938; Khaldea archival ed. 2008",
+          "school": "humanistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Pt.2 Music of the Spheres — Venus, Queen of the Celestial Bees",
+          "original_claim": "Venus, nearest planet inside Earth's orbit, symbolizes the inward way: response or reaction to experience, polar to Mars as the outward way of reaching toward experience.",
+          "normalized_claim": "Venus = inward way: response/reaction to experience (polar to Mars outward reaching).",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "function"
         }
       ]
     },
@@ -678,6 +726,22 @@
           "locus": "Ch.4 The Planets: Core Meanings — Mars",
           "original_claim": "Mars is fundamentally the energy through which an entity survives and maintains its own nature.",
           "normalized_claim": "Mars = survival energy that enables an entity to preserve its own nature.",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.mars.rudhyar_first_gesture",
+          "source_id": "src.humanistic.rudhyar_new_mansions",
+          "source_class": "humanistic",
+          "author": "Dane Rudhyar",
+          "edition": "New Mansions for New Men, Lucis Press 1938; Khaldea archival ed. 2008",
+          "school": "humanistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Pt.2 Music of the Spheres — Mars, He-Who-Goes-Forth",
+          "original_claim": "Mars is the first gesture of being: the first movement of organic life away from its own center of bodily equilibrium.",
+          "normalized_claim": "Mars = first gesture of being: movement away from the organism's center of equilibrium.",
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "function"

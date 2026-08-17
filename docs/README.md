@@ -38,7 +38,8 @@
 - Color layer B: [color/COLOR_LAYER_B_V1.md](./color/COLOR_LAYER_B_V1.md) — 5 live + Champagne pending
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
-- [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md)
+- [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — JSON / Machine Contract build order (не порядок исследования смысла)
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра:** модель → ландшафт литературы → shortlist → ingest. Обязателен до следующего ядра (нумерология / психология / практики / медицина; астрология CORE не строится от первого доступного автора)
 - [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md)
 - [ASTROLOGY_MACHINE_CONTRACT.md](./ASTROLOGY_MACHINE_CONTRACT.md) · [ASTROLOGY_COMPOSITION_MODEL.md](./ASTROLOGY_COMPOSITION_MODEL.md) · [CROSS_DOMAIN_MACHINE_VALIDATION.md](./CROSS_DOMAIN_MACHINE_VALIDATION.md)
 - Astrology meaning: [astrology/INTERPRETATION_LIBRARY_V1.md](./astrology/INTERPRETATION_LIBRARY_V1.md) — **Interpretation Library** (semantic objects; IL-1 drafts, nothing `active`). Corpus: `DATA/reference/astrology/interpretation_v1/source_corpus_v1.json`. Index: [astrology/_INDEX.md](./astrology/_INDEX.md). Публичный язык Canon ≠ IL: [content/TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md)

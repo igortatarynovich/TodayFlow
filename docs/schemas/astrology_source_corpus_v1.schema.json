@@ -39,7 +39,7 @@
         },
         "source_class": {
           "type": "string",
-          "enum": ["astronomy", "classical", "traditional", "psychological", "professional"]
+          "enum": ["astronomy", "classical", "traditional", "psychological", "humanistic", "professional"]
         },
         "title": { "type": "string", "minLength": 3, "maxLength": 160 },
         "author": { "type": "string", "minLength": 2, "maxLength": 120 },
@@ -50,6 +50,7 @@
             "translation_program",
             "traditional_living",
             "psychological",
+            "humanistic",
             "transit",
             "bridge",
             "history",
