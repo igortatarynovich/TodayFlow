@@ -108,7 +108,7 @@ Public copy (NASA/JPL claims): [Trust Layer](content/TODAYFLOW_TRUST_LAYER.md).
 Только атомарный уровень — не меняется день ото дня; авторский текст, не LLM.  
 Готово к переносу в код/DATA как lookup-таблицы после sign-off владельца.
 
-**Не храним как полный каталог:** позиции («Луна в Овне») и все комбинации. Default — Composition Engine из атомов. LLM **не** решает значение комбинации; выражает pack из [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md). Curated Layer 5 — только non-compositional исключения.
+**Не храним как полный каталог:** позиции («Луна в Овне») и все комбинации. Default — Composition Engine из атомов. LLM **не** решает значение комбинации; выражает pack из [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md). Curated Layer 5 — только non-compositional исключения; IL-1 gold list = candidates until IL-2.
 
 **Вне этого черновика (отдельный трек):** 78 карт таро; деталка `COLOR_CATALOG_V1` (уже почти в форме источника).
 

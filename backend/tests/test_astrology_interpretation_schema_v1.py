@@ -212,6 +212,24 @@ def test_houses_and_aspects_from_opened_loci_only():
     assert square["angle"] == 90
 
 
+def test_activation_gates_block_active_ambiguity():
+    """Unevidenced boolean and Layer 5 candidates must not ship as active."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    ra = schema["$defs"]["knowledge_object"]["properties"]["requires_action"]
+    assert ra["type"] == "boolean"
+    assert "unevidenced" in ra["description"]
+    assert "active" in ra["description"]
+    curation = schema["$defs"]["knowledge_object"]["properties"]["curation_reason"]
+    assert "candidates" in curation["description"]
+    for obj in objects["objects"]:
+        if obj.get("type") == "aspect" and obj.get("requires_action") is False:
+            assert obj["status"] != "active", obj["object_id"]
+        if obj.get("curation_reason") == "non_compositional":
+            assert obj["status"] != "active", obj["object_id"]
+            assert obj["layer"] == 5
+
+
 def test_sign_classifications_do_not_invent_layer2_psychology():
     claims = json.loads((CLAIMS_DIR / "astro.sign.classifications.json").read_text(encoding="utf-8"))
     schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))

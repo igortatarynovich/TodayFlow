@@ -198,7 +198,8 @@
         },
         "curation_reason": {
           "type": ["string", "null"],
-          "enum": [null, "non_compositional", "gold_replay", "school_conflict"]
+          "enum": [null, "non_compositional", "gold_replay", "school_conflict"],
+          "description": "IL-1 Layer 5 gold list marks curated candidates, not proven IL-2 exceptions. IL-2 may demote non_compositional to composed."
         },
         "intensity_rule": {
           "type": "string",
@@ -231,7 +232,10 @@
           "type": "string",
           "enum": ["merging", "friction", "flow", "opportunity", "polarization"]
         },
-        "requires_action": { "type": "boolean" },
+        "requires_action": {
+          "type": "boolean",
+          "description": "Attested property only. On draft, false may mean the opened locus does not establish the property — not 'this aspect does not require action'. Activation gate: status=active is forbidden while this boolean is unevidenced. Schema type stays boolean for IL-1."
+        },
         "base_meaning": { "$ref": "#/$defs/lemma" },
         "psychological": { "$ref": "#/$defs/lemma" },
         "opportunity": { "$ref": "#/$defs/lemma" },

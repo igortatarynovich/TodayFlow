@@ -158,7 +158,7 @@ Engine подставляет **уже выбранным** drivers коротк
 ASTRONOMY → ASTRO FACT → CANONICAL MEANING (IL) → (позже) LLM STORY
 ```
 
-Default: атомы (layers 1–4) + composition. **Не** каталог всех planet×sign. Curated Layer 5 — только non-compositional исключения.
+Default: атомы (layers 1–4) + composition. **Не** каталог всех planet×sign. Curated Layer 5 — только non-compositional исключения; IL-1 gold list = candidates until IL-2.
 
 Пока нет `active` объектов (IL-1 drafts не runtime SoT) — **не** отдавать значение на откуп Kimi; лучше бедный канон / omit, чем ежедневное «вспоминание». Наполнение = research (IL-1…IL-3), не генерация.
 
@@ -363,5 +363,5 @@ manifest:
 - **Public contract changed?** target yes (phased): `global_day` / `personal_day` nests; `primary_energy`; windows with supports/cautions. Нет wire bump в lock-only.
 - **Migration required?** yes — native C1 monolith, Kimi windows, LLM visual_mode, ritual number, guide. Cached days keep old shape until regenerate/admin.
 - **Canon updated?** yes — this file · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) (экраны) · SCENARIO_V3 superseded as product map · README · tracker.
-- **2026-08-17:** step 2 lookup = Interpretation Library (schema only; not a second Meaning SoT). User-facing planet×sign catalog **rejected** (ACM + IL layers).
+- **2026-08-17:** step 2 lookup = Interpretation Library (schema only; not a second Meaning SoT). User-facing planet×sign catalog **rejected** (ACM + IL layers). IL-1 Layer 5 gold list = curated candidates until IL-2.
 - **Backward compatible?** yes API until nests land; old clients ignore.

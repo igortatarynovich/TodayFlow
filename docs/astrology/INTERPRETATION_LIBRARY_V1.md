@@ -5,6 +5,7 @@
 **Методология:** **LOCKED** до закрытия IL-1 (~100 объектов). Не переоткрывать схему слоёв / evidence / provenance / ingest, пока модель не столкнётся с источниками.  
 **Владелец:** Product + Research.  
 **Данные:** `DATA/reference/astrology/interpretation_v1/` — corpus · `claims/` · `objects_v1.json` (draft).  
+**Handoff (next agent):** [IL1_HANDOFF.md](./IL1_HANDOFF.md) — что сделано, что locked, откуда продолжать ingest.  
 **Схема:** [astrology_interpretation_v1.schema.json](../schemas/astrology_interpretation_v1.schema.json) · claims ledger [astrology_claims_v1.schema.json](../schemas/astrology_claims_v1.schema.json).  
 **Пример формы (не SoT смысла):** [astrology_interpretation_v1.example.json](../schemas/fixtures/astrology_interpretation_v1.example.json).
 
@@ -17,7 +18,7 @@
 ## Architecture impact
 
 - **SoT before:** pipeline step 2 («Astrology Interpretation Canon») named as **дыра**; смысл примитивов размазан (Foundation keywords · legacy JSON · AMC vectors · LLM invention).
-- **SoT after:** Interpretation Library = that lookup (atoms first, curated Layer 5). Runtime: Swiss/JPL → calculation → IL → engine → expression. Licensing Swiss = parallel gate. Engine clusters + ranks; LLM выражает pack. **Today Meaning SoT остаётся** TODAY_CONTENT_PIPELINE_V1.
+- **SoT after:** Interpretation Library = that lookup (atoms first, Layer 5 gold list = curated *candidates* until IL-2). Runtime: Swiss/JPL → calculation → IL → engine → expression. Licensing Swiss = parallel gate. Engine clusters + ranks; LLM выражает pack. **Today Meaning SoT остаётся** TODAY_CONTENT_PIPELINE_V1. Activation gates: unevidenced `requires_action: false` cannot become `active`; IL-2 may demote Layer 5 candidates to composed.
 - **Public contract changed?** no (пока нет runtime wiring).
 - **Migration required?** no until IL-4 (Expression). Legacy content JSON не удалять до `active` атомов.
 - **Canon updated?** this doc · pipeline §2 · AMC §2.2 · ACM · Foundation §2 compose rule · DAY_SOURCES цепочка · tracker freeze.
@@ -80,6 +81,15 @@ scale the library
 | **IL-2** | **правила** композиции (не каталог всех пар) | 10 000 JSON-гороскопов |
 | **IL-3** | детерминированный engine тем | LLM |
 | **IL-4** | выражение уже выбранного смысла | решение «что значит Saturn □ Venus» |
+
+### Activation gates (не методология)
+
+Не меняют sequence / ontology / evidence. Стоп **перед `status: active`**, не перед IL-1 draft.
+
+1. **`requires_action` boolean.** Пока объекты `draft` и runtime их не читает — допустимый компромисс. `false` на неподтверждённом локусе ≠ «аспект не требует действия». До первого `active`: либо representation перестаёт быть двусмысленным boolean, либо ingest/runtime контракт запрещает читать это поле как отрицательное утверждение. `active` с такой двусмысленностью **запрещён**. Схему из-за IL-1 не расширять.
+2. **Layer 5 gold list.** ~50–60 комбинаций в IL-1 = **curated candidates**, не доказанные исключения из IL-2. Критерий `non_compositional` окончательно проверяется только после composition rules. IL-2 может разжаловать объект из curated в composed. Sequence не меняется.
+
+Пользовательский provenance позже: школьный слой (*Traditional* · *Modern psychological* · *Cross-tradition* · *TodayFlow synthesis*), не locus («Lilly p.57»). Это [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md) / Expression, не ingest IL-1.
 
 **IL-0 закрыт** (2026-08-17) как foundation. Следующий execution slice = **IL-1**.  
 Масштаб библиотеки — только после IL-4.
@@ -148,7 +158,7 @@ Swiss: Saturn = 14° Aries, natal Venus = 14° Cancer
 
 ## 1. Слои (строить строго снизу)
 
-Комбинаторный взрыв `planet × planet × aspect × house × sign` **запрещён** как каталог. Согласовано с [ACM-Compose](../ASTROLOGY_COMPOSITION_MODEL.md): атомы в Reference; композиты — runtime. Исключение: **узкий curated Layer 5** только там, где сложение атомов врёт.
+Комбинаторный взрыв `planet × planet × aspect × house × sign` **запрещён** как каталог. Согласовано с [ACM-Compose](../ASTROLOGY_COMPOSITION_MODEL.md): атомы в Reference; композиты — runtime. Исключение: **узкий curated Layer 5** только там, где сложение атомов врёт — в IL-1 это **candidates** (activation gate 2).
 
 ```
 Layer 1 Objects  →  Layer 2 Signs  →  Layer 3 Houses  →  Layer 4 Aspects
@@ -210,7 +220,7 @@ Conjunction · Opposition · Square · Trine · Sextile.
 
 Таблица — **смысл слота**, когда локус его подтвердит. Не default для копирования в объект.
 
-**IL-1 fill:** Ptolemy I.16 даёт только harmonious / discordant. Lilly CA I.1 даёт good / enmity / concord — другая качественная система; в `object.interaction` не копировать. Geometry 0/60/90/120/180 compared. `requires_action` в схеме — boolean (нет `unknown` / `not_evidenced`). `false` = свойство **не установлено данным локусом**, не утверждение «square не требует действия». Схему из-за этого не расширять.
+**IL-1 fill:** Ptolemy I.16 даёт только harmonious / discordant. Lilly CA I.1 даёт good / enmity / concord — другая качественная система; в `object.interaction` не копировать. Geometry 0/60/90/120/180 compared. `requires_action` в схеме — boolean (нет `unknown` / `not_evidenced`). `false` = свойство **не установлено данным локусом**, не утверждение «square не требует действия». Схему из-за этого не расширять. **Activation gate:** `status: active` с таким boolean запрещён, пока representation или runtime-контракт не снимут двусмысленность.
 
 Миноры (Foundation §2.4) — не Layer 4 v1.
 
@@ -221,7 +231,7 @@ Conjunction · Opposition · Square · Trine · Sextile.
 Типы: `planet_in_sign` · `planet_in_house` · `natal_aspect` · `transit_to_natal` · `transit_through_house`.
 
 **Default (IL-2):** Composition Engine собирает объект из атомов (не JSON на каждую пару).  
-**Curated (часть IL-1 gold):** только `curation_reason: non_compositional` — значение нельзя надёжно сложить; всё равно **surface-neutral**.
+**Curated (часть IL-1 gold):** `curation_reason: non_compositional` — *кандидат* на исключение, пока IL-2 не подтвердит, что сложение атомов врёт. IL-2 может разжаловать в composed. Всё равно **surface-neutral**.
 
 Хранить в `DATA/reference/astrology/interpretation_v1/` — **не** в `machine/`. ACM freeze на composite **machine** JSON остаётся.
 
@@ -467,7 +477,7 @@ LLM в этом пайплайне **может** помогать извлек�
 
 12 signs · 12 houses · 12 Layer-1 objects · 5 major aspects · углы уже в Layer 1 · dignity/rulership — Foundation §2.5 (не дублировать в IL).
 
-Дальше комбинации **композиционно**. Вручную curated — где сложение атомов врёт.
+Дальше комбинации **композиционно**. Вручную curated в IL-1 — **candidates**, где сложение атомов *может* врать; IL-2 подтверждает или разжалует.
 
 Не начинать с 10 000 комбинаций. Не менять методологию до конца IL-1. Порядок = **Sequence (LOCKED)** выше.
 
@@ -475,7 +485,7 @@ LLM в этом пайплайне **может** помогать извлек�
 |----|--------|--------|
 | **IL-0** | Foundation: корпус, evidence, provenance, declared gates | ✅ 2026-08-17 |
 | **IL-1** | ~100 surface-neutral objects из корпуса + review | in progress (24 drafts: planets 7 · houses 12 · aspects 5; signs withheld) |
-| **IL-2** | Composition rules (не полный каталог пар) | after IL-1 |
+| **IL-2** | Composition rules (не полный каталог пар) | after IL-1; may demote Layer 5 candidates to composed |
 | **IL-3** | Interpretation Engine (sky → themes) | after IL-2 |
 | **IL-4** | Expression (LLM / voice per surface) | after IL-3 |
 
@@ -485,7 +495,7 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 8. IL-1 gold set — первые ~100 (surface-neutral)
 
-Не «контент Today». Слои 1–4 целиком, затем non-compositional combinations, которые нельзя надёжно сложить из атомов. Остальное — IL-2 rules.
+Не «контент Today». Слои 1–4 целиком, затем Layer 5 **candidates** (~50–60), которые *могут* оказаться non-compositional. Остальное — IL-2 rules. Не объявлять список окончательными исключениями до composition rules.
 
 ### Атомы (41)
 
@@ -494,9 +504,9 @@ LLM в этом пайплайне **может** помогать извлек�
 - Houses (12): 01…12
 - Aspects (5): conjunction, opposition, square, trine, sextile
 
-### Non-compositional combinations (~50–60)
+### Layer 5 candidates (~50–60)
 
-Не полный декартов продукт. Критерий: значение нельзя надёжно сложить из атомов, объект годен Profile / Today / Compatibility, **и** конструкция есть в output calculation layer (Swiss + Astro).
+Не полный декартов продукт. Рабочий критерий отбора в IL-1: объект годен Profile / Today / Compatibility, конструкция есть в output calculation layer (Swiss + Astro), и *подозрение*, что сложение атомов врёт. Это **не** доказанный `non_compositional` до IL-2.
 
 **transit_to_natal:** Saturn□natal Venus, Saturn□Moon, Saturn□Sun, Saturn□Mars, Saturn☍Venus, Saturn☍Moon, Saturn☌Sun, Saturn☌Moon, Jupiter△Sun, Jupiter□Saturn, Uranus□Moon, Uranus☍Venus, Neptune□Venus, Pluto□Sun, Pluto□Venus.
 
@@ -528,6 +538,7 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 10. Changelog
 
+- **1.3.8 (2026-08-17)** — Activation gates (not methodology): unevidenced `requires_action: false` cannot become `active`; IL-1 Layer 5 gold list = curated candidates, IL-2 may demote to composed. User-facing provenance bands later via Trust Layer. No sequence/ontology change.
 - **1.3.7 (2026-08-17)** — Public brand/trust language moved to [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md) (not an IL methodology change). Swiss/DE431 claim facts in Foundation §1.4.1.
 - **1.3.6 (2026-08-17)** — Ptolemy I.17 + Lilly CA I.16 p.91: commanding *grouping* compared; equinox pair-relation stays school_specific. Ptolemy I.18 beholding not collapsed into Lilly Antiscion. Copy-paste Aries gap_note removed from other sign QUALITY files. No Layer 2 objects. No methodology change.
 - **1.3.5 (2026-08-17)** — Lilly CA I.1 opened: aspect *geometry* compared with Ptolemy; qualitative labels remain school_specific (good/enmity ≠ harmonious-by-sex). Lilly CA I.16 sign *quality* claims for 12 signs; still no Layer 2 objects. `requires_action` stays false/not-evidenced. No methodology change.

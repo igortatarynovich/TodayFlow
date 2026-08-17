@@ -40,7 +40,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-17):** **Interpretation Library IL-1** — methodology LOCKED. Aspect geometry compared (Ptolemy + Lilly I.1); qualitative labels not collapsed. Sign QUALITY claims from Lilly I.16; commanding *grouping* compared, pair-relation and Antiscion not collapsed. Layer 2 objects still withheld. Canon: `docs/astrology/INTERPRETATION_LIBRARY_V1.md`.
+**NOW (FOUNDATION, 2026-08-17):** **Interpretation Library IL-1** — methodology LOCKED. Activation gates: unevidenced `requires_action: false` cannot become `active`; Layer 5 gold list = curated candidates (IL-2 may demote). Next value = newly opened loci, not document polish. Canon: `docs/astrology/INTERPRETATION_LIBRARY_V1.md`.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
