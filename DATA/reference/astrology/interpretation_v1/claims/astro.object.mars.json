@@ -3,16 +3,17 @@
   "object_id": "astro.object.mars",
   "calc_entity": "astrology.planet.mars",
   "pending_source_ids": [
-    "src.classical.valens_anthologies",
     "src.traditional.skyscript",
     "src.professional.hand_planets_in_transit",
     "src.psychological.george_ancient_practice"
   ],
   "gap_notes": [
-    "CORE cannot be scored yet: only classical sources ingested (Ptolemy, Lilly). Psychological, living-traditional, and professional schools are pending — do not backfill from model memory.",
+    "CORE cannot be scored yet: ingested sources are still classical only (Ptolemy, Lilly, Valens). Psychological, living-traditional, and professional schools pending.",
+    "Valens I.1 is a topical/significator catalog (sect, colour, taste, body parts), not Ptolemy/Lilly elemental qualities. Do not backfill heat/cold/dry/moist from Valens, and do not average catalogs into function.",
+    "Valens I.1 is force, war, fire-or-iron action, night sect. It does not attest Ptolemy/Lilly hot-dry as a native quality. Malefics in sect may bestow good — do not collapse into a simple malefic lemma.",
     "Corpus has no dedicated psychological title for Mars (Greene books in the registry are Saturn, luminaries, relating, outer planets). Do not invent a Greene-Mars locus.",
     "Object-level themes mix compared and school_specific lemmas. Per-lemma evidence_tier stays in this ledger; knowledge-object schema is not expanded for that.",
-    "Layer 1 requires positive_expression; it is filled from Lilly well-dignified manners only until a second school class is compared."
+    "Layer 1 requires positive_expression; it is filled from Lilly well-dignified manners only until a second school class is compared. Valens is still source_class=classical."
   ],
   "claims": [
     {
@@ -238,6 +239,38 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "tempo"
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "author": "Vettius Valens / Mark Riley trans.",
+      "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.mars.valens_force",
+      "locus": "Anthologies Book I ch.1 Nature of the Stars",
+      "original_claim": "Mars indicates force, wars, violence, actions involving fire or iron, commands and campaigns; it is of the night sect.",
+      "normalized_claim": "Valens' Mars is force, war, and fire-or-iron action, not an elemental hot-dry package",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "themes"
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "author": "Vettius Valens / Mark Riley trans.",
+      "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.mars.malefic_in_sect",
+      "locus": "Anthologies Book I ch.1 Nature of the Stars",
+      "original_claim": "Malefic stars, when operative in appropriate places in their own sect, can bestow good and high rank; when inoperative, disasters.",
+      "normalized_claim": "Valens' malefics are conditional on sect and place, not a fixed evil quality",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "shadow"
     }
   ]
 }

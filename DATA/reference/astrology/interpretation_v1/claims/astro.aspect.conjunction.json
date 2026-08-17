@@ -10,9 +10,10 @@
   ],
   "gap_notes": [
     "CORE cannot be scored for aspect *meaning*. Geometry of 0/60/90/120/180 is now compared (Ptolemy I.16/I.27 + Lilly CA I.1). Qualitative labels are not the same system: Ptolemy harmonious/discordant-by-sex vs Lilly good/enmity/concord. Do not collapse.",
-    "Lilly CA I.1 opened. CA ~p.105 terms/aspects table still unopened; not backfilled.",
+    "Lilly CA I.19 opened (printed ~p.105): orbs are planetary moieties, two tables, used from memory. Not aspect-orbs and not an IL object field. Schema not expanded. requires_action still unevidenced.",
     "Lilly: sextile indifferent good; square enmity and not good; trine unity/concord/friendship; opposition a bad aspect; conjunction good or ill according to the question. None of these attest requires_action.",
-    "requires_action is boolean in schema (no unknown/not_evidenced). false here means the opened locus does not establish the property — not the assertion 'this aspect does not require action'. Schema not expanded."
+    "requires_action is boolean in schema (no unknown/not_evidenced). false here means the opened locus does not establish the property — not the assertion 'this aspect does not require action'. Schema not expanded.",
+    "Lilly I.19 sharpens I.1: square = imperfect enmity; opposition = perfect hatred; sextile/trine = love/unity (trine stronger); conjunction good/bad as the planets are friends or enemies. Still not Ptolemy sex-harmony. Do not copy into interaction."
   ],
   "claims": [
     {
@@ -78,6 +79,54 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "interaction"
+    },
+    {
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.aspect.conjunction.improper",
+      "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105)",
+      "original_claim": "The strongest configurations are sextile, square, trine, opposition; conjunction is called an aspect very improperly.",
+      "normalized_claim": "Lilly I.19: conjunction is not properly an aspect",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "interaction"
+    },
+    {
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.aspect.conjunction.lilly19_quality",
+      "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105)",
+      "original_claim": "Conjunctions are good or bad as the planets in conjunction are friends or enemies to one another.",
+      "normalized_claim": "Lilly I.19: conjunction quality follows whether the bodies are friends or enemies",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "interaction"
+    },
+    {
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.aspect.conjunction.partile_platick",
+      "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105–107)",
+      "original_claim": "A partile aspect is exact in degree; a platick aspect is within the moiety of both planets' orbs.",
+      "normalized_claim": "Lilly I.19: partile is exact; platick uses planetary moiety orbs",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "intensity_rule"
     }
   ]
 }

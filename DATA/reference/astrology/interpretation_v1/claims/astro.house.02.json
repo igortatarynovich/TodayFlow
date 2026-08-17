@@ -3,17 +3,17 @@
   "object_id": "astro.house.02",
   "calc_entity": "astrology.house.02",
   "pending_source_ids": [
-    "src.classical.valens_anthologies",
     "src.traditional.skyscript",
     "src.traditional.houlding_houses",
     "src.psychological.sasportas_twelve_houses",
     "src.psychological.george_ancient_practice"
   ],
   "gap_notes": [
-    "CORE cannot be scored: 12 topical houses are attested here from Lilly CA I.7 only.",
+    "CORE cannot be scored: topical houses now Lilly CA I.7 + Valens IX. Still classical only. Ptolemy I.13 is not a 12-house list.",
     "Ptolemy Tetrabiblos I.13 gives four-angle temperament (east dry, south hot, west moist, north cold), not 12 topical houses. Lilly ascribes this house list to 'Ptolomeian Doctrine' (CA I.7 close). A source citing Ptolemy is not Ptolemy+Lilly consensus. Attribution unverified from the opened Tetrabiblos locus. Do not mark compared.",
     "No ASC/MC Layer-1 identity objects: I.13 is directional temperament, not persona/status packages.",
-    "Layer 3 required slots filled only with Lilly's topical lists. Do not add modern 'psychological houses' (self-actualization, etc.)."
+    "Layer 3 required slots filled only with Lilly's topical lists. Do not add modern 'psychological houses' (self-actualization, etc.).",
+    "Valens IX also gives derived-place meanings (this place relative to III/IV/VII). Schema has no derived-place slot; not copied into domain."
   ],
   "claims": [
     {
@@ -79,6 +79,38 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "internal_meaning"
+    },
+    {
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.house.02.livelihood",
+      "locus": "Book I Chapter VII Second House (1659 p.51–52)",
+      "original_claim": "From this house is required judgment of estate, wealth or poverty, removable goods, money lent, profit or loss.",
+      "normalized_claim": "the second place concerns livelihood and property",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "domain"
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "author": "Vettius Valens / Mark Riley trans.",
+      "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.house.02.livelihood",
+      "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+      "original_claim": "Place II: livelihood, income from property.",
+      "normalized_claim": "the second place concerns livelihood and property",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "domain"
     }
   ]
 }

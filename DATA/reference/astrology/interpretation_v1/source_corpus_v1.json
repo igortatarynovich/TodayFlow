@@ -23,7 +23,8 @@
       "use": ["objects", "houses", "aspects", "natal"],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Greek original PD. Riley English is copyrighted — paraphrase only. Opened: Book I ch.1 stars, I.2 Aries, IX XII Places. I.3 terms = dignity, not Layer 2."
     },
     {
       "source_id": "src.classical.dorotheus_carmen",
@@ -57,7 +58,7 @@
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "1647 text PD. Facsimile/reset modern editions may still carry new copyright on apparatus."
+      "notes": "1647 text PD. Facsimile/reset modern editions may still carry new copyright on apparatus. Opened I.19 (p.105): planetary moiety orbs, two tables, partile/platick."
     },
     {
       "source_id": "src.classical.paulus_introductory",

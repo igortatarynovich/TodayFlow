@@ -3,7 +3,7 @@
 **Date:** 2026-08-17  
 **Owner intent:** continue **Interpretation Library IL-1 ingest**. Do not polish the methodology document. Do not reopen sequence / ontology / evidence.
 
-Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (working tree has **1.3.8** activation gates, **not committed** at handoff).  
+Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.9** ingest after **1.3.8** activation gates).  
 Today Meaning SoT remains [`docs/today/TODAY_CONTENT_PIPELINE_V1.md`](../today/TODAY_CONTENT_PIPELINE_V1.md). IL is pipeline step 2 lookup only.
 
 Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
@@ -12,22 +12,12 @@ Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
 
 ## 0. First 15 minutes
 
-1. Read this file + IL § Sequence + **Activation gates** + §6 ingest + Layer 2/3/4 fill-rules.
-2. **Commit the uncommitted 1.3.8 slice** if still dirty (activation gates). Do **not** mix Profile v2 / Foundation UI / landing / Trust Layer copy into that commit.
-3. Prefer a **new short-lived branch from `main`** for further IL ingest. Current branch `cursor/today-scroll-and-number-tap` is a mixed train (Today scroll + IL + Trust Layer + Profile). Do not park IL on it.
+1. Read this file + IL § Sequence + **Activation gates** + §6 ingest + Layer 1–4 fill-rules.
+2. 1.3.8 activation gates are **committed** (`3c62a5c6`). Do not reopen them.
+3. IL ingest lives on short-lived `il/il-1-ingest` (from that tip). Do **not** mix Profile v2 / Foundation UI / landing / Trust / motion into IL commits. Working tree on the host often has those dirty; leave them.
 4. Then ingest **only newly opened loci**. Next value is collisions, not document prose.
 
-Uncommitted at handoff (include in the 1.3.8 commit if still unstaged):
-
-- `docs/astrology/INTERPRETATION_LIBRARY_V1.md`
-- `docs/schemas/astrology_interpretation_v1.schema.json` (descriptions only; type still boolean)
-- `backend/tests/test_astrology_interpretation_schema_v1.py` (`test_activation_gates_block_active_ambiguity`)
-- `docs/ASTROLOGY_COMPOSITION_MODEL.md` (Layer 5 = candidates)
-- `docs/today/TODAY_CONTENT_PIPELINE_V1.md` (one clause)
-- `docs/foundation_v1.md` (one clause)
-- tracker **NOW (FOUNDATION)** line only — the file also has unrelated Trust/visual hunks; do not stage those
-
-Exclude: `frontend/src/components/profile/v2/**`, `docs/TODAYFLOW_FOUNDATION_UI.md`, landing/Trust copy.
+v1.3.8 is closed: `requires_action` and Layer 5 stay draft→active gates, not IL-1 re-ontology.
 
 ---
 
@@ -67,9 +57,10 @@ Public brand copy SoT: [`docs/content/TODAYFLOW_TRUST_LAYER.md`](../content/TODA
 | `c9fe3d05` | Schema, corpus, classical seven drafts (Sun–Saturn) |
 | `805bbbdb` | 12 houses (Lilly I.7) + 5 aspects (Ptolemy) + sign classifications; signs withheld |
 | `b9f2643e` | Lilly I.1 aspect **geometry** compared; I.16 sign QUALITY claims; commanding grouping compared |
+| `3c62a5c6` | Activation gates 1.3.8 (requires_action / Layer 5 candidates) + handoff |
 | `5dee20a5` | Trust Layer (brand) — **not** IL ingest |
 
-Working tree after that: **1.3.8 activation gates** (see §0).
+IL ingest after 1.3.8: branch `il/il-1-ingest` (Valens I.1/I.2/IX + Lilly I.19). SHA after commit.
 
 ### Catalog (all `draft`, nothing `active`)
 
@@ -82,10 +73,10 @@ Runtime: `DATA/reference/astrology/interpretation_v1/`
 
 | Layer | IDs | Provenance honesty |
 |-------|-----|--------------------|
-| 1 planets | `astro.object.{sun,moon,mercury,venus,mars,jupiter,saturn}` | Ptolemy I.4–I.7 + Lilly CA I.8–I.14 |
-| 2 signs | **claims only** `astro.sign.{aries…pisces}` + `astro.sign.classifications` | Lilly QUALITY; psych slots unattested |
-| 3 houses | `astro.house.01`–`12` | **Lilly CA I.7 only**. Lilly citing “Ptolomeian Doctrine” ≠ Ptolemy+Lilly consensus. Ptolemy I.13 is four-angle temperament, not 12 topical houses |
-| 4 aspects | conjunction / sextile / square / trine / opposition | Geometry compared (Ptolemy I.16/I.27 + Lilly I.1). Qualitative labels **not** collapsed into `object.interaction` |
+| 1 planets | `astro.object.{sun,moon,mercury,venus,mars,jupiter,saturn}` | Ptolemy I.4–I.7 + Lilly CA I.8–I.14 + Valens I.1. `function` still elemental (Ptolemy/Lilly), not a Valens catalog average |
+| 2 signs | **claims only** `astro.sign.{aries…pisces}` + `astro.sign.classifications` | Lilly QUALITY; Valens I.2 Aries fiery *and* watery. Psych slots unattested |
+| 3 houses | `astro.house.01`–`12` | Object `domain` still Lilly CA I.7. Valens IX compared on thin lemmas only. Derived-place not in schema. Ptolemy I.13 still not 12 topical houses |
+| 4 aspects | conjunction / sextile / square / trine / opposition | Geometry compared. Lilly I.19 orbs/partile logged, not copied into objects. `interaction` not Lilly enmity labels |
 | 5 combos | none materialized | gold list in IL §8 = candidates |
 
 Saturn is deliberately poor vs modern astrology: cooling quality / cold / dryness / slowness / solitude / austerity — **not** structure / limits / maturity.
@@ -111,6 +102,14 @@ Saturn is deliberately poor vs modern astrology: cooling quality / cold / drynes
 - I.16 divisions, djvu 111–114; nature/quality of 12 signs, printed ~p.93–98
 - I.16 commanding list, printed p.91, djvu 117
 - I.16 Antiscion / Contrantiscion, printed p.89–91 (cites “PTOL. APHO.” — attribution ≠ consensus)
+- I.19 terms/aspects, printed ~p.105 (Archive.org 1647/1659 text): partile/platick, planetary moiety orbs (two tables), imperfect enmity vs perfect hatred
+
+**Valens, Anthologies**, Riley unperfected English (paraphrase only; Greek PD):
+
+- I.1 Nature of the Stars (seven planets)
+- I.2 Nature of the Twelve Signs (Aries opened; fiery *and* watery weather)
+- I.3 50 terms — **dignity**, not Layer 2; not copied (Foundation §2.5)
+- IX The XII Places (Riley 2K;3P)
 
 ### Collisions already logged (do not “fix”)
 
@@ -127,8 +126,16 @@ Saturn is deliberately poor vs modern astrology: cooling quality / cold / drynes
 11. Lilly Northern list in the same chapter says six signs but names five (Leo omitted in this scan). Commanding list on p.91 is the compared grouping.
 12. Lilly long/short ascension is rising-time technique; opened list puts Aquarius in both — not normalized as Layer 2 meaning.
 13. Layer 2 required psych slots (`motivation` / `strengths` / `excess` / `deficiency` / `behavioral_tendencies`) unattested classically — **do not materialize 12 sign objects**.
+14. Valens I.1 is a topical/significator catalog, not Ptolemy/Lilly elemental qualities. Do not average into `function`.
+15. Saturn dryness: Ptolemy/Lilly secondary dry vs Valens injuries from cold **and moisture**.
+16. Valens malefics-in-sect can bestow good — not added to the compared “traditionally malefic” lemma.
+17. Mercury convertibility now has Valens as a third compared row; native cold/dry vs alternate dry/moist still unresolved.
+18. Moon/Venus temperature still unresolved: Valens I.1 does not attest heat or cold.
+19. Aries element: Lilly fire vs Ptolemy winds vs Valens fiery *and* watery weather. Do not compare fire.
+20. Houses: Valens IX vs Lilly I.7 — compared on thin topics (life, brothers, marriage…). Enemies: Lilly VII public + XII private vs Valens XII. Servants: Lilly VI vs Valens XII slaves. Derived-place rotation has no schema slot.
+21. Lilly I.19: conjunction “very improperly” an aspect; orbs are planetary moieties, two tables from memory — not an IL aspect field.
 
-CORE cannot be scored yet (only two classical school classes opened). Do not teach “Saturn = structure” as CORE.
+CORE cannot be scored yet (still only `source_class=classical`, three authors). Do not teach “Saturn = structure” as CORE.
 
 ---
 
@@ -138,9 +145,8 @@ CORE cannot be scored yet (only two classical school classes opened). Do not tea
 
 Useful next opens (optional, not a backlog to invent from memory):
 
-- Lilly ~p.105 terms/aspects table (still unopened; noted in aspect `gap_notes`)
-- Valens *Anthologies* (in corpus, not opened)
-- Skyscript / Houlding (traditional ontology; paraphrase, no scrape)
+- Remaining Valens I.2 signs (Taurus–Pisces) — claims only, no objects
+- Skyscript / Houlding (traditional ontology; paraphrase, no scrape) — first **non-classical** school class
 - Greene / Hand / Sasportas / Arroyo / George — **only after those books are actually opened**
 
 Do **not**:
@@ -174,8 +180,9 @@ Author for commits (do not `git config`): `TodayFlow Agent <agent@todayflow.app>
 - no surface keys
 - no `evidence_tier: core` yet
 - aspects: geometry compared; `requires_action is False` cannot be `active`
-- houses: Lilly only
-- Aries fiery remains `school_specific`, not compared to Ptolemy fire
+- houses: Lilly `domain` text remains; Valens compared on thin lemmas; derived-place / enemy-house / servant-house collisions logged
+- Aries fiery remains `school_specific`, not compared to Ptolemy fire **or** Valens fire (Valens also watery)
+- Lilly I.19 orbs not copied onto aspect objects
 
 ---
 
@@ -203,8 +210,8 @@ Canon: docs/astrology/INTERPRETATION_LIBRARY_V1.md
 LOCKED: sequence IL-0✅ → IL-1 now → IL-2 rules → IL-3 engine → IL-4 expression.
 Do not polish the IL document. Do not reopen methodology/ontology/schema.
 Do not materialize 12 sign objects. Do not set status=active.
-Do not mix Profile/Trust/landing into IL commits.
+Do not mix Profile/Trust/landing/motion into IL commits.
 
-First: if 1.3.8 activation gates are still uncommitted, commit those six IL files only.
-Then: ingest only newly opened loci (same claims → object pipeline). Next value is real collisions, not a modern average.
+1.3.8 activation gates are committed. v1.3.8 is closed (draft→active gates, not IL-1 re-ontology).
+Ingest only newly opened loci (same claims → object pipeline). Next value is real collisions, not a modern average.
 ```

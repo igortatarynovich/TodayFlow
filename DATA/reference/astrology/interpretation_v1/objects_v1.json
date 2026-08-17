@@ -265,6 +265,22 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "positive_expression"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.mercury.convertible",
+          "locus": "Anthologies Book I ch.1 Nature of the Stars",
+          "original_claim": "Mercury's effects go in many directions with changes of the zodiac and interactions of the stars; outcomes are capricious.",
+          "normalized_claim": "Mercury takes colour from what it joins",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
         }
       ]
     },
@@ -729,6 +745,22 @@
           "field": "positive_expression",
           "reviewer": null,
           "reviewed_at": null
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.saturn.solitariness",
+          "locus": "Anthologies Book I ch.1 Nature of the Stars",
+          "original_claim": "Saturn makes those born under him solitary, care-worn, secretive, and associated with bereavement, bachelors, and widows.",
+          "normalized_claim": "Saturn signifies solitude and withdrawal",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "themes"
         }
       ]
     },
@@ -804,6 +836,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.01.life",
+          "locus": "Book I Chapter VII First House (1659 p.50–51)",
+          "original_claim": "The first house signifies life, stature, colour, complexion, form and shape of the querent or native.",
+          "normalized_claim": "the first place concerns life",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.01.life",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place I: life, the basis of years, the psychic spirit — the Ascendant itself.",
+          "normalized_claim": "the first place concerns life",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -878,6 +942,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.02.livelihood",
+          "locus": "Book I Chapter VII Second House (1659 p.51–52)",
+          "original_claim": "From this house is required judgment of estate, wealth or poverty, removable goods, money lent, profit or loss.",
+          "normalized_claim": "the second place concerns livelihood and property",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.02.livelihood",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place II: livelihood, income from property.",
+          "normalized_claim": "the second place concerns livelihood and property",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -954,6 +1050,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.03.brothers",
+          "locus": "Book I Chapter VII Third House (1659 p.52)",
+          "original_claim": "Signification of brethren, sisters, cousins, kindred, neighbours, small inland journeys, epistles, letters, rumours, messengers.",
+          "normalized_claim": "the third place concerns brothers",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.03.brothers",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place III: concerning the life of brothers. It is also the Place of the Goddess and the Queen.",
+          "normalized_claim": "the third place concerns brothers",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -1030,6 +1158,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.04.parents_property",
+          "locus": "Book I Chapter VII Fourth House (1659 p.52–53)",
+          "original_claim": "Fathers; lands, houses, tenements, inheritances, tillage; treasures hidden; the determination or end of any thing.",
+          "normalized_claim": "the fourth place concerns parents and property",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.04.parents_property",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place IV: the life of parents, religious and secret matters, estates, property, and treasure-troves.",
+          "normalized_claim": "the fourth place concerns parents and property",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -1106,6 +1266,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.05.children",
+          "locus": "Book I Chapter VII Fifth House (1659 p.53)",
+          "original_claim": "Children, embassadors, a woman with child, banquets, ale-houses, taverns, plays; house of pleasure, delight and merriment.",
+          "normalized_claim": "the fifth place concerns children",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.05.children",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place V: the life of children; the Good Fortune.",
+          "normalized_claim": "the fifth place concerns children",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -1183,6 +1375,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.06.illness",
+          "locus": "Book I Chapter VII Sixth House (1659 p.53–54)",
+          "original_claim": "Servants, lesser cattle, sickness and its quality and cause, whether curable, short or long; uncles.",
+          "normalized_claim": "the sixth place concerns illness and injury",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.06.illness",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place VI: injuries, illness, and afflicting crises.",
+          "normalized_claim": "the sixth place concerns illness and injury",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -1262,6 +1486,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.07.marriage",
+          "locus": "Book I Chapter VII Seventh House (1659 p.54)",
+          "original_claim": "Marriage, the person inquired after, love questions, public enemies, the defendant, quarrels, duels, lawsuits, thieves, wives, sweethearts.",
+          "normalized_claim": "the seventh place concerns marriage",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.07.marriage",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place VII: the Marriage-bringer of a nativity; concerning the life of women.",
+          "normalized_claim": "the seventh place concerns marriage",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -1339,6 +1595,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.08.death",
+          "locus": "Book I Chapter VII Eighth House (1659 p.54–55)",
+          "original_claim": "Estate of men deceased, death, wills, legacies, dowry of the wife, portion of the maid; fear and anguish of mind.",
+          "normalized_claim": "the eighth place concerns death",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.08.death",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place VIII: this place concerns death.",
+          "normalized_claim": "the eighth place concerns death",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -1413,6 +1701,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.09.travel_divine",
+          "locus": "Book I Chapter VII Ninth House (1659 p.55)",
+          "original_claim": "Voyages or long journeys beyond seas; religious men; dreams, visions, foreign countries, books, learning, church livings.",
+          "normalized_claim": "the ninth place concerns foreign travel and the divine",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.09.travel_divine",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place IX: foreign lands, the God, the King, prophecy, and money matters.",
+          "normalized_claim": "the ninth place concerns foreign travel and the divine",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -1490,6 +1810,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.10.occupation",
+          "locus": "Book I Chapter VII Tenth House (1659 p.55)",
+          "original_claim": "Kings, princes, judges, commanders, magistracy; mothers; honour, preferment, dignity, office; the profession or trade; kingdoms.",
+          "normalized_claim": "the tenth place concerns occupation and rank",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.10.occupation",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place X: concerning occupation and rank.",
+          "normalized_claim": "the tenth place concerns occupation and rank",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -1565,6 +1917,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.11.friends",
+          "locus": "Book I Chapter VII Eleventh House (1659 p.55–56)",
+          "original_claim": "Friends and friendship, hope, trust, confidence, praise or dispraise, fidelity or falseness of friends.",
+          "normalized_claim": "the eleventh place concerns friends",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.11.friends",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place XI: the Good Daimon; friends, desires, and acquisition.",
+          "normalized_claim": "the eleventh place concerns friends",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "domain"
         }
       ]
     },
@@ -1640,6 +2024,22 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "people"
+        },
+        {
+          "source_id": "src.classical.valens_anthologies",
+          "source_class": "classical",
+          "author": "Vettius Valens / Mark Riley trans.",
+          "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.house.12.valens_enemies",
+          "locus": "Anthologies Book IX The XII Places (Riley 2K;3P)",
+          "original_claim": "Place XII: enemies, slaves, and afflicting crises.",
+          "normalized_claim": "Valens' twelfth place is enemies, slaves, and afflicting crises",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "domain"
         }
       ]
     },
@@ -1713,6 +2113,54 @@
           "evidence_tier": "supported",
           "review_status": "compared",
           "field": "angle"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.aspect.conjunction.improper",
+          "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105)",
+          "original_claim": "The strongest configurations are sextile, square, trine, opposition; conjunction is called an aspect very improperly.",
+          "normalized_claim": "Lilly I.19: conjunction is not properly an aspect",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "interaction"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.aspect.conjunction.lilly19_quality",
+          "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105)",
+          "original_claim": "Conjunctions are good or bad as the planets in conjunction are friends or enemies to one another.",
+          "normalized_claim": "Lilly I.19: conjunction quality follows whether the bodies are friends or enemies",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "interaction"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.aspect.conjunction.partile_platick",
+          "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105–107)",
+          "original_claim": "A partile aspect is exact in degree; a platick aspect is within the moiety of both planets' orbs.",
+          "normalized_claim": "Lilly I.19: partile is exact; platick uses planetary moiety orbs",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "intensity_rule"
         }
       ]
     },
@@ -1785,6 +2233,22 @@
           "evidence_tier": "supported",
           "review_status": "compared",
           "field": "angle"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.aspect.sextile.lilly19_unity",
+          "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105)",
+          "original_claim": "Sextile and trine are arguments of love, unity and friendship; the trine is more forcible.",
+          "normalized_claim": "Lilly I.19: sextile is unity/friendship, weaker than trine",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "interaction"
         }
       ]
     },
@@ -1858,6 +2322,22 @@
           "evidence_tier": "supported",
           "review_status": "compared",
           "field": "angle"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.aspect.square.imperfect_enmity",
+          "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105)",
+          "original_claim": "The quartile aspect is a sign of imperfect enmity; reconciliation may still be possible.",
+          "normalized_claim": "Lilly I.19 classes square as imperfect enmity",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "interaction"
         }
       ]
     },
@@ -1930,6 +2410,22 @@
           "evidence_tier": "supported",
           "review_status": "compared",
           "field": "angle"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.aspect.trine.lilly19_unity",
+          "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105)",
+          "original_claim": "Sextile and trine are arguments of love, unity and friendship; the trine is more forcible.",
+          "normalized_claim": "Lilly I.19: trine is unity/friendship, stronger than sextile",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "interaction"
         }
       ]
     },
@@ -2002,6 +2498,22 @@
           "evidence_tier": "supported",
           "review_status": "compared",
           "field": "angle"
+        },
+        {
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.aspect.opposition.perfect_hatred",
+          "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105)",
+          "original_claim": "Opposition is an aspect of perfect hatred; peace is not to be expected until the contest ends.",
+          "normalized_claim": "Lilly I.19 classes opposition as perfect hatred",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "interaction"
         }
       ]
     }

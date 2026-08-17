@@ -3,17 +3,17 @@
   "object_id": "astro.object.sun",
   "calc_entity": "astrology.planet.sun",
   "pending_source_ids": [
-    "src.classical.valens_anthologies",
     "src.traditional.skyscript",
     "src.professional.hand_planets_in_transit",
     "src.psychological.george_ancient_practice",
     "src.psychological.greene_luminaries"
   ],
   "gap_notes": [
-    "CORE cannot be scored yet: only classical sources ingested (Ptolemy, Lilly). Psychological, living-traditional, and professional schools are pending — do not backfill from model memory.",
+    "CORE cannot be scored yet: ingested sources are still classical only (Ptolemy, Lilly, Valens). Psychological, living-traditional, and professional schools pending.",
+    "Valens I.1 is a topical/significator catalog (sect, colour, taste, body parts), not Ptolemy/Lilly elemental qualities. Do not backfill heat/cold/dry/moist from Valens, and do not average catalogs into function.",
     "Benefic status conflict: Ptolemy calls the Sun of common influence with whatever it joins; Lilly says it is equivalent to a fortune if well dignified. Do not collapse to one polarity lemma.",
     "Object-level themes mix compared and school_specific lemmas. Per-lemma evidence_tier stays in this ledger; knowledge-object schema is not expanded for that.",
-    "Layer 1 requires positive_expression; it is filled from Lilly well-dignified manners only until a second school class is compared."
+    "Layer 1 requires positive_expression; it is filled from Lilly well-dignified manners only until a second school class is compared. Valens is still source_class=classical."
   ],
   "claims": [
     {
@@ -223,6 +223,22 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "tempo"
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "author": "Vettius Valens / Mark Riley trans.",
+      "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sun.valens_topics",
+      "locus": "Anthologies Book I ch.1 Nature of the Stars",
+      "original_claim": "The Sun indicates kingship, rule, intellect, public reputation, the father and master, and is of the day sect.",
+      "normalized_claim": "Valens' Sun is a topical ruler of kingship, intellect, and the father, not an elemental quality package",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "themes"
     }
   ]
 }

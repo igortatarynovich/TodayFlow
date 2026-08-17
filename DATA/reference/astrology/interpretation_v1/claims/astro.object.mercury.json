@@ -3,17 +3,18 @@
   "object_id": "astro.object.mercury",
   "calc_entity": "astrology.planet.mercury",
   "pending_source_ids": [
-    "src.classical.valens_anthologies",
     "src.traditional.skyscript",
     "src.professional.hand_planets_in_transit",
     "src.psychological.george_ancient_practice"
   ],
   "gap_notes": [
-    "CORE cannot be scored yet: only classical sources ingested (Ptolemy, Lilly). Psychological, living-traditional, and professional schools are pending — do not backfill from model memory.",
+    "CORE cannot be scored yet: ingested sources are still classical only (Ptolemy, Lilly, Valens). Psychological, living-traditional, and professional schools pending.",
+    "Valens I.1 is a topical/significator catalog (sect, colour, taste, body parts), not Ptolemy/Lilly elemental qualities. Do not backfill heat/cold/dry/moist from Valens, and do not average catalogs into function.",
+    "Valens I.1 attests convertibility (effects vary with zodiac and other stars) without a native cold/dry quality. Native-quality conflict (Ptolemy alternate dry/moist vs Lilly melancholy) is not resolved.",
     "Native-quality conflict: Ptolemy makes Mercury alternate dryness and moisture with equal vigour; Lilly says of his own nature he is cold and dry / melancholy, then takes the planet he joins. Do not collapse to one elemental lemma.",
     "Corpus has no dedicated psychological title for Mercury. Do not invent a Greene-Mercury locus.",
     "Object-level themes mix compared and school_specific lemmas. Per-lemma evidence_tier stays in this ledger; knowledge-object schema is not expanded for that.",
-    "Layer 1 requires positive_expression; it is filled from Lilly well-dignified manners only until a second school class is compared."
+    "Layer 1 requires positive_expression; it is filled from Lilly well-dignified manners only until a second school class is compared. Valens is still source_class=classical."
   ],
   "claims": [
     {
@@ -175,6 +176,22 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "shadow"
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "author": "Vettius Valens / Mark Riley trans.",
+      "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.mercury.convertible",
+      "locus": "Anthologies Book I ch.1 Nature of the Stars",
+      "original_claim": "Mercury's effects go in many directions with changes of the zodiac and interactions of the stars; outcomes are capricious.",
+      "normalized_claim": "Mercury takes colour from what it joins",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "function"
     }
   ]
 }

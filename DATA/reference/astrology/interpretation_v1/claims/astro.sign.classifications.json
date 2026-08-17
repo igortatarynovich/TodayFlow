@@ -3,7 +3,6 @@
   "object_id": "astro.sign.classifications",
   "calc_entity": "astrology.sign.classification",
   "pending_source_ids": [
-    "src.classical.valens_anthologies",
     "src.traditional.skyscript",
     "src.psychological.arroyo_four_elements",
     "src.psychological.rudhyar_personality"
@@ -18,7 +17,10 @@
     "Commanding/obeying: Lilly's Aries–Virgo vs Libra–Pisces list matches Ptolemy I.17 summer/winter semicircle grouping (compared). Ptolemy also defines a pair-relation by equal distance from the equinox; Lilly's list does not attest that geometry. Do not collapse.",
     "Ptolemy I.18 beholding/equal power (equal distance from a tropic) is not the same lemma as Lilly Antiscion (CA I.16 p.89–91). Lilly cites 'PTOL. APHO.' and adds Contrantiscion as square/opposition. Attribution is not consensus.",
     "Lilly's Northern list in the same chapter says six signs but names five (Leo omitted in this scan). The commanding list on printed p.91 is complete; that is the compared grouping.",
-    "Lilly long/short ascension is rising-time technique, not Layer 2 meaning. Opened list puts Aquarius in both columns; not normalized."
+    "Lilly long/short ascension is rising-time technique, not Layer 2 meaning. Opened list puts Aquarius in both columns; not normalized.",
+    "Valens I.2 calls Aries fiery and also by nature watery (thunder/hail weather). Do not use Valens to confirm Lilly fire, and do not collapse weather into element.",
+    "Valens I.2 Aries is tropic. That is not Ptolemy equinoctial and not Lilly moveable/cardinal. Schema still cannot store the split; do not compare.",
+    "Valens I.3 (50 terms) is bounds/dignity, not Layer 2 meaning. Left in Foundation §2.5. Not copied here."
   ],
   "claims": [
     {
@@ -260,6 +262,54 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "expression"
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "author": "Vettius Valens / Mark Riley trans.",
+      "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sign.aries.valens_masculine",
+      "locus": "Anthologies Book I ch.2 Nature of the Twelve Zodiacal Signs (Aries)",
+      "original_claim": "Aries is a masculine sign, tropic, terrestrial, governing, fiery.",
+      "normalized_claim": "Valens' Aries is masculine; diurnal alternation is not attested in this sentence",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "orientation"
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "author": "Vettius Valens / Mark Riley trans.",
+      "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sign.aries.valens_fiery",
+      "locus": "Anthologies Book I ch.2 Nature of the Twelve Zodiacal Signs (Aries)",
+      "original_claim": "Aries is listed as fiery, and also said to be by nature watery, with thunder and hail.",
+      "normalized_claim": "Valens' Aries is both fiery as a sign label and watery as weather",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "element"
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "author": "Vettius Valens / Mark Riley trans.",
+      "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sign.aries.valens_tropic",
+      "locus": "Anthologies Book I ch.2 Nature of the Twelve Zodiacal Signs (Aries)",
+      "original_claim": "Aries is tropic. From its first degree to the equinox it is stormy; the middle degrees are milder.",
+      "normalized_claim": "Valens classes Aries as tropic, not as schema-cardinal",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "mode"
     }
   ]
 }

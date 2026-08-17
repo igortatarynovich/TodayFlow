@@ -3,7 +3,6 @@
   "object_id": "astro.sign.aries",
   "calc_entity": "astrology.sign.aries",
   "pending_source_ids": [
-    "src.classical.valens_anthologies",
     "src.traditional.skyscript",
     "src.psychological.arroyo_four_elements",
     "src.psychological.rudhyar_personality"
@@ -13,7 +12,8 @@
     "Element and mode remain two-system: this Lilly QUALITY line is not Ptolemy winds / tropical-vs-equinoctial. Do not collapse into one taxonomy.",
     "Diseases, places, kingdoms, corporature from the same chapter are horary accidentalia — not copied into a sign knowledge object.",
     "Rulership/exaltation identity stays in Foundation §2.5 — not duplicated here as meaning.",
-    "CORE cannot be scored."
+    "CORE cannot be scored.",
+    "Valens I.2 opened: Aries fiery AND watery (weather). Still no Layer 2 object. Do not compare fire with Lilly."
   ],
   "claims": [
     {
@@ -31,6 +31,22 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "expression"
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "author": "Vettius Valens / Mark Riley trans.",
+      "edition": "Riley unperfected English; Kroll 1908 / Pingree 1986 Greek",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.sign.aries.valens_fiery",
+      "locus": "Anthologies Book I ch.2 Nature of the Twelve Zodiacal Signs (Aries)",
+      "original_claim": "Aries is listed as fiery, and also said to be by nature watery, with thunder and hail.",
+      "normalized_claim": "Valens' Aries is both fiery as a sign label and watery as weather",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "element"
     }
   ]
 }

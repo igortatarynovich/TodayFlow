@@ -149,6 +149,7 @@ def test_classical_seven_draft_ledgers():
         assert used_ids.isdisjoint(pending_ids)
         assert "src.classical.ptolemy_tetrabiblos" in used_ids
         assert "src.classical.lilly_christian_astrology" in used_ids
+        assert "src.classical.valens_anthologies" in used_ids
         assert all(row["evidence_tier"] != "core" for row in claims["claims"])
         assert any("CORE cannot be scored" in note for note in claims["gap_notes"])
 
@@ -159,7 +160,9 @@ def test_saturn_claims_not_schema_example():
     saturn = next(obj for obj in objects["objects"] if obj["object_id"] == "astro.object.saturn")
     assert saturn["function"] != "structure, limits, time, responsibility"
     compared = {row["concept_id"] for row in claims["claims"] if row["review_status"] == "compared"}
-    assert {"claim.saturn.cold", "claim.saturn.dry", "claim.saturn.malefic"} <= compared
+    assert {"claim.saturn.cold", "claim.saturn.dry", "claim.saturn.malefic", "claim.saturn.solitariness"} <= compared
+    malefic_ids = {row["source_id"] for row in claims["claims"] if row["concept_id"] == "claim.saturn.malefic"}
+    assert "src.classical.valens_anthologies" not in malefic_ids
     moon = json.loads((CLAIMS_DIR / "astro.object.moon.json").read_text(encoding="utf-8"))
     assert any("Temperature conflict" in note for note in moon["gap_notes"])
     mercury = json.loads((CLAIMS_DIR / "astro.object.mercury.json").read_text(encoding="utf-8"))
@@ -184,9 +187,14 @@ def test_houses_and_aspects_from_opened_loci_only():
     assert "astro.object.mc" not in by_id
     for obj in houses:
         used = {row["source_id"] for row in obj["provenance"]}
-        assert used == {"src.classical.lilly_christian_astrology"}
+        assert used == {
+            "src.classical.lilly_christian_astrology",
+            "src.classical.valens_anthologies",
+        }
         notes = json.loads((CLAIMS_DIR / f"{obj['object_id']}.json").read_text(encoding="utf-8"))["gap_notes"]
         assert any("not Ptolemy+Lilly consensus" in n for n in notes)
+        assert any("derived-place" in n for n in notes)
+        assert "src.classical.ptolemy_tetrabiblos" not in used
     for obj in aspects:
         used = {row["source_id"] for row in obj["provenance"]}
         assert used == {
@@ -246,16 +254,48 @@ def test_sign_classifications_do_not_invent_layer2_psychology():
     assert "claim.sign.commanding_equinox_pairs" not in compared
     assert "claim.sign.beholding_tropical_distance" not in compared
     assert "claim.sign.antiscion_tropical_distance" not in compared
+    assert "claim.sign.aries.valens_fiery" not in compared
     notes_joined = " ".join(claims["gap_notes"])
     assert "pair-relation" in notes_joined
     assert "Antiscion" in notes_joined
+    assert "watery" in notes_joined
     for sign in (
         "aries", "taurus", "gemini", "cancer", "leo", "virgo",
         "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces",
     ):
         sign_claims = json.loads((CLAIMS_DIR / f"astro.sign.{sign}.json").read_text(encoding="utf-8"))
         jsonschema.validate(sign_claims, schema)
-        assert all(row["source_id"] == "src.classical.lilly_christian_astrology" for row in sign_claims["claims"])
+        used = {row["source_id"] for row in sign_claims["claims"]}
+        assert "src.classical.lilly_christian_astrology" in used
+        if sign == "aries":
+            assert "src.classical.valens_anthologies" in used
+        else:
+            assert used == {"src.classical.lilly_christian_astrology"}
         assert all(row["evidence_tier"] != "core" for row in sign_claims["claims"])
         assert any("No Layer 2 object" in n for n in sign_claims["gap_notes"])
         assert not any("fiery/cardinal/equinoctial here" in n for n in sign_claims["gap_notes"])
+
+
+def test_valens_and_lilly19_collisions_not_averaged():
+    """Opened Valens / Lilly I.19 must log collisions, not rewrite draft meaning slots."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    saturn = by_id["astro.object.saturn"]
+    assert saturn["function"] == "cooling quality operating by distance from heat"
+    assert saturn["status"] == "draft"
+    saturn_claims = json.loads((CLAIMS_DIR / "astro.object.saturn.json").read_text(encoding="utf-8"))
+    assert any("cold and moisture" in n.lower() or "cold AND moisture" in n for n in saturn_claims["gap_notes"])
+    house01 = by_id["astro.house.01"]
+    assert house01["domain"] == "life, stature, and the querent's person"
+    house07 = json.loads((CLAIMS_DIR / "astro.house.07.json").read_text(encoding="utf-8"))
+    compared07 = {row["concept_id"] for row in house07["claims"] if row["review_status"] == "compared"}
+    assert "claim.house.07.marriage" in compared07
+    assert "claim.house.07.domain" not in compared07
+    square = by_id["astro.aspect.square"]
+    assert square["interaction"] == "friction"
+    assert square["requires_action"] is False
+    assert square["status"] != "active"
+    square_claims = json.loads((CLAIMS_DIR / "astro.aspect.square.json").read_text(encoding="utf-8"))
+    assert any(row["concept_id"] == "claim.aspect.square.imperfect_enmity" for row in square_claims["claims"])
+    assert any("moiet" in n.lower() for n in square_claims["gap_notes"])
+    assert not any(obj["type"] == "sign" for obj in objects["objects"])

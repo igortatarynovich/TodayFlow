@@ -182,6 +182,8 @@ v1.1: North Node · South Node · Chiron · Lilith (Mean Apogee) — identity у
 
 Не статья «Что такое Сатурн».
 
+**IL-1 fill:** Valens I.1 — topical/significator catalog (sect, colour, taste), не Ptolemy/Lilly elemental qualities. Saturn injuries from cold+moisture не схлопывать в dryness. `function` черновиков не усреднять.
+
 ### Layer 2 — Signs
 
 Aries → Pisces.
@@ -192,7 +194,7 @@ Identity (ruler, dates) остаётся в Foundation §2.1 — **не копи
 
 **IL-1 fill:** `motivation` / `strengths` / `excess` / `deficiency` / `behavioral_tendencies` не «ошибка схемы». Это слоты более позднего интерпретационного слоя — ждать локусы (Arroyo, Rudhyar, …). Классические деления знака (Ptolemy I.14–I.15, I.21; Lilly CA I.16) их не подтверждают. 12 sign objects не материализовать искусственно.
 
-`element` и `mode` **не унифицировать** задним числом: Lilly fiery/earthly/airy/watry и Ptolemy winds/rulers — разные системы; Ptolemy tropical/equinoctial ≠ Lilly moveable/cardinal. Mismatch со schema (`cardinal|fixed|mutable`, четыре стихии) — gap_note, не silent collapse.
+`element` и `mode` **не унифицировать** задним числом: Lilly fiery/earthly/airy/watry и Ptolemy winds/rulers — разные системы; Ptolemy tropical/equinoctial ≠ Lilly moveable/cardinal. Valens I.2 Aries = fiery *и* watery (weather) — не подтверждение Lilly fire. Mismatch со schema (`cardinal|fixed|mutable`, четыре стихии) — gap_note, не silent collapse.
 
 **Commanding / obeying:** группировка summer/winter (Aries–Virgo vs Libra–Pisces) compared (Ptolemy I.17 + Lilly CA I.16 p.91). Pair-relation Ptolemy I.17 (равное расстояние от равноденствия) Lilly list не подтверждает — не схлопывать. Ptolemy I.18 beholding ≠ Lilly Antiscion/Contrantiscion; ссылка Lilly на «PTOL. APHO.» не consensus.
 
@@ -202,7 +204,7 @@ Identity (ruler, dates) остаётся в Foundation §2.1 — **не копи
 
 Поля: `domain` · `internal_meaning` · `external_manifestations[]` · `people[]` · `activities[]` · `resources[]` · `risks[]`.
 
-**IL-1 fill:** topical houses в draft-объектах = Lilly CA I.7. То, что Lilly ссылается на «Ptolomeian Doctrine», не есть Ptolemy+Lilly consensus. Compared — только после открытого topical locus у Ptolemy.
+**IL-1 fill:** draft-объект `domain` остаётся Lilly CA I.7 (не усреднять). Valens IX XII Places compared только по тонким lemmas (life, brothers, marriage…). Derived-place rotation и VIII-place note — gap, схему не расширять. Lilly «Ptolomeian Doctrine» ≠ Ptolemy+Lilly; Ptolemy I.13 по-прежнему не 12 topical houses.
 
 ### Layer 4 — Aspects (major only, v1)
 
@@ -220,7 +222,7 @@ Conjunction · Opposition · Square · Trine · Sextile.
 
 Таблица — **смысл слота**, когда локус его подтвердит. Не default для копирования в объект.
 
-**IL-1 fill:** Ptolemy I.16 даёт только harmonious / discordant. Lilly CA I.1 даёт good / enmity / concord — другая качественная система; в `object.interaction` не копировать. Geometry 0/60/90/120/180 compared. `requires_action` в схеме — boolean (нет `unknown` / `not_evidenced`). `false` = свойство **не установлено данным локусом**, не утверждение «square не требует действия». Схему из-за этого не расширять. **Activation gate:** `status: active` с таким boolean запрещён, пока representation или runtime-контракт не снимут двусмысленность.
+**IL-1 fill:** Ptolemy I.16 даёт только harmonious / discordant. Lilly CA I.1 даёт good / enmity / concord — другая качественная система; в `object.interaction` не копировать. Lilly CA I.19 (p.105) уточняет: square = imperfect enmity, opposition = perfect hatred; orbs = planetary moieties (две таблицы, from memory), не aspect-orbs. В объект не копировать. Geometry 0/60/90/120/180 compared. `requires_action` в схеме — boolean (нет `unknown` / `not_evidenced`). `false` = свойство **не установлено данным локусом**, не утверждение «square не требует действия». Схему из-за этого не расширять. **Activation gate:** `status: active` с таким boolean запрещён, пока representation или runtime-контракт не снимут двусмысленность.
 
 Миноры (Foundation §2.4) — не Layer 4 v1.
 
@@ -538,6 +540,7 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 10. Changelog
 
+- **1.3.9 (2026-08-17)** — IL-1 ingest (no methodology change): Valens I.1 planets, I.2 Aries, IX XII Places; Lilly CA I.19 orbs/partile. Collisions logged; objects not averaged; nothing `active`; no sign objects.
 - **1.3.8 (2026-08-17)** — Activation gates (not methodology): unevidenced `requires_action: false` cannot become `active`; IL-1 Layer 5 gold list = curated candidates, IL-2 may demote to composed. User-facing provenance bands later via Trust Layer. No sequence/ontology change.
 - **1.3.7 (2026-08-17)** — Public brand/trust language moved to [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md) (not an IL methodology change). Swiss/DE431 claim facts in Foundation §1.4.1.
 - **1.3.6 (2026-08-17)** — Ptolemy I.17 + Lilly CA I.16 p.91: commanding *grouping* compared; equinox pair-relation stays school_specific. Ptolemy I.18 beholding not collapsed into Lilly Antiscion. Copy-paste Aries gap_note removed from other sign QUALITY files. No Layer 2 objects. No methodology change.
