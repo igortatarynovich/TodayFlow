@@ -1,9 +1,11 @@
 # IL-1 handoff — next agent
 
 **Date:** 2026-08-17  
-**Owner intent:** continue **Interpretation Library IL-1 ingest**. Do not polish the methodology document. Do not reopen sequence / ontology / evidence.
+**Owner intent:** IL-1 catalog is **frozen for conceptual additions**. Transfer SHA: **`ecb4cbe4`**. Next agent opens this file, receives a physically opened Greene/Hand locus, and continues `locus → claims → normalization → draft`. Do not redesign TodayFlow. Do not polish the methodology document. Do not reopen sequence / ontology / evidence.
 
-**Next school-class (2026-08-17):** psychological or professional (**Greene / Hand**), *when that book is physically opened*. Do not pad object count with more classical/traditional loci as a substitute. Houlding remaining houses / Valens I.2 claims-only remain valid if those books are not open — they are not the next *school-class* signal.
+**Catalog state (correct, not a gap):** 24 draft / 0 active / 0 sign objects / CORE unscored.
+
+**Next school-class:** first physically opened **Greene or Hand**. That experiment tests whether the Canon can hold historical and modern semantics side by side without rewriting the first. Until that locus is in hand, do not add more classical/traditional ingest as busywork.
 
 Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.10** first traditional school_class; `876e6f98`).  
 Today Meaning SoT remains [`docs/today/TODAY_CONTENT_PIPELINE_V1.md`](../today/TODAY_CONTENT_PIPELINE_V1.md). IL is pipeline step 2 lookup only.
@@ -17,10 +19,11 @@ Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
 1. Read this file + IL § Sequence + **Activation gates** + §6 ingest + Layer 1–4 fill-rules.
 2. 1.3.8 activation gates are **committed** (`3c62a5c6`). Do not reopen them.
 3. IL ingest lives on short-lived `il/il-1-ingest` (from that tip). Do **not** mix Profile v2 / Foundation UI / landing / Trust / motion into IL commits. Working tree on the host often has those dirty; leave them.
-4. Then ingest **only newly opened loci**. Highest-value next class = psychological/professional. Do not grow the catalog with extra classical/traditional rows just to raise the object count.
+4. If a Greene/Hand locus is in hand: ingest it (`locus → claims → normalization → draft`). If not: **stop**. Do not invent work.
 
 v1.3.8 is closed: `requires_action` and Layer 5 stay draft→active gates, not IL-1 re-ontology.  
-`876e6f98` is closed as first traditional class: classical layer not rewritten.
+`876e6f98` is closed as first traditional class: classical layer not rewritten.  
+`ecb4cbe4` is the transfer point: next school-class = psychological/professional; 24/0/CORE unscored is correct.
 
 ---
 
@@ -65,7 +68,7 @@ Public brand copy SoT: [`docs/content/TODAYFLOW_TRUST_LAYER.md`](../content/TODA
 | `3c62a5c6` | Activation gates 1.3.8 (requires_action / Layer 5 candidates) + handoff |
 | `5dee20a5` | Trust Layer (brand) — **not** IL ingest |
 
-IL ingest after 1.3.8: branch `il/il-1-ingest`. `edc37221` Valens/Lilly I.19. `876e6f98` Houlding traditional class.
+IL ingest after 1.3.8: branch `il/il-1-ingest`. `edc37221` Valens/Lilly I.19. `876e6f98` Houlding traditional class. **`ecb4cbe4` = transfer** (next class = Greene/Hand; do not pad).
 
 ### Catalog (all `draft`, nothing `active`)
 
@@ -157,9 +160,11 @@ CORE cannot be scored yet (classical + traditional opened; psychological and pro
 
 ## 3. What to do next
 
-**Highest-value next open:** Greene (*Saturn* / luminaries / relating) or Hand (*Planets in Transit* / *Horoscope Symbols*) — **only from a physically opened locus**. That is the first `psychological` / `professional` school_class. Test: can the Canon hold cold/dry/malefic *and* structure/maturation/boundaries as distinct layers, without rewriting one as the other.
+**Stop until a Greene or Hand locus is physically opened.** Then ingest that locus. Do not add conceptual layers, school classes, fill-rules, or extra classical/traditional rows before that.
 
-**If those books are not open:** remaining Houlding house extracts (2–5, 8–11) and Valens I.2 signs (claims-only, no objects) are still correct work. They are **not** a substitute for the next school-class.
+The experiment is not object count. It is whether the Canon can keep `cold/dry/malefic` beside `structure/maturation/reality/boundaries` without rewriting the first as the second.
+
+Greene: *Saturn* / luminaries / relating. Hand: *Planets in Transit* / *Horoscope Symbols*. First opened page is enough. Then the ingest recipe below.
 
 Do **not**:
 
@@ -226,8 +231,8 @@ Do not polish the IL document. Do not reopen methodology/ontology/schema.
 Do not materialize 12 sign objects. Do not set status=active.
 Do not mix Profile/Trust/landing/motion into IL commits.
 
-1.3.8 gates and first traditional class (Houlding, 876e6f98) are closed.
-Next school-class = Greene/Hand when physically opened (psychological/professional).
-Do not pad classical/traditional loci to raise the object count.
-24 drafts / 0 active / CORE unscored is correct until that comparison.
+Transfer SHA: ecb4cbe4. Catalog 24 draft / 0 active / 0 signs / CORE unscored is correct.
+Do not add conceptually. Do not pad classical/traditional ingest.
+When a Greene/Hand locus is in hand: locus → claims → normalization → draft.
+Do not redesign TodayFlow.
 ```
