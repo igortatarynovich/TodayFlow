@@ -133,7 +133,7 @@ def test_classical_seven_draft_ledgers():
         "astro.object.saturn",
     }
     by_id = {obj["object_id"]: obj for obj in objects["objects"]}
-    assert set(by_id) == expected
+    assert expected <= set(by_id)
     for object_id in expected:
         claims = json.loads((CLAIMS_DIR / f"{object_id}.json").read_text(encoding="utf-8"))
         jsonschema.validate(claims, claims_schema)
@@ -164,3 +164,49 @@ def test_saturn_claims_not_schema_example():
     assert any("Temperature conflict" in note for note in moon["gap_notes"])
     mercury = json.loads((CLAIMS_DIR / "astro.object.mercury.json").read_text(encoding="utf-8"))
     assert any("Native-quality conflict" in note for note in mercury["gap_notes"])
+
+
+def test_houses_and_aspects_from_opened_loci_only():
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    houses = [obj for obj in objects["objects"] if obj["layer"] == 3]
+    aspects = [obj for obj in objects["objects"] if obj["layer"] == 4]
+    assert {obj["object_id"] for obj in houses} == {f"astro.house.{i:02d}" for i in range(1, 13)}
+    assert {obj["object_id"] for obj in aspects} == {
+        "astro.aspect.conjunction",
+        "astro.aspect.sextile",
+        "astro.aspect.square",
+        "astro.aspect.trine",
+        "astro.aspect.opposition",
+    }
+    assert not any(obj["type"] == "sign" for obj in objects["objects"])
+    assert "astro.object.asc" not in by_id
+    assert "astro.object.mc" not in by_id
+    for obj in houses:
+        used = {row["source_id"] for row in obj["provenance"]}
+        assert used == {"src.classical.lilly_christian_astrology"}
+        notes = json.loads((CLAIMS_DIR / f"{obj['object_id']}.json").read_text(encoding="utf-8"))["gap_notes"]
+        assert any("not Ptolemy+Lilly consensus" in n for n in notes)
+    for obj in aspects:
+        used = {row["source_id"] for row in obj["provenance"]}
+        assert used == {"src.classical.ptolemy_tetrabiblos"}
+        assert obj["requires_action"] is False
+        notes = json.loads((CLAIMS_DIR / f"{obj['object_id']}.json").read_text(encoding="utf-8"))["gap_notes"]
+        assert any("does not establish the property" in n for n in notes)
+    square = by_id["astro.aspect.square"]
+    assert square["interaction"] == "friction"
+    assert square["angle"] == 90
+
+
+def test_sign_classifications_do_not_invent_layer2_psychology():
+    claims = json.loads((CLAIMS_DIR / "astro.sign.classifications.json").read_text(encoding="utf-8"))
+    schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    jsonschema.validate(claims, schema)
+    notes = " ".join(claims["gap_notes"])
+    assert "No Layer 2 sign objects yet" in notes
+    assert "later interpretive layer" in notes
+    assert "Element conflict" in notes
+    assert "Mode conflict" in notes
+    compared = {row["concept_id"] for row in claims["claims"] if row["review_status"] == "compared"}
+    assert "claim.sign.masculine_alternate" in compared
+    assert "claim.sign.fire_triangle_elements" not in compared

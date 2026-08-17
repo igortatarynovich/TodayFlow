@@ -1,0 +1,84 @@
+{
+  "contract_version": "astrology_claims_v1",
+  "object_id": "astro.house.05",
+  "calc_entity": "astrology.house.05",
+  "pending_source_ids": [
+    "src.classical.valens_anthologies",
+    "src.traditional.skyscript",
+    "src.traditional.houlding_houses",
+    "src.psychological.sasportas_twelve_houses",
+    "src.psychological.george_ancient_practice"
+  ],
+  "gap_notes": [
+    "CORE cannot be scored: 12 topical houses are attested here from Lilly CA I.7 only.",
+    "Ptolemy Tetrabiblos I.13 gives four-angle temperament (east dry, south hot, west moist, north cold), not 12 topical houses. Lilly ascribes this house list to 'Ptolomeian Doctrine' (CA I.7 close). A source citing Ptolemy is not Ptolemy+Lilly consensus. Attribution unverified from the opened Tetrabiblos locus. Do not mark compared.",
+    "No ASC/MC Layer-1 identity objects: I.13 is directional temperament, not persona/status packages.",
+    "Layer 3 required slots filled only with Lilly's topical lists. Do not add modern 'psychological houses' (self-actualization, etc.)."
+  ],
+  "claims": [
+    {
+      "concept_id": "claim.house.05.domain",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.78",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Fifth House (1659 p.53)",
+      "original_claim": "Children, embassadors, a woman with child, banquets, ale-houses, taverns, plays; house of pleasure, delight and merriment.",
+      "normalized_claim": "children, pleasure, and messengers of state",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "domain"
+    },
+    {
+      "concept_id": "claim.house.05.people",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.78",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Fifth House (1659 p.53)",
+      "original_claim": "Children; messengers or agents for a republic.",
+      "normalized_claim": "children; embassadors",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "people"
+    },
+    {
+      "concept_id": "claim.house.05.risks",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.78",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Fifth House (1659 p.53)",
+      "original_claim": "Wholly unfortunate by Mars or Saturn, who therein show disobedient and untoward children.",
+      "normalized_claim": "disobedient children when Mars or Saturn occupy",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "risks"
+    },
+    {
+      "concept_id": "claim.house.05.place",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.78",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Fifth House (1659 p.53)",
+      "original_claim": "Masculine succedent house; Venus joys here.",
+      "normalized_claim": "Masculine succedent house; Venus joys here.",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "internal_meaning"
+    }
+  ]
+}

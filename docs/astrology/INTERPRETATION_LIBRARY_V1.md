@@ -1,6 +1,6 @@
 # Interpretation Library v1 — ontology / schema
 
-**Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (7 draft objects: classical seven; nothing `active`).  
+**Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (24 draft objects: classical seven · 12 houses · 5 major aspects; no sign objects yet; nothing `active`).  
 **Версия:** 1.3 (2026-08-17).  
 **Методология:** **LOCKED** до закрытия IL-1 (~100 объектов). Не переоткрывать схему слоёв / evidence / provenance / ingest, пока модель не столкнётся с источниками.  
 **Владелец:** Product + Research.  
@@ -178,11 +178,17 @@ Aries → Pisces.
 
 Identity (ruler, dates) остаётся в Foundation §2.1 — **не копировать** в IL.
 
+**IL-1 fill:** `motivation` / `strengths` / `excess` / `deficiency` / `behavioral_tendencies` не «ошибка схемы». Это слоты более позднего интерпретационного слоя — ждать локусы (Arroyo, Rudhyar, …). Классические деления знака (Ptolemy I.14–I.15, I.21; Lilly CA I.16) их не подтверждают. 12 sign objects не материализовать искусственно.
+
+`element` и `mode` **не унифицировать** задним числом: Lilly fiery/earthly/airy/watry и Ptolemy winds/rulers — разные системы; Ptolemy tropical/equinoctial ≠ Lilly moveable/cardinal. Mismatch со schema (`cardinal|fixed|mutable`, четыре стихии) — gap_note, не silent collapse.
+
 ### Layer 3 — Houses
 
 1–12.
 
 Поля: `domain` · `internal_meaning` · `external_manifestations[]` · `people[]` · `activities[]` · `resources[]` · `risks[]`.
+
+**IL-1 fill:** topical houses в draft-объектах = Lilly CA I.7. То, что Lilly ссылается на «Ptolomeian Doctrine», не есть Ptolemy+Lilly consensus. Compared — только после открытого topical locus у Ptolemy.
 
 ### Layer 4 — Aspects (major only, v1)
 
@@ -197,6 +203,10 @@ Conjunction · Opposition · Square · Trine · Sextile.
 | opposition | polarization / projection |
 | trine | easy flow / access |
 | sextile | opportunity requiring participation |
+
+Таблица — **смысл слота**, когда локус его подтвердит. Не default для копирования в объект.
+
+**IL-1 fill:** Ptolemy I.16 даёт только harmonious / discordant. `requires_action` в схеме — boolean (нет `unknown` / `not_evidenced`). `false` = свойство **не установлено данным локусом**, не утверждение «square не требует действия». Схему из-за этого не расширять.
 
 Миноры (Foundation §2.4) — не Layer 4 v1.
 
@@ -406,8 +416,10 @@ IL-1 research artifacts (pipeline, not a new ontology): `DATA/reference/astrolog
 
 Разница обязательна:
 
-- CORE: *Saturn связан с ограничением / структурой*
+- Пока CORE по Saturn **не scored**: открыты только classical loci (холод / сухость / malefic). *Structure / limits / maturity* — не CORE до Greene/Hand (или иного открытого психологического/профессионального локуса).
 - не CORE: *Saturn square Venus значит, что партнёр отдалится*
+
+Канон — не усреднённая «одна астрология». Provenance держит слои различимыми. Когда придут Greene, Hand, Sasportas, Arroyo, George: смотреть, что с классическим claim произошло (продолжено / переосмыслено / психологизировано / заменено). Классические lemmas **не затирать** современным пакетом.
 
 Engine: primary theme только из `core` ∪ `supported`. `editorial` не может быть единственным основанием пользовательского утверждения.
 
@@ -456,7 +468,7 @@ LLM в этом пайплайне **может** помогать извлек�
 | ID | Работа | Выход |
 |----|--------|--------|
 | **IL-0** | Foundation: корпус, evidence, provenance, declared gates | ✅ 2026-08-17 |
-| **IL-1** | ~100 surface-neutral objects из корпуса + review | in progress (7 drafts: classical seven) |
+| **IL-1** | ~100 surface-neutral objects из корпуса + review | in progress (24 drafts: planets 7 · houses 12 · aspects 5; signs withheld) |
 | **IL-2** | Composition rules (не полный каталог пар) | after IL-1 |
 | **IL-3** | Interpretation Engine (sky → themes) | after IL-2 |
 | **IL-4** | Expression (LLM / voice per surface) | after IL-3 |
@@ -510,6 +522,8 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 10. Changelog
 
+- **1.3.4 (2026-08-17)** — Fill-rules from corpus collisions (no schema change): Layer 2 psych slots wait later loci; element/mode are distinct descriptive systems; houses = Lilly I.7 only; `requires_action: false` = not evidenced. Do not polish existing objects to a modern average.
+- **1.3.3 (2026-08-17)** — Houses 1–12 from Lilly CA I.7 (not compared to Ptolemy I.13). Major aspects from Ptolemy I.16/I.27; `requires_action` left false. Sign *objects* withheld: Layer 2 required psych slots unattested; element/mode conflicts logged. No ASC/MC/outers. No methodology change.
 - **1.3.2 (2026-08-17)** — IL-1 classical seven drafts (Sun–Saturn) from Ptolemy I.4–I.7 + Lilly CA I.8–I.14. Concrete gaps: Moon/Venus temperature mismatch; Mercury native quality vs convertibility; CORE still blocked. No methodology change.
 - **1.3.1 (2026-08-17)** — IL-1 started. First draft `astro.object.saturn` from Ptolemy I.4–I.5 + Lilly CA I.8 (claims ledger → normalized object). CORE not scored. No methodology change.
 - **1.3 (2026-08-17)** — Swiss stays in IL runtime stack; only *licensing* is a parallel gate. IL-1 objects must map to calc-layer entities.

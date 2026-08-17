@@ -1,0 +1,52 @@
+{
+  "contract_version": "astrology_claims_v1",
+  "object_id": "astro.aspect.square",
+  "calc_entity": "astrology.aspect.square",
+  "pending_source_ids": [
+    "src.classical.valens_anthologies",
+    "src.traditional.skyscript",
+    "src.traditional.houlding_aspects",
+    "src.professional.tierney_aspect_analysis",
+    "src.classical.lilly_christian_astrology"
+  ],
+  "gap_notes": [
+    "CORE cannot be scored: geometry and harmonious/discordant labels are from Ptolemy I.16 (conjunction from I.27). Lilly's chapter of terms/aspects (CA ~p.105) is not opened this pass — listed pending, not backfilled.",
+    "Ptolemy I.16 names opposition, trine, quartile, sextile. Conjunction is bodily application in I.27, not a sign-configuration in I.16.",
+    "Ptolemy's only qualitative split is harmonious (trine, sextile: same sex) vs discordant (quartile, opposition: different sex). Schema interaction enum is finer. Mapping is the thinnest fit; do not add modern 'growth edge' or 'opportunity mindset'.",
+    "requires_action is boolean in schema (no unknown/not_evidenced). false here means the opened locus does not establish the property — not the assertion 'this aspect does not require action'. Do not copy the Layer 4 table ('square requires action') into the object without a locus. Schema not expanded."
+  ],
+  "claims": [
+    {
+      "concept_id": "claim.aspect.square.discordant",
+      "source_id": "src.classical.ptolemy_tetrabiblos",
+      "source_class": "classical",
+      "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+      "edition": "Ashmand 1822; Gutenberg ebook 70850",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Tetrabiblos Book I Chapter XVI (Ashmand p.24–26)",
+      "original_claim": "Quadrate distance of ninety degrees is a configuration. Opposition and quartile are discordant, made between signs of different sexes.",
+      "normalized_claim": "Square is a 90-degree configuration classed discordant",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "interaction"
+    },
+    {
+      "concept_id": "claim.aspect.square.angle",
+      "source_id": "src.classical.ptolemy_tetrabiblos",
+      "source_class": "classical",
+      "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+      "edition": "Ashmand 1822; Gutenberg ebook 70850",
+      "school": "hellenistic",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Tetrabiblos Book I Chapter XVI (Ashmand p.24–26)",
+      "original_claim": "Quadrate distance of ninety degrees is a configuration. Opposition and quartile are discordant, made between signs of different sexes.",
+      "normalized_claim": "square is 90 degrees",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "angle"
+    }
+  ]
+}

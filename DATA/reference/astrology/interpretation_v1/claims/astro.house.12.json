@@ -1,0 +1,84 @@
+{
+  "contract_version": "astrology_claims_v1",
+  "object_id": "astro.house.12",
+  "calc_entity": "astrology.house.12",
+  "pending_source_ids": [
+    "src.classical.valens_anthologies",
+    "src.traditional.skyscript",
+    "src.traditional.houlding_houses",
+    "src.psychological.sasportas_twelve_houses",
+    "src.psychological.george_ancient_practice"
+  ],
+  "gap_notes": [
+    "CORE cannot be scored: 12 topical houses are attested here from Lilly CA I.7 only.",
+    "Ptolemy Tetrabiblos I.13 gives four-angle temperament (east dry, south hot, west moist, north cold), not 12 topical houses. Lilly ascribes this house list to 'Ptolomeian Doctrine' (CA I.7 close). A source citing Ptolemy is not Ptolemy+Lilly consensus. Attribution unverified from the opened Tetrabiblos locus. Do not mark compared.",
+    "No ASC/MC Layer-1 identity objects: I.13 is directional temperament, not persona/status packages.",
+    "Layer 3 required slots filled only with Lilly's topical lists. Do not add modern 'psychological houses' (self-actualization, etc.)."
+  ],
+  "claims": [
+    {
+      "concept_id": "claim.house.12.domain",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.81",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Twelfth House (1659 p.56)",
+      "original_claim": "Private enemies, witches, great cattle, sorrow, tribulation, imprisonments, all manner of affliction, self-undoing.",
+      "normalized_claim": "private enemies, sorrow, and self-undoing",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "domain"
+    },
+    {
+      "concept_id": "claim.house.12.people",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.81",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Twelfth House (1659 p.56)",
+      "original_claim": "Such as maliciously undermine their neighbours or inform secretly against them.",
+      "normalized_claim": "private enemies; witches",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "people"
+    },
+    {
+      "concept_id": "claim.house.12.risks",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.81",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Twelfth House (1659 p.56)",
+      "original_claim": "Sorrow, tribulation, imprisonments, affliction, self-undoing.",
+      "normalized_claim": "sorrow, imprisonment, self-undoing, secret malice",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "risks"
+    },
+    {
+      "concept_id": "claim.house.12.place",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.81",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Twelfth House (1659 p.56)",
+      "original_claim": "Cadent feminine house, sometimes called Cataphora; Saturn joys here.",
+      "normalized_claim": "Cadent feminine house, sometimes called Cataphora; Saturn joys here.",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "internal_meaning"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "contract_version": "astrology_claims_v1",
+  "object_id": "astro.house.02",
+  "calc_entity": "astrology.house.02",
+  "pending_source_ids": [
+    "src.classical.valens_anthologies",
+    "src.traditional.skyscript",
+    "src.traditional.houlding_houses",
+    "src.psychological.sasportas_twelve_houses",
+    "src.psychological.george_ancient_practice"
+  ],
+  "gap_notes": [
+    "CORE cannot be scored: 12 topical houses are attested here from Lilly CA I.7 only.",
+    "Ptolemy Tetrabiblos I.13 gives four-angle temperament (east dry, south hot, west moist, north cold), not 12 topical houses. Lilly ascribes this house list to 'Ptolomeian Doctrine' (CA I.7 close). A source citing Ptolemy is not Ptolemy+Lilly consensus. Attribution unverified from the opened Tetrabiblos locus. Do not mark compared.",
+    "No ASC/MC Layer-1 identity objects: I.13 is directional temperament, not persona/status packages.",
+    "Layer 3 required slots filled only with Lilly's topical lists. Do not add modern 'psychological houses' (self-actualization, etc.)."
+  ],
+  "claims": [
+    {
+      "concept_id": "claim.house.02.domain",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.76–77",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Second House (1659 p.51–52)",
+      "original_claim": "From this house is required judgment of estate, wealth or poverty, removable goods, money lent, profit or loss.",
+      "normalized_claim": "estate, movable goods, and profit or loss",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "domain"
+    },
+    {
+      "concept_id": "claim.house.02.people",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.76–77",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Second House (1659 p.51–52)",
+      "original_claim": "In suits it signifies a man's friends or assistants; in private duels, the querent's second.",
+      "normalized_claim": "friends or assistants in lawsuits; the querent's second in a duel",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "people"
+    },
+    {
+      "concept_id": "claim.house.02.risks",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.76–77",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Second House (1659 p.51–52)",
+      "original_claim": "Sun and Mars are never well placed here; either shows dispersion of substance.",
+      "normalized_claim": "dispersion of substance when Sun or Mars occupy",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "risks"
+    },
+    {
+      "concept_id": "claim.house.02.place",
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu p.76–77",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "locus": "Book I Chapter VII Second House (1659 p.51–52)",
+      "original_claim": "It is a feminine succedent house, called Anaphora.",
+      "normalized_claim": "It is a feminine succedent house, called Anaphora.",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "internal_meaning"
+    }
+  ]
+}
