@@ -220,6 +220,7 @@
   border-top: 1px solid var(--tf-ds-border-ink);
   /* Opaque fill — avoid live backdrop-filter over Day Atmosphere wash on phones. */
   background: color-mix(in srgb, var(--day-surface-tint, rgba(253, 251, 247, 0.96)) 96%, #ffffff);
+  box-shadow: 0 -8px 24px color-mix(in srgb, var(--tf-ink, #2a2520) 8%, transparent);
 }
 
 .tabItem {

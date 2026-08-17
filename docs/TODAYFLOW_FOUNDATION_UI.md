@@ -821,7 +821,7 @@ Story frame — общая визуальная грамматика для Glan
 - Состав и honest-omit правила контента (TODAY_SCREEN_SCENARIO_V3 — не трогается).
 - Цвета CTA/error/success/warning (§0/§4).
 - Навигационная механика (свайп/keyboard/analytics) — SCREEN_FLOW_V1 §1.1–§1.4, §1.7–§1.9 без изменений.
-- Product bottom tab bar (`DsMobileTabBar`) всегда доступен; ScreenFlow высота = `100dvh − nav`.
+- Product bottom tab bar (`DsMobileTabBar`) всегда доступен (`position: fixed`); ScreenFlow высота = `100dvh − nav`. Product `appMain` — единый вертикальный скролл на всех экранах шелла.
 
 ### 16.6 Domain icons (закрыто)
 

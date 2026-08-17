@@ -172,6 +172,7 @@ export function ProductWebAppShell({
         <div
           className={l.mobileTabBarWrap}
           data-product-web-chrome=""
+          data-testid="product-mobile-tab-bar"
           aria-hidden={mobileAriaHidden || undefined}
         >
           <DsMobileTabBar
