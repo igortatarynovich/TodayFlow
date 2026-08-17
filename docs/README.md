@@ -73,7 +73,7 @@
 - [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — **Практики** SoT: цикл состояния · locked need/format · сессия · music layer ([index](./practices/_INDEX.md))
 - [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md)
 - [EXPLAIN_MEANING_NOT_MECHANISM.md](./explainability/EXPLAIN_MEANING_NOT_MECHANISM.md)
-- **Brand / Trust (копирайт лендинга и рекламы):** [content/TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) — точность NASA/JPL + многослойный Canon; in-product голос остаётся [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) ([index](./content/_INDEX.md))
+- **Brand / Trust (копирайт лендинга и рекламы):** [content/TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) — лендинг = бренд-поверхность (H1 = locked line); точность NASA/JPL + многослойный Canon; in-product голос остаётся [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) ([index](./content/_INDEX.md))
 
 ## Статусы · схемы · i18n
 
@@ -102,7 +102,7 @@
 Screen-level и PIM-слой (`pim/`, `today-language/`, `explainability/`) — уточняют unified, не заменяют его.  
 **Не плодить** второй «канон дня» / «Meaning SoT» рядом с `TODAY_CONTENT_PIPELINE_V1`.
 
-**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §2 ten-layer language (information glyphs vs identity planet images; natal = composition) + §11–§15 (Day Atmosphere · DS audit · DS canon `--tf-*` / `Ds*`). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
+**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §2 ten-layer language + **§2.7 Moon = live object (no stars)** + **§18 motion budget** (landing 7/10 · app 2–3/10 · share 5/10) + §11–§15 (Day Atmosphere · DS). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
 
 ## Правило записи (обязательно)
 

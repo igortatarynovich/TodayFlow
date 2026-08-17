@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { LandingSignatureMoon } from "@/components/landing/LandingSignatureMoon";
 import {
   PRODUCT_WEB_LANDING_FINAL,
   PRODUCT_WEB_LANDING_FOOTER,
   PRODUCT_WEB_LANDING_HERO,
   PRODUCT_WEB_LANDING_NAV,
-  PRODUCT_WEB_LANDING_ORBIT_NODES,
-  PRODUCT_WEB_LANDING_RETURN_REASONS,
   PRODUCT_WEB_LANDING_SECTION_IDS,
   PRODUCT_WEB_LANDING_SERVICE_SECTIONS,
   PRODUCT_WEB_LANDING_TODAY_PROMISE,
+  PRODUCT_WEB_LANDING_TRUST,
 } from "@/components/product-ui/productWebLandingContent";
 import { ProductWebGuestNav } from "@/components/product-ui/ProductWebGuestNav";
 import { ProductScenePlate } from "@/components/product-ui/ProductScenePlate";
@@ -20,17 +20,12 @@ import {
   DsButton,
   DsDisplayTitle,
   DsEyebrow,
-  DsFeatureTile,
   DsMarketingPage,
   DsMarketingSection,
-  DsOrbitalNode,
-  DsOrbitalViz,
   DsSectionTitle,
   DsThemeAsideRow,
   DsThemePanel,
   IconEye,
-  IconMountain,
-  IconRoute,
   IconSparkles,
   IconSun,
 } from "@/design-system";
@@ -41,20 +36,6 @@ import { landingServicePlate } from "@/lib/productScenePlates";
 type Props = {
   loginHref: string;
 };
-
-const ORBIT_NODE_ICONS = {
-  sun: IconSun,
-  moon: IconEye,
-  path: IconRoute,
-  star: IconSparkles,
-  sage: IconMountain,
-} as const;
-
-const RETURN_REASON_ICONS = {
-  morning: IconSun,
-  memory: IconSparkles,
-  "today-not-portrait": IconEye,
-} as const;
 
 const PROMISE_CARD_ICONS = {
   theme: IconSun,
@@ -134,15 +115,6 @@ export function ProductWebLanding({ loginHref }: Props) {
   const navLinks = PRODUCT_WEB_LANDING_NAV.map(({ href, label }) => ({ href, label }));
   const demoHref = VALUE_FIRST_PATHS.demoToday;
   const inviteHref = VALUE_FIRST_PATHS.invite;
-  const compatHref = "/compatibility";
-
-  const orbitNodes: DsOrbitalNode[] = PRODUCT_WEB_LANDING_ORBIT_NODES.map((node) => {
-    const Icon = ORBIT_NODE_ICONS[node.id as keyof typeof ORBIT_NODE_ICONS] ?? IconSparkles;
-    return {
-      ...node,
-      icon: <Icon />,
-    };
-  });
 
   return (
     <DsMarketingPage
@@ -204,50 +176,93 @@ export function ProductWebLanding({ loginHref }: Props) {
         <div className={l.heroSection}>
           <div className={l.heroCopy}>
             <div>
-              <DsDisplayTitle id="landing-hero-title">
-                {PRODUCT_WEB_LANDING_HERO.titleLead}
-                <br />
-                {PRODUCT_WEB_LANDING_HERO.titleTail}
+              <p className={l.heroBrand}>{PRODUCT_WEB_LANDING_HERO.brand}</p>
+              <DsDisplayTitle id="landing-hero-title" className={l.heroBeats}>
+                {PRODUCT_WEB_LANDING_HERO.beats.map((beat) => (
+                  <span key={beat} className={l.heroBeat}>
+                    {beat}
+                  </span>
+                ))}
               </DsDisplayTitle>
               <DsBody size="lg" muted>
-                {PRODUCT_WEB_LANDING_HERO.subtitle}
+                {PRODUCT_WEB_LANDING_HERO.manifesto}
               </DsBody>
-              <div className={l.heroFragment} data-testid="landing-hero-fragment">
-                <DsEyebrow>{PRODUCT_WEB_LANDING_HERO.fragmentEyebrow}</DsEyebrow>
-                <p className={l.heroFragmentLine}>
-                  <strong>{PRODUCT_WEB_LANDING_HERO.fragmentThemeLabel}.</strong>{" "}
-                  {PRODUCT_WEB_LANDING_HERO.fragmentTheme}
-                </p>
-                <p className={l.heroFragmentLine}>
-                  <strong>{PRODUCT_WEB_LANDING_HERO.fragmentFocusLabel}.</strong>{" "}
-                  {PRODUCT_WEB_LANDING_HERO.fragmentFocus}
-                </p>
-              </div>
             </div>
             <div className={l.heroCtas} data-testid="landing-hero-ctas">
               <DsButton href={demoHref}>{PRODUCT_WEB_LANDING_HERO.primaryCtaDemo}</DsButton>
-              <DsButton href={compatHref}>{PRODUCT_WEB_LANDING_HERO.primaryCtaCompat}</DsButton>
               <DsButton href={loginHref} variant="secondary">
                 {PRODUCT_WEB_LANDING_HERO.loginCta}
               </DsButton>
             </div>
-            <p className={l.heroTools} data-testid="landing-hero-tools">
-              <span>{PRODUCT_WEB_LANDING_HERO.toolsEyebrow}: </span>
-              <Link href="/tarot">{PRODUCT_WEB_LANDING_HERO.toolsTarotLabel}</Link>
-              {" · "}
-              <Link href="/practices">{PRODUCT_WEB_LANDING_HERO.toolsPracticesLabel}</Link>
+            <p className={l.heroLearnMore}>
+              <Link href="#trust">{PRODUCT_WEB_LANDING_HERO.learnMore}</Link>
             </p>
           </div>
           <div className={l.heroVisual} data-testid="landing-hero-visual">
-            <ProductScenePlate
-              plate="landing_hero"
-              frame="landingHero"
-              testId="landing-hero-plate"
-            />
-            <div className={l.heroOrbitOverlay}>
-              <DsOrbitalViz nodes={orbitNodes} testId="landing-orbit-viz" />
-            </div>
+            <LandingSignatureMoon />
           </div>
+        </div>
+      </DsMarketingSection>
+
+      <DsMarketingSection
+        id="trust"
+        screen
+        testId="landing-section-trust"
+        data-landing-screen="trust"
+        aria-labelledby="landing-trust-title"
+      >
+        <div className={l.manifestoSection}>
+          <DsEyebrow>{PRODUCT_WEB_LANDING_TRUST.eyebrow}</DsEyebrow>
+          <DsDisplayTitle id="landing-trust-title" as="h2" size="lg">
+            {PRODUCT_WEB_LANDING_TRUST.title}
+          </DsDisplayTitle>
+          <DsBody size="lg" muted>
+            {PRODUCT_WEB_LANDING_TRUST.body}
+          </DsBody>
+          <ol className={l.manifestoList}>
+            {PRODUCT_WEB_LANDING_TRUST.items.map((item) => (
+              <li key={item.id} className={l.manifestoItem} data-testid={`landing-trust-${item.id}`}>
+                <span className={l.manifestoIndex}>{item.kicker}</span>
+                <h3 className={l.manifestoHeading}>{item.title}</h3>
+                <p className={l.manifestoBody}>{item.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </DsMarketingSection>
+
+      <DsMarketingSection id="today" screen tone="muted" testId="landing-section-today" data-landing-screen="today" aria-labelledby="landing-today-promise">
+        <div className={l.todaySection}>
+          <ProductScenePlate
+            plate="landing_today"
+            frame="landingService"
+            className={l.todayPlate}
+            testId="landing-today-plate"
+          />
+          <DsThemePanel
+            variant="marketing"
+            titleId="landing-today-promise"
+            eyebrow={PRODUCT_WEB_LANDING_TODAY_PROMISE.eyebrow}
+            title={PRODUCT_WEB_LANDING_TODAY_PROMISE.title}
+            tags={[...PRODUCT_WEB_LANDING_TODAY_PROMISE.tags]}
+            body={PRODUCT_WEB_LANDING_TODAY_PROMISE.body}
+            aside={
+              <>
+                {PRODUCT_WEB_LANDING_TODAY_PROMISE.cards.map((card) => {
+                  const Icon = PROMISE_CARD_ICONS[card.id as keyof typeof PROMISE_CARD_ICONS] ?? IconSparkles;
+                  return (
+                    <DsThemeAsideRow
+                      key={card.id}
+                      testId={`landing-promise-${card.id}`}
+                      icon={<Icon />}
+                      label={card.label}
+                      value={card.value}
+                    />
+                  );
+                })}
+              </>
+            }
+          />
         </div>
       </DsMarketingSection>
 
@@ -285,61 +300,6 @@ export function ProductWebLanding({ loginHref }: Props) {
           </DsMarketingSection>
         );
       })}
-
-      <DsMarketingSection id="today" screen tone="muted" testId="landing-section-today" data-landing-screen="today" aria-labelledby="landing-today-promise">
-        <div className={l.todaySection}>
-          <ProductScenePlate
-            plate="landing_today"
-            frame="landingService"
-            className={l.todayPlate}
-            testId="landing-today-plate"
-          />
-          <DsThemePanel
-            variant="marketing"
-            titleId="landing-today-promise"
-            eyebrow={PRODUCT_WEB_LANDING_TODAY_PROMISE.eyebrow}
-            title={PRODUCT_WEB_LANDING_TODAY_PROMISE.title}
-            tags={[...PRODUCT_WEB_LANDING_TODAY_PROMISE.tags]}
-            body={PRODUCT_WEB_LANDING_TODAY_PROMISE.body}
-            aside={
-              <>
-                {PRODUCT_WEB_LANDING_TODAY_PROMISE.cards.map((card) => {
-                  const Icon = PROMISE_CARD_ICONS[card.id as keyof typeof PROMISE_CARD_ICONS] ?? IconSparkles;
-                  return (
-                    <DsThemeAsideRow
-                      key={card.id}
-                      testId={`landing-promise-${card.id}`}
-                      icon={<Icon />}
-                      label={card.label}
-                      value={card.value}
-                    />
-                  );
-                })}
-              </>
-            }
-          />
-        </div>
-      </DsMarketingSection>
-
-      <DsMarketingSection id="why" screen testId="landing-section-why" data-landing-screen="why" aria-labelledby="landing-return-reasons">
-        <div className={l.centerStack}>
-          <DsSectionTitle id="landing-return-reasons">{PRODUCT_WEB_LANDING_RETURN_REASONS.title}</DsSectionTitle>
-          <div className={l.grid3}>
-            {PRODUCT_WEB_LANDING_RETURN_REASONS.items.map((item) => {
-              const Icon = RETURN_REASON_ICONS[item.id as keyof typeof RETURN_REASON_ICONS] ?? IconSparkles;
-              return (
-                <DsFeatureTile
-                  key={item.id}
-                  testId={`landing-reason-${item.id}`}
-                  icon={<Icon />}
-                  title={item.title}
-                  body={item.body}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </DsMarketingSection>
 
       <DsMarketingSection id="cta" screen tone="muted" testId="landing-section-cta" data-landing-screen="cta" aria-labelledby="landing-final-cta">
         <div className={l.ctaSection}>

@@ -60,24 +60,6 @@
   overflow: hidden;
 }
 
-.sectionHero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.55;
-  background-image:
-    radial-gradient(1.5px 1.5px at 12% 18%, rgba(90, 70, 48, 0.35), transparent),
-    radial-gradient(1.5px 1.5px at 28% 62%, rgba(90, 70, 48, 0.28), transparent),
-    radial-gradient(1.5px 1.5px at 48% 28%, rgba(90, 70, 48, 0.22), transparent),
-    radial-gradient(1.5px 1.5px at 66% 72%, rgba(90, 70, 48, 0.3), transparent),
-    radial-gradient(1.5px 1.5px at 82% 22%, rgba(90, 70, 48, 0.25), transparent),
-    radial-gradient(1.5px 1.5px at 90% 58%, rgba(90, 70, 48, 0.2), transparent),
-    linear-gradient(118deg, transparent 0 46%, rgba(201, 168, 115, 0.12) 46.5% 47%, transparent 47.5%),
-    linear-gradient(152deg, transparent 0 62%, rgba(120, 140, 168, 0.1) 62.5% 63%, transparent 63.5%);
-}
-
 .sectionHero > * {
   position: relative;
   z-index: 1;
@@ -98,7 +80,27 @@
 .heroCopy {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2.25rem;
+}
+
+.heroBrand {
+  margin: 0 0 1rem;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.15rem, 2.2vw, 1.65rem);
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  color: var(--tf-ink);
+}
+
+.heroBeats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08em;
+  margin-bottom: 1.35rem;
+}
+
+.heroBeat {
+  display: block;
 }
 
 .heroCtas {
@@ -107,33 +109,82 @@
   gap: 1.25rem;
 }
 
-.heroFragment {
-  margin-top: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-  max-width: 36rem;
-}
-
-.heroFragmentLine {
+.heroLearnMore {
   margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--tf-ink-soft, #5b4630);
-}
-
-.heroTools {
-  margin: 0.35rem 0 0;
-  font-size: 0.8125rem;
-  line-height: 1.5;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--tf-caption, #9a8468);
 }
 
-.heroTools a {
+.heroLearnMore a {
   color: inherit;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.15em;
+}
+
+.heroMoonStage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 28rem;
+  margin-inline: auto;
+  min-height: min(72vw, 26rem);
+}
+
+.heroMoonStage :global(canvas) {
+  width: min(100%, 27.5rem) !important;
+  height: auto !important;
+  max-width: 100%;
+}
+
+.manifestoSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  max-width: 48rem;
+}
+
+.manifestoList {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  width: 100%;
+}
+
+.manifestoItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.manifestoIndex {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold, #c9a873);
+}
+
+.manifestoHeading {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  line-height: 1.2;
+  font-weight: 400;
+  color: var(--tf-ink);
+}
+
+.manifestoBody {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--tf-ink-soft, #5b4630);
 }
 
 .grid3 {
@@ -586,6 +637,11 @@
 
   .grid3 {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .manifestoList {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
   }
 
   .footerTop {

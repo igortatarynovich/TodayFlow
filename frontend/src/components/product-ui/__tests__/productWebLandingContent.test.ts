@@ -1,30 +1,23 @@
 import {
-  PRODUCT_WEB_LANDING_RETURN_REASONS,
+  PRODUCT_WEB_LANDING_FOOTER,
+  PRODUCT_WEB_LANDING_HERO,
   PRODUCT_WEB_LANDING_SCREENS,
   PRODUCT_WEB_LANDING_SECTION_IDS,
   PRODUCT_WEB_LANDING_TODAY_PROMISE,
+  PRODUCT_WEB_LANDING_TRUST,
 } from "@/components/product-ui/productWebLandingContent";
 
 describe("productWebLandingContent · copy antipatterns", () => {
   it("does not invent named testimonials with job titles", () => {
     const blob = JSON.stringify({
-      reasons: PRODUCT_WEB_LANDING_RETURN_REASONS,
       promise: PRODUCT_WEB_LANDING_TODAY_PROMISE,
+      trust: PRODUCT_WEB_LANDING_TRUST,
+      hero: PRODUCT_WEB_LANDING_HERO,
+      footer: PRODUCT_WEB_LANDING_FOOTER,
     });
     expect(blob).not.toMatch(/Елена Р\.|Юлиан В\.|Сара Л\./);
     expect(blob).not.toMatch(/Креативный директор|Системный архитектор|Клинический психолог/);
     expect(blob.toLowerCase()).not.toMatch(/testimonial/);
-  });
-
-  it("return reasons are product facts, not attributed quotes", () => {
-    expect(PRODUCT_WEB_LANDING_RETURN_REASONS.items).toHaveLength(3);
-    for (const item of PRODUCT_WEB_LANDING_RETURN_REASONS.items) {
-      expect(item.title.trim().length).toBeGreaterThan(0);
-      expect(item.body.trim().length).toBeGreaterThan(20);
-      expect(item).not.toHaveProperty("name");
-      expect(item).not.toHaveProperty("role");
-      expect(item).not.toHaveProperty("quote");
-    }
   });
 
   it("promise theme card avoids bare imperative poster copy", () => {
@@ -33,16 +26,50 @@ describe("productWebLandingContent · copy antipatterns", () => {
     expect(theme?.value).not.toMatch(/^«?Сегодня лучше не спешить/);
   });
 
-  it("landing screens follow Plan v4 scenario order", () => {
+  it("landing screens put brand thesis before guest tools", () => {
     expect(PRODUCT_WEB_LANDING_SECTION_IDS).toEqual([
       "hero",
-      "tarot",
-      "compatibility",
-      "practices",
+      "trust",
       "today",
-      "why",
+      "compatibility",
+      "tarot",
+      "practices",
       "cta",
     ]);
     expect(PRODUCT_WEB_LANDING_SCREENS).toHaveLength(PRODUCT_WEB_LANDING_SECTION_IDS.length);
+    expect(PRODUCT_WEB_LANDING_SECTION_IDS).not.toContain("why");
+  });
+
+  it("hero is the locked Trust Layer line, not a continuity slogan", () => {
+    expect(PRODUCT_WEB_LANDING_HERO.beats).toEqual([
+      "Точные астрономические данные.",
+      "Столетия астрологической интерпретации.",
+      "Один личный взгляд.",
+    ]);
+    expect(PRODUCT_WEB_LANDING_HERO.manifesto).toMatch(/NASA JPL/);
+    expect(PRODUCT_WEB_LANDING_HERO.manifesto).toMatch(/историческ/);
+    expect(PRODUCT_WEB_LANDING_HERO.manifesto).toMatch(/Не гадаем/);
+    expect(JSON.stringify(PRODUCT_WEB_LANDING_HERO)).not.toMatch(/видит не только твой день/);
+  });
+
+  it("trust copy names NASA/JPL as ephemeris, not as astrology endorsement", () => {
+    const blob = `${PRODUCT_WEB_LANDING_HERO.beats.join(" ")} ${PRODUCT_WEB_LANDING_HERO.manifesto} ${JSON.stringify(PRODUCT_WEB_LANDING_TRUST)}`;
+    expect(blob).toMatch(/NASA JPL/);
+    expect(blob).toMatch(/историческ/);
+    expect(blob).toMatch(/личный взгляд/i);
+    expect(blob.toLowerCase()).not.toMatch(/powered by nasa|nasa-certified|horizons|научная астрология|единственно верн|алгоритм|фундамент/);
+    expect(blob).not.toMatch(/прочитан[ао].*алгоритм/i);
+    expect(blob).not.toMatch(/небо не лж/);
+  });
+
+  it("trust pillars map to the three trust levels, not one school or a human astrologer", () => {
+    expect(PRODUCT_WEB_LANDING_TRUST.items.map((item) => item.kicker)).toEqual([
+      "Точность",
+      "Глубина",
+      "Человечность",
+    ]);
+    expect(PRODUCT_WEB_LANDING_TRUST.items[0]?.title).toMatch(/Астрономия/);
+    expect(PRODUCT_WEB_LANDING_TRUST.body).not.toMatch(/наука/);
+    expect(JSON.stringify(PRODUCT_WEB_LANDING_TRUST)).not.toMatch(/школа, которой доверяли/);
   });
 });

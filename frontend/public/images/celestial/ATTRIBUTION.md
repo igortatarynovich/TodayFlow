@@ -11,10 +11,9 @@
 
 - Source: NASA / JPL-Caltech / UCLA — WISE [PIA15417](https://photojournal.jpl.nasa.gov/catalog/PIA15417) (“A Star Is Born”)
 - License: NASA public domain
-- Processing: resized ~1920w, darkened/contrast for page background behind the moon
-- Use: `/dev/celestial-moon` preview sky
+- **Product use: forbidden** (FOUNDATION_UI §2.7 / §18 — no starfield). Keep file only as historical asset; do not wire into landing, Today, natal, or share.
 
 ## moon_lro_*.jpg
 
 - Source: NASA SVS [CGI Moon Kit](https://svs.gsfc.nasa.gov/4720) LRO equirect maps (public domain)
-- Kept as optional global/globe source; UI disk prefers near-side photo above
+- Use: `DsCelestialMoon` / `CelestialMoon` — live phase sphere (FOUNDATION_UI §2.7)

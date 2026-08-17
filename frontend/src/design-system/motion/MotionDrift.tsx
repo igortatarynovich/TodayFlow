@@ -13,8 +13,9 @@ type MotionDriftProps = {
 };
 
 /**
- * Drift — almost imperceptible idle motion (FOUNDATION_UI §7).
- * Landing orbit rings, atmosphere particles.
+ * Drift — almost imperceptible idle motion.
+ * FOUNDATION_UI §18: in-app idle décor is over budget (2–3/10). Prefer landing only.
+ * Do not use for particles / starfield.
  */
 export function MotionDrift({
   children,

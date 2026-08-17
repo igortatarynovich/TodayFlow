@@ -4,7 +4,31 @@ Last updated: 2026-08-17
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (BRAND / COPY, 2026-08-17):** **Trust Layer locked.** Canon is not one averaged astrology — it is a normalized intersection of historical layers with provenance. Public communication has two pillars: (1) astronomical accuracy (NASA/JPL DE431 via Swiss, live); (2) interpretation depth (multi-school Canon). Locked line: *Precise astronomical data. Centuries of astrological interpretation. One personal perspective.* SoT: `docs/content/TODAYFLOW_TRUST_LAYER.md`. **Next:** landing + ads copy pass. Do not leave this as an IL-internal note.
+**NOW (MOTION / MOON, 2026-08-17):** FOUNDATION_UI v0.7 — animation explains state or day mood; else delete. Surface budget: landing 7/10 · app 2–3/10 · share 5/10. No stars / particles / flying zodiac. Moon = live astronomical object (`DsCelestialMoon`, real phase). Today moon is static (no idle spin). Stack: CSS + Framer; WebGL only for the moon. SoT: FOUNDATION_UI §2.7 · §18.
+
+## Architecture impact — Motion budget + live Moon (2026-08-17)
+
+- **SoT before:** Day Atmosphere allowed particles; Today moon idly spun; no product-wide motion budget; starfield still in natal/profile CSS (transitional).
+- **SoT after:** Motion must explain UI state or amplify day mood. Astrology-site décor forbidden. Moon is information (phase/terminator), not décor. App nearly still; landing may have slow pointer/scroll on the same sphere. Natal starfield remains debt until §2.6 package — do not add more.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Today moon `animated=false` / `spin=0`. Idle `MotionDrift` in Profile/HeroLarge is over-budget; do not add new instances.
+- **Canon updated?** yes — FOUNDATION_UI v0.7 §2.7 · §18 · §11.4 · TODAY_MOTION_PILOT pointer · README
+- **Backward compatible?** yes — visuals quieter on Today moon
+- **Next:** do not pull Three.js; do not split planet restyle from §2.6. Landing moon signature is CODE.
+
+**NOW (BRAND / LANDING, 2026-08-17):** Landing rebuilt as Trust Layer brand surface (Co-Star principle: manifesto first). H1 = locked three beats. Moon = hero signature (real phase). Thesis `#trust` before Today / Compatibility / Tarot. Dual hero CTA and `#why` retired. Guest path demo→invite unchanged. SoT: [TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) §5. **Next:** about/press if needed; do not put NASA/Canon into Today/Profile body. Do not overclaim IL-1. Do not say Horizons is live.
+
+## Architecture impact — Trust Layer landing as brand (2026-08-17)
+
+- **SoT before:** Guest Story P0 landing = continuity slogan + dual primary CTAs; Trust Layer was a `#trust` kicker after tools.
+- **SoT after:** Landing **is** the brand. Locked line is H1. Order: hero → trust thesis → today → compatibility → tarot/practices → cta. Moon is the signature object (FOUNDATION_UI §2.7). Compatibility stays a full chapter, not hero co-CTA.
+- **Public contract changed?** no JSON/generation. Marketing H1 / meta description / landing section order yes.
+- **Migration required?** no runtime. Dual hero CTA retired. `#why` removed (no invented testimonials).
+- **Canon updated?** yes — Trust Layer v1.2 §5 · Guest Story P0 landing-narrative supersession · WEB_LAUNCH pointer · FOUNDATION_UI §2.7 landing CODE.
+- **Backward compatible?** old bookmarks `#why` 404-in-page. Guest in-app nav unchanged.
+- **Next:** about/press if needed. Do not overclaim IL-1. Do not say Horizons is live.
+
+**NOW (BRAND / COPY, 2026-08-17):** **Trust Layer locked.** Ads brief in Trust Layer §6. SoT: `docs/content/TODAYFLOW_TRUST_LAYER.md`. Landing copy lives in `productWebLandingContent.ts`.
 
 ## Architecture impact — Trust Layer / brand language (2026-08-17)
 
@@ -14,7 +38,7 @@ Status: Active working document
 - **Migration required?** no runtime. Copy slice: landing · ads · about.
 - **Canon updated?** yes — Trust Layer v1.0 · Voice Canon §0.08 v1.9 · Unified §0 v1.11 · Foundation §1.4.1 · IL pointer 1.3.7 · README · explainability indexes.
 - **Backward compatible?** yes
-- **Next:** write landing/ads from the locked line. Do not overclaim IL-1 drafts as a finished public catalog. Do not say Horizons is live.
+- **Next:** about/press if needed. Landing copy is in `productWebLandingContent`. Do not overclaim IL-1 drafts as a finished public catalog. Do not say Horizons is live.
 
 **NOW (VISUAL LANGUAGE, 2026-08-17):** FOUNDATION_UI §2 v0.5 — ten-layer language + two registers (information glyphs vs identity planet images) + natal as branded composition of the same primitives (not a traditional wheel). Cross-surface literacy: `♀ → ♉︎ → VII → △ → ♄` in Profile / Today / Compat / chart. Next DS (not this commit): planet restyle · glyph set · natal rebuild from atoms. Profile viewport 1 unchanged.
 
@@ -1711,6 +1735,9 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-17 | Visual / Motion | **Motion budget + live Moon (no stars)** | **CANON + CODE** | FOUNDATION_UI v0.7 §2.7/§18. Landing 7/10 · app 2–3/10 · share 5/10. Today moon static. No Three.js. Natal starfield still debt.
+- 2026-08-17 | Brand / Copy | **Landing copy: three trust levels** | **CODE** | Точность / глубина / человечность as pillar kickers. Locked H1 unchanged. Rejected: «наука», «не алгоритм», «построить карту» as primary. [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.3.
+- 2026-08-17 | Brand / Copy | **Trust Layer on landing + ads brief** | **CODE** | Hero `trustLine` · `#trust` three pillars · footer · [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.1 §6 ads. No Horizons / no NASA endorsement / no finished IL catalog. Next = about/press if needed.
 - 2026-08-17 | Brand / Copy | **Trust Layer locked — two pillars + NASA/JPL bounds** | **CANON** | [TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) v1.0. Canon ≠ averaged astrology; provenance is brand language. Astronomy copy = Swiss/DE431 live, not Horizons. Next = landing + ads. Voice Canon v1.9 acquisition exception.
 - 2026-08-15 | Today / Canon | **I2/I3 hygiene** | **CODE** | `primary_scene_id` on native+scenario; gate reject missing/unknown; projector no first-scene pick / no expect concat / do from primary only. Next: I0 contract → Global Engine.
 - 2026-08-15 | Today / Canon | **Pipeline ownership + non-mutation** | **LOCKED** | [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md): один decision owner на поле; downstream enrich/verbalize only; цепочка Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation; UX reveal ≠ authority. Next: I2/I3 hygiene → I0 contract → Global Engine.

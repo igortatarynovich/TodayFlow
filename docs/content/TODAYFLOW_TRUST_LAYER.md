@@ -1,9 +1,9 @@
 # TodayFlow Trust Layer — brand language & copywriting
 
 **Статус:** ACCEPTED — публичная концепция бренда (не внутренняя особенность Interpretation Library).  
-**Версия:** 1.0 (2026-08-17).  
+**Версия:** 1.3 (2026-08-17).  
 **Владелец:** Product + Content.  
-**Принять в работу:** лендинг · реклама · App Store / about / press. Следующий execution slice — копирайт этих поверхностей (трекер).
+**Принять в работу:** реклама (бриф §6) · App Store / about / press. Лендинг — **бренд-поверхность** (не kicker `#trust`).
 
 **Связь:** [TODAYFLOW_VOICE_CANON.md](./TODAYFLOW_VOICE_CANON.md) (in-product голос) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md) · [foundation_v1.md](../foundation_v1.md) §1.4.1 (факты NASA/JPL) · [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) (методика слоёв, не бренд-SoT) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md)
 
@@ -11,12 +11,12 @@
 
 ## Architecture impact
 
-- **SoT before:** provenance / multi-school Canon жили как внутренняя методика IL (§6). NASA/JPL — runtime footnote (Swiss) и «кандидат Horizons». Лендинг говорил про память дней, не про две опоры доверия.
-- **SoT after:** публичный **Trust Layer** = язык бренда. Две опоры коммуникации: (1) точность астрономических данных, (2) глубина интерпретации как нормализованное пересечение исторических слоёв с provenance. IL остаётся lookup смысла, не единственным местом этой мысли.
-- **Public contract changed?** no — JSON / generation не меняются. Меняется **разрешённый** маркетинговый язык.
-- **Migration required?** no runtime. Copy pass: landing + ads (открытый slice).
-- **Canon updated?** this doc · Voice Canon §0.08 · Unified §0 · Foundation §1.4.1 · IL pointer · explainability indexes.
-- **Backward compatible?** yes — in-product Voice Canon §0 («не говорит о себе») остаётся для Profile / Today / Tarot / Compatibility body.
+- **SoT before:** provenance / multi-school Canon жили как внутренняя методика IL (§6). NASA/JPL — runtime footnote (Swiss) и «кандидат Horizons». Лендинг говорил про память дней (Guest Story dual CTA), не про две опоры доверия.
+- **SoT after:** публичный **Trust Layer** = язык бренда. Две опоры коммуникации: (1) точность астрономических данных, (2) глубина интерпретации как нормализованное пересечение исторических слоёв с provenance. IL остаётся lookup смысла, не единственным местом этой мысли. Лендинг **строится на locked line**, а не носит её как slogan.
+- **Public contract changed?** no — JSON / generation не меняются. Меняется **разрешённый** маркетинговый язык и **порядок** лендинга (тезис до инструментов).
+- **Migration required?** no runtime. Landing H1 = locked three beats. Dual hero CTA retired. Ads use §6.
+- **Canon updated?** this doc · Voice Canon §0.08 · Unified §0 · Foundation §1.4.1 · IL pointer · explainability indexes · Guest Story P0 landing-narrative supersession.
+- **Backward compatible?** yes — in-product Voice Canon §0 («не говорит о себе») остаётся для Profile / Today / Tarot / Compatibility body. Guest path Landing → `/demo/today` → invite **сохраняется**.
 
 ---
 
@@ -58,13 +58,13 @@ One personal perspective.
 Один личный взгляд.
 ```
 
-Три удара = три разных обещания. Не сжимать в «мы точнее гороскопов» и не делать NASA поручителем смысла.
+Три удара = три уровня доверия. Не сжимать в «мы точнее гороскопов» и не делать NASA поручителем смысла.
 
-| Удар | Что обещаем | Чего не обещаем |
-|------|-------------|-----------------|
-| Precise astronomical data | Положения тел считаются по астрономическим эфемеридам NASA/JPL (через Swiss Ephemeris) | NASA «подтвердила гороскоп» · партнёрство · live API Horizons |
-| Centuries of interpretation | Canon держит слои традиции различимыми; не одна модная школа | Полный каталог уже в приложении · UI с цитатами Валенса на каждом Today |
-| One personal perspective | Personal Model / Profile / Today — смысл для человека | «Единственно верная астрология» |
+| Удар | Уровень доверия | Что обещаем | Чего не обещаем |
+|------|-----------------|-------------|-----------------|
+| Precise astronomical data | **Точность** | Положения тел считаются по астрономическим эфемеридам NASA/JPL (через Swiss Ephemeris) | NASA «подтвердила гороскоп» · партнёрство · live API Horizons · «без округлений» как абсолют |
+| Centuries of interpretation | **Глубина** | Canon держит слои традиции различимыми; не одна модная школа | Полный каталог уже в приложении · «одна школа, которой доверяли задолго до нас» |
+| One personal perspective | **Человечность** | Personal Model / Profile / Today — смысл для человека | «Единственно верная астрология» · «прочитано человеком, а не алгоритмом» |
 
 ---
 
@@ -117,7 +117,9 @@ Canon:
 | «Powered by NASA» / «NASA-certified» / логотип как endorsement | нет партнёрства; NASA не толкует карту |
 | «Мы запрашиваем NASA Horizons» | API не wired |
 | «NASA подтвердила ваш гороскоп» | смешение астрономии и смысла |
-| «Единственно верная / научная астрология» | Canon как раз против одной истины |
+| «Единственно верная / научная астрология» · «фундамент — наука» | Canon против одной истины; астрономия ≠ поручитель смысла |
+| «Прочитана человеком, а не алгоритмом» | запрет кухни; продукт не живой астролог в чате |
+| «Небо не лжёт» как обещание смысла | точны положения, не «небо сказало, что делать» |
 | «Усреднили все школы в один правильный текст» | противоположность provenance |
 | «Полная библиотека веков уже в Today» | IL ещё draft |
 | Кухня в рекламе: `evidence_tier`, Swiss flags, «алгоритм выбрал» | Trust Layer ≠ mechanism dump |
@@ -142,15 +144,61 @@ NASA/JPL в копирайте = **источник астрономически
 
 ---
 
-## 5. Копирайтинг — принять в работу
+## 5. Лендинг = бренд-поверхность
 
-Концепция **locked**. Следующий slice — написать, не оставлять только в docs:
+Концепция **locked**. Не подменять north star Personal Model. Trust Layer объясняет **опоры знания**; Personal Model остаётся тем, **для кого** собирается взгляд.
 
-1. **Лендинг** (`productWebLandingContent` / hero + why) — один экран или блок, который держит три удара, не ломая текущее обещание «история, которая помнит вчера».
-2. **Реклама** — короткие варианты locked line (EN/RU); запреты §3 обязательны в брифе.
-3. About / press-kit — тот же каркас, без overclaim IL.
+Лендинг — не Guest Story merchandising с Trust как kicker. Принцип как у Co-Star: **имя + манифест в первом экране**, «что это» **до** инструментов, главы продукта после тезиса. Не клонировать Co-Star (нет фейковых отзывов, нет «algorithmically generate», нет Powered by NASA).
 
-Не подменять этим north star Personal Model. Trust Layer объясняет **опоры знания**; Personal Model остаётся тем, **для кого** собирается взгляд.
+| Экран | Роль |
+|-------|------|
+| **Hero** | Locked three beats = **H1**. Манифест (NASA JPL = эфемериды; Canon = метод). Луна = живой астрономический объект (фаза правда, yaw от курсора без смены фазы). Один primary CTA → `/demo/today`. |
+| **#trust** | «Что это» — три опоры редакционно, не sparkle-tiles |
+| **#today** | Один личный взгляд / continuity как продукт |
+| **#compatibility** | Полная глава (L1), не dual-CTA в hero |
+| **#tarot / #practices** | Вторичные инструменты после тезиса |
+| **#cta** | Закрытие. Без invented testimonials |
+
+Live copy: `frontend/src/components/product-ui/productWebLandingContent.ts`.
+
+| Поверхность | Статус |
+|-------------|--------|
+| **Лендинг** | **CODE** — бренд-первый порядок · H1 = locked line · Moon signature · footer. Guest path demo→invite сохранён. Dual hero CTA и `#why` сняты. |
+| **Реклама** | бриф §6 — использовать, не изобретать NASA-партнёрство |
+| About / press-kit | тот же каркас, без overclaim IL |
+
+---
+
+## 6. Рекламный бриф (короткие варианты)
+
+Смысл трёх ударов не менять. Каденцию можно короче. Запреты §3 обязательны в любом креативе.
+
+### Locked (основной)
+
+```text
+EN  Precise astronomical data. Centuries of astrological interpretation. One personal perspective.
+RU  Точные астрономические данные. Столетия астрологической интерпретации. Один личный взгляд.
+```
+
+### Короче (баннер / сторис)
+
+```text
+EN  NASA JPL sky data. Centuries of interpretation. One personal view.
+RU  Данные неба NASA JPL. Столетия интерпретации. Один личный взгляд.
+```
+
+«NASA JPL sky data» = эфемериды положений. Не логотип NASA, не «NASA-certified».
+
+### Ещё короче (одна строка)
+
+```text
+EN  The sky is astronomy. The meaning is tradition. The view is yours.
+RU  Небо — астрономия. Смысл — традиция. Взгляд — твой.
+```
+
+### Не использовать в рекламе
+
+Powered by NASA · NASA-certified · Horizons · «научная астрология» · «единственно верная школа» · «полная библиотека веков уже в приложении».
 
 ---
 
@@ -159,3 +207,6 @@ NASA/JPL в копирайте = **источник астрономически
 | Date | Change |
 |------|--------|
 | 2026-08-17 | v1.0 — public Trust Layer: two pillars + locked line; NASA/JPL claims bounded to live Swiss/DE431; copy slice opened for landing/ads |
+| 2026-08-17 | v1.1 — landing `#trust` + ads brief §6; interpretation still method, not a finished catalog claim |
+| 2026-08-17 | v1.2 — landing is the brand surface (Co-Star principle): H1 = locked line, thesis before tools, Moon signature; dual hero CTA retired |
+| 2026-08-17 | v1.3 — RU landing copy: three trust levels (точность / глубина / человечность) as editorial reading of locked beats; warmer pillar titles; rejected pack lines stay in §3 |

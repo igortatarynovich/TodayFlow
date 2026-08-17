@@ -66,9 +66,9 @@ v2 → одна строка в трекер, **не обсуждаем**.
 
 **Guest Story Surface P0 (2026-07-30)** — [GUEST_STORY_SURFACE_P0_2026-07-30.md](../audits/GUEST_STORY_SURFACE_P0_2026-07-30.md):
 
-- Landing: continuity thesis + **dual primary CTAs** (demo Today + Compatibility). Tarot/Practices = low-weight only.
-- `/demo/today` **re-activated** (honest labeled demo → Profile-invite → value-first chain).
-- Guest product nav: **Today · Profile · Compatibility** (primary) · Tarot · Practices (secondary).
+- Landing **narrative (2026-08-17):** Trust Layer is the brand surface — locked three beats as H1, thesis before tools. Dual hero CTA **retired**. See [TODAYFLOW_TRUST_LAYER.md](../content/TODAYFLOW_TRUST_LAYER.md) §5.
+- Path still: `/demo/today` **re-activated** (honest labeled demo → Profile-invite → value-first chain).
+- Guest product nav: **Today · Profile · Compatibility** (primary) · Tarot · Practices (secondary). Compatibility remains a full landing **chapter**, not a Tarot-tier tool.
 - Evening / day-2 continuity UI = **slice 2** (not this P0).
 
 **Ранее superseded для launch v1** *(историческая таблица; demo path снова в силе для P0 выше):*
@@ -98,15 +98,17 @@ v2 → одна строка в трекер, **не обсуждаем**.
 
 ### Цель (5 секунд)
 
-**Почувствовать:** continuity — «дни складываются в меня», не разовый гороскоп.
+**Почувствовать:** Trust Layer — точные астрономические данные, столетия интерпретации, один личный взгляд. Continuity живёт в главе Today / CTA, не как H1. SoT: [TODAYFLOW_TRUST_LAYER.md](../content/TODAYFLOW_TRUST_LAYER.md) §5.
 
-**Не:** равный feature grid из пяти продуктов; не signup-first без демо.
+**Не:** равный feature grid из пяти продуктов; не signup-first без демо; не «ещё один гороскоп».
 
 ### Почему нажмёт CTA
 
-Либо хочет **увидеть формат Today** (demo), либо пришёл за **совместимостью** (L1 hook) — оба CTA на hero одного веса.
+Хочет увидеть формат Today (demo). Совместимость — полная глава после тезиса, не второй primary на hero.
 
 ### Layout — блок за блоком
+
+> **2026-08-17:** Block A–hero ниже — исторический Guest Story wireframe. Live hero = locked three beats + Moon. Не восстанавливать dual CTA / fragment / orbit.
 
 #### Block A · Hero (above fold, ~80vh mobile)
 

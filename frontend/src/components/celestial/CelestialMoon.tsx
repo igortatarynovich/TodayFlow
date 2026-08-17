@@ -16,8 +16,9 @@ export type CelestialMoonProps = {
   /** Equirectangular lunar albedo. */
   textureSrc?: string;
   /**
-   * Continuous rAF spin loop. When false (Today summary), draw on demand only —
-   * phase still updates via props; cheaper on battery.
+   * Continuous rAF spin loop. App default is false (FOUNDATION_UI §2.7):
+   * the moon is nearly static; phase still updates via props.
+   * Landing / `/dev/celestial-moon` may opt in.
    */
   animated?: boolean;
   testId?: string;
@@ -225,16 +226,17 @@ function mat3FromMat4(m: Float32Array): Float32Array {
 /**
  * Lunar globe: equirect LRO map on a UV sphere.
  * Spin = yaw around the polar Y axis (true axial turn). Phase = light only.
+ * FOUNDATION_UI §2.7: live astronomical object — not décor. App: keep still.
  */
 export function CelestialMoon({
   phase = 0.5,
   size = 320,
-  spin = 0.035,
+  spin = 0,
   longitude = 0,
   glow = 1,
   className,
   textureSrc = DEFAULT_TEXTURE,
-  animated = true,
+  animated = false,
   testId = "celestial-moon",
 }: CelestialMoonProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
