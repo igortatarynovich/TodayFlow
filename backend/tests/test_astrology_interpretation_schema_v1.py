@@ -361,3 +361,150 @@ def test_greene_first_psychological_class_not_averaged():
     provenance_classes = {row["source_class"] for row in saturn["provenance"]}
     assert "psychological" in provenance_classes
     assert not any("structure" in theme for theme in saturn["themes"])
+
+
+def test_houlding_saturn_article_not_averaged():
+    """Houlding Saturn article adds traditional lemmas beside cold/dry; it must not rewrite function or score CORE."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    saturn = next(obj for obj in objects["objects"] if obj["object_id"] == "astro.object.saturn")
+    claims = json.loads((CLAIMS_DIR / "astro.object.saturn.json").read_text(encoding="utf-8"))
+    assert saturn["function"] == "cooling quality operating by distance from heat"
+    assert saturn["themes"] == ["cold", "dryness", "slowness", "solitude", "austerity"]
+    used = {row["source_id"] for row in claims["claims"]}
+    assert "src.traditional.houlding_saturn" in used
+    boundary = next(row for row in claims["claims"] if row["concept_id"] == "claim.saturn.personal_boundary")
+    mature = next(row for row in claims["claims"] if row["concept_id"] == "claim.saturn.mature_through_constraint")
+    assert boundary["source_class"] == "traditional"
+    assert boundary["evidence_tier"] == "school_specific"
+    assert mature["evidence_tier"] == "school_specific"
+    cold_classes = {
+        row["source_class"] for row in claims["claims"] if row["concept_id"] == "claim.saturn.cold"
+    }
+    assert cold_classes == {"classical", "traditional"}
+    assert all(row["review_status"] == "compared" for row in claims["claims"] if row["concept_id"] == "claim.saturn.cold")
+    notes = " ".join(claims["gap_notes"]).lower()
+    assert "t1-t4" in notes or "t1–t4" in notes
+    assert "structure-setting" in notes
+    assert all(row["evidence_tier"] != "core" for row in claims["claims"])
+    assert "boundary" not in saturn["function"]
+    assert "structure" not in saturn["function"]
+
+
+def test_watters_greene_luminaries_not_averaged():
+    """Watters 2003 is modern practical parked as professional; Greene stays psychological school_specific."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    watters = next(src for src in corpus["sources"] if src["source_id"] == "src.professional.watters_today")
+    assert watters["source_class"] == "professional"
+    assert watters["role"] == "bridge"
+    functions = {
+        "astro.object.sun": "heating quality with moderate dryness",
+        "astro.object.moon": "moistening quality acting close to earth and bodies",
+        "astro.object.mercury": "convertible quality taking the nature of what it joins",
+        "astro.object.venus": "moist temperate quality disposed to pleasure and company",
+        "astro.object.mars": "heating and drying quality that contends",
+        "astro.object.jupiter": "temperate warming and moistening quality",
+        "astro.object.saturn": "cooling quality operating by distance from heat",
+    }
+    for object_id, function in functions.items():
+        assert by_id[object_id]["function"] == function
+        assert by_id[object_id]["status"] == "draft"
+    planets = (
+        "astro.object.sun",
+        "astro.object.moon",
+        "astro.object.mercury",
+        "astro.object.venus",
+        "astro.object.mars",
+        "astro.object.jupiter",
+    )
+    for object_id in planets:
+        claims = json.loads((CLAIMS_DIR / f"{object_id}.json").read_text(encoding="utf-8"))
+        obj = by_id[object_id]
+        used = {row["source_id"] for row in claims["claims"]}
+        pending = set(claims["pending_source_ids"])
+        assert "src.professional.watters_today" in used
+        assert "src.professional.watters_today" not in pending
+        watters_rows = [row for row in claims["claims"] if row["source_id"] == "src.professional.watters_today"]
+        assert watters_rows
+        assert all(row["source_class"] == "professional" for row in watters_rows)
+        assert all(row["evidence_tier"] == "school_specific" for row in watters_rows)
+        assert all(row["review_status"] == "extracted" for row in watters_rows)
+        assert all(row["school"] == "modern_general_practical" for row in watters_rows)
+        assert not any("body_" in row["concept_id"] for row in obj["provenance"])
+        assert not any("fertility" in row["concept_id"] or "health" in row["concept_id"] for row in obj["provenance"])
+        domains_text = json.dumps(obj["domains"]).lower()
+        assert "gynecolog" not in domains_text
+        assert "diabetes" not in domains_text
+        assert "sciatic" not in domains_text
+        assert "blood sugar" not in domains_text
+        assert all(row["evidence_tier"] != "core" for row in claims["claims"])
+        assert "src.professional.hand_horoscope_symbols" in pending
+        notes = " ".join(claims["gap_notes"]).lower()
+        assert "modern general practical" in notes or "classification gap" in notes
+        assert all("do_not_compare_with" not in row for row in claims["claims"])
+        assert all("runtime_semantic_candidate" not in row for row in claims["claims"])
+        assert all("classification_gap" not in row for row in claims["claims"])
+        assert "modern_general_practical" not in {row["source_class"] for row in claims["claims"]}
+        assert "modern_psychological" not in {row["source_class"] for row in claims["claims"]}
+    sun_claims = json.loads((CLAIMS_DIR / "astro.object.sun.json").read_text(encoding="utf-8"))
+    moon_claims = json.loads((CLAIMS_DIR / "astro.object.moon.json").read_text(encoding="utf-8"))
+    sun_ids = {row["concept_id"] for row in sun_claims["claims"]}
+    assert "claim.sun.essential_self" in sun_ids
+    assert "claim.sun.becoming" in sun_ids
+    assert "claim.sun.father_signifier_female_chart" in sun_ids
+    assert "claim.sun.attraction_type_female_chart" in sun_ids
+    assert "claim.sun.strong_sun_traits" in sun_ids
+    assert "claim.sun.strong_sun_health" in sun_ids
+    assert "claim.sun.annual_orbit_fact" in sun_ids
+    assert "claim.sun.solar_return_symbolism" in sun_ids
+    assert "claim.sun.essential_self_and_becoming" not in sun_ids
+    solar = next(row for row in sun_claims["claims"] if row["concept_id"] == "claim.sun.solar_consciousness_eternal")
+    assert solar["source_class"] == "psychological"
+    assert solar["evidence_tier"] == "school_specific"
+    assert solar["source_id"] == "src.psychological.greene_luminaries"
+    moon_ids = {row["concept_id"] for row in moon_claims["claims"]}
+    assert "claim.moon.earth_mother_embodiment" in moon_ids
+    assert "claim.moon.embodied_life_as_numinous" in moon_ids
+    assert "claim.moon.night_world_function" in moon_ids
+    assert "claim.moon.emotion_habit_function" in moon_ids
+    venus_ids = {
+        row["concept_id"]
+        for row in json.loads((CLAIMS_DIR / "astro.object.venus.json").read_text(encoding="utf-8"))["claims"]
+    }
+    assert "claim.venus.love_desire_function" in venus_ids
+    assert "claim.venus.venus_mercury_contrast" in venus_ids
+    mercury_claims = json.loads((CLAIMS_DIR / "astro.object.mercury.json").read_text(encoding="utf-8"))
+    mercury_ids = {row["concept_id"] for row in mercury_claims["claims"]}
+    assert "claim.mercury.mind_curiosity" in mercury_ids
+    assert "claim.mercury.mind_breadth_over_depth" in mercury_ids
+    assert "claim.mercury.hermes_spontaneity" in mercury_ids
+    assert "src.psychological.greene_inner_planets" in {row["source_id"] for row in mercury_claims["claims"]}
+    assert "src.psychological.greene_inner_planets" not in set(mercury_claims["pending_source_ids"])
+    hermes = next(row for row in mercury_claims["claims"] if row["concept_id"] == "claim.mercury.hermes_spontaneity")
+    assert hermes["source_class"] == "psychological"
+    assert hermes["evidence_tier"] == "school_specific"
+    for object_id in ("astro.object.venus", "astro.object.mars", "astro.object.jupiter"):
+        claims = json.loads((CLAIMS_DIR / f"{object_id}.json").read_text(encoding="utf-8"))
+        used = {row["source_id"] for row in claims["claims"]}
+        assert "src.psychological.greene_luminaries" not in used
+        assert "src.psychological.greene_inner_planets" not in used
+    sun = by_id["astro.object.sun"]
+    moon = by_id["astro.object.moon"]
+    mercury = by_id["astro.object.mercury"]
+    assert "essential self" not in sun["function"]
+    assert "solar consciousness" not in sun["function"]
+    assert "unconscious" not in moon["function"]
+    assert "embodiment" not in moon["function"]
+    assert "spontaneity" not in mercury["function"]
+    sun_prov = {row["concept_id"] for row in sun["provenance"]}
+    moon_prov = {row["concept_id"] for row in moon["provenance"]}
+    mercury_prov = {row["concept_id"] for row in mercury["provenance"]}
+    assert "claim.sun.essential_self" in sun_prov
+    assert "claim.sun.solar_consciousness_eternal" in sun_prov
+    assert "claim.moon.night_world_function" in moon_prov
+    assert "claim.moon.earth_mother_embodiment" in moon_prov
+    assert "claim.mercury.mind_curiosity" in mercury_prov
+    assert "claim.mercury.hermes_spontaneity" in mercury_prov
+    inner = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_inner_planets")
+    assert inner["source_class"] == "psychological"

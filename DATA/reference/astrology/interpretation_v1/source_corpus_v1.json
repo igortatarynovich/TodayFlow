@@ -8,7 +8,13 @@
       "title": "Tetrabiblos",
       "author": "Claudius Ptolemy",
       "role": "primary",
-      "use": ["objects", "signs", "houses", "aspects", "rulerships"],
+      "use": [
+        "objects",
+        "signs",
+        "houses",
+        "aspects",
+        "rulerships"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
@@ -20,7 +26,12 @@
       "title": "Anthologies",
       "author": "Vettius Valens",
       "role": "primary",
-      "use": ["objects", "houses", "aspects", "natal"],
+      "use": [
+        "objects",
+        "houses",
+        "aspects",
+        "natal"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
@@ -32,7 +43,12 @@
       "title": "Carmen Astrologicum",
       "author": "Dorotheus of Sidon",
       "role": "primary",
-      "use": ["houses", "aspects", "natal", "transits"],
+      "use": [
+        "houses",
+        "aspects",
+        "natal",
+        "transits"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -43,7 +59,11 @@
       "title": "Matheseos Libri VIII",
       "author": "Julius Firmicus Maternus",
       "role": "primary",
-      "use": ["objects", "houses", "natal"],
+      "use": [
+        "objects",
+        "houses",
+        "natal"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -54,7 +74,13 @@
       "title": "Christian Astrology",
       "author": "William Lilly",
       "role": "primary",
-      "use": ["objects", "houses", "aspects", "orbs", "natal"],
+      "use": [
+        "objects",
+        "houses",
+        "aspects",
+        "orbs",
+        "natal"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
@@ -66,7 +92,11 @@
       "title": "Introductory Matters",
       "author": "Paulus Alexandrinus",
       "role": "primary",
-      "use": ["objects", "houses", "aspects"],
+      "use": [
+        "objects",
+        "houses",
+        "aspects"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -77,7 +107,11 @@
       "title": "Compendium",
       "author": "Rhetorius of Egypt",
       "role": "primary",
-      "use": ["houses", "natal", "history"],
+      "use": [
+        "houses",
+        "natal",
+        "history"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -88,7 +122,11 @@
       "title": "Liber Astronomiae",
       "author": "Guido Bonatti",
       "role": "primary",
-      "use": ["houses", "aspects", "natal"],
+      "use": [
+        "houses",
+        "aspects",
+        "natal"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -99,7 +137,11 @@
       "title": "The Beginning of Wisdom",
       "author": "Abraham Ibn Ezra",
       "role": "primary",
-      "use": ["objects", "signs", "houses"],
+      "use": [
+        "objects",
+        "signs",
+        "houses"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -110,7 +152,13 @@
       "title": "Project Hindsight translations (1993–)",
       "author": "Project Hindsight / Robert Schmidt et al.",
       "role": "translation_program",
-      "use": ["objects", "houses", "aspects", "natal", "history"],
+      "use": [
+        "objects",
+        "houses",
+        "aspects",
+        "natal",
+        "history"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
@@ -122,7 +170,12 @@
       "title": "Hellenistic Astrology: The Study of Fate and Fortune",
       "author": "Chris Brennan",
       "role": "history",
-      "use": ["history", "houses", "aspects", "natal"],
+      "use": [
+        "history",
+        "houses",
+        "aspects",
+        "natal"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -133,7 +186,9 @@
       "title": "A History of Horoscopic Astrology",
       "author": "James Herschel Holden",
       "role": "history",
-      "use": ["history"],
+      "use": [
+        "history"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -144,7 +199,16 @@
       "title": "Skyscript (library)",
       "author": "Deborah Houlding / Skyscript contributors",
       "role": "traditional_living",
-      "use": ["objects", "houses", "aspects", "natal", "transits", "stars", "rulerships", "orbs"],
+      "use": [
+        "objects",
+        "houses",
+        "aspects",
+        "natal",
+        "transits",
+        "stars",
+        "rulerships",
+        "orbs"
+      ],
       "legal_status": "copyrighted_site",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
@@ -156,7 +220,10 @@
       "title": "The Houses: Temples of the Sky",
       "author": "Deborah Houlding",
       "role": "traditional_living",
-      "use": ["houses", "history"],
+      "use": [
+        "houses",
+        "history"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
@@ -168,11 +235,30 @@
       "title": "The Traditional Use of Aspects / planetary vs aspect orbs",
       "author": "Deborah Houlding",
       "role": "traditional_living",
-      "use": ["aspects", "orbs", "history"],
+      "use": [
+        "aspects",
+        "orbs",
+        "history"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
       "notes": "Needed so square ≠ simply 'bad'; aspect is a relation with a history. Opened: Classical Origin and Traditional Use of Aspects (Skyscript 2004; Mag. 8, 1995). Paraphrase only."
+    },
+    {
+      "source_id": "src.traditional.houlding_saturn",
+      "source_class": "traditional",
+      "title": "Saturn: The Great Teacher",
+      "author": "Deborah Houlding",
+      "role": "traditional_living",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened Skyscript article, December 2003. Paraphrase only. Boundary/constraint lemmas stay school_specific; Mundane Signification catalog not copied; Greene membrane quote not ingested as Greene."
     },
     {
       "source_id": "src.traditional.abu_mashar_great_introduction",
@@ -180,7 +266,11 @@
       "title": "The Great Introduction",
       "author": "Abu Ma'shar",
       "role": "primary",
-      "use": ["objects", "signs", "houses"],
+      "use": [
+        "objects",
+        "signs",
+        "houses"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -191,7 +281,10 @@
       "title": "Saturn: A New Look at an Old Devil",
       "author": "Liz Greene",
       "role": "psychological",
-      "use": ["objects", "natal"],
+      "use": [
+        "objects",
+        "natal"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
@@ -203,10 +296,15 @@
       "title": "Relating",
       "author": "Liz Greene",
       "role": "psychological",
-      "use": ["objects", "natal", "houses"],
+      "use": [
+        "objects",
+        "natal",
+        "houses"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Publisher preview reaches the ego/unconscious opening only. Venus / 7th-house-as-relating section not opened. NEED_OWNER: Weiser 2nd ed. ISBN 0-87728-418-0, that section. Do not backfill."
     },
     {
       "source_id": "src.psychological.greene_luminaries",
@@ -214,10 +312,29 @@
       "title": "The Luminaries",
       "author": "Liz Greene / Howard Sasportas",
       "role": "psychological",
-      "use": ["objects", "natal"],
+      "use": [
+        "objects",
+        "natal"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Opened publisher preview: Pt.1 Mothers and Matriarchy (Moon); Pt.2 Hero with a Thousand Faces (Sun). Paraphrase only. Relating Venus chapter still closed."
+    },
+    {
+      "source_id": "src.psychological.greene_inner_planets",
+      "source_class": "psychological",
+      "title": "The Inner Planets: Building Blocks of Personal Reality",
+      "author": "Liz Greene / Howard Sasportas",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened publisher preview: Mercury / young-Hermes spontaneity. Paraphrase only. Do not backfill unread planet sections."
     },
     {
       "source_id": "src.psychological.greene_outer_planets",
@@ -225,7 +342,10 @@
       "title": "The Outer Planets and Their Cycles",
       "author": "Liz Greene",
       "role": "psychological",
-      "use": ["objects", "transits"],
+      "use": [
+        "objects",
+        "transits"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -236,7 +356,10 @@
       "title": "The Twelve Houses",
       "author": "Howard Sasportas",
       "role": "psychological",
-      "use": ["houses", "natal"],
+      "use": [
+        "houses",
+        "natal"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -247,10 +370,28 @@
       "title": "The Gods of Change",
       "author": "Howard Sasportas",
       "role": "psychological",
-      "use": ["objects", "transits"],
+      "use": [
+        "objects",
+        "transits"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
+    },
+    {
+      "source_id": "src.professional.watters_today",
+      "source_class": "professional",
+      "title": "Astrology For Today (Skyscript planet introductions)",
+      "author": "Joanna Watters",
+      "role": "bridge",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Classification gap: 2003 modern general practical synthesis on Skyscript, not Houlding traditional and not Hand. Parked in professional. Do not CORE-score. primary_read = page was read; not extra evidence weight."
     },
     {
       "source_id": "src.professional.hand_planets_in_transit",
@@ -258,7 +399,11 @@
       "title": "Planets in Transit",
       "author": "Robert Hand",
       "role": "transit",
-      "use": ["transits", "objects", "aspects"],
+      "use": [
+        "transits",
+        "objects",
+        "aspects"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
@@ -270,10 +415,16 @@
       "title": "Horoscope Symbols",
       "author": "Robert Hand",
       "role": "transit",
-      "use": ["objects", "signs", "houses", "aspects"],
+      "use": [
+        "objects",
+        "signs",
+        "houses",
+        "aspects"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Legal previews stop inside Ch.3. Ch.4 Planets: Core Meanings and Ch.7 Aspects: Core Meanings not opened. NEED_OWNER: Schiffer 1997 pb ISBN 9780914918165, those chapters. Do not backfill from memory."
     },
     {
       "source_id": "src.psychological.arroyo_four_elements",
@@ -281,10 +432,14 @@
       "title": "Astrology, Psychology, and the Four Elements",
       "author": "Stephen Arroyo",
       "role": "psychological",
-      "use": ["signs", "objects"],
+      "use": [
+        "signs",
+        "objects"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Google Books preview surfaces front matter/index only. Planet-section text not opened. Do not backfill Mercury/Mars/Jupiter psychological function from memory."
     },
     {
       "source_id": "src.psychological.arroyo_chart_handbook",
@@ -292,7 +447,12 @@
       "title": "Chart Interpretation Handbook",
       "author": "Stephen Arroyo",
       "role": "psychological",
-      "use": ["objects", "signs", "houses", "natal"],
+      "use": [
+        "objects",
+        "signs",
+        "houses",
+        "natal"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -303,7 +463,10 @@
       "title": "Relationships and Life Cycles",
       "author": "Stephen Arroyo",
       "role": "psychological",
-      "use": ["natal", "transits"],
+      "use": [
+        "natal",
+        "transits"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -314,7 +477,11 @@
       "title": "The Astrology of Personality",
       "author": "Dane Rudhyar",
       "role": "psychological",
-      "use": ["objects", "signs", "natal"],
+      "use": [
+        "objects",
+        "signs",
+        "natal"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -325,7 +492,10 @@
       "title": "The Lunation Cycle",
       "author": "Dane Rudhyar",
       "role": "psychological",
-      "use": ["objects", "transits"],
+      "use": [
+        "objects",
+        "transits"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -336,7 +506,11 @@
       "title": "Astrology and the Authentic Self",
       "author": "Demetra George",
       "role": "bridge",
-      "use": ["natal", "objects", "houses"],
+      "use": [
+        "natal",
+        "objects",
+        "houses"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -347,7 +521,12 @@
       "title": "Ancient Astrology in Theory and Practice",
       "author": "Demetra George",
       "role": "bridge",
-      "use": ["houses", "aspects", "natal", "history"],
+      "use": [
+        "houses",
+        "aspects",
+        "natal",
+        "history"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
@@ -359,7 +538,10 @@
       "title": "Dynamics of Aspect Analysis",
       "author": "Bil Tierney",
       "role": "transit",
-      "use": ["aspects", "natal"],
+      "use": [
+        "aspects",
+        "natal"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -370,7 +552,10 @@
       "title": "Retrograde Planets",
       "author": "Erin Sullivan",
       "role": "transit",
-      "use": ["transits", "objects"],
+      "use": [
+        "transits",
+        "objects"
+      ],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -381,7 +566,11 @@
       "title": "Astrologia Gallica (selected books)",
       "author": "Jean-Baptiste Morin",
       "role": "primary",
-      "use": ["houses", "natal", "objects"],
+      "use": [
+        "houses",
+        "natal",
+        "objects"
+      ],
       "legal_status": "public_domain_original",
       "ingest_rule": "research_paraphrase",
       "status": "candidate"
@@ -392,7 +581,9 @@
       "title": "Swiss Ephemeris",
       "author": "Astrodienst AG / Dieter Koch / Alois Treindl",
       "role": "astronomy",
-      "use": ["ephemeris"],
+      "use": [
+        "ephemeris"
+      ],
       "legal_status": "dual_license_astronomy",
       "ingest_rule": "facts_only",
       "status": "candidate",
@@ -404,7 +595,9 @@
       "title": "JPL Horizons",
       "author": "NASA / JPL",
       "role": "astronomy",
-      "use": ["ephemeris"],
+      "use": [
+        "ephemeris"
+      ],
       "legal_status": "needs_legal_review",
       "ingest_rule": "facts_only",
       "status": "candidate",

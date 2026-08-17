@@ -89,6 +89,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "positive_expression"
+        },
+        {
+          "source_id": "src.professional.watters_today",
+          "source_class": "professional",
+          "author": "Joanna Watters",
+          "edition": "Astrology For Today 2003, Carroll & Brown; Skyscript republication",
+          "school": "modern_general_practical",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Skyscript sun1.html; Introducing the Sun (Watters 2003 extract)",
+          "concept_id": "claim.sun.essential_self",
+          "field": "function",
+          "original_claim": "Sun is presented as the seat of day-conscious identity: one's essential self.",
+          "normalized_claim": "Sun = essential self / day-conscious identity."
+        },
+        {
+          "source_id": "src.psychological.greene_luminaries",
+          "source_class": "psychological",
+          "author": "Liz Greene / Howard Sasportas",
+          "edition": "The Luminaries, 1992 Samuel Weiser / CPA; ISBN 978-0-87728-750-6",
+          "school": "psychological_jungian",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "The Luminaries Pt.2, The Hero with a Thousand Faces (Greene)",
+          "concept_id": "claim.sun.solar_consciousness_eternal",
+          "field": "function",
+          "original_claim": "Solar consciousness is presented as oriented toward what is eternal/timeless.",
+          "normalized_claim": "Solar consciousness (Greene) orients to the eternal/timeless."
         }
       ]
     },
@@ -177,6 +209,38 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "positive_expression"
+        },
+        {
+          "source_id": "src.professional.watters_today",
+          "source_class": "professional",
+          "author": "Joanna Watters",
+          "edition": "Astrology For Today 2003, Carroll & Brown; Skyscript republication",
+          "school": "modern_general_practical",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Skyscript moon1.html; Introducing the Moon (Watters 2003 extract)",
+          "concept_id": "claim.moon.night_world_function",
+          "field": "function",
+          "original_claim": "If the Sun is the day-world of consciousness, the Moon is the night-world, ruling the unconscious and dreams.",
+          "normalized_claim": "Moon = night-world/unconscious counterpart to solar day-consciousness."
+        },
+        {
+          "source_id": "src.psychological.greene_luminaries",
+          "source_class": "psychological",
+          "author": "Liz Greene / Howard Sasportas",
+          "edition": "The Luminaries, 1992 Samuel Weiser / CPA; ISBN 978-0-87728-750-6",
+          "school": "psychological_jungian",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "The Luminaries Pt.1, Mothers and Matriarchy (Greene)",
+          "concept_id": "claim.moon.earth_mother_embodiment",
+          "field": "function",
+          "original_claim": "Via Gaia and Demeter, the Moon is linked to nature as a living whole, and to the body as direct experience of that principle.",
+          "normalized_claim": "Moon linked (via Gaia/Demeter) to nature-as-life-force and to the body as direct experience of it."
         }
       ]
     },
@@ -281,6 +345,38 @@
           "evidence_tier": "supported",
           "review_status": "compared",
           "field": "function"
+        },
+        {
+          "source_id": "src.professional.watters_today",
+          "source_class": "professional",
+          "author": "Joanna Watters",
+          "edition": "Astrology For Today 2003, Carroll & Brown; Skyscript republication",
+          "school": "modern_general_practical",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Skyscript mercury1.html; Introducing Mercury (Watters 2003 extract)",
+          "concept_id": "claim.mercury.mind_curiosity",
+          "field": "function",
+          "original_claim": "As planet of the mind, Mercury is characterised by curiosity paired with a short attention span.",
+          "normalized_claim": "Mercury = mind/curiosity, short attention span."
+        },
+        {
+          "source_id": "src.psychological.greene_inner_planets",
+          "source_class": "psychological",
+          "author": "Liz Greene / Howard Sasportas",
+          "edition": "The Inner Planets, 1993 Samuel Weiser; ISBN 0-87728-741-4",
+          "school": "psychological_jungian",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "The Inner Planets Pt.1 Mercury section (Greene/Sasportas)",
+          "concept_id": "claim.mercury.hermes_spontaneity",
+          "field": "function",
+          "original_claim": "Via the myth of newborn Hermes setting off without knowing where he was headed, Mercury is linked to spontaneity and openness to the unplanned.",
+          "normalized_claim": "Mercury linked (via young-Hermes myth) to spontaneity and openness to the unexpected."
         }
       ]
     },
@@ -401,6 +497,22 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "positive_expression"
+        },
+        {
+          "source_id": "src.professional.watters_today",
+          "source_class": "professional",
+          "author": "Joanna Watters",
+          "edition": "Astrology For Today 2003, Carroll & Brown; Skyscript republication",
+          "school": "modern_general_practical",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Skyscript venus1.html; Introducing Venus (Watters 2003 extract)",
+          "concept_id": "claim.venus.love_desire_function",
+          "field": "function",
+          "original_claim": "Venus governs love, desire and attraction, experienced through joy, rapture, lust and sexuality.",
+          "normalized_claim": "Venus = love/desire/attraction function."
         }
       ]
     },
@@ -521,6 +633,22 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "positive_expression"
+        },
+        {
+          "source_id": "src.professional.watters_today",
+          "source_class": "professional",
+          "author": "Joanna Watters",
+          "edition": "Astrology For Today 2003, Carroll & Brown; Skyscript republication",
+          "school": "modern_general_practical",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Skyscript mars1a.html; Introducing Mars (Watters 2003 extract)",
+          "concept_id": "claim.mars.assertive_drive_function",
+          "field": "function",
+          "original_claim": "Mars governs assertive/confrontational drive and urgency: how a person goes into battle and handles friction.",
+          "normalized_claim": "Mars = assertive/confrontational drive and urgency."
         }
       ]
     },
@@ -641,6 +769,22 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "positive_expression"
+        },
+        {
+          "source_id": "src.professional.watters_today",
+          "source_class": "professional",
+          "author": "Joanna Watters",
+          "edition": "Astrology For Today 2003, Carroll & Brown; Skyscript republication",
+          "school": "modern_general_practical",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "Skyscript jupiter1.html; Introducing Jupiter (Watters 2003 extract)",
+          "concept_id": "claim.jupiter.expansion_function",
+          "field": "function",
+          "original_claim": "Jupiter's core principle is enlargement/expansion.",
+          "normalized_claim": "Jupiter = enlargement/expansion principle."
         }
       ]
     },
@@ -740,8 +884,8 @@
           "school": "traditional_horary",
           "original_claim": "When well dignified: reserved in speech, patient in labour, grave in dispute, austere in conduct.",
           "normalized_claim": "Dignified Saturn: reserved, patient, austere, grave",
-          "evidence_tier": "school_specific",
-          "review_status": "extracted",
+          "evidence_tier": "supported",
+          "review_status": "compared",
           "field": "positive_expression",
           "reviewer": null,
           "reviewed_at": null
@@ -788,6 +932,54 @@
           "school": "psychological_jungian",
           "original_claim": "Frustrating Saturnian experience is educational; people attempt self-discovery when pain leaves no other choice, and self-understanding is the path to eventual freedom.",
           "normalized_claim": "Painful Saturnian experience can lead to self-discovery and eventual freedom",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "themes",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        {
+          "concept_id": "claim.saturn.cold",
+          "source_id": "src.traditional.houlding_saturn",
+          "source_class": "traditional",
+          "author": "Deborah Houlding",
+          "edition": "Skyscript article, December 2003",
+          "locus": "Saturn: The Great Teacher, Introduction",
+          "school": "living_traditional",
+          "original_claim": "Houlding restates Saturn as the Greater Malefic, cold because furthest from the Sun's warmth and from the Earth's moisture.",
+          "normalized_claim": "Saturn's primary quality is cold",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        {
+          "concept_id": "claim.saturn.personal_boundary",
+          "source_id": "src.traditional.houlding_saturn",
+          "source_class": "traditional",
+          "author": "Deborah Houlding",
+          "edition": "Skyscript article, December 2003",
+          "locus": "Saturn: The Great Teacher, Introduction",
+          "school": "living_traditional",
+          "original_claim": "As the most distant visible planet, Saturn marks the finite limit of personal awareness, capability, and life, against which personal will proves futile.",
+          "normalized_claim": "Saturn marks the finite boundary of personal awareness and capability",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "function",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        {
+          "concept_id": "claim.saturn.mature_through_constraint",
+          "source_id": "src.traditional.houlding_saturn",
+          "source_class": "traditional",
+          "author": "Deborah Houlding",
+          "edition": "Skyscript article, December 2003",
+          "locus": "Saturn: The Great Teacher, Saturn in Psychological Astrology",
+          "school": "living_traditional",
+          "original_claim": "Where Jupiter develops through expansion, Saturn matures through constraint; hard experience often shows its value only after time has passed.",
+          "normalized_claim": "Saturn matures through constraint rather than expansion",
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "themes",

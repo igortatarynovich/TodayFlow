@@ -182,7 +182,7 @@ v1.1: North Node · South Node · Chiron · Lilith (Mean Apogee) — identity у
 
 Не статья «Что такое Сатурн».
 
-**IL-1 fill:** Valens I.1 — topical/significator catalog (sect, colour, taste), не Ptolemy/Lilly elemental qualities. Saturn injuries from cold+moisture не схлопывать в dryness. Greene Weiser Classics 2021 Introduction — первый `psychological` school_class: psychic process / pain-toward-self-discovery остаются `school_specific` рядом с cold/dry/malefic. `function` черновиков не усреднять; structure / limits / maturation / reality не импортировать с этой страницы.
+**IL-1 fill:** Valens I.1 — topical/significator catalog (sect, colour, taste), не Ptolemy/Lilly elemental qualities. Saturn injuries from cold+moisture не схлопывать в dryness. Greene Weiser Classics 2021 Introduction — первый `psychological` school_class: psychic process / pain-toward-self-discovery остаются `school_specific`. Houlding *Saturn: The Great Teacher* (Skyscript 2003) — living-traditional: cold/dry/malefic/slow compared; personal boundary and mature-through-constraint остаются `school_specific`. Watters *Astrology For Today* 2003 (Skyscript planet intros) — classification gap: modern general practical, parked `source_class=professional` / `school=modern_general_practical`, not Houlding traditional and not Hand; `school_specific` only. Greene *The Luminaries* preview — Sun/Moon psychological `school_specific` (solar consciousness / embodiment); Greene *The Inner Planets* preview — Mercury Hermes-spontaneity `school_specific`. Do not collapse to consciousness vs unconscious as CORE. Body/health/fertility rows stay in the claims ledger, not `object.domains`. `function` черновиков не усреднять. Не записывать Ptolemy в подтверждающие structure-setting.
 
 ### Layer 2 — Signs
 
@@ -432,7 +432,7 @@ IL-1 research artifacts (pipeline, not a new ontology): `DATA/reference/astrolog
 
 Разница обязательна:
 
-- Пока CORE по Saturn **не scored**: classical cold/dry/malefic и Greene psychic-process — разные категории, не пересечение. *Structure / limits / maturity* на открытом Introduction **не attested** и не CORE.
+- Пока CORE по Saturn **не scored**: classical cold/dry/malefic, Houlding boundary/constraint и Greene psychic-process — разные категории, не пересечение. Не записывать Ptolemy в `schools_confirming` для structure-setting.
 - не CORE: *Saturn square Venus значит, что партнёр отдалится*
 
 Канон — не усреднённая «одна астрология». Provenance держит слои различимыми. Когда придут Greene, Hand, Sasportas, Arroyo, George: смотреть, что с классическим claim произошло (продолжено / переосмыслено / психологизировано / заменено). Классические lemmas **не затирать** современным пакетом.
@@ -540,6 +540,9 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 10. Changelog
 
+- **1.3.14 (2026-08-17)** — IL-1 ingest (no methodology change): refine Watters/Greene rows from the second research dump. Atomic splits (father≠attraction, traits≠health, orbit-fact≠symbolism). `runtime_semantic_candidate` / `do_not_compare_with` / `modern_general_practical` as source_class **not** added to schema. Watters stays `professional`. Greene Inner Planets Mercury (Hermes spontaneity) ingested as psychological `school_specific`. Body/health/fertility still ledger-only. Nothing `active`. CORE still unscored.
+- **1.3.13 (2026-08-17)** — IL-1 ingest (no methodology change): Watters 2003 Skyscript planet intros (Sun–Jupiter) as modern general intro parked in `professional` (classification gap; not traditional). Compound lemmas split. Body/medical rows ledger-only. Greene *The Luminaries* Sun/Moon preview as psychological `school_specific`. Hand Ch.4 / Relating Venus / Mercury–Mars–Jupiter psych remain NEED_OWNER. Object `function` not rewritten. Nothing `active`. CORE still unscored.
+- **1.3.12 (2026-08-17)** — IL-1 ingest (no methodology change): Houlding *Saturn: The Great Teacher* (Skyscript 2003) as living-traditional Saturn locus. Cold/dry/malefic/slow compared; personal-boundary and mature-through-constraint stay `school_specific`. Object `function` not rewritten. External T1–T4 Saturn pilot not imported. Nothing `active`. CORE still unscored.
 - **1.3.11 (2026-08-17)** — IL-1 ingest (no methodology change): first `psychological` school_class from opened Greene *Saturn* Introduction (Weiser Classics 2021 p.1–8, publisher Calaméo preview). Psychic-process / pain-toward-self-discovery stay `school_specific`; Saturn `function` not rewritten; structure/limits/maturation not imported. Nothing `active`. CORE still unscored.
 - **1.3.10 (2026-08-17)** — IL-1 ingest (no methodology change): first `traditional` school_class from opened Houlding loci (aspects 1995/2004; houses 1/6/7/12 extract). Orbs stay planetary; square not simply bad stays school_specific; house `domain` not rewritten. Nothing `active`. CORE still unscored.
 - **1.3.9 (2026-08-17)** — IL-1 ingest (no methodology change): Valens I.1 planets, I.2 Aries, IX XII Places; Lilly CA I.19 orbs/partile. Collisions logged; objects not averaged; nothing `active`; no sign objects.
