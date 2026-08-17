@@ -62,13 +62,13 @@ export const FIRST_TODAY_PATH = "/today?first=1";
 
 /**
  * Single source of truth for the mood/day-phase "first day" signal (FOUNDATION_UI §8/§9).
- * Kept in one place so shell, dashboard, and atmosphere resolvers can't diverge —
- * they previously computed this independently and disagreed.
+ * Explicit `?first=1` only — never treat a returning `/today` visit as first-day
+ * just because localStorage has not marked First Today complete (login / new device).
  */
 export function resolveIsFirstDay(
-  pathname: string | null | undefined,
+  _pathname: string | null | undefined,
   searchParams: URLSearchParams | null | undefined,
 ): boolean {
-  const firstQuery = searchParams?.get("first") === "1";
-  return firstQuery || ((pathname?.startsWith("/today") ?? false) && !hasCompletedFirstToday());
+  if (searchParams?.get("first") !== "1") return false;
+  return !hasCompletedFirstToday();
 }
