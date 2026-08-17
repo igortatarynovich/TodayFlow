@@ -84,6 +84,8 @@
   font-weight: 600;
   color: var(--tf-ink, #2d241c);
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   box-shadow: 0 4px 12px rgba(90, 52, 44, 0.08);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
   opacity: 0;
@@ -107,10 +109,16 @@
   }
 }
 
-.numBtn:hover,
 .numBtn:focus-visible {
   transform: scale(1.08);
   box-shadow: 0 6px 16px rgba(120, 72, 58, 0.12);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .numBtn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(120, 72, 58, 0.12);
+  }
 }
 
 .hint {

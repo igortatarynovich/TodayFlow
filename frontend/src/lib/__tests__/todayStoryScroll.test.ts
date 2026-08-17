@@ -49,6 +49,34 @@ describe("todayStoryScroll", () => {
     jest.restoreAllMocks();
   });
 
+  it("skips an overflow-visible pane and uses the step scroller", () => {
+    const step = document.createElement("div");
+    step.setAttribute("data-story-scroll", "step");
+    Object.defineProperty(step, "scrollHeight", { value: 800, configurable: true });
+    Object.defineProperty(step, "clientHeight", { value: 400, configurable: true });
+
+    const pane = document.createElement("div");
+    pane.setAttribute("data-story-scroll", "pane");
+    Object.defineProperty(pane, "scrollHeight", { value: 800, configurable: true });
+    Object.defineProperty(pane, "clientHeight", { value: 800, configurable: true });
+
+    const target = document.createElement("div");
+    step.appendChild(pane);
+    pane.appendChild(target);
+    document.body.appendChild(step);
+
+    jest.spyOn(window, "getComputedStyle").mockImplementation((el) => {
+      if (el === step) {
+        return { overflowY: "auto", scrollMarginTop: "0px" } as CSSStyleDeclaration;
+      }
+      return { overflowY: "visible", scrollMarginTop: "0px" } as CSSStyleDeclaration;
+    });
+
+    expect(findStoryScrollContainer(target)).toBe(step);
+    step.remove();
+    jest.restoreAllMocks();
+  });
+
   it("scopes block lookup to the active ScreenFlow step", () => {
     const stepA = document.createElement("section");
     stepA.setAttribute("data-screen-flow-step", "a");

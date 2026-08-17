@@ -52,6 +52,7 @@
   border-radius: var(--tf-ds-radius-lg);
   cursor: pointer;
   text-align: center;
+  touch-action: manipulation;
 }
 
 .ritualGate:focus-visible {

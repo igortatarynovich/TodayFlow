@@ -305,6 +305,7 @@ export function RitualTarotPickExperience({
           type="button"
           className={styles.idleDeck}
           onClick={onIdleActivate}
+          onPointerDown={(event) => event.stopPropagation()}
           aria-label={RITUAL_COPY.tarotIdleHint}
           data-testid="ritual-tarot-idle-deck"
         >

@@ -53,7 +53,9 @@ export function DsHeroBlock({
   testId,
 }: DsHeroBlockProps) {
   const feature = size === "feature";
-  const asButton = Boolean(onOpen) && !afterCopy;
+  // FAB is already a button — wrapping the hero too nested-buttons iOS and
+  // blocks first-screen scroll when the drag starts on the hero.
+  const asButton = Boolean(onOpen) && !afterCopy && !fab;
   return (
     <DsCard
       tone={tone}
@@ -369,6 +371,7 @@ export function DsOverlaySheet({
       aria-labelledby={titleId}
       data-testid={testId}
       className={fk.overlayRoot}
+      onPointerDown={(event) => event.stopPropagation()}
     >
       <button type="button" className={fk.overlayScrim} aria-label={closeLabel} onClick={onClose} />
       <DsCard tone="overlay" size="default" className={joinClass(fk.overlaySheet, c.stack)} testId={`${testId}-panel`}>

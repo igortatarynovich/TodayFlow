@@ -288,6 +288,7 @@
   cursor: pointer;
   color: inherit;
   font: inherit;
+  touch-action: pan-y;
 }
 
 .listRow:last-child {

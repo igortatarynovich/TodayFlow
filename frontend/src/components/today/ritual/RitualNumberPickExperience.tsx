@@ -247,6 +247,7 @@ export function RitualNumberPickExperience({
               data-blank="true"
               style={{ left: x, top: y, "--ni": i } as CSSProperties}
               onClick={onPick}
+              onPointerDown={(event) => event.stopPropagation()}
               disabled={resolving}
               aria-busy={resolving || undefined}
               aria-label="Открыть число дня"

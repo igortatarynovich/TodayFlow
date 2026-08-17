@@ -61,6 +61,7 @@ export function DsRitualGate({
       type="button"
       className={joinClass(m.ritualGate, kind === "tarot" ? m.ritualGateTarot : m.ritualGateNumber)}
       onClick={onClick}
+      onPointerDown={(event) => event.stopPropagation()}
       data-testid={testId}
     >
       {step ? <span className={m.gateStep}>{step}</span> : null}

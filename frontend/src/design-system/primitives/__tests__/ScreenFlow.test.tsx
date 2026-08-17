@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import {
@@ -7,11 +7,21 @@ import {
   resolveScreenFlowEntryIndex,
 } from "@/design-system/primitives/ScreenFlow";
 
-function Harness({ axis = "x" as const, initial = 0 }: { axis?: "x" | "y"; initial?: number }) {
+function Harness({
+  axis = "x" as const,
+  initial = 0,
+  withButton = false,
+}: {
+  axis?: "x" | "y";
+  initial?: number;
+  withButton?: boolean;
+}) {
   const [index, setIndex] = useState(initial);
   return (
     <ScreenFlow activeIndex={index} axis={axis} onIndexChange={(next) => setIndex(next)}>
-      <ScreenFlowStep id="a" label="Альфа"><p>Content A</p></ScreenFlowStep>
+      <ScreenFlowStep id="a" label="Альфа">
+        {withButton ? <button type="button">Открыть число</button> : <p>Content A</p>}
+      </ScreenFlowStep>
       <ScreenFlowStep id="b" label="Бета"><p>Content B</p></ScreenFlowStep>
       <ScreenFlowStep id="c" label="Гамма" status="pending" />
       <ScreenFlowStep id="d" label="Дельта" status="failed" />
@@ -47,10 +57,21 @@ describe("ScreenFlow", () => {
     expect(screen.getByTestId("screen-flow")).toHaveAttribute("data-axis", "y");
   });
 
-  it("exports locked Today axis and edge deadzone", async () => {
-    const mod = await import("@/design-system/primitives/ScreenFlow");
-    expect(mod.TODAY_SCREEN_FLOW_AXIS).toBe("x");
-    expect(mod.SCREEN_FLOW_EDGE_DEADZONE_PX).toBe(24);
+  it("does not swipe when the gesture starts on a button", () => {
+    render(<Harness withButton />);
+    const btn = screen.getByRole("button", { name: "Открыть число" });
+    const viewport = screen.getByTestId("screen-flow-viewport");
+    fireEvent.touchStart(btn, { changedTouches: [{ identifier: 1, clientX: 220, clientY: 120 }] });
+    fireEvent.touchEnd(viewport, { changedTouches: [{ identifier: 1, clientX: 40, clientY: 120 }] });
+    expect(screen.getByTestId("screen-flow")).toHaveAttribute("data-active-index", "0");
+  });
+
+  it("swipes to the next step from the pane", () => {
+    render(<Harness />);
+    const viewport = screen.getByTestId("screen-flow-viewport");
+    fireEvent.touchStart(viewport, { changedTouches: [{ identifier: 1, clientX: 220, clientY: 120 }] });
+    fireEvent.touchEnd(viewport, { changedTouches: [{ identifier: 1, clientX: 40, clientY: 120 }] });
+    expect(screen.getByTestId("screen-flow")).toHaveAttribute("data-active-index", "1");
   });
 });
 

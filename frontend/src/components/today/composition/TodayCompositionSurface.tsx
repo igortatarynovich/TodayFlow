@@ -2750,6 +2750,7 @@ export function TodayCompositionSurface(props: Props) {
               aria-modal="true"
               aria-label={copy.ritualTarotPendingTitle}
               data-testid="today-ritual-tarot-overlay"
+              onPointerDown={(event) => event.stopPropagation()}
             >
               <div className={styles.pickSheet}>
                 <div data-testid="today-ritual-tarot-pick">{tarotPickExperience}</div>
@@ -2770,6 +2771,7 @@ export function TodayCompositionSurface(props: Props) {
               aria-modal="true"
               aria-label={copy.ritualNumberPendingTitle}
               data-testid="today-ritual-number-overlay"
+              onPointerDown={(event) => event.stopPropagation()}
             >
               <div className={styles.pickSheet}>
                 <div data-testid="today-ritual-number-pick">{numberPickExperience}</div>
