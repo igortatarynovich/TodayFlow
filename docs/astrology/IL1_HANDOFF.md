@@ -3,7 +3,7 @@
 **Date:** 2026-08-17  
 **Owner intent:** continue **Interpretation Library IL-1 ingest**. Do not polish the methodology document. Do not reopen sequence / ontology / evidence.
 
-Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.9** ingest after **1.3.8** activation gates).  
+Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.10** first traditional school_class after **1.3.9** Valens/Lilly I.19).  
 Today Meaning SoT remains [`docs/today/TODAY_CONTENT_PIPELINE_V1.md`](../today/TODAY_CONTENT_PIPELINE_V1.md). IL is pipeline step 2 lookup only.
 
 Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
@@ -24,6 +24,8 @@ v1.3.8 is closed: `requires_action` and Layer 5 stay draft→active gates, not I
 ## 1. Locked (do not reopen)
 
 Sequence: **IL-0 ✅ → IL-1 now → IL-2 composition rules → IL-3 engine → IL-4 expression**.
+
+This sequence *is* the knowledge engine (atoms + provenance → composition rules → themes → expression). It is not a library of texts. Do not add a second vision document.
 
 - IL-1 is **surface-neutral**: no `today_message` / `profile_blurb` / `compatibility_line`. `surface` exists only on expression packs (IL-4).
 - Objects must map to entities the **current Swiss + Astro/calculation layer can emit**. No Uranus/Neptune/Pluto/ASC/MC until a real opened locus **and** calc emits them.
@@ -60,7 +62,7 @@ Public brand copy SoT: [`docs/content/TODAYFLOW_TRUST_LAYER.md`](../content/TODA
 | `3c62a5c6` | Activation gates 1.3.8 (requires_action / Layer 5 candidates) + handoff |
 | `5dee20a5` | Trust Layer (brand) — **not** IL ingest |
 
-IL ingest after 1.3.8: branch `il/il-1-ingest` (Valens I.1/I.2/IX + Lilly I.19). SHA after commit.
+IL ingest after 1.3.8: branch `il/il-1-ingest`. `edc37221` Valens/Lilly I.19. Next SHA: Houlding traditional class.
 
 ### Catalog (all `draft`, nothing `active`)
 
@@ -75,8 +77,8 @@ Runtime: `DATA/reference/astrology/interpretation_v1/`
 |-------|-----|--------------------|
 | 1 planets | `astro.object.{sun,moon,mercury,venus,mars,jupiter,saturn}` | Ptolemy I.4–I.7 + Lilly CA I.8–I.14 + Valens I.1. `function` still elemental (Ptolemy/Lilly), not a Valens catalog average |
 | 2 signs | **claims only** `astro.sign.{aries…pisces}` + `astro.sign.classifications` | Lilly QUALITY; Valens I.2 Aries fiery *and* watery. Psych slots unattested |
-| 3 houses | `astro.house.01`–`12` | Object `domain` still Lilly CA I.7. Valens IX compared on thin lemmas only. Derived-place not in schema. Ptolemy I.13 still not 12 topical houses |
-| 4 aspects | conjunction / sextile / square / trine / opposition | Geometry compared. Lilly I.19 orbs/partile logged, not copied into objects. `interaction` not Lilly enmity labels |
+| 3 houses | `astro.house.01`–`12` | Object `domain` still Lilly CA I.7. Valens IX compared on thin lemmas. Houlding houses extract opened for 1/6/7/12 only — personality and known-enemies rule not copied into `domain` |
+| 4 aspects | conjunction / sextile / square / trine / opposition | Geometry compared. Planetary orbs compared (Lilly I.19 + Houlding). Square-not-simply-bad is school_specific. `interaction` not rewritten |
 | 5 combos | none materialized | gold list in IL §8 = candidates |
 
 Saturn is deliberately poor vs modern astrology: cooling quality / cold / dryness / slowness / solitude / austerity — **not** structure / limits / maturity.
@@ -111,6 +113,11 @@ Saturn is deliberately poor vs modern astrology: cooling quality / cold / drynes
 - I.3 50 terms — **dignity**, not Layer 2; not copied (Foundation §2.5)
 - IX The XII Places (Riley 2K;3P)
 
+**Houlding / Skyscript** (copyrighted; paraphrase only):
+
+- *The Classical Origin and Traditional Use of Aspects* (Traditional Astrologer Mag. 8, 1995; Skyscript 2004)
+- *The Houses: Temples of the Sky* 1st ed. 1996 extracts: 1st, 6th, 7th, 12th (Skyscript 2003)
+
 ### Collisions already logged (do not “fix”)
 
 1. Moon/Venus temperature: Ptolemy moisture + moderate heat vs Lilly cold+moist.
@@ -134,8 +141,14 @@ Saturn is deliberately poor vs modern astrology: cooling quality / cold / drynes
 19. Aries element: Lilly fire vs Ptolemy winds vs Valens fiery *and* watery weather. Do not compare fire.
 20. Houses: Valens IX vs Lilly I.7 — compared on thin topics (life, brothers, marriage…). Enemies: Lilly VII public + XII private vs Valens XII. Servants: Lilly VI vs Valens XII slaves. Derived-place rotation has no schema slot.
 21. Lilly I.19: conjunction “very improperly” an aspect; orbs are planetary moieties, two tables from memory — not an IL aspect field.
+22. Houlding: orbs belong to planets; modern aspect-orbs are a 20th-century simplification. Compared with Lilly I.19 as planetary-not-aspectual. Numbers not copied onto objects.
+23. Houlding: square is not simply damaging (planet/dignity/reception). Lilly I.19 keeps imperfect enmity. Not averaged into `interaction`. Planet-dependent quality is IL-2.
+24. Houlding 1st house adds personality/mind. Lilly I.7 is life/stature/complexion. Domain not rewritten.
+25. Servants/employees: Lilly I.7 + Houlding 6th compared. Valens IX still puts slaves in XII.
+26. Known enemies: Houlding moves secret→7th once known. Lilly VII-public vs XII-private vs Valens XII-enemies remain distinct.
+27. Houlding 12th “unconscious / premature development” is later overlay on a traditional page — not Layer 3 meaning.
 
-CORE cannot be scored yet (still only `source_class=classical`, three authors). Do not teach “Saturn = structure” as CORE.
+CORE cannot be scored yet (classical + traditional opened; psychological and professional pending). Do not teach “Saturn = structure” as CORE.
 
 ---
 
@@ -145,9 +158,9 @@ CORE cannot be scored yet (still only `source_class=classical`, three authors). 
 
 Useful next opens (optional, not a backlog to invent from memory):
 
+- Remaining Houlding house extracts 2–5, 8–11 (same book; claims only where slots already exist)
 - Remaining Valens I.2 signs (Taurus–Pisces) — claims only, no objects
-- Skyscript / Houlding (traditional ontology; paraphrase, no scrape) — first **non-classical** school class
-- Greene / Hand / Sasportas / Arroyo / George — **only after those books are actually opened**
+- Greene / Hand / Sasportas / Arroyo / George — **only after those books are actually opened** (first psychological / professional class)
 
 Do **not**:
 
@@ -180,9 +193,9 @@ Author for commits (do not `git config`): `TodayFlow Agent <agent@todayflow.app>
 - no surface keys
 - no `evidence_tier: core` yet
 - aspects: geometry compared; `requires_action is False` cannot be `active`
-- houses: Lilly `domain` text remains; Valens compared on thin lemmas; derived-place / enemy-house / servant-house collisions logged
+- houses: Lilly `domain` text remains; Valens compared on thin lemmas; Houlding 1/6/7/12 is traditional class without rewriting domain
 - Aries fiery remains `school_specific`, not compared to Ptolemy fire **or** Valens fire (Valens also watery)
-- Lilly I.19 orbs not copied onto aspect objects
+- Lilly I.19 / Houlding orbs not copied onto aspect objects; square-not-simply-bad stays school_specific
 
 ---
 

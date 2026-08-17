@@ -148,7 +148,7 @@
       "legal_status": "copyrighted_site",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Structured traditional ontology. Extract concepts; never scrape articles into objects."
+      "notes": "Structured traditional ontology. Extract concepts; never scrape articles into objects. House extracts 1/6/7/12 opened via Houlding *Houses* source_id, not this row."
     },
     {
       "source_id": "src.traditional.houlding_houses",
@@ -159,7 +159,8 @@
       "use": ["houses", "history"],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Opened Skyscript extracts of houses 1/6/7/12 (1996/2003). Paraphrase only. Personality overlay and turned-house lists not copied into domain."
     },
     {
       "source_id": "src.traditional.houlding_aspects",
@@ -171,7 +172,7 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Needed so square ≠ simply 'bad'; aspect is a relation with a history."
+      "notes": "Needed so square ≠ simply 'bad'; aspect is a relation with a history. Opened: Classical Origin and Traditional Use of Aspects (Skyscript 2004; Mag. 8, 1995). Paraphrase only."
     },
     {
       "source_id": "src.traditional.abu_mashar_great_introduction",

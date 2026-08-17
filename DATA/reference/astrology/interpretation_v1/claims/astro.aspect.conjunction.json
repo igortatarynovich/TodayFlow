@@ -5,11 +5,12 @@
   "pending_source_ids": [
     "src.classical.valens_anthologies",
     "src.traditional.skyscript",
-    "src.traditional.houlding_aspects",
     "src.professional.tierney_aspect_analysis"
   ],
   "gap_notes": [
-    "CORE cannot be scored for aspect *meaning*. Geometry of 0/60/90/120/180 is now compared (Ptolemy I.16/I.27 + Lilly CA I.1). Qualitative labels are not the same system: Ptolemy harmonious/discordant-by-sex vs Lilly good/enmity/concord. Do not collapse.",
+    "CORE cannot be scored for aspect *meaning*. Classical + living-traditional now opened; psychological and professional schools pending. Do not promote geometry agreement to CORE.",
+    "Houlding 1995/2004: orbs belong to planets; attributing orbs to aspect types is a mid-20th-century simplification. Compared with Lilly I.19 moieties. Not an IL object field. Schema not expanded.",
+    "Houlding: square is not simply damaging; force depends on the planets, dignity, and reception. Lilly I.19 keeps imperfect enmity. Do not average into object.interaction. Planet-dependent quality is IL-2.",
     "Lilly CA I.19 opened (printed ~p.105): orbs are planetary moieties, two tables, used from memory. Not aspect-orbs and not an IL object field. Schema not expanded. requires_action still unevidenced.",
     "Lilly: sextile indifferent good; square enmity and not good; trine unity/concord/friendship; opposition a bad aspect; conjunction good or ill according to the question. None of these attest requires_action.",
     "requires_action is boolean in schema (no unknown/not_evidenced). false here means the opened locus does not establish the property — not the assertion 'this aspect does not require action'. Schema not expanded.",
@@ -91,9 +92,9 @@
       "concept_id": "claim.aspect.conjunction.improper",
       "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105)",
       "original_claim": "The strongest configurations are sextile, square, trine, opposition; conjunction is called an aspect very improperly.",
-      "normalized_claim": "Lilly I.19: conjunction is not properly an aspect",
-      "evidence_tier": "school_specific",
-      "review_status": "extracted",
+      "normalized_claim": "Conjunction is not properly an aspect",
+      "evidence_tier": "supported",
+      "review_status": "compared",
       "field": "interaction"
     },
     {
@@ -127,6 +128,70 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "intensity_rule"
+    },
+    {
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Archive.org 1647/1659 text",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.aspect.orbs_planetary",
+      "locus": "Book I Chapter XIX Terms and Aspects (1659 p.105–107)",
+      "original_claim": "A platick aspect admits the orbs or rays of the two planets; Lilly measures this by the moiety of each planet's orb.",
+      "normalized_claim": "Orbs belong to the planets, not to the aspect type",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "intensity_rule"
+    },
+    {
+      "source_id": "src.traditional.houlding_aspects",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Skyscript; Traditional Astrologer Mag. 8 (1995), online 2004",
+      "school": "living_traditional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.aspect.orbs_planetary",
+      "locus": "Classical Origin and Traditional Use of Aspects (Houlding; Skyscript 2004)",
+      "original_claim": "Traditional orbs belong to the planets; assigning orbs to aspect types is a later simplification after the outer planets.",
+      "normalized_claim": "Orbs belong to the planets, not to the aspect type",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "intensity_rule"
+    },
+    {
+      "source_id": "src.traditional.houlding_aspects",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Skyscript; Traditional Astrologer Mag. 8 (1995), online 2004",
+      "school": "living_traditional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.aspect.conjunction.improper",
+      "locus": "Classical Origin and Traditional Use of Aspects (Houlding; Skyscript 2004)",
+      "original_claim": "Conjunction is not properly an aspect: the bodies join physically rather than regarding each other by sight.",
+      "normalized_claim": "Conjunction is not properly an aspect",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "interaction"
+    },
+    {
+      "source_id": "src.traditional.houlding_aspects",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Skyscript; Traditional Astrologer Mag. 8 (1995), online 2004",
+      "school": "living_traditional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.aspect.conjunction.bodily",
+      "locus": "Classical Origin and Traditional Use of Aspects (Houlding; Skyscript 2004)",
+      "original_claim": "Traditional texts prefix conjunction as corporeal: a bodily union that combines the planets' influences.",
+      "normalized_claim": "Conjunction is bodily application of two bodies in the same parts of the zodiac",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "interaction"
     }
   ]
 }

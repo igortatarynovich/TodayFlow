@@ -4,17 +4,17 @@
   "calc_entity": "astrology.house.07",
   "pending_source_ids": [
     "src.traditional.skyscript",
-    "src.traditional.houlding_houses",
     "src.psychological.sasportas_twelve_houses",
     "src.psychological.george_ancient_practice"
   ],
   "gap_notes": [
-    "CORE cannot be scored: topical houses now Lilly CA I.7 + Valens IX. Still classical only. Ptolemy I.13 is not a 12-house list.",
+    "CORE cannot be scored: classical (Lilly, Valens) plus living-traditional (Houlding houses extract). Psychological and professional schools pending. Ptolemy I.13 is still not a 12-house list.",
     "Ptolemy Tetrabiblos I.13 gives four-angle temperament (east dry, south hot, west moist, north cold), not 12 topical houses. Lilly ascribes this house list to 'Ptolomeian Doctrine' (CA I.7 close). A source citing Ptolemy is not Ptolemy+Lilly consensus. Attribution unverified from the opened Tetrabiblos locus. Do not mark compared.",
     "No ASC/MC Layer-1 identity objects: I.13 is directional temperament, not persona/status packages.",
     "Layer 3 required slots filled only with Lilly's topical lists. Do not add modern 'psychological houses' (self-actualization, etc.).",
     "Valens IX also gives derived-place meanings (this place relative to III/IV/VII). Schema has no derived-place slot; not copied into domain.",
-    "Valens IX: VII = marriage-bringer / life of women, not open enemies. Lilly I.7 puts public enemies here. Compared on marriage only."
+    "Valens IX: VII = marriage-bringer / life of women, not open enemies. Lilly I.7 puts public enemies here. Compared on marriage only.",
+    "Houlding: known enemies belong to the 7th; the 12th warns of secret enemies until they are known. That normalizes Lilly VII-public vs XII-private. Valens IX still lists enemies at XII. Do not merge."
   ],
   "claims": [
     {
@@ -112,6 +112,38 @@
       "evidence_tier": "supported",
       "review_status": "compared",
       "field": "domain"
+    },
+    {
+      "source_id": "src.traditional.houlding_houses",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Houses: Temples of the Sky 1st ed. 1996; Skyscript extract 2003",
+      "school": "living_traditional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.house.07.marriage",
+      "locus": "Skyscript The 7th house (Houlding 1996/2003)",
+      "original_claim": "Marriage and all forms of partnerships; the spouse, lover, and person enquired after.",
+      "normalized_claim": "the seventh place concerns marriage",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "domain"
+    },
+    {
+      "source_id": "src.traditional.houlding_houses",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Houses: Temples of the Sky 1st ed. 1996; Skyscript extract 2003",
+      "school": "living_traditional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.house.07.known_enemies_rule",
+      "locus": "Skyscript The 7th house (Houlding 1996/2003)",
+      "original_claim": "All enemies known as such belong to the 7th; the 12th warns of secret enemies, who move to the 7th once known.",
+      "normalized_claim": "Living-traditional rule: secret enemies are 12th until known, then 7th",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "people"
     }
   ]
 }

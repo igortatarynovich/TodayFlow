@@ -187,19 +187,22 @@ def test_houses_and_aspects_from_opened_loci_only():
     assert "astro.object.mc" not in by_id
     for obj in houses:
         used = {row["source_id"] for row in obj["provenance"]}
-        assert used == {
-            "src.classical.lilly_christian_astrology",
-            "src.classical.valens_anthologies",
-        }
         notes = json.loads((CLAIMS_DIR / f"{obj['object_id']}.json").read_text(encoding="utf-8"))["gap_notes"]
+        assert "src.classical.lilly_christian_astrology" in used
+        assert "src.classical.valens_anthologies" in used
+        assert "src.classical.ptolemy_tetrabiblos" not in used
         assert any("not Ptolemy+Lilly consensus" in n for n in notes)
         assert any("derived-place" in n for n in notes)
-        assert "src.classical.ptolemy_tetrabiblos" not in used
+        if obj["object_id"] in {"astro.house.01", "astro.house.06", "astro.house.07", "astro.house.12"}:
+            assert "src.traditional.houlding_houses" in used
+        else:
+            assert "src.traditional.houlding_houses" not in used
     for obj in aspects:
         used = {row["source_id"] for row in obj["provenance"]}
-        assert used == {
+        assert used >= {
             "src.classical.ptolemy_tetrabiblos",
             "src.classical.lilly_christian_astrology",
+            "src.traditional.houlding_aspects",
         }
         assert obj["requires_action"] is False
         claims = json.loads((CLAIMS_DIR / f"{obj['object_id']}.json").read_text(encoding="utf-8"))
@@ -299,3 +302,34 @@ def test_valens_and_lilly19_collisions_not_averaged():
     assert any(row["concept_id"] == "claim.aspect.square.imperfect_enmity" for row in square_claims["claims"])
     assert any("moiet" in n.lower() for n in square_claims["gap_notes"])
     assert not any(obj["type"] == "sign" for obj in objects["objects"])
+
+
+def test_houlding_first_traditional_class_not_averaged():
+    """Living-traditional Houlding is a new school_class; it must not rewrite drafts or score CORE."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert by_id["astro.house.01"]["domain"] == "life, stature, and the querent's person"
+    assert by_id["astro.aspect.square"]["interaction"] == "friction"
+    h01 = json.loads((CLAIMS_DIR / "astro.house.01.json").read_text(encoding="utf-8"))
+    life = [r for r in h01["claims"] if r["concept_id"] == "claim.house.01.life"]
+    assert {r["source_class"] for r in life} == {"classical", "traditional"}
+    assert all(r["evidence_tier"] != "core" for r in h01["claims"])
+    assert any("personality" in n.lower() for n in h01["gap_notes"])
+    h06 = json.loads((CLAIMS_DIR / "astro.house.06.json").read_text(encoding="utf-8"))
+    servants = [r for r in h06["claims"] if r["concept_id"] == "claim.house.06.servants"]
+    assert {r["source_id"] for r in servants} == {
+        "src.classical.lilly_christian_astrology",
+        "src.traditional.houlding_houses",
+    }
+    assert all(r["review_status"] == "compared" for r in servants)
+    h07 = json.loads((CLAIMS_DIR / "astro.house.07.json").read_text(encoding="utf-8"))
+    assert any(r["concept_id"] == "claim.house.07.known_enemies_rule" for r in h07["claims"])
+    square = json.loads((CLAIMS_DIR / "astro.aspect.square.json").read_text(encoding="utf-8"))
+    not_bad = next(r for r in square["claims"] if r["concept_id"] == "claim.aspect.square.not_simply_bad")
+    assert not_bad["evidence_tier"] == "school_specific"
+    orbs = [r for r in square["claims"] if r["concept_id"] == "claim.aspect.orbs_planetary"]
+    assert {r["source_class"] for r in orbs} == {"classical", "traditional"}
+    assert all(r["evidence_tier"] != "core" for r in square["claims"])
+    classes = {r["source_class"] for obj in objects["objects"] for r in obj["provenance"]}
+    assert "traditional" in classes
+    assert all(obj["status"] != "active" for obj in objects["objects"])

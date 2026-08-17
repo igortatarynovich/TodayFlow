@@ -4,17 +4,17 @@
   "calc_entity": "astrology.house.12",
   "pending_source_ids": [
     "src.traditional.skyscript",
-    "src.traditional.houlding_houses",
     "src.psychological.sasportas_twelve_houses",
     "src.psychological.george_ancient_practice"
   ],
   "gap_notes": [
-    "CORE cannot be scored: topical houses now Lilly CA I.7 + Valens IX. Still classical only. Ptolemy I.13 is not a 12-house list.",
+    "CORE cannot be scored: classical (Lilly, Valens) plus living-traditional (Houlding houses extract). Psychological and professional schools pending. Ptolemy I.13 is still not a 12-house list.",
     "Ptolemy Tetrabiblos I.13 gives four-angle temperament (east dry, south hot, west moist, north cold), not 12 topical houses. Lilly ascribes this house list to 'Ptolomeian Doctrine' (CA I.7 close). A source citing Ptolemy is not Ptolemy+Lilly consensus. Attribution unverified from the opened Tetrabiblos locus. Do not mark compared.",
     "No ASC/MC Layer-1 identity objects: I.13 is directional temperament, not persona/status packages.",
     "Layer 3 required slots filled only with Lilly's topical lists. Do not add modern 'psychological houses' (self-actualization, etc.).",
     "Valens IX also gives derived-place meanings (this place relative to III/IV/VII). Schema has no derived-place slot; not copied into domain.",
-    "Valens IX: XII = enemies, slaves, crises. Lilly I.7: private enemies. Lilly VII also has public enemies. Do not merge enemy-houses."
+    "Valens IX: XII = enemies, slaves, crises. Lilly I.7: private enemies. Lilly VII also has public enemies. Do not merge enemy-houses.",
+    "Houlding 12th: hidden, restrained, secret; traditionally wholly unfortunate. A clause on unconscious/premature development is later overlay on this page — not copied into domain. Outer-planet examples skipped (calc/IL-1)."
   ],
   "claims": [
     {
@@ -96,6 +96,54 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "domain"
+    },
+    {
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "author": "William Lilly",
+      "edition": "Christian Astrology 1659; Wikisource djvu / Book I.7",
+      "school": "traditional_horary",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.house.12.imprisonment",
+      "locus": "Book I Chapter VII Twelfth House (1659 p.56)",
+      "original_claim": "Private enemies, sorrow, tribulation, imprisonments, all manner of affliction, self-undoing.",
+      "normalized_claim": "the twelfth place concerns imprisonment and affliction",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "domain"
+    },
+    {
+      "source_id": "src.traditional.houlding_houses",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Houses: Temples of the Sky 1st ed. 1996; Skyscript extract 2003",
+      "school": "living_traditional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.house.12.imprisonment",
+      "locus": "Skyscript The 12th house (Houlding 1996/2003)",
+      "original_claim": "Traditionally a wholly unfortunate house: sorrow, captivity, imprisonment, persecution, and self-undoing; places of seclusion.",
+      "normalized_claim": "the twelfth place concerns imprisonment and affliction",
+      "evidence_tier": "supported",
+      "review_status": "compared",
+      "field": "domain"
+    },
+    {
+      "source_id": "src.traditional.houlding_houses",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Houses: Temples of the Sky 1st ed. 1996; Skyscript extract 2003",
+      "school": "living_traditional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "concept_id": "claim.house.12.hidden",
+      "locus": "Skyscript The 12th house (Houlding 1996/2003)",
+      "original_claim": "The 12th represents matters that are hidden, restrained, secret, or incapable of full action or understanding.",
+      "normalized_claim": "Living-traditional 12th is hidden/restrained/secret, not Valens' general enemies-and-slaves package",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "internal_meaning"
     }
   ]
 }

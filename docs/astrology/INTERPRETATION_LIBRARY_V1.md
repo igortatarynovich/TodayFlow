@@ -204,7 +204,7 @@ Identity (ruler, dates) остаётся в Foundation §2.1 — **не копи
 
 Поля: `domain` · `internal_meaning` · `external_manifestations[]` · `people[]` · `activities[]` · `resources[]` · `risks[]`.
 
-**IL-1 fill:** draft-объект `domain` остаётся Lilly CA I.7 (не усреднять). Valens IX XII Places compared только по тонким lemmas (life, brothers, marriage…). Derived-place rotation и VIII-place note — gap, схему не расширять. Lilly «Ptolomeian Doctrine» ≠ Ptolemy+Lilly; Ptolemy I.13 по-прежнему не 12 topical houses.
+**IL-1 fill:** draft-объект `domain` остаётся Lilly CA I.7 (не усреднять). Valens IX XII Places compared только по тонким lemmas (life, brothers, marriage…). Houlding *Houses* extract (1/6/7/12) — первый `traditional` school_class: personality на 1-м и known-enemies rule на 7-м не копировать в `domain`. Derived-place / turned-house — gap, схему не расширять. Lilly «Ptolomeian Doctrine» ≠ Ptolemy+Lilly; Ptolemy I.13 по-прежнему не 12 topical houses.
 
 ### Layer 4 — Aspects (major only, v1)
 
@@ -222,7 +222,7 @@ Conjunction · Opposition · Square · Trine · Sextile.
 
 Таблица — **смысл слота**, когда локус его подтвердит. Не default для копирования в объект.
 
-**IL-1 fill:** Ptolemy I.16 даёт только harmonious / discordant. Lilly CA I.1 даёт good / enmity / concord — другая качественная система; в `object.interaction` не копировать. Lilly CA I.19 (p.105) уточняет: square = imperfect enmity, opposition = perfect hatred; orbs = planetary moieties (две таблицы, from memory), не aspect-orbs. В объект не копировать. Geometry 0/60/90/120/180 compared. `requires_action` в схеме — boolean (нет `unknown` / `not_evidenced`). `false` = свойство **не установлено данным локусом**, не утверждение «square не требует действия». Схему из-за этого не расширять. **Activation gate:** `status: active` с таким boolean запрещён, пока representation или runtime-контракт не снимут двусмысленность.
+**IL-1 fill:** Ptolemy I.16 даёт только harmonious / discordant. Lilly CA I.1 даёт good / enmity / concord — другая качественная система; в `object.interaction` не копировать. Lilly CA I.19 (p.105) уточняет: square = imperfect enmity, opposition = perfect hatred; orbs = planetary moieties (две таблицы, from memory), не aspect-orbs. Houlding 1995/2004: orbs принадлежат планетам; square не «просто плохой»; качество зависит от планет (это IL-2, не Layer 4 default). В объект не копировать. Geometry 0/60/90/120/180 compared. `requires_action` в схеме — boolean (нет `unknown` / `not_evidenced`). `false` = свойство **не установлено данным локусом**, не утверждение «square не требует действия». Схему из-за этого не расширять. **Activation gate:** `status: active` с таким boolean запрещён, пока representation или runtime-контракт не снимут двусмысленность.
 
 Миноры (Foundation §2.4) — не Layer 4 v1.
 
@@ -540,6 +540,7 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 10. Changelog
 
+- **1.3.10 (2026-08-17)** — IL-1 ingest (no methodology change): first `traditional` school_class from opened Houlding loci (aspects 1995/2004; houses 1/6/7/12 extract). Orbs stay planetary; square not simply bad stays school_specific; house `domain` not rewritten. Nothing `active`. CORE still unscored.
 - **1.3.9 (2026-08-17)** — IL-1 ingest (no methodology change): Valens I.1 planets, I.2 Aries, IX XII Places; Lilly CA I.19 orbs/partile. Collisions logged; objects not averaged; nothing `active`; no sign objects.
 - **1.3.8 (2026-08-17)** — Activation gates (not methodology): unevidenced `requires_action: false` cannot become `active`; IL-1 Layer 5 gold list = curated candidates, IL-2 may demote to composed. User-facing provenance bands later via Trust Layer. No sequence/ontology change.
 - **1.3.7 (2026-08-17)** — Public brand/trust language moved to [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md) (not an IL methodology change). Swiss/DE431 claim facts in Foundation §1.4.1.
