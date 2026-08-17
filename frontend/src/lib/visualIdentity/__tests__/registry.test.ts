@@ -6,8 +6,17 @@ import {
   archetypeIllustrationSrc,
   resolveArchetypeIllustrationSlug,
   planetAssetPath,
+  planetHasPhotoAsset,
+  planetPhotoPath,
+  earthPhotoPath,
+  chartAngleAssetPath,
+  zodiacOrbAssetPath,
+  celestialKitDecorPath,
   resolvePlanetSlug,
   zodiacAssetPath,
+  zodiacIllustrationPath,
+  zodiacIllustrationSrc,
+  resolveZodiacIllustrationSlug,
   elementAssetPath,
   resolveElementSlug,
   ARCHETYPE_SLUGS,
@@ -46,8 +55,32 @@ describe("visualIdentity registry", () => {
     expect(archetypeAssetPath("sage")).toBe("/images/icons/archetypes/sage.svg");
     expect(archetypeAssetPath("unknown")).toBe("/images/icons/archetypes/unknown.svg");
     expect(planetAssetPath("moon")).toBe("/images/icons/planets/moon.svg");
-    expect(zodiacAssetPath("aquarius")).toBe("/images/icons/zodiac/aquarius.svg");
+    expect(zodiacAssetPath("aquarius")).toBe("/images/icons/zodiac/aquarius.webp");
     expect(elementAssetPath("fire")).toBe("/images/icons/elements/fire.svg");
+  });
+
+  it("maps zodiac signs to painterly illustration WebP paths", () => {
+    expect(zodiacIllustrationPath("aries")).toBe("/images/zodiac/aries.webp");
+    expect(zodiacIllustrationSrc("Aquarius")).toBe("/images/zodiac/aquarius.webp");
+    expect(zodiacIllustrationSrc("Водолей")).toBe("/images/zodiac/aquarius.webp");
+    expect(resolveZodiacIllustrationSlug("Рыбы")).toBe("pisces");
+    expect(zodiacIllustrationSrc("")).toBeNull();
+    expect(resolveZodiacIllustrationSlug("Ophiuchus")).toBeNull();
+  });
+
+  it("prefers photo WebP for all ten traditional chart planets", () => {
+    expect(planetHasPhotoAsset("sun")).toBe(true);
+    expect(planetHasPhotoAsset("mercury")).toBe(true);
+    expect(planetHasPhotoAsset("pluto")).toBe(true);
+    expect(planetPhotoPath("saturn")).toBe("/images/icons/planets/saturn.webp");
+    expect(planetPhotoPath("mercury")).toBe("/images/icons/planets/mercury.webp");
+    expect(earthPhotoPath()).toBe("/images/icons/planets/earth.webp");
+  });
+
+  it("maps celestial-kit chart accents", () => {
+    expect(chartAngleAssetPath("asc")).toBe("/images/icons/angles/asc.webp");
+    expect(zodiacOrbAssetPath("leo")).toBe("/images/icons/zodiac-orbs/leo.webp");
+    expect(celestialKitDecorPath("star-gold")).toBe("/images/decorative/kit/star-gold.webp");
   });
 
   it("resolves EN and RU element names", () => {

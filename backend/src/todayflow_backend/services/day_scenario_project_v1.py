@@ -22,6 +22,7 @@ from todayflow_backend.services.day_scenario_v1 import (
     _TEMPLATE_OPP_RE,
     _TEMPLATE_WHAT_MARKERS,
     _month_from_ritual_or_today,
+    apply_primary_scene_id_v1,
     build_interpretive_chorus_v1,
     build_scenario_conflict_v1,
     build_scenario_props_v1,
@@ -49,7 +50,7 @@ from todayflow_backend.services.today_domain_wire_v1 import (
 PROJECTION_VERSION = "day_scenario_project_v1.b5"
 
 PROJECTION_MAP = {
-    "expect": "conflict + primary scene opportunity/what_happens",
+    "expect": "primary scene what_happens (fill-empty opportunity)",
     "trap": "primary scene.trap",
     "do": "props.goals[0] or primary scene.recommended_action",
     "avoid": "primary scene.do_not",
@@ -96,12 +97,14 @@ def _clip(value: Any, n: int = 400) -> str:
     return clip_prose(value, n)
 
 
-def _primary_scene(scenes: list[Any]) -> dict[str, Any] | None:
+def _primary_scene(scenes: list[Any], *, primary_scene_id: Any = None) -> dict[str, Any] | None:
+    from todayflow_backend.services.day_scenario_v1 import resolve_primary_scene_id_v1
+
+    sid = resolve_primary_scene_id_v1(scenes, declared=primary_scene_id)
+    if not sid:
+        return None
     for sc in scenes:
-        if isinstance(sc, dict) and sc.get("role_in_story") == "primary":
-            return sc
-    for sc in scenes:
-        if isinstance(sc, dict):
+        if isinstance(sc, dict) and str(sc.get("scene_id") or "").strip() == sid:
             return sc
     return None
 
@@ -405,6 +408,7 @@ def _heal_template_scene_copy(
                     foundation.get("personal_natal_activations") or []
                 ),
                 target_month=_month_from_ritual_or_today(None, foundation),
+                primary_scene_id=healed.get("primary_scene_id"),
             )
     return healed
 
@@ -443,6 +447,7 @@ def project_day_scenario_onto_day_story_v1(
         return base
 
     scen = _heal_template_scene_copy(scen, person_name=person_name)
+    scen = apply_primary_scene_id_v1(scen)
 
     errors = validate_day_scenario_v1(scen)
     hard = [
@@ -454,6 +459,8 @@ def project_day_scenario_onto_day_story_v1(
             "bad_contract_version",
             "scenes_empty",
             "conflict_missing_short_name",
+            "primary_scene_id_missing",
+            "primary_scene_id_unknown",
         }
     ]
     scenes = _as_list(scen.get("scenes"))
@@ -461,7 +468,7 @@ def project_day_scenario_onto_day_story_v1(
     props = _as_dict(scen.get("props"))
     foundation = _as_dict(scen.get("foundation"))
     chorus = _as_dict(scen.get("chorus"))
-    primary = _primary_scene(scenes)
+    primary = _primary_scene(scenes, primary_scene_id=scen.get("primary_scene_id"))
     origin_conflict = _origin_conflict_id(conflict)
     driver_ids = list(conflict.get("driver_ids") or [])[:5]
 
@@ -551,14 +558,8 @@ def project_day_scenario_onto_day_story_v1(
             "composition_ids": list(thesis.get("composition_ids") or [])[:3],
         }
 
-    # Day mood (visual_mode) — closed enum from native LLM; invalid ignored (atmosphere fallback)
-    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
-
-    mood = normalize_visual_mode(scen.get("visual_mode"))
-    if mood:
-        base["visual_mode"] = mood
-    else:
-        base.pop("visual_mode", None)
+    # Energy is Global Day Engine only — never copy LLM visual_mode as SoT.
+    base.pop("visual_mode", None)
 
     facts = [
         str(d.get("fact_ru") or "").strip()
@@ -614,11 +615,12 @@ def project_day_scenario_onto_day_story_v1(
     if affirms and isinstance(affirms[0], dict) and affirms[0].get("text"):
         a0 = affirms[0]
         text = _clip(a0.get("text"), 200)
+        kind = str(a0.get("kind") or "affirmation").strip() or "affirmation"
         # Prefer trap-compensation as reason; never repeat the affirmation text.
         reason_raw = _clip(a0.get("compensates_trap"), 120) or _clip(a0.get("helps_action"), 160)
         reason = reason_raw if reason_raw and reason_raw.lower() != text.lower() else ""
         base["practice_recommendation"] = {
-            "kind": "affirmation",
+            "kind": kind,
             "text": text,
             "reason": reason or None,
             "origin_scene_id": a0.get("origin_scene_id"),
@@ -632,14 +634,21 @@ def project_day_scenario_onto_day_story_v1(
         base["practice_recommendation"] = None
 
     goals = _as_list(props.get("goals"))
-    if goals and isinstance(goals[0], dict) and goals[0].get("text"):
-        base["development_point"] = _clip(goals[0].get("text"), 240)
+    primary_goals = [
+        g
+        for g in goals
+        if isinstance(g, dict)
+        and str(g.get("origin_scene_id") or "").strip() == scene_id
+        and str(g.get("text") or "").strip()
+    ]
+    if primary_goals:
+        base["development_point"] = _clip(primary_goals[0].get("text"), 240)
     else:
         base["development_point"] = _clip(primary.get("recommended_action"), 240)
 
-    # Editorial slots — always from scenario
+    # Editorial slots — lossless map from primary scene (I2: no concat, no second-scene pick)
     base["expect"] = _clip(
-        f"{primary.get('what_happens')} {primary.get('opportunity')}".strip(),
+        primary.get("what_happens") or primary.get("opportunity") or "",
         400,
     )
     base["trap"] = _clip(primary.get("trap"), 320)
@@ -651,22 +660,15 @@ def project_day_scenario_onto_day_story_v1(
         400,
     )
 
-    do_text = ""
-    if goals and isinstance(goals[0], dict):
-        do_text = str(goals[0].get("text") or "")
-    if not do_text:
-        do_text = str(primary.get("recommended_action") or "")
-    do_list = [_clip(do_text, 240)] if do_text else []
-    if len(goals) > 1 and isinstance(goals[1], dict) and goals[1].get("text"):
-        do_list.append(_clip(goals[1].get("text"), 240))
-    elif len(scenes) > 1 and isinstance(scenes[1], dict):
-        alt = _clip(scenes[1].get("recommended_action"), 240)
-        if alt and alt not in do_list:
-            do_list.append(alt)
+    do_list = [_clip(g.get("text"), 240) for g in primary_goals[:2]]
+    if not do_list:
+        rec = _clip(primary.get("recommended_action"), 240)
+        if rec:
+            do_list = [rec]
     # No filler do-line invent when only one real action exists.
     base["do"] = do_list
-    base["today_move"] = _clip(do_list[0] if do_list else do_text, 200)
-    base["primary_action"] = _clip(do_list[0] if do_list else do_text, 200)
+    base["today_move"] = _clip(do_list[0] if do_list else "", 200)
+    base["primary_action"] = _clip(do_list[0] if do_list else "", 200)
 
     avoid_list: list[str] = []
     avoid_text = _clip(primary.get("do_not"), 240)
@@ -697,7 +699,11 @@ def project_day_scenario_onto_day_story_v1(
         ),
         "do": _field_provenance(
             origin_scene_id=str(
-                (goals[0].get("origin_scene_id") if goals and isinstance(goals[0], dict) else None)
+                (
+                    primary_goals[0].get("origin_scene_id")
+                    if primary_goals
+                    else None
+                )
                 or scene_id
                 or None
             ),
@@ -760,5 +766,14 @@ def build_and_project_day_scenario_v1(
         ritual_context=ritual_context,
         celestial_events=celestial_events,
         person_name=person_name,
+        omit_narrative=True,
     )
+    if scenario.get("narrative_omitted"):
+        out = dict(story) if isinstance(story, dict) else {}
+        out["day_scenario"] = scenario
+        editorial = dict(out.get("editorial") or {})
+        editorial["runtime_source"] = "facts_only_poorer_fallback"
+        editorial["narrative_omitted"] = True
+        out["editorial"] = editorial
+        return out
     return project_day_scenario_onto_day_story_v1(story, scenario, person_name=person_name)

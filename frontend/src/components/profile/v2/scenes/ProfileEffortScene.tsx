@@ -9,7 +9,7 @@ import {
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
 import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 import { ElementIcon } from "@/components/visualIdentity/ElementIcon";
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
 import type { ElementSlug, PlanetSlug } from "@/lib/visualIdentity/registry";

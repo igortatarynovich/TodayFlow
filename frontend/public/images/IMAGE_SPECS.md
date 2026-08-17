@@ -20,7 +20,7 @@ Quick reference guide for image requirements across the application.
 ### 🟢 Low Priority (Can Wait)
 1. Pattern card images
 2. Practice card previews
-3. Zodiac avatars
+3. ✅ Zodiac avatars — `public/images/zodiac/{slug}.webp`
 4. Promotional banners
 5. Background patterns
 

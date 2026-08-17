@@ -59,8 +59,6 @@ def test_build_celestial_events_includes_symbols_and_transits():
     with patch("todayflow_backend.services.celestial_events_builder.LunarService") as lunar_cls, patch(
         "todayflow_backend.services.celestial_events_builder.RetrogradeService"
     ) as retro_cls, patch(
-        "todayflow_backend.services.celestial_events_builder.AspectEngine"
-    ) as aspect_cls, patch(
         "todayflow_backend.services.celestial_events_builder.find_timed_major_moon_aspects",
         new=AsyncMock(return_value=[]),
     ), patch(
@@ -70,7 +68,6 @@ def test_build_celestial_events_includes_symbols_and_transits():
         lunar_cls.return_value.phase_at.return_value = mock_lunar
         lunar_cls.return_value.current_phase.return_value = mock_lunar
         retro_cls.return_value.get_retrograde_status = AsyncMock(return_value=mock_retro)
-        aspect_cls.return_value.callouts.return_value = MagicMock(callouts=[])
 
         payload = asyncio.run(
             build_celestial_events(
@@ -93,3 +90,6 @@ def test_build_celestial_events_includes_symbols_and_transits():
     assert payload["timed_lunar_aspects"] == []
     assert payload["day_events_pack"]["contract_version"] == "day_events_pack_v1"
     assert isinstance(payload["day_events_pack"]["ranked_drivers"], list)
+    assert payload.get("headline_sky")
+    assert payload["headline_sky"]["aspect"] == "square"
+    assert payload.get("sky_positions")

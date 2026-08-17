@@ -14,7 +14,6 @@ import {
   type KeyboardEvent,
   type ReactElement,
   type ReactNode,
-  type TouchEvent,
 } from "react";
 import { usePrefersReducedMotion } from "@/design-system/motion/usePrefersReducedMotion";
 import { joinClass } from "@/design-system/utils/joinClass";
@@ -91,6 +90,13 @@ const FAILURE_COPY: Record<"failed" | "degraded", string> = {
 
 /** Handoff SoT: pointer delta > 60px (design_handoff_today_flow README). */
 const SWIPE_THRESHOLD_PX = 60;
+
+const INTERACTIVE_TOUCH_SELECTOR =
+  "button, a, input, textarea, select, label, [role='button'], [role='dialog'], [role='slider']";
+
+function isInteractiveTouchTarget(target: EventTarget | null): boolean {
+  return target instanceof Element && Boolean(target.closest(INTERACTIVE_TOUCH_SELECTOR));
+}
 
 export function ScreenFlowStep({
   id,
@@ -174,7 +180,8 @@ export function ScreenFlow({
   const reduceMotion = usePrefersReducedMotion();
   const liveId = useId();
   const headingRefs = useRef<Array<HTMLHeadingElement | null>>([]);
-  const touchStart = useRef<{ x: number; y: number; edge: boolean } | null>(null);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const touchStart = useRef<{ x: number; y: number; edge: boolean; ignore: boolean } | null>(null);
   const [liveText, setLiveText] = useState("");
 
   const steps = useMemo(() => {
@@ -234,34 +241,54 @@ export function ScreenFlow({
     }
   };
 
-  const onTouchStart = (e: TouchEvent) => {
-    const t = e.changedTouches[0];
-    if (!t) return;
-    touchStart.current = {
-      x: t.clientX,
-      y: t.clientY,
-      edge: axis === "x" && t.clientX <= edgeDeadzonePx,
-    };
-  };
+  // Native + passive: React onTouchStart on the viewport is non-passive and
+  // blocks iOS scrolling / click on nested buttons (gates, number tiles, hero).
+  const swipeRef = useRef({ axis, edgeDeadzonePx, goTo, clamped });
+  swipeRef.current = { axis, edgeDeadzonePx, goTo, clamped };
 
-  const onTouchEnd = (e: TouchEvent) => {
-    const start = touchStart.current;
-    touchStart.current = null;
-    if (!start || start.edge) return;
-    const t = e.changedTouches[0];
-    if (!t) return;
-    const dx = t.clientX - start.x;
-    const dy = t.clientY - start.y;
-    if (axis === "x") {
-      if (Math.abs(dx) < SWIPE_THRESHOLD_PX || Math.abs(dx) < Math.abs(dy)) return;
-      if (dx < 0) goTo(clamped + 1, "swipe");
-      else goTo(clamped - 1, "swipe");
-    } else {
-      if (Math.abs(dy) < SWIPE_THRESHOLD_PX || Math.abs(dy) < Math.abs(dx)) return;
-      if (dy < 0) goTo(clamped + 1, "swipe");
-      else goTo(clamped - 1, "swipe");
-    }
-  };
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+
+    const onTouchStart = (e: globalThis.TouchEvent) => {
+      const t = e.changedTouches[0];
+      if (!t) return;
+      const s = swipeRef.current;
+      touchStart.current = {
+        x: t.clientX,
+        y: t.clientY,
+        edge: s.axis === "x" && t.clientX <= s.edgeDeadzonePx,
+        ignore: isInteractiveTouchTarget(e.target),
+      };
+    };
+
+    const onTouchEnd = (e: globalThis.TouchEvent) => {
+      const start = touchStart.current;
+      touchStart.current = null;
+      if (!start || start.edge || start.ignore) return;
+      const t = e.changedTouches[0];
+      if (!t) return;
+      const s = swipeRef.current;
+      const dx = t.clientX - start.x;
+      const dy = t.clientY - start.y;
+      if (s.axis === "x") {
+        if (Math.abs(dx) < SWIPE_THRESHOLD_PX || Math.abs(dx) < Math.abs(dy)) return;
+        if (dx < 0) s.goTo(s.clamped + 1, "swipe");
+        else s.goTo(s.clamped - 1, "swipe");
+      } else {
+        if (Math.abs(dy) < SWIPE_THRESHOLD_PX || Math.abs(dy) < Math.abs(dx)) return;
+        if (dy < 0) s.goTo(s.clamped + 1, "swipe");
+        else s.goTo(s.clamped - 1, "swipe");
+      }
+    };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
+  }, []);
 
   const trackStyle =
     axis === "x"
@@ -382,12 +409,11 @@ export function ScreenFlow({
       ) : null}
 
       <div
+        ref={viewportRef}
         className={styles.viewport}
         data-testid="screen-flow-viewport"
         tabIndex={0}
         onKeyDown={onKeyDown}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
       >
         <div
           className={joinClass(styles.track, axis === "x" ? styles.trackX : styles.trackY)}

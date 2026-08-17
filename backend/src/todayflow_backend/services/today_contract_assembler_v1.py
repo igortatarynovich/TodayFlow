@@ -564,7 +564,17 @@ def assemble_today_contract_v1(
 
 # Subtrees with their own contracts — do not scan for legacy sphere keys.
 # welcome_glass.reason is SoT (Wave B1); day_story carries narrative slots.
-_LEGACY_SCAN_SKIP_TOP_KEYS = frozenset({"day_story", "welcome_glass"})
+_LEGACY_SCAN_SKIP_TOP_KEYS = frozenset(
+    {
+        "day_story",
+        "welcome_glass",
+        "sky_today",
+        "global_day",
+        "personal_day",
+        "day_package_manifest",
+        "daily_actions",
+    }
+)
 
 
 def _collect_forbidden_keys(obj: Any, path: str = "") -> list[str]:

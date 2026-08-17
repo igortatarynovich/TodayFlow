@@ -12,7 +12,7 @@ import { ProfileV0LifeLayer } from "./ProfileV0LifeLayer";
 import { ProfileV0NumbersMiniHero } from "./ProfileV0NumbersMiniHero";
 import { ProfileV0SocialMirrorBlock } from "./ProfileV0SocialMirrorBlock";
 import { ProfileV0WhoScene } from "./ProfileV0WhoScene";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 export type ProfileV0ScreenProps = {
   model: ProfileV0ViewModel;

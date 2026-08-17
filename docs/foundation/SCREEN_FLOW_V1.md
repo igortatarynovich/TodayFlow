@@ -4,7 +4,7 @@
 **Версия:** 1.0 (2026-07-30)  
 **Контракт:** Discrete product steps via transform — **viewport lock** + **swipe** + **keyboard** + **a11y**
 
-Канон для полноэкранного (one-act-at-a-time) продуктового потока шагов — **Today ScreenFlow** handoff composition (**Welcome → Priority → Promise → Make yours → Поток дня → [Число → Карта] → Цвет → Фокус → Практика → Recap → Close**; content jobs: [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md)) и будущих product flows.
+Канон для полноэкранного (one-act-at-a-time) продуктового потока шагов — **Today ScreenFlow**. **Product cycle (LOCKED):** [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md) — **TODAY → RITUAL → MY DAY → EVENING**. Pager mechanics живут здесь; jobs экрана — там.
 
 **Визуальный родитель:** [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) — surface/motion/radius/gap.
 
@@ -152,21 +152,36 @@ Meaning events: см. [TODAY_PERSONALIZATION_CORE.md](../TODAY_PERSONALIZATION_C
 
 ## 4. Today mapping
 
-Content jobs SoT: [TODAY_SCREEN_SCENARIO_V3.md](../today/TODAY_SCREEN_SCENARIO_V3.md) **v3.1 houses**.  
-**Presentation SoT (LOCKED 2026-08-10):** **six blocks** — День → Ритуалы → Инструкция → Цвет → Задания → Петля.
+**Product cycle SoT (LOCKED 2026-08-15):** [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md).
 
-| Index | Block | Notes |
-|-------|-------|--------|
-| 0 | День | тренд-амбассадор: вайб · why · энергия · expect/trap/do·don't · (опц. timeline) |
-| 1 | Ритуалы | число + карта (omit if no symbols) |
-| 2 | Инструкция | персональный prioritize/avoid |
-| 3 | Цвет | color guide |
-| 4 | Задания | 1–2 выдачи + ежедневные; не catalog shop |
-| 5 | Петля | обещание → close |
+| Index | id | Question |
+|-------|----|----------|
+| 0 | `today` | Какой сегодня день? (Global: energy · moon · driver · strengths · risks) |
+| 1 | `ritual` | Карта, затем число (линзы) |
+| 2 | `my_day` | Что это значит для меня? (omit guest) |
+| 3 | `evening` | За что я благодарен? |
 
-Without symbols: indices shift (5 steps). Re-entry: ordinary visit → **0**; deep-link `sf=1&step=N`.
+Детали — тап / sheet, не новые шаги. Timeline **не** на `today`. Color / practice / action — карточки внутри `my_day`.
 
-**v3.3 12-step handoff — deprecated** (see SCENARIO_V3.4).
+**Code (2026-08-15):** `TodayProductScreenFlow.tsx` mounts these four ids. Guest/general omit `my_day`. [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md) remains a historical six-block map.
+
+**v3.3 12-step handoff — deprecated.** Six-block v3.4 — superseded as product map.
+
+### 4.1 Capability matrix (who may see which house)
+
+Canon: [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md) · [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md) I0.  
+Code: `frontend/src/lib/todayScreenFlowCapability.ts`.
+
+ScreenFlow **hides** houses. It does **not** invent Personal Day.
+
+| Depth | Evidence | Screens on | Honest omit |
+|-------|----------|------------|-------------|
+| **guest** | shared sky | `today` · `ritual` (card + universal number) · `evening` | `my_day`, personal timeline |
+| **general** | account, thin natal | same | `my_day`, why_personal, deep natal |
+| **light** | DOB | + `my_day` (light) | natal house/angle overlay, personal timeline |
+| **deep** | DOB + time + place | + personal timeline if activations exist | empty invented windows |
+
+Guest must never see empty personal slots pretending to be “your day”.
 
 **Contract:** [TODAY_WAVE2_CONTRACT_V1.md](../today/TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1` + `day_story` → Today Contract Assembler.
 
@@ -233,6 +248,18 @@ Without symbols: indices shift (5 steps). Re-entry: ordinary visit → **0**; de
 
 ## 7. Changelog
 
+### 2026-08-15 — Product cycle: four surfaces
+
+- **SoT:** [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md) — TODAY → RITUAL → MY DAY → EVENING.
+- Six-block v3.4 superseded as product map; pager mechanics unchanged.
+- **FE cutover:** `TodayProductScreenFlow` ids `today` · `ritual` · `my_day` · `evening`. Guest omits `my_day`. Timeline only on `my_day`. Evening = gratitude.
+- **First Today:** intent/reality gate, then the same four surfaces (capability). Not a separate conversation cycle.
+
+### 2026-08-15 — Capability matrix (§4.1)
+
+- **Added §4.1** — guest / general / light / deep: Global Day always; Personal Day omitted without natal evidence.
+- **Code:** `todayScreenFlowCapability.ts`
+
 ### 2026-08-03 — Chrome: drop visible step numbers (§1.5)
 
 - **Added §1.5** — nav bar is optional per §1.4; `TodayActNav` visible ordinal (`{item.step}`) replaced with non-numeric indicator, swipe stays the primary path.
@@ -251,7 +278,7 @@ Without symbols: indices shift (5 steps). Re-entry: ordinary visit → **0**; de
 ### 2026-08-03 — Today mapping → SCENARIO v3.1
 
 - **§4 rows** replaced to match locked content jobs (no seed leakage · color house = Move · Reading ≤2 no action).
-- Content SoT remains [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md); this file = pager mechanics + index map.
+- Meaning SoT = [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md); presentation map = [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md); this file = pager mechanics + index map.
 
 ### 2026-07-30 — v1.2 (axis lock)
 

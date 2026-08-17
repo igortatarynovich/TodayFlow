@@ -94,6 +94,32 @@
   margin: 0;
   padding: 0.25rem 0 0.25rem 0;
   border: none;
+  position: relative;
+}
+
+.quoteHighlight {
+  padding: var(--tf-ds-space-5, 1rem) var(--tf-ds-space-5, 1rem) var(--tf-ds-space-5, 1rem)
+    var(--tf-ds-space-6, 1.25rem);
+  border-radius: var(--tf-ds-radius-md, 1.1rem);
+  background: color-mix(
+    in srgb,
+    var(--day-accent-soft, var(--tf-accent-gold-wash, #f9f4e8)) 42%,
+    var(--tf-surface, #fff)
+  );
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 28%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 70%, transparent);
+}
+
+.quoteHighlight::before {
+  content: "“";
+  position: absolute;
+  top: 0.15rem;
+  left: 0.55rem;
+  font-family: var(--tf-font-display);
+  font-size: clamp(2.5rem, 8vw, 3.5rem);
+  line-height: 1;
+  color: color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 55%, transparent);
+  pointer-events: none;
 }
 
 .quoteKicker {

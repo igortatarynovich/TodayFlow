@@ -27,7 +27,7 @@ import { buildProfileJourneyProjection } from "@/lib/profilePage/buildProfileJou
 import { profilePortraitFormingMessage } from "@/lib/profilePage/profilePortraitForming";
 import { buildProfileHeroQuote } from "@/lib/product-ui/profileWebFigmaHelpers";
 import type { CoreProfile } from "@/lib/types";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type ProfileV2SystemScreenProps = {
   model: ProfileQuickMapScreenProps["model"];

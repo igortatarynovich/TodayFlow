@@ -96,5 +96,17 @@ Engine: `day_lifecycle_clock_c5.py`, `day_lifecycle_jobs_c5.py`
 5. **C5.3 System close** — landed
 6. **Assemble-once hard gate (GET never builds)** — landed 2026-07-26
 7. **Ready_at → 05:00** — landed 2026-08-03
+8. **D−1 evening prewarm** — landed 2026-08-15 (additive): local **21:00–midnight** enqueues assemble for **tomorrow**; 03:00–05:00 remains catch-up for today. `ready_at` unchanged (05:00).
+
+```markdown
+## Architecture impact — D−1 evening prewarm (2026-08-15)
+
+- **SoT before:** assemble window 03:00–05:00 on day D; catch-up after ready_at if missing.
+- **SoT after:** TARGET «пакет D готов до midnight D−1» starts as additive evening enqueue (21:00+) for D+1. Morning 03:00–05:00 still catch-up. ready_at stays 05:00.
+- **Public contract changed?** no — `progress.day_lifecycle.ready_time` unchanged; new count `prewarm_d_minus_1` in cron stats only.
+- **Migration required?** no
+- **Canon updated?** yes — this doc · clock `in_d_minus_1_window`
+- **Backward compatible?** yes
+```
 
 Ops: crontab every 10 min → `scripts/run_day_lifecycle_cron.sh` → `POST /internal/push/run-due` (needs `PUSH_DISPATCH_SECRET`, `--max-time 600`). Cover **03–06** and 22–00 local bands for active TZs. Missed openers: GET assembling enqueues background `day_prewarm` job.

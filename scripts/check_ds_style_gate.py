@@ -36,12 +36,35 @@ EXEMPT_DIR_PARTS = ("design-system",)
 HEX_RE = re.compile(
     r"(?<![\w-])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b"
 )
-# Selectors that look like ad-hoc CTA / card shells (prefix match per Task 1)
+# Selectors that look like ad-hoc CTA / card shells (prefix match per Task 1 + Form Kit §15.8)
 ADHOC_CLASS_RE = re.compile(
     r"(?<![\w-])\.("
-    r"(?:cta|card|actionButton|primaryCta|secondaryCta|submitButton)\w*"
+    r"(?:cta|card|actionButton|primaryCta|secondaryCta|submitButton|"
+    r"heroCard|heroBlock|glassCard|chipRow|fabBtn|metricCard|surfaceCard|"
+    r"betterCard|trapCard|supportCard|personalCard)\w*"
     r")\b"
 )
+
+# Form Kit §15.8 — visual skin declarations outside design-system (even on `.container`)
+VISUAL_PROP_RE = re.compile(
+    r"(?P<prop>"
+    r"border-radius|backdrop-filter|-webkit-backdrop-filter|box-shadow|"
+    r"background|background-color|background-image"
+    r")\s*:\s*(?P<value>[^;}+]+)",
+    re.IGNORECASE,
+)
+VISUAL_PROP_OK_RE = re.compile(
+    r"^(?:"
+    r"var\(\s*--(?:tf|day)-[a-z0-9-]+"
+    r"|transparent|none|inherit|unset|initial|currentColor|0|0px"
+    r")",
+    re.IGNORECASE,
+)
+# Decorative gradients flagged even when not hex (skin lives in DS)
+GRADIENT_RE = re.compile(r"\b(?:linear|radial|conic)-gradient\s*\(", re.IGNORECASE)
+
+# Zone allowlist — paths still migrating; new files outside this list must be clean.
+DEFAULT_ZONE_ALLOWLIST = REPO_ROOT / "scripts" / "ds_form_kit_zone_allowlist.json"
 # New custom-property *definitions* for banned namespaces (not var(--orbit-*) reads)
 LEGACY_DEF_RE = re.compile(
     r"(--(?:orbit|todayflow|tdp|product)-[a-zA-Z0-9-]+)\s*:"
@@ -226,6 +249,49 @@ def scan_file(path: Path) -> list[Violation]:
                 )
             )
 
+        for m in VISUAL_PROP_RE.finditer(line):
+            prop = m.group("prop").lower()
+            value = normalize_css_value(m.group("value"))
+            # Layout-only transparent/none backgrounds ok; token-only ok
+            if VISUAL_PROP_OK_RE.match(value) and prop in {
+                "background",
+                "background-color",
+                "background-image",
+                "box-shadow",
+                "border-radius",
+                "backdrop-filter",
+                "-webkit-backdrop-filter",
+            }:
+                # Still flag decorative gradients even when mixed with tokens
+                if not GRADIENT_RE.search(value):
+                    continue
+            # border-radius via --tf-ds-radius-* is allowed
+            if prop == "border-radius" and "var(--tf-ds-radius" in value.replace(" ", ""):
+                continue
+            if prop == "border-radius" and re.match(r"^999px$", value):
+                continue
+            detail = f"{prop}:{value[:60]}"
+            out.append(
+                Violation(
+                    rule="visual-skin",
+                    path=rel,
+                    line=i + 1,
+                    detail=detail,
+                )
+            )
+
+        if GRADIENT_RE.search(line) and "background" not in line.lower() and "mask" not in line.lower():
+            # catch standalone gradient usages
+            snippet = normalize_css_value(line.strip())[:80]
+            out.append(
+                Violation(
+                    rule="visual-skin",
+                    path=rel,
+                    line=i + 1,
+                    detail=f"gradient:{snippet}",
+                )
+            )
+
     # Dedupe identical keys on same line noise
     seen: set[tuple[str, int, str]] = set()
     unique: list[Violation] = []
@@ -236,6 +302,35 @@ def scan_file(path: Path) -> list[Violation]:
         seen.add(k)
         unique.append(v)
     return unique
+
+
+def load_zone_allowlist(path: Path) -> set[str]:
+    """Return set of posix paths still allowed to carry local visual skin."""
+    if not path.exists():
+        return set()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    paths: set[str] = set()
+    zones = data.get("zones", {})
+    if isinstance(zones, dict):
+        for entries in zones.values():
+            if isinstance(entries, list):
+                paths.update(str(p) for p in entries)
+    extra = data.get("paths", [])
+    if isinstance(extra, list):
+        paths.update(str(p) for p in extra)
+    return paths
+
+
+def is_path_in_open_zone(rel: str, allowlist: set[str]) -> bool:
+    if rel in allowlist:
+        return True
+    # prefix match for directory entries ending with /
+    for entry in allowlist:
+        if entry.endswith("/") and rel.startswith(entry):
+            return True
+        if entry.endswith("/**") and rel.startswith(entry[:-3]):
+            return True
+    return False
 
 
 def iter_module_css(root: Path) -> list[Path]:
@@ -257,11 +352,11 @@ def write_baseline(path: Path, violations: list[Violation]) -> None:
     for v in violations:
         by_rule[v.rule] = by_rule.get(v.rule, 0) + 1
     payload = {
-        "version": 2,
+        "version": 3,
         "description": (
             "DS style gate baseline — hex/adhoc/legacy + rgba/color-mix + font-size + "
-            "max-width debt. New keys fail CI; listed keys warn only. Shrink as "
-            "Task 2.6 / 2.6b / 2.7 migrations land."
+            "max-width + Form Kit visual-skin debt. New keys fail CI; listed keys warn only. "
+            "Shrink as zone migrations land (ds_form_kit_zone_allowlist.json)."
         ),
         "generated_by": "scripts/check_ds_style_gate.py --write-baseline",
         "counts": {
@@ -294,6 +389,12 @@ def main(argv: list[str] | None = None) -> int:
         help="Baseline JSON path",
     )
     parser.add_argument(
+        "--zone-allowlist",
+        type=Path,
+        default=DEFAULT_ZONE_ALLOWLIST,
+        help="Form Kit open-zone allowlist JSON",
+    )
+    parser.add_argument(
         "--warn-only",
         action="store_true",
         help="Report all violations as warnings; exit 0",
@@ -316,6 +417,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     root = args.root if args.root.is_absolute() else REPO_ROOT / args.root
+    zone_path = (
+        args.zone_allowlist
+        if args.zone_allowlist.is_absolute()
+        else REPO_ROOT / args.zone_allowlist
+    )
+    open_zones = load_zone_allowlist(zone_path)
     files = iter_module_css(root)
     all_v: list[Violation] = []
     for f in files:
@@ -334,6 +441,11 @@ def main(argv: list[str] | None = None) -> int:
     warnings: list[Violation] = []
 
     for v in all_v:
+        in_open = is_path_in_open_zone(v.path, open_zones)
+        # Form Kit: visual-skin outside open zones is always an error (DoD absolute).
+        if v.rule == "visual-skin" and not in_open and not args.warn_only:
+            errors.append(v)
+            continue
         if args.warn_only or v.key in baseline:
             warnings.append(v)
         else:
@@ -347,6 +459,7 @@ def main(argv: list[str] | None = None) -> int:
                     "errors": [asdict(v) for v in errors],
                     "warnings": [asdict(v) for v in warnings],
                     "baseline_keys": len(baseline),
+                    "open_zone_paths": len(open_zones),
                 },
                 indent=2,
             )
@@ -360,12 +473,14 @@ def main(argv: list[str] | None = None) -> int:
         print(
             f"\nds-style-gate: scanned {len(files)} module.css · "
             f"{len(errors)} new error(s) · {len(warnings)} baselined warning(s) · "
-            f"baseline={args.baseline.relative_to(REPO_ROOT) if args.baseline.exists() else 'missing'}"
+            f"baseline={args.baseline.relative_to(REPO_ROOT) if args.baseline.exists() else 'missing'} · "
+            f"open_zones={len(open_zones)}"
         )
         if errors:
             print(
-                "New design-system gate violations. Use DsButton/DsCard/DsTypography + --tf-*/--day-* "
-                "/ --tf-type-* / --tf-shell-* or add `/* ds-gate: allow — <ticket> */` with justification."
+                "New design-system gate violations. Use Form Kit Ds* exports only "
+                "(FOUNDATION_UI §15.8); no local visual skin outside design-system/. "
+                "Or add `/* ds-gate: allow — <ticket> */` with justification."
             )
 
     if args.warn_only:

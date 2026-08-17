@@ -21,6 +21,8 @@ DEFAULT_READY_TIME = "05:00"
 DEFAULT_ASSEMBLE_START = "03:00"
 DEFAULT_ASSEMBLE_END = "05:00"
 DEFAULT_CLOSE_TIME = "23:00"
+# D−1 evening window: assemble tomorrow's package before midnight (additive to 03:00–05:00 catch-up).
+DEFAULT_D_MINUS_1_START = "21:00"
 
 DAY_STATUS_NOT_READY = "day_not_ready"
 DAY_STATUS_ASSEMBLING = "assembling"
@@ -111,6 +113,17 @@ def compute_day_lifecycle_c5(
         },
         "now_local": now_local.isoformat(),
     }
+
+
+def in_d_minus_1_window(
+    now_local: datetime,
+    *,
+    start: str | None = None,
+) -> bool:
+    """True from 21:00 local until midnight — assemble next day's package."""
+    start_t = parse_hhmm(start, fallback=DEFAULT_D_MINUS_1_START)
+    minutes = now_local.hour * 60 + now_local.minute
+    return minutes >= (start_t.hour * 60 + start_t.minute)
 
 
 def in_assemble_window(

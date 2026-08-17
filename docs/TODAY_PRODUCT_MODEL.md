@@ -1,6 +1,6 @@
 # Today — продуктовая модель
 
-**Статус:** принято (канон **что такое экран Today** и **воронка формирования дня**).  
+**Статус:** принято (воронка / Theme→Action→Progress). **Дневной ScreenFlow** — не здесь: [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY · RITUAL · MY DAY · EVENING).  
 **Версия:** 1.1 (2026-06-01).  
 **Владелец:** Product + Engineering.
 

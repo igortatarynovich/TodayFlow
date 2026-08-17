@@ -152,6 +152,7 @@ def test_heal_drops_broken_props_not_whole_scenario() -> None:
             {
                 "scene_id": "scene.work",
                 "sphere": "work_decisions",
+                "role_in_story": "primary",
                 "serves_conflict": "тон дня",
                 "setup": "s",
                 "what_happens": "w",

@@ -466,12 +466,13 @@ export type TodayContractDayStoryV1 = {
    * Full day_scenario nest (B3+). Prefer for conflict/scenes/props when present;
    * public slots remain projections.
    */
-  day_scenario?: {
+    day_scenario?: {
     contract_version?: string;
     version?: string;
     runtime_sot?: boolean;
     ready?: boolean;
     generation_source?: string;
+    primary_scene_id?: string;
     conflict?: {
       short_name?: string;
       why_arose?: string;
@@ -527,6 +528,7 @@ export type TodayDayFoundationV1 = {
   };
   lunar?: {
     phase?: {
+      id?: string;
       name?: string;
       cycle_day?: number;
       guidance?: string;
@@ -747,6 +749,104 @@ export type TodayContractColorGuideV1 = {
   avoid_why?: string | null;
 };
 
+export type TodayContractSkyBodyV1 = {
+  body: string;
+  body_ru: string;
+  sign: string;
+  sign_ru: string;
+  degree?: number | null;
+  retrograde?: boolean;
+  exact_time_local?: string | null;
+};
+
+export type TodayContractSkyHeadlineV1 = {
+  id: string;
+  planet_a: string;
+  planet_b: string;
+  planet_a_ru: string;
+  planet_b_ru: string;
+  sign_a?: string | null;
+  sign_b?: string | null;
+  sign_a_ru?: string | null;
+  sign_b_ru?: string | null;
+  aspect: string;
+  aspect_ru: string;
+  title_ru: string;
+  story_ru?: string | null;
+  orb_delta?: number | null;
+  exact_time_local?: string | null;
+};
+
+export type TodayContractSkyAspectV1 = {
+  id: string;
+  planet_a: string;
+  planet_b: string;
+  planet_a_ru: string;
+  planet_b_ru: string;
+  sign_a_ru?: string | null;
+  sign_b_ru?: string | null;
+  aspect: string;
+  aspect_ru: string;
+  title_ru: string;
+  orb_delta?: number | null;
+};
+
+export type TodayContractSkyWindowV1 = {
+  kind: string;
+  starts_at: string;
+  ends_at: string;
+};
+
+/** Shared sky influence: Moon climate + one headline. Not an ephemeris dump. */
+export type TodayContractSkyTodayV1 = {
+  contract_version?: string;
+  moon?: TodayContractSkyBodyV1 | null;
+  headline?: TodayContractSkyHeadlineV1 | null;
+  window?: TodayContractSkyWindowV1 | null;
+  positions?: TodayContractSkyBodyV1[];
+  aspects?: TodayContractSkyAspectV1[];
+};
+
+export type TodayContractGlobalDayWindowV1 = {
+  time?: string;
+  driver_id?: string;
+  intensity?: number;
+  supports?: string[];
+  cautions?: string[];
+};
+
+export type TodayContractGlobalDayV1 = {
+  contract_version?: string;
+  scoring_version?: string;
+  primary_energy?: string;
+  energy_scores?: Record<string, number>;
+  drivers?: Array<{ id?: string; kind?: string; fact_ru?: string; strength?: number }>;
+  strength?: string[];
+  risk?: string[];
+  windows?: TodayContractGlobalDayWindowV1[];
+};
+
+export type TodayContractPersonalDayV1 = {
+  contract_version?: string;
+  mutates_global?: boolean;
+  natal_overlay?: Record<string, unknown> | null;
+};
+
+export type TodayContractDayPackageManifestV1 = {
+  contract_version?: string;
+  immutable?: boolean;
+  scoring_version?: string;
+  timeline_rules_version?: string;
+  today_contract_version?: string;
+  [key: string]: unknown;
+};
+
+export type TodayContractDailyActionV1 = {
+  kind: "practice" | "affirmation" | "reflection" | "goal" | string;
+  text: string;
+  origin_scene_id?: string;
+};
+
 export type TodayContractV1 = {
   contract_version: typeof TODAY_CONTRACT_V1 | string;
   global_context: { period: string };
@@ -762,6 +862,16 @@ export type TodayContractV1 = {
   welcome_glass?: TodayContractWelcomeGlassV1 | null;
   today_progress?: TodayContractTodayProgressV1 | null;
   color_guide?: TodayContractColorGuideV1 | null;
+  /** Shared sky influence: Moon climate + one headline. Not an ephemeris dump. */
+  sky_today?: TodayContractSkyTodayV1 | null;
+  /** Deterministic Global Day Profile (I0). Downstream must not mutate. */
+  global_day?: TodayContractGlobalDayV1 | null;
+  /** Personal Day nest. Omit for guest. Must not mutate global_day. */
+  personal_day?: TodayContractPersonalDayV1 | null;
+  /** Version stamps; GET reads persist and does not recompute. */
+  day_package_manifest?: TodayContractDayPackageManifestV1 | null;
+  /** Typed actions (practice | affirmation | reflection | goal). */
+  daily_actions?: TodayContractDailyActionV1[] | null;
 };
 
 export const DAY_ATMOSPHERE_ENGINE_EVENT = "todayflow:day-atmosphere";
@@ -846,7 +956,11 @@ function contractFromFirstTodayPackage(
   };
 }
 
-/** Deterministic contract when `/today/contract` is unavailable (offline, LLM quota, etc.). */
+/**
+ * Test / fixture helper only.
+ * Do **not** paint this as live Today — it invents a First Today package.
+ * Product path: wait, then «Нет соединения.» / «Не удалось загрузить.»
+ */
 export function buildFallbackTodayContract(input: {
   coreProfile?: CoreProfile | null;
 } = {}): TodayContractV1 {
@@ -884,7 +998,8 @@ export async function fetchTodayContractV1(targetDate?: string): Promise<TodayCo
   if (targetDate) params.set("target_date", targetDate);
   params.set("timezone", clientTimezone());
   const qs = `?${params.toString()}`;
-  // Hard client budget: if contract LLM stalls, Today must paint via fallback — not hang forever.
+  // Hard client budget: if contract LLM stalls, Today stays on the waiting surface
+  // (or honest unavailable) — never invent a First Today package.
   const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
   const timer =
     controller && typeof window !== "undefined"

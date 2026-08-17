@@ -8,7 +8,7 @@ import {
   outcomeLabelRu,
   type DayContinuityRecord,
 } from "@/lib/todayDayContinuity";
-import editorialStyles from "@/components/profile/editorial/profileEditorial.module.css";
+import editorialStyles from "@/design-system/profile/dsProfileEditorial.module.css";
 
 export const PROFILE_MY_DAYS_COPY = {
   label: "Мои дни",

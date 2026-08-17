@@ -1,8 +1,80 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-10
+Last updated: 2026-08-17
 Owner: Product + Engineering
 Status: Active working document
+
+## Architecture impact — One product shell chrome on every in-app page (2026-08-17)
+
+- **SoT before:** Pages could pass `theme`/`mood` into `ProductWebAppShell`; Tarot section atmosphere still painted ritual void (`#07080c`); `data-product-web-shell` also fired on `/` and `/auth`.
+- **SoT after:** Chrome (sidebar, tab bar, type, ink, frame bg) is identical on every `usesProductWebAppShell` route. Pages may set rail / `fullMain` / main content only. Day Atmosphere still tints the shared wash; it does not fork a per-section shell.
+- **Public contract changed?** no
+- **Migration required?** no — FE chrome only
+- **Canon updated?** yes — `docs/TODAYFLOW_FOUNDATION_UI.md` §7 · §11.1
+- **Backward compatible?** yes; marketing `/` `/auth*` `/onboarding*` stay outside App Shell
+
+## Architecture impact — Login must not paint First Today fallback (2026-08-17)
+
+- **SoT before:** Post-auth used localStorage `hasCompletedFirstToday()`; missing flag → `/today?first=1` chip gate. Missing `/today/contract` → FE invented `buildFallbackTodayContract` (First Today package) as live paint.
+- **SoT after:** Login home = `/today`. First Today (`?first=1`) only from explicit onboarding routes. Contract miss → wait / «Нет соединения.» / «Не удалось загрузить.» — no invented day.
+- **Public contract changed?** no
+- **Migration required?** no — client routing + paint only
+- **Canon updated?** yes — `docs/FIRST_DAY_EXPERIENCE.md` §2 post-auth
+- **Backward compatible?** yes; onboarding still `router.replace(FIRST_TODAY_PATH)`
+
+**CANON LOCKED (2026-08-15):** **Один Today Meaning SoT** = [TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md). **Один product cycle** = [TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY → RITUAL → MY DAY → EVENING). SCENARIO_V3 six-block **superseded** as product map. DAY_SCENARIO_V1 / B5 demoted (не канон смысла). DAY_SOURCES = facts only.
+
+## Architecture impact — Today product flow (2026-08-15)
+
+- **SoT before:** presentation = SCENARIO_V3.4 six blocks (1a/1b, color, tasks, loop=promise); timeline could live on Global.
+- **SoT after:** TODAY_PRODUCT_FLOW_V1 — four surfaces. Timeline **shown** only on MY DAY. Evening = gratitude. Meaning unchanged (pipeline I0). Card/number remain lenses.
+- **Public contract changed?** target yes, phased — ScreenFlow ids; gratitude persist; Global UI without timeline.
+- **Migration required?** yes — FE cutover from six/seven steps; evening job.
+- **Canon updated?** yes — TODAY_PRODUCT_FLOW_V1 · pipeline § экран · SCENARIO_V3 banner · SCREEN_FLOW §4 · README · capability TS.
+- **Backward compatible?** yes API until gratitude/cutover; cached days keep old nests.
+- **Next:** FE rebuilt 2026-08-15 (`docker compose … --build --force-recreate frontend`). Live `/today` 200 · image `551d5764`. TODAY Global clock + MY DAY «Ритм дня» from windows when natal empty. Hard-refresh. Gratitude History → Month → Map still later.
+
+## Architecture impact — MY DAY Global rhythm fallback (2026-08-15)
+
+- **SoT before:** MY DAY timeline only if `personalTimeline` (deep) and natal `glance_timeline`. Light users and empty natal saw no clock.
+- **SoT after:** Rhythm mounts on any `my_day`. Natal clocks if present («Мой ритм дня»). Else Global windows × driver facts («Ритм дня»).
+- **Public contract changed?** no.
+- **Migration required?** no.
+- **Canon updated?** yes — TODAY_PRODUCT_FLOW_V1 §3 · pipeline § экран.
+- **Backward compatible?** yes; untitled windows omit.
+
+## Architecture impact — Global day clock on TODAY (2026-08-15)
+
+- **SoT before:** TODAY hid `windows[]`; one ranked driver; energy = 8-set label; Personal Timeline only on MY DAY.
+- **SoT after:** TODAY shows Global clock from existing `global_day.windows[]` + timed transit rows (moon + drivers) + `energy_scores[primary]` as %. Personal Timeline still MY DAY only (natal × windows). Form kit blocks (`DsMetricCard`, `DsWindowCard`, `DsListRow`+`DsPlanet`).
+- **Public contract changed?** no — UI reads existing nests.
+- **Migration required?** no.
+- **Canon updated?** yes — TODAY_PRODUCT_FLOW_V1 §1 · pipeline § экран.
+- **Backward compatible?** yes; omit empty scores/windows.
+
+## Architecture impact — Content pipeline + I0 (2026-08-15)
+
+- **SoT before:** I1–I8 = один DayScenario Meaning SoT.
+- **SoT after:** I0 + pipeline. Ownership-таблица (один decision owner на поле). Downstream non-mutation (enrich/verbalize only). Цепочка: Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. UX reveal (GLOBAL → RITUAL → PERSONAL) отдельно от authority. LLM только формулирует persist-once. Карта/число не определяют день.
+- **Public contract changed?** target yes, phased — lock-only no wire bump.
+- **Migration required?** yes — see pipeline overlay table.
+- **Canon updated?** yes — TODAY_CONTENT_PIPELINE_V1 · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · SCENARIO_V3 · README.
+- **Backward compatible?** yes cached payloads.
+- **Next:** deploy when owner asks. Pipeline work order 0–11 landed in code 2026-08-15 (I0 nests, Global Engine, ritual number, manifest, guide read-only, daily_actions, poorer fallback, ScreenFlow capability, D−1 evening enqueue).
+
+- 2026-08-15 | Today / Ritual | **Число дня не открывалось** | **CODE** | ScreenFlow `transform` + `container-type: size` ловили `position: fixed`. `DsOverlaySheet` и pick-оверлеи карты/числа теперь portal в `document.body` (z-index 200). Тесты: gate → overlay, lens → sheet.
+
+
+**DONE (OPS+CODE, 2026-08-14):** **K2.6 primary · K3 complex-only** — `NEBIUS_MODEL=moonshotai/Kimi-K2.6` for day/prewarm/routine; `NEBIUS_COMPLEX_MODEL=moonshotai/Kimi-K3` + `resolve_complex_chat_model()` only for CE Stage 2–4, profile disclosure funnel, natal decode. Canon: LLM_QUALITY Nebius section.
+
+## Architecture impact — K2.6 primary + K3 complex-only (2026-08-14)
+
+- **SoT before:** Live `NEBIUS_MODEL=moonshotai/Kimi-K3` for all Nebius chat (day + profile).
+- **SoT after:** Primary `moonshotai/Kimi-K2.6` (`resolve_default_chat_model`); K3 only via `NEBIUS_COMPLEX_MODEL` on allowlisted complex user ops (CE 2–4, profile funnel, natal decode). Empty complex → same as primary.
+- **Public contract changed?** no
+- **Migration required?** no — env + resolver; cached day rows keep prior model id in logs
+- **Canon updated?** yes — `docs/LLM_QUALITY_AND_PROMPT_EVOLUTION.md` Nebius routing table
+- **Backward compatible?** yes for GET cache
 
 **DONE (CODE, 2026-08-10):** **Today Block 1 dashboard + detail sheet (v3.4.2)** — mockup-led cards on `day` (hero · why chips · better · support‖trap · personal); tap opens overlay sheet; CTA → orientation; timeline on orientation. No invent / no public JSON change. Canon: SCENARIO_V3.4.2.
 
@@ -919,10 +991,21 @@ Status: `COMPLETED`
 ## Phase 5: Design System Hardening
 Status: `IN_PROGRESS`
 
+### Form Kit (2026-08-14) — closed visual SoT
+- **Canon:** `TODAYFLOW_FOUNDATION_UI.md` §15.8 — Surface≠Card; compositions; visual import contract; formal DoD; form≠kit colors.
+- **Hard rules:** `DsWaveMeter` = semantic value viz; `DsChip` `statusTone` = `--tf-semantic-*` only (no `--day-*`); `DsSectionHeader` = composition only.
+- **Code:** `frontend/src/design-system/` primitives + `compositions/` + `visual/` wrappers; catalog `/design-system` = **100% sheet roles specimen**; gate declarative skin bans.
+- **Production:** Today day brief wires only roles with real model data; UI imports from `design-system/**` (+ domain data/types). Next stage = zone migration only (Practices…).
+- **Zone sequence (absolute no local skin after each):** Today → Profile → Practices → Compatibility → Natal → rest. Allowlist: `scripts/ds_form_kit_zone_allowlist.json`.
+
 ### Tasks
 - [x] Lock color tokens, typography scale, spacing grid.
 - [x] Standardize button/card/input variants.
 - [x] Unify icon style and tarot cover style.
+- [x] **Form Kit closed set** — §15.8 primitives + compositions + visual contract + gate + **full-sheet catalog specimen** + day-brief data-backed wiring.
+- [ ] **Form Kit zones** — Today → Profile → Practices → Compatibility → Natal → rest (zero local skin per closed zone). Allowlist: `scripts/ds_form_kit_zone_allowlist.json`.
+  - **Today zone CLOSED** · **Profile zone CLOSED** (2026-08-14): local `*.module.css` moved under `design-system/**`. Next: Practices (5 modules).
+  - Today/Profile inventory closed via DS compositions/patterns/layouts/profile skins.
 - [x] **Task 2.7 Wave 1** — Shell/layout unification (`--tf-shell-max` / readable; kill phone columns). Practices/Profile/Compatibility + Tarot hub. Exit: `layout DoD ✅`, zones still IN PROGRESS.
 - [x] **Task 2.6 Wave 2** — Expand DS gate for `rgba()` / `color-mix()`; rewrite Compatibility local rgba cards to `--tf-*`/`--day-*`.
 - [x] **Task 2.6b Wave 2** — Typography on same three zones + Tarot hub → Foundation `--tf-type-*` roles.
@@ -1579,7 +1662,10 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-08-10 | Today / Focus | **Kill kitchen leaks in Фокус дня** | **LIVE (code→deploy)** | Stopped `element_focus` catalog + aligned-tension kitchen («Источники в основном согласованы») from Daily Focus. BE: empty tension when aligned; orchestrator `do_focus` not seeded from element; value-gate bans. FE: no tension candidate; kitchen reject; no canned filler. Empty omit wins.
+- 2026-08-15 | Today / Canon | **I2/I3 hygiene** | **CODE** | `primary_scene_id` on native+scenario; gate reject missing/unknown; projector no first-scene pick / no expect concat / do from primary only. Next: I0 contract → Global Engine.
+- 2026-08-15 | Today / Canon | **Pipeline ownership + non-mutation** | **LOCKED** | [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md): один decision owner на поле; downstream enrich/verbalize only; цепочка Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation; UX reveal ≠ authority. Next: I2/I3 hygiene → I0 contract → Global Engine.
+- 2026-08-14 | Design System | **Form Kit full-sheet SoT** | **LIVE (FE)** | Chips statusTone=`--tf-semantic-*` only; `DsLinearProgress` + semantic `DsWaveMeter`; button `lg`; `DsSectionHeader` composition; quote highlight; `/design-system` 100% sheet specimen; DayBrief data-backed only + `DsCelestialMoon`. Next = Practices zone migration.
+- 2026-08-14 | Ops / LLM | **K2.6 primary · K3 complex-only** | **CODE→deploy** | `NEBIUS_MODEL=K2.6`; `NEBIUS_COMPLEX_MODEL=K3` for CE 2–4 / profile funnel / natal decode only. Day/prewarm stay on K2.6.
 - 2026-08-04 | Design System | **Day shell chrome fix** | **DONE (LIVE)** | PR #14 merged · frontend rebuild. Day-mode = shell routes; evening phase gated; sidebar stretch.
 - 2026-08-05 | Design System | **Task 2.9b Compatibility result** | **IN PROGRESS (code)** | Exploration main/duals/tips/deep + funnel confidence/today/risk + analyze/signs personalized → `DsCallout`/`DsQuote`. Not zone DONE — 6-axis DoD + screenshots remain.
 - 2026-08-05 | Design System | **Task 2.9b Tarot result** | **DONE (CODE)** | `TarotWebResult` answer/next_step/A·B/confidence/why → `DsCallout`/`DsQuote`. Not zone DONE — 6-axis DoD + screenshots remain.

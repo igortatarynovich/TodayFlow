@@ -120,14 +120,19 @@ type DsQuoteProps = {
   children: ReactNode;
   /** Quiet eyebrow above the quote (e.g. «Сегодня»). */
   kicker?: ReactNode;
+  /** Form Kit highlight plate (day wash + large quote mark). */
+  highlight?: boolean;
   className?: string;
   testId?: string;
 };
 
 /** Large pull-quote — breaks reading rhythm between body paragraphs. */
-export function DsQuote({ children, kicker, className, testId }: DsQuoteProps) {
+export function DsQuote({ children, kicker, highlight = false, className, testId }: DsQuoteProps) {
   return (
-    <blockquote className={joinClass(c.quote, className)} data-testid={testId ?? "ds-quote"}>
+    <blockquote
+      className={joinClass(c.quote, highlight ? c.quoteHighlight : null, className)}
+      data-testid={testId ?? "ds-quote"}
+    >
       {kicker ? <p className={c.quoteKicker}>{kicker}</p> : null}
       <p className={c.quoteText}>{children}</p>
     </blockquote>

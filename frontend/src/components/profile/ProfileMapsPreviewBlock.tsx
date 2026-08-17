@@ -21,8 +21,8 @@ import {
 } from "@/lib/profileHabitWeavePreview";
 import { ProfileMapExploreGrid } from "@/components/profile/ProfileMapExploreGrid";
 import { useAuth } from "@/lib/useAuth";
-import editorialStyles from "@/components/profile/editorial/profileEditorial.module.css";
-import quickMapStyles from "@/components/profile/quickMap/profileQuickMap.module.css";
+import editorialStyles from "@/design-system/profile/dsProfileEditorial.module.css";
+import quickMapStyles from "@/design-system/profile/dsProfileQuickMap.module.css";
 
 type Props = {
   className?: string;

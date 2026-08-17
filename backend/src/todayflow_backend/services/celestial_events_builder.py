@@ -6,11 +6,17 @@ from datetime import date, datetime, time, timezone
 from typing import Any
 
 from todayflow_backend.services import astro
-from todayflow_backend.services.aspects import AspectEngine
 from todayflow_backend.services.day_events_pack_v1 import build_day_events_pack_v1
+from todayflow_backend.services.sky_geometry_v1 import (
+    pick_headline_sky,
+    positions_to_sky_bodies,
+    sky_aspects_from_bodies,
+    transit_signs_from_bodies,
+)
 from todayflow_backend.services.day_sources.timed_lunar_aspects import (
     find_moon_sign_ingress_time,
     find_timed_major_moon_aspects,
+    resolve_sky_aspect_exact_time,
 )
 from todayflow_backend.services.day_sources.void_of_course import build_void_of_course_v0
 from todayflow_backend.services.lunar import LunarService
@@ -252,12 +258,23 @@ async def _sky_aspects_for_date(
     target_date: date,
     locale: str,
     astro_service: astro.AstroService,
-    aspect_engine: AspectEngine,
-) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any] | None]:
-    """Returns (sky_aspects, transit_signs, transit_noon_ephemeris_snapshot)."""
+    *,
+    timezone_name: str | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any] | None, list[dict[str, Any]]]:
+    """Returns (sky_aspects, transit_signs, transit_noon_snapshot, sky_positions).
+
+    Shared sky uses an explicit IANA zone (UTC default). Silent civil-as-UT is forbidden
+    by Foundation v1 — astro refuses charts without TZ and used to empty this pack.
+    """
     from todayflow_backend.services.day_sources.ephemeris_bridge import snapshot_from_positions
 
-    birth_payload = {"date": target_date.isoformat(), "time": "12:00:00", "location": "Equator"}
+    tz = (timezone_name or "UTC").strip() or "UTC"
+    birth_payload = {
+        "date": target_date.isoformat(),
+        "time": "12:00:00",
+        "location": "Equator",
+        "timezone_name": tz,
+    }
     transit_signs: dict[str, Any] = {}
     try:
         chart = await astro_service.compute_chart(
@@ -265,47 +282,19 @@ async def _sky_aspects_for_date(
             coordinates={"latitude": 0.0, "longitude": 0.0},
         )
     except Exception:
-        return [], transit_signs, None
+        return [], transit_signs, None, []
 
-    for pos in chart.positions or []:
-        if not isinstance(pos, dict):
-            continue
-        body = str(pos.get("body") or pos.get("planet") or "").strip()
-        sign = str(pos.get("sign") or "").strip()
-        if not body or not sign:
-            continue
-        if body.lower() == "moon":
-            transit_signs["moon_sign"] = {"sign": sign, "sign_ru": _sign_ru(sign), "source": "transit_chart"}
-        elif body.lower() == "sun":
-            transit_signs["sun_sign"] = {"sign": sign, "sign_ru": _sign_ru(sign), "source": "transit_chart"}
-
-    callouts = aspect_engine.callouts(chart.positions, locale=locale)
-    out: list[dict[str, Any]] = []
-    for callout in callouts.callouts[:4]:
-        aspect_id = str(callout.aspect_id or "").replace("_", " ")
-        title = callout.bodies or callout.label
-        desc = (callout.description or "").strip()
-        if not desc:
-            continue
-        out.append(
-            {
-                "id": f"sky-{callout.aspect_id}-{len(out)}",
-                "kind": "sky_aspect",
-                "aspect": aspect_id,
-                "title": title.replace(" · ", " — "),
-                "story_ru": desc[:240],
-                "tension_level": callout.tension_level or None,
-                "orb_delta": getattr(callout, "orb_delta", None),
-                "strength": getattr(callout, "strength", None),
-            }
-        )
+    bodies = positions_to_sky_bodies(list(chart.positions or []))
+    transit_signs = transit_signs_from_bodies(bodies)
+    aspects = sky_aspects_from_bodies(bodies)
     snap = snapshot_from_positions(
         list(chart.positions or []),
         as_of=target_date,
         role="transit_noon",
         houses=chart.houses if isinstance(chart.houses, dict) else None,
     )
-    return out, transit_signs, snap
+    _ = locale
+    return aspects, transit_signs, snap, bodies
 
 
 async def build_celestial_events(
@@ -331,9 +320,9 @@ async def build_celestial_events(
     )
 
     astro_service = astro_service or astro.AstroService()
-    aspect_engine = AspectEngine()
     lunar_service = LunarService()
     retrograde_service = RetrogradeService(astro_service=astro_service)
+    sky_tz = (timezone_name or "UTC").strip() or "UTC"
 
     lunar_phase: dict[str, Any] | None = None
     try:
@@ -415,9 +404,10 @@ async def build_celestial_events(
     except Exception:
         pass
 
-    sky_aspects, transit_signs, transit_noon = await _sky_aspects_for_date(
-        target_date, locale, astro_service, aspect_engine
+    sky_aspects, transit_signs, transit_noon, sky_positions = await _sky_aspects_for_date(
+        target_date, locale, astro_service, timezone_name=sky_tz
     )
+    headline_sky = pick_headline_sky(sky_aspects)
 
     personal: list[dict[str, Any]] = []
     sorted_transits = sorted(personal_transits or [], key=_transit_sort_key)
@@ -449,6 +439,7 @@ async def build_celestial_events(
         timed_lunar_aspects = await find_timed_major_moon_aspects(
             astro_service,
             target_date=target_date,
+            timezone_name=sky_tz,
         )
     except Exception:
         timed_lunar_aspects = []
@@ -466,7 +457,9 @@ async def build_celestial_events(
         except ValueError:
             ing_day = target_date
         try:
-            exact = await find_moon_sign_ingress_time(astro_service, around_date=ing_day)
+            exact = await find_moon_sign_ingress_time(
+                astro_service, around_date=ing_day, timezone_name=sky_tz
+            )
         except Exception:
             exact = None
         if exact is not None:
@@ -487,6 +480,25 @@ async def build_celestial_events(
         time_bit = f" Точно около {when[11:16]}." if len(when) >= 16 else ""
         row["story_ru"] = f"{title}: {base}{time_bit}"[:240] if title else f"{base}{time_bit}"[:240]
 
+    if isinstance(headline_sky, dict):
+        try:
+            when = await resolve_sky_aspect_exact_time(
+                astro_service,
+                headline=headline_sky,
+                timed_lunar_aspects=timed_lunar_aspects,
+                target_date=target_date,
+                timezone_name=sky_tz,
+            )
+        except Exception:
+            when = None
+        if when:
+            headline_sky["exact_time"] = when
+            hid = str(headline_sky.get("id") or "")
+            for row in sky_aspects:
+                if isinstance(row, dict) and str(row.get("id") or "") == hid:
+                    row["exact_time"] = when
+                    break
+
     void_of_course = build_void_of_course_v0(
         target_date=target_date,
         ingresses=ingresses_today,
@@ -496,7 +508,9 @@ async def build_celestial_events(
     payload: dict[str, Any] = {
         "lunar_phase": lunar_phase,
         "retrogrades": retrogrades,
-        "sky_aspects": sky_aspects,
+        "sky_positions": sky_positions,
+        "sky_aspects": sky_aspects[:8],
+        "headline_sky": headline_sky,
         "personal_transits": personal,
         "ingresses": ingresses_today,
         "daily_symbols": daily_symbols,
@@ -544,7 +558,7 @@ async def build_celestial_events(
             target_date=target_date,
             lat=geo_lat,
             lon=geo_lon,
-            timezone_name=timezone_name,
+            timezone_name=sky_tz,
         )
     except Exception:
         payload["day_events_pack"] = {

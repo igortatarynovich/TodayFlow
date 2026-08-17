@@ -7,9 +7,9 @@ import { buildOnboardingRitualContext, readOnboardingContext, todayDayKey } from
 import { GuestFirstTodayScreen } from "@/components/onboarding/valueFirst/GuestFirstTodayScreen";
 import { hasGuestPreview, readGuestProfileDraft } from "@/lib/guestProfileDraft";
 import { hasAuthSessionEnded } from "@/lib/authSession";
-import { markFirstTodayCompleted, resolveIsFirstDay } from "@/lib/firstTodayState";
-import { ApiError, getJson, postJson, putJson } from "@/lib/api";
-import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
+import { hasCompletedFirstToday, markFirstTodayCompleted, resolveIsFirstDay } from "@/lib/firstTodayState";
+import { ApiError, getJson, isTransportFailure, postJson, putJson } from "@/lib/api";
+import { TODAY_NO_CONNECTION_COPY, TODAY_UNAVAILABLE_COPY } from "@/lib/todaySlotAvailability";
 import {
   CORE_PROFILE_UPDATED_EVENT,
   type CoreProfileUpdatedDetail,
@@ -78,7 +78,6 @@ import { flushMeaningOutbox, getCachedMeaningRings, refreshMeaningRings } from "
 import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
 import {
   fetchTodayContractV1,
-  buildFallbackTodayContract,
   isDayAssembling,
   isDayNotReady,
   readDayLifecycle,
@@ -116,7 +115,9 @@ export default function TodayPage() {
   const { isAuthenticated, isLoading: authLoading, networkDegraded } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const firstTodayMode = searchParams.get("first") === "1";
+  const firstQuery = searchParams.get("first") === "1";
+  // Returning login must not keep the First Today chip gate just because the URL still has ?first=1.
+  const firstTodayMode = firstQuery && !hasCompletedFirstToday();
   // Mood/atmosphere first-day signal (FOUNDATION_UI §8) — same resolver as
   // SectionAtmosphereBridge, so shell + dashboard don't diverge from html.
   const isFirstDayMood = resolveIsFirstDay("/today", searchParams);
@@ -145,6 +146,15 @@ export default function TodayPage() {
     const q = next.toString();
     router.replace(q ? `/today?${q}` : "/today", { scroll: false });
   }, [searchParams, router, toast]);
+
+  useEffect(() => {
+    if (!firstQuery || firstTodayMode) return;
+    const next = new URLSearchParams(searchParams.toString());
+    next.delete("first");
+    next.delete("core_loop");
+    const q = next.toString();
+    router.replace(q ? `/today?${q}` : "/today", { scroll: false });
+  }, [firstQuery, firstTodayMode, searchParams, router]);
 
   const todayIso = useMemo(() => localCalendarDateISO(), []);
   const initialBundle = useMemo(() => (typeof window !== "undefined" ? readTodayDayBundle(todayIso) : null), [todayIso]);
@@ -433,7 +443,11 @@ export default function TodayPage() {
           const ritualUrl =
             `/morning-ritual/today?target_date=${encodeURIComponent(todayIso)}&fast_mode=1`;
           const ritualPromise = getJson<MorningRitualData>(ritualUrl).catch(() => null);
-          const contractPromise = fetchTodayContractV1(todayIso).catch(() => null);
+          let contractFetchError: unknown = null;
+          const contractPromise = fetchTodayContractV1(todayIso).catch((err) => {
+            contractFetchError = err;
+            return null;
+          });
           let data: TodayCycleData | null = null;
           if (!force) {
             const cached = cycleRef.current;
@@ -457,7 +471,18 @@ export default function TodayPage() {
             normalized.core_profile?.astro?.profile_id ?? null,
           );
           if (!contractPayload) {
-            contractPayload = buildFallbackTodayContract({ coreProfile: core });
+            const paintedContract = todayContractRef.current;
+            if (
+              paintedContract?.day_story &&
+              !isDayNotReady(paintedContract) &&
+              !isDayAssembling(paintedContract)
+            ) {
+              contractPayload = paintedContract;
+            } else {
+              const connectionFailure =
+                contractFetchError != null && isTransportFailure(contractFetchError);
+              throw new Error(connectionFailure ? TODAY_NO_CONNECTION_COPY : TODAY_UNAVAILABLE_COPY);
+            }
           }
           // Do not wipe a painted day with a not-ready/assembling null shell on soft refresh.
           const painted = todayContractRef.current;

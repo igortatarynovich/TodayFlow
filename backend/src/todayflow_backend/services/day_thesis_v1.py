@@ -159,9 +159,22 @@ def _pick_from_drivers(
     family, variant = "momentum", "steady_productive_rhythm"
     if drivers:
         top = drivers[0]
+        hint = ""
+        meta = top.get("meta") if isinstance(top.get("meta"), dict) else {}
+        hint = str(meta.get("thesis_hint") or top.get("thesis_hint") or "")
         kind = str(top.get("kind") or "").lower()
-        family, variant = _KIND_DEFAULT.get(kind, (family, variant))
+        hinted = False
+        if "/" in hint:
+            fam, var = hint.split("/", 1)
+            if fam in _VARIANTS and var in _VARIANTS[fam]:
+                family, variant = fam, var
+                hinted = True
+        if not hinted:
+            family, variant = _KIND_DEFAULT.get(kind, (family, variant))
         blob = _text_blob(top)
+        # Pair mapping from shared sky is the plot; blob heuristics are for kind defaults.
+        if hinted:
+            return family, variant
         # Interaction with second driver / model
         second_blob = _text_blob(drivers[1]) if len(drivers) > 1 else ""
         combined = f"{blob} {second_blob}"

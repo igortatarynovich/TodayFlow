@@ -19,6 +19,15 @@ describe("PlanetIcon", () => {
     expect(container.firstChild).toBeNull();
   });
 
+  it("uses photo assets for sun and mercury", () => {
+    const { rerender } = render(<PlanetIcon planet="Sun" size={24} />);
+    expect(screen.getByTestId("planet-symbol")).toHaveAttribute("data-visual", "photo");
+    rerender(<PlanetIcon planet="Mercury" size={24} />);
+    expect(screen.getByTestId("planet-symbol")).toHaveAttribute("data-visual", "photo");
+    rerender(<PlanetIcon planet="Pluto" size={24} />);
+    expect(screen.getByTestId("planet-symbol")).toHaveAttribute("data-visual", "photo");
+  });
+
   it("ships seal-weight assets for all ten traditional planets", () => {
     const fs = require("node:fs") as typeof import("node:fs");
     const path = require("node:path") as typeof import("node:path");

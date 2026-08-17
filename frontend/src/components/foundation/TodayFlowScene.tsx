@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import styles from "./TodayFlowScene.module.css";
+import styles from "@/design-system/layouts/dsTodayFlowScene.module.css";
 
 export function PageShell({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={`${styles.pageShell} ${className}`.trim()}>{children}</div>;

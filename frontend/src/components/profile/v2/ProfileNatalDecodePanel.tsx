@@ -9,7 +9,7 @@ import {
 } from "@/lib/profile/profileMotionOnce";
 import { DsButton } from "@/design-system";
 import { joinClass } from "@/design-system/utils/joinClass";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type NatalDecodeOffer = {
   layer?: string;

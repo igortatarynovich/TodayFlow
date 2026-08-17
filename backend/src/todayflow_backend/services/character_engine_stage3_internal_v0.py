@@ -16,7 +16,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
-    resolve_default_chat_model,
+    resolve_complex_chat_model,
 )
 from todayflow_backend.prompts.registry_v1 import get_prompt
 
@@ -574,8 +574,8 @@ def build_character_engine_internal_engine_v0(
     from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
 
     system = with_practitioner_persona(system, locale=locale)
-    client = get_openai_compatible_client(operation="background")
-    model = resolve_default_chat_model()
+    client = get_openai_compatible_client(operation="background", model=resolve_complex_chat_model())
+    model = resolve_complex_chat_model()
     messages = [
         {"role": "system", "content": system},
         {"role": "user", "content": json.dumps(context, ensure_ascii=False)},

@@ -47,8 +47,10 @@ services:
       GUIDANCE_LLM_MODEL: ${GUIDANCE_LLM_MODEL:-gpt-5.5}
       LLM_QUALITY_MODE: ${LLM_QUALITY_MODE:-rich}
       NEBIUS_API_KEY: ${NEBIUS_API_KEY:-}
-      NEBIUS_BASE_URL: ${NEBIUS_BASE_URL:-https://api.tokenfactory.eu-west2.nebius.com/v1/}
+      NEBIUS_BASE_URL: ${NEBIUS_BASE_URL:-https://api.tokenfactory.us-central1.nebius.com/v1/}
+      NEBIUS_COMPLEX_BASE_URL: ${NEBIUS_COMPLEX_BASE_URL:-https://api.tokenfactory.eu-west2.nebius.com/v1/}
       NEBIUS_MODEL: ${NEBIUS_MODEL:-moonshotai/Kimi-K2.6}
+      NEBIUS_COMPLEX_MODEL: ${NEBIUS_COMPLEX_MODEL:-moonshotai/Kimi-K3}
       NEBIUS_FALLBACK_MODEL: ${NEBIUS_FALLBACK_MODEL:-}
       LLM_STREAM_COMPLETIONS: ${LLM_STREAM_COMPLETIONS:-1}
       LLM_STREAM_READ_TIMEOUT_SECONDS: ${LLM_STREAM_READ_TIMEOUT_SECONDS:-120}

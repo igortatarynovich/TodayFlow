@@ -12,10 +12,10 @@ import {
   todayWebGreeting,
 } from "@/components/product-ui/todayWebDashboardChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
+import { NumberIcon } from "@/components/visualIdentity/NumberIcon";
 import { buildTodayWebTimelineFromGlance } from "@/lib/buildTodayWebDashboardData";
 import { fetchDayFacts } from "@/lib/todayDayFacts";
 import { getLocale } from "@/lib/i18n";
-import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import s from "@/components/product-ui/productWebScreens.module.css";
 
@@ -246,7 +246,9 @@ function TodayWebOverview({
         <article className={pl.dashboardInsightCard}>
           <p className={v2.eyebrow}>{chrome.insightNumerologyLabel}</p>
           <div className={pl.insightVisual}>
-            <span className={pl.insightNumber}>{numerologyValue}</span>
+            <span className={pl.insightNumber}>
+              <NumberIcon value={numerologyValue} size={40} alt={String(numerologyValue)} />
+            </span>
           </div>
           <div className={pl.insightCopy}>
             <p className={pl.insightTitle}>{chrome.insightNumerologyTitle}</p>
@@ -304,13 +306,12 @@ export function TodayWebDashboard({
   coreProfile,
   locale,
   layout = "full",
-  isFirstDay = false,
+  isFirstDay: _isFirstDay = false,
   children,
 }: TodayWebDashboardProps) {
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
   const chrome = useMemo(() => todayWebDashboardChromeBundle(resolvedLocale), [resolvedLocale]);
-  const { theme, mood } = useProductMoodTheme({ isFirstDay });
 
   // PR-2: never invent timeline / weekly / practices for the rail or overview.
   const resolvedTimeline = timelineEvents ?? [];
@@ -337,8 +338,6 @@ export function TodayWebDashboard({
       displayName,
       profileMeta,
       coreProfile,
-      theme,
-      mood,
       mainWide: true,
       rail: showRail ? (
         <TodayWebRail
@@ -355,13 +354,11 @@ export function TodayWebDashboard({
     coreProfile,
     dateISO,
     displayName,
-    mood,
     profileMeta,
     resolvedTimeline,
     resolvedWeekly,
     showRail,
     streakDays,
-    theme,
   ]);
 
   return (

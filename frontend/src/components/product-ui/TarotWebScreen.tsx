@@ -7,7 +7,6 @@ import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/compo
 import { productWebShellChromeBundle } from "@/components/product-ui/productWebShellChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
-import { useProductDayNightTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import l from "@/design-system/layouts/dsLayouts.module.css";
@@ -21,7 +20,6 @@ export type TarotWebScreenProps = {
   backHref?: string;
   backLabel?: string;
   topicLabel?: string;
-  theme?: "light" | "dark";
   rail?: ReactNode;
   children: ReactNode;
 };
@@ -34,28 +32,24 @@ export function TarotWebScreen({
   backHref = "/tarot",
   backLabel,
   topicLabel,
-  theme: themeProp,
   rail,
   children,
 }: TarotWebScreenProps) {
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
-  const dayNightTheme = useProductDayNightTheme();
-  const theme = themeProp ?? dayNightTheme;
   const shell = useMemo(() => productWebShellChromeBundle(resolvedLocale), [resolvedLocale]);
   const resolvedBackLabel = backLabel ?? shell.tarotBackLabel;
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
     return {
       testId: "tarot-web-screen",
-      theme,
       mainWide: true,
       displayName,
       profileMeta,
       coreProfile,
       rail,
     };
-  }, [coreProfile, displayName, profileMeta, rail, theme]);
+  }, [coreProfile, displayName, profileMeta, rail]);
 
   return (
     <>

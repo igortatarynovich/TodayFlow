@@ -1,6 +1,7 @@
 /**
  * TodayFlow Design System — Product Web layer.
  * Canon tokens: `frontend/src/styles/todayflow-foundation.css` (--tf-* / --tf-ds-*)
+ * Form Kit: FOUNDATION_UI §15.8 · `docs/design/assets/ui-kit-form-sheet.png`
  * Figma map: `design-system/registry/figmaMap.ts`
  * Live catalog: `/design-system`
  */
@@ -10,8 +11,25 @@ export { DS_FIGMA_MAP } from "@/design-system/registry/figmaMap";
 export type { DsFigmaCategory } from "@/design-system/registry/figmaMap";
 
 export { DsButton } from "@/design-system/primitives/DsButton";
-export { DsCard, DsStatusBadge } from "@/design-system/primitives/DsCard";
+export { DsCard, DsStatusBadge, cardVariantToTone } from "@/design-system/primitives/DsCard";
 export type { DsCardSize, DsCardVariant } from "@/design-system/primitives/DsCard";
+export { DsSurface, legacySurfaceVariantToTone } from "@/design-system/primitives/DsSurface";
+export type { DsSurfaceTone, DsSurfaceLegacyVariant } from "@/design-system/primitives/DsSurface";
+export { DsChip, DsChipCluster } from "@/design-system/primitives/DsChip";
+export type { DsChipStatusTone, DsChipVariant } from "@/design-system/primitives/DsChip";
+export { DsFab } from "@/design-system/primitives/DsFab";
+export type { DsFabSize } from "@/design-system/primitives/DsFab";
+export {
+  DsDotMeter,
+  DsLinearProgress,
+  DsMetric,
+  DsRadialMeter,
+  DsSpectrum,
+  DsWaveMeter,
+} from "@/design-system/primitives/DsMeters";
+export { DsStarDivider } from "@/design-system/primitives/DsStarDivider";
+export { DsAvatar } from "@/design-system/primitives/DsAvatar";
+export type { DsAvatarSize } from "@/design-system/primitives/DsAvatar";
 export {
   DsCheckbox,
   DsChipField,
@@ -30,7 +48,6 @@ export {
   DsPill,
   DsSectionTitle,
   DsSubtitle,
-  DsSurface,
   DsTag,
   DsTitle,
 } from "@/design-system/primitives/DsTypography";
@@ -47,6 +64,28 @@ export type {
   DsCalloutLabel,
   DsCalloutTone,
 } from "@/design-system/primitives/DsCallout";
+
+export {
+  DsActionCard,
+  DsContentCard,
+  DsHeroBlock,
+  DsHeroFabArrow,
+  DsListPanel,
+  DsListRow,
+  DsMetricCard,
+  DsOverlaySheet,
+  DsSectionHeader,
+  DsWindowCard,
+} from "@/design-system/compositions/DsBlocks";
+
+export {
+  DsPlanet,
+  DsZodiac,
+  DsNumber,
+  DsTarotFace,
+  DsAngle,
+  DsCelestialMoon,
+} from "@/design-system/visual";
 
 export { DsOrbitalViz, DsThemePanel, DsThemeViz } from "@/design-system/patterns/DsThemePanel";
 export type { DsOrbitalNode } from "@/design-system/patterns/DsThemePanel";
@@ -108,4 +147,10 @@ export {
 export type { MotionEase } from "@/design-system/motion";
 
 export { ScreenFlow, ScreenFlowStep, resolveScreenFlowEntryIndex } from "@/design-system/primitives/ScreenFlow";
-export type { ScreenFlowAxis, ScreenFlowChangeReason, ScreenFlowStepStatus, ScreenFlowStepProps, ScreenFlowProps } from "@/design-system/primitives/ScreenFlow";
+export type {
+  ScreenFlowAxis,
+  ScreenFlowChangeReason,
+  ScreenFlowStepStatus,
+  ScreenFlowStepProps,
+  ScreenFlowProps,
+} from "@/design-system/primitives/ScreenFlow";

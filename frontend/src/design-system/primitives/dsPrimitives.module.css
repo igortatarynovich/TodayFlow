@@ -18,6 +18,11 @@
     box-shadow var(--tf-motion-micro) var(--tf-motion-ease-out);
 }
 
+.btnLg {
+  padding: 1.15rem 2.35rem;
+  font-size: 0.9375rem;
+}
+
 .btnMd {
   padding: 1rem 2rem;
   font-size: 0.875rem;

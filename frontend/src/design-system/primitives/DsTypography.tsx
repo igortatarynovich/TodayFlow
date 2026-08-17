@@ -133,35 +133,8 @@ export function DsTag({
   );
 }
 
-type DsSurfaceProps = {
-  children: ReactNode;
-  variant?: "elevated" | "outline" | "glass" | "card";
-  className?: string;
-  as?: "div" | "section" | "article";
-  testId?: string;
-};
-
-export function DsSurface({
-  children,
-  variant = "card",
-  className,
-  as: Tag = "div",
-  testId,
-}: DsSurfaceProps) {
-  const variantClass =
-    variant === "elevated"
-      ? p.elevated
-      : variant === "outline"
-        ? p.outline
-        : variant === "glass"
-          ? p.glass
-          : p.card;
-  return (
-    <Tag className={joinClass(p.surface, variantClass, className)} data-testid={testId}>
-      {children}
-    </Tag>
-  );
-}
+export { DsSurface } from "@/design-system/primitives/DsSurface";
+export type { DsSurfaceTone, DsSurfaceLegacyVariant } from "@/design-system/primitives/DsSurface";
 
 export function DsIconBadge({
   children,

@@ -1,19 +1,26 @@
 # Today — сценарий страницы (v3.4.2 · шесть блоков)
 
-**Status:** ACTIVE · **Updated 2026-08-10**  
-**Prior:** v3.4.1 atmosphere+orientation · v3.4 six blocks · v3.3 handoff 12-step · v3.2 story-deck · v3.1 content jobs  
+**Status:** SUPERSEDED as product map · **2026-08-15**  
+**Product cycle SoT:** [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) — `today` · `ritual` · `my_day` · `evening`.  
+Этот файл — **историческая карта шести блоков**. FE cutover 2026-08-15. Не наращивать шесть блоков.
 
-## Presentation SoT — шесть блоков (LOCKED) · Block 1 = 2 кадра
+**Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md).
+
+## Presentation map — шесть блоков (LOCKED) · Block 1 = 2 кадра
 
 Продуктовая нарезка Today. **Не расширять** без явного решения owner.  
-12-step handoff v3.3 = **deprecated** как presentation SoT (слишком много кадров = suite, не день).
+12-step handoff v3.3 = **deprecated** как presentation map (слишком много кадров = suite, не день).
+
+**Content layers (из pipeline):** до ритуала = **Global Day**. Ритуал = карта/число, не пересчёт. После = **Personal Day**. Это **UX reveal**, не порядок authority (Natal Overlay считает backend между Global и Personal; отдельного кадра нет).
 
 ```text
-1. День          — два кадра:
+1. День          — два кадра (Global Day):
                    (a) Атмосфера = dashboard (не длинная колонка):
-                       дата + лунная подпись · hero режима (mode + atmosphere + cue) ·
+                       дата + полоска неба (погода дня: Луна-климат + одно влияние; тап → общее и личное, не эфемериды) ·
+                       hero режима (mode + atmosphere + cue) ·
                        «Почему так сегодня» (chips) · «Сегодня лучше» (≤3 карточки) ·
-                       Опора ‖ Ловушка · персональный мост + CTA.
+                       Опора ‖ Ловушка · CTA к ориентиру / ритуалу.
+                       **Не** personal overlay до ритуала (I0).
                        Tap по блоку → detail sheet поверх (без смены ScreenFlow-шага).
                        CTA «Посмотреть мой день» → кадр orientation.
                    (b) Ориентир: trap · do/avoid · энергия (+ cause) · timeline/поток
@@ -47,6 +54,8 @@
 | 5 | Убрать паралич выбора | **≤2** чеклиста (daily streak + 1 точечное); не каталог |
 | 6 | Фиксация намерения → вечерний чекаут | Утро: манифест + **Принимаю**. Вечер: trap-check + итог + **Идти в сон** | Promise suggestions / dayGoal · trap · evening_closure |
 
+**Core vs depth (LOCKED 2026-08-15):** Block **1a+1b** = законченный продукт (DAY → POWER → RISK → MOVE) за 1–2 минуты. Блоки 2–6 = depth/engagement, не обязательны для «день был полезен». Смысл — один Day Scenario ([DAY_SCENARIO_V1](../DAY_SCENARIO_V1.md) I1–I8); UI не генерирует сюжет.
+
 **Запрет на блок 1:** простыни эфемерид, kitchen dumps, «прочитай всё чтобы понять день».  
 Смысл слотов — из live `day_story` / nests; внешние LLM-черновики **не** SoT и не hardcode.
 
@@ -54,7 +63,7 @@
 
 | # | Блок | ScreenFlow id | Что показывает | Откуда смысл (houses / nests) |
 |---|------|---------------|----------------|-------------------------------|
-| 1a | День · атмосфера | `day` | dashboard: date/lunar · mode hero · why chips · better cards · support‖trap · personal (+ sheet) | day_story · day_foundation · welcome_glass · day_atmosphere · domains/scenes |
+| 1a | День · атмосфера | `day` | dashboard: date · **sky strip** (day weather) · mode hero · why chips · better cards · support‖trap · personal; tap strip → overlay: shared influence + personal overlay | `sky_today` · day_personal / why_personal · day_story · welcome_glass · day_atmosphere |
 | 1b | День · ориентир | `orientation` | trap · do/avoid · энергия (+ cause) · timeline | day_story · chorus energy · glance timeline |
 | 2 | Ритуалы | `rituals` | число + карта (если symbols) | Symbols·A |
 | 3 | Инструкция | `instruction` | персональный prioritize / avoid (+ deepen опц.) | Glance Daily Focus · depth_layer |
@@ -75,6 +84,15 @@
 | Focus отдельно от «инструкции» | = блок 3 |
 | Recap | Лишний; петля = promise+close |
 | 12 swipe-шагов | Распыляет день |
+
+### Architecture impact (2026-08-15 — sky strip · Moon every day + one headline)
+
+- **SoT before:** Block 1a date used catalog lunar caption (`phase · sign`); no shared-sky pair on the surface.
+- **SoT after:** Block 1a shows **day weather** (Moon climate + one headline influence, with **degree and exact clock when the event happens today**). Tap → overlay with **two meaning layers**: shared day influence (incl. VOC window if timed), then personal overlay (`why_personal` / `day_personal`). Not an ephemeris: no 10-body list, no aspect catalog. Guest omits personal. Mood still from `visual_mode` / `thesis.mode`. **orb ≠ time** — no invented clocks.
+- **Public contract changed?** yes — `sky_today` is moon + headline (+ `story_ru`, `exact_time_local`, optional `window`); positions/aspects are kitchen, not the nest. Personal stays L3 fields already on `day_story`. Glance timeline still natal.
+- **Migration required?** no — old clients ignore the nest.
+- **Canon updated?** yes — this file · [DAY_ENGINE_AND_COHERENCE.md](../DAY_ENGINE_AND_COHERENCE.md) §2
+- **Backward compatible?** yes API; FE without nest keeps previous lunar caption.
 
 ### Architecture impact (2026-08-10 — Block 1 dashboard + detail sheet · v3.4.2)
 

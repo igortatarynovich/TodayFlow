@@ -503,6 +503,7 @@ def test_chorus_bridges_are_lived_not_generation_meta():
             "scene_id": "s1",
             "sphere": "work",
             "sphere_label_ru": "Работа и решения",
+            "role_in_story": "primary",
             "trap": "спешка в ответе",
             "recommended_action": "Один ясный ответ до обеда.",
             "evidence_references": [],

@@ -1,0 +1,448 @@
+/* Form Kit ritual pick pattern — FOUNDATION_UI §15.8 */
+/* Tarot ritual — one continuous table scene (fan → flip). Aspect 3:5. */
+
+.wrap {
+  --tarot-card-bg: var(--tf-surface, #f4ebe0);
+  --ritual-ink: var(--tf-ink, #2a2218);
+  --ritual-ink-soft: var(--tf-ink-soft, #6b5d4d);
+  --ritual-gold: var(--tf-accent-gold-600, #8b6a3e);
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  overflow: visible;
+  padding: 0.5rem 0 0.75rem;
+  border-radius: 0;
+  background: transparent;
+}
+
+.table {
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 70%, rgba(92, 64, 48, 0.18) 0%, transparent 62%),
+    linear-gradient(180deg, rgba(244, 235, 224, 0.35) 0%, rgba(232, 220, 204, 0.55) 100%);
+  border-radius: 1.35rem;
+  padding: 1rem 0.65rem 1.15rem;
+}
+
+.scene {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Idle: 3 stacked backs (handoff closed-state) --- */
+.idleStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.idleDeck {
+  position: relative;
+  width: min(168px, 46vw);
+  aspect-ratio: 3 / 5;
+  margin: 0.35rem auto 0.15rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.idleDeckBack {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(154, 132, 104, 0.4);
+  box-shadow:
+    0 14px 32px rgba(60, 40, 28, 0.18),
+    0 0 0 1px rgba(255, 252, 248, 0.28) inset;
+  background: var(--tarot-card-bg);
+  transform-origin: center bottom;
+}
+
+.idleDeckBack:nth-child(1) {
+  transform: translate(-10px, 6px) rotate(-6deg);
+  z-index: 1;
+  opacity: 0.88;
+}
+
+.idleDeckBack:nth-child(2) {
+  transform: translate(10px, 4px) rotate(5deg);
+  z-index: 2;
+  opacity: 0.92;
+}
+
+.idleDeckBack:nth-child(3) {
+  transform: translate(0, 0) rotate(0deg);
+  z-index: 3;
+}
+
+.idleCard {
+  position: relative;
+  width: min(168px, 46vw);
+  max-width: 100%;
+  aspect-ratio: 3 / 5;
+  height: auto;
+  box-sizing: border-box;
+  border-radius: 14px;
+  overflow: visible;
+  cursor: pointer;
+  border: 1px solid rgba(154, 132, 104, 0.4);
+  box-shadow:
+    0 14px 32px rgba(60, 40, 28, 0.18),
+    0 0 0 1px rgba(255, 252, 248, 0.28) inset;
+  background: var(--tarot-card-bg);
+  padding: 0;
+}
+
+.idleCard::after {
+  content: "";
+  position: absolute;
+  inset: -22%;
+  border-radius: 22px;
+  background: radial-gradient(circle at 50% 55%, rgba(201, 169, 110, 0.35) 0%, transparent 68%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.breatheGlow {
+  position: absolute;
+  inset: -12px;
+  border-radius: 22px;
+  background: radial-gradient(circle, rgba(201, 169, 110, 0.28) 0%, transparent 68%);
+  opacity: 0.22;
+  pointer-events: none;
+  animation: glowPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.16;
+  }
+  50% {
+    opacity: 0.32;
+  }
+}
+
+.breathe:not([data-reduce="true"]) .idleCard {
+  animation: breatheScale 2.5s ease-in-out infinite;
+}
+
+@keyframes breatheScale {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.025);
+  }
+}
+
+.press:not([data-reduce="true"]) .idleCard {
+  animation: pressNudge 0.2s ease-out;
+}
+
+@keyframes pressNudge {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
+.hint {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 252, 248, 0.92);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  max-width: 90%;
+  text-align: center;
+}
+
+.hintSparkle {
+  font-size: 0.78rem;
+  line-height: 1;
+  opacity: 0.95;
+}
+
+.skipLink {
+  border: none;
+  background: transparent;
+  color: #7a6a52;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+/* --- Fan --- */
+.gridHeader {
+  text-align: center;
+  margin-bottom: 0.35rem;
+  max-width: 22rem;
+}
+
+.gridLead {
+  margin: 0;
+  font-family: var(--orbit-font-display);
+  font-size: clamp(1.3rem, 4vw, 1.55rem);
+  font-weight: 600;
+  color: var(--ritual-ink);
+  letter-spacing: 0.02em;
+}
+
+.gridSub {
+  margin: 0.3rem 0 0;
+  font-size: 0.9rem;
+  color: var(--ritual-ink-soft);
+  line-height: 1.45;
+}
+
+.fanStage {
+  position: relative;
+  width: min(340px, 94vw);
+  height: 210px;
+  margin: 0.35rem auto 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.deckStage {
+  position: relative;
+  width: 100%;
+  max-width: 14rem;
+  margin: 1.25rem auto 0;
+}
+
+.fanCard {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  width: min(92px, 26vw);
+  aspect-ratio: 3 / 5;
+  margin-left: calc(min(92px, 26vw) / -2);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--tarot-card-bg);
+  box-shadow:
+    0 10px 24px rgba(48, 32, 22, 0.22),
+    0 0 0 1px rgba(154, 132, 104, 0.35);
+  opacity: 0;
+  transform: translateX(var(--fan-x, 0)) translateY(24px) rotate(var(--fan-rotate, 0deg)) scale(0.92);
+  z-index: var(--fan-z, 1);
+  transition:
+    opacity 0.42s ease-out,
+    transform 0.42s ease-out,
+    filter 0.15s ease,
+    box-shadow 0.2s ease;
+  transition-delay: var(--stagger, 0ms);
+}
+
+.fanOpen .fanCard {
+  opacity: 1;
+  transform: translateX(var(--fan-x, 0)) translateY(var(--fan-y, 0)) rotate(var(--fan-rotate, 0deg)) scale(1);
+}
+
+.fanCard:hover,
+.fanCard:focus-visible {
+  filter: brightness(1.04);
+  box-shadow:
+    0 14px 28px rgba(48, 32, 22, 0.28),
+    0 0 0 1px rgba(139, 106, 62, 0.45);
+}
+
+.fanCardPicked {
+  z-index: 40 !important;
+}
+
+.fanHonesty {
+  margin: 1rem auto 0;
+  max-width: 22rem;
+  padding: 0 0.75rem;
+  text-align: center;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--ritual-ink-soft);
+}
+
+.gridFooter {
+  margin: 0.55rem auto 0;
+  max-width: 20rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: #9a8268;
+  text-align: center;
+  line-height: 1.45;
+}
+
+/* --- Reveal --- */
+.revealScreenTitle {
+  margin: 0 0 0.75rem;
+  width: 100%;
+  text-align: center;
+  font-family: var(--orbit-font-display, "Georgia", serif);
+  font-size: clamp(1.15rem, 3.2vw, 1.35rem);
+  font-weight: 600;
+  color: var(--ritual-ink);
+  letter-spacing: 0.01em;
+}
+
+.revealStage {
+  position: relative;
+  width: min(220px, 58vw);
+  max-width: 100%;
+  aspect-ratio: 3 / 5;
+  height: auto;
+  box-sizing: border-box;
+  margin: 0 auto;
+  border-radius: 14px;
+  overflow: visible;
+  border: 1px solid rgba(154, 132, 104, 0.4);
+  box-shadow: 0 16px 36px rgba(48, 32, 22, 0.2);
+  background: var(--tarot-card-bg);
+}
+
+.revealMeta {
+  margin-top: 0.85rem;
+  text-align: center;
+}
+
+.revealCardName {
+  margin: 0;
+  font-family: var(--orbit-font-display);
+  font-weight: 600;
+  color: var(--ritual-ink);
+  font-size: 1.15rem;
+}
+
+.revealTags {
+  list-style: none;
+  margin: 0.45rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.revealTags li {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ritual-gold);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 252, 246, 0.7);
+  border: 1px solid rgba(198, 166, 119, 0.28);
+}
+
+.revealCtaRow {
+  margin-top: 1.15rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.cascadeCard {
+  width: min(100%, 22rem);
+  margin-top: 0.75rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 16px;
+  background: rgba(255, 252, 248, 0.92);
+  border: 1px solid rgba(198, 166, 119, 0.28);
+  box-shadow: 0 6px 16px rgba(60, 40, 28, 0.06);
+  text-align: left;
+  animation: ritualCascadeIn 0.28s ease-out both;
+}
+
+.cascadeEyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ritual-gold, var(--tf-accent-gold-600, #8b6a3e));
+}
+
+.cascadeBody {
+  margin: 0.4rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--ritual-ink-soft, var(--tf-ink-soft, #6b5d4d));
+}
+
+@keyframes ritualCascadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-reduce="true"] .cascadeCard {
+  animation: none;
+}
+
+.revealPrimaryCta {
+  appearance: none;
+  border: 1px solid rgba(139, 106, 62, 0.45);
+  border-radius: 999px;
+  padding: 0.72rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #1a1510;
+  background: linear-gradient(145deg, #e8d0a5 0%, #d4b896 52%, #c9a96e 100%);
+  box-shadow: 0 8px 22px rgba(120, 72, 48, 0.12);
+  font-family: inherit;
+  min-width: min(12rem, 88vw);
+}
+
+.revealPrimaryCta:hover {
+  filter: brightness(1.03);
+}
+
+.revealPrimaryCta:focus-visible {
+  outline: 2px solid rgba(139, 106, 62, 0.65);
+  outline-offset: 3px;
+}
+
+[data-reduce="true"] .breatheGlow,
+[data-reduce="true"] .idleCard,
+[data-reduce="true"] .fanCard {
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-reduce="true"] .fanOpen .fanCard {
+  opacity: 1;
+}

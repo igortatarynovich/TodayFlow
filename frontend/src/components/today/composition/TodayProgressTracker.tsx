@@ -4,9 +4,8 @@ import {
   formatTodayProgressStreakLabel,
   type TodayProgressRow,
 } from "@/lib/todayGrowthTrackers";
-import { DsHabitStreakRow, DsSectionTitle } from "@/design-system";
-import { TodayScreenBlock } from "@/components/today/composition/TodayScreenBlock";
-import styles from "@/components/today/composition/TodayProgressTracker.module.css";
+import { DsEyebrow, DsHabitStreakRow, DsListPanel, DsStarDivider } from "@/design-system";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 type Props = {
   rows: TodayProgressRow[];
@@ -17,15 +16,11 @@ export function TodayProgressTracker({ rows, title = "Твой прогресс"
   if (!rows.length) return null;
 
   return (
-    <TodayScreenBlock testId="today-zone-progress">
-      {title ? (
-        <DsSectionTitle as="p" className={styles.title}>
-          {title}
-        </DsSectionTitle>
-      ) : null}
-      <ul className={styles.list}>
+    <DsListPanel tone="glass" testId="today-zone-progress">
+      {title ? <DsEyebrow>{title}</DsEyebrow> : null}
+      <div className={layout.stack}>
         {rows.map((row, index) => (
-          <li key={row.id} className={styles.rowItem}>
+          <div key={row.id}>
             <DsHabitStreakRow
               name={row.name}
               kind={row.kindLabel}
@@ -33,10 +28,10 @@ export function TodayProgressTracker({ rows, title = "Твой прогресс"
               days={row.days.map((d) => d.completed)}
               testId={`today-progress-row-${row.kind}`}
             />
-            {index < rows.length - 1 ? <div className={styles.divider} /> : null}
-          </li>
+            {index < rows.length - 1 ? <DsStarDivider /> : null}
+          </div>
         ))}
-      </ul>
-    </TodayScreenBlock>
+      </div>
+    </DsListPanel>
   );
 }

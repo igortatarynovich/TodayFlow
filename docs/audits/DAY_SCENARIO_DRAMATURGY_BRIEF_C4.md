@@ -36,6 +36,9 @@ Facts (event pack) → Dramaturgy brief (C4) → Native LLM conflict/scenes
 
 `day_thesis` / `act_iii_registry_label` = Act III registry seed **only**, not the story.
 
+**Entity status (LOCKED 2026-08-15):** Brief **не** Meaning SoT и не planner. Serialization adapter (protected prefix) для legacy native call.  
+**Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md). Target: Brief сериализует **Global Day Profile** → LLM #1, не «scenario after the call».
+
 ## Brief contract (`day_dramaturgy_brief_c4`)
 
 | Field | Role |

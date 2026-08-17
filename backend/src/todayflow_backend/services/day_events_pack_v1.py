@@ -225,15 +225,27 @@ def _events_from_ingresses(ingresses: list[Any], target: date) -> list[dict[str,
 
 def _events_from_sky_aspects(aspects: list[Any]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
-    for i, row in enumerate(aspects[:6]):
+    for i, row in enumerate(aspects[:8]):
         if not isinstance(row, dict):
             continue
-        title = str(row.get("title") or "").strip()
+        title = str(row.get("title_ru") or row.get("title") or "").strip()
         story = str(row.get("story_ru") or "").strip()
         if not title and not story:
             continue
         eid = str(row.get("id") or f"sky-aspect-{i}")
         fact = story or title
+        planet_a = str(row.get("planet_a") or "").strip() or None
+        planet_b = str(row.get("planet_b") or "").strip() or None
+        aspect = str(row.get("aspect") or "").strip() or None
+        hint = str(row.get("priority_hint") or "").strip() or None
+        meta = {
+            "aspect": aspect,
+            "planet_a": planet_a,
+            "planet_b": planet_b,
+            "thesis_hint": row.get("thesis_hint"),
+            "domain_weights": row.get("domain_weights"),
+            "daily_score": row.get("daily_score"),
+        }
         out.append(
             _event(
                 eid=eid,
@@ -243,6 +255,13 @@ def _events_from_sky_aspects(aspects: list[Any]) -> list[dict[str, Any]]:
                 orb_delta=row.get("orb_delta"),
                 tension_level=str(row.get("tension_level") or "") or None,
                 strength_label=str(row.get("strength") or "") or None,
+                priority_hint=hint,
+                body=planet_a,
+                target_body=planet_b,
+                aspect=aspect,
+                fact_key="sky_aspect",
+                when=str(row.get("exact_time") or "") or None,
+                meta={k: v for k, v in meta.items() if v is not None},
             )
         )
     return out
@@ -313,10 +332,85 @@ def _events_from_retrogrades(retros: list[Any]) -> list[dict[str, Any]]:
     return out
 
 
+_SIGN_INDEX = {
+    "Aries": 0,
+    "Taurus": 1,
+    "Gemini": 2,
+    "Cancer": 3,
+    "Leo": 4,
+    "Virgo": 5,
+    "Libra": 6,
+    "Scorpio": 7,
+    "Sagittarius": 8,
+    "Capricorn": 9,
+    "Aquarius": 10,
+    "Pisces": 11,
+}
+
+# ~1 day of Moon motion. Catalog "new" farther than this is texture, not a plot turn.
+_QUARTER_ELONGATION_DEG = 15.0
+
+
+def _lon_from_sign_degree(row: dict[str, Any] | None) -> float | None:
+    if not isinstance(row, dict):
+        return None
+    lon = row.get("longitude")
+    if isinstance(lon, (int, float)):
+        return float(lon) % 360.0
+    sign = str(row.get("sign") or "").strip()
+    deg = row.get("degree")
+    idx = _SIGN_INDEX.get(sign)
+    if idx is None or not isinstance(deg, (int, float)):
+        return None
+    return (idx * 30.0 + float(deg)) % 360.0
+
+
+def _sun_moon_elongation_deg(
+    *,
+    moon_sign: dict[str, Any] | None,
+    sun_sign: dict[str, Any] | None,
+    sky_positions: list[Any] | None,
+) -> float | None:
+    """Swiss/noon elongation 0..180°. None if lights missing."""
+    from todayflow_backend.services.sky_geometry_v1 import angular_separation
+
+    sun_lon = moon_lon = None
+    for row in sky_positions or []:
+        if not isinstance(row, dict):
+            continue
+        body = str(row.get("body") or "").strip().lower()
+        lon = row.get("longitude")
+        if not isinstance(lon, (int, float)):
+            continue
+        if body == "sun":
+            sun_lon = float(lon) % 360.0
+        elif body == "moon":
+            moon_lon = float(lon) % 360.0
+    if sun_lon is None:
+        sun_lon = _lon_from_sign_degree(sun_sign)
+    if moon_lon is None:
+        moon_lon = _lon_from_sign_degree(moon_sign)
+    if sun_lon is None or moon_lon is None:
+        return None
+    return angular_separation(sun_lon, moon_lon)
+
+
+def _near_lunar_quarter(elongation_deg: float | None) -> bool | None:
+    """True = new/quarter/full geometry today. None = unknown."""
+    if elongation_deg is None:
+        return None
+    sep = float(elongation_deg)
+    dist = min(sep, abs(sep - 90.0), abs(sep - 180.0))
+    return dist <= _QUARTER_ELONGATION_DEG
+
+
 def _events_from_phase(
     lunar_phase: dict[str, Any] | None,
     moon_sign: dict[str, Any] | None,
     target: date,
+    *,
+    sun_sign: dict[str, Any] | None = None,
+    sky_positions: list[Any] | None = None,
 ) -> list[dict[str, Any]]:
     if not isinstance(lunar_phase, dict) or not lunar_phase:
         return []
@@ -335,24 +429,28 @@ def _events_from_phase(
             fact = f"{fact}: {guidance}"
     else:
         fact = f"{title}" + (f": {guidance}" if guidance else "")
-    # Treat as phase_change when next phase is today or tomorrow.
+    # Catalog phase is texture. It competes for the plot only on a real quarter-turn
+    # (Swiss Sun–Moon elongation), not because LunarService labelled the window "new".
     kind = "phase_change"
     next_phase = lunar_phase.get("next_phase") if isinstance(lunar_phase.get("next_phase"), dict) else {}
     in_days = next_phase.get("in_days")
+    sep = _sun_moon_elongation_deg(
+        moon_sign=moon_sign,
+        sun_sign=sun_sign,
+        sky_positions=sky_positions,
+    )
+    near_quarter = _near_lunar_quarter(sep)
+    priority = "ambient"
     try:
-        if in_days is not None and float(in_days) > 1.5:
-            kind = "phase_change"  # still name the current phase as a soft driver
-            # Downgrade when far from quarter turn — ranker will use strength.
+        soon = in_days is not None and float(in_days) <= 1.0
     except (TypeError, ValueError):
-        pass
-    priority = "primary"
-    try:
-        if in_days is not None and float(in_days) <= 1.0:
-            priority = "primary"
-        elif in_days is not None and float(in_days) > 3.0:
-            priority = "secondary"
-    except (TypeError, ValueError):
-        pass
+        soon = False
+    if near_quarter is True:
+        priority = "primary"
+    elif near_quarter is False:
+        priority = "ambient"
+    elif soon:
+        priority = "primary"
     return [
         _event(
             eid=f"phase-{phase_id or name}-{target.isoformat()}",
@@ -361,7 +459,11 @@ def _events_from_phase(
             fact_ru=fact[:240],
             when=target.isoformat(),
             priority_hint=priority,
-            meta={"phase_id": phase_id, "moon_sign": sign_ru or None},
+            meta={
+                "phase_id": phase_id,
+                "moon_sign": sign_ru or None,
+                "sun_moon_sep_deg": round(sep, 2) if sep is not None else None,
+            },
         )
     ]
 
@@ -591,6 +693,8 @@ def collect_raw_day_events(
             ce.get("lunar_phase") if isinstance(ce.get("lunar_phase"), dict) else None,
             ce.get("moon_sign") if isinstance(ce.get("moon_sign"), dict) else None,
             target_date,
+            sun_sign=ce.get("sun_sign") if isinstance(ce.get("sun_sign"), dict) else None,
+            sky_positions=list(ce.get("sky_positions") or []),
         )
     )
     events.extend(_events_from_personal(list(ce.get("personal_transits") or [])))

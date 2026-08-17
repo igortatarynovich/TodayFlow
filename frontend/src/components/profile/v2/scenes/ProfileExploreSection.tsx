@@ -10,7 +10,7 @@ import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
 import type { ProgressiveDetailItem } from "@/lib/profilePage/buildProfileProgressiveDetailsProjection";
 import { profileV2SphereCardLine } from "@/lib/profilePage/profileV2SpherePresentation";
 import type { ProfileQuickMapViewModel } from "@/lib/profilePage/buildProfileQuickMapData";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type ProfileExploreSectionProps = {
   open: boolean;

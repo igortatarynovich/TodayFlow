@@ -1,7 +1,7 @@
 "use client";
 
 import type { ProfileV0MovementCard } from "@/lib/profilePage/buildProfileV0Data";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 export function ProfileV0ActionLayer({ action }: { action: ProfileV0MovementCard }) {
   return (

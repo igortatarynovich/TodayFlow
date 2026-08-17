@@ -5,7 +5,7 @@ import { ProfileMotionExpand, profileMotionStyles } from "@/components/foundatio
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { MotionPulse } from "@/design-system/motion";
 import { PROFILE_QUICK_MAP_COPY as copy } from "@/components/profile/quickMap/profileQuickMapCopy";
-import styles from "./profilePortalDeepSection.module.css";
+import styles from "@/design-system/profile/dsProfilePortalDeep.module.css";
 
 export function ProfilePortalDeepSection({
   id,

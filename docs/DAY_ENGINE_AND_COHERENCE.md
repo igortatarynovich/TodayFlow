@@ -3,7 +3,8 @@
 **Статус:** канон продуктово-инженерного направления (не маркетинг).  
 **Связь:** [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md), [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md). **Выполнение:** чеклист DE-1…DE-13 и порядок работ — [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) §4.7, §5.3.  
 **Паритет:** web и iOS должны опираться на одни и те же контракты данных и один смысл «дня».  
-**Центральная логика:** [§10 DayModel](#10-daymodel-и-decision-engine-закрытый-канон) — без этого слоя текст и UI не имеют опоры.
+**Today content SoT (LOCKED 2026-08-15):** только [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md). Этот файл — указатель / история DE-*; не параллельный канон смысла.  
+§10 DayModel **не** Meaning SoT Today.
 
 ---
 
@@ -38,13 +39,22 @@
 | `rhythm` | Цели, привычки, аскезы, отметки, **сводка дневника** | `fusion.rhythm_context` в промпте narrative; дневник как факт, не выдумка |
 | `health_signals` | Сон, активность (с согласия пользователя) | **пробел:** интеграция Health |
 | `evidence.celestial_events` | `day_events_pack_v1` — structured sky evidence + ranked drivers + compositions | **вложено в DayContext**, не второй SoT дня |
+| `headline_sky` | Одно shared-sky соединение дня (мажоры, Swiss noon) — что показать на полоске Today | `sky_geometry_v1` → `celestial_events.headline_sky`; pack `ranked_drivers[0]` |
 | `day_thesis` | Единый сюжет дня (family/variant/mode/label) для всех поверхностей Today | `day_thesis_v1` из drivers + compositions + day_model |
 
 **Инвариант (2026-07):** `day_events_pack` — evidence; `day_thesis` — один сюжет; `day_story` / Day Map / Hero / Instructions — проекции thesis. Запрещено параллельно вести conflict/headline/funnel thesis как независимые SoT.
 
+**Shared sky vs natal (2026-08-15):** соединения неба (Меркурий × Юпитер и т.п.) задают **погоду дня** — headline, thesis, fallback mood (`thesis.mode` → `visual_mode`). Сферы пользователя (`domain_verdicts` / `top_driver_v1`) остаются наложением транзита на натал.
+
+**Полоска Today (`sky_today`):** два слоя смысла, не справочник. **Погода дня** — Луна как ежедневный климат (знак + градус; `exact_time_local` только если ингресс сегодня) + одно headline-соединение (orb + `exact_time_local`, если пара сходится сегодня). Окно VOC — если есть timed lunar + ингресс. **Для тебя** — наложение на натал (`why_personal` / `day_personal`), в sheet по тапу; гость = честный omit. **orb ≠ time:** полуденный орб не есть час; без `exact_time_local` часы не пишем ([TODAY_WAVE2_CONTRACT_V1](./today/TODAY_WAVE2_CONTRACT_V1.md) §4). Glance timeline остаётся natal-окнами; shared-часы кормят погоду дня и `day_events_pack.when`. На экране только погода; не выводить ряд из 10 тел и всех аспектов.
+
+**Catalog lunar phase vs Swiss lights:** mean-phase label из `LunarService` (например «новолуние» на 2-й день цикла) **не** конкурирует за `ranked_drivers`, пока Swiss элонгация Солнце–Луна не в пределах 15° от 0° / 90° / 180°. Иначе `priority_hint=ambient`. Реальный четверть-поворот остаётся `primary`.
+
 **Правило Day Engine (вход):** в LLM для поверхностей Today уходит **один согласованный пакет входа** (DayContext + версии), а не разрозненные догадки по отдельным полям.
 
-**Правило Day Engine (выход — целевое):** не пытаться получить **одним** широким запросом весь смысл дня и все блоки UI сразу: это вынуждает модель усреднять. Цель — **управляемая цепочка вывода** (узкая задача → ограниченный JSON → следующий шаг опирается на `parent_generation_id` / артефакты предыдущих логов). Текущий `surface=guide` — монолитный компромисс; декомпозиция — см. **§2.1** и **DE-13** в [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) §4.7.
+**Meaning SoT (LOCKED 2026-08-15):** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md) I0 — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. UX reveal отдельно от authority. Foundation и Brief — не сюжет. Guide generation — к удалению. LLM не выбирает energy/windows.
+
+**Правило Day Engine (выход — целевое):** не пытаться получить **одним** широким запросом весь смысл дня и все блоки UI сразу: это вынуждает модель усреднять. Цель — **управляемая цепочка вывода** (узкая задача → ограниченный JSON → следующий шаг опирается на `parent_generation_id` / артефакты предыдущих логов). Текущий `surface=guide` — нарушение I0 (второй сюжет). Today: два LLM только формулируют Global / Personal Profile. §2.1 ниже — исторический DE-чеклист, не content SoT.
 
 ### 2.1 Цепочка смыслов (не один промпт на всё)
 

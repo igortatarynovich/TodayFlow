@@ -175,21 +175,43 @@ def test_chat_completion_json_retries_when_json_mode_returns_empty(monkeypatch):
     assert plain_call.get("max_completion_tokens", 0) >= 8192
 
 
-def test_nebius_model_fallback_on_404(monkeypatch):
+def test_resolve_complex_chat_model_empty_falls_back_to_primary(monkeypatch):
     from todayflow_backend.core.llm_openai_compatible import (
-        classify_llm_call_failure,
-        resolve_chat_model_chain,
+        resolve_complex_chat_model,
+        resolve_default_chat_model,
     )
 
     s = config_module.Settings(
         llm_provider="nebius",
         nebius_api_key="sk-test",
-        nebius_model="moonshotai/Kimi-K3",
+        nebius_model="moonshotai/Kimi-K2.6",
+        nebius_complex_model="",
+    )
+    _patch_settings(monkeypatch, s)
+    assert resolve_default_chat_model() == "moonshotai/Kimi-K2.6"
+    assert resolve_complex_chat_model() == "moonshotai/Kimi-K2.6"
+
+
+def test_nebius_model_fallback_on_404(monkeypatch):
+    from todayflow_backend.core.llm_openai_compatible import (
+        classify_llm_call_failure,
+        resolve_chat_model_chain,
+        resolve_complex_chat_model,
+        resolve_default_chat_model,
+    )
+
+    s = config_module.Settings(
+        llm_provider="nebius",
+        nebius_api_key="sk-test",
+        nebius_model="moonshotai/Kimi-K2.6",
+        nebius_complex_model="moonshotai/Kimi-K3",
         nebius_fallback_model="deepseek-ai/DeepSeek-V4-Pro",
     )
     _patch_settings(monkeypatch, s)
-    assert resolve_chat_model_chain("moonshotai/Kimi-K3") == [
-        "moonshotai/Kimi-K3",
+    assert resolve_default_chat_model() == "moonshotai/Kimi-K2.6"
+    assert resolve_complex_chat_model() == "moonshotai/Kimi-K3"
+    assert resolve_chat_model_chain("moonshotai/Kimi-K2.6") == [
+        "moonshotai/Kimi-K2.6",
         "deepseek-ai/DeepSeek-V4-Pro",
     ]
 

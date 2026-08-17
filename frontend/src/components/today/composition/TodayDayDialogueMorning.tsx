@@ -8,7 +8,7 @@ import {
   shouldAskMorningMood,
 } from "@/lib/todayDayDialogue";
 import { FOCUS_DEEPEN_CTA_LABEL } from "@/lib/todayFocusDeepen";
-import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
+import styles from "@/design-system/compositions/dsCompositionSurface.module.css";
 
 type Props = {
   dateISO: string;

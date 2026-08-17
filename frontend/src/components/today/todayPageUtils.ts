@@ -257,6 +257,7 @@ export type MorningRitualData = {
   } | null;
   celestial_events?: {
     lunar_phase?: {
+      id?: string;
       name?: string;
       themes?: string;
       guidance?: string;

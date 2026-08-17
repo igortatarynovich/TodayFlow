@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ProfileV0Header } from "@/lib/profilePage/buildProfileV0Data";
 import type { ProfileV0SocialMirrorCard } from "@/lib/profilePage/buildProfileV0SphereCards";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 type NameFacetKey = "firstImpression" | "broadcast" | "blindSpot";
 

@@ -8,7 +8,7 @@ import { ProfileEditorialNumbers } from "./ProfileEditorialNumbers";
 import { ProfileEditorialSocialMirror } from "./ProfileEditorialSocialMirror";
 import { ProfilePortraitSection } from "@/components/profile/ProfilePortraitSection";
 import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
-import styles from "./profileEditorial.module.css";
+import styles from "@/design-system/profile/dsProfileEditorial.module.css";
 
 export type ProfileEditorialScreenProps = {
   model: ProfileV0ViewModel;

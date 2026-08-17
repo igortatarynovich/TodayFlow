@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ProfileV0LoveCard } from "@/lib/profilePage/buildProfileV0SphereCards";
 import { LoveOrbitObject } from "./sphere/LoveOrbitObject";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 type LoveFacetKey = "needs" | "mistakes" | "redFlags";
 

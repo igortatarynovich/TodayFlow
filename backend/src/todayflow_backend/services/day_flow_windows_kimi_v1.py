@@ -1,8 +1,8 @@
-"""Day flow activity windows — Kimi titles/details on exact-time glance clocks.
+"""Day flow activity windows — labels only.
 
-SoT: clocks/valence/driver_id = geometry (today_glance_timeline_v1).
-title/detail = Kimi day_flow_windows_v1. Bank = fill-empty only.
-No conflict/scenes in the prompt. Not on GET request path — prewarm/persist.
+SoT: Global Day Engine owns window times / supports / cautions.
+Natal glance clocks remain geometry (`today_glance_timeline_v1`).
+Kimi is not a timeline decision. Bank = fill-empty labels only.
 """
 
 from __future__ import annotations
@@ -319,149 +319,17 @@ def ensure_day_flow_windows_for_user(
     timezone_name: str,
     locale: str = "ru",
 ) -> str:
-    """Compute glance clocks, generate Kimi copy if cache miss. Returns status string."""
-    import asyncio
+    """No-op: Global Day Engine owns windows. Kimi is not a timeline decision.
 
-    from todayflow_backend.api import reports as reports_api
-    from todayflow_backend.services import astro as astro_mod
-    from todayflow_backend.services import today_glance_timeline_v1 as glance_svc
-    from todayflow_backend.services import today_natal_activations_v1 as act_svc
-    from todayflow_backend.services.day_lifecycle_clock_c5 import resolve_user_timezone
-    from todayflow_backend.services.geocode import Geocoder
-    from todayflow_backend.services.personal_transits import get_personal_transit_service
-
-    user_id = int(user.id)
-    tz_name = resolve_user_timezone(db, user_id=user_id, explicit=timezone_name)
-
-    async def _compute() -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any] | None]:
-        transit_service = await get_personal_transit_service()
-        geocoder = Geocoder()
-        astro_service = astro_mod.AstroService()
-        astro_profile = await reports_api._get_user_astro_profile(user, db, None, locale)
-        birth_data = await reports_api._prepare_birth_data(astro_profile, geocoder, locale)
-        natal_chart = await reports_api._compute_natal_chart(
-            birth_data, astro_service, astro_profile, db
-        )
-        activations, _deg = await act_svc.resolve_natal_activations(
-            user_id=user_id,
-            local_date=local_date,
-            natal_chart=natal_chart,
-            birth_data=birth_data,
-            transit_service=transit_service,
-        )
-        coords = None
-        if birth_data and getattr(birth_data, "coordinates", None):
-            coords = {
-                "latitude": float(birth_data.coordinates.latitude),
-                "longitude": float(birth_data.coordinates.longitude),
-            }
-        glance_rows, enriched = await glance_svc.compute_glance_timeline(
-            activations=activations,
-            natal_chart=natal_chart,
-            local_date=local_date,
-            timezone_name=tz_name,
-            astro_service=astro_service,
-            coordinates=coords,
-        )
-        moon_phase = None
-        try:
-            from todayflow_backend.services import today_day_facts_project_v1 as project_svc
-
-            scenario = project_svc.load_ready_day_scenario(
-                db, user_id=user_id, local_date=local_date
-            )
-            if scenario:
-                blob = project_svc.project_narrative_blob(scenario, activations=enriched)
-                if blob:
-                    moon_phase = blob.get("moon_phase")
-        except Exception:
-            moon_phase = None
-        return glance_rows, list(enriched or []), moon_phase if isinstance(moon_phase, dict) else None
-
-    try:
-        try:
-            loop = asyncio.get_running_loop()
-        except RuntimeError:
-            loop = None
-        if loop and loop.is_running():
-            logger.warning("day_flow_windows skip nested loop user=%s", user_id)
-            return "skipped_loop"
-        glance_rows, activations, moon_phase = asyncio.run(_compute())
-        # Glance/natal used db inside asyncio.run — release before further work.
-        _release_db_transaction(db)
-    except Exception:
-        logger.exception("day_flow_windows glance failed user=%s date=%s", user_id, local_date)
-        return "error"
-
-    if not glance_rows:
-        return "empty_glance"
-
-    fp = fingerprint_for_windows(glance_rows)
-    cached = load_cached_day_flow_windows(
-        db, user_id=user_id, local_date=local_date, fingerprint=fp
+    Natal glance clocks remain geometry (`today_glance_timeline_v1`).
+    Label fill-empty uses ``apply_cached_or_bank`` only.
+    """
+    logger.info(
+        "day_flow_windows kimi skipped user=%s date=%s — engine owns windows",
+        getattr(user, "id", None),
+        local_date,
     )
-    if cached and validate_windows_payload(
-        cached, allowed_ids={str(r.get("driver_id") or "") for r in glance_rows}
-    ):
-        _release_db_transaction(db)
-        return "cache_hit"
-
-    profile_light: dict[str, Any] = {}
-    try:
-        from todayflow_backend.services.core_profile import get_core_profile_service
-
-        core = get_core_profile_service().build_cached_or_baseline(db, user)
-        if isinstance(core, dict):
-            profile_light = {
-                "sun_sign": core.get("sun_sign") or (core.get("astrology") or {}).get("sun_sign"),
-                "display_name": (core.get("identity") or {}).get("name")
-                if isinstance(core.get("identity"), dict)
-                else None,
-            }
-    except Exception:
-        profile_light = {}
-
-    allowed = {str(r.get("driver_id") or "") for r in glance_rows if r.get("driver_id")}
-    user_payload = build_kimi_user_payload(
-        glance_rows=glance_rows,
-        activations=activations,
-        moon_phase=moon_phase,
-        profile_light=profile_light,
-    )
-
-    # Critical: end the DB transaction BEFORE Nebius/Kimi. Holding the session
-    # across ~15s LLM starves the pool → GET /today/day-facts waits ~15–20s.
-    _release_db_transaction(db)
-
-    payload, model = call_day_flow_windows_kimi(user_payload, allowed_ids=allowed)
-    if not payload:
-        return "llm_miss"
-
-    # Persist on a fresh short session so we never re-borrow the caller's
-    # connection for long — and so a dead caller session cannot block writes.
-    from todayflow_backend.db.session import SessionLocal
-
-    persist_db = SessionLocal()
-    try:
-        persist_day_flow_windows(
-            persist_db,
-            user_id=user_id,
-            local_date=local_date,
-            fingerprint=fp,
-            payload=payload,
-            model=model,
-        )
-        persist_db.commit()
-    except Exception:
-        logger.debug("day_flow_windows persist failed", exc_info=True)
-        try:
-            persist_db.rollback()
-        except Exception:
-            pass
-        return "persist_fail"
-    finally:
-        persist_db.close()
-    return "generated"
+    return "skipped_engine_owns_windows"
 
 
 def _release_db_transaction(db: Session) -> None:

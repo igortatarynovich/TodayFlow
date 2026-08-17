@@ -1,15 +1,27 @@
 "use client";
 
 /**
- * Wave 2 slots — VerdictStrip Phase B + GlanceTimeline Phase C + TapWidget Phase A.
- * Prefer parent day_facts payload (D.1); standalone fetchDayFacts as fallback.
+ * Wave 2 slots — Form Kit surfaces (FOUNDATION_UI §15.8 / §5.1 / §16.6).
+ * Verdict → DsCallout tones · Glance → list rows · Tap → action cluster.
  */
 import { useEffect, useState } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import styles from "@/components/today/composition/TodayWave2Slots.module.css";
-import { DsButton } from "@/design-system/primitives/DsButton";
+import {
+  DsBody,
+  DsButton,
+  DsCallout,
+  DsCaption,
+  DsChip,
+  DsChipCluster,
+  DsContentCard,
+  DsEyebrow,
+  DsHeadline,
+  DsListRow,
+  DsPill,
+} from "@/design-system";
+import type { DsCalloutTone } from "@/design-system/primitives/DsCallout";
 import { TODAY_DOMAIN_ICON_MAP } from "@/design-system/icons/DsIcons";
-import { joinClass } from "@/design-system/utils/joinClass";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import {
   DOMAIN_LABEL_RU,
@@ -58,6 +70,13 @@ function failureFromDayFacts(data: DayFactsSlotSlice): TodaySlotLoadFailure | nu
   if (data.loadFailure) return data.loadFailure;
   if (data.is_fallback ?? data.degraded) return "unavailable";
   return null;
+}
+
+function verdictTone(verdict: VerdictKey): DsCalloutTone {
+  if (verdict === "open") return "help";
+  if (verdict === "friction") return "avoid";
+  if (verdict === "charged") return "insight";
+  return "practice";
 }
 
 export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStripProps) {
@@ -125,7 +144,7 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
   if (!loaded) {
     return (
       <div
-        className={styles.verdictStrip}
+        className={layout.stack}
         data-testid="today-slot-verdict-strip"
         data-wave2-slot="verdict"
         data-loading="true"
@@ -138,7 +157,7 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
   if (failure) {
     return (
       <div
-        className={styles.verdictStrip}
+        className={layout.stack}
         data-testid="today-slot-verdict-strip"
         data-wave2-slot="verdict"
         data-fallback="true"
@@ -146,9 +165,11 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
         role="status"
         aria-label={copy.journey.verdictStripLabel}
       >
-        <p className={styles.verdictFallback} data-testid="today-verdict-fallback">
-          {todaySlotFailureCopy(failure)}
-        </p>
+        <div data-testid="today-verdict-fallback">
+          <DsBody size="sm" muted>
+            {todaySlotFailureCopy(failure)}
+          </DsBody>
+        </div>
       </div>
     );
   }
@@ -156,7 +177,7 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
   if (!rows || rows.length === 0) {
     return (
       <div
-        className={styles.verdictStrip}
+        className={layout.stack}
         data-testid="today-slot-verdict-strip"
         data-wave2-slot="verdict"
         data-empty="true"
@@ -167,7 +188,7 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
 
   return (
     <div
-      className={styles.verdictStrip}
+      className={layout.stack}
       data-testid="today-slot-verdict-strip"
       data-wave2-slot="verdict"
       data-fallback="false"
@@ -179,38 +200,35 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
         const verdict = row.verdict as VerdictKey;
         const domainLabel = DOMAIN_LABEL_RU[domain] ?? row.domain;
         const verdictLabel = VERDICT_LABEL_RU[verdict] ?? row.verdict;
-        // Unknown/legacy domain string (not in the closed DomainKey map) → no icon, label still renders.
         const DomainIcon = (TODAY_DOMAIN_ICON_MAP as Partial<Record<string, typeof TODAY_DOMAIN_ICON_MAP.work>>)[
           domain
         ];
+        const title = DomainIcon ? (
+          <span className={layout.glanceNearestRow}>
+            <DomainIcon className={layout.domainIcon} />
+            {domainLabel}
+          </span>
+        ) : (
+          domainLabel
+        );
         return (
           <div
             key={row.domain}
-            className={styles.verdictRow}
             role="listitem"
             data-domain={row.domain}
             data-verdict={row.verdict}
             data-testid={`today-verdict-${row.domain}`}
           >
-            <span className={styles.verdictSign} data-verdict={row.verdict} aria-hidden>
-              {verdict === "open" ? "◇" : verdict === "charged" ? "▲" : verdict === "friction" ? "×" : "·"}
-            </span>
-            <div className={styles.verdictCopy}>
-              <div className={styles.verdictHead}>
-                <span className={styles.verdictDomainGroup}>
-                  {DomainIcon ? <DomainIcon className={styles.verdictDomainIcon} /> : null}
-                  <span className={styles.verdictDomain}>{domainLabel}</span>
-                </span>
-                <span className={styles.verdictKey} data-verdict={row.verdict}>
-                  {verdictLabel}
-                </span>
-              </div>
+            <DsCallout tone={verdictTone(verdict)} title={title}>
+              <DsCaption muted>{verdictLabel}</DsCaption>
               {row.why_short ? (
-                <p className={styles.verdictWhy} data-testid={`today-verdict-why-${row.domain}`}>
-                  {row.why_short}
-                </p>
+                <div data-testid={`today-verdict-why-${row.domain}`}>
+                  <DsBody size="sm" muted>
+                    {row.why_short}
+                  </DsBody>
+                </div>
               ) : null}
-            </div>
+            </DsCallout>
           </div>
         );
       })}
@@ -287,7 +305,7 @@ export function TodayGlanceTimelineSlot({
   if (!loaded) {
     return (
       <div
-        className={styles.glance}
+        className={layout.stack}
         data-testid="today-slot-glance-timeline"
         data-wave2-slot="glance"
         data-loading="true"
@@ -299,16 +317,18 @@ export function TodayGlanceTimelineSlot({
   if (failure) {
     return (
       <div
-        className={styles.glance}
+        className={layout.stack}
         data-testid="today-slot-glance-timeline"
         data-wave2-slot="glance"
         data-fallback="true"
         data-failure={failure}
         role="status"
       >
-        <p className={styles.glanceFallback} data-testid="today-glance-fallback">
-          {todaySlotFailureCopy(failure)}
-        </p>
+        <div data-testid="today-glance-fallback">
+          <DsBody size="sm" muted>
+            {todaySlotFailureCopy(failure)}
+          </DsBody>
+        </div>
       </div>
     );
   }
@@ -316,7 +336,7 @@ export function TodayGlanceTimelineSlot({
   if (rows.length === 0) {
     return (
       <div
-        className={variant === "story" ? styles.glanceStory : styles.slot}
+        className={layout.stack}
         data-testid="today-slot-glance-timeline"
         data-wave2-slot="glance"
         data-empty="true"
@@ -324,17 +344,55 @@ export function TodayGlanceTimelineSlot({
         aria-hidden={variant === "story" ? undefined : true}
       >
         {variant === "story" ? (
-          <p className={styles.glanceStoryEmpty} data-testid="today-glance-empty">
-            {copy.journey.glanceNearestEmpty}
-          </p>
+          <div data-testid="today-glance-empty">
+            <DsBody size="sm" muted>
+              {copy.journey.glanceNearestEmpty}
+            </DsBody>
+          </div>
         ) : null}
+      </div>
+    );
+  }
+
+  if (variant === "story") {
+    return (
+      <div
+        className={layout.stack}
+        data-testid="today-slot-glance-timeline"
+        data-wave2-slot="glance"
+        data-fallback="false"
+        data-variant={variant}
+        role="list"
+        aria-label={copy.journey.glanceStripLabel}
+      >
+        {rows.map((row) => {
+          const live = isGlanceLiveNow(row.time_local, nowTick);
+          const tone =
+            row.valence === "caution" ? "accent" : row.valence === "favorable" ? "solid" : "subtle";
+          return (
+            <div
+              key={`${row.driver_id}-${row.time_local}`}
+              role="listitem"
+              data-valence={row.valence}
+              data-live={live ? "true" : "false"}
+              data-testid={`today-glance-${row.driver_id}`}
+            >
+              <DsContentCard
+                tone={tone}
+                eyebrow={formatGlanceClock(row.time_local)}
+                title={row.label_short}
+                chips={live ? <DsPill>{copy.journey.glanceNow}</DsPill> : undefined}
+              />
+            </div>
+          );
+        })}
       </div>
     );
   }
 
   return (
     <div
-      className={variant === "story" ? styles.glanceStory : styles.glance}
+      className={layout.stack}
       data-testid="today-slot-glance-timeline"
       data-wave2-slot="glance"
       data-fallback="false"
@@ -344,45 +402,20 @@ export function TodayGlanceTimelineSlot({
     >
       {rows.map((row) => {
         const live = isGlanceLiveNow(row.time_local, nowTick);
-        if (variant !== "story") {
-          return (
-            <div
-              key={`${row.driver_id}-${row.time_local}`}
-              className={styles.glanceRow}
-              role="listitem"
-              data-valence={row.valence}
-              data-live={live ? "true" : "false"}
-              data-testid={`today-glance-${row.driver_id}`}
-            >
-              <span className={styles.glanceTime}>{formatGlanceClock(row.time_local)}</span>
-              <span className={styles.glanceLabel}>{row.label_short}</span>
-              {live ? (
-                <span className={styles.glanceNow} data-testid="today-glance-now">
-                  {copy.journey.glanceNow}
-                </span>
-              ) : null}
-            </div>
-          );
-        }
         return (
           <div
             key={`${row.driver_id}-${row.time_local}`}
-            className={styles.glanceStoryRow}
             role="listitem"
             data-valence={row.valence}
             data-live={live ? "true" : "false"}
             data-testid={`today-glance-${row.driver_id}`}
           >
-            <span className={styles.glanceStoryTime}>{formatGlanceClock(row.time_local)}</span>
-            <div className={styles.glanceStoryCopy}>
-              {/* Valence = data-valence / row color — no «Благоприятно» prose (WAVE2 lived-use). */}
-              <span className={styles.glanceStoryLabel}>{row.label_short}</span>
-            </div>
-            {live ? (
-              <span className={styles.glanceNow} data-testid="today-glance-now">
-                {copy.journey.glanceNow}
-              </span>
-            ) : null}
+            <DsListRow
+              title={formatGlanceClock(row.time_local)}
+              subtitle={
+                live ? `${row.label_short} · ${copy.journey.glanceNow}` : row.label_short
+              }
+            />
           </div>
         );
       })}
@@ -410,7 +443,6 @@ export function TodayTapWidget({
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [summary, setSummary] = useState<AccuracySummaryV1 | null>(null);
-  const [completedPulse, setCompletedPulse] = useState(false);
 
   useEffect(() => {
     setResponse(initialResponse);
@@ -433,14 +465,16 @@ export function TodayTapWidget({
   if (!prompt) {
     return (
       <div
-        className={styles.tap}
+        className={layout.actionCenter}
         data-testid="today-slot-tap-widget"
         data-wave2-slot="tap"
         data-empty="true"
         data-no-trap="true"
       >
-        <p className={styles.tapHint} role="status">
-          {copy.journey.tapEmptyHint}
+        <p role="status">
+          <DsBody size="sm" muted>
+            {copy.journey.tapEmptyHint}
+          </DsBody>
         </p>
       </div>
     );
@@ -463,8 +497,6 @@ export function TodayTapWidget({
         dayFactsId,
       });
       setResponse(code);
-      setCompletedPulse(true);
-      window.setTimeout(() => setCompletedPulse(false), 900);
       onRecorded?.(code);
     } catch {
       setError(copy.journey.tapError);
@@ -477,29 +509,19 @@ export function TodayTapWidget({
 
   return (
     <div
-      className={[
-        styles.tap,
-        attention ? styles.tapAttention : "",
-        completedPulse ? styles.tapCompleted : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      className={layout.actionCenter}
       data-testid="today-slot-tap-widget"
       data-wave2-slot="tap"
       data-tap-attention={attention ? "true" : "false"}
       data-tap-answered={answered ? "true" : "false"}
     >
-      <p className={styles.tapPrompt} data-testid="today-tap-prompt">
-        {prompt.promptedText}
-      </p>
-      <div className={styles.tapRow} role="group" aria-label={prompt.promptedText}>
+      <div data-testid="today-tap-prompt">
+        <DsHeadline as="p">{prompt.promptedText}</DsHeadline>
+      </div>
+      <DsChipCluster>
         <DsButton
           variant="secondary"
           size="sm"
-          className={joinClass(
-            styles.tapChoice,
-            response === "avoided_trap" ? styles.tapChoiceSelected : null,
-          )}
           data-testid="today-tap-avoided"
           data-selected={response === "avoided_trap" ? "true" : undefined}
           aria-pressed={response === "avoided_trap"}
@@ -511,10 +533,6 @@ export function TodayTapWidget({
         <DsButton
           variant="secondary"
           size="sm"
-          className={joinClass(
-            styles.tapChoice,
-            response === "fell_into_trap" ? styles.tapChoiceSelected : null,
-          )}
           data-testid="today-tap-fell"
           data-selected={response === "fell_into_trap" ? "true" : undefined}
           aria-pressed={response === "fell_into_trap"}
@@ -526,11 +544,6 @@ export function TodayTapWidget({
         <DsButton
           variant="ghost"
           size="sm"
-          className={joinClass(
-            styles.tapChoice,
-            styles.tapChoiceGhost,
-            response === "not_applicable" ? styles.tapChoiceSelected : null,
-          )}
           data-testid="today-tap-na"
           data-selected={response === "not_applicable" ? "true" : undefined}
           aria-pressed={response === "not_applicable"}
@@ -539,21 +552,23 @@ export function TodayTapWidget({
         >
           {copy.journey.tapNotApplicable}
         </DsButton>
-      </div>
+      </DsChipCluster>
       {answered ? (
-        <p className={styles.tapDone} data-testid="today-tap-recorded">
-          {copy.journey.tapRecorded}
-        </p>
+        <div data-testid="today-tap-recorded">
+          <DsCaption>{copy.journey.tapRecorded}</DsCaption>
+        </div>
       ) : null}
       {error ? (
-        <p className={styles.tapError} data-testid="today-tap-error">
-          {error}
-        </p>
+        <div data-testid="today-tap-error">
+          <DsBody size="sm" muted>
+            {error}
+          </DsBody>
+        </div>
       ) : null}
       {accuracyLine ? (
-        <p className={styles.tapAccuracy} data-testid="today-tap-accuracy">
-          {accuracyLine}
-        </p>
+        <div data-testid="today-tap-accuracy">
+          <DsCaption muted>{accuracyLine}</DsCaption>
+        </div>
       ) : null}
     </div>
   );
@@ -562,29 +577,17 @@ export function TodayTapWidget({
 /** @deprecated Wave 1 stub — use TodayTapWidget */
 export function TodayTapWidgetStub(props: { onTap?: () => void; answered?: boolean | null }) {
   return (
-    <div className={styles.tap} data-testid="today-slot-tap-widget" data-wave2-slot="tap">
-      <p className={styles.tapLabel}>{copy.journey.tapStubLabel}</p>
-      <div className={styles.tapRow}>
-        <DsButton
-          variant="secondary"
-          size="sm"
-          className={styles.tapChoice}
-          data-testid="today-tap-yes"
-          onClick={() => props.onTap?.()}
-        >
+    <div className={layout.actionCenter} data-testid="today-slot-tap-widget" data-wave2-slot="tap">
+      <DsEyebrow>{copy.journey.tapStubLabel}</DsEyebrow>
+      <DsChipCluster>
+        <DsChip onClick={() => props.onTap?.()} testId="today-tap-yes">
           Да
-        </DsButton>
-        <DsButton
-          variant="ghost"
-          size="sm"
-          className={joinClass(styles.tapChoice, styles.tapChoiceGhost)}
-          data-testid="today-tap-no"
-          onClick={() => props.onTap?.()}
-        >
+        </DsChip>
+        <DsChip variant="ghost" onClick={() => props.onTap?.()} testId="today-tap-no">
           Нет
-        </DsButton>
-      </div>
-      <p className={styles.tapHint}>{copy.journey.tapStubHint}</p>
+        </DsChip>
+      </DsChipCluster>
+      <DsCaption muted>{copy.journey.tapStubHint}</DsCaption>
     </div>
   );
 }

@@ -8,7 +8,7 @@ import {
   type InterpretationResonance,
 } from "@/lib/todayInterpretationConfirm";
 import type { CompactUserModel } from "@/lib/types";
-import styles from "./profileQuickMap.module.css";
+import styles from "@/design-system/profile/dsProfileQuickMap.module.css";
 
 const VERDICT_PREFIX = "todayflow.profile_atom_verdict.v1";
 

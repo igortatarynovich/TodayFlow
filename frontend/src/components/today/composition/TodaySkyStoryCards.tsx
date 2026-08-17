@@ -16,7 +16,7 @@ import {
   IconSun,
   IconTarot,
 } from "@/design-system/icons/DsIcons";
-import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
+import styles from "@/design-system/compositions/dsCompositionSurface.module.css";
 
 type Props = {
   cards: TodaySkyCard[];

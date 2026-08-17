@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./profileAtmosphere.module.css";
+import styles from "@/design-system/profile/dsProfileAtmosphere.module.css";
 
 export type ProfileAtmosphereMotif =
   | "why"

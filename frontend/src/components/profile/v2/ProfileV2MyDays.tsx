@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { buildDayContinuityWeekCells } from "@/lib/todayDayContinuityHeatmap";
 import { DsButton } from "@/design-system";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export function ProfileV2MyDays() {
   const [todayISO, setTodayISO] = useState<string | null>(null);

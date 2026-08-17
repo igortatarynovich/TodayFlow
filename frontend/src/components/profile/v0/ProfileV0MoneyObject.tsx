@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ProfileV0MoneyCard } from "@/lib/profilePage/buildProfileV0SphereCards";
 import { MoneyStructureObject } from "./sphere/MoneyStructureObject";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 type MoneyFacetKey = "motivation" | "risk" | "workStyle";
 

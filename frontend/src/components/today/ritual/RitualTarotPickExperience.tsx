@@ -18,7 +18,7 @@ import { postJson } from "@/lib/api";
 import { TAROT_DECK_INDICES } from "@/components/today/todayTarotDraw";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { ritualRevealCtaReady, useRitualRevealStages } from "@/lib/ritualRevealCascade";
-import styles from "./RitualTarotPickExperience.module.css";
+import styles from "@/design-system/patterns/dsRitualTarotPick.module.css";
 
 type Phase = "idle" | "deck" | "reveal";
 
@@ -305,6 +305,7 @@ export function RitualTarotPickExperience({
           type="button"
           className={styles.idleDeck}
           onClick={onIdleActivate}
+          onPointerDown={(event) => event.stopPropagation()}
           aria-label={RITUAL_COPY.tarotIdleHint}
           data-testid="ritual-tarot-idle-deck"
         >

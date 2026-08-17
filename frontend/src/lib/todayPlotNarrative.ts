@@ -106,43 +106,40 @@ export function buildPlotStoryBeats(contract: TodayContractV1 | null | undefined
   );
   if (!scenes.length) return [];
 
+  const pid = String(contract.day_story?.day_scenario?.primary_scene_id || "").trim();
   const primary =
-    scenes.find((s) => s.role_in_story === "primary") ||
-    scenes.find((s) => s.role_in_story === "peak") ||
-    scenes[0];
-  const support = scenes.find((s) => s !== primary && (s.trap || s.opportunity)) || scenes[1];
+    (pid ? scenes.find((s) => String(s.scene_id || "") === pid) : undefined) ||
+    scenes.find((s) => s.role_in_story === "primary");
+  if (!primary) return [];
 
   const beats: PlotStoryBeat[] = [];
   const setup =
-    clean(primary?.what_happens) ||
-    clean(primary?.domestic_example) ||
+    clean(primary.what_happens) ||
+    clean(primary.domestic_example) ||
     clean(contract.day_story?.day_scenario?.conflict?.why_arose);
   if (setup && !isCalendarKitchenFact(setup)) {
     beats.push({
-      id: `${primary?.scene_id || "scene"}-setup`,
+      id: `${primary.scene_id || "scene"}-setup`,
       role: "setup",
       label: BEAT_LABEL.setup,
       body: setup,
     });
   }
 
-  const tensionBody = clean(primary?.trap) || clean(support?.trap);
+  const tensionBody = clean(primary.trap);
   if (tensionBody) {
     beats.push({
-      id: `${primary?.scene_id || "scene"}-tension`,
+      id: `${primary.scene_id || "scene"}-tension`,
       role: "tension",
       label: BEAT_LABEL.tension,
       body: tensionBody,
     });
   }
 
-  const turnBody =
-    clean(primary?.opportunity) ||
-    clean(support?.opportunity) ||
-    clean(primary?.recommended_action);
+  const turnBody = clean(primary.opportunity) || clean(primary.recommended_action);
   if (turnBody) {
     beats.push({
-      id: `${primary?.scene_id || "scene"}-turn`,
+      id: `${primary.scene_id || "scene"}-turn`,
       role: "turn",
       label: BEAT_LABEL.turn,
       body: turnBody,

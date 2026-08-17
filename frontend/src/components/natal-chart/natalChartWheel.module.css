@@ -44,6 +44,22 @@
   background-size: auto, auto, auto, cover;
 }
 
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    url("/images/decorative/kit/star-gold.webp"),
+    url("/images/decorative/kit/star-silver.webp"),
+    url("/images/decorative/kit/flare-gold.webp");
+  background-repeat: no-repeat;
+  background-position: 10% 14%, 90% 18%, 84% 72%;
+  background-size: 18px, 15px, 28px;
+}
+
 .stage[data-element="fire"] {
   background-image:
     radial-gradient(ellipse 65% 50% at 50% 40%, rgba(196, 120, 42, 0.3) 0%, transparent 55%),
@@ -112,7 +128,8 @@
   position: relative;
   z-index: 1;
   margin: 0 auto;
-  padding: 0;
+  /* Inset so rim orbs/angles are not clipped by .stage overflow:hidden */
+  padding: 0.35rem;
   background: transparent;
   border-radius: 50%;
   border: none;
@@ -122,9 +139,10 @@
   overflow: visible;
   aspect-ratio: 1 / 1;
   /* Fill the stage width — wheel is the hero, not a padded widget. */
-  width: 100%;
+  width: min(100%, calc(100% - 0.5rem));
   max-width: none;
-  align-self: stretch;
+  align-self: center;
+  box-sizing: border-box;
 }
 
 @keyframes natalAspectWave {
@@ -158,9 +176,10 @@
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
+  /* Must stay square overflow — circular clip was cutting zodiac/angle markers on the rim. */
   overflow: visible;
   touch-action: manipulation;
-  border-radius: 50%;
+  border-radius: 0;
   filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.28));
 }
 

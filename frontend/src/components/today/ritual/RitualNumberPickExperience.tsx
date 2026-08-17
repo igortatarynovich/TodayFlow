@@ -2,10 +2,11 @@
 
 import type { CSSProperties } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { DsButton, DsNumber } from "@/design-system";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { pulseDayPhaseRevealFlash } from "@/lib/dayPhaseAtmosphere";
 import { ritualRevealCtaReady, useRitualRevealStages } from "@/lib/ritualRevealCascade";
-import styles from "./RitualNumberPickExperience.module.css";
+import styles from "@/design-system/patterns/dsRitualNumberPick.module.css";
 
 type Props = {
   /** Уже известное число дня (если есть в morning после reveal). */
@@ -197,7 +198,9 @@ export function RitualNumberPickExperience({
         <div className={styles.cascade}>
           <div className={styles.cascadeCard} data-testid="ritual-number-value">
             <div className={styles.halo}>
-              <span className={styles.bigNum}>{display}</span>
+              <span className={styles.bigNum}>
+                <DsNumber value={display} size={48} alt={display} />
+              </span>
             </div>
             {title ? <p className={styles.valueTitle}>{title}</p> : null}
           </div>
@@ -219,9 +222,9 @@ export function RitualNumberPickExperience({
 
         {ctaReady && !alreadyConfirmed ? (
           <div className={styles.revealActions}>
-            <button type="button" className={styles.revealPrimaryCta} onClick={onConfirm}>
+            <DsButton onClick={onConfirm} data-testid="ritual-number-done">
               {RITUAL_COPY.numberRevealDoneCta}
-            </button>
+            </DsButton>
           </div>
         ) : null}
       </div>
@@ -244,6 +247,7 @@ export function RitualNumberPickExperience({
               data-blank="true"
               style={{ left: x, top: y, "--ni": i } as CSSProperties}
               onClick={onPick}
+              onPointerDown={(event) => event.stopPropagation()}
               disabled={resolving}
               aria-busy={resolving || undefined}
               aria-label="Открыть число дня"

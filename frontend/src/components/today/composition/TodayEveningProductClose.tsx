@@ -1,14 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { DsButton } from "@/design-system";
+import {
+  DsActionCard,
+  DsButton,
+  DsChip,
+  DsChipCluster,
+  DsContentCard,
+  DsHeroBlock,
+  DsListPanel,
+  DsListRow,
+  DsStarDivider,
+} from "@/design-system";
 import type { DayFocusOutcome } from "@/lib/todayDayContinuity";
 import type { TodayPromiseSuggestion } from "@/lib/todayDayDialogue";
 import {
   TODAY_EVENING_HIGHLIGHTS,
   promiseOutcomeLabelRu,
 } from "@/lib/todayDayDialogue";
-import styles from "@/components/today/composition/TodayEveningProductClose.module.css";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 const OUTCOMES: DayFocusOutcome[] = ["done", "partial", "not_done"];
 
@@ -30,7 +40,6 @@ type Props = {
   activeAscetic?: { id: number; title: string } | null;
   habitMarked?: boolean;
   asceticMarked?: boolean;
-  /** Optional one-tap when user answers «Да» to evening habit/ascetic question. */
   onHabitEveningDone?: () => void;
   onAsceticEveningDone?: () => void;
   promiseSuggestions?: TodayPromiseSuggestion[];
@@ -46,6 +55,37 @@ function formatName(name: string | null | undefined): string | null {
   return trimmed.split(/\s+/)[0] ?? trimmed;
 }
 
+function OutcomeChips({
+  value,
+  onChange,
+  disabled,
+  testIdPrefix,
+  ariaLabel,
+}: {
+  value: DayFocusOutcome | null;
+  onChange: (v: DayFocusOutcome) => void;
+  disabled?: boolean;
+  testIdPrefix: string;
+  ariaLabel: string;
+}) {
+  return (
+    <DsChipCluster testId={ariaLabel}>
+      {OUTCOMES.map((id) => (
+        <DsChip
+          key={id}
+          selected={value === id}
+          disabled={disabled}
+          testId={`${testIdPrefix}-${id}`}
+          onClick={() => onChange(id)}
+        >
+          {OUTCOME_LABELS[id] ?? promiseOutcomeLabelRu(id)}
+        </DsChip>
+      ))}
+    </DsChipCluster>
+  );
+}
+
+/** Evening close — Form Kit hero / content / chips / action. */
 export function TodayEveningProductClose({
   userName,
   userPromise,
@@ -83,7 +123,9 @@ export function TodayEveningProductClose({
   const completedPractices =
     (practiceCompleted ? 1 : 0) + (practiceStarted && !practiceCompleted ? 0 : 0);
   const practiceSummary =
-    strengthenToolCount > 0 ? `${Math.max(completedPractices, practiceCompleted ? 1 : 0)} из ${strengthenToolCount}` : "—";
+    strengthenToolCount > 0
+      ? `${Math.max(completedPractices, practiceCompleted ? 1 : 0)} из ${strengthenToolCount}`
+      : "—";
   const intentionSummary = userPromise ? "Выполнено" : "Не выбрано";
   const reflectionSummary = highlightId ? "1" : "0";
 
@@ -91,29 +133,30 @@ export function TodayEveningProductClose({
   const showAsceticQuestion = Boolean(activeAscetic) && !asceticMarked;
 
   return (
-    <div className={styles.root} data-testid="today-composition-evening">
-      <section data-testid="today-day-continuity-evening">
-        <header className={styles.eveningHeader}>
-          <h1 className={styles.eveningHeaderTitle}>{greetingName}</h1>
-          <p className={styles.eveningHeaderMeta}>
-            {themeShort ? `Тема: ${themeShort}` : "Тема дня"}
-            {userPromise ? ` · Намерение: ${userPromise}` : ""}
-          </p>
-        </header>
+    <div className={layout.stack} data-testid="today-composition-evening">
+      <section className={layout.stack} data-testid="today-day-continuity-evening">
+        <DsHeroBlock
+          tone="solid"
+          title={greetingName}
+          body={
+            [
+              themeShort ? `Тема: ${themeShort}` : "Тема дня",
+              userPromise ? `Намерение: ${userPromise}` : null,
+            ]
+              .filter(Boolean)
+              .join(" · ")
+          }
+        />
 
         {showPromisePicker ? (
-          <div className={styles.promisePicker} data-testid="evening-promise-picker">
+          <DsListPanel tone="glass" testId="evening-promise-picker" title="Обещание">
             {promiseSuggestions.map((suggestion) => (
-              <DsButton
+              <DsListRow
                 key={suggestion.id}
-                type="button"
-                variant="secondary"
-                data-testid={`evening-promise-${suggestion.id}`}
-                disabled={saving}
+                title={suggestion.text}
+                testId={`evening-promise-${suggestion.id}`}
                 onClick={() => onPickPromise?.(suggestion.text)}
-              >
-                {suggestion.text}
-              </DsButton>
+              />
             ))}
             <DsButton
               type="button"
@@ -124,177 +167,138 @@ export function TodayEveningProductClose({
             >
               Продолжить без обещания
             </DsButton>
-          </div>
+          </DsListPanel>
         ) : (
           <>
-            <article className={styles.questionCard}>
-              <h2 className={styles.questionTitle}>Как прошёл сегодняшний главный фокус?</h2>
-              <div className={styles.outcomeRow} role="group" aria-label="Итог дня">
-                {OUTCOMES.map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    data-testid={`day-continuity-outcome-${value}`}
-                    className={outcome === value ? styles.outcomePillSelected : styles.outcomePill}
-                    disabled={saving}
-                    onClick={() => setOutcome(value)}
-                  >
-                    {OUTCOME_LABELS[value] ?? promiseOutcomeLabelRu(value)}
-                  </button>
-                ))}
-              </div>
-            </article>
+            <DsContentCard
+              tone="glass"
+              eyebrow="Главный фокус"
+              title="Как прошёл сегодняшний главный фокус?"
+              chips={
+                <OutcomeChips
+                  value={outcome}
+                  onChange={setOutcome}
+                  disabled={saving}
+                  testIdPrefix="day-continuity-outcome"
+                  ariaLabel="Итог дня"
+                />
+              }
+            />
 
             {showHabitQuestion && activeHabit ? (
-              <article className={styles.questionCard} data-testid="evening-habit-question">
-                <h2 className={styles.questionTitle}>
-                  Получилось сегодня с привычкой «{activeHabit.name}»?
-                </h2>
-                <div className={styles.outcomeRow} role="group" aria-label="Привычка сегодня">
-                  {OUTCOMES.map((value) => (
-                    <button
-                      key={value}
-                      type="button"
-                      data-testid={`evening-habit-outcome-${value}`}
-                      className={habitOutcome === value ? styles.outcomePillSelected : styles.outcomePill}
-                      disabled={saving}
-                      onClick={() => {
-                        setHabitOutcome(value);
-                        if (value === "done") onHabitEveningDone?.();
-                      }}
-                    >
-                      {OUTCOME_LABELS[value] ?? promiseOutcomeLabelRu(value)}
-                    </button>
-                  ))}
-                </div>
-              </article>
+              <DsContentCard
+                tone="subtle"
+                testId="evening-habit-question"
+                title={`Получилось сегодня с привычкой «${activeHabit.name}»?`}
+                chips={
+                  <OutcomeChips
+                    value={habitOutcome}
+                    onChange={(value) => {
+                      setHabitOutcome(value);
+                      if (value === "done") onHabitEveningDone?.();
+                    }}
+                    disabled={saving}
+                    testIdPrefix="evening-habit-outcome"
+                    ariaLabel="Привычка сегодня"
+                  />
+                }
+              />
             ) : null}
 
             {showAsceticQuestion && activeAscetic ? (
-              <article className={styles.questionCard} data-testid="evening-ascetic-question">
-                <h2 className={styles.questionTitle}>
-                  Получилось сегодня с аскезой «{activeAscetic.title}»?
-                </h2>
-                <div className={styles.outcomeRow} role="group" aria-label="Аскеза сегодня">
-                  {OUTCOMES.map((value) => (
-                    <button
-                      key={value}
-                      type="button"
-                      data-testid={`evening-ascetic-outcome-${value}`}
-                      className={
-                        asceticOutcome === value ? styles.outcomePillSelected : styles.outcomePill
-                      }
-                      disabled={saving}
-                      onClick={() => {
-                        setAsceticOutcome(value);
-                        if (value === "done") onAsceticEveningDone?.();
-                      }}
-                    >
-                      {OUTCOME_LABELS[value] ?? promiseOutcomeLabelRu(value)}
-                    </button>
-                  ))}
-                </div>
-              </article>
+              <DsContentCard
+                tone="subtle"
+                testId="evening-ascetic-question"
+                title={`Получилось сегодня с аскезой «${activeAscetic.title}»?`}
+                chips={
+                  <OutcomeChips
+                    value={asceticOutcome}
+                    onChange={(value) => {
+                      setAsceticOutcome(value);
+                      if (value === "done") onAsceticEveningDone?.();
+                    }}
+                    disabled={saving}
+                    testIdPrefix="evening-ascetic-outcome"
+                    ariaLabel="Аскеза сегодня"
+                  />
+                }
+              />
             ) : null}
 
-            <section className={styles.highlightsSection}>
-              <p className={styles.highlightsLabel}>Что запомнилось?</p>
-              <div className={styles.highlightRow} role="group" aria-label="Самое важное сегодня">
-                {TODAY_EVENING_HIGHLIGHTS.map((highlight) => (
-                  <button
-                    key={highlight.id}
-                    type="button"
-                    data-testid={`evening-highlight-${highlight.id}`}
-                    className={highlightId === highlight.id ? styles.highlightChipSelected : styles.highlightChip}
-                    disabled={saving}
-                    onClick={() => setHighlightId((prev) => (prev === highlight.id ? null : highlight.id))}
-                  >
-                    {highlight.label}
-                  </button>
-                ))}
-              </div>
-            </section>
+            <DsContentCard
+              tone="glass"
+              eyebrow="Что запомнилось?"
+              chips={
+                <DsChipCluster>
+                  {TODAY_EVENING_HIGHLIGHTS.map((highlight) => (
+                    <DsChip
+                      key={highlight.id}
+                      selected={highlightId === highlight.id}
+                      disabled={saving}
+                      testId={`evening-highlight-${highlight.id}`}
+                      onClick={() =>
+                        setHighlightId((prev) => (prev === highlight.id ? null : highlight.id))
+                      }
+                    >
+                      {highlight.label}
+                    </DsChip>
+                  ))}
+                </DsChipCluster>
+              }
+            />
 
-            <article className={styles.summaryCard}>
-              <div className={styles.summaryRow}>
-                <p className={styles.summaryLabel}>Практики</p>
-                <p className={styles.summaryValue}>
-                  {practiceSummary}
-                  {practiceCompleted ? <span className={styles.summaryCheck}>✓</span> : null}
-                </p>
-              </div>
-              <div className={styles.summaryDivider} />
-              <div className={styles.summaryRow}>
-                <p className={styles.summaryLabel}>Намерение</p>
-                <p className={styles.summaryValue}>
-                  {intentionSummary}
-                  {userPromise && outcome === "done" ? <span className={styles.summaryCheck}>✓</span> : null}
-                </p>
-              </div>
+            <DsListPanel tone="solid" title="Итог">
+              <DsListRow
+                title="Практики"
+                subtitle={`${practiceSummary}${practiceCompleted ? " ✓" : ""}`}
+              />
+              <DsListRow
+                title="Намерение"
+                subtitle={`${intentionSummary}${userPromise && outcome === "done" ? " ✓" : ""}`}
+              />
               {activeHabit ? (
-                <>
-                  <div className={styles.summaryDivider} />
-                  <div className={styles.summaryRow}>
-                    <p className={styles.summaryLabel}>Привычка</p>
-                    <p className={styles.summaryValue}>
-                      {habitMarked || habitOutcome === "done" ? "Отмечено" : "—"}
-                      {habitMarked || habitOutcome === "done" ? (
-                        <span className={styles.summaryCheck}>✓</span>
-                      ) : null}
-                    </p>
-                  </div>
-                </>
+                <DsListRow
+                  title="Привычка"
+                  subtitle={habitMarked || habitOutcome === "done" ? "Отмечено ✓" : "—"}
+                />
               ) : null}
               {activeAscetic ? (
-                <>
-                  <div className={styles.summaryDivider} />
-                  <div className={styles.summaryRow}>
-                    <p className={styles.summaryLabel}>Аскеза</p>
-                    <p className={styles.summaryValue}>
-                      {asceticMarked || asceticOutcome === "done" ? "Отмечено" : "—"}
-                      {asceticMarked || asceticOutcome === "done" ? (
-                        <span className={styles.summaryCheck}>✓</span>
-                      ) : null}
-                    </p>
-                  </div>
-                </>
+                <DsListRow
+                  title="Аскеза"
+                  subtitle={asceticMarked || asceticOutcome === "done" ? "Отмечено ✓" : "—"}
+                />
               ) : null}
-              <div className={styles.summaryDivider} />
-              <div className={styles.summaryRow}>
-                <p className={styles.summaryLabel}>Рефлексий</p>
-                <p className={styles.summaryValue}>
-                  {reflectionSummary}
-                  {highlightId ? <span className={styles.summaryCheck}>✓</span> : null}
-                </p>
-              </div>
-            </article>
+              <DsListRow
+                title="Рефлексий"
+                subtitle={`${reflectionSummary}${highlightId ? " ✓" : ""}`}
+              />
+            </DsListPanel>
 
-            <div className={styles.actions}>
-              <DsButton
-                type="button"
-                variant="primary"
-                data-testid="day-continuity-submit"
-                disabled={saving || outcome == null}
-                onClick={() => {
-                  if (outcome == null) return;
-                  onSubmit(outcome, highlightId, "");
-                }}
-              >
-                {saving ? "Сохраняем…" : "Сохранить день"}
-              </DsButton>
-              <p className={styles.footerHint}>Завтра утром TodayFlow начнёт с того, что было сегодня.</p>
-            </div>
+            <DsStarDivider />
+            <DsActionCard
+              tone="accent"
+              title={saving ? "Сохраняем…" : "Сохранить день"}
+              body="Завтра утром TodayFlow начнёт с того, что было сегодня."
+              action={
+                <DsButton
+                  type="button"
+                  variant="primary"
+                  data-testid="day-continuity-submit"
+                  disabled={saving || outcome == null}
+                  onClick={() => {
+                    if (outcome == null) return;
+                    onSubmit(outcome, highlightId, "");
+                  }}
+                >
+                  {saving ? "Сохраняем…" : "Сохранить день"}
+                </DsButton>
+              }
+            />
           </>
         )}
 
         {onBack ? (
-          <DsButton
-            type="button"
-            variant="ghost"
-            className={styles.backButton}
-            disabled={saving}
-            onClick={onBack}
-          >
+          <DsButton type="button" variant="ghost" disabled={saving} onClick={onBack}>
             Назад к дню
           </DsButton>
         ) : null}

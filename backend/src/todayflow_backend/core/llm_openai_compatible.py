@@ -45,7 +45,7 @@ def is_llm_chat_configured() -> bool:
     return bool(key)
 
 
-def _resolve_llm_credentials() -> tuple[str, str] | None:
+def _resolve_llm_credentials(*, model: str | None = None) -> tuple[str, str] | None:
     """Возвращает (api_key, base_url) для активного chat-провайдера."""
     provider = (settings.llm_provider or "openai").strip().lower()
     if provider == "gemini":
@@ -58,7 +58,12 @@ def _resolve_llm_credentials() -> tuple[str, str] | None:
         key = (settings.nebius_api_key or "").strip()
         if not key:
             return None
-        base = (settings.nebius_base_url or "https://api.tokenfactory.eu-west2.nebius.com/v1/").strip()
+        base = (settings.nebius_base_url or "https://api.tokenfactory.us-central1.nebius.com/v1/").strip()
+        complex_mid = (getattr(settings, "nebius_complex_model", None) or "").strip()
+        complex_base = (getattr(settings, "nebius_complex_base_url", None) or "").strip()
+        mid = (model or "").strip()
+        if mid and complex_mid and mid == complex_mid and complex_base:
+            base = complex_base
         return key, base.rstrip("/")
 
     key = (settings.llm_chat_api_key or settings.openai_api_key or "").strip()
@@ -73,15 +78,18 @@ def _resolve_llm_credentials() -> tuple[str, str] | None:
     return key, base.rstrip("/") if base else ""
 
 
-def get_openai_compatible_client(*, operation: str | None = None) -> Any | None:
+def get_openai_compatible_client(*, operation: str | None = None, model: str | None = None) -> Any | None:
     """Собирает `openai.OpenAI` с опциональным `base_url` для своего провайдера.
 
     operation:
       sync — read-path / accidental calls: short timeout, no SDK retries
       background — enrichment jobs: longer timeout, still no SDK retries
         (job-level attempt_count owns retries)
+    model:
+      When Nebius + matches ``NEBIUS_COMPLEX_MODEL``, uses ``NEBIUS_COMPLEX_BASE_URL``
+      (K3 on eu-west2). Otherwise primary ``NEBIUS_BASE_URL`` (K2.6 on us-central1).
     """
-    creds = _resolve_llm_credentials()
+    creds = _resolve_llm_credentials(model=model)
     if creds is None:
         return None
     try:
@@ -135,6 +143,11 @@ def get_gemini_compatible_client() -> Any | None:
 
 
 def resolve_default_chat_model() -> str:
+    """Primary model for routine generation (day native, windows, narrative, …).
+
+    Nebius SoT: ``NEBIUS_MODEL`` = Kimi-K2.6. Do not use this for CE portrait /
+    natal-decode — call ``resolve_complex_chat_model`` instead.
+    """
     provider = (settings.llm_provider or "openai").strip().lower()
     if provider == "gemini":
         return settings.gemini_model
@@ -145,6 +158,22 @@ def resolve_default_chat_model() -> str:
             return override
         return settings.nebius_model
     return settings.llm_default_model
+
+
+def resolve_complex_chat_model() -> str:
+    """K3 (or ``NEBIUS_COMPLEX_MODEL``) for multi-step portrait / natal-decode only.
+
+    Gate: use only where quality delta vs K2.6 is product-visible and the call is a
+    user-justified operation (CE Stage 2–4 publish, profile disclosure funnel,
+    natal decode depth). Empty ``NEBIUS_COMPLEX_MODEL`` → same as primary.
+    """
+    provider = (settings.llm_provider or "openai").strip().lower()
+    if provider == "nebius":
+        complex_id = (getattr(settings, "nebius_complex_model", None) or "").strip()
+        if complex_id:
+            return complex_id
+        return settings.nebius_model
+    return resolve_default_chat_model()
 
 
 def resolve_guidance_chat_model() -> str:
@@ -405,9 +434,10 @@ def chat_completion_text(
     JSON mode may fall back to plain completion when the provider rejects
     ``response_format`` or returns empty content.
 
-    When ``LLM_PROVIDER=nebius``, primary is Kimi-K3. Optional
+    When ``LLM_PROVIDER=nebius``, primary is ``NEBIUS_MODEL`` (K2.6). Optional
     ``NEBIUS_FALLBACK_MODEL`` retries once on provider failure when set.
     Throttle (429) does not switch models. Kimi calls stream by default.
+    Pass ``resolve_complex_chat_model()`` as ``model`` only for CE/natal ops.
     """
     chain = resolve_chat_model_chain(model)
     last_kind: str | None = None

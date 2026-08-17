@@ -8,7 +8,7 @@ import {
   type ProximityChoiceId,
 } from "@/lib/todayInterpretationConfirm";
 import { DsButton } from "@/design-system";
-import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
+import styles from "@/design-system/compositions/dsCompositionSurface.module.css";
 
 type Props = {
   target: InterpretationConfirmTarget;

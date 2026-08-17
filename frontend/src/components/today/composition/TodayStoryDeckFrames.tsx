@@ -7,6 +7,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
+import { DsChip, DsChipCluster } from "@/design-system/primitives/DsChip";
 import {
   DsBody,
   DsDisplayTitle,
@@ -38,7 +39,9 @@ import {
   todaySlotFailureFromError,
   type TodaySlotLoadFailure,
 } from "@/lib/todaySlotAvailability";
-import styles from "@/components/today/composition/TodayStoryDeckFrames.module.css";
+import styles from "@/design-system/compositions/dsStoryDeckFrames.module.css";
+import chrome from "@/design-system/compositions/dsStoryChrome.module.css";
+import { joinClass } from "@/design-system/utils/joinClass";
 
 type StoryArtTone = "photo" | "energy" | "practice";
 
@@ -122,14 +125,17 @@ function ImmersiveArtPlane({ role, testId }: { role: TodayStoryArtRole; testId: 
 export function StoryBlockCue({
   targetId,
   label,
+  onArt = false,
 }: {
   targetId: string;
   label?: string;
+  /** Light ink when sitting on immersive photo art. */
+  onArt?: boolean;
 }) {
   return (
     <button
       type="button"
-      className={styles.blockCue}
+      className={joinClass(chrome.blockCue, onArt ? chrome.onArt : null)}
       data-testid="today-story-block-cue"
       aria-label={label ? `Дальше: ${label}` : "К следующему блоку"}
       onClick={(e) => {
@@ -137,10 +143,10 @@ export function StoryBlockCue({
         if (target) scrollStoryBlockIntoStep(target);
       }}
     >
-      <span className={styles.blockCueArrow} aria-hidden>
+      <span className={chrome.blockCueArrow} aria-hidden>
         ↓
       </span>
-      {label ? <span className={styles.blockCueLabel}>{label}</span> : null}
+      {label ? <span className={chrome.blockCueLabel}>{label}</span> : null}
     </button>
   );
 }
@@ -150,24 +156,26 @@ export function StoryNextAnchor({
   title,
   hint,
   onNext,
+  onArt = false,
 }: {
   title: string;
   hint?: string;
   onNext: () => void;
+  onArt?: boolean;
 }) {
   return (
     <button
       type="button"
-      className={styles.nextAnchor}
+      className={joinClass(chrome.nextAnchor, onArt ? chrome.onArt : null)}
       data-testid="today-story-next-anchor"
       onClick={onNext}
     >
-      <span className={styles.nextAnchorArrow} aria-hidden>
+      <span className={chrome.nextAnchorArrow} aria-hidden>
         ↓
       </span>
-      <span className={styles.nextAnchorEyebrow}>{copy.storyNext.further}</span>
-      <span className={styles.nextAnchorTitle}>{title}</span>
-      {hint ? <span className={styles.nextAnchorHint}>{hint}</span> : null}
+      <span className={chrome.nextAnchorEyebrow}>{copy.storyNext.further}</span>
+      <span className={chrome.nextAnchorTitle}>{title}</span>
+      {hint ? <span className={chrome.nextAnchorHint}>{hint}</span> : null}
     </button>
   );
 }
@@ -176,8 +184,8 @@ export function StoryNextAnchor({
 export function TodayStoryDownCue({ targetId, label }: { targetId?: string; label?: string } = {}) {
   if (targetId) return <StoryBlockCue targetId={targetId} label={label} />;
   return (
-    <div className={styles.blockCue} data-testid="today-story-down-cue" aria-hidden>
-      <span className={styles.blockCueArrow}>↓</span>
+    <div className={chrome.blockCue} data-testid="today-story-down-cue" aria-hidden>
+      <span className={chrome.blockCueArrow}>↓</span>
     </div>
   );
 }
@@ -763,6 +771,7 @@ export function TodayPracticeFrame({
               title={copy.storyNext.insight}
               hint={copy.storyNext.insightHint}
               onNext={onGoNext}
+              onArt
             />
           </div>
         </section>
@@ -897,22 +906,21 @@ export function TodayCloseFrame({
             </p>
           ) : null}
           {onPickOutcome ? (
-            <div className={styles.closeOutcomes} data-testid="today-close-outcomes">
+            <DsChipCluster testId="today-close-outcomes" className={styles.closeOutcomes}>
               {outcomes.map((row) => (
-                <button
+                <DsChip
                   key={row.id}
-                  type="button"
-                  className={outcome === row.id ? styles.closeOutcomeActive : styles.closeOutcome}
-                  data-testid={`today-close-outcome-${row.id}`}
+                  selected={outcome === row.id}
+                  testId={`today-close-outcome-${row.id}`}
                   onClick={() => {
                     setOutcome(row.id);
                     onPickOutcome(row.id);
                   }}
                 >
                   {row.label}
-                </button>
+                </DsChip>
               ))}
-            </div>
+            </DsChipCluster>
           ) : null}
           <div className={styles.responseWrap}>
             <TodayTapWidget

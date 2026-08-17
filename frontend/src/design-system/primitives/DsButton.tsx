@@ -5,7 +5,7 @@ import p from "@/design-system/primitives/dsPrimitives.module.css";
 
 type DsButtonProps = {
   variant?: "primary" | "secondary" | "ghost" | "destructive" | "icon";
-  size?: "md" | "sm" | "block";
+  size?: "lg" | "md" | "sm" | "block";
   href?: string;
   className?: string;
   children: ReactNode;
@@ -15,7 +15,7 @@ type DsButtonProps = {
 function buttonClass(variant: DsButtonProps["variant"], size: DsButtonProps["size"], disabled?: boolean) {
   return joinClass(
     p.btn,
-    size === "sm" ? p.btnSm : size === "block" ? p.btnBlock : p.btnMd,
+    size === "sm" ? p.btnSm : size === "lg" ? p.btnLg : size === "block" ? p.btnBlock : p.btnMd,
     variant === "primary"
       ? p.btnPrimary
       : variant === "secondary"

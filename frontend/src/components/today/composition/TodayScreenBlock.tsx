@@ -1,20 +1,16 @@
 /**
- * TodayScreenBlock — glass only when wrapping an interactive cluster (FOUNDATION_UI §16).
- * Prefer typography-first story frames; do not wrap every eyebrow/primary.
+ * TodayScreenBlock — Form Kit cluster (FOUNDATION_UI §16 + §15.8).
  */
 "use client";
 
 import type { ReactNode } from "react";
-import { DsCard } from "@/design-system/primitives/DsCard";
+import { DsBody, DsCard, DsEyebrow } from "@/design-system";
 import { joinClass } from "@/design-system/utils/joinClass";
-import styles from "@/components/today/composition/TodayScreenBlock.module.css";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 
 type BlockProps = {
-  /** Eyebrow — muted label (FOUNDATION_UI §16.2). */
   eyebrow?: string | null;
-  /** Primary — short main value; not a paragraph. */
   primary?: ReactNode;
-  /** Optional detail / caption. */
   detail?: ReactNode;
   children?: ReactNode;
   className?: string;
@@ -23,10 +19,6 @@ type BlockProps = {
   onClick?: () => void;
 };
 
-/**
- * Interactive cluster surface — `DsCard glass + compact` (FOUNDATION_UI §16).
- * Content SoT stays in TODAY_SCREEN_SCENARIO_V3; this is visual grammar only.
- */
 export function TodayScreenBlock({
   eyebrow = null,
   primary = null,
@@ -34,24 +26,32 @@ export function TodayScreenBlock({
   children = null,
   className,
   testId,
-  as = "div",
+  as = "article",
   onClick,
 }: BlockProps) {
   return (
     <DsCard
-      variant="glass"
+      tone="glass"
       size="compact"
       as={as}
-      className={joinClass(styles.block, className)}
+      className={joinClass(layout.stack, className)}
       testId={testId}
       onClick={onClick}
     >
-      {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+      {eyebrow ? <DsEyebrow>{eyebrow}</DsEyebrow> : null}
       {primary != null && primary !== false && primary !== "" ? (
-        <div className={styles.primary}>{primary}</div>
+        typeof primary === "string" || typeof primary === "number" ? (
+          <DsBody>{String(primary)}</DsBody>
+        ) : (
+          <div>{primary}</div>
+        )
       ) : null}
       {detail != null && detail !== false && detail !== "" ? (
-        <div className={styles.detail}>{detail}</div>
+        typeof detail === "string" || typeof detail === "number" ? (
+          <DsBody size="sm">{String(detail)}</DsBody>
+        ) : (
+          <div>{detail}</div>
+        )
       ) : null}
       {children}
     </DsCard>
@@ -64,10 +64,9 @@ type StackProps = {
   testId?: string;
 };
 
-/** Vertical rhythm between clusters — `--tf-ds-space-5` / `6` (§16.3). */
 export function TodayScreenBlockStack({ children, className, testId }: StackProps) {
   return (
-    <div className={joinClass(styles.stack, className)} data-testid={testId}>
+    <div className={joinClass(layout.stack, className)} data-testid={testId}>
       {children}
     </div>
   );

@@ -15,10 +15,16 @@ Transparent SVG (and cosmic WebP washes) used **over** product surfaces — not 
 |------|-----|
 | `orbit.svg` | Concentric / elliptical orbits |
 | `divider.svg` | Thin gold section divider |
-| `compass.svg` | ASC / direction motif |
-| `north-star.svg` | MC / peak / vector |
+| `compass.svg` | ASC / direction motif (legacy; chart ASC prefers `icons/angles/asc.webp`) |
+| `north-star.svg` | MC / peak / vector (legacy; chart MC prefers `icons/angles/mc.webp`) |
 | `solar-rays.svg` | Sun accent |
 | `vignette.svg` | Soft frame for illustration wells |
+
+## Kit accents (`kit/`)
+
+WebP crops from `celestial-kit-sheet.png`: stars, flares, cardinal ring, nebula orb.
+Used at low opacity in natal stage + ProfileAtmosphere. See `kit/README.md`.
+
 
 ## Motifs (ProfileAtmosphere)
 

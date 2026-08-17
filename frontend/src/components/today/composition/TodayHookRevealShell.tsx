@@ -1,8 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import styles from "@/components/today/composition/TodayHookRevealShell.module.css";
-import { DsCard } from "@/design-system/primitives/DsCard";
+import { DsBody, DsCard, DsCaption, DsDisplayTitle, DsEyebrow, DsHeadline } from "@/design-system";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
 import { asTrimmedText, formatColorWhereToUse } from "@/lib/hookRevealText";
 
 export type HookRevealPayload = {
@@ -41,7 +41,7 @@ type Props = {
 /**
  * Shared shell: base (static) → bridge | fail → instruction.
  * Never invents bridge prose when unavailable.
- * Surface: Today Block = DsCard glass compact (FOUNDATION_UI §16).
+ * Form Kit: DsCard glass + typography (FOUNDATION_UI §15.8 / §16).
  */
 export function TodayHookRevealShell({
   kindLabel,
@@ -71,47 +71,64 @@ export function TodayHookRevealShell({
         ? "прямая"
         : null;
 
+  const titleText = orientation ? `${title} · ${orientation}` : title;
+
   return (
     <DsCard
-      variant="glass"
+      tone="glass"
       size="compact"
       as="section"
-      className={`${styles.root} ${variant === "tarot" ? styles.variantTarot : ""} ${variant === "numerology" ? styles.variantNumerology : ""}`.trim()}
+      className={layout.centerStack}
       testId={testId}
     >
-      <div data-hook-kind={hook?.kind || undefined} data-hook-variant={variant !== "default" ? variant : undefined}>
-        <p className={styles.kind}>{kindLabel}</p>
-        {visual ? <div className={styles.visual}>{visual}</div> : null}
-        <h2 className={styles.title}>
-          {title}
-          {orientation ? <span className={styles.orient}> · {orientation}</span> : null}
-        </h2>
-        {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
+      <div
+        className={layout.centerStack}
+        data-hook-kind={hook?.kind || undefined}
+        data-hook-variant={variant !== "default" ? variant : undefined}
+      >
+        <DsEyebrow>{kindLabel}</DsEyebrow>
+        {visual ? <div className={layout.hookVisual}>{visual}</div> : null}
+        {variant === "numerology" ? (
+          <DsDisplayTitle as="h2" size="xl">
+            {titleText}
+          </DsDisplayTitle>
+        ) : (
+          <DsHeadline as="h2">{titleText}</DsHeadline>
+        )}
+        {subtitle ? (
+          <DsBody size="sm" muted>
+            {subtitle}
+          </DsBody>
+        ) : null}
 
         {baseMeaning ? (
-          <div className={styles.layer} data-layer="base">
-            <p className={styles.layerLabel}>Значение</p>
-            <p className={styles.layerBody}>{baseMeaning}</p>
+          <div className={layout.stackTight} data-layer="base">
+            <DsCaption muted>Значение</DsCaption>
+            <DsBody size="sm">
+              {baseMeaning}
+            </DsBody>
           </div>
         ) : fallbackBody ? (
-          <p className={styles.layerBody}>{fallbackBody}</p>
+          <DsBody size="sm">{fallbackBody}</DsBody>
         ) : null}
 
         {bridgeOk ? (
-          <div className={styles.layer} data-layer="bridge">
-            <p className={styles.layerLabel}>Почему сегодня</p>
-            <p className={styles.layerBody}>{bridgeText}</p>
+          <div className={layout.stackTight} data-layer="bridge">
+            <DsCaption muted>Почему сегодня</DsCaption>
+            <DsBody size="sm">{bridgeText}</DsBody>
           </div>
         ) : bridgeFail ? (
-          <p className={styles.fail} role="status" data-bridge-status="unavailable">
-            {bridgeFail}
-          </p>
+          <div role="status" data-bridge-status="unavailable">
+            <DsBody size="sm" muted>
+              {bridgeFail}
+            </DsBody>
+          </div>
         ) : null}
 
         {showInstruction ? (
-          <div className={styles.layer} data-layer="instruction">
-            <p className={styles.layerLabel}>Как применить</p>
-            <p className={styles.layerBody}>{instruction}</p>
+          <div className={layout.stackTight} data-layer="instruction">
+            <DsCaption muted>Как применить</DsCaption>
+            <DsBody size="sm">{instruction}</DsBody>
           </div>
         ) : null}
       </div>

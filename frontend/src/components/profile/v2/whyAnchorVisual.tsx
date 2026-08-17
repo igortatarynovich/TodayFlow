@@ -1,6 +1,7 @@
 "use client";
 
 import { ElementIcon } from "@/components/visualIdentity/ElementIcon";
+import { NumberIcon } from "@/components/visualIdentity/NumberIcon";
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
 import { ZodiacIcon } from "@/components/visualIdentity/ZodiacIcon";
 import type { ElementSlug, PlanetSlug, ZodiacSlug } from "@/lib/visualIdentity/registry";
@@ -89,11 +90,7 @@ export function WhyAnchorGlyph({
     return <ElementIcon element={visual.slug} size={size} stroke={stroke} />;
   }
   if (visual.kind === "lifePath") {
-    return (
-      <span aria-hidden style={{ fontFamily: "var(--tf-font-display)", fontSize: size * 0.72, fontWeight: 600, lineHeight: 1 }}>
-        {visual.digit}
-      </span>
-    );
+    return <NumberIcon value={visual.digit} size={size} />;
   }
   return <span aria-hidden style={{ width: size, height: size, display: "inline-block" }} />;
 }

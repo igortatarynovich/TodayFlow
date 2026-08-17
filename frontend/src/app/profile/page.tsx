@@ -57,11 +57,11 @@ import {
   surfaceInsightStyles,
 } from "@/components/foundation/SurfaceInsight";
 import { DsButton } from "@/design-system";
-import routeStyles from "./profileRoute.module.css";
-import v0RouteStyles from "@/components/profile/v0/profileV0.module.css";
+import routeStyles from "@/design-system/profile/dsProfileRoute.module.css";
+import v0RouteStyles from "@/design-system/profile/dsProfileV0.module.css";
 import "@/components/profile/editorial/profileEditorialRoute.css";
-import "@/components/profile/editorial/profileEditorial.module.css";
-import "@/components/profile/quickMap/profileQuickMap.module.css";
+import "@/design-system/profile/dsProfileEditorial.module.css";
+import "@/design-system/profile/dsProfileQuickMap.module.css";
 import { buildProfileV0ViewModel } from "@/lib/profilePage/buildProfileV0Data";
 import {
   buildProfileChartFrameworkInput,

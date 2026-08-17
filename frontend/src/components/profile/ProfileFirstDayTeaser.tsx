@@ -16,7 +16,7 @@ import {
   type IntentTheme,
   type RealityState,
 } from "@/lib/onboardingContext";
-import editorialStyles from "@/components/profile/editorial/profileEditorial.module.css";
+import editorialStyles from "@/design-system/profile/dsProfileEditorial.module.css";
 
 type ProfileFirstDayTeaserProps = {
   model: ProfileV0ViewModel;

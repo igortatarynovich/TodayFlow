@@ -11,7 +11,15 @@ import {
   deriveMajorAspectCalloutsFromLongitudes,
   NATAL_ASPECT_HALO,
 } from "@/lib/natal/natalWheelMaterial";
-import { resolvePlanetSlug } from "@/lib/visualIdentity/registry";
+import {
+  resolvePlanetSlug,
+  chartAngleAssetPath,
+  zodiacOrbAssetPath,
+  planetHasPhotoAsset,
+  planetPhotoPath,
+  type ChartAngleSlug,
+  type ZodiacSlug,
+} from "@/lib/visualIdentity/registry";
 import { resolveNatalPlanetLayout } from "@/lib/natal/natalWheelLayout";
 import {
   resolveNatalAtmosphereElement,
@@ -287,17 +295,24 @@ export function NatalChartWheel({
   const isMobile = useIsMobileLayout(layout);
   const size = 720;
   const center = size / 2;
-  /* Planet band owns the mid-ring; house numbers live in the zodiac ring. */
-  const outerRadius = size / 2 - 40;
-  const zodiacInnerRadius = outerRadius - 34;
+  /**
+   * Kit principle: zodiac chips sit fully inside the outer ring (not clipped),
+   * house digits share the band on the inner side, planets fill their discs.
+   */
+  const outerRadius = size / 2 - 28;
+  const zodiacBand = 52;
+  const zodiacInnerRadius = outerRadius - zodiacBand;
+  const zodiacMarkerR = isMobile ? 11 : 13;
+  /** Outer half of band — keeps orbs clear of the rim stroke. */
+  const zodiacBandRadius = outerRadius - zodiacMarkerR - 4;
+  /** Inner half of band — house chips don't sit under zodiac orbs. */
+  const houseLabelRadius = zodiacInnerRadius + Math.min(12, zodiacBand * 0.28);
   const innerRadius = outerRadius * 0.22;
   const aspectRadius = innerRadius - 4;
   /** Hub hole so opposition/square chords do not read as spokes from the center. */
   const aspectHubRadius = Math.max(34, innerRadius * 0.48);
-  /** House number chips — mid zodiac ring, clear of planet discs. */
-  const houseLabelRadius = (zodiacInnerRadius + outerRadius) / 2;
-  const planetDisc = isMobile ? 13 : 15;
-  const planetRadiusMax = zodiacInnerRadius - planetDisc - 14;
+  const planetDisc = isMobile ? 15 : 18;
+  const planetRadiusMax = zodiacInnerRadius - planetDisc - 10;
   const planetRadiusMin = innerRadius + planetDisc + 6;
   const basePlanetRadius = (planetRadiusMin + planetRadiusMax) / 2;
   const houseRadius = houseLabelRadius;
@@ -400,18 +415,18 @@ export function NatalChartWheel({
 
   // Zodiac signs with their glyphs (U+FE0E: text presentation, not emoji)
   const zodiacSigns = useMemo(() => [
-    { name: "Aries", glyph: "♈︎", element: "fire" },
-    { name: "Taurus", glyph: "♉︎", element: "earth" },
-    { name: "Gemini", glyph: "♊︎", element: "air" },
-    { name: "Cancer", glyph: "♋︎", element: "water" },
-    { name: "Leo", glyph: "♌︎", element: "fire" },
-    { name: "Virgo", glyph: "♍︎", element: "earth" },
-    { name: "Libra", glyph: "♎︎", element: "air" },
-    { name: "Scorpio", glyph: "♏︎", element: "water" },
-    { name: "Sagittarius", glyph: "♐︎", element: "fire" },
-    { name: "Capricorn", glyph: "♑︎", element: "earth" },
-    { name: "Aquarius", glyph: "♒︎", element: "air" },
-    { name: "Pisces", glyph: "♓︎", element: "water" },
+    { name: "Aries", slug: "aries" as ZodiacSlug, glyph: "♈︎", element: "fire" },
+    { name: "Taurus", slug: "taurus" as ZodiacSlug, glyph: "♉︎", element: "earth" },
+    { name: "Gemini", slug: "gemini" as ZodiacSlug, glyph: "♊︎", element: "air" },
+    { name: "Cancer", slug: "cancer" as ZodiacSlug, glyph: "♋︎", element: "water" },
+    { name: "Leo", slug: "leo" as ZodiacSlug, glyph: "♌︎", element: "fire" },
+    { name: "Virgo", slug: "virgo" as ZodiacSlug, glyph: "♍︎", element: "earth" },
+    { name: "Libra", slug: "libra" as ZodiacSlug, glyph: "♎︎", element: "air" },
+    { name: "Scorpio", slug: "scorpio" as ZodiacSlug, glyph: "♏︎", element: "water" },
+    { name: "Sagittarius", slug: "sagittarius" as ZodiacSlug, glyph: "♐︎", element: "fire" },
+    { name: "Capricorn", slug: "capricorn" as ZodiacSlug, glyph: "♑︎", element: "earth" },
+    { name: "Aquarius", slug: "aquarius" as ZodiacSlug, glyph: "♒︎", element: "air" },
+    { name: "Pisces", slug: "pisces" as ZodiacSlug, glyph: "♓︎", element: "water" },
   ], []);
 
   const degreeToAngle = useCallback((degree: number): number => {
@@ -573,18 +588,18 @@ export function NatalChartWheel({
   ]);
 
   const angleMarkers = useMemo(() => {
-    const markers = [
-      { key: "ASC", degree: houseCusps[0], color: INK.angle.ASC },
-      { key: "IC", degree: houseCusps[3], color: INK.angle.IC },
-      { key: "DSC", degree: houseCusps[6], color: INK.angle.DSC },
-      { key: "MC", degree: houseCusps[9], color: INK.angle.MC },
+    const markers: Array<{ key: string; slug: ChartAngleSlug; degree: number; color: string }> = [
+      { key: "ASC", slug: "asc", degree: houseCusps[0], color: INK.angle.ASC },
+      { key: "IC", slug: "ic", degree: houseCusps[3], color: INK.angle.IC },
+      { key: "DSC", slug: "dsc", degree: houseCusps[6], color: INK.angle.DSC },
+      { key: "MC", slug: "mc", degree: houseCusps[9], color: INK.angle.MC },
     ];
     return markers.map((marker) => {
       const angle = degreeToAngle(marker.degree);
       return {
         ...marker,
         angle,
-        outer: getPosition(angle, outerRadius - 2),
+        outer: getPosition(angle, outerRadius - 14),
         inner: getPosition(angle, zodiacInnerRadius + 2),
       };
     });
@@ -963,65 +978,51 @@ export function NatalChartWheel({
 
         {zodiacSigns.map((sign, i) => {
           const signAngle = degreeToAngle(i * 30 + 15);
-          const bandRadius = (outerRadius + zodiacInnerRadius) / 2;
-          const pos = getPosition(signAngle, bandRadius);
-          const stroke = INK.elementStroke[sign.element] || INK.gold;
-          const wash = INK.elementWash[sign.element] || "rgba(255,250,242,0.88)";
-          const markerR = isMobile ? 13 : 16;
+          const pos = getPosition(signAngle, zodiacBandRadius);
+          const size = zodiacMarkerR * 2;
           return (
-            <g key={sign.name}>
-              <circle
-                cx={pos.x}
-                cy={pos.y}
-                r={markerR}
-                fill={wash}
-                stroke={stroke}
-                strokeWidth="2"
-                opacity="0.96"
-              />
-              <text
-                x={pos.x}
-                y={pos.y}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize={isMobile ? "14" : "17"}
-                fill={stroke}
-                fontWeight="700"
-              >
-                {sign.glyph}
-              </text>
-            </g>
+            <image
+              key={sign.name}
+              href={zodiacOrbAssetPath(sign.slug)}
+              x={pos.x - size / 2}
+              y={pos.y - size / 2}
+              width={size}
+              height={size}
+              preserveAspectRatio="xMidYMid meet"
+              opacity="0.96"
+              style={{ pointerEvents: "none" }}
+            />
           );
         })}
         </g>
 
         {/* Layer mid: angle markers only — aspect chords live under planets (not in the old hub well). */}
         <g className={styles.layerMid}>
-        {angleMarkers.map((marker) => (
-          <g key={marker.key} opacity={focusPlanet ? 0.45 : 0.7}>
-            <line
-              x1={marker.inner.x}
-              y1={marker.inner.y}
-              x2={marker.outer.x}
-              y2={marker.outer.y}
-              stroke={marker.color}
-              strokeWidth="1.8"
-              opacity="0.7"
-            />
-            <circle cx={marker.outer.x} cy={marker.outer.y} r="13" fill={INK.white} stroke={marker.color} strokeWidth="2" />
-            <text
-              x={marker.outer.x}
-              y={marker.outer.y}
-              textAnchor="middle"
-              dominantBaseline="central"
-              fontSize="10"
-              fill={marker.color}
-              fontWeight="700"
-            >
-              {marker.key}
-            </text>
-          </g>
-        ))}
+        {angleMarkers.map((marker) => {
+          const size = 22;
+          return (
+            <g key={marker.key} opacity={focusPlanet ? 0.45 : 0.85}>
+              <line
+                x1={marker.inner.x}
+                y1={marker.inner.y}
+                x2={marker.outer.x}
+                y2={marker.outer.y}
+                stroke={marker.color}
+                strokeWidth="1.8"
+                opacity="0.7"
+              />
+              <image
+                href={chartAngleAssetPath(marker.slug)}
+                x={marker.outer.x - size / 2}
+                y={marker.outer.y - size / 2}
+                width={size}
+                height={size}
+                preserveAspectRatio="xMidYMid meet"
+                style={{ pointerEvents: "none" }}
+              />
+            </g>
+          );
+        })}
         </g>
 
         {/* Layer front: major chords → hub → lit discs */}
@@ -1158,6 +1159,10 @@ export function NatalChartWheel({
           const jewel = resolveNatalPlanetJewel(planet.sign);
           const rimColor = jewel?.stroke || planetColor;
           const disc = planetDisc * (planet.discScale ?? 1);
+          const discR = isActive ? disc + 2 : disc;
+          const slug = resolvePlanetSlug(planet.body);
+          const photoSlug = slug && planetHasPhotoAsset(slug) ? slug : null;
+          const clipId = `${gradientId}-planet-clip-${idx}`;
 
           return (
             <g
@@ -1173,7 +1178,7 @@ export function NatalChartWheel({
             >
               <g filter={isActive ? `url(#${planetGlowId})` : undefined}>
                 <circle cx={planet.position.x} cy={planet.position.y} r={disc + 10} fill="transparent" />
-                {/* Soft element bloom — reads as jewel, not one cream tone */}
+                {/* Soft element bloom — mood glow around the sphere */}
                 {jewel ? (
                   <circle
                     cx={planet.position.x}
@@ -1184,73 +1189,123 @@ export function NatalChartWheel({
                     style={{ pointerEvents: "none", transition: "all 0.3s ease" }}
                   />
                 ) : null}
-                <circle
-                  cx={planet.position.x}
-                  cy={planet.position.y}
-                  r={isActive ? disc + 2 : disc}
-                  fill={isSelected ? `url(#${planetLitSelectedId})` : `url(#${planetLitId})`}
-                  stroke={rimColor}
-                  strokeWidth={isActive ? "2.4" : "1.75"}
-                  style={{ transition: "all 0.3s ease" }}
-                />
-                {jewel ? (
-                  <circle
-                    cx={planet.position.x}
-                    cy={planet.position.y}
-                    r={isActive ? disc + 0.4 : disc - 0.6}
-                    fill="none"
-                    stroke={jewel.wash}
-                    strokeWidth="2.2"
-                    opacity={0.55}
-                    style={{ pointerEvents: "none" }}
-                  />
-                ) : null}
-                {/* Specular highlight */}
-                <circle
-                  cx={planet.position.x - disc * 0.28}
-                  cy={planet.position.y - disc * 0.32}
-                  r={disc * 0.28}
-                  fill="#ffffff"
-                  opacity={isSelected ? 0.55 : 0.42}
-                  style={{ pointerEvents: "none", transition: "all 0.3s ease" }}
-                />
-                {resolvePlanetSlug(planet.body) ? (
-                  <foreignObject
-                    x={planet.position.x - disc * 0.72}
-                    y={planet.position.y - disc * 0.72}
-                    width={disc * 1.44}
-                    height={disc * 1.44}
-                    style={{ pointerEvents: "none", overflow: "visible" }}
-                  >
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <PlanetIcon
-                        planet={planet.body}
-                        size={Math.max(13, Math.round(disc * 1.22))}
-                        stroke={isSelected ? INK.inkDeep : rimColor}
+                {photoSlug ? (
+                  <>
+                    <clipPath id={clipId}>
+                      <circle cx={planet.position.x} cy={planet.position.y} r={discR} />
+                    </clipPath>
+                    {/* Full-sphere photo fill (kit principle: texture covers the disc). */}
+                    <image
+                      href={planetPhotoPath(photoSlug)}
+                      x={planet.position.x - discR}
+                      y={planet.position.y - discR}
+                      width={discR * 2}
+                      height={discR * 2}
+                      preserveAspectRatio="xMidYMid slice"
+                      clipPath={`url(#${clipId})`}
+                      style={{ pointerEvents: "none" }}
+                    />
+                    <circle
+                      cx={planet.position.x}
+                      cy={planet.position.y}
+                      r={discR}
+                      fill="none"
+                      stroke={rimColor}
+                      strokeWidth={isActive ? "2.4" : "1.75"}
+                      style={{ transition: "all 0.3s ease" }}
+                    />
+                    {jewel ? (
+                      <circle
+                        cx={planet.position.x}
+                        cy={planet.position.y}
+                        r={discR - 0.8}
+                        fill="none"
+                        stroke={jewel.wash}
+                        strokeWidth="1.6"
+                        opacity={0.4}
+                        style={{ pointerEvents: "none" }}
                       />
-                    </div>
-                  </foreignObject>
+                    ) : null}
+                    {/* Soft rim light — volume without covering the texture */}
+                    <circle
+                      cx={planet.position.x - discR * 0.32}
+                      cy={planet.position.y - discR * 0.36}
+                      r={discR * 0.22}
+                      fill="#ffffff"
+                      opacity={isSelected ? 0.28 : 0.18}
+                      style={{ pointerEvents: "none", transition: "all 0.3s ease" }}
+                    />
+                  </>
                 ) : (
-                  <text
-                    x={planet.position.x}
-                    y={planet.position.y}
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fontSize={isMobile ? (isActive ? "15" : "13") : isActive ? "17" : "15"}
-                    fill={isSelected ? INK.inkDeep : rimColor}
-                    fontWeight="700"
-                    style={{ transition: "all 0.3s ease", pointerEvents: "none" }}
-                  >
-                    {planet.symbol}
-                  </text>
+                  <>
+                    <circle
+                      cx={planet.position.x}
+                      cy={planet.position.y}
+                      r={discR}
+                      fill={isSelected ? `url(#${planetLitSelectedId})` : `url(#${planetLitId})`}
+                      stroke={rimColor}
+                      strokeWidth={isActive ? "2.4" : "1.75"}
+                      style={{ transition: "all 0.3s ease" }}
+                    />
+                    {jewel ? (
+                      <circle
+                        cx={planet.position.x}
+                        cy={planet.position.y}
+                        r={discR - 0.6}
+                        fill="none"
+                        stroke={jewel.wash}
+                        strokeWidth="2.2"
+                        opacity={0.55}
+                        style={{ pointerEvents: "none" }}
+                      />
+                    ) : null}
+                    <circle
+                      cx={planet.position.x - disc * 0.28}
+                      cy={planet.position.y - disc * 0.32}
+                      r={disc * 0.28}
+                      fill="#ffffff"
+                      opacity={isSelected ? 0.55 : 0.42}
+                      style={{ pointerEvents: "none", transition: "all 0.3s ease" }}
+                    />
+                    {slug ? (
+                      <foreignObject
+                        x={planet.position.x - disc * 0.72}
+                        y={planet.position.y - disc * 0.72}
+                        width={disc * 1.44}
+                        height={disc * 1.44}
+                        style={{ pointerEvents: "none", overflow: "visible" }}
+                      >
+                        <div
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <PlanetIcon
+                            planet={planet.body}
+                            size={Math.max(13, Math.round(disc * 1.22))}
+                            stroke={isSelected ? INK.inkDeep : rimColor}
+                          />
+                        </div>
+                      </foreignObject>
+                    ) : (
+                      <text
+                        x={planet.position.x}
+                        y={planet.position.y}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={isMobile ? (isActive ? "15" : "13") : isActive ? "17" : "15"}
+                        fill={isSelected ? INK.inkDeep : rimColor}
+                        fontWeight="700"
+                        style={{ transition: "all 0.3s ease", pointerEvents: "none" }}
+                      >
+                        {planet.symbol}
+                      </text>
+                    )}
+                  </>
                 )}
               </g>
             </g>
@@ -1275,7 +1330,7 @@ export function NatalChartWheel({
                     aria-pressed={isActive}
                   >
                     <span className={styles.chipGlyph} aria-hidden>
-                      <PlanetIcon planet={planet.body} size={17} />
+                      <PlanetIcon planet={planet.body} size={17} fit="cover" />
                     </span>
                     {planetRuName(planet.body)}
                   </button>
@@ -1319,7 +1374,7 @@ export function NatalChartWheel({
           <>
             <div className={styles.panelHeader}>
               <span className={styles.panelGlyph} aria-hidden>
-                <PlanetIcon planet={selectedPlanetData.body} size={24} />
+                <PlanetIcon planet={selectedPlanetData.body} size={24} fit="cover" />
               </span>
               <h3 className={styles.panelTitle}>{planetRuName(selectedPlanetData.body)}</h3>
               <p className={styles.panelMeta}>

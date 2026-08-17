@@ -1,6 +1,8 @@
 "use client";
 
-import styles from "@/components/today/composition/TodayActNav.module.css";
+import { DsChip, DsChipCluster, DsSurface } from "@/design-system";
+import layout from "@/design-system/compositions/dsCompositions.module.css";
+import { joinClass } from "@/design-system/utils/joinClass";
 
 export type TodayActNavItem = {
   step: number;
@@ -20,57 +22,49 @@ type Props = {
 /**
  * @deprecated Product Today does not mount this strip (SCREEN_FLOW_V1 §1.5).
  * Progress chrome = ScreenFlow dots + swipe. Kept for fixtures / possible reuse.
+ * Form Kit: sticky glass + chips (FOUNDATION_UI §15.8).
  */
 export function TodayActNav({ items, activeIndex, onSelect }: Props) {
   if (items.length === 0) return null;
 
   const controlled = typeof onSelect === "function";
 
+  const scrollToHref = (href?: string) => {
+    const id = (href || "").replace(/^#/, "");
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (typeof window !== "undefined" && window.history?.replaceState && href) {
+      window.history.replaceState(null, "", href);
+    }
+  };
+
   return (
-    <nav className={styles.nav} aria-label="Экраны дня" data-testid="today-act-nav">
-      <ul className={styles.list}>
+    <DsSurface
+      as="nav"
+      tone="glass"
+      className={joinClass(layout.stickyTop, layout.navStrip)}
+      aria-label="Экраны дня"
+      testId="today-act-nav"
+    >
+      <DsChipCluster className={layout.chipScroll}>
         {items.map((item, index) => {
           const isActive = controlled ? activeIndex === item.step : index === 0;
-          if (controlled) {
-            return (
-              <li key={`${item.label}-${item.step}`}>
-                <button
-                  type="button"
-                  className={isActive ? styles.linkActive : styles.link}
-                  aria-current={isActive ? "true" : undefined}
-                  data-testid={`today-act-nav-${item.step}`}
-                  onClick={() => onSelect(item.step)}
-                >
-                  <span className={styles.dot} aria-hidden />
-                  <span className={styles.label}>{item.label}</span>
-                </button>
-              </li>
-            );
-          }
           return (
-            <li key={item.href ?? `${item.label}-${item.step}`}>
-              <a
-                href={item.href}
-                className={isActive ? styles.linkActive : styles.link}
-                aria-current={isActive ? "true" : undefined}
-                onClick={(e) => {
-                  const id = (item.href || "").replace(/^#/, "");
-                  const el = document.getElementById(id);
-                  if (!el) return;
-                  e.preventDefault();
-                  el.scrollIntoView({ behavior: "smooth", block: "start" });
-                  if (typeof window !== "undefined" && window.history?.replaceState) {
-                    window.history.replaceState(null, "", item.href);
-                  }
-                }}
-              >
-                <span className={styles.dot} aria-hidden />
-                <span className={styles.label}>{item.label}</span>
-              </a>
-            </li>
+            <DsChip
+              key={controlled ? `${item.label}-${item.step}` : item.href ?? `${item.label}-${item.step}`}
+              selected={isActive}
+              testId={`today-act-nav-${item.step}`}
+              onClick={() => {
+                if (controlled) onSelect(item.step);
+                else scrollToHref(item.href);
+              }}
+            >
+              {item.label}
+            </DsChip>
           );
         })}
-      </ul>
-    </nav>
+      </DsChipCluster>
+    </DsSurface>
   );
 }

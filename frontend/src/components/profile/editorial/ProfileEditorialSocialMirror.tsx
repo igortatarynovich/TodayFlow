@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ProfileV0SocialMirrorCard } from "@/lib/profilePage/buildProfileV0SphereCards";
-import styles from "./profileEditorial.module.css";
+import styles from "@/design-system/profile/dsProfileEditorial.module.css";
 
 type MirrorFacetKey = "firstImpression" | "broadcast" | "blindSpot";
 

@@ -91,6 +91,9 @@ describe("buildTodayDayBriefModel", () => {
           decor_variant: "default",
           time_phase: "day",
         },
+        global_day: {
+          drivers: [{ id: "moon-ingress", kind: "moon_ingress", fact_ru: "Луна вошла в Весы" }],
+        },
         day_story: {
           contract_version: "day_story_v1",
           theme: "Мягкий поток",
@@ -98,7 +101,7 @@ describe("buildTodayDayBriefModel", () => {
           do: ["Держать один канал"],
           day_foundation: {
             lunar: {
-              phase: { name: "Растущая Луна", themes: "Сбор сил" },
+              phase: { id: "waxing_gibbous", name: "Растущая Луна", cycle_day: 11, themes: "Сбор сил" },
               moon_sign: { sign_ru: "Весы" },
               beats: [{ id: "b1", title: "Тригон Луна — Плутон", story_ru: "Глубина без драмы." }],
             },
@@ -135,6 +138,15 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.visualMode).toBe("flow");
     expect(model.modeLabel).toBeTruthy();
     expect(model.lunarCaption).toBe("Растущая Луна в Весы");
+    expect(model.moonCard?.title).toBe("Луна в Весах");
+    expect(model.moonCard?.meta).toContain("Растущая Луна");
+    expect(model.moonCard?.meta).toContain("11-й день цикла");
+    expect(model.moonCard?.sheetRows.map((r) => r.label)).toEqual(
+      expect.arrayContaining(["Знак", "Фаза", "Цикл", "Смена знака"]),
+    );
+    expect(model.moonCard?.context).toBeTruthy();
+    expect(model.skyStrip).toBeNull();
+    expect(model.moonPhase).toBeCloseTo(11 / 29.53058867, 5);
     expect(model.whyFactors.some((f) => f.id === "lunar")).toBe(true);
     expect(model.whyFactors.some((f) => f.id === "number")).toBe(true);
     expect(model.betterCards).toHaveLength(3);
@@ -216,5 +228,209 @@ describe("buildTodayDayBriefModel", () => {
     });
     expect(model.expect).toContain("первые сигналы");
     expect(model.expect).toContain("серп гаснет");
+  });
+
+  it("falls back to lunarHint when foundation phase is missing", () => {
+    const model = buildTodayDayBriefModel({
+      contract: baseContract,
+      dateLabel: "14 августа",
+      salutation: "Привет",
+      lunarHint: { id: "new", name: "Новолуние", cycle_day: 1.18 },
+    });
+    expect(model.moonPhase).toBeCloseTo(1.18 / 29.53058867, 5);
+  });
+
+  it("resolves moonPhase from welcome glass reason when foundation/hint empty", () => {
+    const model = buildTodayDayBriefModel({
+      contract: baseContract,
+      dateLabel: "14 августа",
+      salutation: "Привет",
+      welcomeGlass: {
+        moodPills: [],
+        reasonLine: "Новолуние — Тихий сброс, прояснение мотивов",
+        activityTags: [],
+      },
+    });
+    expect(model.lunarCaption).toContain("Новолуние");
+    expect(model.moonPhase).toBe(0);
+  });
+
+  it("prefers sky_today Moon-in-sign over catalog phase caption", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        sky_today: {
+          contract_version: "sky_today_v1",
+          moon: { body: "moon", body_ru: "Луна", sign: "Virgo", sign_ru: "Дева", degree: 28.7 },
+          headline: {
+            id: "sky-mercury-conjunction-jupiter",
+            planet_a: "mercury",
+            planet_b: "jupiter",
+            planet_a_ru: "Меркурий",
+            planet_b_ru: "Юпитер",
+            sign_a: "Leo",
+            sign_b: "Leo",
+            sign_a_ru: "Лев",
+            sign_b_ru: "Лев",
+            aspect: "conjunction",
+            aspect_ru: "соединение",
+              title_ru: "Меркурий во Льве — соединение — Юпитер во Льве",
+          },
+          positions: [],
+          aspects: [],
+        },
+        day_story: {
+          contract_version: "day_story_v1",
+          day_foundation: {
+            lunar: {
+              phase: { id: "new", name: "Новолуние" },
+              moon_sign: { sign_ru: "Дева" },
+            },
+          },
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.lunarCaption).toBe("Луна в Деве");
+    expect(model.skyStrip?.moonLabel).toBe("Луна в Деве");
+    expect(model.skyStrip?.headlineLabel).toContain("Меркурий во Льве");
+    expect(model.whyFactors.find((f) => f.id === "lunar")?.label).toBe("Луна в Деве");
+    expect(model.skyStrip?.personalLine).toBeNull();
+  });
+
+  it("puts natal overlay on MY DAY personalLine, not the Global sky strip", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        personal_growth: { development_point: "точка роста персонажа" },
+        sky_today: {
+          moon: { body: "moon", body_ru: "Луна", sign: "Virgo", sign_ru: "Дева" },
+        },
+        day_story: {
+          contract_version: "day_story_v1",
+          day_scenario: {
+            conflict: {
+              why_personal: "тебе обычно проще держать слово, если оно взвешено заранее",
+            },
+          },
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.skyStrip?.personalLine).toBeNull();
+    expect(model.personalLine).toContain("держать слово");
+    expect(model.personalLine).not.toContain("точка роста");
+  });
+
+  it("reads Global driver and strength/risk chips from global_day", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_day: {
+          primary_energy: "clarity",
+          energy_scores: { clarity: 0.78, tension: 0.2 },
+          drivers: [
+            { id: "moon-ingress", kind: "moon_ingress", fact_ru: "Луна вошла в Деву" },
+            { id: "mars-sat", kind: "sky_aspect", fact_ru: "Марс в квадрате к Сатурну" },
+          ],
+          strength: ["deep_work", "admin_order"],
+          risk: ["hard_negotiation", "unknown_type"],
+          windows: [
+            {
+              time: "08:30",
+              driver_id: "moon-ingress",
+              intensity: 0.4,
+              supports: ["deep_work"],
+              cautions: ["hard_negotiation"],
+            },
+            {
+              time: "14:30",
+              driver_id: "mars-sat",
+              intensity: 0.8,
+              supports: ["deep_work"],
+              cautions: ["hard_negotiation"],
+            },
+          ],
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.visualMode).toBe("clarity");
+    expect(model.energyPct).toBe(78);
+    expect(model.modeLabel).toBe("Ясность");
+    expect(model.mainDriver?.title).toContain("Луна вошла в Деву");
+    expect(model.mainDriver?.body).toBe("Смена знака");
+    expect(model.mainDriver?.planets).toEqual(["moon"]);
+    expect(model.mainDriver?.sheetRows.some((r) => r.label === "Время" && r.value === "08:30")).toBe(
+      true,
+    );
+    expect(
+      model.mainDriver?.sheetRows.some(
+        (r) => r.label === "Поддерживает" && String(r.value).includes("Глубокая работа"),
+      ),
+    ).toBe(true);
+    expect(
+      model.mainDriver?.sheetRows.some(
+        (r) => r.label === "Осторожнее" && String(r.value).includes("Жёсткий торг"),
+      ),
+    ).toBe(true);
+    expect(model.mainDriver?.sheetRows.some((r) => r.label === "Связь с энергией")).toBe(true);
+    expect(model.transits.map((t) => t.title)).toEqual(
+      expect.arrayContaining(["Луна вошла в Деву", "Марс в квадрате к Сатурну"]),
+    );
+    expect(model.transits.find((t) => t.id === "mars-sat")?.time).toBe("14:30");
+    expect(model.transits.find((t) => t.id === "mars-sat")?.planets).toEqual(
+      expect.arrayContaining(["mars", "saturn"]),
+    );
+    expect(model.dayWindow?.start).toBe("08:30");
+    expect(model.dayWindow?.end).toBe("14:30");
+    expect(model.dayWindow?.mark).toBeCloseTo((8 * 60 + 30 - 6 * 60) / (18 * 60), 5);
+    expect(model.strengthChips.map((c) => c.id)).toEqual(["deep_work", "admin_order"]);
+    expect(model.strengthChips[0]?.sheetRows[0]?.value).toContain("Луна вошла в Деву");
+    expect(model.strengthChips[0]?.sheetRows.some((r) => r.label === "Время")).toBe(true);
+    expect(model.riskChips.map((c) => c.id)).toEqual(["hard_negotiation"]);
+    expect(model.riskChips[0]?.sheetRows[0]?.value).toContain("Луна вошла в Деву");
+  });
+
+  it("does not leak driver kind ids and maps lunar drivers to the moon image", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_day: {
+          primary_energy: "renewal",
+          drivers: [{ id: "lun-1", kind: "phase_change", fact_ru: "Новолуние." }],
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.modeLabel).toBe("Обновление");
+    expect(model.mainDriver?.title).toBe("Новолуние.");
+    expect(model.mainDriver?.body).toBe("Смена фазы");
+    expect(model.mainDriver?.body).not.toMatch(/phase_change/);
+    expect(model.mainDriver?.planets).toEqual(["moon"]);
+  });
+
+  it("omits energy percent and day window when Engine left them empty", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_day: {
+          primary_energy: "tension",
+          drivers: [{ id: "d1", kind: "sky_aspect", fact_ru: "Марс в соединении с Венерой" }],
+          windows: [{ time: "11:00", driver_id: "d1" }],
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.energyPct).toBeNull();
+    expect(model.dayWindow).toBeNull();
+    expect(model.transits[0]?.title).toContain("Марс в соединении с Венерой");
+    expect(model.transits[0]?.time).toBe("11:00");
+    expect(model.transits[0]?.planets).toEqual(expect.arrayContaining(["mars", "venus"]));
   });
 });

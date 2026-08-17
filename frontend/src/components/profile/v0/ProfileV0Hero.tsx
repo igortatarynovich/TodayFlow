@@ -1,10 +1,11 @@
 "use client";
 
 import { ArchetypeSymbol } from "@/components/visualIdentity/ArchetypeSymbol";
+import { NumberIcon } from "@/components/visualIdentity/NumberIcon";
 import { ZodiacIcon } from "@/components/visualIdentity/ZodiacIcon";
 import type { ProfileV0Header } from "@/lib/profilePage/buildProfileV0Data";
 import type { Element } from "@/lib/zodiac-utils";
-import styles from "./profileV0.module.css";
+import styles from "@/design-system/profile/dsProfileV0.module.css";
 
 const HERO_SCENE_TONE: Record<Element, string> = {
   Fire: styles.heroSceneFire,
@@ -59,7 +60,8 @@ export function ProfileV0Hero({
               ) : null}
               {header.lifePath != null ? (
                 <span className={`${styles.profileMetaPill} ${styles.profileMetaPillAccent}`}>
-                  {header.lifePath} · Число пути
+                  <NumberIcon value={header.lifePath} size={16} />
+                  <span>· Число пути</span>
                 </span>
               ) : null}
             </div>

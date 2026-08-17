@@ -2,9 +2,10 @@
 
 FOUNDATION_UI §11–§12. Engine output is never colors/CSS — only closed fields.
 
-SoT for visual_mode (2026-08-10):
-  1. LLM-chosen mood from the closed 8-set (day story / native scenario), if valid
+SoT for visual_mode (2026-08-15, TODAY_CONTENT_PIPELINE_V1):
+  1. Global Day Engine ``primary_energy`` (closed 8-set) — 1:1 UI map
   2. Else deterministic thesis.mode → visual_mode map (fallback)
+  LLM ``visual_mode`` is not a decision.
 
 Intensity / warmth / contrast follow the resolved visual_mode so shell stays coherent.
 """
@@ -159,7 +160,7 @@ def build_day_atmosphere_v1(
 ) -> dict[str, Any]:
     """Build public nest for today_contract. Always returns a full closed dict.
 
-    ``visual_mode`` — optional LLM/story hint; invalid/missing → thesis map fallback.
+    ``visual_mode`` — Engine ``primary_energy`` (1:1 map); invalid/missing → thesis map.
     """
     thesis = day_thesis if isinstance(day_thesis, dict) else {}
     thesis_mode = str(thesis.get("mode") or "").strip().lower() or "stability"
@@ -168,8 +169,8 @@ def build_day_atmosphere_v1(
     if phase not in ("morning", "day", "evening", "night"):
         phase = time_phase_from_hour(hour if hour is not None else datetime.now().hour)
 
-    llm_mode = normalize_visual_mode(visual_mode)
-    resolved = llm_mode or map_thesis_mode_to_visual(thesis_mode, time_phase=phase)
+    engine_mode = normalize_visual_mode(visual_mode)
+    resolved = engine_mode or map_thesis_mode_to_visual(thesis_mode, time_phase=phase)
 
     intensity = float(_VISUAL_INTENSITY.get(resolved, 0.4))
     warmth = float(_VISUAL_WARMTH.get(resolved, 0.5))
@@ -190,16 +191,14 @@ def build_day_atmosphere_v1(
 
 
 def _visual_mode_from_story(story: dict[str, Any]) -> str | None:
-    """Prefer story-level LLM mood, then nested scenario."""
-    direct = normalize_visual_mode(story.get("visual_mode"))
-    if direct:
-        return direct
+    """Prefer Global Engine primary_energy. LLM/scenario visual_mode is not a decision."""
+    gd = story.get("global_day") if isinstance(story.get("global_day"), dict) else {}
+    engine = normalize_visual_mode(gd.get("primary_energy"))
+    if engine:
+        return engine
+    # Cached packages may already have atmosphere stamped from Engine.
     atm = story.get("day_atmosphere") if isinstance(story.get("day_atmosphere"), dict) else {}
-    nested_atm = normalize_visual_mode(atm.get("visual_mode"))
-    if nested_atm:
-        return nested_atm
-    scen = story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else {}
-    return normalize_visual_mode(scen.get("visual_mode"))
+    return normalize_visual_mode(atm.get("visual_mode"))
 
 
 def day_atmosphere_from_story(
@@ -208,7 +207,7 @@ def day_atmosphere_from_story(
     local_date: str | None = None,
     hour: int | None = None,
 ) -> dict[str, Any] | None:
-    """Extract thesis (+ optional LLM visual_mode) from day_story. None if unavailable."""
+    """Extract thesis + Engine energy from day_story. None if unavailable."""
     if not isinstance(story, dict):
         return None
     if str(story.get("interpretation_status") or "").strip() == "unavailable":

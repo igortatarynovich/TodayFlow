@@ -19,7 +19,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain,
     get_openai_compatible_client,
     is_llm_chat_configured,
-    resolve_default_chat_model,
+    resolve_complex_chat_model,
 )
 from todayflow_backend.prompts.registry_v1 import get_prompt
 from todayflow_backend.services.llm_quality_policy_v1 import (
@@ -114,12 +114,13 @@ def _call(
     """Returns (parsed_dict_or_none, raw_content_or_none). Behavior unchanged when capture off."""
     if not is_llm_chat_configured():
         return None, None
-    client = get_openai_compatible_client()
+    model = resolve_complex_chat_model()
+    client = get_openai_compatible_client(model=model)
     if client is None:
         return None, None
     content = chat_completion_plain(
         client,
-        model=resolve_default_chat_model(),
+        model=model,
         messages=[
             {"role": "system", "content": system},
             {"role": "user", "content": user},
@@ -161,7 +162,7 @@ def _call_with_retry(
     system = with_practitioner_persona(system, locale=locale)
     user = json.dumps(user_payload, ensure_ascii=False)[: user_json_char_budget()]
     max_tokens = funnel_step_max_tokens(depth_level)
-    model = resolve_default_chat_model()
+    model = resolve_complex_chat_model()
     step_meta: dict[str, Any] = {
         "prompt_id": prompt_id,
         "prompt_version": ver,
@@ -448,7 +449,7 @@ def run_profile_disclosure_funnel_v0(
         "partial": False,
         "funnel_contract": PROFILE_DISCLOSURE_FUNNEL_V0,
         "prompt_versions": versions,
-        "model": resolve_default_chat_model() if is_llm_chat_configured() else None,
+        "model": resolve_complex_chat_model() if is_llm_chat_configured() else None,
         "provider": (settings.llm_provider or "").strip().lower(),
         "locale": locale,
         "steps": [],

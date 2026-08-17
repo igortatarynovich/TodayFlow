@@ -8,6 +8,17 @@ from todayflow_backend.core import models
 from todayflow_backend.services import astro
 
 
+def _index_positions(positions: List[Dict[str, Any]] | None) -> Dict[str, Dict[str, Any]]:
+    out: Dict[str, Dict[str, Any]] = {}
+    for row in positions or []:
+        if not isinstance(row, dict) or "longitude" not in row:
+            continue
+        body = str(row.get("body") or "").strip().lower().replace(" ", "_")
+        if body:
+            out[body] = row
+    return out
+
+
 class RetrogradeService:
     """Service for determining planet retrograde status."""
     
@@ -68,7 +79,8 @@ class RetrogradeService:
         birth_payload = {
             "date": target_date.isoformat(),
             "time": "12:00:00",
-            "location": "Equator",  # Location name doesn't matter if coordinates are provided
+            "location": "Equator",
+            "timezone_name": "UTC",
         }
         
         try:
@@ -94,11 +106,11 @@ class RetrogradeService:
         """
         retrograde = []
         
-        current_dict = {p.get("body"): p for p in current_positions if "body" in p and "longitude" in p}
-        previous_dict = {p.get("body"): p for p in previous_positions if "body" in p and "longitude" in p}
+        current_dict = _index_positions(current_positions)
+        previous_dict = _index_positions(previous_positions)
         
         # Planets that can be retrograde (not Sun/Moon - they don't retrograde)
-        retrograde_capable = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Chiron"]
+        retrograde_capable = ["mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto", "chiron"]
         
         for planet in retrograde_capable:
             if planet not in current_dict or planet not in previous_dict:
@@ -122,7 +134,7 @@ class RetrogradeService:
             # If longitude decreased (negative diff), planet is retrograde
             # Use small threshold to account for calculation precision
             if diff < -0.01:  # Small threshold to avoid false positives from rounding
-                retrograde.append(planet)
+                retrograde.append(planet.title() if planet != "chiron" else "Chiron")
         
         return retrograde
     
@@ -175,11 +187,11 @@ class RetrogradeService:
                  "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
         
         # Planets that have ingresses (all planets)
-        ingress_planets = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+        ingress_planets = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"]
         
         # Get current positions
         current_positions = await self._get_planet_positions(forecast_date, coordinates)
-        current_dict = {p.get("body"): p for p in current_positions if "body" in p and "longitude" in p}
+        current_dict = _index_positions(current_positions)
         
         # Check each planet for upcoming ingresses
         for planet in ingress_planets:
@@ -198,7 +210,7 @@ class RetrogradeService:
                 check_date = forecast_date + timedelta(days=day_offset)
                 try:
                     future_positions = await self._get_planet_positions(check_date, coordinates)
-                    future_dict = {p.get("body"): p for p in future_positions if "body" in p and "longitude" in p}
+                    future_dict = _index_positions(future_positions)
                     
                     if planet not in future_dict:
                         continue
@@ -213,10 +225,10 @@ class RetrogradeService:
                     # If sign changed, this is an ingress
                     if future_sign_index != current_sign_index:
                         # Check if we already added this ingress
-                        existing = next((i for i in ingresses if i.planet == planet and i.sign == future_sign), None)
+                        existing = next((i for i in ingresses if i.planet.lower() == planet and i.sign == future_sign), None)
                         if not existing:
                             ingresses.append(models.PlanetaryIngress(
-                                planet=planet,
+                                planet=planet.title(),
                                 sign=future_sign,
                                 ingress_date=check_date.isoformat(),
                             ))

@@ -1,0 +1,652 @@
+/* Form Kit compositions — layout only (FOUNDATION_UI §15.8). No skin. */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  width: 100%;
+}
+
+/* Section header — layout only (skin from typography / divider / button atoms) */
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  width: 100%;
+}
+
+.sectionHeaderRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  width: 100%;
+}
+
+.sectionHeaderCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  min-width: 0;
+}
+
+.sectionHeaderAction {
+  flex-shrink: 0;
+}
+
+.heroInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  min-height: 12.5rem;
+  overflow: hidden;
+}
+
+/* Dominant first-viewport hero — room for bleed; moon may escape the plate. */
+.heroFeature {
+  min-height: clamp(16rem, 38vw, 22rem);
+  overflow: visible;
+  isolation: isolate;
+  gap: var(--tf-ds-space-5, 1rem);
+  padding-block: var(--tf-ds-space-6, 1.25rem);
+}
+
+/**
+ * Open hero (Day Brief mockup): no card plate — sits on atmosphere.
+ * Moon crops past the right edge; copy/chips stay left.
+ */
+.heroOpen {
+  padding: 0 0 var(--tf-ds-space-4, 0.75rem);
+  border-radius: 0;
+  overflow: visible;
+  min-height: 0;
+}
+
+/* Generic bleed slot — small corner asset. */
+.heroBleed {
+  position: absolute;
+  right: -1.25rem;
+  top: -0.75rem;
+  width: min(46%, 9.5rem);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Kit / Day Brief: celestial sphere cropped past the right edge. */
+.heroMoonBleed {
+  right: -18%;
+  top: 0;
+  width: min(58%, 17rem);
+  opacity: 0.94;
+  overflow: visible;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.heroMoonBleed > * {
+  width: 100% !important;
+  height: auto !important;
+  max-width: none;
+}
+
+/* Large rotating moon: ~40% of the sphere sits above the pane top edge. */
+.dayBriefMoonStage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.dayBriefMoonBackdrop {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: min(140%, 28rem);
+  transform: translate(-50%, -40%);
+  aspect-ratio: 1;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.92;
+}
+
+.dayBriefMoonBackdrop > * {
+  width: 100% !important;
+  height: auto !important;
+  max-width: none;
+}
+
+.dayBriefMoonForeground {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+  width: 100%;
+}
+
+.planetPair {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+
+.ritualResultCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  text-align: center;
+  width: 100%;
+}
+
+.ritualResultFace {
+  max-width: 9.5rem !important;
+  margin-inline: auto;
+}
+
+.domainIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.pairHit {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.pairHit:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--day-decor-color, var(--tf-accent-action)) 55%, transparent);
+  outline-offset: 2px;
+  border-radius: var(--tf-ds-radius-md, 12px);
+}
+
+.heroCopy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  max-width: 72%;
+}
+
+.heroCopyFeature {
+  max-width: min(22rem, 62%);
+  gap: var(--tf-ds-space-3, 0.5rem);
+  padding-top: 0;
+}
+
+.heroAfterCopy {
+  position: relative;
+  z-index: 1;
+  max-width: min(22rem, 62%);
+}
+
+.heroOpen .heroFooter {
+  max-width: min(26rem, 78%);
+}
+
+.heroFooter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  margin-top: auto;
+  padding-top: var(--tf-ds-space-4, 0.75rem);
+}
+
+.windowTimes {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-3, 0.5rem);
+}
+
+.metricRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  min-height: 6.5rem;
+}
+
+.metricStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-2, 0.35rem);
+}
+
+.actionCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  min-height: 8rem;
+  justify-content: center;
+}
+
+.actionBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  text-align: left;
+  min-height: 4.5rem;
+}
+
+.actionBarCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  min-width: 0;
+  flex: 1;
+}
+
+.contentBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  flex: 1;
+}
+
+.contentFooter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  margin-top: auto;
+  padding-top: var(--tf-ds-space-3, 0.5rem);
+}
+
+.listPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.listRow {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: var(--tf-ds-space-3, 0.55rem) 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  touch-action: pan-y;
+}
+
+.listRow:last-child {
+  padding-bottom: 0;
+}
+
+.listRow:first-child {
+  padding-top: 0;
+}
+
+.listRowBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.listRowChevron {
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+.skyStrip {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.skyStripRow {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  width: 100%;
+  min-width: 0;
+}
+
+.skyStripCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.skyStripHeadlineArt {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-ds-space-2, 0.35rem);
+  flex-shrink: 0;
+}
+
+.skyPair {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.pilotStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-6, 1.25rem);
+  width: 100%;
+  max-width: min(100%, 40rem);
+  margin-inline: auto;
+  position: relative;
+}
+
+.pilotWithMoon {
+  isolation: isolate;
+  overflow: visible;
+}
+
+/* Dense mid band: better-today + list + support/trap as one composition. */
+.dayBriefMid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  width: 100%;
+}
+
+/* Spheres ‖ energy — side-by-side like Day Brief mockup (even on narrow). */
+.dayBriefFocus {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--tf-ds-space-3, 0.5rem);
+  align-items: stretch;
+  width: 100%;
+}
+
+.dayBriefFocusSingle {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 360px) {
+  .dayBriefFocus {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Energy plate in the focus grid — stack value → meters. */
+.dayBriefEnergy {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  min-height: 0;
+  height: 100%;
+}
+
+.dayBriefEnergy .metricStack {
+  width: 100%;
+}
+
+.dayBriefClose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  width: 100%;
+}
+
+.pilotGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  align-items: stretch;
+  width: 100%;
+}
+
+@media (min-width: 720px) {
+  .pilotGrid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+.pairGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--tf-ds-space-3, 0.5rem);
+  align-items: stretch;
+}
+
+@media (max-width: 520px) {
+  .pairGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Act / hook layout (Form Kit — layout only) --- */
+
+.stickyTop {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  width: 100%;
+}
+
+.navStrip {
+  margin: 0 0 var(--tf-ds-space-2, 0.35rem);
+  padding: var(--tf-ds-space-3, 0.45rem) var(--tf-ds-space-2, 0.35rem);
+}
+
+.chipScroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chipScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.centerStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--tf-ds-space-4, 0.75rem);
+  width: 100%;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.stackTight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tf-ds-space-1, 0.25rem);
+  width: 100%;
+}
+
+.hookVisual {
+  display: flex;
+  justify-content: center;
+  width: min(100%, 11rem);
+  margin: 0.15rem 0 0.35rem;
+}
+
+.hookVisual :global(img),
+.hookVisual :global(picture) {
+  width: 100%;
+  height: auto;
+  border-radius: var(--tf-ds-radius-md, 0.65rem);
+}
+
+.actShell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-5, 0.85rem);
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  border-top: 1px solid color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold-200, #d4b896)) 28%, transparent);
+  box-shadow: inset 3px 0 0 var(--tf-accent-action, #8f6b3a);
+  background: radial-gradient(
+    ellipse 80% 55% at 8% 0%,
+    color-mix(in srgb, var(--day-accent-soft, rgba(201, 169, 110, 0.2)) 40%, transparent) 0%,
+    transparent 55%
+  );
+}
+
+.actShell[data-act-accent="sky"] {
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--day-decor-color, #5b8fa8) 85%, transparent);
+}
+
+.actShell[data-act-accent="support"] {
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--tf-accent-action, #2f6b4f) 75%, #2f6b4f);
+}
+
+.actScreen {
+  scroll-margin-top: 4.5rem;
+  min-height: min(78svh, 44rem);
+}
+
+.actGutterPage {
+  padding: 1.35rem 1.15rem 1.5rem;
+}
+
+.actGutterNone {
+  padding: 0;
+}
+
+.actBridge {
+  margin-top: var(--tf-ds-space-1, 0.25rem);
+}
+
+.actVisual,
+.actHeader,
+.actBody {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.actHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-2, 0.4rem);
+  padding: 0 0.15rem;
+}
+
+.actBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-5, 0.9rem);
+  max-width: none;
+  min-width: 0;
+}
+
+.actBody :global(button),
+.actBody :global(a[class*="btn"]) {
+  min-height: 44px;
+}
+
+@media (min-width: 48rem) {
+  .actGutterPage {
+    padding: 1.6rem 1.5rem 1.85rem;
+  }
+}
+
+.glanceRoot {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--tf-ds-space-5, 1.25rem);
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  padding-block: 0.25rem 0.5rem;
+}
+
+.glanceChrome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+.glanceStage {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tf-ds-space-6, 1.35rem);
+  text-align: center;
+  min-height: 0;
+  padding-inline: 0.35rem;
+}
+
+.glanceFooter {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-5, 0.85rem);
+  width: 100%;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.glanceNearest {
+  width: 100%;
+  text-align: left;
+}
+
+.glanceNearestRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.55rem;
+  width: 100%;
+}
+
+.glanceNearestHint {
+  margin-left: auto;
+}
+
+.skeletonPulse {
+  display: block;
+  height: 1.1rem;
+  width: min(70%, 16rem);
+  border-radius: var(--tf-ds-radius-sm, 0.4rem);
+  background: color-mix(in srgb, var(--tf-ink-muted, #7a7168) 18%, transparent);
+  opacity: 0.7;
+}

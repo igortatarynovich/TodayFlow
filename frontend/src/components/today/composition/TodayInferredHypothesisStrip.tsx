@@ -6,7 +6,7 @@ import { fetchCompactUserModelCached } from "@/lib/compactUserModelCache";
 import { TodayInterpretationConfirm } from "@/components/today/composition/TodayInterpretationConfirm";
 import type { ProximityChoiceId } from "@/lib/todayInterpretationConfirm";
 import type { CompactUserModel } from "@/lib/types";
-import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
+import styles from "@/design-system/compositions/dsCompositionSurface.module.css";
 
 const DISMISS_PREFIX = "todayflow.inferred_hypothesis.dismiss.v1";
 

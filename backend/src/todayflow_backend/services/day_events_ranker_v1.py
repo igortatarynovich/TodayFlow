@@ -118,6 +118,16 @@ def event_strength(event: dict[str, Any]) -> float:
     elif strength_label in {"loose", "weak"}:
         base -= 0.04
 
+    daily = event.get("daily_score")
+    if daily is None:
+        daily = (event.get("meta") or {}).get("daily_score") if isinstance(event.get("meta"), dict) else None
+    if daily is not None:
+        try:
+            # Blend kind floor with shared-sky daily influence (exact Mercury×Jupiter beats a distant phase).
+            base = (base * 0.45) + (_clip01(float(daily)) * 0.55)
+        except (TypeError, ValueError):
+            pass
+
     return _clip01(base)
 
 

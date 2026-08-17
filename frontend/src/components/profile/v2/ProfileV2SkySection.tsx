@@ -3,7 +3,7 @@
 import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import type { ProfileFrameworkAnchor, ProfileFrameworkCard } from "@/lib/profilePage/buildProfileQuickMapData";
 import { DsButton } from "@/design-system";
-import styles from "@/components/profile/v2/profileV2System.module.css";
+import styles from "@/design-system/profile/dsProfileV2System.module.css";
 import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
 
 export type ProfileV2SkySectionProps = {

@@ -78,7 +78,22 @@ def test_from_story_with_thesis():
     assert nest["time_phase"] == "morning"
 
 
-def test_from_story_llm_visual_mode_wins_over_thesis():
+def test_from_story_engine_energy_wins_over_llm_visual_mode():
+    nest = day_atmosphere_from_story(
+        {
+            "interpretation_status": "ok",
+            "day_thesis": {"mode": "opportunity"},
+            "visual_mode": "depth",
+            "global_day": {"primary_energy": "grounded"},
+        },
+        local_date="2026-08-03",
+        hour=10,
+    )
+    assert nest is not None
+    assert nest["visual_mode"] == "grounded"
+
+
+def test_from_story_llm_visual_mode_does_not_win_over_thesis():
     nest = day_atmosphere_from_story(
         {
             "interpretation_status": "ok",
@@ -89,7 +104,7 @@ def test_from_story_llm_visual_mode_wins_over_thesis():
         hour=10,
     )
     assert nest is not None
-    assert nest["visual_mode"] == "depth"
+    assert nest["visual_mode"] == "radiance"
 
 
 def test_from_story_invalid_visual_mode_falls_back_to_thesis():
@@ -166,4 +181,7 @@ def test_day_story_to_today_contract_includes_atmosphere():
     contract = day_story_to_today_contract_v1(story, generation_id="test-gen")
     atm = contract.get("day_atmosphere")
     assert isinstance(atm, dict)
-    assert atm["visual_mode"] == "momentum"
+    # Empty pack → weak day → grounded. LLM visual_mode=momentum is not a decision.
+    assert atm["visual_mode"] == "grounded"
+    assert (contract.get("global_day") or {}).get("primary_energy") == "grounded"
+    assert (contract.get("day_package_manifest") or {}).get("immutable") is True

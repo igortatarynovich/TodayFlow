@@ -17,14 +17,15 @@
 .storyBleed {
   max-width: none;
   width: 100%;
-  height: 100%;
-  min-height: 0;
-  max-height: 100%;
+  height: auto;
+  min-height: 100%;
+  max-height: none;
   flex: 1 1 auto;
   margin-inline: 0;
   align-self: stretch;
   border-radius: 0;
-  overflow: hidden;
+  overflow: visible;
+  overscroll-behavior: auto;
 }
 
 .storyBleed > .chrome {
@@ -37,6 +38,18 @@
   background: transparent;
 }
 
+@media (max-width: 48rem) {
+  .storyBleed {
+    /* Reserve room so floating step chrome sits lower (~30% of upper band) */
+    --sf-mobile-chrome-offset: clamp(2rem, 9vh, 4.25rem);
+    --sf-chrome-h: calc(3.25rem + var(--sf-mobile-chrome-offset));
+  }
+
+  .storyBleed > .chrome {
+    top: var(--sf-mobile-chrome-offset);
+  }
+}
+
 .storyBleed > .chrome button {
   pointer-events: auto;
 }
@@ -44,19 +57,37 @@
 .storyBleed > .viewport {
   flex: 1 1 auto;
   min-height: 0;
-  height: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.storyBleed .track {
+  height: auto;
+  min-height: 100%;
+  align-items: stretch;
 }
 
 .storyBleed .step {
   padding: 0;
   position: relative;
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
 }
 
 .storyBleed .stepBody {
   position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
-  height: 100%;
+  /* Grow with the pane; the step is the only scroller. flex:1 + min-height:100%
+     made this a nested 100%-tall box (and sometimes a second overflow:auto). */
+  flex: 0 0 auto;
+  min-height: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Vertical pan from buttons/chips inside the step — iOS otherwise eats the scroll. */
+.stepScrollable :is(button, a, [role="button"]) {
+  touch-action: pan-y;
 }
 
 .root[data-axis="x"] { touch-action: pan-y; }
@@ -214,6 +245,7 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
+  touch-action: pan-y;
 }
 
 .stepHeading {
@@ -269,3 +301,126 @@
 }
 
 .emptySlot { min-height: 1rem; }
+
+/* ——— Today story pane layout (Form Kit: layout only; was ProductScreenFlow.module) ——— */
+
+.flowFoundation {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  flex: 1 1 auto;
+  height: auto;
+}
+
+.storyFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 0;
+  /* ScreenFlow step is the only vertical scroller — nested overflow + y-mandatory
+     snap locked the first Today pane on phones. */
+  overflow: visible;
+}
+
+.storyFrame :global([data-story-block]),
+.storyFrame :global([data-story-pane]) {
+  box-sizing: border-box;
+  flex: none;
+  min-height: 100%;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding: calc(var(--sf-chrome-h, 3.25rem) + 0.35rem) 1.15rem 1.65rem;
+}
+
+.storyFrame :global([data-story-block]) > :not([data-testid="today-story-block-cue"]):not([data-testid="today-story-next-anchor"]),
+.storyFrame :global([data-story-pane]) > :not([data-testid="today-story-block-cue"]):not([data-testid="today-story-next-anchor"]) {
+  width: 100%;
+  max-width: 22rem;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.storyFrame :global([data-testid="today-story-block-cue"]),
+.storyFrame :global([data-testid="today-story-next-anchor"]) {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.slotStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-3);
+  width: min(100%, 22rem);
+  margin: 0 auto;
+  padding: calc(var(--sf-chrome-h, 3.25rem) + var(--tf-ds-space-2)) var(--tf-ds-space-5) var(--tf-ds-space-6);
+  box-sizing: border-box;
+  text-align: left;
+  min-height: 100%;
+  color: var(--tf-ink, #2a2520);
+}
+
+@media (max-width: 48rem) {
+  .slotStack {
+    padding-top: calc(var(--sf-chrome-h, 3.25rem) + clamp(2.5rem, 10vh, 5rem));
+  }
+}
+
+/* Day brief: chrome hidden on step 0 — don't reserve the floating chrome band. */
+.slotStackCompactTop {
+  padding-top: var(--tf-ds-space-4, 0.75rem);
+}
+
+@media (max-width: 48rem) {
+  .slotStackCompactTop {
+    padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
+  }
+}
+
+.slotStackWide {
+  width: min(100%, 36rem);
+  max-width: 36rem;
+}
+
+.slotStackWide .slotBody {
+  align-items: stretch;
+}
+
+.slotBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-ds-space-3);
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.ritualFrame {
+  padding-top: calc(var(--sf-chrome-h, 3.25rem) + 0.75rem);
+  padding-inline: var(--tf-ds-space-4, 1rem);
+  padding-bottom: var(--tf-ds-space-3, 0.75rem);
+  box-sizing: border-box;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.ritualFrame > :first-child {
+  flex: 0 1 auto;
+  max-width: min(100%, 22rem);
+  margin-inline: auto;
+}
