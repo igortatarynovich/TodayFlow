@@ -53,6 +53,7 @@ Persist → UI / Today / Compat / Tarot
 
 - Без сильного **fact**-промпта интерпретация стоит на песке.  
 - Без сильного **interpretation**-промпта факты не становятся продуктом для человека.  
+- Астрологическое *значение* (что значит Saturn □ Venus) **не** решает interpretation-промпт. После **IL-4** вход — expression pack из [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md); LLM только выражает.  
 - Справочник (знак по дате, год в культурах) **не** заменяет fact-prompt для углов/домов и **не** входит в interpretation как «переспрос модели».  
 - Один «напиши весь профиль» промпт — **антипаттерн**: смешивает роли и ломает explainability.
 

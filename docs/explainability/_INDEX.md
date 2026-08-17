@@ -7,4 +7,6 @@
 | [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) | Umbrella |
 | [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) | Нормы интерпретации |
 | [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) | UX-правило |
-| [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) | event ≠ meaning |
+| [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) | event ≠ meaning (**поведение пользователя**, не астро-атомы) |
+
+Символический смысл планет/аспектов — не здесь: [Interpretation Library](../astrology/INTERPRETATION_LIBRARY_V1.md).

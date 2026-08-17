@@ -1,0 +1,16 @@
+# Astrology — meaning & machine
+
+Не плодить параллельный SoT. Машинные векторы остаются в корневых AMC/ACM; **смысл** — здесь.
+
+| Документ | Роль |
+|----------|------|
+| [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) | **Interpretation Library** — semantic objects; runtime: Swiss → calc → IL → engine → expression |
+| [source_corpus_v1.json](../../DATA/reference/astrology/interpretation_v1/source_corpus_v1.json) | Research corpus (все `candidate`; не approved ingest) |
+| [objects_v1.json](../../DATA/reference/astrology/interpretation_v1/objects_v1.json) | IL-1 knowledge objects (`draft` only; not `active`) |
+| [claims/](../../DATA/reference/astrology/interpretation_v1/claims/) | source → locus → paraphrase → `normalized_claim` |
+| [ASTROLOGY_MACHINE_CONTRACT.md](../ASTROLOGY_MACHINE_CONTRACT.md) | Machine vectors (DayModel axes) — 39 атомов |
+| [ASTROLOGY_COMPOSITION_MODEL.md](../ASTROLOGY_COMPOSITION_MODEL.md) | Primary vs derived; запрет composite **machine** JSON |
+| [foundation_v1.md](../foundation_v1.md) §2 | Identity / константы (стихия, управитель, орбис) |
+| [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) §2 | Как факт карты **выглядит** (10 слоёв · information vs identity · натал = композиция) — не смысл |
+
+**Не путать с** [INTERPRETATION_LAYER_AND_REFERENCE.md](../explainability/INTERPRETATION_LAYER_AND_REFERENCE.md) — там event→meaning для **поведения пользователя**, не астрологические примитивы.

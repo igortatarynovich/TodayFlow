@@ -1,0 +1,387 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.today/schemas/astrology_interpretation_v1.schema.json",
+  "title": "Astrology Interpretation Library v1",
+  "description": "Semantic knowledge objects (not user-facing prose, not surface copy). Forbidden: today_message, profile_blurb, compatibility_line, and any screen-specific field. Catalog may be empty of active records.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "objects"],
+  "properties": {
+    "contract_version": { "const": "astrology_interpretation_v1" },
+    "locale_lemmas": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 2, "maxLength": 8 }
+    },
+    "objects": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/knowledge_object" }
+    }
+  },
+  "$defs": {
+    "lemma": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 240
+    },
+    "lemma_list": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/lemma" }
+    },
+    "theme_cluster": {
+      "type": "string",
+      "enum": [
+        "identity",
+        "emotions",
+        "relationships",
+        "boundaries",
+        "values",
+        "money",
+        "work",
+        "communication",
+        "body",
+        "home",
+        "growth",
+        "meaning",
+        "power",
+        "change",
+        "timing"
+      ]
+    },
+    "polarity": {
+      "type": "string",
+      "enum": ["challenging", "constructive", "supportive", "amplifying", "polarizing", "neutral"]
+    },
+    "temporal_class": {
+      "type": "string",
+      "enum": ["fast", "medium", "slow", "natal"]
+    },
+    "object_status": {
+      "type": "string",
+      "enum": ["schema_example", "draft", "review", "active", "deprecated"]
+    },
+    "source_class": {
+      "type": "string",
+      "enum": [
+        "astronomy",
+        "classical",
+        "traditional",
+        "psychological",
+        "professional",
+        "schema_example",
+        "internal_normalization"
+      ]
+    },
+    "evidence_tier": {
+      "type": "string",
+      "enum": ["core", "supported", "school_specific", "editorial"]
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["extracted", "compared", "reviewed", "rejected", "schema_example"]
+    },
+    "domains": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relationships", "money", "work", "self"],
+      "properties": {
+        "relationships": { "$ref": "#/$defs/lemma" },
+        "money": { "$ref": "#/$defs/lemma" },
+        "work": { "$ref": "#/$defs/lemma" },
+        "self": { "$ref": "#/$defs/lemma" }
+      }
+    },
+    "provenance_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "concept_id",
+        "source_id",
+        "source_class",
+        "original_claim",
+        "normalized_claim",
+        "evidence_tier",
+        "review_status",
+        "field"
+      ],
+      "properties": {
+        "concept_id": {
+          "type": "string",
+          "pattern": "^claim\\.[a-z0-9_.]+$",
+          "maxLength": 120
+        },
+        "source_id": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "source_class": { "$ref": "#/$defs/source_class" },
+        "author": { "type": ["string", "null"], "maxLength": 120 },
+        "edition": { "type": ["string", "null"], "maxLength": 160 },
+        "locus": {
+          "type": ["string", "null"],
+          "description": "Chapter/page/section pointer for a researcher to re-find the passage. Not a copyrighted dump.",
+          "maxLength": 160
+        },
+        "school": { "type": ["string", "null"], "maxLength": 80 },
+        "original_claim": {
+          "$ref": "#/$defs/lemma",
+          "description": "Our paraphrase of the assertion. Never a pasted modern translation."
+        },
+        "normalized_claim": { "$ref": "#/$defs/lemma" },
+        "evidence_tier": { "$ref": "#/$defs/evidence_tier" },
+        "review_status": { "$ref": "#/$defs/review_status" },
+        "field": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "passage_or_concept": { "type": "string", "minLength": 3, "maxLength": 400 },
+        "reviewer": { "type": ["string", "null"] },
+        "reviewed_at": { "type": ["string", "null"], "format": "date" }
+      }
+    },
+    "knowledge_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "object_id",
+        "layer",
+        "type",
+        "status",
+        "version",
+        "phenomenon",
+        "theme_clusters",
+        "polarity",
+        "temporal_class",
+        "composed_from",
+        "provenance"
+      ],
+      "properties": {
+        "object_id": {
+          "type": "string",
+          "pattern": "^astro\\.(object|sign|house|aspect|combo)\\.[a-z0-9_.]+$"
+        },
+        "layer": { "type": "integer", "enum": [1, 2, 3, 4, 5] },
+        "type": {
+          "type": "string",
+          "enum": [
+            "celestial_object",
+            "sign",
+            "house",
+            "aspect",
+            "planet_in_sign",
+            "planet_in_house",
+            "natal_aspect",
+            "transit_to_natal",
+            "transit_through_house"
+          ]
+        },
+        "status": { "$ref": "#/$defs/object_status" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "phenomenon": { "$ref": "#/$defs/lemma" },
+        "machine_entity_code": { "type": "string", "pattern": "^astrology\\.(planet|sign|house|aspect)\\.[a-z0-9]+$" },
+        "theme_clusters": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/theme_cluster" }
+        },
+        "polarity": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/polarity" }
+        },
+        "temporal_class": { "$ref": "#/$defs/temporal_class" },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "evidence_tier": { "$ref": "#/$defs/evidence_tier" },
+        "composed_from": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^astro\\.(object|sign|house|aspect)\\.[a-z0-9_]+$" }
+        },
+        "curation_reason": {
+          "type": ["string", "null"],
+          "enum": [null, "non_compositional", "gold_replay", "school_conflict"]
+        },
+        "intensity_rule": {
+          "type": "string",
+          "enum": ["orb", "angularity", "natal_weight", "composed", "fixed"]
+        },
+        "function": { "$ref": "#/$defs/lemma" },
+        "themes": { "$ref": "#/$defs/lemma_list" },
+        "positive_expression": { "$ref": "#/$defs/lemma" },
+        "shadow": { "$ref": "#/$defs/lemma" },
+        "domains": { "$ref": "#/$defs/domains" },
+        "tempo": { "type": "string", "enum": ["fast", "medium", "slow", "very_slow"] },
+        "mode": { "type": "string", "enum": ["cardinal", "fixed", "mutable"] },
+        "element": { "type": "string", "enum": ["fire", "earth", "air", "water"] },
+        "orientation": { "type": "string", "enum": ["positive", "negative"] },
+        "motivation": { "$ref": "#/$defs/lemma" },
+        "expression": { "$ref": "#/$defs/lemma" },
+        "strengths": { "$ref": "#/$defs/lemma_list" },
+        "excess": { "$ref": "#/$defs/lemma_list" },
+        "deficiency": { "$ref": "#/$defs/lemma_list" },
+        "behavioral_tendencies": { "$ref": "#/$defs/lemma_list" },
+        "domain": { "$ref": "#/$defs/lemma" },
+        "internal_meaning": { "$ref": "#/$defs/lemma" },
+        "external_manifestations": { "$ref": "#/$defs/lemma_list" },
+        "people": { "$ref": "#/$defs/lemma_list" },
+        "activities": { "$ref": "#/$defs/lemma_list" },
+        "resources": { "$ref": "#/$defs/lemma_list" },
+        "risks": { "$ref": "#/$defs/lemma_list" },
+        "angle": { "type": "number", "minimum": 0, "maximum": 180 },
+        "interaction": {
+          "type": "string",
+          "enum": ["merging", "friction", "flow", "opportunity", "polarization"]
+        },
+        "requires_action": { "type": "boolean" },
+        "base_meaning": { "$ref": "#/$defs/lemma" },
+        "psychological": { "$ref": "#/$defs/lemma" },
+        "opportunity": { "$ref": "#/$defs/lemma" },
+        "risk": { "$ref": "#/$defs/lemma" },
+        "action": { "$ref": "#/$defs/lemma_list" },
+        "avoid": { "$ref": "#/$defs/lemma" },
+        "provenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/provenance_entry" }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "layer": { "const": 1 } }, "required": ["layer"] },
+          "then": {
+            "required": [
+              "type",
+              "function",
+              "themes",
+              "positive_expression",
+              "shadow",
+              "domains",
+              "tempo"
+            ],
+            "properties": { "type": { "const": "celestial_object" } }
+          }
+        },
+        {
+          "if": { "properties": { "layer": { "const": 2 } }, "required": ["layer"] },
+          "then": {
+            "required": [
+              "type",
+              "mode",
+              "element",
+              "orientation",
+              "motivation",
+              "expression",
+              "strengths",
+              "excess",
+              "deficiency",
+              "behavioral_tendencies"
+            ],
+            "properties": { "type": { "const": "sign" } }
+          }
+        },
+        {
+          "if": { "properties": { "layer": { "const": 3 } }, "required": ["layer"] },
+          "then": {
+            "required": [
+              "type",
+              "domain",
+              "internal_meaning",
+              "external_manifestations",
+              "people",
+              "activities",
+              "resources",
+              "risks"
+            ],
+            "properties": { "type": { "const": "house" } }
+          }
+        },
+        {
+          "if": { "properties": { "layer": { "const": 4 } }, "required": ["layer"] },
+          "then": {
+            "required": ["type", "angle", "interaction", "requires_action"],
+            "properties": { "type": { "const": "aspect" } }
+          }
+        },
+        {
+          "if": { "properties": { "layer": { "const": 5 } }, "required": ["layer"] },
+          "then": {
+            "required": [
+              "type",
+              "base_meaning",
+              "psychological",
+              "domains",
+              "opportunity",
+              "risk",
+              "action",
+              "avoid",
+              "intensity_rule",
+              "curation_reason",
+              "composed_from"
+            ],
+            "properties": {
+              "composed_from": { "minItems": 2 }
+            }
+          }
+        }
+      ]
+    },
+    "expression_pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_theme",
+        "theme_clusters",
+        "supporting_signals",
+        "opportunity",
+        "risk",
+        "tone",
+        "length_words",
+        "locale",
+        "surface"
+      ],
+      "properties": {
+        "primary_theme": { "$ref": "#/$defs/lemma" },
+        "theme_clusters": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/theme_cluster" }
+        },
+        "supporting_signals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "type": "string", "pattern": "^astro\\." }
+        },
+        "opportunity": { "$ref": "#/$defs/lemma" },
+        "risk": { "$ref": "#/$defs/lemma" },
+        "profile_relevance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["boost"],
+          "properties": {
+            "goal_id": { "type": ["string", "null"] },
+            "boost": { "type": "number", "minimum": 0, "maximum": 1 },
+            "note": { "$ref": "#/$defs/lemma" }
+          }
+        },
+        "tone": {
+          "type": "string",
+          "enum": ["direct_grounded", "soft_clear", "precise_cool"]
+        },
+        "length_words": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "type": "integer", "minimum": 8, "maximum": 80 }
+        },
+        "locale": { "type": "string", "minLength": 2, "maxLength": 8 },
+        "surface": {
+          "type": "string",
+          "enum": ["profile", "today", "compatibility", "tarot_context"],
+          "description": "IL-4 Expression only. Never a field on the knowledge object."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,736 @@
+{
+  "contract_version": "astrology_interpretation_v1",
+  "locale_lemmas": [
+    "en"
+  ],
+  "objects": [
+    {
+      "object_id": "astro.object.sun",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Sun",
+      "machine_entity_code": "astrology.planet.sun",
+      "theme_clusters": [
+        "identity",
+        "power"
+      ],
+      "polarity": [
+        "constructive",
+        "challenging"
+      ],
+      "temporal_class": "medium",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "function": "heating quality with moderate dryness",
+      "themes": [
+        "heat",
+        "dryness",
+        "honour",
+        "command",
+        "pride"
+      ],
+      "positive_expression": "faithful, commanding, honour-seeking, deliberate speech",
+      "shadow": "arrogance, pride, wasteful domination",
+      "domains": {
+        "relationships": "affable when dignified; disdainful when not",
+        "money": "industrious of patrimony; spendthrift when ill",
+        "work": "desire to rule and acquire honour",
+        "self": "majesty and large heart, or arrogant vapour"
+      },
+      "tempo": "medium",
+      "provenance": [
+        {
+          "concept_id": "claim.sun.hot",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Tetrabiblos Book I Chapter IV (Ashmand p.13)",
+          "original_claim": "The Sun produces heat and moderate dryness; his approach to the zenith increases heat.",
+          "normalized_claim": "The Sun's primary quality is heat",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.sun.hot",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.94–95",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter XI Nature (1659 p.69–70)",
+          "original_claim": "The Sun is naturally hot and dry, but more temperate than Mars.",
+          "normalized_claim": "The Sun's primary quality is heat",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.sun.well_dignified",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.95",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter XI Manners when well dignified (1659 p.70)",
+          "original_claim": "When well dignified: faithful, punctual, desirous to rule, prudent, majestic, industrious of honour, deliberate in speech, affable.",
+          "normalized_claim": "Dignified Sun: faithful, commanding, honour-seeking, deliberate",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "positive_expression"
+        }
+      ]
+    },
+    {
+      "object_id": "astro.object.moon",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Moon",
+      "machine_entity_code": "astrology.planet.moon",
+      "theme_clusters": [
+        "body",
+        "change"
+      ],
+      "polarity": [
+        "supportive",
+        "constructive"
+      ],
+      "temporal_class": "fast",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "function": "moistening quality acting close to earth and bodies",
+      "themes": [
+        "moisture",
+        "changeability",
+        "peace",
+        "timidity",
+        "present-focus"
+      ],
+      "positive_expression": "soft, peace-seeking, curious, present-focused",
+      "shadow": "idleness, drift, no forecast",
+      "domains": {
+        "relationships": "peace-loving, easily frightened, tender",
+        "money": "prodigal care for present times; idle waste when ill",
+        "work": "many occupations, shifting habitation; hating labour when ill",
+        "self": "soft unstedfast temperament; phlegmatic"
+      },
+      "tempo": "fast",
+      "provenance": [
+        {
+          "concept_id": "claim.moon.moist",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Tetrabiblos Book I Chapter IV (Ashmand p.13)",
+          "original_claim": "The Moon principally generates moisture by proximity to earth and damp vapours.",
+          "normalized_claim": "The Moon's primary quality is moisture",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.moon.moist",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.106",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter XIV Nature (1659 p.81)",
+          "original_claim": "The Moon is a feminine nocturnal planet, cold, moist and phlegmatic.",
+          "normalized_claim": "The Moon's primary quality is moisture",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.moon.well_placed",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.106",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter XIV Manners when well placed (1659 p.81)",
+          "original_claim": "When well placed: soft, tender, peace-loving, fond of novelties, unstedfast, caring for the present, timorous, easily frightened.",
+          "normalized_claim": "Dignified Moon: soft, peace-seeking, changeable, present-focused",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "positive_expression"
+        }
+      ]
+    },
+    {
+      "object_id": "astro.object.mercury",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Mercury",
+      "machine_entity_code": "astrology.planet.mercury",
+      "theme_clusters": [
+        "communication",
+        "change"
+      ],
+      "polarity": [
+        "polarizing",
+        "constructive"
+      ],
+      "temporal_class": "fast",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "function": "convertible quality taking the nature of what it joins",
+      "themes": [
+        "speech",
+        "inquiry",
+        "swiftness",
+        "subtlety",
+        "deceit"
+      ],
+      "positive_expression": "subtle, eloquent, inquisitive, quick-witted",
+      "shadow": "scattered speech, deceit, busybody restlessness",
+      "domains": {
+        "relationships": "eloquent company; tale-carrying when ill",
+        "money": "inventive trade when dignified; wasted estate in prating when not",
+        "work": "disputation, learning, mysteries, travel of mind",
+        "self": "politic intellect, or troublesome wit"
+      },
+      "tempo": "fast",
+      "provenance": [
+        {
+          "concept_id": "claim.mercury.convertible",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Tetrabiblos Book I Chapter V (Ashmand p.14)",
+          "original_claim": "Mercury is of common influence, good or evil in unison with whatever planets he is connected with.",
+          "normalized_claim": "Mercury takes colour from what it joins",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.mercury.convertible",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.102",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter XIII Nature (1659 p.76–77)",
+          "original_claim": "With the good he is good, with the evil planets ill; he is masculine or feminine as joined to any planet.",
+          "normalized_claim": "Mercury takes colour from what it joins",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.mercury.well_placed",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.102",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter XIII Manners when well placed (1659 p.77)",
+          "original_claim": "When well placed: subtle and politic intellect, eloquent disputant, searcher of mysteries, sharp and witty, unwearied fancy.",
+          "normalized_claim": "Dignified Mercury: subtle, eloquent, inquisitive, quick-witted",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "positive_expression"
+        }
+      ]
+    },
+    {
+      "object_id": "astro.object.venus",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Venus",
+      "machine_entity_code": "astrology.planet.venus",
+      "theme_clusters": [
+        "relationships",
+        "values"
+      ],
+      "polarity": [
+        "supportive",
+        "constructive"
+      ],
+      "temporal_class": "medium",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "function": "moist temperate quality disposed to pleasure and company",
+      "themes": [
+        "moisture",
+        "mirth",
+        "affection",
+        "company",
+        "excess-pleasure"
+      ],
+      "positive_expression": "pleasant, affectionate, sociable, musical",
+      "shadow": "excess pleasure, waste, careless reputation",
+      "domains": {
+        "relationships": "love-matters, cheerful company; lewd excess when ill",
+        "money": "not given to labour; expensive looseness when ill",
+        "work": "music, ornament, pleasant meeting — not painful labour",
+        "self": "neat, cheerful, easy of belief"
+      },
+      "tempo": "medium",
+      "provenance": [
+        {
+          "concept_id": "claim.venus.moist",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Tetrabiblos Book I Chapter IV (Ashmand p.14)",
+          "original_claim": "Venus generates more moisture than heat, taking moist earth vapours as the Moon does.",
+          "normalized_claim": "Venus's primary quality is moisture",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.venus.moist",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.98",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter XII Element and Nature (1659 p.72–73)",
+          "original_claim": "Venus is a feminine planet, temperately cold and moist, nocturnal.",
+          "normalized_claim": "Venus's primary quality is moisture",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.venus.benefic",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Tetrabiblos Book I Chapter V (Ashmand p.14)",
+          "original_claim": "Venus is classed benefic because heat and moisture predominate in a temperate mix.",
+          "normalized_claim": "Venus is traditionally benefic",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "polarity"
+        },
+        {
+          "concept_id": "claim.venus.benefic",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.98",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter XII Element and Nature (1659 p.72–73)",
+          "original_claim": "Venus is the lesser fortune, author of mirth and jollity.",
+          "normalized_claim": "Venus is traditionally benefic",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "polarity"
+        },
+        {
+          "concept_id": "claim.venus.well_placed",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.98–99",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter XII Manners when well placed (1659 p.73)",
+          "original_claim": "When well placed: quiet, not quarrelsome, pleasant, neat, prone to love-matters, musical, cheerful, a company-keeper.",
+          "normalized_claim": "Dignified Venus: pleasant, affectionate, sociable, musical",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "positive_expression"
+        }
+      ]
+    },
+    {
+      "object_id": "astro.object.mars",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Mars",
+      "machine_entity_code": "astrology.planet.mars",
+      "theme_clusters": [
+        "power",
+        "body"
+      ],
+      "polarity": [
+        "challenging",
+        "constructive"
+      ],
+      "temporal_class": "medium",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "function": "heating and drying quality that contends",
+      "themes": [
+        "heat",
+        "dryness",
+        "quarrel",
+        "courage",
+        "violence"
+      ],
+      "positive_expression": "bold, valiant, contentious, self-directed",
+      "shadow": "violence, turbulence, treachery",
+      "domains": {
+        "relationships": "strife and contention; scorns to be exceeded",
+        "money": "hazards himself; cheater or oppressor when ill",
+        "work": "war, command, peril, cutting and burning crafts",
+        "self": "choleric confidence, or furious rashness"
+      },
+      "tempo": "medium",
+      "provenance": [
+        {
+          "concept_id": "claim.mars.hot",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Tetrabiblos Book I Chapter IV (Ashmand p.13–14)",
+          "original_claim": "Mars is strongly heating by his fiery nature and vicinity to the Sun.",
+          "normalized_claim": "Mars is strongly hot",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.mars.hot",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.91",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter X Nature (1659 p.66)",
+          "original_claim": "Mars is a masculine nocturnal planet, hot and dry, choleric and fiery.",
+          "normalized_claim": "Mars is strongly hot",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.mars.malefic",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Tetrabiblos Book I Chapter V (Ashmand p.14)",
+          "original_claim": "Mars is malefic from excess of dryness.",
+          "normalized_claim": "Mars is traditionally malefic",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "shadow"
+        },
+        {
+          "concept_id": "claim.mars.malefic",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.91",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter X Nature (1659 p.66)",
+          "original_claim": "Mars is the lesser infortune, author of quarrels, strifes and contentions.",
+          "normalized_claim": "Mars is traditionally malefic",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "shadow"
+        },
+        {
+          "concept_id": "claim.mars.well_dignified",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.91",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter X Manners when well dignified (1659 p.66)",
+          "original_claim": "When well dignified: invincible in war, bold, confident, valiant, unwilling to submit, yet prudent in his own affairs.",
+          "normalized_claim": "Dignified Mars: bold, valiant, contentious, self-directed",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "positive_expression"
+        }
+      ]
+    },
+    {
+      "object_id": "astro.object.jupiter",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Jupiter",
+      "machine_entity_code": "astrology.planet.jupiter",
+      "theme_clusters": [
+        "growth",
+        "meaning"
+      ],
+      "polarity": [
+        "supportive",
+        "constructive"
+      ],
+      "temporal_class": "slow",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "function": "temperate warming and moistening quality",
+      "themes": [
+        "temperance",
+        "justice",
+        "liberality",
+        "religion",
+        "excess-yielding"
+      ],
+      "positive_expression": "magnanimous, just, liberal, fair-dealing",
+      "shadow": "waste, hypocrisy, dull excess of yielding",
+      "domains": {
+        "relationships": "indulgent to wife and children; careless of friends when ill",
+        "money": "liberal; wastes patrimony when unfortunate",
+        "work": "judgment, counsel, teaching, cloth and law",
+        "self": "sanguine temperance, or hypocritical religion"
+      },
+      "tempo": "slow",
+      "provenance": [
+        {
+          "concept_id": "claim.jupiter.temperate",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Tetrabiblos Book I Chapter IV (Ashmand p.14)",
+          "original_claim": "Jupiter lies between Saturn's cold and Mars's heat and therefore has a temperate influence, promoting warmth and moisture.",
+          "normalized_claim": "Jupiter is temperate, warming and moistening",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.jupiter.temperate",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.87",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter IX Nature (1659 p.61–62)",
+          "original_claim": "Jupiter is a diurnal masculine planet, temperately hot and moist, airy, sanguine.",
+          "normalized_claim": "Jupiter is temperate, warming and moistening",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function"
+        },
+        {
+          "concept_id": "claim.jupiter.benefic",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "school": "hellenistic",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Tetrabiblos Book I Chapter V (Ashmand p.14)",
+          "original_claim": "Jupiter is classed benefic because heat and moisture predominate in a temperate mix.",
+          "normalized_claim": "Jupiter is traditionally benefic",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "polarity"
+        },
+        {
+          "concept_id": "claim.jupiter.benefic",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.87",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter IX Nature (1659 p.61–62)",
+          "original_claim": "Jupiter is the greater fortune, author of temperance, modesty, sobriety, justice.",
+          "normalized_claim": "Jupiter is traditionally benefic",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "polarity"
+        },
+        {
+          "concept_id": "claim.jupiter.well_placed",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.87",
+          "school": "traditional_horary",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "Book I Chapter IX Manners when well placed (1659 p.61–62)",
+          "original_claim": "When well placed: magnanimous, faithful, fair-dealing, charitable, liberal, just, prudent, indulgent to wife and children.",
+          "normalized_claim": "Dignified Jupiter: magnanimous, just, liberal, fair-dealing",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "positive_expression"
+        }
+      ]
+    },
+    {
+      "object_id": "astro.object.saturn",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Saturn",
+      "machine_entity_code": "astrology.planet.saturn",
+      "theme_clusters": [
+        "work",
+        "timing"
+      ],
+      "polarity": [
+        "challenging",
+        "constructive"
+      ],
+      "temporal_class": "slow",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "function": "cooling quality operating by distance from heat",
+      "themes": [
+        "cold",
+        "dryness",
+        "slowness",
+        "solitude",
+        "austerity"
+      ],
+      "positive_expression": "reserved, patient, austere, grave labour",
+      "shadow": "excess cold as destructive; suspicion, envy, sluggish discontent",
+      "domains": {
+        "relationships": "solitude, reserved speech, severity in contact",
+        "money": "solicitous of goods when dignified; covetous when not",
+        "work": "patient labour, slow endurance, austere effort",
+        "self": "melancholy temperament; gravity or mistrust"
+      },
+      "tempo": "very_slow",
+      "provenance": [
+        {
+          "concept_id": "claim.saturn.cold",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "locus": "Tetrabiblos Book I Chapter IV (Ashmand p.13)",
+          "school": "hellenistic",
+          "original_claim": "Saturn mainly produces cold, being farthest from solar heat and from earthly vapours.",
+          "normalized_claim": "Saturn's primary quality is cold",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        {
+          "concept_id": "claim.saturn.cold",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.83",
+          "locus": "Book I Chapter VIII Nature (1659 p.57–58)",
+          "school": "traditional_horary",
+          "original_claim": "Saturn is a diurnal planet, cold and dry, being far from the Sun's heat and moist vapours.",
+          "normalized_claim": "Saturn's primary quality is cold",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "function",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        {
+          "concept_id": "claim.saturn.malefic",
+          "source_id": "src.classical.ptolemy_tetrabiblos",
+          "source_class": "classical",
+          "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+          "edition": "Ashmand 1822; Gutenberg ebook 70850",
+          "locus": "Tetrabiblos Book I Chapter V (Ashmand p.14)",
+          "school": "hellenistic",
+          "original_claim": "Saturn is classed malefic, a causer of evil, contrary to the benefics.",
+          "normalized_claim": "Saturn is traditionally malefic",
+          "evidence_tier": "supported",
+          "review_status": "compared",
+          "field": "shadow",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        {
+          "concept_id": "claim.saturn.well_dignified_austere",
+          "source_id": "src.classical.lilly_christian_astrology",
+          "source_class": "classical",
+          "author": "William Lilly",
+          "edition": "Christian Astrology 1659; Wikisource djvu p.83",
+          "locus": "Book I Chapter VIII Manners when well dignified (1659 p.58)",
+          "school": "traditional_horary",
+          "original_claim": "When well dignified: reserved in speech, patient in labour, grave in dispute, austere in conduct.",
+          "normalized_claim": "Dignified Saturn: reserved, patient, austere, grave",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "positive_expression",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      ]
+    }
+  ]
+}

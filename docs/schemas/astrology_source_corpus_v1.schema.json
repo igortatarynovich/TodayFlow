@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.today/schemas/astrology_source_corpus_v1.schema.json",
+  "title": "Astrology Interpretation Library — source corpus v1",
+  "description": "Research corpus registry. Not a dump of copyrighted text. legal_status is a research flag, not a lawyer sign-off.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "sources"],
+  "properties": {
+    "contract_version": { "const": "astrology_source_corpus_v1" },
+    "notes": { "type": "string", "maxLength": 800 },
+    "sources": {
+      "type": "array",
+      "minItems": 30,
+      "maxItems": 80,
+      "items": { "$ref": "#/$defs/source" }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_class",
+        "title",
+        "author",
+        "role",
+        "use",
+        "legal_status",
+        "ingest_rule",
+        "status"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^src\\.[a-z0-9_]+\\.[a-z0-9_]+$",
+          "maxLength": 80
+        },
+        "source_class": {
+          "type": "string",
+          "enum": ["astronomy", "classical", "traditional", "psychological", "professional"]
+        },
+        "title": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "author": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "role": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "translation_program",
+            "traditional_living",
+            "psychological",
+            "transit",
+            "bridge",
+            "history",
+            "astronomy"
+          ]
+        },
+        "use": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "objects",
+              "signs",
+              "houses",
+              "aspects",
+              "rulerships",
+              "orbs",
+              "natal",
+              "transits",
+              "stars",
+              "history",
+              "ephemeris"
+            ]
+          }
+        },
+        "legal_status": {
+          "type": "string",
+          "enum": [
+            "needs_legal_review",
+            "public_domain_original",
+            "copyrighted_edition",
+            "copyrighted_site",
+            "dual_license_astronomy"
+          ]
+        },
+        "ingest_rule": {
+          "type": "string",
+          "enum": ["research_paraphrase", "facts_only", "do_not_ingest"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["candidate", "approved", "rejected"]
+        },
+        "notes": { "type": "string", "maxLength": 400 }
+      }
+    }
+  }
+}

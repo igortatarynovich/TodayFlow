@@ -1,0 +1,99 @@
+{
+  "contract_version": "astrology_interpretation_v1",
+  "locale_lemmas": ["ru", "en"],
+  "objects": [
+    {
+      "object_id": "astro.object.saturn",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "schema_example",
+      "version": "0.0.0",
+      "phenomenon": "Saturn",
+      "machine_entity_code": "astrology.planet.saturn",
+      "theme_clusters": ["boundaries", "work", "timing"],
+      "polarity": ["challenging", "constructive"],
+      "temporal_class": "slow",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "function": "structure, limits, time, responsibility",
+      "themes": ["discipline", "delay", "mastery", "scarcity-test"],
+      "positive_expression": "mature boundaries and durable form",
+      "shadow": "fear, coldness, paralysis, punitive control",
+      "domains": {
+        "relationships": "seriousness, distance, tests of commitment",
+        "money": "austerity, long-horizon cost, withholding",
+        "work": "duty, competence under constraint, compensation for effort",
+        "self": "self-worth via responsibility; fear of inadequacy"
+      },
+      "tempo": "very_slow",
+      "provenance": [
+        {
+          "concept_id": "claim.schema.saturn.function",
+          "source_id": "schema_example",
+          "source_class": "schema_example",
+          "author": null,
+          "edition": null,
+          "locus": null,
+          "school": null,
+          "original_claim": "Form illustration only — not a reviewed meaning claim",
+          "normalized_claim": "Saturn marks structure and limit",
+          "evidence_tier": "editorial",
+          "review_status": "schema_example",
+          "field": "function",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      ]
+    },
+    {
+      "object_id": "astro.combo.transit.saturn.square.natal.venus",
+      "layer": 5,
+      "type": "transit_to_natal",
+      "status": "schema_example",
+      "version": "0.0.0",
+      "phenomenon": "transiting Saturn square natal Venus",
+      "theme_clusters": ["relationships", "boundaries", "values"],
+      "polarity": ["challenging", "constructive"],
+      "temporal_class": "medium",
+      "confidence": null,
+      "composed_from": [
+        "astro.object.saturn",
+        "astro.aspect.square",
+        "astro.object.venus"
+      ],
+      "curation_reason": "non_compositional",
+      "intensity_rule": "orb",
+      "base_meaning": "ограничения/проверка ценностей, отношений, удовольствия",
+      "psychological": "переоценка привязанностей и собственной ценности",
+      "domains": {
+        "relationships": "дистанция, серьёзность, проверка отношений",
+        "money": "ограничения, осторожность, пересмотр расходов",
+        "work": "ценность собственного труда, компенсация",
+        "self": "проверка ощущения собственной ценности"
+      },
+      "opportunity": "установить более зрелые границы",
+      "risk": "изоляция, холодность, чрезмерный пессимизм",
+      "action": ["пересматривать", "устанавливать границы", "упрощать"],
+      "avoid": "окончательные выводы из временного эмоционального состояния",
+      "provenance": [
+        {
+          "concept_id": "claim.schema.saturn_square_venus.base",
+          "source_id": "schema_example",
+          "source_class": "schema_example",
+          "author": null,
+          "edition": null,
+          "locus": null,
+          "school": null,
+          "original_claim": "Ontology illustration from product brief — not a cited source",
+          "normalized_claim": "Saturn square Venus tests value and attachment",
+          "evidence_tier": "editorial",
+          "review_status": "schema_example",
+          "field": "base_meaning",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      ]
+    }
+  ]
+}

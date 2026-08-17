@@ -35,6 +35,7 @@
 | Геокодинг малых городов; ambiguous → явный выбор | **LIVE** — Nominatim merge; `need_choice` / HTTP 409; FE persist `City, Country`. Smoke: Слуцк; Alexandria / Мозырь → choice |
 | TZ из места/координат при сохранении профиля (не FE-only) | **LIVE** — `birth_timezone_resolve_v1` + engine refuse civil-as-UT |
 | `FLG_SWIEPH` в проде; Moshier не тихий | **LIVE** — `astro/ephe`; `SWISS_EPHEMERIS_PATH=/app/ephe`; metadata `swiss_swieph`; Moshier → 503 `ephemeris_degraded` (не кэшируется) |
+| Swiss Ephemeris **license** (AGPL vs Professional) | **OPEN** — см. §1.4; нет артефакта Professional License в репо |
 | Игорь / Kyiv пересчитаны; кэш инвалидирован | **LIVE** — TZ backfill + Swiss re-warm |
 | ASC/MC сверены с независимым источником | **LIVE** — §1.3 |
 | История `today_tap_events` / tap не переписана | **held** — count неизменен |
@@ -65,7 +66,19 @@ LMT → UT = 10:50 (10°E ≈ +40 min). Не использовать `Europe/Be
 
 Acceptance: несколько угловых минут — **pass**.
 
-### 1.4 Non-goals геометрии
+### 1.4 Swiss Ephemeris license (commercial gate)
+
+Astrodienst dual-license: **AGPL** or **Swiss Ephemeris Professional License**. Choice is required before distributing software or activating a public service that contains Swiss Ephemeris.
+
+**Prod fact:** `todayflow-astro` uses `pyswisseph` + `astro/ephe` (`sepl_18.se1` / `semo_18.se1` / `seas_18.se1`). Public site is live.
+
+**Repo fact:** no signed Professional License / purchase artifact is in this workspace.
+
+This is the **licensing** gate only. Swiss Ephemeris remains the live **runtime input** to Interpretation Library (positions → calculation layer → which knowledge objects are active). License review **does not block** IL-1 research (Greene/Hand/Valens → first 100 objects). Full pipeline `raw sky → objects → Today` already assumes Swiss (or a declared ephemeris replacement) as that input. Do not treat AGPL as “fine for SaaS” without counsel. Horizons/JPL is an astronomy alternative for positions, not a drop-in Swiss replacement without a separate accuracy program.
+
+Meaning sources: [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md) §6.2.
+
+### 1.5 Non-goals геометрии
 
 - Геокодинг до улицы / полный dump GeoNames (Nominatim v1 ок; revisit при дырах)
 - Перепись исторической точности tap
@@ -78,7 +91,7 @@ Acceptance: несколько угловых минут — **pass**.
 Только атомарный уровень — не меняется день ото дня; авторский текст, не LLM.  
 Готово к переносу в код/DATA как lookup-таблицы после sign-off владельца.
 
-**Не храним:** позиции («Луна в Овне») и комбинации — LLM синтезирует из атомов.
+**Не храним как полный каталог:** позиции («Луна в Овне») и все комбинации. Default — Composition Engine из атомов. LLM **не** решает значение комбинации; выражает pack из [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md). Curated Layer 5 — только non-compositional исключения.
 
 **Вне этого черновика (отдельный трек):** 78 карт таро; деталка `COLOR_CATALOG_V1` (уже почти в форме источника).
 
@@ -261,12 +274,12 @@ Owner: подтвердил остальное as-is; эти три пункта
 | Таро | FE `todayTarotCardsRu.ts` vs `tarot_full_deck.json` vs `DATA/reference/tarot/knowledge_v1/` vs смысл из `tarot_explainer.py` | Один SoT; остальное — производные или deprecated |
 | Цвет | BE `day_color_catalog_v1.py` vs FE `todayDayColorGuide.ts` | BE catalog SoT (**20** = 8+A6+B6); FE = `COLOR_HEX` only + honest unavailable; Champagne via `day_favorable` ([COLOR_LAYER_B_V1.md](./color/COLOR_LAYER_B_V1.md)) |
 | Нумерология | Векторы ритма без прозы (`NUMBER_RHYTHM_BY_VALUE`) + machine cores | Заполнить/заменить атомарной прозой из §2.8 |
-| Астро reference | `DATA/astrology_reference/*`, `DATA/reference/astrology/machine/*` | Свести к lookup из §2 (после sign-off) |
+| Астро reference | `DATA/astrology_reference/*`, `DATA/reference/astrology/machine/*` | Identity/орбис → §2; **смысл** → [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md) |
 | Валентность аспектов | Литералы в `sphere_score_v0` / `top_driver_v1` | Lookup из §2.4 / `aspects.json` |
 
 ### Принцип
 
-Ни один генератор (`day_scenario`, chorus, explainers, `hook_reveal`, `domain_verdicts`, …) не хранит собственное значение планеты / знака / аспекта / числа / карты / цвета. Получает структурированный контекст из фундамента и только компонует текст.
+Ни один генератор (`day_scenario`, chorus, explainers, `hook_reveal`, `domain_verdicts`, …) не хранит собственное значение планеты / знака / аспекта / числа / карты / цвета. Identity/константы — из фундамента; астрологический *смысл* — из Interpretation Library; генератор только выражает pack.
 
 Аналог правила `day_facts_v1` как SoT дня — уровнем ниже, для строительных блоков.  
 Новые генераторы: документ + тест на чтение из фундамента (§5).

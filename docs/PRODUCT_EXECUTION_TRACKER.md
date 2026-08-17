@@ -28,7 +28,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-17):** **Interpretation Library IL-1** — methodology LOCKED. First draft: `astro.object.saturn` (Ptolemy I.4–I.5 + Lilly CA I.8). CORE blocked until Valens / Houlding-Skyscript / Greene / Hand are ingested on real loci. Next atom the same way. Swiss = runtime ephemeris input; **licensing** = parallel legal gate. Canon: `docs/astrology/INTERPRETATION_LIBRARY_V1.md`.
+**NOW (FOUNDATION, 2026-08-17):** **Interpretation Library IL-1** — methodology LOCKED. Drafts: classical seven (`sun`…`saturn`) from Ptolemy I.4–I.7 + Lilly CA I.8–I.14. CORE blocked. Concrete gaps logged (Moon/Venus temperature; Mercury native quality). Next: remaining Layer-1 atoms the calc layer emits (ASC/MC) only with opened loci — not Uranus/Neptune/Pluto from these two sources. Swiss = runtime input; **licensing** = parallel legal gate. Canon: `docs/astrology/INTERPRETATION_LIBRARY_V1.md`.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 

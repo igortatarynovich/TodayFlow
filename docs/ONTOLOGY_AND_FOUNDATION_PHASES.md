@@ -71,6 +71,7 @@ flowchart TB
 | Домен | Сущности (примеры) | Канон / артефакт | Статус |
 |-------|-------------------|------------------|--------|
 | **Astrology Reference** | ZodiacSign, Planet, House, Aspect (atomic); composites → Composition Engine | AMC + ACM-Compose; `DATA/reference/astrology/machine/` | partial (39 atomic P0.8 ✅) |
+| **Astrology Interpretation Library** | semantic knowledge objects (layers 1–5); not user prose | [INTERPRETATION_LIBRARY_V1](astrology/INTERPRETATION_LIBRARY_V1.md) | IL-0 schema ✅; IL-1 in progress (drafts, not `active`) |
 | **Tarot Reference** | TarotCard, Spread, SpreadPosition | P0.3–P0.4; `DATA/reference/tarot/` | partial (22 major machine) |
 | **Numerology Reference** | CoreNumber, MasterNumber, PersonalDay/Month/Year, LetterMapping | P0.5; `DATA/reference/numerology/` | partial (39 machine) |
 | **Symbolic Assets Reference** | Stone, Symbol, SKU, stage/month gates | [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) | missing catalog |
@@ -240,6 +241,8 @@ P0.5 Numerology machine ✅
 
 ## 10. Changelog
 
+- **1.0.2 (2026-08-17)** — IL-1 in progress (draft objects, not `active`).
+- **1.0.1 (2026-08-17)** — Astrology Interpretation Library row (IL-0 schema; catalog empty).
 - **1.0 (2026-05-31)** — пять фаз, текущий этап «онтология мира», 80% thesis, запрет consumer-first, mapping P0 + PIL.
 
 ---

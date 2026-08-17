@@ -70,13 +70,16 @@ Foundation **не** Meaning SoT. «Day Story» как единый контей�
 Цепочка смысла (обязательна для Story):
 
 ```text
-факт (Source)
-  → значение в выбранной системе (Reference / school canon)
+факт (Source / Swiss)
+  → астрологическая конструкция (Calculation layer)
+  → значение в выбранной системе (Interpretation Library)
   → персональная активация (L3, если доступна)
   → сфера жизни
   → практическое действие
   → место в более длинном цикле
 ```
+
+Для западной астрологии: факт = Swiss/JPL; конструкции (аспект, дом, транзит) = calculation layer; «значение в системе» = [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md). LLM не заполняет этот шаг.
 
 Без этой цепочки получается общий гороскоп. С ней — модель дня.
 

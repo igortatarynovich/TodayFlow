@@ -10,7 +10,10 @@ Dedicated microservice for astronomical calculations (Sun/Moon/Rising symbols, h
 ## Stack
 - Python 3.11
 - FastAPI + Uvicorn
-- `pyswisseph` (install locally for precise chart calculations)
+- `pyswisseph` (Swiss Ephemeris; **dual license AGPL / Professional** — see `docs/foundation_v1.md` §1.4)
+
+## License
+Swiss Ephemeris is not “just a pip package.” Production must have either AGPL-compliant distribution or a Professional License from Astrodienst. This repo does not currently store that license.
 
 ## Running locally
 ```bash
