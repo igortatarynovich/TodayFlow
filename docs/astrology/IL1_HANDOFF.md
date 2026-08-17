@@ -3,7 +3,9 @@
 **Date:** 2026-08-17  
 **Owner intent:** continue **Interpretation Library IL-1 ingest**. Do not polish the methodology document. Do not reopen sequence / ontology / evidence.
 
-Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.10** first traditional school_class after **1.3.9** Valens/Lilly I.19).  
+**Next school-class (2026-08-17):** psychological or professional (**Greene / Hand**), *when that book is physically opened*. Do not pad object count with more classical/traditional loci as a substitute. Houlding remaining houses / Valens I.2 claims-only remain valid if those books are not open — they are not the next *school-class* signal.
+
+Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.10** first traditional school_class; `876e6f98`).  
 Today Meaning SoT remains [`docs/today/TODAY_CONTENT_PIPELINE_V1.md`](../today/TODAY_CONTENT_PIPELINE_V1.md). IL is pipeline step 2 lookup only.
 
 Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
@@ -15,9 +17,10 @@ Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
 1. Read this file + IL § Sequence + **Activation gates** + §6 ingest + Layer 1–4 fill-rules.
 2. 1.3.8 activation gates are **committed** (`3c62a5c6`). Do not reopen them.
 3. IL ingest lives on short-lived `il/il-1-ingest` (from that tip). Do **not** mix Profile v2 / Foundation UI / landing / Trust / motion into IL commits. Working tree on the host often has those dirty; leave them.
-4. Then ingest **only newly opened loci**. Next value is collisions, not document prose.
+4. Then ingest **only newly opened loci**. Highest-value next class = psychological/professional. Do not grow the catalog with extra classical/traditional rows just to raise the object count.
 
-v1.3.8 is closed: `requires_action` and Layer 5 stay draft→active gates, not IL-1 re-ontology.
+v1.3.8 is closed: `requires_action` and Layer 5 stay draft→active gates, not IL-1 re-ontology.  
+`876e6f98` is closed as first traditional class: classical layer not rewritten.
 
 ---
 
@@ -62,7 +65,7 @@ Public brand copy SoT: [`docs/content/TODAYFLOW_TRUST_LAYER.md`](../content/TODA
 | `3c62a5c6` | Activation gates 1.3.8 (requires_action / Layer 5 candidates) + handoff |
 | `5dee20a5` | Trust Layer (brand) — **not** IL ingest |
 
-IL ingest after 1.3.8: branch `il/il-1-ingest`. `edc37221` Valens/Lilly I.19. Next SHA: Houlding traditional class.
+IL ingest after 1.3.8: branch `il/il-1-ingest`. `edc37221` Valens/Lilly I.19. `876e6f98` Houlding traditional class.
 
 ### Catalog (all `draft`, nothing `active`)
 
@@ -143,9 +146,9 @@ Saturn is deliberately poor vs modern astrology: cooling quality / cold / drynes
 21. Lilly I.19: conjunction “very improperly” an aspect; orbs are planetary moieties, two tables from memory — not an IL aspect field.
 22. Houlding: orbs belong to planets; modern aspect-orbs are a 20th-century simplification. Compared with Lilly I.19 as planetary-not-aspectual. Numbers not copied onto objects.
 23. Houlding: square is not simply damaging (planet/dignity/reception). Lilly I.19 keeps imperfect enmity. Not averaged into `interaction`. Planet-dependent quality is IL-2.
-24. Houlding 1st house adds personality/mind. Lilly I.7 is life/stature/complexion. Domain not rewritten.
+24. Houlding 1st house adds personality/mind. Lilly I.7 is life/stature/complexion. Domain not rewritten. Provenance is product, not academic: layers coexist; do not silently ship a modern identity/personality object.
 25. Servants/employees: Lilly I.7 + Houlding 6th compared. Valens IX still puts slaves in XII.
-26. Known enemies: Houlding moves secret→7th once known. Lilly VII-public vs XII-private vs Valens XII-enemies remain distinct.
+26. Known enemies: Houlding moves secret→7th once known. Lilly VII-public vs XII-private vs Valens XII-enemies remain distinct. These are different *category systems* for life, not a disagreement about one lemma — do not consensus-score them into one house.
 27. Houlding 12th “unconscious / premature development” is later overlay on a traditional page — not Layer 3 meaning.
 
 CORE cannot be scored yet (classical + traditional opened; psychological and professional pending). Do not teach “Saturn = structure” as CORE.
@@ -154,16 +157,13 @@ CORE cannot be scored yet (classical + traditional opened; psychological and pro
 
 ## 3. What to do next
 
-**Only newly opened loci.** Same pipeline: read → paraphrase claim → `gap_notes` on collision → maybe normalize object **if** required slots are attested without invention.
+**Highest-value next open:** Greene (*Saturn* / luminaries / relating) or Hand (*Planets in Transit* / *Horoscope Symbols*) — **only from a physically opened locus**. That is the first `psychological` / `professional` school_class. Test: can the Canon hold cold/dry/malefic *and* structure/maturation/boundaries as distinct layers, without rewriting one as the other.
 
-Useful next opens (optional, not a backlog to invent from memory):
-
-- Remaining Houlding house extracts 2–5, 8–11 (same book; claims only where slots already exist)
-- Remaining Valens I.2 signs (Taurus–Pisces) — claims only, no objects
-- Greene / Hand / Sasportas / Arroyo / George — **only after those books are actually opened** (first psychological / professional class)
+**If those books are not open:** remaining Houlding house extracts (2–5, 8–11) and Valens I.2 signs (claims-only, no objects) are still correct work. They are **not** a substitute for the next school-class.
 
 Do **not**:
 
+- pad classical/traditional loci to raise the object counter
 - polish Saturn/houses/aspects to a modern average
 - create Layer 2 sign objects from QUALITY lines
 - create Layer 5 combo objects yet (candidates list exists; wait until atoms are denser **or** owner asks — still candidates, not proven exceptions)
@@ -171,6 +171,7 @@ Do **not**:
 - wire runtime / Today prompts
 - expand schema for `unknown` / `not_evidenced`
 - open a parallel “canonical v2”
+- backfill Greene/Hand from model memory
 
 ### Ingest recipe
 
@@ -225,6 +226,8 @@ Do not polish the IL document. Do not reopen methodology/ontology/schema.
 Do not materialize 12 sign objects. Do not set status=active.
 Do not mix Profile/Trust/landing/motion into IL commits.
 
-1.3.8 activation gates are committed. v1.3.8 is closed (draft→active gates, not IL-1 re-ontology).
-Ingest only newly opened loci (same claims → object pipeline). Next value is real collisions, not a modern average.
+1.3.8 gates and first traditional class (Houlding, 876e6f98) are closed.
+Next school-class = Greene/Hand when physically opened (psychological/professional).
+Do not pad classical/traditional loci to raise the object count.
+24 drafts / 0 active / CORE unscored is correct until that comparison.
 ```
