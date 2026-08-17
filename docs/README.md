@@ -41,6 +41,7 @@
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md)
 - [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md)
 - [ASTROLOGY_MACHINE_CONTRACT.md](./ASTROLOGY_MACHINE_CONTRACT.md) · [ASTROLOGY_COMPOSITION_MODEL.md](./ASTROLOGY_COMPOSITION_MODEL.md) · [CROSS_DOMAIN_MACHINE_VALIDATION.md](./CROSS_DOMAIN_MACHINE_VALIDATION.md)
+- Astrology meaning: [astrology/INTERPRETATION_LIBRARY_V1.md](./astrology/INTERPRETATION_LIBRARY_V1.md) — **Interpretation Library** (semantic objects; IL-1 drafts, nothing `active`). Corpus: `DATA/reference/astrology/interpretation_v1/source_corpus_v1.json`. Index: [astrology/_INDEX.md](./astrology/_INDEX.md)
 - [EVOLUTION_CALCULATION_CONTRACT.md](./EVOLUTION_CALCULATION_CONTRACT.md) — **запрет `evolution_stage` в API** до UEM-2
 - Tarot: [tarot/TAROT_INTERPRETATION_ENGINE_V1.md](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) · [tarot/TAROT_CARD_BASE_V1.md](./tarot/TAROT_CARD_BASE_V1.md) (base meanings SoT) · [tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md)
 - Numerology: [numerology/NUMBER_BASE_V1.md](./numerology/NUMBER_BASE_V1.md) (digit SoT) · [numerology/NUMEROLOGY_INTEGRATION_SPEC_V1.md](./numerology/NUMEROLOGY_INTEGRATION_SPEC_V1.md)
@@ -48,7 +49,7 @@
 
 ## Today · Profile (experience)
 
-**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation.  
+**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. Step 2 lookup = [astrology/INTERPRETATION_LIBRARY_V1.md](./astrology/INTERPRETATION_LIBRARY_V1.md) (не второй канон дня).  
 **Today product cycle (экраны):** [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — TODAY → RITUAL → MY DAY → EVENING. Не плодить второй канон смысла.
 
 - [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный канон смысла / content pipeline Today**

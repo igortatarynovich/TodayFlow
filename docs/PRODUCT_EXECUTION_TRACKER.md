@@ -16,6 +16,48 @@ Status: Active working document
 - **Backward compatible?** yes — UI unchanged until DS pass
 - **Next:** owner asks → primitives + planet restyle + natal rebuild together (chart must not get a third art language). Do not open Profile viewport 2 for this.
 
+**NOW (PROFILE VIEWPORT 1, 2026-08-17):** First `/profile` frame @390 = portrait → name → `recognition_line` → one signal. `identity_core` is disclosure, not the line. Not Today, not environment, not assets.
+
+## Architecture impact — Profile first viewport (2026-08-17)
+
+- **SoT before:** Act 1 preferred `identity_core` as the visible body; step badge «Твоя суть»; name via `clamp()` to 52px. Journey still a document below.
+- **SoT after:** First viewport slots = portrait · Hero name · Body `recognition_line` (≤120) · one signal («Почему именно ты»). `identity_core` opens on that signal. Why+ still on scroll, not in the first frame. Locked form Step 1 in PROFILE_PRODUCT_JOURNEY_FORMS_V1.
+- **Public contract changed?** no
+- **Migration required?** no — FE composition only
+- **Canon updated?** no new file — live aligned to existing locked form
+- **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
+- **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
+
+**NOW (FOUNDATION, 2026-08-17):** **Interpretation Library IL-1** — methodology LOCKED. First draft: `astro.object.saturn` (Ptolemy I.4–I.5 + Lilly CA I.8). CORE blocked until Valens / Houlding-Skyscript / Greene / Hand are ingested on real loci. Next atom the same way. Swiss = runtime ephemeris input; **licensing** = parallel legal gate. Canon: `docs/astrology/INTERPRETATION_LIBRARY_V1.md`.
+
+**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
+
+## Architecture impact — IL sequence lock (2026-08-17)
+
+- **SoT before:** IL-0.5 / IL-0.6 / IL-5 / IL-6 numbering; gold combos framed as Today drivers; Swiss phrased as outside IL.
+- **SoT after:** IL-0 ✅ · IL-1 ~100 surface-neutral objects · IL-2 composition rules · IL-3 engine · IL-4 expression. Runtime: Swiss/JPL → calc → IL meaning → engine → expression. Only **licensing** is a parallel gate. IL-1 objects map to calc-layer entities. Methodology frozen until IL-1 closes.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL v1.3 Runtime stack · Foundation §1.4
+- **Backward compatible?** yes
+
+## Architecture impact — Interpretation Library corpus (2026-08-17)
+
+- **SoT before:** IL-0 named source *classes*; no corpus, no evidence tiers, provenance was thin.
+- **SoT after:** claims extracted from a multi-school corpus (classical / traditional / psychological / professional); consensus → `core|supported|school_specific|editorial`; no copyrighted dump; astronomy separate (Swiss facts-only). Today Meaning SoT remains the pipeline.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL v1.1 §6 · source_corpus_v1.json · Foundation §1.4 (Swiss license OPEN)
+- **Backward compatible?** yes
+
+## Architecture impact — Interpretation Library (2026-08-17)
+
+- **SoT before:** TODAY_CONTENT_PIPELINE_V1 step 2 lookup named as a hole; LLM still invents primitive meanings.
+- **SoT after:** Interpretation Library = that lookup (atoms first, curated combos only if non-compositional). Cluster + profile relevance change **priority**, not astrological meaning. LLM expresses packs. Today Meaning SoT remains the pipeline (not a second day-canon).
+- **Public contract changed?** no (no runtime wiring yet)
+- **Migration required?** no until IL-4
+- **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` · pipeline §2 · AMC §2.2 · ACM · Foundation §2 · DAY_SOURCES chain · REFERENCE §2.1/§6
+- **Backward compatible?** yes — generators unchanged until Engine consumes packs
 
 **CANON LOCKED (2026-08-15):** **Один Today Meaning SoT** = [TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md). **Один product cycle** = [TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY → RITUAL → MY DAY → EVENING). SCENARIO_V3 six-block **superseded** as product map. DAY_SCENARIO_V1 / B5 demoted (не канон смысла). DAY_SOURCES = facts only.
 
