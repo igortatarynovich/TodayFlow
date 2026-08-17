@@ -518,6 +518,27 @@
   border-radius: 0;
 }
 
+/*
+ * First Today chips sit in ConversationThread, not ScreenFlow. overflow:hidden
+ * on the story pane trapped the wheel — only the sibling sidebar still scrolled.
+ */
+.appMain:has([data-testid="conversation-thread-first-today"]),
+.productWebMain:has([data-testid="conversation-thread-first-today"]),
+.productWebMainProfileV2:has([data-testid="conversation-thread-first-today"]),
+.productWebMainV2:has([data-testid="conversation-thread-first-today"]) {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  height: auto;
+  min-height: 100%;
+}
+
+.productWebContentStory:has([data-testid="conversation-thread-first-today"]) {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  height: auto;
+  min-height: 100%;
+}
+
 @media (max-width: 63.99rem) {
   /* Tab bar clearance is owned by ScreenFlow --tf-ds-nav-h, not appMain padding. */
   .appMain:has(.productWebContentStory) {
