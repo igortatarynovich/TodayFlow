@@ -761,6 +761,38 @@
           "evidence_tier": "supported",
           "review_status": "compared",
           "field": "themes"
+        },
+        {
+          "concept_id": "claim.saturn.psychic_process",
+          "source_id": "src.psychological.greene_saturn",
+          "source_class": "psychological",
+          "author": "Liz Greene",
+          "edition": "Weiser Classics 2021; ISBN 978-1-57863-735-5; Red Wheel/Weiser Calaméo preview",
+          "locus": "Introduction (2021 p.2)",
+          "school": "psychological_jungian",
+          "original_claim": "Saturn is not only pain, restriction, and discipline; it also names a psychic process that can use those experiences toward greater consciousness and fulfilment.",
+          "normalized_claim": "Saturn is a psychological process that can turn painful constraint into greater consciousness",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "function",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        {
+          "concept_id": "claim.saturn.pain_self_discovery",
+          "source_id": "src.psychological.greene_saturn",
+          "source_class": "psychological",
+          "author": "Liz Greene",
+          "edition": "Weiser Classics 2021; ISBN 978-1-57863-735-5; Red Wheel/Weiser Calaméo preview",
+          "locus": "Introduction (2021 p.3-4)",
+          "school": "psychological_jungian",
+          "original_claim": "Frustrating Saturnian experience is educational; people attempt self-discovery when pain leaves no other choice, and self-understanding is the path to eventual freedom.",
+          "normalized_claim": "Painful Saturnian experience can lead to self-discovery and eventual freedom",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "field": "themes",
+          "reviewer": null,
+          "reviewed_at": null
         }
       ]
     },

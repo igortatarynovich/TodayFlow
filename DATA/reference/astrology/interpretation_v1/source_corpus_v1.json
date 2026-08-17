@@ -194,7 +194,8 @@
       "use": ["objects", "natal"],
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
-      "status": "candidate"
+      "status": "candidate",
+      "notes": "Opened Weiser Classics 2021 Introduction via Red Wheel/Weiser Calaméo preview (ISBN 978-1-57863-735-5; Intro p.1-8). Paraphrase only. Watery ch.1 in same preview not ingested."
     },
     {
       "source_id": "src.psychological.greene_relating",

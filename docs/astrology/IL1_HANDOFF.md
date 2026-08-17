@@ -1,13 +1,13 @@
 # IL-1 handoff — next agent
 
 **Date:** 2026-08-17  
-**Owner intent:** IL-1 catalog is **frozen for conceptual additions**. Transfer SHA: **`ecb4cbe4`**. Next agent opens this file, receives a physically opened Greene/Hand locus, and continues `locus → claims → normalization → draft`. Do not redesign TodayFlow. Do not polish the methodology document. Do not reopen sequence / ontology / evidence.
+**Owner intent:** IL-1 catalog is **frozen for conceptual additions**. Catalog/priority transfer SHA: **`ecb4cbe4`**. First psychological class is opened (Greene *Saturn* Introduction). Continue `locus → claims → normalization → draft`. Do not redesign TodayFlow. Do not polish the methodology document. Do not reopen sequence / ontology / evidence.
 
-**Catalog state (correct, not a gap):** 24 draft / 0 active / 0 sign objects / CORE unscored.
+**Catalog state (correct, not a gap):** 24 draft / 0 active / 0 sign objects / CORE unscored. Saturn `function` remains classical cooling/cold; Greene psychic-process sits beside it as `school_specific`.
 
-**Next school-class:** first physically opened **Greene or Hand**. That experiment tests whether the Canon can hold historical and modern semantics side by side without rewriting the first. Until that locus is in hand, do not add more classical/traditional ingest as busywork.
+**Research-first (operational):** the agent must search legally available loci before asking the owner. Order: Google Books preview → publisher previews (Calaméo / Weiser) → Open Library / controlled borrowing → library sources. Owner is asked only when a **specific** needed locus (edition + pages X–Y) is closed by paywall or borrow restriction. Do not ask the owner to buy, photograph, or paraphrase a book as the default step.
 
-Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.10** first traditional school_class; `876e6f98`).  
+Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.11** first psychological school_class).  
 Today Meaning SoT remains [`docs/today/TODAY_CONTENT_PIPELINE_V1.md`](../today/TODAY_CONTENT_PIPELINE_V1.md). IL is pipeline step 2 lookup only.
 
 Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
@@ -19,11 +19,12 @@ Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
 1. Read this file + IL § Sequence + **Activation gates** + §6 ingest + Layer 1–4 fill-rules.
 2. 1.3.8 activation gates are **committed** (`3c62a5c6`). Do not reopen them.
 3. IL ingest lives on short-lived `il/il-1-ingest` (from that tip). Do **not** mix Profile v2 / Foundation UI / landing / Trust / motion into IL commits. Working tree on the host often has those dirty; leave them.
-4. If a Greene/Hand locus is in hand: ingest it (`locus → claims → normalization → draft`). If not: **stop**. Do not invent work.
+4. Search a legally available next locus yourself (research-first rule above). If found: ingest (`locus → claims → normalization → draft`). If a **specific** page is closed: ask the owner for pages X–Y of that edition. If nothing is needed: **stop**. Do not pad classical/traditional ingest. Do not invent work.
 
 v1.3.8 is closed: `requires_action` and Layer 5 stay draft→active gates, not IL-1 re-ontology.  
 `876e6f98` is closed as first traditional class: classical layer not rewritten.  
-`ecb4cbe4` is the transfer point: next school-class = psychological/professional; 24/0/CORE unscored is correct.
+`ecb4cbe4` is the catalog/priority transfer: do not pad traditional.  
+`9a0fe7c2` closed leftover busywork only; catalog unchanged. First psychological class = Greene Introduction (1.3.11).
 
 ---
 
@@ -38,7 +39,7 @@ This sequence *is* the knowledge engine (atoms + provenance → composition rule
 - Swiss = runtime ephemeris input. **Licensing** is a parallel legal gate, not a research blocker. Do not write “Swiss outside IL.”
 - If sources do not fit the ontology: **log a concrete gap** from real material. Do **not** expand the schema “just in case.”
 - Canonical objects must **not be richer than the evidence base**. Do not polish drafts into a modern average.
-- Psychological planet layer waits for **opened** Greene/Hand/etc. — no backfill from model memory.
+- Remaining psychological / professional lemmas wait for **opened** pages — no backfill from model memory or jacket copy.
 - Ingest = paraphrase + locus, never paste translations/scrapes.
 - Evidence: `core` | `supported` | `school_specific` | `editorial`. CORE ≈ intersection of ingested **school classes**, not two classical authors. Engine primary theme only from `core` ∪ `supported`.
 - meaning ≠ relevance ≠ expression. Profile changes **priority**, not meaning. One object feeds Profile / Today / Compatibility.
@@ -68,7 +69,7 @@ Public brand copy SoT: [`docs/content/TODAYFLOW_TRUST_LAYER.md`](../content/TODA
 | `3c62a5c6` | Activation gates 1.3.8 (requires_action / Layer 5 candidates) + handoff |
 | `5dee20a5` | Trust Layer (brand) — **not** IL ingest |
 
-IL ingest after 1.3.8: branch `il/il-1-ingest`. `edc37221` Valens/Lilly I.19. `876e6f98` Houlding traditional class. **`ecb4cbe4` = transfer** (next class = Greene/Hand; do not pad).
+IL ingest after 1.3.8: branch `il/il-1-ingest`. `edc37221` Valens/Lilly I.19. `876e6f98` Houlding traditional class. **`ecb4cbe4` = catalog/priority transfer** (do not pad traditional). `9a0fe7c2` leftover freeze only. **1.3.11** = first psychological class (Greene Introduction).
 
 ### Catalog (all `draft`, nothing `active`)
 
@@ -81,13 +82,13 @@ Runtime: `DATA/reference/astrology/interpretation_v1/`
 
 | Layer | IDs | Provenance honesty |
 |-------|-----|--------------------|
-| 1 planets | `astro.object.{sun,moon,mercury,venus,mars,jupiter,saturn}` | Ptolemy I.4–I.7 + Lilly CA I.8–I.14 + Valens I.1. `function` still elemental (Ptolemy/Lilly), not a Valens catalog average |
+| 1 planets | `astro.object.{sun,moon,mercury,venus,mars,jupiter,saturn}` | Ptolemy I.4–I.7 + Lilly CA I.8–I.14 + Valens I.1. Saturn also Greene Introduction (psychic-process `school_specific`). `function` still elemental (Ptolemy/Lilly), not a Valens or Greene average |
 | 2 signs | **claims only** `astro.sign.{aries…pisces}` + `astro.sign.classifications` | Lilly QUALITY; Valens I.2 Aries fiery *and* watery. Psych slots unattested |
 | 3 houses | `astro.house.01`–`12` | Object `domain` still Lilly CA I.7. Valens IX compared on thin lemmas. Houlding houses extract opened for 1/6/7/12 only — personality and known-enemies rule not copied into `domain` |
 | 4 aspects | conjunction / sextile / square / trine / opposition | Geometry compared. Planetary orbs compared (Lilly I.19 + Houlding). Square-not-simply-bad is school_specific. `interaction` not rewritten |
 | 5 combos | none materialized | gold list in IL §8 = candidates |
 
-Saturn is deliberately poor vs modern astrology: cooling quality / cold / dryness / slowness / solitude / austerity — **not** structure / limits / maturity.
+Saturn object slots stay deliberately poor vs modern astrology: cooling quality / cold / dryness / slowness / solitude / austerity. Greene psychic-process lives in the ledger beside them. **Not** structure / limits / maturity.
 
 ### Opened loci (citable; ingest only from these)
 
@@ -124,6 +125,12 @@ Saturn is deliberately poor vs modern astrology: cooling quality / cold / drynes
 - *The Classical Origin and Traditional Use of Aspects* (Traditional Astrologer Mag. 8, 1995; Skyscript 2004)
 - *The Houses: Temples of the Sky* 1st ed. 1996 extracts: 1st, 6th, 7th, 12th (Skyscript 2003)
 
+**Greene, Saturn: A New Look at an Old Devil** (copyrighted; paraphrase only):
+
+- Weiser Classics 2021 (ISBN 978-1-57863-735-5; 288 pp.). Introduction starts p.1. Opened via Red Wheel/Weiser Calaméo two-chapter preview: Introduction p.1–8.
+- Same preview includes ch.1 watery signs/houses (p.9–34) — **not ingested** (planet-in-house is Layer 5).
+- 2011 Weiser and 1976 Open Library `saturnnewlookato00gree` exist; Introduction did not require borrow.
+
 ### Collisions already logged (do not “fix”)
 
 1. Moon/Venus temperature: Ptolemy moisture + moderate heat vs Lilly cold+moist.
@@ -153,18 +160,19 @@ Saturn is deliberately poor vs modern astrology: cooling quality / cold / drynes
 25. Servants/employees: Lilly I.7 + Houlding 6th compared. Valens IX still puts slaves in XII.
 26. Known enemies: Houlding moves secret→7th once known. Lilly VII-public vs XII-private vs Valens XII-enemies remain distinct. These are different *category systems* for life, not a disagreement about one lemma — do not consensus-score them into one house.
 27. Houlding 12th “unconscious / premature development” is later overlay on a traditional page — not Layer 3 meaning.
+28. Greene Introduction: Saturn as a psychic process that can use pain/restriction toward self-discovery, greater consciousness, and eventual freedom. This is a different category from Ptolemy/Lilly cold/dry/malefic. Do not rewrite `function`. Do not import structure / limits / maturation / reality from this page or from jacket copy.
 
-CORE cannot be scored yet (classical + traditional opened; psychological and professional pending). Do not teach “Saturn = structure” as CORE.
+CORE cannot be scored yet (classical + traditional + one psychological lemma that does not intersect). Do not teach “Saturn = structure” as CORE.
 
 ---
 
 ## 3. What to do next
 
-**Stop until a Greene or Hand locus is physically opened.** Then ingest that locus. Do not add conceptual layers, school classes, fill-rules, or extra classical/traditional rows before that.
+Search the next legally available **planet-level** locus yourself. Highest value: Robert Hand *Horoscope Symbols*, “The Planets: Core Meanings” → Saturn (Google Books limited preview / publisher channels). Ingest only if that Saturn page is actually readable. Do not pad Greene watery houses from the already-open Calaméo chapter. Do not add conceptual layers, school classes, fill-rules, or extra classical/traditional rows.
 
-The experiment is not object count. It is whether the Canon can keep `cold/dry/malefic` beside `structure/maturation/reality/boundaries` without rewriting the first as the second.
+The experiment continues: keep `cold/dry/malefic` beside the psychological lemma without rewriting the first. Structure / maturation / reality / boundaries still wait for an opened page that actually attests them.
 
-Greene: *Saturn* / luminaries / relating. Hand: *Planets in Transit* / *Horoscope Symbols*. First opened page is enough. Then the ingest recipe below.
+If Hand Core Meanings Saturn is closed: ask the owner for **pages X–Y of that edition**, not “find me Hand.”
 
 Do **not**:
 
@@ -202,6 +210,7 @@ Author for commits (do not `git config`): `TodayFlow Agent <agent@todayflow.app>
 - houses: Lilly `domain` text remains; Valens compared on thin lemmas; Houlding 1/6/7/12 is traditional class without rewriting domain
 - Aries fiery remains `school_specific`, not compared to Ptolemy fire **or** Valens fire (Valens also watery)
 - Lilly I.19 / Houlding orbs not copied onto aspect objects; square-not-simply-bad stays school_specific
+- Saturn `function` remains cooling/cold; Greene psychic-process stays `school_specific`; no `structure` in object themes
 
 ---
 
@@ -233,6 +242,8 @@ Do not mix Profile/Trust/landing/motion into IL commits.
 
 Transfer SHA: ecb4cbe4. Catalog 24 draft / 0 active / 0 signs / CORE unscored is correct.
 Do not add conceptually. Do not pad classical/traditional ingest.
-When a Greene/Hand locus is in hand: locus → claims → normalization → draft.
+Research-first: Google Books → publisher preview → Open Library/CDL → libraries.
+Ask the owner only for a specific closed locus (edition + pages).
+Next: Hand Horoscope Symbols Core Meanings Saturn if legally readable; do not ingest Greene watery houses.
 Do not redesign TodayFlow.
 ```

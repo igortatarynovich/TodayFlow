@@ -333,3 +333,31 @@ def test_houlding_first_traditional_class_not_averaged():
     classes = {r["source_class"] for obj in objects["objects"] for r in obj["provenance"]}
     assert "traditional" in classes
     assert all(obj["status"] != "active" for obj in objects["objects"])
+
+
+def test_greene_first_psychological_class_not_averaged():
+    """Opened Greene Introduction is a new school_class; it must not rewrite Saturn or score CORE."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    saturn = next(obj for obj in objects["objects"] if obj["object_id"] == "astro.object.saturn")
+    claims = json.loads((CLAIMS_DIR / "astro.object.saturn.json").read_text(encoding="utf-8"))
+    assert saturn["function"] == "cooling quality operating by distance from heat"
+    assert saturn["themes"] == ["cold", "dryness", "slowness", "solitude", "austerity"]
+    assert saturn["status"] == "draft"
+    used = {row["source_id"] for row in claims["claims"]}
+    pending = set(claims["pending_source_ids"])
+    assert "src.psychological.greene_saturn" in used
+    assert "src.psychological.greene_saturn" not in pending
+    psychic = next(row for row in claims["claims"] if row["concept_id"] == "claim.saturn.psychic_process")
+    pain = next(row for row in claims["claims"] if row["concept_id"] == "claim.saturn.pain_self_discovery")
+    assert psychic["source_class"] == "psychological"
+    assert psychic["evidence_tier"] == "school_specific"
+    assert psychic["review_status"] == "extracted"
+    assert pain["evidence_tier"] == "school_specific"
+    assert all(row["evidence_tier"] != "core" for row in claims["claims"])
+    notes = " ".join(claims["gap_notes"]).lower()
+    assert "psychic process" in notes or "psychic-process" in notes
+    assert "structure" in notes
+    assert "layer 5" in notes
+    provenance_classes = {row["source_class"] for row in saturn["provenance"]}
+    assert "psychological" in provenance_classes
+    assert not any("structure" in theme for theme in saturn["themes"])

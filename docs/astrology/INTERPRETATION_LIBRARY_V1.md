@@ -182,7 +182,7 @@ v1.1: North Node · South Node · Chiron · Lilith (Mean Apogee) — identity у
 
 Не статья «Что такое Сатурн».
 
-**IL-1 fill:** Valens I.1 — topical/significator catalog (sect, colour, taste), не Ptolemy/Lilly elemental qualities. Saturn injuries from cold+moisture не схлопывать в dryness. `function` черновиков не усреднять.
+**IL-1 fill:** Valens I.1 — topical/significator catalog (sect, colour, taste), не Ptolemy/Lilly elemental qualities. Saturn injuries from cold+moisture не схлопывать в dryness. Greene Weiser Classics 2021 Introduction — первый `psychological` school_class: psychic process / pain-toward-self-discovery остаются `school_specific` рядом с cold/dry/malefic. `function` черновиков не усреднять; structure / limits / maturation / reality не импортировать с этой страницы.
 
 ### Layer 2 — Signs
 
@@ -432,7 +432,7 @@ IL-1 research artifacts (pipeline, not a new ontology): `DATA/reference/astrolog
 
 Разница обязательна:
 
-- Пока CORE по Saturn **не scored**: открыты только classical loci (холод / сухость / malefic). *Structure / limits / maturity* — не CORE до Greene/Hand (или иного открытого психологического/профессионального локуса).
+- Пока CORE по Saturn **не scored**: classical cold/dry/malefic и Greene psychic-process — разные категории, не пересечение. *Structure / limits / maturity* на открытом Introduction **не attested** и не CORE.
 - не CORE: *Saturn square Venus значит, что партнёр отдалится*
 
 Канон — не усреднённая «одна астрология». Provenance держит слои различимыми. Когда придут Greene, Hand, Sasportas, Arroyo, George: смотреть, что с классическим claim произошло (продолжено / переосмыслено / психологизировано / заменено). Классические lemmas **не затирать** современным пакетом.
@@ -540,6 +540,7 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 10. Changelog
 
+- **1.3.11 (2026-08-17)** — IL-1 ingest (no methodology change): first `psychological` school_class from opened Greene *Saturn* Introduction (Weiser Classics 2021 p.1–8, publisher Calaméo preview). Psychic-process / pain-toward-self-discovery stay `school_specific`; Saturn `function` not rewritten; structure/limits/maturation not imported. Nothing `active`. CORE still unscored.
 - **1.3.10 (2026-08-17)** — IL-1 ingest (no methodology change): first `traditional` school_class from opened Houlding loci (aspects 1995/2004; houses 1/6/7/12 extract). Orbs stay planetary; square not simply bad stays school_specific; house `domain` not rewritten. Nothing `active`. CORE still unscored.
 - **1.3.9 (2026-08-17)** — IL-1 ingest (no methodology change): Valens I.1 planets, I.2 Aries, IX XII Places; Lilly CA I.19 orbs/partile. Collisions logged; objects not averaged; nothing `active`; no sign objects.
 - **1.3.8 (2026-08-17)** — Activation gates (not methodology): unevidenced `requires_action: false` cannot become `active`; IL-1 Layer 5 gold list = curated candidates, IL-2 may demote to composed. User-facing provenance bands later via Trust Layer. No sequence/ontology change.
