@@ -4,7 +4,7 @@
 
 | Документ | Роль |
 |----------|------|
-| [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) | **Interpretation Library** — semantic objects; runtime: Swiss → calc → IL → engine → expression |
+| [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) | **Interpretation Library** — semantic objects; runtime: Swiss → calc → IL → engine → expression. Публичный бренд Canon — [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md), не этот файл |
 | [source_corpus_v1.json](../../DATA/reference/astrology/interpretation_v1/source_corpus_v1.json) | Research corpus (все `candidate`; не approved ingest) |
 | [objects_v1.json](../../DATA/reference/astrology/interpretation_v1/objects_v1.json) | IL-1 knowledge objects (`draft` only; not `active`) |
 | [claims/](../../DATA/reference/astrology/interpretation_v1/claims/) | source → locus → paraphrase → `normalized_claim` |

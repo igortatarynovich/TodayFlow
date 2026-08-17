@@ -1,9 +1,9 @@
 # TodayFlow Voice Canon
 
 **Статус:** архитектурный канон контента (не copywriter guide).  
-**Версия:** 1.8 (2026-08-03).  
+**Версия:** 1.9 (2026-08-17).  
 **Источник:** живые удачные кейсы Compatibility / Profile review packs — узнаваемый авторский тон продукта.  
-**Связь:** [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../profile/PROFILE_CONTENT_CANON_V1.md) · [EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [TODAY_DEPTH_LAYER_V1.md](../TODAY_DEPTH_LAYER_V1.md)
+**Связь:** [TODAYFLOW_TRUST_LAYER.md](./TODAYFLOW_TRUST_LAYER.md) (лендинг · реклама · бренд) · [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../profile/PROFILE_CONTENT_CANON_V1.md) · [EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [TODAY_DEPTH_LAYER_V1.md](../TODAY_DEPTH_LAYER_V1.md)
 
 ---
 
@@ -14,6 +14,8 @@
 > Интерфейс объясняет **человека**, **смысл данных** и **ценность следующего шага** — не состояние продукта.
 
 Связь с [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md): смысл и честные границы — да; кухня и «кто посчитал» — нет.
+
+**Acquisition (лендинг · реклама · about · press)** — исключение по поверхности, не дыра в запрете кухни: бренд может назвать две опоры Trust Layer (астрономия NASA/JPL · многослойный Canon). Не «алгоритм / ИИ / мы рассчитали». См. §0.08.
 
 ### Запрещённые паттерны (весь продукт · UI · LLM · email · push)
 
@@ -126,10 +128,13 @@ Exemplars (ориентиры):
 | Today | История дня — что несёт сегодня и что с этим делать |
 | Compatibility | История отношений и событий между людьми |
 | Tarot | Поиск ответа на вопрос через расклад |
+| **Landing · ads · about · press** | Опоры доверия бренда — [Trust Layer](./TODAYFLOW_TRUST_LAYER.md). Здесь можно назвать астрономию NASA/JPL и многослойный Canon. **Не** переносить это в body Profile/Today. |
 
 Один авторский голос TodayFlow; разный **сюжет**.  
 Виджеты без сквозной истории — антипаттерн.  
 См. [PRODUCT_AVAILABILITY_MATRIX](../PRODUCT_AVAILABILITY_MATRIX.md) § «Режим подачи».
+
+**Исключение к §0 для acquisition:** запрет «продукт рассказывает про себя» относится к **интерпретационному UI**. Лендинг и реклама имеют право держать две опоры Trust Layer. Кухню (алгоритм, scores, «ИИ») туда всё равно не тащить.
 
 
 Последний LLM-слой **не пишет прогноз**. Он **редактирует уже вычисленный смысл**.
@@ -295,3 +300,4 @@ Naturalness = «не звучит как робот». Consistency = «узна�
 | 2026-07-21 | v1.4 — §0.05 человек не система; §0.06 missing/CTA = отсутствие · влияние · ценность; ban pipeline status copy |
 | 2026-07-27 | v1.7 — §1 practitioner+friend persona: tarot · numerology · astrology · psychology · sexology · friend; wisdom = precision + warmth |
 | 2026-08-03 | v1.8 — §1: professional tarot/astro/numerology + friendly informal tone (emotion · scene · metaphor); runtime `llm_practitioner_persona_v1.2` |
+| 2026-08-17 | v1.9 — §0.08: landing/ads = Trust Layer surface (NASA/JPL + layered Canon); in-product §0 unchanged |

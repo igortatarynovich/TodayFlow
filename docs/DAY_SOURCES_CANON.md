@@ -79,7 +79,7 @@ Foundation **не** Meaning SoT. «Day Story» как единый контей�
   → место в более длинном цикле
 ```
 
-Для западной астрологии: факт = Swiss/JPL; конструкции (аспект, дом, транзит) = calculation layer; «значение в системе» = [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md). LLM не заполняет этот шаг.
+Для западной астрологии: факт = Swiss Ephemeris (NASA JPL DE431); конструкции (аспект, дом, транзит) = calculation layer; «значение в системе» = [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md). Публичный язык двух опор — [Trust Layer](content/TODAYFLOW_TRUST_LAYER.md). LLM не заполняет этот шаг.
 
 Без этой цепочки получается общий гороскоп. С ней — модель дня.
 
@@ -316,7 +316,7 @@ Foundation **не** Meaning SoT. «Day Story» как единый контей�
 | Поле | Значение |
 |------|----------|
 | purpose | Фаза, освещённость, возраст Луны |
-| data_sot | Sun–Moon elongation / ephemeris (NASA-compatible metrics) |
+| data_sot | Sun–Moon elongation / Swiss Ephemeris (JPL DE431-derived; not Horizons API) |
 | required_inputs | datetime |
 | deterministic_outputs | phase_id (8-fold), elongation°, illumination%, age_days, waxing/waning, days_to_quarter |
 | depends_on | `western_astrology.planetary_positions` (Sun, Moon) |

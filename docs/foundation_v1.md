@@ -76,7 +76,24 @@ Astrodienst dual-license: **AGPL** or **Swiss Ephemeris Professional License**. 
 
 This is the **licensing** gate only. Swiss Ephemeris remains the live **runtime input** to Interpretation Library (positions → calculation layer → which knowledge objects are active). License review **does not block** IL-1 research (Greene/Hand/Valens → first 100 objects). Full pipeline `raw sky → objects → Today` already assumes Swiss (or a declared ephemeris replacement) as that input. Do not treat AGPL as “fine for SaaS” without counsel. Horizons/JPL is an astronomy alternative for positions, not a drop-in Swiss replacement without a separate accuracy program.
 
-Meaning sources: [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md) §6.2.
+Meaning sources: [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md) §6.2.  
+Public copy (NASA/JPL claims): [Trust Layer](content/TODAYFLOW_TRUST_LAYER.md).
+
+### 1.4.1 Astronomical provenance — что можно утверждать публично
+
+Факты для копирайта. Не путать слои.
+
+| Утверждение | Статус | Где в коде |
+|-------------|--------|------------|
+| Положения тел считает Swiss Ephemeris `FLG_SWIEPH` | **LIVE** | `todayflow-astro` · `pyswisseph>=2.10.3` · `astro/ephe` (`sepl_18` / `semo_18` / `seas_18`) |
+| Сжатые файлы Swiss воспроизводят NASA JPL **DE431** | **LIVE (источник данных)** | Документация Astrodienst для Swiss 2.00+; это честная формула «данные NASA/JPL» |
+| Точность Swiss vs JPL ~0.001″ (заявление Astrodienst) | **vendor claim** — не наш независимый бенчмарк DE | Не выдавать как «мы измерили против Horizons» |
+| Кросс-проверка углов (Einstein vs Astrotheme/Astro-Seek) | **LIVE** | §1.3 — минуты дуги; это сверка **карты**, не DE-тест |
+| NASA/JPL Horizons API как runtime | **не wired** | кандидат на сверку; не источник продакшена |
+| NASA Photojournal / LRO в UI | **visual identity** | не источник положений; не доказательство точности эфемерид |
+| NASA толкует натал / «сертифицирует астрологию» | **запрещено** | нет партнёрства, нет endorsement |
+
+Копирайт: «точные астрономические данные NASA/JPL» = Swiss считает по DE431. Не = live Horizons, не = смысл карты.
 
 ### 1.5 Non-goals геометрии
 

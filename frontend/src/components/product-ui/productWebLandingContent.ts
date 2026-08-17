@@ -1,4 +1,7 @@
-/** Product UI web landing — editorial copy (RU). Guest Story Surface P0. */
+/** Product UI web landing — editorial copy (RU). Guest Story Surface P0.
+ * Brand/trust claims (NASA/JPL, layered Canon): docs/content/TODAYFLOW_TRUST_LAYER.md
+ * Do not invent astronomy or “one true astrology” copy outside that canon.
+ */
 
 import { GUEST_ACCESS_LIMITS } from "@/lib/guestAccessLimits";
 

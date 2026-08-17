@@ -10,6 +10,8 @@
 
 **Роль:** семантическая база астрологических примитивов (данные, не пользовательский текст). Для **Today** это шаг 2 pipeline ([TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный Meaning SoT дня**): «Astrology Interpretation Canon (lookup)». Не второй канон дня. Тот же lookup читают Profile · Compatibility · Tarot-context.
 
+**Публичный язык (не этот файл):** Canon как нормализованное пересечение исторических слоёв + точность NASA/JPL — [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md). IL = методика и lookup. Бренд / лендинг / реклама читают Trust Layer.
+
 ---
 
 ## Architecture impact
@@ -363,8 +365,8 @@ Skyscript: структурированная библиотека (planets, hou
 
 | Источник | Роль у нас |
 |----------|------------|
-| **Swiss Ephemeris** | LIVE runtime вход: `todayflow-astro` · `pyswisseph` · `FLG_SWIEPH` · `astro/ephe` |
-| NASA/JPL Horizons | кандидат на независимую сверку позиций; не wired |
+| **Swiss Ephemeris** | LIVE runtime вход: `todayflow-astro` · `pyswisseph` · `FLG_SWIEPH` · `astro/ephe`. Сжатые файлы воспроизводят NASA JPL **DE431** (Astrodienst; Swiss 2.00+). Публичные формулировки — [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md) · [Foundation §1.4.1](../foundation_v1.md) |
+| NASA/JPL Horizons | кандидат на независимую сверку позиций; **не wired** — нельзя утверждать в копирайте как live источник |
 
 Swiss Ephemeris — **dual license** (Astrodienst): GNU AGPL **или** Swiss Ephemeris Professional License. Выбор должен быть сделан **до** публичного сервиса. В репозитории **нет** артефакта Professional License. `todayflow.today` уже публичен.
 
@@ -422,6 +424,8 @@ IL-1 research artifacts (pipeline, not a new ontology): `DATA/reference/astrolog
 - не CORE: *Saturn square Venus значит, что партнёр отдалится*
 
 Канон — не усреднённая «одна астрология». Provenance держит слои различимыми. Когда придут Greene, Hand, Sasportas, Arroyo, George: смотреть, что с классическим claim произошло (продолжено / переосмыслено / психологизировано / заменено). Классические lemmas **не затирать** современным пакетом.
+
+Это следствие **публичное**: бренд не продаёт одну современную трактовку как единственную истину. Копирайт (лендинг, реклама) — [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md), не этот §6.
 
 Engine: primary theme только из `core` ∪ `supported`. `editorial` не может быть единственным основанием пользовательского утверждения.
 
@@ -524,6 +528,7 @@ LLM в этом пайплайне **может** помогать извлек�
 
 ## 10. Changelog
 
+- **1.3.7 (2026-08-17)** — Public brand/trust language moved to [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md) (not an IL methodology change). Swiss/DE431 claim facts in Foundation §1.4.1.
 - **1.3.6 (2026-08-17)** — Ptolemy I.17 + Lilly CA I.16 p.91: commanding *grouping* compared; equinox pair-relation stays school_specific. Ptolemy I.18 beholding not collapsed into Lilly Antiscion. Copy-paste Aries gap_note removed from other sign QUALITY files. No Layer 2 objects. No methodology change.
 - **1.3.5 (2026-08-17)** — Lilly CA I.1 opened: aspect *geometry* compared with Ptolemy; qualitative labels remain school_specific (good/enmity ≠ harmonious-by-sex). Lilly CA I.16 sign *quality* claims for 12 signs; still no Layer 2 objects. `requires_action` stays false/not-evidenced. No methodology change.
 - **1.3.4 (2026-08-17)** — Fill-rules from corpus collisions (no schema change): Layer 2 psych slots wait later loci; element/mode are distinct descriptive systems; houses = Lilly I.7 only; `requires_action: false` = not evidenced. Do not polish existing objects to a modern average.

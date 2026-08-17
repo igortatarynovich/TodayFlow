@@ -4,6 +4,18 @@ Last updated: 2026-08-17
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (BRAND / COPY, 2026-08-17):** **Trust Layer locked.** Canon is not one averaged astrology — it is a normalized intersection of historical layers with provenance. Public communication has two pillars: (1) astronomical accuracy (NASA/JPL DE431 via Swiss, live); (2) interpretation depth (multi-school Canon). Locked line: *Precise astronomical data. Centuries of astrological interpretation. One personal perspective.* SoT: `docs/content/TODAYFLOW_TRUST_LAYER.md`. **Next:** landing + ads copy pass. Do not leave this as an IL-internal note.
+
+## Architecture impact — Trust Layer / brand language (2026-08-17)
+
+- **SoT before:** provenance and “not one averaged astrology” lived only in Interpretation Library §6. NASA/JPL was a runtime footnote; Horizons unwired. Landing copy did not carry the two trust pillars.
+- **SoT after:** [TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) is public brand/copy SoT. Astronomy claims bounded to live Swiss/DE431 (Foundation §1.4.1). IL remains meaning lookup; Voice Canon §0 still bans self-reference *inside* product UI.
+- **Public contract changed?** no JSON/generation. Marketing language yes.
+- **Migration required?** no runtime. Copy slice: landing · ads · about.
+- **Canon updated?** yes — Trust Layer v1.0 · Voice Canon §0.08 v1.9 · Unified §0 v1.11 · Foundation §1.4.1 · IL pointer 1.3.7 · README · explainability indexes.
+- **Backward compatible?** yes
+- **Next:** write landing/ads from the locked line. Do not overclaim IL-1 drafts as a finished public catalog. Do not say Horizons is live.
+
 **NOW (VISUAL LANGUAGE, 2026-08-17):** FOUNDATION_UI §2 v0.5 — ten-layer language + two registers (information glyphs vs identity planet images) + natal as branded composition of the same primitives (not a traditional wheel). Cross-surface literacy: `♀ → ♉︎ → VII → △ → ♄` in Profile / Today / Compat / chart. Next DS (not this commit): planet restyle · glyph set · natal rebuild from atoms. Profile viewport 1 unchanged.
 
 ## Architecture impact — Natal visual language v0.5 (2026-08-17)
@@ -1699,6 +1711,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-17 | Brand / Copy | **Trust Layer locked — two pillars + NASA/JPL bounds** | **CANON** | [TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) v1.0. Canon ≠ averaged astrology; provenance is brand language. Astronomy copy = Swiss/DE431 live, not Horizons. Next = landing + ads. Voice Canon v1.9 acquisition exception.
 - 2026-08-15 | Today / Canon | **I2/I3 hygiene** | **CODE** | `primary_scene_id` on native+scenario; gate reject missing/unknown; projector no first-scene pick / no expect concat / do from primary only. Next: I0 contract → Global Engine.
 - 2026-08-15 | Today / Canon | **Pipeline ownership + non-mutation** | **LOCKED** | [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md): один decision owner на поле; downstream enrich/verbalize only; цепочка Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation; UX reveal ≠ authority. Next: I2/I3 hygiene → I0 contract → Global Engine.
 - 2026-08-14 | Design System | **Form Kit full-sheet SoT** | **LIVE (FE)** | Chips statusTone=`--tf-semantic-*` only; `DsLinearProgress` + semantic `DsWaveMeter`; button `lg`; `DsSectionHeader` composition; quote highlight; `/design-system` 100% sheet specimen; DayBrief data-backed only + `DsCelestialMoon`. Next = Practices zone migration.
