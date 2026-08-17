@@ -5,6 +5,10 @@ import {
 } from "@/lib/authSessionStorage";
 import { beginAuthSession, clearAuthSession } from "@/lib/authSession";
 
+jest.mock("@/lib/warmTodayDayBundle", () => ({
+  warmTodayDayBundle: jest.fn(() => Promise.resolve()),
+}));
+
 describe("auth session storage", () => {
   beforeEach(() => {
     window.localStorage.clear();

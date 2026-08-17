@@ -1,8 +1,17 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-15
+Last updated: 2026-08-17
 Owner: Product + Engineering
 Status: Active working document
+
+## Architecture impact — Login must not paint First Today fallback (2026-08-17)
+
+- **SoT before:** Post-auth used localStorage `hasCompletedFirstToday()`; missing flag → `/today?first=1` chip gate. Missing `/today/contract` → FE invented `buildFallbackTodayContract` (First Today package) as live paint.
+- **SoT after:** Login home = `/today`. First Today (`?first=1`) only from explicit onboarding routes. Contract miss → wait / «Нет соединения.» / «Не удалось загрузить.» — no invented day.
+- **Public contract changed?** no
+- **Migration required?** no — client routing + paint only
+- **Canon updated?** yes — `docs/FIRST_DAY_EXPERIENCE.md` §2 post-auth
+- **Backward compatible?** yes; onboarding still `router.replace(FIRST_TODAY_PATH)`
 
 **CANON LOCKED (2026-08-15):** **Один Today Meaning SoT** = [TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md). **Один product cycle** = [TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY → RITUAL → MY DAY → EVENING). SCENARIO_V3 six-block **superseded** as product map. DAY_SCENARIO_V1 / B5 demoted (не канон смысла). DAY_SOURCES = facts only.
 

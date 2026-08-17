@@ -86,8 +86,9 @@ flowchart LR
 
 **Post-auth redirect (target):**
 
+- **Login (returning):** `/today` — never `/today?first=1`. First Today chips are onboarding payoff, not a loading fallback while the day package arrives.
 - `core_profile.is_ready === false` → `/onboarding/core` (не Profile hub).
-- После Reality → `/today` (не `/profile?setup=done`).
+- После Reality → `/today?first=1` (explicit First Today) or `/today` once First Today is done.
 - Profile как «твой портрет» — **после** первого открытия First Today или явный depth CTA.
 
 **iOS паритет:** Auth → birth onboarding → intent/reality (native) → Today → Profile summary; те же REST-контракты, не WKWebView Profile как onboarding.

@@ -7,7 +7,7 @@ function safeRedirect(path: string): string {
   if (path.startsWith("/") && !path.startsWith("//")) {
     return path;
   }
-  return "/profile";
+  return "/today";
 }
 
 function escapeHtml(s: string): string {
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       }
     }
 
-    let next = "/profile";
+    let next = "/today";
     const rawState = formData.get("state");
     if (rawState && typeof rawState === "string") {
       try {
