@@ -4,6 +4,15 @@ Last updated: 2026-08-17
 Owner: Product + Engineering
 Status: Active working document
 
+## Architecture impact — One product shell chrome on every in-app page (2026-08-17)
+
+- **SoT before:** Pages could pass `theme`/`mood` into `ProductWebAppShell`; Tarot section atmosphere still painted ritual void (`#07080c`); `data-product-web-shell` also fired on `/` and `/auth`.
+- **SoT after:** Chrome (sidebar, tab bar, type, ink, frame bg) is identical on every `usesProductWebAppShell` route. Pages may set rail / `fullMain` / main content only. Day Atmosphere still tints the shared wash; it does not fork a per-section shell.
+- **Public contract changed?** no
+- **Migration required?** no — FE chrome only
+- **Canon updated?** yes — `docs/TODAYFLOW_FOUNDATION_UI.md` §7 · §11.1
+- **Backward compatible?** yes; marketing `/` `/auth*` `/onboarding*` stay outside App Shell
+
 ## Architecture impact — Login must not paint First Today fallback (2026-08-17)
 
 - **SoT before:** Post-auth used localStorage `hasCompletedFirstToday()`; missing flag → `/today?first=1` chip gate. Missing `/today/contract` → FE invented `buildFallbackTodayContract` (First Today package) as live paint.

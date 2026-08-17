@@ -2,13 +2,13 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { isProductWebFullPageRoute } from "@/lib/productWebShell";
+import { usesProductWebAppShell } from "@/lib/productWebShell";
 
 export function ProductWebShellBridge() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const enabled = isProductWebFullPageRoute(pathname);
+    const enabled = usesProductWebAppShell(pathname);
     if (enabled) {
       document.documentElement.setAttribute("data-product-web-shell", "true");
     } else {

@@ -22,7 +22,6 @@ import {
   productWebProfileMeta,
   productWebUserInitial,
 } from "@/lib/productWebUser";
-import type { ProductMood } from "@/lib/productMoodTheme";
 import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 
@@ -34,11 +33,7 @@ export type ProductWebAppShellProps = {
   locale?: FlowPracticesChromeLocale;
   main: ReactNode;
   rail?: ReactNode;
-  sidebar?: ReactNode;
-  theme?: "light" | "dark";
-  /** Optional override; default from useProductMoodTheme. */
-  mood?: ProductMood;
-  /** Wider horizontal padding for profile v2 canvas (Figma px-24). */
+  /** Wider horizontal padding — default on so every product page shares the same gutters. */
   mainWide?: boolean;
   /** Page draws its own internal columns (profile v2): main spans both grid tracks. */
   fullMain?: boolean;
@@ -55,10 +50,7 @@ export function ProductWebAppShell({
   locale,
   main,
   rail,
-  sidebar,
-  theme: themeProp,
-  mood: moodProp,
-  mainWide = false,
+  mainWide = true,
   fullMain = false,
 }: ProductWebAppShellProps) {
   const pathname = usePathname() ?? "/today";
@@ -86,35 +78,17 @@ export function ProductWebAppShell({
     pathname,
     typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null,
   );
-  const { mood: hookMood } = useProductMoodTheme({ isFirstDay });
-  // Day Atmosphere owns product chrome tint (FOUNDATION_UI §11.1). When day-mode is
-  // active, never paint the frame as appearance-dark — that re-opened light --tf-ink
-  // on light --day-* surfaces (sidebar / Practices). themeProp only applies outside day-mode.
-  const theme = themeProp ?? "light";
-  const mood = moodProp ?? hookMood;
-  // data-theme/data-mood depend on clock + localStorage, which SSR can't see —
-  // rendering them as JSX props bakes a value at SSR time that then mismatches the
-  // client's real value. React logs a hydration warning and (for this element) never
-  // repaints the attribute afterwards, so the shell gets stuck on the wrong palette.
-  // Setting them imperatively post-mount (same approach as SectionAtmosphereBridge on
-  // <html>) sidesteps the mismatch entirely instead of fighting it.
+  const { mood } = useProductMoodTheme({ isFirstDay });
+  // Chrome is one product language (FOUNDATION_UI §7 / §11.1): pages must not
+  // pass appearance-dark. Frame theme stays light; Day Atmosphere tints wash.
+  // Attributes are set post-mount so SSR cannot bake a stale palette.
   const frameRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const frame = frameRef.current;
     if (!frame) return;
-    const syncFrameTheme = () => {
-      const dayModeActive = document.documentElement.hasAttribute("data-day-mode");
-      frame.setAttribute("data-theme", dayModeActive ? "light" : theme);
-      frame.setAttribute("data-mood", mood);
-    };
-    syncFrameTheme();
-    const obs = new MutationObserver(syncFrameTheme);
-    obs.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-day-mode"],
-    });
-    return () => obs.disconnect();
-  }, [theme, mood]);
+    frame.setAttribute("data-theme", "light");
+    frame.setAttribute("data-mood", mood);
+  }, [mood]);
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
   const navItems = useMemo(
@@ -133,21 +107,23 @@ export function ProductWebAppShell({
   const footerHref = guestShell ? VALUE_FIRST_PATHS.invite : undefined;
   const footerLabel = guestShell ? "Собрать мой Today" : shell.navSettings;
 
-  const sidebarNode =
-    sidebar ??
-    (showSidebar ? (
-      <div className={l.sidebarSlot} aria-hidden={sidebarAriaHidden || undefined}>
-        <DsAppSidebar
-          displayName={resolvedName}
-          profileMeta={resolvedMeta}
-          avatarInitial={avatarInitial}
-          navItems={navItems}
-          settingsLabel={footerLabel}
-          logoHref={logoHref}
-          footerHref={footerHref}
-        />
-      </div>
-    ) : null);
+  const sidebarNode = showSidebar ? (
+    <div
+      className={l.sidebarSlot}
+      data-product-web-chrome=""
+      aria-hidden={sidebarAriaHidden || undefined}
+    >
+      <DsAppSidebar
+        displayName={resolvedName}
+        profileMeta={resolvedMeta}
+        avatarInitial={avatarInitial}
+        navItems={navItems}
+        settingsLabel={footerLabel}
+        logoHref={logoHref}
+        footerHref={footerHref}
+      />
+    </div>
+  ) : null;
 
   return (
     <div

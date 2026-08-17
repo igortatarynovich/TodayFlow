@@ -12,7 +12,6 @@ import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/compo
 import { productWebShellChromeBundle } from "@/components/product-ui/productWebShellChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
-import { useProductDayNightTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import s from "@/components/product-ui/productWebScreens.module.css";
 
@@ -79,7 +78,6 @@ export function PracticeSessionWebScreen({
   const copy = SESSION_COPY[resolvedLocale === "ru" ? "ru" : "en"];
   const shell = useMemo(() => productWebShellChromeBundle(resolvedLocale), [resolvedLocale]);
   const resolvedBackLabel = backLabel ?? shell.practicesBackLabel;
-  const theme = useProductDayNightTheme();
   const whyLabel = dayWhyLabel ?? copy.whyLabel;
   const livingLead = (subtitle || copy.leadDefault).trim();
 
@@ -89,11 +87,10 @@ export function PracticeSessionWebScreen({
       displayName,
       profileMeta,
       coreProfile,
-      theme,
       mainWide: true,
       rail,
     };
-  }, [coreProfile, displayName, profileMeta, rail, theme]);
+  }, [coreProfile, displayName, profileMeta, rail]);
 
   return (
     <>
