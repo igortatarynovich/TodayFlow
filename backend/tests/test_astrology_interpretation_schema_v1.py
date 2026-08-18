@@ -1691,3 +1691,59 @@ def test_hand_pluto_claims_not_core():
     assert concept_fields["claim.pluto.gradual_not_uranian_sudden"] == "tempo"
     assert len(objects["objects"]) == 24
 
+
+def test_sun_pluto_live_recount_after_access_blocked():
+    """1.3.58: dashboard from ledgers, not the 1.3.44 snapshot. No ingest this pass."""
+    claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    planets = [
+        "sun",
+        "moon",
+        "mercury",
+        "venus",
+        "mars",
+        "jupiter",
+        "saturn",
+        "uranus",
+        "neptune",
+        "pluto",
+    ]
+    psych_n = {}
+    total = 0
+    core_n = 0
+    for name in planets:
+        payload = json.loads((CLAIMS_DIR / f"astro.object.{name}.json").read_text(encoding="utf-8"))
+        jsonschema.validate(payload, claims_schema)
+        total += len(payload["claims"])
+        psych = [row for row in payload["claims"] if row.get("source_class") == "psychological"]
+        psych_n[name] = len(psych)
+        core_n += sum(1 for row in payload["claims"] if row.get("evidence_tier") == "core")
+    assert total == 491
+    assert sum(psych_n.values()) == 82
+    assert core_n == 0
+    assert psych_n["pluto"] == 10
+    assert psych_n["mars"] == 0
+    assert psych_n["moon"] == 2
+    assert psych_n["mercury"] == 1
+    assert psych_n["sun"] == 12
+    assert psych_n["venus"] == 9
+    assert psych_n["jupiter"] == 19
+    assert psych_n["saturn"] == 11
+    assert psych_n["uranus"] == 9
+    assert psych_n["neptune"] == 9
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert "astro.object.pluto" not in by_id
+    assert "heating and drying quality that contends" == by_id["astro.object.mars"]["function"]
+    audit = (ROOT / "docs" / "astrology" / "IL1_SUN_PLUTO_GAP_AUDIT.md").read_text(encoding="utf-8")
+    assert "1.3.58" in audit
+    assert "**ACCESS_BLOCKED**" in audit
+    assert "**COVERED**" in audit
+    assert "**THIN**" in audit
+    assert "EMPTY **0**" in audit or "EMPTY 0" in audit
+    assert "1.3.44 dashboard snapshots" in audit or "replace 1.3.44" in audit
+    # live queue must not revive the 1.3.44 instruction
+    live_queue = audit.split("## 6. Next research queue")[1].split("## 7.")[0]
+    assert "Do **not** run 1.3.44" in live_queue or "Retired instructions" in live_queue
+    assert "Pluto is COVERED" in audit or "Pluto | 10 | **COVERED**" in audit
+
+

@@ -7,6 +7,7 @@
 | [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) | **Interpretation Library** — semantic objects; runtime: Swiss → calc → IL → engine → expression. Публичный бренд Canon — [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md), не этот файл |
 | [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) | Parent: модель знания **до** литературы. IL-1 in-flight ≠ шаблон следующего ядра |
 | [IL1_HANDOFF.md](./IL1_HANDOFF.md) | Next-agent handoff: locked rules, catalog state, opened loci, next ingest |
+| [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md) | **Live** Sun→Pluto recount (1.3.58). 1.3.44 snapshot retired. Slot statuses COVERED / THIN / DISCOVERED / ACCESS_BLOCKED / EMPTY |
 | [source_corpus_v1.json](../../DATA/reference/astrology/interpretation_v1/source_corpus_v1.json) | Research corpus (все `candidate`; не approved ingest) |
 | [objects_v1.json](../../DATA/reference/astrology/interpretation_v1/objects_v1.json) | IL-1 knowledge objects (`draft` only; not `active`) |
 | [claims/](../../DATA/reference/astrology/interpretation_v1/claims/) | source → locus → paraphrase → `normalized_claim` |

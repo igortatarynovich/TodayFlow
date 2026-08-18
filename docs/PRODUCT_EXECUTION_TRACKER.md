@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.57:** Psychological Mars `ACCESS_BLOCKED` (3 dedicated loci NEED_OWNER; 0 readable bodies; 0 claims). Discovery for this slot stops. Do not hunt a fourth Mars book. §6.10 empty-slot + densify budget closed. Recount now allowed. CORE=0 is not a KPI. Parent order: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`. CORE blocked.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.58:** live Sun→Pluto recount. KPI order: psych coverage → school-class → access-blocked → collisions → CORE candidates → CORE. COVERED 7 · THIN 2 · ACCESS_BLOCKED 1 (Mars) · EMPTY 0. Pluto COVERED. 1.3.44 dashboard retired. Next = access queue, not Pluto psychological. CORE=0 is a fact, not the lead KPI. Parent: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -93,6 +93,15 @@ Status: Active working document
 - **Public contract changed?** no
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
+- **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.58 live recount (2026-08-18)
+
+- **SoT before:** 1.3.44 dashboard could still be read as live (next = Pluto psychological; Mars empty; CORE=0 as lead).
+- **SoT after:** `docs/astrology/IL1_SUN_PLUTO_GAP_AUDIT.md` recomputed from ledgers. Slot statuses COVERED/THIN/DISCOVERED/ACCESS_BLOCKED/EMPTY. Semantic ≠ access. Queue rebuilt. No ingest. No CORE scoring.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.58 · gap audit rewrite
 - **Backward compatible?** yes — no runtime wiring
 
 ## Architecture impact — IL-1 1.3.57 ACCESS_BLOCKED (2026-08-18)
