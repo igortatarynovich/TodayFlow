@@ -1,12 +1,12 @@
 # Interpretation Library v1 — ontology / schema
 
-**Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (24 draft objects: classical seven · 12 houses · 5 major aspects; 12 sign *claims* without objects; Uranus, Neptune and Pluto Hand-1981 + Rudhyar NMNM *claims* without objects; nothing `active`).  
-**Версия:** 1.3.44 (2026-08-17).  
-**Методология:** слои / evidence tiers / provenance **LOCKED** до закрытия IL-1. Parent research order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — модель знания **до** литературы. **1.3.29** discovery (school-first) остаётся для IL-1 in-flight. **1.3.30** запрещает строить следующее ядро / CORE от первого доступного автора. `source_class=humanistic` с 1.3.29. Дальше — только баги модели.  
+**Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (24 draft objects: classical seven · 12 houses · 5 major aspects; 12 sign *claims* without objects; Uranus Hand-1981 + Rudhyar NMNM + Tarnas intro *claims* without object; Neptune Hand-1981 + Rudhyar NMNM + Tarnas intro *claims* without object; Pluto Hand-1981 + Rudhyar NMNM + Greene/Campion interview *claims* without object; nothing `active`).  
+**Версия:** 1.3.56 (2026-08-18).  
+**Методология:** слои / evidence tiers / provenance **LOCKED** до закрытия IL-1. Parent research order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — модель знания **до** литературы. **1.3.29** discovery (school-first) остаётся для IL-1 in-flight. **1.3.30** запрещает строить следующее ядро / CORE от первого доступного автора. **1.3.45** remaining planet budget = empty psychological slots (Pluto→Uranus→Neptune→Venus→Mars). **1.3.46** Uranus psychological filled (Tarnas official intro). **1.3.47** Neptune psychological filled (same Tarnas PDF, Neptune section, after field check). **1.3.48** Venus psychological filled (Sullivan official-site *Venus and Jupiter* excerpt). **1.3.49** Mars psychological field re-checked, still empty. **1.3.50** Sun psychological densified (Greene Apollon Issue 1 / astro.com in_sungod). **1.3.51** Moon psychological field re-checked, still only Luminaries preview. **1.3.52** Mercury psychological field re-checked, still only Inner Planets Hermes. **1.3.53** Saturn psychological densified (Tarnas official intro senex section). **1.3.54** Mars psychological field re-checked, still empty. **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 identified unread (NEED_OWNER). **1.3.56** Huber *The Planets* Mars chapter identified unread (NEED_OWNER). Remaining empty: Mars. `source_class=humanistic` с 1.3.29. Дальше — только баги модели.  
 **Владелец:** Product + Research.  
 **Данные:** `DATA/reference/astrology/interpretation_v1/` — corpus · `claims/` · `objects_v1.json` (draft).  
 **Handoff (next agent):** [IL1_HANDOFF.md](./IL1_HANDOFF.md) — что сделано, что locked, откуда продолжать ingest.  
-**Gap audit (Sun→Pluto, 1.3.24):** [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md). Owner queue **1.3.25** superseded for *discovery* by **1.3.29**. NEED_OWNER-blocks-locus **1.3.26** still holds for named closed pages. Hand Ch.4 Sun unread **1.3.27**. Corpus QA snapshot **1.3.28** — [IL1_CORPUS_QA.md](./IL1_CORPUS_QA.md). **1.3.29** reopens source discovery (school-first). **1.3.30** parent: knowledge-core research order. **1.3.31** Rudhyar Mars humanistic. **1.3.32** Rudhyar Uranus humanistic. **1.3.33** Rudhyar Neptune humanistic. **1.3.34** Rudhyar Pluto humanistic. **1.3.35** Rudhyar Sun humanistic. **1.3.36** Rudhyar Moon humanistic. **1.3.37** Rudhyar Mercury humanistic. **1.3.38** Greene *By Jove!* Psychology of Jupiter extract (psychological). **1.3.39** Rudhyar Saturn humanistic. **1.3.40** Rudhyar Jupiter humanistic. **1.3.41** Venus psychological discovery (no ingest). **1.3.42** Mars psychological discovery (no ingest). **1.3.43** Uranus psychological discovery (no ingest). **1.3.44** Neptune psychological discovery (no ingest). CORE still unscored.  
+**Gap audit (Sun→Pluto, 1.3.24):** [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md). Owner queue **1.3.25** superseded for *discovery* by **1.3.29**. NEED_OWNER-blocks-locus **1.3.26** still holds for named closed pages. Hand Ch.4 Sun unread **1.3.27**. Corpus QA snapshot **1.3.28** — [IL1_CORPUS_QA.md](./IL1_CORPUS_QA.md). **1.3.29** reopens source discovery (school-first). **1.3.30** parent: knowledge-core research order. **1.3.31** Rudhyar Mars humanistic. **1.3.32** Rudhyar Uranus humanistic. **1.3.33** Rudhyar Neptune humanistic. **1.3.34** Rudhyar Pluto humanistic. **1.3.35** Rudhyar Sun humanistic. **1.3.36** Rudhyar Moon humanistic. **1.3.37** Rudhyar Mercury humanistic. **1.3.38** Greene *By Jove!* Psychology of Jupiter extract (psychological). **1.3.39** Rudhyar Saturn humanistic. **1.3.40** Rudhyar Jupiter humanistic. **1.3.41** Venus psychological discovery (no ingest). **1.3.42** Mars psychological discovery (no ingest). **1.3.43** Uranus psychological discovery (no ingest). **1.3.44** Neptune psychological discovery (no ingest). **1.3.45** psych-budget lock + Pluto psychological ingest (Greene/Campion interview; object withheld). **1.3.46** Uranus psychological ingest (Tarnas official intro; object withheld). **1.3.47** Neptune psychological ingest (Tarnas official intro Neptune section; object withheld). **1.3.48** Venus psychological ingest (Sullivan official-site *Venus and Jupiter* excerpt; `function` unchanged). **1.3.49** Mars psychological discovery (no ingest; p.138 still NEED_OWNER). **1.3.50** Sun psychological densification (Greene Apollon Issue 1; Apollo's Chariot still NEED_OWNER). **1.3.51** Moon psychological densification (no ingest; Costello still NEED_OWNER). **1.3.52** Mercury psychological densification (no ingest; Inner Planets Hermes already ingested). **1.3.53** Saturn psychological densification (Tarnas official intro Saturn/senex; Greene Introduction not re-ingested). **1.3.54** Mars psychological densification (no ingest; p.138 still NEED_OWNER). **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 cataloged unread (NEED_OWNER; not ingested). **1.3.56** Huber *The Planets and Their Psychological Meaning* Mars chapter cataloged unread (NEED_OWNER; not ingested). CORE still unscored.  
 **Схема:** [astrology_interpretation_v1.schema.json](../schemas/astrology_interpretation_v1.schema.json) · claims ledger [astrology_claims_v1.schema.json](../schemas/astrology_claims_v1.schema.json).  
 **Пример формы (не SoT смысла):** [astrology_interpretation_v1.example.json](../schemas/fixtures/astrology_interpretation_v1.example.json).
 
@@ -43,6 +43,123 @@
 - **Canon updated?** yes — new doc + this changelog 1.3.30
 - **Backward compatible?** yes — no runtime wiring; IL-1 claims unchanged
 
+### Architecture impact — 1.3.45 remaining psych budget
+
+- **SoT before:** IL-1 planet fill was school-first, one locus, any missing class. After 1.3.44 the next named task was Pluto psychological, but classical/humanistic/professional padding was still allowed. CORE=0 was easy to treat as a KPI. Humanistic Rudhyar could be mistaken for a psychological substitute. Discovery could still hunt confirmation of Hand lemmas (reconstruction / disruption / dissolution).
+- **SoT after:** remaining IL-1 planet research budget is **psychological coverage of empty slots**, in order **Pluto → Uranus → Neptune → Venus → Mars**, then densify Sun/Moon/Mercury/Saturn. Jupiter psychological is paused (already the dense psych ledger). Humanistic ≠ psychological. Do not search for a second source that confirms Hand. CORE=0 is not a KPI; the CORE rule (same lemma across school classes) is unchanged. Full recount only after those five empty psych slots are non-empty. Outer planets are the stress-test: hold three models without averaging. Greene NEED_OWNER does not block another independent psychological source.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this doc §6.10 · changelog 1.3.45; handoff; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; CORE still unscored; Pluto object still withheld
+
+### Architecture impact — 1.3.46 Uranus psychological ingest
+
+- **SoT before:** Uranus psych slot empty. Ledger = Hand professional + Rudhyar humanistic. Tarnas *Prometheus the Awakener* unread; 1987 client-brief not ingested as a substitute.
+- **SoT after:** Uranus psych slot filled from Tarnas official-site *Introduction to Archetypal Astrology* (Uranus/Prometheus section) as `psychological` `school_specific`. Monograph still unread NEED_OWNER. Object withheld. No CORE. Remaining empty psych slots: Neptune → Venus → Mars. Recount still deferred.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.46; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Uranus object still withheld; CORE still unscored
+
+### Architecture impact — 1.3.47 Neptune psychological ingest
+
+- **SoT before:** Neptune psych slot empty. Ledger = Hand professional + Rudhyar humanistic. *The Astrological Neptune* NEED_OWNER.
+- **SoT after:** Neptune psych slot filled from Tarnas official-site *Introduction to Archetypal Astrology* (Neptune section) as `psychological` `school_specific`. Same PDF as Uranus 1.3.46 after field check, not auto-picked. Dedicated Greene book still unread NEED_OWNER. Object withheld. No CORE. Remaining empty psych slots: Venus → Mars. Recount still deferred.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.47; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Neptune object still withheld; CORE still unscored
+
+### Architecture impact — 1.3.48 Venus psychological ingest
+
+- **SoT before:** Venus psych slot empty. Ledger = classical moisture + Watters love/desire + Hand bonding + Rudhyar inward-way. Inner Planets p.69 NEED_OWNER. Sullivan *Venus and Jupiter* cataloged unread (CPA page/reviews only).
+- **SoT after:** Venus psych slot filled from Sullivan official-site Apollon excerpt of *Venus and Jupiter* (`erinsullivan.com` Eros and Aphrodite) as `psychological` `school_specific`. Dual Goddess seminar body still unread. Inner Planets p.69 still NEED_OWNER. `object.function` unchanged. No CORE. Remaining empty psych slot: Mars. Recount still deferred until Mars is also non-empty.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.48; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Venus `function` still classical moisture; CORE still unscored
+
+### Architecture impact — 1.3.49 Mars psychological discovery (no ingest)
+
+- **SoT before:** Venus psych filled 1.3.48. Remaining empty psych slot: Mars. Inner Planets p.138 NEED_OWNER.
+- **SoT after:** Mars psych slot still empty after independent field re-check. No legally readable dedicated principle locus. p.138 still NEED_OWNER. `object.function` unchanged. No CORE. Recount still deferred. Next: densify Sun psychological, one locus.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.49; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Mars `function` still classical heat/dryness; CORE still unscored
+
+### Architecture impact — 1.3.50 Sun psychological densification
+
+- **SoT before:** Sun psych ledger = Luminaries preview (2 claims) + Rudhyar humanistic. Apollo's Chariot NEED_OWNER. Apollon Issue 1 opened 1.3.35, not ingested (humanistic class took priority).
+- **SoT after:** Sun psych densified from Greene *The Sun-god and the Astrological Sun* (CPA Apollon Issue 1 official PDF / authorized astro.com `in_sungod`) as `psychological` `school_specific`. Apollo's Chariot still unread NEED_OWNER — not substituted. Luminaries not re-ingested. `object.function` unchanged. No CORE. Remaining empty psych slot: Mars. Next: densify Moon psychological. Recount still deferred.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.50; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Sun `function` still classical heat/dryness; CORE still unscored
+
+### Architecture impact — 1.3.51 Moon psychological densification (no ingest)
+
+- **SoT before:** Moon psych ledger = Luminaries preview (2 claims) + Rudhyar humanistic. Costello *The Astrological Moon* NEED_OWNER.
+- **SoT after:** Moon psych still only Luminaries preview after independent field re-check. No legally readable dedicated natal-Moon principle locus besides the already-ingested Luminaries preview. Costello still NEED_OWNER. `object.function` unchanged. No CORE. Remaining empty psych slot: Mars. Next: densify Mercury psychological. Recount still deferred.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.51; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Moon `function` still classical moisture; CORE still unscored
+
+### Architecture impact — 1.3.52 Mercury psychological densification (no ingest)
+
+- **SoT before:** Mercury psych ledger = Inner Planets Hermes (1 claim) + Rudhyar humanistic. Hand Ch.4 Mercury NEED_OWNER.
+- **SoT after:** Mercury psych still only Inner Planets Hermes after independent field re-check. No legally readable dedicated natal-Mercury principle locus besides that already-ingested preview. Remaining Inner Planets Mercury chapters unread same-author densification. Hand Ch.4 Mercury still NEED_OWNER. `object.function` unchanged. No CORE. Remaining empty psych slot: Mars. Next: densify Saturn psychological. Recount still deferred.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.52; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Mercury `function` still classical convertibility; CORE still unscored
+
+### Architecture impact — 1.3.53 Saturn psychological densification
+
+- **SoT before:** Saturn psych ledger = Greene Introduction (2 claims) + Rudhyar humanistic + Hand professional. Remaining *Saturn: A New Look* chapters unread same-author densification.
+- **SoT after:** Saturn psych densified from Tarnas official-site *Introduction to Archetypal Astrology* (Saturn/senex section) as `psychological` `school_specific`. Greene Introduction not re-ingested. Remaining book chapters still unread. `object.function` and `themes` unchanged (no `structure`). No CORE. Remaining empty psych slot: Mars. Sun/Moon/Mercury/Saturn densify budget complete. Recount still deferred.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.53; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Saturn `function` still classical cold; CORE still unscored
+
+### Architecture impact — 1.3.54 Mars psychological densification (no ingest)
+
+- **SoT before:** Mars psych slot empty after 1.3.49. Inner Planets p.138 NEED_OWNER. Densify Sun/Moon/Mercury/Saturn complete.
+- **SoT after:** Mars psych still empty after independent field re-check. No legally readable dedicated natal-Mars principle locus. p.138 still NEED_OWNER. `object.function` unchanged. No CORE. Do not loop a fourth Mars hunt without a new readable locus. Recount still deferred. Jupiter psych paused.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.54; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Mars `function` still classical heat/dryness; CORE still unscored
+
+### Architecture impact — 1.3.55 Mars psychological discovery (Sasportas aggression seminar cataloged unread)
+
+- **SoT before:** Mars psych empty after 1.3.54. Inner Planets p.138 NEED_OWNER. Densify Sun/Moon/Mercury/Saturn complete. Do not loop p.138.
+- **SoT after:** Independent field found a **new** dedicated psych Mars/aggression locus: Sasportas *Dynamics of the Unconscious* Part 1 (Weiser 1988 ISBN 0877286744). Body unread (Google Books empty; Archive printdisabled). Cataloged as `src.psychological.sasportas_dynamics_unconscious`, pending on Mars, **not ingested**. Forum/AbeBooks p.18 quotes unused. Not a substitute for p.138. Arroyo still front-matter; George Hellenistic is not this psych slot; Bell official site still jacket. `object.function` unchanged. No CORE. Recount still deferred. Jupiter psych paused.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.55; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Mars `function` still classical heat/dryness; CORE still unscored
+
+### Architecture impact — 1.3.56 Mars psychological discovery (Huber Planets cataloged unread)
+
+- **SoT before:** Mars psych empty after 1.3.55. Inner Planets p.138 and Sasportas Dynamics Part 1 NEED_OWNER. Do not loop those pages.
+- **SoT after:** Independent field found a **new** dedicated psych Mars chapter: Huber *The Planets and Their Psychological Meaning* (HopeWell 2006 ISBN 9780954768027) ch. *Mars: The Masculine* p.59, identified from the official API TOC. Chapter body unread. Cataloged as `src.psychological.huber_planets`, pending on Mars, **not ingested**. Parked `psychological` (no Huber enum). Do not ingest tool-planet/masculine from TOC, garden lecture, or review. Not a substitute for p.138 or Dynamics Part 1. `object.function` unchanged. No CORE. Recount still deferred. Jupiter psych paused.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.56; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Mars `function` still classical heat/dryness; CORE still unscored
+
+### Architecture impact — 1.3.56 Mars psychological discovery (Huber Planets cataloged unread)
+
+- **SoT before:** Mars psych empty after 1.3.55. Inner Planets p.138 and Sasportas Dynamics Part 1 NEED_OWNER. Do not loop those pages.
+- **SoT after:** Independent field found a **new** dedicated psych Mars chapter: Huber *The Planets and Their Psychological Meaning* (HopeWell 2006 ISBN 9780954768027) ch. *Mars: The Masculine* p.59, identified from the official API TOC. Chapter body unread. Cataloged as `src.psychological.huber_planets`, pending on Mars, **not ingested**. Parked `psychological` (no Huber enum). Do not ingest tool-planet/masculine from TOC, garden lecture, or review. Not a substitute for p.138 or Dynamics Part 1. `object.function` unchanged. No CORE. Recount still deferred. Jupiter psych paused.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this changelog 1.3.56; handoff; gap-audit patch; tracker FOUNDATION NOW
+- **Backward compatible?** yes — no runtime wiring; Mars `function` still classical heat/dryness; CORE still unscored
+
 ---
 
 ## 0. Зачем останавливать Today-контент
@@ -56,7 +173,7 @@ Pipeline уже назвал дыру: **Astrology Interpretation Canon (lookup)
 
 **Freeze (Today content):** не расширять narrative prompts / formula banks / slot-polish, пока нет IL-3 Engine (темы выбираются до LLM). I0 и product cycle **не** переоткрываются.
 
-**Freeze (методология IL):** не менять слои / evidence tiers / provenance shape до первых ~100 объектов (IL-1). **1.3.29–1.3.30** — исключения, которые вскрыло столкновение с источниками: author-first очередь и фиксация ядра от доступных книг. In-flight IL-1: school-first discovery. Следующее ядро: полный research order. Дальше — только баги модели.
+**Freeze (методология IL):** не менять слои / evidence tiers / provenance shape до первых ~100 объектов (IL-1). **1.3.29–1.3.30** — исключения, которые вскрыло столкновение с источниками: author-first очередь и фиксация ядра от доступных книг. **1.3.45** — remaining planet budget = empty psychological slots (not more classical/humanistic/professional padding). In-flight IL-1: school-first discovery inside that budget. Следующее ядро: полный research order. Дальше — только баги модели.
 
 **Разрешено параллельно:** транспортная честность, routing, visual foundation, DS, баги, геометрия, ScreenFlow без новой семантики, **Swiss licensing gate** (не блокирует research IL-1).
 
@@ -514,6 +631,31 @@ Author-first очередь Greene → Hand была методологичес�
 
 Extraction first. Cross-source comparison только после extraction. No `object.function` rewrite. No automatic CORE promotion.
 
+### 6.10 Remaining IL-1 planet budget (1.3.45)
+
+The live gap after 1.3.44 is **not** “too few planet claims.” It is **psychological coverage imbalance**. Further classical / traditional / humanistic / professional accumulation does not raise canon value until the empty psych slots exist as independent models.
+
+**Budget (locked until the five empty psych slots are non-empty):**
+
+```text
+Pluto → Uranus → Neptune → Venus → Mars
+then densify Sun / Moon / Mercury / Saturn
+Jupiter psychological: paused
+```
+
+**Rules inside this budget:**
+
+- Search for an authoritative psychological/depth source that independently defines the object. Do **not** search for confirmation of Hand lemmas (reconstruction / disruption / dissolution / bonding / survival).
+- Humanistic Rudhyar is a third intellectual line. It is **not** a psychological substitute.
+- `NEED_OWNER(Greene/Hand locus)` does not block another independent psychological source.
+- Extraction first. Compare only after extraction exists. Do not average Uranus/Neptune/Pluto models.
+- CORE=0 is **not** a KPI. The CORE rule stays: same lemma across **school classes**. Library value lives in same / related / different-register / reinterpretation / conflict / school-specific relations, not only in `core`.
+- Full Sun→Pluto recount only after Pluto, Uranus, Neptune, Venus, and Mars psychological slots are all non-empty. Not after each book.
+
+Outer planets are the stress-test: classical absent historically; humanistic Rudhyar + professional Hand exist; psychological was empty. Holding three models without averaging is the proof of the library.
+
+**Progress inside this budget:** Pluto filled 1.3.45 (Greene/Campion interview). Uranus filled 1.3.46 (Tarnas official intro — not the unread monograph). Neptune filled 1.3.47 (same Tarnas PDF, Neptune section, after field check). Venus filled 1.3.48 (Sullivan official-site *Venus and Jupiter* excerpt — not Inner Planets p.69). Mars still empty after 1.3.49, **1.3.54**, **1.3.55**, and **1.3.56** (p.138 NEED_OWNER; Sasportas Dynamics Part 1 unread; Huber *The Planets* Mars chapter unread). Sun densified 1.3.50 (Greene Apollon Issue 1 / astro.com in_sungod — not Apollo's Chariot). Moon still only Luminaries preview after 1.3.51 field re-check (Costello still NEED_OWNER). Mercury still only Inner Planets Hermes after 1.3.52 field re-check (remaining chapters unread). Saturn densified 1.3.53 (Tarnas official intro Saturn/senex — not remaining *Saturn: A New Look* chapters). Remaining empty: **Mars**. Densify Sun/Moon/Mercury/Saturn complete. Do not loop p.138 or Dynamics; do not ingest Huber masculine/tool-planet from TOC. Recount still deferred until Mars psych is also non-empty. Jupiter psych paused.
+
 ---
 
 ## 7. Масштаб
@@ -583,6 +725,18 @@ Extraction first. Cross-source comparison только после extraction. No
 
 ## 10. Changelog
 
+- **1.3.56 (2026-08-18)** — IL-1 discovery (no ingest, no CORE): independent Mars psychological field after 1.3.55 Dynamics skip. New dedicated chapter identified: Huber *The Planets and Their Psychological Meaning* (HopeWell 2006 ISBN 9780954768027) ch. *Mars: The Masculine* p.59, from official API TOC. Chapter body unread. Cataloged as `src.psychological.huber_planets`, pending on Mars. Parked `psychological` (no Huber enum). Do not ingest tool-planet/masculine from TOC, garden lecture, or Llewellyn review. Not a substitute for Inner Planets p.138 or Dynamics Part 1. Independent field: Hamaker planets-as-drives still unread (ebin unused); *Development of the Personality* is childhood stages; Clark vocation PDF is one-sentence Mars. Psychological Mars still empty. `object.function` unchanged. Jupiter psych paused. Nothing `active`. CORE still unscored.
+- **1.3.55 (2026-08-18)** — IL-1 discovery (no ingest, no CORE): independent Mars psychological field after 1.3.54 skip of p.138. New dedicated locus identified: Sasportas *Dynamics of the Unconscious* Part 1 *The Astrology and Psychology of Aggression* (Weiser 1988 ISBN 0877286744). Body unread (Google Books `M9IEuEmeS0YC` empty viewport; Archive `dynamicsofuncons0000gree` printdisabled). Cataloged as `src.psychological.sasportas_dynamics_unconscious`, pending on Mars. Pirate dumps unused. Forum/AbeBooks quotes of p.18 not ingested. Not a substitute for Inner Planets p.138. Independent field: Arroyo *Four Elements* still front-matter; George *Ancient Practice* is Hellenistic technique, not this psych slot; Lynn Bell official site still Mars Quartet jacket. Psychological Mars still empty. `object.function` unchanged. Jupiter psych paused. Nothing `active`. CORE still unscored.
+- **1.3.54 (2026-08-18)** — IL-1 discovery (no ingest, no CORE): Mars psychological field re-check after Saturn densify. Inner Planets p.138 still NEED_OWNER (Google Books empty; Archive printdisabled; pirate dumps unused; no Greene summary; third-party quotes of p.185/p.188 not ingested). Same-author densification skipped (CPA Mars webinars 2024 page re-checked, still description not transcript; astro.com Mythic Mars extract not a substitute). Independent field: Mars Quartet still jacket; Martin Lesson 3 unread; Sullivan official site still has no Mars principle excerpt; Clark *Aphrodite and Ares* is Venus-Mars pair myth; Costello *Desire and the Stars* is general desire/divination; McAdam life-coach and OPA consulting-room are natal/cycle essays; Hand transits Mars is professional densification; Tarnas intro Mars still a thin survey. Psychological Mars still empty. `object.function` unchanged. Do not loop a fourth Mars hunt without a new readable locus. Jupiter psych paused. Nothing `active`. CORE still unscored.
+- **1.3.53 (2026-08-18)** — IL-1 ingest (no CORE): Saturn psychological densification field re-check after Mercury skip. Greene Introduction already ingested — not re-ingested. Remaining *Saturn: A New Look* chapters unread same-author densification. CPA Saturn webinars 2015 page re-checked, not transcript. Same-author densification skipped (astro.com Mythic Saturn extract `advent2319spz` opened-not-ingested). Independent field: Relating p.39 unread; Martin Lesson 4 unread; Reinhart *Saturn, Chiron and the Centaurs* jacket; Sullivan *Saturn in Transit* jacket/cycle; Grasse astro.com is karmic-in-sign; Harvey Apollon Saturn-Uranus is a pair. Best accessible dedicated principle text after field check: Tarnas official-site *Introduction to Archetypal Astrology* (Saturn/senex section) as `psychological` `school_specific` (limit-necessity / senex / Chronos-fixing-the-chart / gravitas / birth-labor / skeleton / inner-judge / inner-authority / threshold-guardian — author's categories, not Greene psychic-process, Hand resistance/structure, Houlding personal-boundary, or Rudhyar I-am-I / Ring-Pass-Not). Same PDF as Uranus/Neptune after field check, not auto-picked. Superficial structure/limit overlap with Hand is not equivalence. Karma/Yahweh dump excluded. `object.function` and `themes` unchanged (no `structure`). Next: remaining empty psych slot is Mars. Densify Sun/Moon/Mercury/Saturn complete. Nothing `active`. CORE still unscored.
+- **1.3.52 (2026-08-18)** — IL-1 discovery (no ingest, no CORE): Mercury psychological densification field re-check after Moon skip. Inner Planets Hermes already ingested — not re-ingested. Remaining Inner Planets Mercury chapters (Sasportas Tricksters / Interpreting Mercury) unread same-author densification. Hand Ch.4 Mercury still NEED_OWNER. Same-author densification skipped (astro.com Mythic Mercury extract `advent235ikc` opened-not-ingested). Independent field: Martin Mercury unread; Gerhardt / Lockley astro.com are natal/ego essays; Meyer Four Faces and Clark Timelines are cycle densification; Clark *Crossing the Threshold* opened-not-ingested (mythic katabasis/psychopomp, not natal Mercury); Costello MISPA is third-party notes; CPA Planets of Twilight page-only; Reinhart Forensic Mercury is Rx-in-Scorpio cycle; Sullivan official site has no Mercury principle excerpt; Tarnas intro Mercury is a thin survey paragraph — not this locus. Psychological Mercury still only Inner Planets Hermes. `object.function` unchanged. Next: densify Saturn psychological, one locus. Nothing `active`. CORE still unscored.
+- **1.3.51 (2026-08-18)** — IL-1 discovery (no ingest, no CORE): Moon psychological densification field re-check after Sun fill. Costello *The Astrological Moon* still NEED_OWNER (CPA/author jacket+Harvey review; official-site reprint blurb not chapter body; pirate dumps unused; no Costello summary). Same-author densification skipped (Luminaries Moon preview not re-ingested; astro.com Mythic Moon extract `advent237yqs` opened-not-ingested). Independent field: Martin Lesson 2 unread; Sullivan *Dynasty* Sun/Moon is family-systems; Gerhardt astro.com Moon is natal/mothering essay; Reinhart Moon Talk I–II opened-not-ingested (cycle attunement/meditation, not natal principle); Brian Clark Apollon Issue 4 / astro.com progressed lunation are cycle densification. Tarnas intro Moon is a thin survey paragraph — not this locus. Hand transits Moon intro is professional densification. Psychological Moon still only Luminaries preview. `object.function` unchanged. Next: densify Mercury psychological, one locus. Nothing `active`. CORE still unscored.
+- **1.3.50 (2026-08-17)** — IL-1 ingest (no CORE): Sun psychological densification. Apollo's Chariot NEED_OWNER remains (jacket only; pirate dumps unused; no Greene summary). Hand Ch.4 Sun still NEED_OWNER. Same-author densification skipped (Mythic Advent Sun snippet; Luminaries not re-ingested). Independent field: Martin Lesson 2 unread; Sullivan *Dynasty* Sun/Moon is family-systems, not this principle locus; Tarnas intro Sun not this locus (do not auto-pick that PDF a third time); Wounding-and-will-to-live is a Chiron article. Best accessible dedicated principle text after field check: Greene *The Sun-god and the Astrological Sun* (CPA Apollon Issue 1 official PDF / authorized astro.com `in_sungod`) as `psychological` `school_specific` (carrier-not-physical-Sun / inner-light Know-thyself / core-identity-destiny / family-curse-breaker / cosmocrator-reconciler / vocation-as-inner-call / inner-healer will-to-live / unexpressed-Sun / aloneness-price — author's categories, not Luminaries solar-consciousness, Rudhyar light-as-integration, or Watters essential-self). Cataloged opened-not-ingested in 1.3.35; extracted now. Not a substitute for Apollo's Chariot. House/aspect natal recipes and heart/body dump excluded. `object.function` unchanged. Next: densify Moon psychological, one locus. Nothing `active`. CORE still unscored.
+- **1.3.49 (2026-08-17)** — IL-1 discovery (no ingest, no CORE): Mars psychological field re-check after Venus fill. Inner Planets p.138 still NEED_OWNER (Google Books viewport empty; Archive printdisabled; pirate dumps unused; no Greene summary; third-party quotes of p.185/p.188 not ingested). Same-author densification skipped (CPA Mars webinars 2024 page re-checked, still description not transcript; astro.com Mythic Astrology Mars extract re-opened-not-ingested). Independent field: Mars Quartet still jacket; Martin Lesson 3 unread; Sullivan official site has no Mars principle excerpt; Costello events/listings only; Reinhart articles are not Mars-alone. Tarnas intro Mars is a thin survey paragraph — not this locus (do not auto-pick the same PDF a third time). Gerhardt astro.com Mars is natal/cultural essay. Hand transits Mars intro is professional densification. Psychological Mars still empty. `object.function` unchanged. Next: densify Sun psychological, one locus. Nothing `active`. CORE still unscored.
+- **1.3.48 (2026-08-17)** — IL-1 ingest (no CORE): Venus psychological. Inner Planets p.69 NEED_OWNER remains (pirate dumps unused; no Greene summary). Relating unread. Mythic Venus still not ingested (same-author densification). CPA *Venus and Jupiter* page/reviews still not claims. Dual Goddess seminar body still unread. Martin Lesson 3 unread. Tarnas intro Venus is a thin survey sentence — not this locus (do not auto-pick the same PDF a third time). Gerhardt Venus questionnaire not this principle locus. Best accessible independent principle text after field check: Erin Sullivan official-site excerpt of *Venus and Jupiter* (Apollon 1999 / erinsullivan.com *Eros and Aphrodite: Love and Creation*) as `psychological` `school_specific` (channel-for-Eros / Urania-Pandemos dual goddess / bridge-ideal-real / same-impulse-for-relating-and-creating / Saturn-as-midwife / unchanneled-Eros / creativity-as-discovery / not-only-fine-arts / pre-creative-chaos — author's categories, not Hand bonding, Watters love/desire, or Rudhyar inward-way). Moon-Neptune raw-Eros and natal examples not this locus. Womb/medical dump excluded. `object.function` unchanged. Next: Mars psychological, one locus. Nothing `active`. CORE still unscored.
+- **1.3.47 (2026-08-17)** — IL-1 ingest (no CORE): Neptune psychological. *The Astrological Neptune* NEED_OWNER remains (Google Books still title/TOC). Outer Planets NEED_OWNER remains. CPA Neptune page re-checked, not transcript. Mythic Neptune extract re-opened-not-ingested. Sullivan *The Elusive Neptune* opened-not-ingested (Pisces-transit/discovery/liminality, not this principle locus). Reinhart Saturn-Neptune and Uranus-Neptune essays are pair/transit. Sasportas/Martin still closed. Best accessible independent principle text after field check: Tarnas official-site *Introduction to Archetypal Astrology* (Neptune section) as `psychological` `school_specific` (transcendent-ideal / ocean-of-consciousness / thirst-for-transcendence / Nirvana-and-Maya / Narcissus / longing — author's categories, not Hand dissolution-of-distinction or Rudhyar ecstasy/prenatal). Same PDF as Uranus 1.3.46 after field check, not auto-picked. Tarnas Maya is Neptune-alone, not Hand Neptune+Saturn. Perinatal/medical/intuition dump excluded. Object still withheld. Next: Venus psychological, one locus. Nothing `active`. CORE still unscored.
+- **1.3.46 (2026-08-17)** — IL-1 ingest (no CORE): Uranus psychological. Outer Planets NEED_OWNER remains; Art of Stealing Fire still unread (not a substitute); CPA Uranus page re-checked, not transcript; Mythic Uranus extract re-opened-not-ingested; Sullivan Midlife extract opened-not-ingested (Saturn-Uranus/midlife, not this principle locus); Reinhart pair/transit essays not this locus; Sasportas/Martin still closed. Best accessible independent principle text after field check: Tarnas official-site *Introduction to Archetypal Astrology* (cosmosandpsyche.com PDF, Uranus/Prometheus section) as `psychological` `school_specific` (Prometheus-figure / freedom-rebellion-revolution / breakthroughs / own-path / unintegrated-as-forced-change-from-without — author's categories, not Hand disruption/mutation or Rudhyar transform/through). Not a substitute for unread *Prometheus the Awakener*. 1781/tech/perinatal dump excluded. Object still withheld. Next: Neptune psychological, one locus. Nothing `active`. CORE still unscored.
+- **1.3.45 (2026-08-17)** — IL-1 remaining planet budget locked to empty psychological slots (Pluto → Uranus → Neptune → Venus → Mars; then densify Sun/Moon/Mercury/Saturn; Jupiter psych paused). CORE=0 is not a KPI; CORE rule unchanged. Humanistic ≠ psychological. Do not hunt Hand-lemma confirmation. Recount deferred until those five psych slots are non-empty. Pluto psychological ingest (no CORE, object withheld): Greene/Campion *Living with Pluto* interview Parts 1–2 (astro.com authorized author speech) as `psychological` `school_specific` (life-force-in-substance / image-family / grind-or-victim / survival-instinct-when-overwhelmed — author's categories, not Hand reconstruction or Rudhyar celestial-seed). Outer Planets NEED_OWNER remains; this is not that volume. Field opened: Reinhart 1991 official essay opened-not-ingested (Scorpio-transit/collective); Cunningham/Hamaker unread; Sasportas/Martin still closed; Mythic Pluto extract opened-not-ingested; CPA page still not transcript. Evolutionary Green/Forrest not this psych fill. Next: Uranus psychological, one locus. Nothing `active`. CORE still unscored.
 - **1.3.44 (2026-08-17)** — IL-1 discovery (no ingest, no CORE): Neptune psychological. *The Astrological Neptune* still NEED_OWNER (Google Books title+TOC only; pirate dumps unused; no Greene summary; espirited.com / forum / Goodreads intro quotes not ingested). Same-author densification skipped (CPA Neptune webinars 2018 page re-checked, still description not transcript — 1.3.33 rule holds; astro.com Mythic Astrology Neptune extract opened-not-ingested). Independent field: Sasportas *Gods of Change* still jacket; Martin Lesson 5 unread; Outer Planets still NEED_OWNER. Steven Forrest *Book of Neptune* is evolutionary/jacket, not this psych fill. Psychological Neptune still empty. Object still withheld. Next: Pluto psychological, same discovery rule, one locus. Nothing `active`. CORE still unscored.
 - **1.3.43 (2026-08-17)** — IL-1 discovery (no ingest, no CORE): Uranus psychological. Outer Planets volume still NEED_OWNER; pirate dumps unused; no Greene summary. Art of Stealing Fire is not a substitute. Same-author densification skipped (CPA Uranus webinars 2019 page re-checked, still description not transcript — 1.3.32 rule holds; astro.com Mythic Astrology Uranus extract opened-not-ingested). Independent field: Sasportas *Gods of Change* still jacket/printdisabled; Martin Lesson 5 unread; Tarnas *Prometheus the Awakener* cataloged unread (1987 client-brief intro not ingested as a substitute for that monograph). Psychological Uranus still empty. Object still withheld. Next: Neptune psychological, same discovery rule, one locus. Nothing `active`. CORE still unscored.
 - **1.3.42 (2026-08-17)** — IL-1 discovery (no ingest, no CORE): Mars psychological. Inner Planets p.138 still NEED_OWNER; pirate dumps unused; no Greene summary; third-party quotes of p.185/p.188 not ingested. Same-author densification skipped (CPA Mars webinars 2024 page re-checked, still description not transcript — 1.3.31 rule holds; astro.com Mythic Astrology Mars extract opened-not-ingested). Independent field: Mars Quartet still jacket only; Martin Lesson 3 unread; Dana Gerhardt astro.com Mars is not Greene; Hand transits Mars intro is professional densification. Psychological Mars still empty. `object.function` unchanged. Next: Uranus psychological, same discovery rule, one locus. Nothing `active`. CORE still unscored.

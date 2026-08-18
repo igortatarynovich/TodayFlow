@@ -9,7 +9,9 @@
     "src.psychological.arroyo_four_elements",
     "src.psychological.greene_inner_planets",
     "src.psychological.greene_mars_cpa",
-    "src.psychological.bell_mars_quartet"
+    "src.psychological.bell_mars_quartet",
+    "src.psychological.sasportas_dynamics_unconscious",
+    "src.psychological.huber_planets"
   ],
   "gap_notes": [
     "Valens I.1 is a topical/significator catalog (sect, colour, taste, body parts), not Ptolemy/Lilly elemental qualities. Do not backfill heat/cold/dry/moist from Valens, and do not average catalogs into function.",
@@ -29,7 +31,18 @@
     "1.3.42: Psych Mars discovery. Inner Planets p.138 still NEED_OWNER (Google Books empty). Pirate dumps unused. Do not replace that page with a Greene summary. Third-party quotes of p.185/p.188 not ingested.",
     "Same-author densification skipped: CPA Mars webinars 2024 page re-checked (still description, not 7h11m transcript) — not ingested, 1.3.31 rule holds. astro.com Mythic Astrology Mars extract opened (advent) — mythology snippet, not ingested because p.138 is the dedicated psych Mars chapter.",
     "Independent field: Mars Quartet still jacket only (CPA page/reviews not claims). Martin Lesson 3 unread. Dana Gerhardt astro.com Mars article is not Greene — not ingested. Hand transits Mars intro is professional densification, not this psych fill.",
-    "Psychological Mars still empty. object.function unchanged (heating and drying quality that contends). Iron/inflammation stay out of object.domains. Next: Uranus psychological, same discovery rule."
+    "Psychological Mars still empty. object.function unchanged (heating and drying quality that contends). Iron/inflammation stay out of object.domains. Next: Uranus psychological, same discovery rule.",
+    "1.3.49: Psych Mars field re-checked after Venus fill. Inner Planets p.138 still NEED_OWNER (Google Books viewport empty; Archive printdisabled). Pirate dumps unused. Do not replace that page with a Greene summary.",
+    "Same-author densification skipped: CPA Mars webinars 2024 page re-checked, still description not 7h11m transcript. Mythic Astrology Mars extract re-opened (advent232zvv) — mythology snippet, not ingested. Relating unread.",
+    "Independent field: Mars Quartet still jacket (CPA/Bell/Reinhart pages, not chapter body). Martin Lesson 3 unread. Sullivan official site has no Mars principle excerpt (Venus excerpt is not this locus). Costello events/listings only. Reinhart articles are Chiron/Pluto/Centaurs, not Mars-alone.",
+    "Not this locus: Tarnas intro Mars is a thin survey paragraph — do not auto-pick the same PDF a third time. Gerhardt astro.com Mars is natal/cultural essay. Hand transits Mars intro is professional densification. OPA/third-party quotes of p.185/p.188 not ingested.",
+    "Psychological Mars still empty. object.function unchanged. Iron/inflammation stay out of object.domains. Next: densify Sun psychological, one locus. Recount still deferred.",
+    "1.3.54: Psych Mars field re-checked after Saturn densify. Inner Planets p.138 still NEED_OWNER (Google Books empty; Archive printdisabled). Pirate dumps unused. Do not replace that page with a Greene summary. object.function unchanged.",
+    "Independent field 1.3.54: CPA Mars page still not transcript; Mars Quartet still jacket; Martin Lesson 3 unread. Clark Aphrodite-and-Ares is Venus-Mars pair myth. Costello Desire-and-the-Stars is general desire. McAdam/OPA natal-cycle essays. Hand transits Mars is professional densification. Tarnas intro Mars still thin survey. Sullivan has no Mars excerpt.",
+    "1.3.55: New dedicated psych Mars/aggression locus identified, body unread. Sasportas Dynamics of the Unconscious Part 1 (Weiser 1988 ISBN 0877286744). Google Books empty; Archive printdisabled. Pirate dumps unused. Forum/AbeBooks p.18 quotes not ingested. Not a substitute for Inner Planets p.138. object.function unchanged.",
+    "Independent field 1.3.55: Arroyo Four Elements still front-matter; classify from opened locus if readable. George Ancient Practice is Hellenistic technique, not this psych slot. Lynn Bell official site still Mars Quartet jacket. Gerhardt in_dg_mars already skipped as natal/cultural essay.",
+    "1.3.56: New dedicated psych Mars chapter identified, body unread. Huber The Planets and Their Psychological Meaning (HopeWell 2006 ISBN 9780954768027) ch. Mars: The Masculine p.59. Official API TOC only. Do not ingest tool-planet/masculine from TOC. object.function unchanged.",
+    "Independent field 1.3.56: API garden lecture is Huber system architecture, not Mars-alone. Llewellyn review unused. Hamaker Psychological Astrology planets-as-drives still unread (ebin pirate unused). Development of the Personality is childhood stages, not this locus. Clark vocation PDF is one-sentence Mars in a vocation essay."
   ],
   "claims": [
     {

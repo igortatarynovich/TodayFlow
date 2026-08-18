@@ -504,11 +504,36 @@ def test_watters_greene_luminaries_not_averaged():
     assert all("solar consciousness" not in row["normalized_claim"].lower() for row in rudhyar_sun)
     assert "src.humanistic.rudhyar_new_mansions" not in set(sun_claims["pending_source_ids"])
     assert "src.psychological.greene_apollos_chariot" in set(sun_claims["pending_source_ids"])
-    assert "src.psychological.greene_apollon_sun" in set(sun_claims["pending_source_ids"])
+    assert "src.psychological.greene_apollon_sun" not in set(sun_claims["pending_source_ids"])
     assert "src.professional.hand_horoscope_symbols" in set(sun_claims["pending_source_ids"])
     assert any("song of light" in note.lower() for note in sun_claims["gap_notes"])
     assert any("apollon" in note.lower() and "not this locus" in note.lower() for note in sun_claims["gap_notes"])
     assert any("apollo's chariot" in note.lower() or "apollos chariot" in note.lower() for note in sun_claims["gap_notes"])
+    assert any("1.3.50" in note for note in sun_claims["gap_notes"])
+    apollon_sun = [row for row in sun_claims["claims"] if row["source_id"] == "src.psychological.greene_apollon_sun"]
+    assert len(apollon_sun) == 10
+    assert all(row["source_class"] == "psychological" for row in apollon_sun)
+    assert all(row["school"] == "psychological_jungian" for row in apollon_sun)
+    assert all(row["evidence_tier"] == "school_specific" for row in apollon_sun)
+    assert all(row["review_status"] == "extracted" for row in apollon_sun)
+    assert {row["concept_id"] for row in apollon_sun} == {
+        "claim.sun.greene_apollon_carrier",
+        "claim.sun.greene_apollon_inner_light",
+        "claim.sun.greene_apollon_core_identity",
+        "claim.sun.greene_apollon_family_curse",
+        "claim.sun.greene_apollon_chart_centre",
+        "claim.sun.greene_apollon_cosmocrator",
+        "claim.sun.greene_apollon_vocation",
+        "claim.sun.greene_apollon_healer_will",
+        "claim.sun.greene_apollon_unexpressed",
+        "claim.sun.greene_apollon_aloneness_price",
+    }
+    carrier = next(row for row in apollon_sun if row["concept_id"] == "claim.sun.greene_apollon_carrier")
+    assert carrier["field"] == "function"
+    assert "carrier" in carrier["normalized_claim"].lower()
+    assert all("essential self" not in row["normalized_claim"].lower() for row in apollon_sun)
+    assert all("solar consciousness" not in row["normalized_claim"].lower() for row in apollon_sun)
+    assert all("integration" not in row["normalized_claim"].lower() for row in apollon_sun)
     moon_ids = {row["concept_id"] for row in moon_claims["claims"]}
     assert "claim.moon.earth_mother_embodiment" in moon_ids
     assert "claim.moon.embodied_life_as_numinous" in moon_ids
@@ -546,6 +571,10 @@ def test_watters_greene_luminaries_not_averaged():
     assert "src.professional.hand_horoscope_symbols" in set(moon_claims["pending_source_ids"])
     assert any("song of life" in note.lower() for note in moon_claims["gap_notes"])
     assert any("costello" in note.lower() and "need_owner" in note.lower() for note in moon_claims["gap_notes"])
+    assert any("1.3.51" in note for note in moon_claims["gap_notes"])
+    moon_psych = [row for row in moon_claims["claims"] if row["source_class"] == "psychological"]
+    assert len(moon_psych) == 2
+    assert all(row["source_id"] == "src.psychological.greene_luminaries" for row in moon_psych)
     venus_ids = {
         row["concept_id"]
         for row in json.loads((CLAIMS_DIR / "astro.object.venus.json").read_text(encoding="utf-8"))["claims"]
@@ -601,11 +630,43 @@ def test_watters_greene_luminaries_not_averaged():
     assert any("carolina de pedro" in note.lower() for note in venus_claims["gap_notes"])
     assert any("humanistic" in note.lower() and "rudhyar" in note.lower() for note in venus_claims["gap_notes"])
     assert any("1.3.41" in note for note in venus_claims["gap_notes"])
+    assert any("1.3.48" in note for note in venus_claims["gap_notes"])
     assert any("sullivan" in note.lower() for note in venus_claims["gap_notes"])
     assert any("mythic astrology" in note.lower() for note in venus_claims["gap_notes"])
-    assert "src.psychological.sullivan_venus_jupiter" in set(venus_claims["pending_source_ids"])
-    assert all(row["source_class"] != "psychological" for row in venus_claims["claims"])
+    assert "src.psychological.sullivan_venus_jupiter" not in set(venus_claims["pending_source_ids"])
+    assert "src.psychological.greene_inner_planets" in set(venus_claims["pending_source_ids"])
+    assert "src.psychological.greene_mythic_astrology" in set(venus_claims["pending_source_ids"])
+    sullivan_venus = [
+        row for row in venus_claims["claims"] if row["source_id"] == "src.psychological.sullivan_venus_jupiter"
+    ]
+    assert len(sullivan_venus) == 9
+    assert all(row["source_class"] == "psychological" for row in sullivan_venus)
+    assert all(row["school"] == "psychological_cpa" for row in sullivan_venus)
+    assert all(row["evidence_tier"] == "school_specific" for row in sullivan_venus)
+    assert all(row["review_status"] == "extracted" for row in sullivan_venus)
+    assert {row["concept_id"] for row in sullivan_venus} == {
+        "claim.venus.sullivan_channel_for_eros",
+        "claim.venus.sullivan_dual_goddess",
+        "claim.venus.sullivan_bridge_ideal_real",
+        "claim.venus.sullivan_same_impulse",
+        "claim.venus.sullivan_saturn_midwife",
+        "claim.venus.sullivan_eros_amok",
+        "claim.venus.sullivan_creativity_discovery",
+        "claim.venus.sullivan_not_only_fine_arts",
+        "claim.venus.sullivan_precreative_chaos",
+    }
+    channel = next(row for row in sullivan_venus if row["concept_id"] == "claim.venus.sullivan_channel_for_eros")
+    assert channel["field"] == "function"
+    assert "channel" in channel["normalized_claim"].lower()
+    assert "eros" in channel["normalized_claim"].lower()
+    assert all("bonding" not in row["normalized_claim"].lower() for row in sullivan_venus)
+    assert all("harlot" not in row["normalized_claim"].lower() for row in sullivan_venus)
+    assert all("love/desire" not in row["normalized_claim"].lower() for row in sullivan_venus)
+    assert all("inward way" not in row["normalized_claim"].lower() for row in sullivan_venus)
+    assert "claim.venus.sullivan_channel_for_eros" in {row["concept_id"] for row in by_id["astro.object.venus"]["provenance"]}
     assert "moist temperate quality disposed to pleasure and company" == by_id["astro.object.venus"]["function"]
+    assert "channel" not in by_id["astro.object.venus"]["function"]
+    assert "eros" not in by_id["astro.object.venus"]["function"].lower()
     mercury_claims = json.loads((CLAIMS_DIR / "astro.object.mercury.json").read_text(encoding="utf-8"))
     mercury_ids = {row["concept_id"] for row in mercury_claims["claims"]}
     assert "claim.mercury.mind_curiosity" in mercury_ids
@@ -646,6 +707,10 @@ def test_watters_greene_luminaries_not_averaged():
     assert "src.professional.hand_horoscope_symbols" in set(mercury_claims["pending_source_ids"])
     assert any("weaver" in note.lower() for note in mercury_claims["gap_notes"])
     assert any("humanistic" in note.lower() and "rudhyar" in note.lower() for note in mercury_claims["gap_notes"])
+    assert any("1.3.52" in note for note in mercury_claims["gap_notes"])
+    mercury_psych = [row for row in mercury_claims["claims"] if row["source_class"] == "psychological"]
+    assert len(mercury_psych) == 1
+    assert mercury_psych[0]["concept_id"] == "claim.mercury.hermes_spontaneity"
     for object_id in ("astro.object.venus", "astro.object.mars", "astro.object.jupiter"):
         claims = json.loads((CLAIMS_DIR / f"{object_id}.json").read_text(encoding="utf-8"))
         used = {row["source_id"] for row in claims["claims"]}
@@ -659,6 +724,9 @@ def test_watters_greene_luminaries_not_averaged():
     assert "integration" not in sun["function"]
     assert "heart of the sun" not in sun["function"]
     assert "will" not in sun["function"]
+    assert "carrier" not in sun["function"]
+    assert "cosmocrator" not in sun["function"]
+    assert "heating quality with moderate dryness" == sun["function"]
     domains_text = json.dumps(sun["domains"]).lower()
     assert "endocrine" not in domains_text
     assert "nerve" not in domains_text
@@ -683,6 +751,7 @@ def test_watters_greene_luminaries_not_averaged():
     assert "claim.sun.essential_self" in sun_prov
     assert "claim.sun.solar_consciousness_eternal" in sun_prov
     assert "claim.sun.rudhyar_light_as_integration" in sun_prov
+    assert "claim.sun.greene_apollon_carrier" in sun_prov
     assert "claim.moon.night_world_function" in moon_prov
     assert "claim.moon.earth_mother_embodiment" in moon_prov
     assert "claim.moon.rudhyar_song_of_life" in moon_prov
@@ -691,11 +760,17 @@ def test_watters_greene_luminaries_not_averaged():
     assert "claim.mercury.rudhyar_weaver" in mercury_prov
     inner = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_inner_planets")
     assert inner["source_class"] == "psychological"
+    assert "1.3.52" in inner["notes"]
+    assert "1.3.54" in inner["notes"]
+    assert "same-author" in inner["notes"].lower()
     sullivan = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.sullivan_venus_jupiter")
     assert sullivan["source_class"] == "psychological"
     assert sullivan["status"] == "candidate"
+    assert sullivan["legal_status"] == "copyrighted_site"
     assert "unread" in sullivan["notes"].lower()
     assert "1.3.41" in sullivan["notes"]
+    assert "1.3.48" in sullivan["notes"]
+    assert "ingested" in sullivan["notes"].lower()
     mythic = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_mythic_astrology")
     assert mythic["source_class"] == "psychological"
     assert mythic["status"] == "candidate"
@@ -704,6 +779,14 @@ def test_watters_greene_luminaries_not_averaged():
     assert "1.3.42" in mythic["notes"]
     assert "1.3.43" in mythic["notes"]
     assert "1.3.44" in mythic["notes"]
+    assert "1.3.45" in mythic["notes"]
+    assert "1.3.46" in mythic["notes"]
+    assert "1.3.48" in mythic["notes"]
+    assert "1.3.49" in mythic["notes"]
+    assert "1.3.51" in mythic["notes"]
+    assert "1.3.52" in mythic["notes"]
+    assert "1.3.53" in mythic["notes"]
+    assert "1.3.54" in mythic["notes"]
     art_fire = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_art_of_stealing_fire")
     assert art_fire["source_class"] == "psychological"
     assert art_fire["status"] == "candidate"
@@ -712,6 +795,17 @@ def test_watters_greene_luminaries_not_averaged():
     assert tarnas["source_class"] == "psychological"
     assert tarnas["status"] == "candidate"
     assert "unread" in tarnas["notes"].lower()
+    tarnas_intro = next(
+        src for src in corpus["sources"] if src["source_id"] == "src.psychological.tarnas_archetypal_intro"
+    )
+    assert tarnas_intro["source_class"] == "psychological"
+    assert tarnas_intro["status"] == "candidate"
+    assert "1.3.46" in tarnas_intro["notes"]
+    assert "1.3.47" in tarnas_intro["notes"]
+    assert "1.3.53" in tarnas_intro["notes"]
+    assert "1.3.54" in tarnas_intro["notes"]
+    assert "ingested" in tarnas_intro["notes"].lower()
+    assert "not prometheus the awakener" in tarnas_intro["notes"].lower() or "not this book" in tarnas["notes"].lower()
     uranus_cpa = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_uranus_cpa")
     assert uranus_cpa["status"] == "candidate"
     assert "1.3.43" in uranus_cpa["notes"]
@@ -719,11 +813,16 @@ def test_watters_greene_luminaries_not_averaged():
     assert mars_cpa["source_class"] == "psychological"
     assert mars_cpa["status"] == "candidate"
     assert "1.3.42" in mars_cpa["notes"]
+    assert "1.3.49" in mars_cpa["notes"]
+    assert "1.3.54" in mars_cpa["notes"]
     assert "transcript" in mars_cpa["notes"].lower()
     bell = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.bell_mars_quartet")
     assert bell["source_class"] == "psychological"
     assert bell["status"] == "candidate"
     assert "1.3.42" in bell["notes"]
+    assert "1.3.49" in bell["notes"]
+    assert "1.3.54" in bell["notes"]
+    assert "1.3.55" in bell["notes"]
     mars_claims = json.loads((CLAIMS_DIR / "astro.object.mars.json").read_text(encoding="utf-8"))
     mars_ids = {row["concept_id"] for row in mars_claims["claims"]}
     assert "claim.mars.hand_survival_energy" in mars_ids
@@ -775,9 +874,17 @@ def test_watters_greene_luminaries_not_averaged():
     assert any("p.138" in note and "not opened" in note.lower() for note in mars_claims["gap_notes"])
     assert any("humanistic" in note.lower() and "rudhyar" in note.lower() for note in mars_claims["gap_notes"])
     assert any("1.3.42" in note for note in mars_claims["gap_notes"])
+    assert any("1.3.49" in note for note in mars_claims["gap_notes"])
+    assert any("1.3.54" in note for note in mars_claims["gap_notes"])
+    assert any("1.3.55" in note for note in mars_claims["gap_notes"])
+    assert any("1.3.56" in note for note in mars_claims["gap_notes"])
     assert any("mythic astrology" in note.lower() for note in mars_claims["gap_notes"])
     assert "src.psychological.greene_mars_cpa" in set(mars_claims["pending_source_ids"])
     assert "src.psychological.bell_mars_quartet" in set(mars_claims["pending_source_ids"])
+    assert "src.psychological.sasportas_dynamics_unconscious" in set(mars_claims["pending_source_ids"])
+    assert "src.psychological.huber_planets" in set(mars_claims["pending_source_ids"])
+    assert "src.psychological.sasportas_dynamics_unconscious" not in {row["source_id"] for row in mars_claims["claims"]}
+    assert "src.psychological.huber_planets" not in {row["source_id"] for row in mars_claims["claims"]}
     assert all(row["source_class"] != "psychological" for row in mars_claims["claims"])
     assert "heating and drying quality that contends" == by_id["astro.object.mars"]["function"]
     jupiter_claims = json.loads((CLAIMS_DIR / "astro.object.jupiter.json").read_text(encoding="utf-8"))
@@ -968,6 +1075,38 @@ def test_watters_greene_luminaries_not_averaged():
     assert "src.humanistic.rudhyar_new_mansions" not in set(saturn_claims["pending_source_ids"])
     assert any("ring-pass-not" in note.lower() or "i-am-i" in note.lower() for note in saturn_claims["gap_notes"])
     assert any("humanistic" in note.lower() and "rudhyar" in note.lower() for note in saturn_claims["gap_notes"])
+    tarnas_saturn = [row for row in saturn_claims["claims"] if row["source_id"] == "src.psychological.tarnas_archetypal_intro"]
+    assert len(tarnas_saturn) == 9
+    assert all(row["source_class"] == "psychological" for row in tarnas_saturn)
+    assert all(row["school"] == "archetypal_depth" for row in tarnas_saturn)
+    assert all(row["evidence_tier"] == "school_specific" for row in tarnas_saturn)
+    assert {row["concept_id"] for row in tarnas_saturn} == {
+        "claim.saturn.tarnas_limit_necessity",
+        "claim.saturn.tarnas_senex",
+        "claim.saturn.tarnas_chronos_chart",
+        "claim.saturn.tarnas_gravitas",
+        "claim.saturn.tarnas_birth_labor",
+        "claim.saturn.tarnas_skeleton",
+        "claim.saturn.tarnas_inner_judge",
+        "claim.saturn.tarnas_inner_authority",
+        "claim.saturn.tarnas_threshold_guardian",
+    }
+    senex = next(row for row in tarnas_saturn if row["concept_id"] == "claim.saturn.tarnas_senex")
+    assert senex["field"] == "themes"
+    assert "senex" in senex["normalized_claim"].lower()
+    assert all("psychic process" not in row["normalized_claim"].lower() for row in tarnas_saturn)
+    assert all("i am i" not in row["normalized_claim"].lower() for row in tarnas_saturn)
+    assert any("1.3.53" in note for note in saturn_claims["gap_notes"])
+    saturn_psych = [row for row in saturn_claims["claims"] if row["source_class"] == "psychological"]
+    assert {row["source_id"] for row in saturn_psych} == {
+        "src.psychological.greene_saturn",
+        "src.psychological.tarnas_archetypal_intro",
+    }
+    assert "claim.saturn.tarnas_senex" in {row["concept_id"] for row in by_id["astro.object.saturn"]["provenance"]}
+    assert "claim.saturn.tarnas_chronos_chart" in {row["concept_id"] for row in by_id["astro.object.saturn"]["provenance"]}
+    assert "senex" not in by_id["astro.object.saturn"]["function"].lower()
+    assert "chronos" not in by_id["astro.object.saturn"]["function"].lower()
+    assert "threshold" not in by_id["astro.object.saturn"]["function"].lower()
     hand_claim_files = {
         path.name
         for path in CLAIMS_DIR.glob("astro.object.*.json")
@@ -1017,22 +1156,43 @@ def test_watters_greene_luminaries_not_averaged():
     assert chariot["source_class"] == "psychological"
     assert chariot["status"] == "candidate"
     assert "unread" in chariot["notes"].lower()
+    assert "1.3.50" in chariot["notes"]
+    assert "need_owner" in chariot["notes"].lower()
     apollon = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_apollon_sun")
     assert apollon["source_class"] == "psychological"
     assert apollon["legal_status"] == "copyrighted_site"
     assert apollon["status"] == "candidate"
-    assert "not ingested" in apollon["notes"].lower()
+    assert "1.3.50" in apollon["notes"]
+    assert "ingested" in apollon["notes"].lower()
+    assert "not apollo's chariot" in apollon["notes"].lower() or "not apollo’s chariot" in apollon["notes"].lower()
     costello = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.costello_astrological_moon")
     assert costello["source_class"] == "psychological"
     assert costello["status"] == "candidate"
     assert "unread" in costello["notes"].lower()
     assert "need_owner" in costello["notes"].lower()
+    assert "1.3.51" in costello["notes"]
+    reinhart_moon = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.reinhart_moon_talk")
+    assert reinhart_moon["source_class"] == "psychological"
+    assert reinhart_moon["status"] == "candidate"
+    assert reinhart_moon["legal_status"] == "copyrighted_site"
+    assert "1.3.51" in reinhart_moon["notes"]
+    assert "not natal" in reinhart_moon["notes"].lower()
+    clark_hermes = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.clark_hermes_guide")
+    assert clark_hermes["source_class"] == "psychological"
+    assert clark_hermes["status"] == "candidate"
+    assert clark_hermes["legal_status"] == "copyrighted_site"
+    assert "1.3.52" in clark_hermes["notes"]
+    assert "not natal" in clark_hermes["notes"].lower()
     martin = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.martin_mapping_psyche")
     assert martin["source_class"] == "psychological"
     assert martin["status"] == "candidate"
     assert "unread" in martin["notes"].lower()
     assert "lesson 2" in martin["notes"].lower()
     assert "lesson 4" in martin["notes"].lower()
+    assert "1.3.52" in martin["notes"]
+    assert "1.3.53" in martin["notes"]
+    assert "1.3.54" in martin["notes"]
+    assert "1.3.55" in martin["notes"]
     unused_rudhyar = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.rudhyar_personality")
     assert unused_rudhyar["source_class"] == "psychological"
     mars_cpa = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_mars_cpa")
@@ -1043,6 +1203,7 @@ def test_watters_greene_luminaries_not_averaged():
     assert saturn_cpa["status"] == "candidate"
     assert "transcript" in saturn_cpa["notes"].lower()
     assert "1.3.39" in saturn_cpa["notes"]
+    assert "1.3.53" in saturn_cpa["notes"]
     uranus_cpa = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_uranus_cpa")
     assert uranus_cpa["source_class"] == "psychological"
     assert uranus_cpa["status"] == "candidate"
@@ -1063,19 +1224,55 @@ def test_watters_greene_luminaries_not_averaged():
     assert pluto_cpa["source_class"] == "psychological"
     assert pluto_cpa["status"] == "candidate"
     assert "transcript" in pluto_cpa["notes"].lower()
+    assert "1.3.45" in pluto_cpa["notes"]
+    living = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_living_with_pluto")
+    assert living["source_class"] == "psychological"
+    assert living["status"] == "candidate"
+    assert "1.3.45" in living["notes"]
+    assert "ingested" in living["notes"].lower()
+    reinhart = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.reinhart_pluto_lord")
+    assert reinhart["source_class"] == "psychological"
+    assert reinhart["status"] == "candidate"
+    assert "not this locus" in reinhart["notes"].lower()
+    cunningham = next(
+        src for src in corpus["sources"] if src["source_id"] == "src.psychological.cunningham_healing_pluto"
+    )
+    assert cunningham["source_class"] == "psychological"
+    assert cunningham["status"] == "candidate"
+    assert "unread" in cunningham["notes"].lower() or "cover only" in cunningham["notes"].lower()
+    hamaker = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.hamaker_psychological")
+    assert hamaker["source_class"] == "psychological"
+    assert hamaker["status"] == "candidate"
+    assert "unread" in hamaker["notes"].lower()
+    assert "1.3.56" in hamaker["notes"]
     sasportas_change = next(
         src for src in corpus["sources"] if src["source_id"] == "src.psychological.sasportas_gods_of_change"
     )
     assert sasportas_change["source_class"] == "psychological"
     assert sasportas_change["status"] == "candidate"
     assert "unread" in sasportas_change["notes"].lower() or "not opened" in sasportas_change["notes"].lower()
+    assert "1.3.45" in sasportas_change["notes"]
     bell = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.bell_mars_quartet")
     assert bell["source_class"] == "psychological"
     assert bell["status"] == "candidate"
+    dynamics = next(
+        src for src in corpus["sources"] if src["source_id"] == "src.psychological.sasportas_dynamics_unconscious"
+    )
+    assert dynamics["source_class"] == "psychological"
+    assert dynamics["status"] == "candidate"
+    assert "1.3.55" in dynamics["notes"]
+    assert "aggression" in dynamics["notes"].lower()
+    assert "printdisabled" in dynamics["notes"].lower()
+    huber = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.huber_planets")
+    assert huber["source_class"] == "psychological"
+    assert huber["status"] == "candidate"
+    assert "1.3.56" in huber["notes"]
+    assert "masculine" in huber["notes"].lower()
+    assert "unread" in huber["notes"].lower()
 
 
 def test_hand_uranus_claims_not_core():
-    """Hand Ch.4 Uranus is professional school_specific; Rudhyar NMNM is a separate humanistic class; object withheld; not CORE."""
+    """Hand Ch.4 Uranus is professional school_specific; Rudhyar NMNM is humanistic; Tarnas intro is psychological; object withheld; not CORE."""
     object_schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
@@ -1140,7 +1337,41 @@ def test_hand_uranus_claims_not_core():
     assert "mutation" not in transforms["normalized_claim"].lower()
     regen = next(row for row in rudhyar_rows if row["concept_id"] == "claim.uranus.rudhyar_not_regeneration")
     assert "pluto" in regen["normalized_claim"].lower()
-    assert len(claims["claims"]) == 24
+    tarnas_rows = [
+        row for row in claims["claims"] if row["source_id"] == "src.psychological.tarnas_archetypal_intro"
+    ]
+    assert {row["concept_id"] for row in tarnas_rows} == {
+        "claim.uranus.tarnas_prometheus_figure",
+        "claim.uranus.tarnas_freedom_rebellion",
+        "claim.uranus.tarnas_breakthroughs",
+        "claim.uranus.tarnas_breakup_structures",
+        "claim.uranus.tarnas_individual_path",
+        "claim.uranus.tarnas_genius_vs_eccentric",
+        "claim.uranus.tarnas_unintegrated_from_without",
+        "claim.uranus.tarnas_hold_the_past",
+        "claim.uranus.tarnas_restless_quest",
+    }
+    assert len(tarnas_rows) == 9
+    assert all(row["source_class"] == "psychological" for row in tarnas_rows)
+    assert all(row["school"] == "archetypal_depth" for row in tarnas_rows)
+    assert all(row["evidence_tier"] == "school_specific" for row in tarnas_rows)
+    assert all(row["review_status"] == "extracted" for row in tarnas_rows)
+    prometheus = next(row for row in tarnas_rows if row["concept_id"] == "claim.uranus.tarnas_prometheus_figure")
+    assert prometheus["field"] == "function"
+    assert "prometheus" in prometheus["normalized_claim"].lower()
+    assert "ouranos" in prometheus["normalized_claim"].lower()
+    assert "disruption" not in prometheus["normalized_claim"].lower()
+    assert "mutation" not in prometheus["normalized_claim"].lower()
+    assert "transform" not in prometheus["normalized_claim"].lower()
+    unintegrated = next(
+        row for row in tarnas_rows if row["concept_id"] == "claim.uranus.tarnas_unintegrated_from_without"
+    )
+    assert unintegrated["field"] == "shadow"
+    assert "forced change" in unintegrated["normalized_claim"].lower()
+    assert "saturnine structure" not in unintegrated["normalized_claim"].lower()
+    assert all("disruption of over-stabilized" not in row["normalized_claim"].lower() for row in tarnas_rows)
+    assert all("transform" not in row["normalized_claim"].lower() for row in tarnas_rows)
+    assert len(claims["claims"]) == 33
     assert all("runtime_semantic_candidate" not in row for row in claims["claims"])
     assert all("do_not_compare_with" not in row for row in claims["claims"])
     assert all("classification_gap" not in row for row in claims["claims"])
@@ -1153,26 +1384,31 @@ def test_hand_uranus_claims_not_core():
     assert "src.psychological.greene_uranus_cpa" in pending
     assert "src.psychological.greene_art_of_stealing_fire" in pending
     assert "src.psychological.tarnas_prometheus" in pending
+    assert "src.psychological.greene_mythic_astrology" in pending
     assert "src.professional.hand_horoscope_symbols" not in pending
     assert "src.humanistic.rudhyar_new_mansions" not in pending
+    assert "src.psychological.tarnas_archetypal_intro" not in pending
     assert "src.psychological.greene_outer_planets" not in used
     assert "src.psychological.sasportas_gods_of_change" not in used
-    assert all(row["source_class"] != "psychological" for row in claims["claims"])
-    assert any("1.3.43" in note for note in claims["gap_notes"])
-    assert any("mythic astrology" in note.lower() for note in claims["gap_notes"])
+    assert "src.psychological.tarnas_prometheus" not in used
     assert "src.humanistic.rudhyar_new_mansions" in used
+    assert "src.psychological.tarnas_archetypal_intro" in used
     notes = " ".join(claims["gap_notes"]).lower()
     assert "object withheld" in notes or "object still withheld" in notes
     assert "jupiter" in notes and "alien" in notes
     assert "1981" in notes
     assert "rudhyar" in notes and "humanistic" in notes
     assert "not core" in notes or "cannot be scored" in notes
+    assert "1.3.43" in notes
+    assert "1.3.46" in notes
+    assert "prometheus" in notes
+    assert "mythic astrology" in notes
     assert all(row["evidence_tier"] != "core" for row in claims["claims"])
     assert len(objects["objects"]) == 24
 
 
 def test_hand_neptune_claims_not_core():
-    """Hand Ch.4 Neptune is professional school_specific; Rudhyar NMNM is a separate humanistic class; object withheld; not CORE."""
+    """Hand Ch.4 Neptune is professional; Rudhyar NMNM humanistic; Tarnas intro psychological; object withheld; not CORE."""
     object_schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
@@ -1241,7 +1477,40 @@ def test_hand_neptune_claims_not_core():
     assert "dissolution of" not in ecstasy["normalized_claim"].lower()
     prenatal = next(row for row in rudhyar_rows if row["concept_id"] == "claim.neptune.rudhyar_prenatal_growth")
     assert "pluto" in prenatal["normalized_claim"].lower()
-    assert len(claims["claims"]) == 29
+    tarnas_rows = [
+        row for row in claims["claims"] if row["source_id"] == "src.psychological.tarnas_archetypal_intro"
+    ]
+    assert {row["concept_id"] for row in tarnas_rows} == {
+        "claim.neptune.tarnas_transcendent_ideal",
+        "claim.neptune.tarnas_ocean_of_consciousness",
+        "claim.neptune.tarnas_thirst_transcendence",
+        "claim.neptune.tarnas_nirvana_and_maya",
+        "claim.neptune.tarnas_narcissus",
+        "claim.neptune.tarnas_longing_loss",
+        "claim.neptune.tarnas_imagination_compassion",
+        "claim.neptune.tarnas_deny_self",
+        "claim.neptune.tarnas_madness_mysticism",
+    }
+    assert len(tarnas_rows) == 9
+    assert all(row["source_class"] == "psychological" for row in tarnas_rows)
+    assert all(row["school"] == "archetypal_depth" for row in tarnas_rows)
+    assert all(row["evidence_tier"] == "school_specific" for row in tarnas_rows)
+    assert all(row["review_status"] == "extracted" for row in tarnas_rows)
+    ocean = next(row for row in tarnas_rows if row["concept_id"] == "claim.neptune.tarnas_ocean_of_consciousness")
+    assert ocean["field"] == "function"
+    assert "ocean of consciousness" in ocean["normalized_claim"].lower()
+    assert "dissolution of" not in ocean["normalized_claim"].lower()
+    assert "ultimate reality" not in ocean["normalized_claim"].lower()
+    thirst = next(row for row in tarnas_rows if row["concept_id"] == "claim.neptune.tarnas_thirst_transcendence")
+    assert "addictive" in thirst["normalized_claim"].lower()
+    assert "spiritual" in thirst["normalized_claim"].lower()
+    maya = next(row for row in tarnas_rows if row["concept_id"] == "claim.neptune.tarnas_nirvana_and_maya")
+    assert maya["field"] == "polarity"
+    assert "maya" in maya["normalized_claim"].lower()
+    assert "neptune+saturn" not in maya["normalized_claim"].lower().replace(" ", "")
+    assert all("dissolution of distinction" not in row["normalized_claim"].lower() for row in tarnas_rows)
+    assert all("ecstasy" not in row["normalized_claim"].lower() for row in tarnas_rows)
+    assert len(claims["claims"]) == 38
     assert all("runtime_semantic_candidate" not in row for row in claims["claims"])
     assert all("do_not_compare_with" not in row for row in claims["claims"])
     assert all("classification_gap" not in row for row in claims["claims"])
@@ -1253,14 +1522,14 @@ def test_hand_neptune_claims_not_core():
     assert "src.psychological.sasportas_gods_of_change" in pending
     assert "src.psychological.greene_astrological_neptune" in pending
     assert "src.psychological.greene_neptune_cpa" in pending
+    assert "src.psychological.greene_mythic_astrology" in pending
     assert "src.professional.hand_horoscope_symbols" not in pending
     assert "src.humanistic.rudhyar_new_mansions" not in pending
+    assert "src.psychological.tarnas_archetypal_intro" not in pending
     assert "src.psychological.greene_outer_planets" not in used
     assert "src.psychological.greene_astrological_neptune" not in used
-    assert all(row["source_class"] != "psychological" for row in claims["claims"])
-    assert any("1.3.44" in note for note in claims["gap_notes"])
-    assert any("mythic astrology" in note.lower() for note in claims["gap_notes"])
     assert "src.humanistic.rudhyar_new_mansions" in used
+    assert "src.psychological.tarnas_archetypal_intro" in used
     combo_ids = {"claim.neptune.maya_with_saturn", "claim.neptune.artistic_creativity_with_venus"}
     assert combo_ids <= expected_ids
     notes = " ".join(claims["gap_notes"]).lower()
@@ -1271,12 +1540,15 @@ def test_hand_neptune_claims_not_core():
     assert "1981" in notes
     assert "rudhyar" in notes and "humanistic" in notes
     assert "not core" in notes or "cannot be scored" in notes
+    assert "1.3.44" in notes
+    assert "1.3.47" in notes
+    assert "mythic astrology" in notes
     assert all(row["evidence_tier"] != "core" for row in claims["claims"])
     assert len(objects["objects"]) == 24
 
 
 def test_hand_pluto_claims_not_core():
-    """Hand Ch.4 Pluto is professional school_specific; Rudhyar NMNM is a separate humanistic class; object withheld; not CORE."""
+    """Hand Ch.4 Pluto is professional; Rudhyar NMNM humanistic; Greene Campion interview psychological; object withheld; not CORE."""
     object_schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
@@ -1341,7 +1613,37 @@ def test_hand_pluto_claims_not_core():
     assert "decomposition" not in seed["normalized_claim"].lower()
     hierophant = next(row for row in rudhyar_rows if row["concept_id"] == "claim.pluto.rudhyar_hierophant_of_birth")
     assert "birth" in hierophant["normalized_claim"].lower()
-    assert len(claims["claims"]) == 27
+    greene_rows = [
+        row for row in claims["claims"] if row["source_id"] == "src.psychological.greene_living_with_pluto"
+    ]
+    assert {row["concept_id"] for row in greene_rows} == {
+        "claim.pluto.greene_image_family",
+        "claim.pluto.greene_life_force",
+        "claim.pluto.greene_breakdown_new_forms",
+        "claim.pluto.greene_multiple_registers",
+        "claim.pluto.greene_overwhelm_defend",
+        "claim.pluto.greene_grind_or_victim",
+        "claim.pluto.greene_life_or_death",
+        "claim.pluto.greene_obsessive_takeover",
+        "claim.pluto.greene_accept_greater",
+        "claim.pluto.greene_survival_instinct",
+    }
+    assert len(greene_rows) == 10
+    assert all(row["source_class"] == "psychological" for row in greene_rows)
+    assert all(row["school"] == "psychological_jungian" for row in greene_rows)
+    assert all(row["evidence_tier"] == "school_specific" for row in greene_rows)
+    assert all(row["review_status"] == "extracted" for row in greene_rows)
+    life_force = next(row for row in greene_rows if row["concept_id"] == "claim.pluto.greene_life_force")
+    assert life_force["field"] == "function"
+    assert "life-force" in life_force["normalized_claim"].lower() or "life force" in life_force["normalized_claim"].lower()
+    assert "reconstruction" not in life_force["normalized_claim"].lower()
+    assert "seed" not in life_force["normalized_claim"].lower()
+    grind = next(row for row in greene_rows if row["concept_id"] == "claim.pluto.greene_grind_or_victim")
+    assert grind["field"] == "shadow"
+    assert "victim" in grind["normalized_claim"].lower()
+    assert all("reconstruction" not in row["normalized_claim"].lower() for row in greene_rows)
+    assert all("celestial-seed" not in row["normalized_claim"].lower() for row in greene_rows)
+    assert len(claims["claims"]) == 37
     assert all("runtime_semantic_candidate" not in row for row in claims["claims"])
     assert all("do_not_compare_with" not in row for row in claims["claims"])
     assert all("classification_gap" not in row for row in claims["claims"])
@@ -1351,10 +1653,17 @@ def test_hand_pluto_claims_not_core():
     assert "src.psychological.greene_outer_planets" in pending
     assert "src.professional.hand_planets_in_transit" in pending
     assert "src.psychological.sasportas_gods_of_change" in pending
+    assert "src.psychological.greene_pluto_cpa" in pending
+    assert "src.psychological.reinhart_pluto_lord" in pending
+    assert "src.psychological.cunningham_healing_pluto" in pending
+    assert "src.psychological.hamaker_psychological" in pending
+    assert "src.psychological.greene_mythic_astrology" in pending
     assert "src.professional.hand_horoscope_symbols" not in pending
     assert "src.humanistic.rudhyar_new_mansions" not in pending
+    assert "src.psychological.greene_living_with_pluto" not in pending
     assert "src.psychological.greene_outer_planets" not in used
     assert "src.humanistic.rudhyar_new_mansions" in used
+    assert "src.psychological.greene_living_with_pluto" in used
     notes = " ".join(claims["gap_notes"]).lower()
     assert "object withheld" in notes or "object still withheld" in notes
     assert "psychotic" in notes and "excluded" in notes
@@ -1362,6 +1671,8 @@ def test_hand_pluto_claims_not_core():
     assert "uranus" in notes and "neptune" in notes
     assert "1981" in notes
     assert "rudhyar" in notes and "humanistic" in notes
+    assert "1.3.45" in notes
+    assert "living with pluto" in notes
     assert "not core" in notes or "cannot be scored" in notes
     assert all(row["evidence_tier"] != "core" for row in claims["claims"])
     concept_fields = {row["concept_id"]: row["field"] for row in claims["claims"]}

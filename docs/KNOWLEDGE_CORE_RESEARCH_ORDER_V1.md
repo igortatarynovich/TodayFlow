@@ -1,7 +1,7 @@
 # Knowledge Core research order v1
 
 **Статус:** ACCEPTED (порядок работы для семантических ядер).  
-**Версия:** 1.0 (2026-08-17).  
+**Версия:** 1.1 (2026-08-17).  
 **Владелец:** Product + Research.  
 **Не является:** Meaning SoT дня · IL lookup · Machine Contract · KASP (сбор данных пользователя).
 
@@ -114,7 +114,7 @@ IL `NEED_OWNER(author/locus)` ≠ `NEED_EVIDENCE(slot)` — частный сл�
 - Не заменяет [HUMAN_EXPLANATORY_SYSTEMS_ANALYSIS.md](./audits/HUMAN_EXPLANATORY_SYSTEMS_ANALYSIS.md) (почему объяснительные системы удерживают людей).
 - Не требует купить книги, чтобы «закрыть ландшафт». Карта включает закрытые тома как *известные, непрочитанные*.
 
-**IL-1 in flight:** наполнение уже открытой модели планет (Sun→Pluto claims) продолжается по IL §6.9 (school-first, one locus). Это **не** шаблон для следующего ядра. CORE по астрологии по-прежнему не scored и не строится из «кто оказался читаемым».
+**IL-1 in flight:** наполнение уже открытой модели планет (Sun→Pluto claims) продолжается по IL §6.9 (school-first, one locus) внутри **§6.10 remaining psych budget**. Это **не** шаблон для следующего ядра. CORE по астрологии по-прежнему не scored, не KPI, и не строится из «кто оказался читаемым».
 
 **Следующее ядро** (новый слой IL, пересборка нумерологического смысла, психология, практики-как-знание, медицина): шаги 1–9 обязательны до первого ingest.
 
@@ -134,3 +134,15 @@ IL `NEED_OWNER(author/locus)` ≠ `NEED_EVIDENCE(slot)` — частный сл�
 ## 7. Changelog
 
 - **1.0 (2026-08-17)** — locked sequence для семантических ядер. Урок IL-1: provenance раньше author-lock. Parent для IL §6.9. Обязателен для следующего ядра и для нумерологии / психологии / практик / медицины как систем знаний.
+- **1.1 (2026-08-17)** — IL-1 in-flight remaining planet budget (IL §6.10 / 1.3.45) is psychological coverage of empty slots. This file's sequence for the *next* core is unchanged. CORE=0 is not a KPI.
+- **1.1 note (2026-08-17)** — IL-1.3.46 filled Uranus psychological from Tarnas official intro. Remaining empty slots: Neptune → Venus → Mars. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-17)** — IL-1.3.47 filled Neptune psychological from the same Tarnas intro PDF (Neptune section, after field check). Remaining empty slots: Venus → Mars. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-17)** — IL-1.3.48 filled Venus psychological from Sullivan official-site *Venus and Jupiter* excerpt. Remaining empty slot: Mars. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-17)** — IL-1.3.49 re-checked Mars psychological field: still empty (no legally readable dedicated principle locus). Remaining empty slot: Mars. Next inside IL §6.10: densify Sun / Moon / Mercury / Saturn. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-17)** — IL-1.3.50 densified Sun psychological from Greene Apollon Issue 1 (not Apollo's Chariot). Remaining empty slot: Mars. Next inside IL §6.10: densify Moon / Mercury / Saturn. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-18)** — IL-1.3.51 re-checked Moon psychological field: still only Luminaries preview (Costello still NEED_OWNER). Remaining empty slot: Mars. Next inside IL §6.10: densify Mercury / Saturn. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-18)** — IL-1.3.52 re-checked Mercury psychological field: still only Inner Planets Hermes (remaining chapters unread). Remaining empty slot: Mars. Next inside IL §6.10: densify Saturn. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-18)** — IL-1.3.53 densified Saturn psychological from Tarnas official intro Saturn/senex (Greene Introduction not re-ingested; `themes` unchanged). Remaining empty slot: Mars. Densify Sun/Moon/Mercury/Saturn complete. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-18)** — IL-1.3.54 re-checked Mars psychological field: still empty (p.138 NEED_OWNER). Do not loop Mars without a new readable locus. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-18)** — IL-1.3.55 cataloged Sasportas *Dynamics of the Unconscious* Part 1 unread (NEED_OWNER; no ingest). Mars psych still empty. Do not ingest forum quotes. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-18)** — IL-1.3.56 cataloged Huber *The Planets* Mars chapter unread (NEED_OWNER; no ingest). Do not ingest masculine/tool-planet from TOC. Recount still deferred. This file's sequence for the *next* core is unchanged.

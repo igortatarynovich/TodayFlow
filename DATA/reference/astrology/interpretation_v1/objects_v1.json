@@ -137,6 +137,22 @@
           "field": "function",
           "original_claim": "Light is the compassionate gesture of God toward matter: the eternal power of integration that gathers chaotic elements into living organisms.",
           "normalized_claim": "Solar light = compassionate integration: gathering chaotic matter into living organisms."
+        },
+        {
+          "source_id": "src.psychological.greene_apollon_sun",
+          "source_class": "psychological",
+          "author": "Liz Greene",
+          "edition": "Apollon Issue 1, Oct 1998; CPA official PDF / astro.com in_sungod",
+          "school": "psychological_jungian",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "The Sun-god and the Astrological Sun — Apollon p.6–; astro.com in_sungod",
+          "concept_id": "claim.sun.greene_apollon_carrier",
+          "field": "function",
+          "original_claim": "Apollo is not the physical Sun; he is the carrier of the Sun, bearing it in his golden chariot. His human form is a vessel for the ineffable One, remote and untouchable.",
+          "normalized_claim": "Sun/Apollo = carrier/vessel for the ineffable physical Sun, not that remote One itself."
         }
       ]
     },
@@ -593,6 +609,22 @@
           "evidence_tier": "school_specific",
           "review_status": "extracted",
           "field": "function"
+        },
+        {
+          "source_id": "src.psychological.sullivan_venus_jupiter",
+          "source_class": "psychological",
+          "author": "Erin Sullivan",
+          "edition": "Venus and Jupiter, CPA Press 1997/1998; official-site Apollon excerpt",
+          "school": "psychological_cpa",
+          "reviewer": null,
+          "reviewed_at": null,
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "locus": "erinsullivan.com — Eros and Aphrodite: Love and Creation",
+          "concept_id": "claim.venus.sullivan_channel_for_eros",
+          "field": "function",
+          "original_claim": "The medial Aphrodite, our astrological Venus, is a channel for Eros: she has form, and transforms his primeval uncontained rawness into embodied, accessible forms.",
+          "normalized_claim": "Venus = channel that gives form to primordial uncontained Eros."
         }
       ]
     },
@@ -1193,6 +1225,54 @@
           "field": "function",
           "original_claim": "I am I — such is the great mantram of Saturn, Lord of Boundaries, Lord of Form.",
           "normalized_claim": "Saturn mantram: I am I. Lord of Boundaries / Lord of Form."
+        },
+        {
+          "source_id": "src.psychological.tarnas_archetypal_intro",
+          "source_class": "psychological",
+          "author": "Richard Tarnas",
+          "edition": "An Introduction to Archetypal Astrology; cosmosandpsyche.com PDF",
+          "locus": "Official PDF — Saturn / senex section",
+          "school": "archetypal_depth",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.saturn.tarnas_senex",
+          "field": "themes",
+          "original_claim": "In Jungian and archetypal psychology, Saturn is often called the senex. It is associated with Kronos, Fate, Father Time, Death, and the Grim Reaper.",
+          "normalized_claim": "Saturn = senex: old one / Kronos / Fate / Father Time — Jungian-archetypal name, not Greene psychic-process."
+        },
+        {
+          "source_id": "src.psychological.tarnas_archetypal_intro",
+          "source_class": "psychological",
+          "author": "Richard Tarnas",
+          "edition": "An Introduction to Archetypal Astrology; cosmosandpsyche.com PDF",
+          "locus": "Official PDF — Saturn / senex section",
+          "school": "archetypal_depth",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.saturn.tarnas_chronos_chart",
+          "field": "function",
+          "original_claim": "Saturn is Time, Chronos: that which fixes a moment in time, creates through birth a separate embodiment of reality, and works out through time the meaning of that archetypal moment.",
+          "normalized_claim": "Saturn as Chronos: Time that fixes the birth moment and works out its meaning."
+        },
+        {
+          "source_id": "src.psychological.tarnas_archetypal_intro",
+          "source_class": "psychological",
+          "author": "Richard Tarnas",
+          "edition": "An Introduction to Archetypal Astrology; cosmosandpsyche.com PDF",
+          "locus": "Official PDF — Saturn / senex section",
+          "school": "archetypal_depth",
+          "evidence_tier": "school_specific",
+          "review_status": "extracted",
+          "reviewer": null,
+          "reviewed_at": null,
+          "concept_id": "claim.saturn.tarnas_threshold_guardian",
+          "field": "function",
+          "original_claim": "Saturn is that part of the archetypal birth process which oppresses and alienates, yet slowly molds and, in the end, ushers us into a new level of existence. It is the guardian of the threshold.",
+          "normalized_claim": "Saturn as guardian of the threshold: oppression that slowly ushers a new level of existence."
         }
       ]
     },

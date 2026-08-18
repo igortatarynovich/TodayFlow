@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-17):** IL-1 **1.3.44:** Neptune psychological discovery, no ingest. *The Astrological Neptune* NEED_OWNER remains. Next: Pluto psychological, one locus — Outer Planets NEED_OWNER remains; check the field. Parent order: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`. CORE blocked.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.56:** Huber *The Planets* Mars chapter cataloged unread (NEED_OWNER; no ingest). Mars psych still empty. Do not ingest masculine from TOC. Do not loop p.138 or Dynamics. Densify Sun/Moon/Mercury/Saturn complete. CORE=0 is not a KPI. Remaining empty psych slot: Mars. Parent order: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`. CORE blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
