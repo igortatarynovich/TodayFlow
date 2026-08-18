@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.59:** planet fill research-stable (not semantically finalized). Do not generate planet research to raise coverage. CORE scoring blocked. Next large step = Layer 2 Signs definition (parent steps 1–4 in IL §6.13; continue from step 5). Dashboard numbers remain the 1.3.58 recount: COVERED 7 · THIN 2 · ACCESS_BLOCKED 1 (Mars) · EMPTY 0. Parent: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.60:** Layer 2 Signs schools + source types (IL §6.14). Next = literature map (parent step 7) from that table, not from Arroyo/Rudhyar pending IDs. Planet fill remains research-stable. CORE scoring blocked. Dashboard numbers remain the 1.3.58 recount. Parent: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -94,6 +94,15 @@ Status: Active working document
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
 - **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.60 Layer 2 schools + source types (2026-08-18)
+
+- **SoT before:** Layer 2 definition existed; school list did not. Sign pending IDs still named Arroyo/Rudhyar as if they were the next authors.
+- **SoT after:** IL §6.14 maps existing `source_class` onto classification vs later-interpretive bands. No new enum. Literature map still waits. No ingest. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.60 §6.14
+- **Backward compatible?** yes — pending Arroyo/Rudhyar rows not promoted
 
 ## Architecture impact — IL-1 1.3.59 planet research-stable + Layer 2 definition (2026-08-18)
 

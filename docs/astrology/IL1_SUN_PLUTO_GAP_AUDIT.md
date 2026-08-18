@@ -3,7 +3,7 @@
 **Date:** 2026-08-18  
 **Status:** **1.3.58 live recount** from current ledgers after 1.3.57. Not product meaning. Not CORE scoring.  
 **Supersedes:** 1.3.24 / 1.3.44 dashboard snapshots. Do **not** inherit counts or “next = Pluto psychological” from those pages. `IL1_CORPUS_QA.md` remains a **historical** 303-row QA (1.3.28), not this dashboard.  
-**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.6 · §6.11 · §6.12 · §6.13. Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md).  
+**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.6 · §6.11 · §6.12 · §6.13 · §6.14. Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md).  
 **Handoff:** [IL1_HANDOFF.md](./IL1_HANDOFF.md).
 
 This file records what the ledger already contains. It does **not** rewrite `object.function`, set `active`, invent T1–T4, ingest claims, or open a new bibliography.
@@ -202,7 +202,7 @@ There is **no EMPTY psych slot** left to discover. Independent densify of THIN M
 
 ### Next large step (not planet research)
 
-**Layer 2 Signs definition** — parent research order. Steps 1–4 are in IL §6.13. Continue from **step 5 (schools)** using that model. Do not start from Arroyo, Rudhyar, Greene, or Hand. Do not ingest. Do not materialize 12 sign objects. Do not change schema in the definition pass. Houses/aspects already have classical draft objects; ASC/MC still need locus + calc; outers stay claims-only.
+**Layer 2 Signs** — definition (§6.13) and schools/source-types (§6.14) done. Continue from **parent step 7 (literature map)** using the school × constituent table. Do not start from Arroyo, Rudhyar, Greene, or Hand pending IDs. Do not ingest. Do not materialize 12 sign objects. Do not add a new `source_class`. Houses/aspects already have classical draft objects; ASC/MC still need locus + calc; outers stay claims-only.
 
 ### Access queue (opportunistic extract only)
 
@@ -230,7 +230,7 @@ When a **named** page becomes legally readable: extract only. `school_specific`.
 
 ### If no named planet locus is newly readable
 
-Continue Layer 2 from IL §6.13 / parent step 5. Do not invent a 20th Mars source. Do not start CORE scoring. CORE-candidate audit remains **listing only** (this file §0): five Saturn lemmas, not scored.
+Continue Layer 2 from IL §6.14 / parent step 7 (literature map). Do not invent a 20th Mars source. Do not start CORE scoring. CORE-candidate audit remains **listing only** (this file §0): five Saturn lemmas, not scored.
 
 ---
 
@@ -262,3 +262,4 @@ Continue Layer 2 from IL §6.13 / parent step 5. Do not invent a 20th Mars sourc
 - **1.3.57** Psychological Mars `ACCESS_BLOCKED`.
 - **1.3.58** this live recount. Dashboard numbers above replace 1.3.44.
 - **1.3.59** planet fill research-stable; Layer 2 Signs definition is the next large step. Access queue stays opportunistic.
+- **1.3.60** Layer 2 schools + source types. Next = literature map from §6.14, not Arroyo/Rudhyar pending IDs.

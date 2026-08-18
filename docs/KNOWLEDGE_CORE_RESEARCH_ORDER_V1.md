@@ -118,7 +118,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 **IL-1 in flight:** наполнение модели планет (Sun→Pluto) **research-stable** (IL **1.3.59**). §6.10 remaining psych budget closed 1.3.57. Дальше планеты — только opportunistic extract уже названных NEED_OWNER loci, не hunt ради coverage. Это **не** шаблон для следующего ядра. CORE по астрологии по-прежнему не scored, не KPI, и не строится из «кто оказался читаемым».
 
-**Следующее IL-ядро = Layer 2 Signs.** Definition pass (шаги 1–4) начат в IL §6.13. Продолжать с шага 5 (школы) **до** карты литературы и ingest. Не начинать с Arroyo/Rudhyar/Greene/Hand. Не материализовать 12 sign objects в definition pass. Houses/aspects уже имеют classical draft objects; ASC/MC и outers — отдельные ворота. Для любого **нового** ядра вне этого трека: шаги 1–9 обязательны до первого ingest.
+**Следующее IL-ядро = Layer 2 Signs.** Definition pass (шаги 1–4) в IL §6.13. Школы и типы источников (шаги 5–6) в IL §6.14. Продолжать с шага 7 (карта литературы) **от таблицы school × constituent**, не от pending Arroyo/Rudhyar. Не начинать с первого открытого cookbook. Не материализовать 12 sign objects до Architecture impact по required later-interpretive слотам. Houses/aspects уже имеют classical draft objects; ASC/MC и outers — отдельные ворота. Для любого **нового** ядра вне этого трека: шаги 1–9 обязательны до первого ingest.
 
 ---
 
@@ -152,3 +152,4 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - **1.1 note (2026-08-18)** — IL-1.3.57: Psychological Mars `ACCESS_BLOCKED` (3 dedicated loci, 0 bodies, 0 claims). §6.10 empty-slot + densify budget closed. Recount now allowed. Discovery for this slot stops. This file's sequence for the *next* core is unchanged.
 - **1.1 note (2026-08-18)** — IL-1.3.58: live Sun→Pluto recount. 1.3.44 dashboard retired. Psych: COVERED 7 · THIN 2 · ACCESS_BLOCKED 1 · EMPTY 0. Access queue is opportunistic, not a discovery hunt. This file's sequence for the *next* core is unchanged.
 - **1.1 note (2026-08-18)** — IL-1.3.59: planet fill research-stable. Do not generate planet research to raise coverage. CORE scoring stays blocked. Next IL core = Layer 2 Signs; definition pass (steps 1–4) in IL §6.13; continue from step 5 before bibliography/ingest. Do not start from Arroyo/Rudhyar.
+- **1.1 note (2026-08-18)** — IL-1.3.60: Layer 2 schools + source types in IL §6.14. Reuse `source_class` enum; no new class. Literature map is next (step 7) from that table, not from Arroyo/Rudhyar pending IDs.
