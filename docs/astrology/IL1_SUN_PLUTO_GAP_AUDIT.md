@@ -3,7 +3,7 @@
 **Date:** 2026-08-18  
 **Status:** **1.3.58 live recount** from current ledgers after 1.3.57. Not product meaning. Not CORE scoring.  
 **Supersedes:** 1.3.24 / 1.3.44 dashboard snapshots. Do **not** inherit counts or “next = Pluto psychological” from those pages. `IL1_CORPUS_QA.md` remains a **historical** 303-row QA (1.3.28), not this dashboard.  
-**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.6 · §6.11 · §6.12 · §6.13 · §6.14. Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md).  
+**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.6 · §6.11 · §6.12 · §6.13 · §6.14 · §6.15 · §6.16. Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md).  
 **Handoff:** [IL1_HANDOFF.md](./IL1_HANDOFF.md).
 
 This file records what the ledger already contains. It does **not** rewrite `object.function`, set `active`, invent T1–T4, ingest claims, or open a new bibliography.
@@ -202,7 +202,7 @@ There is **no EMPTY psych slot** left to discover. Independent densify of THIN M
 
 ### Next large step (not planet research)
 
-**Layer 2 Signs** — definition (§6.13), schools/source-types (§6.14), and literature map (§6.15) done. Continue from **parent steps 8–9 (criteria + shortlist)** using [IL1_LAYER2_SIGNS_LITERATURE_MAP.md](./IL1_LAYER2_SIGNS_LITERATURE_MAP.md). Do not ingest 12 portraits. Do not start from Arroyo/Rudhyar pending IDs. Do not materialize 12 sign objects.
+**Layer 2 Signs** — definition (§6.13), schools/source-types (§6.14), literature map (§6.15), and selection criteria (§6.16) done. Continue from **1.3.63 shortlist (parent step 9)** scored against [IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md). Cell C unscored — do not pick by access. Do not ingest 12 portraits. Do not start from Arroyo/Rudhyar pending IDs. Do not materialize 12 sign objects.
 
 ### Access queue (opportunistic extract only)
 
@@ -263,3 +263,5 @@ Continue Layer 2 from IL §6.15 / parent steps 8–9 (shortlist). Do not invent 
 - **1.3.58** this live recount. Dashboard numbers above replace 1.3.44.
 - **1.3.59** planet fill research-stable; Layer 2 Signs definition is the next large step. Access queue stays opportunistic.
 - **1.3.60** Layer 2 schools + source types. Next = literature map from §6.14, not Arroyo/Rudhyar pending IDs.
+- **1.3.61** Layer 2 literature map. Landscape, not shortlist.
+- **1.3.62** Layer 2 selection criteria locked. Next = 1.3.63 shortlist. Cell C unscored.

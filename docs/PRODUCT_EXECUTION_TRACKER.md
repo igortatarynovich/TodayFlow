@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.61:** Layer 2 Signs literature map (`docs/astrology/IL1_LAYER2_SIGNS_LITERATURE_MAP.md`). Next = parent steps 8–9 (criteria + shortlist). Do not ingest 12 portraits. Proposed first locus = Houlding triplicity ontology (not extracted). Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.62:** Layer 2 Signs selection criteria (`docs/astrology/IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md`). Next = 1.3.63 shortlist (parent step 9), scored against locked criteria. Cell C (Arroyo / Martin / Hamaker) unscored — do not pick by access. Do not ingest 12 portraits. Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -94,6 +94,15 @@ Status: Active working document
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
 - **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.62 Layer 2 selection criteria (2026-08-18)
+
+- **SoT before:** literature map existed; next agent could treat map forecast as shortlist, or pick the psychological textbook by readability.
+- **SoT after:** selection criteria locked separately from shortlist (IL §6.16). Epistemic ≠ access. Cell C unscored. No ingest. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.62 §6.16 · `docs/astrology/IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md`
+- **Backward compatible?** yes — planet ledgers untouched; 1.3.61 map remains landscape
 
 ## Architecture impact — IL-1 1.3.61 Layer 2 literature map (2026-08-18)
 

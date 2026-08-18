@@ -1,7 +1,7 @@
 # IL-1 Layer 2 Signs — literature map (parent step 7)
 
 **Date:** 2026-08-18  
-**Status:** **1.3.61 literature map only.** Not a shortlist. Not ingest. Not product meaning. Not CORE.  
+**Status:** **1.3.61 literature map only.** Not a shortlist. Not ingest. Not product meaning. Not CORE. Selection criteria locked separately in **1.3.62** ([IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md)).  
 **Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.13 (constituents) · §6.14 (schools / source types) · §6.15. Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) step 7.  
 **Handoff:** [IL1_HANDOFF.md](./IL1_HANDOFF.md).
 
@@ -176,4 +176,4 @@ Do **not** extract: triplicity-ruler lists, Dorotheus/Valens/Rhetorius fortune e
 
 **Do not extract next in the same pass:** Arroyo, Martin, Hamaker, Hand Ch.10–11, Pulse Part Two, *Astrology of Personality*.
 
-Stopped before parent step 8 (selection criteria as a separate locked list) and step 9 (shortlist). This map is the landscape. Shortlist must still pick **C** as one psychological textbook, not all three.
+Stopped before parent step 8 in 1.3.61. Criteria now locked in [IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md) (1.3.62). This map remains the landscape. Shortlist (1.3.63) must still pick **C** as one psychological textbook, not all three, by scoring — not by this forecast.
