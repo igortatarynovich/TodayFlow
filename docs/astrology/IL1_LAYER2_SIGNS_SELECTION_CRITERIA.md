@@ -94,4 +94,4 @@ First extract, if 1.3.63 confirms: Houlding ontology (L2-C4 among classification
 - No CORE. Map consensus still ≠ semantic consensus.
 - No planet coverage hunt.
 
-**Stopped before step 9.** Next artifact: 1.3.63 Layer 2 Signs shortlist, scored with these criteria against the 1.3.61 map.
+**Stopped before step 9.** Next artifact: 1.3.63 Layer 2 Signs shortlist, scored with these criteria against the 1.3.61 map. **Done in 1.3.63** — [IL1_LAYER2_SIGNS_SHORTLIST.md](./IL1_LAYER2_SIGNS_SHORTLIST.md). Cell C remains a cell (no winner).

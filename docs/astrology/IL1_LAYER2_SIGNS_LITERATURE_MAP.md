@@ -176,4 +176,4 @@ Do **not** extract: triplicity-ruler lists, Dorotheus/Valens/Rhetorius fortune e
 
 **Do not extract next in the same pass:** Arroyo, Martin, Hamaker, Hand Ch.10–11, Pulse Part Two, *Astrology of Personality*.
 
-Stopped before parent step 8 in 1.3.61. Criteria now locked in [IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md) (1.3.62). This map remains the landscape. Shortlist (1.3.63) must still pick **C** as one psychological textbook, not all three, by scoring — not by this forecast.
+Stopped before parent step 8 in 1.3.61. Criteria locked in 1.3.62. Shortlist scored in **1.3.63** — [IL1_LAYER2_SIGNS_SHORTLIST.md](./IL1_LAYER2_SIGNS_SHORTLIST.md). This map remains the landscape. Cell **C** is still a cell, not a named textbook.

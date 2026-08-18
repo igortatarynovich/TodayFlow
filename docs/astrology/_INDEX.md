@@ -8,8 +8,9 @@
 | [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) | Parent: модель знания **до** литературы. IL-1 in-flight ≠ шаблон следующего ядра |
 | [IL1_HANDOFF.md](./IL1_HANDOFF.md) | Next-agent handoff: locked rules, catalog state, opened loci, next ingest |
 | [IL1_LAYER2_SIGNS_LITERATURE_MAP.md](./IL1_LAYER2_SIGNS_LITERATURE_MAP.md) | Layer 2 Signs literature map (1.3.61). Landscape from school × constituent matrix. Not shortlist, not ingest |
-| [IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md) | Layer 2 Signs selection criteria (1.3.62). Parent step 8. Not shortlist, not ingest. Epistemic ≠ access |
-| [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md) | **Live** Sun→Pluto recount (1.3.58 numbers). 1.3.59 planet fill research-stable. 1.3.62 criteria locked; next = 1.3.63 shortlist. Slot statuses COVERED / THIN / DISCOVERED / ACCESS_BLOCKED / EMPTY |
+| [IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md) | Layer 2 Signs selection criteria (1.3.62). Parent step 8. Not ingest. Epistemic ≠ access |
+| [IL1_LAYER2_SIGNS_SHORTLIST.md](./IL1_LAYER2_SIGNS_SHORTLIST.md) | Layer 2 Signs shortlist (1.3.63). Parent step 9. Cell C is a cell, not a winner. Not ingest |
+| [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md) | **Live** Sun→Pluto recount (1.3.58 numbers). 1.3.59 planet fill research-stable. 1.3.63 shortlist; next = 1.3.64 Houlding ontology extract. Slot statuses COVERED / THIN / DISCOVERED / ACCESS_BLOCKED / EMPTY |
 | [source_corpus_v1.json](../../DATA/reference/astrology/interpretation_v1/source_corpus_v1.json) | Research corpus (все `candidate`; не approved ingest) |
 | [objects_v1.json](../../DATA/reference/astrology/interpretation_v1/objects_v1.json) | IL-1 knowledge objects (`draft` only; not `active`) |
 | [claims/](../../DATA/reference/astrology/interpretation_v1/claims/) | source → locus → paraphrase → `normalized_claim` |

@@ -75,7 +75,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.62:** Layer 2 Signs selection criteria (`docs/astrology/IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md`). Next = 1.3.63 shortlist (parent step 9), scored against locked criteria. Cell C (Arroyo / Martin / Hamaker) unscored — do not pick by access. Do not ingest 12 portraits. Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.63:** Layer 2 Signs shortlist (`docs/astrology/IL1_LAYER2_SIGNS_SHORTLIST.md`). Traditional = Houlding ontology. Cell C = one of Arroyo/Martin/Hamaker, no winner. Humanistic = Pulse Part One. Hand Ch.10 later. Next = 1.3.64 Houlding extract (not this pass). Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -105,6 +105,15 @@ Status: Active working document
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
 - **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.63 Layer 2 shortlist (2026-08-18)
+
+- **SoT before:** criteria locked; map forecast could still be treated as corpus; Cell C could be won by TOC/access.
+- **SoT after:** shortlist locked (IL §6.17). Houlding ontology IN; Cell C remains a cell; Pulse Part One IN; Hand Ch.10 later. No ingest. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.63 §6.17 · `docs/astrology/IL1_LAYER2_SIGNS_SHORTLIST.md`
+- **Backward compatible?** yes — planet ledgers untouched; Houlding/Pulse not extracted
 
 ## Architecture impact — IL-1 1.3.62 Layer 2 selection criteria (2026-08-18)
 

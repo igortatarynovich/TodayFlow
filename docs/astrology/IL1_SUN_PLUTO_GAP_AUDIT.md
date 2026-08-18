@@ -202,7 +202,7 @@ There is **no EMPTY psych slot** left to discover. Independent densify of THIN M
 
 ### Next large step (not planet research)
 
-**Layer 2 Signs** — definition (§6.13), schools/source-types (§6.14), literature map (§6.15), and selection criteria (§6.16) done. Continue from **1.3.63 shortlist (parent step 9)** scored against [IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md). Cell C unscored — do not pick by access. Do not ingest 12 portraits. Do not start from Arroyo/Rudhyar pending IDs. Do not materialize 12 sign objects.
+**Layer 2 Signs** — definition through shortlist done (§6.13–§6.17). Continue from **1.3.64 Houlding ontology extract (parent step 10)** if named. Cell C remains a cell — do not pick by access. Do not ingest 12 portraits. Do not start from Arroyo/Rudhyar pending IDs. Do not materialize 12 sign objects.
 
 ### Access queue (opportunistic extract only)
 
@@ -265,3 +265,4 @@ Continue Layer 2 from IL §6.15 / parent steps 8–9 (shortlist). Do not invent 
 - **1.3.60** Layer 2 schools + source types. Next = literature map from §6.14, not Arroyo/Rudhyar pending IDs.
 - **1.3.61** Layer 2 literature map. Landscape, not shortlist.
 - **1.3.62** Layer 2 selection criteria locked. Next = 1.3.63 shortlist. Cell C unscored.
+- **1.3.63** Layer 2 shortlist locked. Next = 1.3.64 Houlding ontology extract. Cell C remains a cell.

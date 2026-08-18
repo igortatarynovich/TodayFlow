@@ -1897,7 +1897,6 @@ def test_layer2_literature_map_from_matrix_no_ingest():
     assert "Hand Ch.11" in lit or "Ch.11" in lit
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "shortlist" in next_block.lower()
     assert "Do **not** start CORE scoring" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.61" in parent
@@ -1941,7 +1940,7 @@ def test_layer2_selection_criteria_locked_no_shortlist_no_ingest():
     jsonschema.validate(classifications, claims_schema)
     assert not any("houlding" in (row.get("source_id") or "") for row in classifications["claims"])
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.62" in canon
+    assert "1.3.62" in canon
     assert "### 6.16 Layer 2 Signs — selection criteria" in canon
     assert "Stopped before step 9" in canon
     criteria = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md").read_text(encoding="utf-8")
@@ -1955,13 +1954,68 @@ def test_layer2_selection_criteria_locked_no_shortlist_no_ingest():
     assert "Do **not** ingest" in criteria
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "1.3.63" in next_block
-    assert "shortlist" in next_block.lower()
-    assert "step 9" in next_block.lower() or "шага 9" in next_block
-    assert "8–9" not in next_block and "8-9" not in next_block
-    assert "not accessibility" in next_block.lower() or "not by access" in next_block.lower()
     assert "Do **not** start CORE scoring" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.62" in parent
-    assert "шага 9" in parent
+
+
+def test_layer2_shortlist_scored_from_criteria_no_ingest():
+    """1.3.63: shortlist from locked criteria. Cell C is a cell, not a winner. No ingest."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    planets = [
+        "sun",
+        "moon",
+        "mercury",
+        "venus",
+        "mars",
+        "jupiter",
+        "saturn",
+        "uranus",
+        "neptune",
+        "pluto",
+    ]
+    total = 0
+    psych_n = 0
+    core_n = 0
+    for name in planets:
+        payload = json.loads((CLAIMS_DIR / f"astro.object.{name}.json").read_text(encoding="utf-8"))
+        jsonschema.validate(payload, claims_schema)
+        total += len(payload["claims"])
+        psych_n += sum(1 for row in payload["claims"] if row.get("source_class") == "psychological")
+        core_n += sum(1 for row in payload["claims"] if row.get("evidence_tier") == "core")
+    assert total == 491
+    assert psych_n == 82
+    assert core_n == 0
+    assert len(objects["objects"]) == 24
+    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
+    jsonschema.validate(aries, claims_schema)
+    assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
+    assert "src.psychological.rudhyar_personality" in aries["pending_source_ids"]
+    classifications = json.loads((CLAIMS_DIR / "astro.sign.classifications.json").read_text(encoding="utf-8"))
+    jsonschema.validate(classifications, claims_schema)
+    assert not any("houlding" in (row.get("source_id") or "") for row in classifications["claims"])
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.63" in canon
+    assert "### 6.17 Layer 2 Signs — shortlist" in canon
+    assert "Stopped before step 10" in canon
+    shortlist = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_SHORTLIST.md").read_text(encoding="utf-8")
+    assert "Not ingest" in shortlist or "not ingest" in shortlist.lower()
+    assert "Houlding" in shortlist and "ontology" in shortlist.lower()
+    assert "Pulse of Life" in shortlist
+    assert "optional / later" in shortlist.lower() or "optional/later" in shortlist.lower()
+    assert "No winner" in shortlist or "no winner" in shortlist.lower()
+    assert "Arroyo" in shortlist and "Martin" in shortlist and "Hamaker" in shortlist
+    assert "Do **not** ingest from this page" in shortlist or "Do **not** ingest" in shortlist
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.64" in next_block
+    assert "Houlding" in next_block
+    assert "step 10" in next_block.lower() or "шага 10" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "1.3.63" in parent
+    assert "шага 10" in parent
+
 
