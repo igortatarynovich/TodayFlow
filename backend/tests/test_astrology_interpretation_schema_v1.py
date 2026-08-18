@@ -1747,3 +1747,57 @@ def test_sun_pluto_live_recount_after_access_blocked():
     assert "Pluto is COVERED" in audit or "Pluto | 10 | **COVERED**" in audit
 
 
+def test_planet_fill_research_stable_layer2_definition():
+    """1.3.59: planet fill research-stable; Layer 2 definition before literature. No ingest."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    planets = [
+        "sun",
+        "moon",
+        "mercury",
+        "venus",
+        "mars",
+        "jupiter",
+        "saturn",
+        "uranus",
+        "neptune",
+        "pluto",
+    ]
+    total = 0
+    psych_n = 0
+    core_n = 0
+    for name in planets:
+        payload = json.loads((CLAIMS_DIR / f"astro.object.{name}.json").read_text(encoding="utf-8"))
+        jsonschema.validate(payload, claims_schema)
+        total += len(payload["claims"])
+        psych_n += sum(1 for row in payload["claims"] if row.get("source_class") == "psychological")
+        core_n += sum(1 for row in payload["claims"] if row.get("evidence_tier") == "core")
+    assert total == 491
+    assert psych_n == 82
+    assert core_n == 0
+    assert len(objects["objects"]) == 24
+    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.59" in canon
+    assert "### 6.12 Planet fill research-stable (1.3.59)" in canon
+    assert "### 6.13 Layer 2 Signs — definition pass" in canon
+    assert "must not** generate planet research tasks" in canon
+    assert "не ждать Arroyo/Rudhyar как обязательных авторов" in canon
+    assert "ждать локусы (Arroyo, Rudhyar" not in canon
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "Layer 2 Signs" in next_block
+    assert "access queue" not in next_block.lower() or "opportunistic" in next_block.lower()
+    assert "Do **not** start CORE" in next_block or "Do **not** start CORE scoring" in next_block
+    audit = (ROOT / "docs" / "astrology" / "IL1_SUN_PLUTO_GAP_AUDIT.md").read_text(encoding="utf-8")
+    live_queue = audit.split("## 6. Next research queue")[1].split("## 7.")[0]
+    assert "Layer 2 Signs definition" in live_queue
+    assert "research-stable" in live_queue
+    assert "Do not start a new semantic core" not in live_queue
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "research-stable" in parent
+    assert "Layer 2 Signs" in parent
+    assert "1.3.59" in parent
+
+
+

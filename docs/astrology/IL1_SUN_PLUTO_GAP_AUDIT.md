@@ -3,7 +3,7 @@
 **Date:** 2026-08-18  
 **Status:** **1.3.58 live recount** from current ledgers after 1.3.57. Not product meaning. Not CORE scoring.  
 **Supersedes:** 1.3.24 / 1.3.44 dashboard snapshots. Do **not** inherit counts or “next = Pluto psychological” from those pages. `IL1_CORPUS_QA.md` remains a **historical** 303-row QA (1.3.28), not this dashboard.  
-**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.6 · §6.11. Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md).  
+**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.6 · §6.11 · §6.12 · §6.13. Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md).  
 **Handoff:** [IL1_HANDOFF.md](./IL1_HANDOFF.md).
 
 This file records what the ledger already contains. It does **not** rewrite `object.function`, set `active`, invent T1–T4, ingest claims, or open a new bibliography.
@@ -196,15 +196,19 @@ Hand outer runtime divider (Uranus = what must change; Neptune = where boundarie
 
 ## 6. Next research queue (from this recount)
 
-**Retired instructions (do not execute):** “Next research move: Pluto psychological.” “Mars psych is empty, hunt another book.” “CORE=0, go produce consensus.”
+**Retired instructions (do not execute):** “Next research move: Pluto psychological.” “Mars psych is empty, hunt another book.” “CORE=0, go produce consensus.” “Generate another planet source to raise coverage.”
 
-There is **no EMPTY psych slot** left to discover. Independent densify of THIN Moon/Mercury already ran (1.3.51 / 1.3.52). §6.10 empty-slot + densify budget is closed.
+There is **no EMPTY psych slot** left to discover. Independent densify of THIN Moon/Mercury already ran (1.3.51 / 1.3.52). §6.10 empty-slot + densify budget is closed. **1.3.59:** planet fill is research-stable. Coverage counts are not a reason to reopen discovery.
 
-### Access queue (not discovery)
+### Next large step (not planet research)
 
-When a **named** page becomes legally readable: extract only. `school_specific`. No `function` rewrite. No CORE. No `active`.
+**Layer 2 Signs definition** — parent research order. Steps 1–4 are in IL §6.13. Continue from **step 5 (schools)** using that model. Do not start from Arroyo, Rudhyar, Greene, or Hand. Do not ingest. Do not materialize 12 sign objects. Do not change schema in the definition pass. Houses/aspects already have classical draft objects; ASC/MC still need locus + calc; outers stay claims-only.
 
-1. **Psychological Mars** (`ACCESS_BLOCKED`) — Inner Planets p.138 **or** Dynamics Part 1 **or** Huber p.59. Highest access priority: only ACCESS_BLOCKED psych slot. Do not hunt a fourth book.
+### Access queue (opportunistic extract only)
+
+When a **named** page becomes legally readable: extract only. `school_specific`. No `function` rewrite. No CORE. No `active`. Do **not** hunt a fourth analog if it stays closed.
+
+1. **Psychological Mars** (`ACCESS_BLOCKED`) — Inner Planets p.138 **or** Dynamics Part 1 **or** Huber p.59. Highest access priority among planets: only ACCESS_BLOCKED psych slot. Do not hunt a fourth book.
 2. **Costello *The Astrological Moon*** — densify THIN Moon. NEED_OWNER.
 3. **Hand Ch.4 Sun → Moon → Mercury** — professional coverage inside an opened book. NEED_OWNER. ISBN 9780914918165.
 4. **Inner Planets Venus p.69** — densify COVERED Venus. NEED_OWNER.
@@ -213,7 +217,7 @@ When a **named** page becomes legally readable: extract only. `school_specific`.
 
 ### Do not
 
-- Hunt Mars discovery
+- Hunt Mars discovery or a fourth Mars book
 - Unpause Jupiter psych
 - Pad traditional
 - Treat remaining Inner Planets Mercury chapters as filling EMPTY
@@ -221,11 +225,12 @@ When a **named** page becomes legally readable: extract only. `school_specific`.
 - Surrogate-fill NEED_OWNER with summaries of those authors
 - Score CORE or promote the five Saturn candidates
 - Materialize Uranus/Neptune/Pluto objects
+- Materialize 12 sign objects from the first modern cookbook
 - Mix Profile v2 / Foundation UI / landing into IL commits
 
-### If no new readable locus
+### If no named planet locus is newly readable
 
-Stop. Do not invent a 20th Mars source. Do not start a new semantic core. CORE-candidate audit remains **listing only** (this file §0): five Saturn lemmas, not scored.
+Continue Layer 2 from IL §6.13 / parent step 5. Do not invent a 20th Mars source. Do not start CORE scoring. CORE-candidate audit remains **listing only** (this file §0): five Saturn lemmas, not scored.
 
 ---
 
@@ -255,4 +260,5 @@ Stop. Do not invent a 20th Mars source. Do not start a new semantic core. CORE-c
 - **1.3.53** Saturn psych densify (Tarnas senex).
 - **1.3.54–1.3.56** Mars discovery, no ingest (p.138 · Dynamics · Huber cataloged unread).
 - **1.3.57** Psychological Mars `ACCESS_BLOCKED`.
-- **1.3.58** this live recount. Dashboard and queue above replace 1.3.44.
+- **1.3.58** this live recount. Dashboard numbers above replace 1.3.44.
+- **1.3.59** planet fill research-stable; Layer 2 Signs definition is the next large step. Access queue stays opportunistic.

@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.58:** live Sun→Pluto recount. KPI order: psych coverage → school-class → access-blocked → collisions → CORE candidates → CORE. COVERED 7 · THIN 2 · ACCESS_BLOCKED 1 (Mars) · EMPTY 0. Pluto COVERED. 1.3.44 dashboard retired. Next = access queue, not Pluto psychological. CORE=0 is a fact, not the lead KPI. Parent: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.59:** planet fill research-stable (not semantically finalized). Do not generate planet research to raise coverage. CORE scoring blocked. Next large step = Layer 2 Signs definition (parent steps 1–4 in IL §6.13; continue from step 5). Dashboard numbers remain the 1.3.58 recount: COVERED 7 · THIN 2 · ACCESS_BLOCKED 1 (Mars) · EMPTY 0. Parent: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -94,6 +94,15 @@ Status: Active working document
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
 - **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.59 planet research-stable + Layer 2 definition (2026-08-18)
+
+- **SoT before:** after 1.3.58 the named next task was still an access queue that could reopen planet research; Layer 2 fill-rule waited on Arroyo/Rudhyar (author-first). CORE scoring still tempting as the next planet KPI.
+- **SoT after:** planet fill research-stable. No coverage-KPI hunts. Opportunistic named-locus extract only. CORE scoring blocked. Next large step = Layer 2 Signs definition before bibliography (IL §6.13). “Wait for Arroyo/Rudhyar” withdrawn.
+- **Public contract changed?** no
+- **Migration required?** no — no schema change; 0 sign objects
+- **Canon updated?** yes — IL 1.3.59 §6.12 · §6.13
+- **Backward compatible?** yes — no runtime wiring; catalog 24 draft unchanged
 
 ## Architecture impact — IL-1 1.3.58 live recount (2026-08-18)
 
