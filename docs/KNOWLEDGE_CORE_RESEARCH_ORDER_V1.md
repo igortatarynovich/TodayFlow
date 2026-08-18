@@ -90,6 +90,8 @@ IL-1 это уже показал. Provenance и atomic claims — правил�
 
 IL `NEED_OWNER(author/locus)` ≠ `NEED_EVIDENCE(slot)` — частный случай этого правила ([IL §6.9](./astrology/INTERPRETATION_LIBRARY_V1.md)).
 
+IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота найдены ≥3 качественных независимых dedicated loci и все закрыты по доступу, discovery **этого слота** прекращается. Это статус слота, не локуса. Локусы остаются NEED_OWNER. Когда один из названных локусов станет читаемым: только extraction, без нового discovery ([IL §6.11](./astrology/INTERPRETATION_LIBRARY_V1.md)).
+
 ---
 
 ## 4. Два разных принципа доказательности
@@ -114,7 +116,7 @@ IL `NEED_OWNER(author/locus)` ≠ `NEED_EVIDENCE(slot)` — частный сл�
 - Не заменяет [HUMAN_EXPLANATORY_SYSTEMS_ANALYSIS.md](./audits/HUMAN_EXPLANATORY_SYSTEMS_ANALYSIS.md) (почему объяснительные системы удерживают людей).
 - Не требует купить книги, чтобы «закрыть ландшафт». Карта включает закрытые тома как *известные, непрочитанные*.
 
-**IL-1 in flight:** наполнение уже открытой модели планет (Sun→Pluto claims) продолжается по IL §6.9 (school-first, one locus) внутри **§6.10 remaining psych budget**. Это **не** шаблон для следующего ядра. CORE по астрологии по-прежнему не scored, не KPI, и не строится из «кто оказался читаемым».
+**IL-1 in flight:** наполнение уже открытой модели планет (Sun→Pluto claims) шло по IL §6.9 внутри **§6.10 remaining psych budget**. **1.3.57:** that budget is **closed** (empty psych slots filled or Mars `ACCESS_BLOCKED`; densify complete). Это **не** шаблон для следующего ядра. CORE по астрологии по-прежнему не scored, не KPI, и не строится из «кто оказался читаемым».
 
 **Следующее ядро** (новый слой IL, пересборка нумерологического смысла, психология, практики-как-знание, медицина): шаги 1–9 обязательны до первого ingest.
 
@@ -124,6 +126,7 @@ IL `NEED_OWNER(author/locus)` ≠ `NEED_EVIDENCE(slot)` — частный сл�
 
 - Фиксировать обязательных авторов до shortlist.
 - Строить архитектуру исследования вокруг доступности 1–2 книг.
+- Охотиться за 20-м источником пустого слота, когда ≥3 dedicated loci уже найдены и все закрыты по доступу (`ACCESS_BLOCKED`).
 - Читать новый источник к уже извлечённым категориям другого автора.
 - Объявлять CORE / product meaning, пока не определены составляющие и не виден ландшафт, а не только shortlist.
 - Копировать астрологический `core` = school intersection в психологию или медицину.
@@ -146,3 +149,4 @@ IL `NEED_OWNER(author/locus)` ≠ `NEED_EVIDENCE(slot)` — частный сл�
 - **1.1 note (2026-08-18)** — IL-1.3.54 re-checked Mars psychological field: still empty (p.138 NEED_OWNER). Do not loop Mars without a new readable locus. Recount still deferred. This file's sequence for the *next* core is unchanged.
 - **1.1 note (2026-08-18)** — IL-1.3.55 cataloged Sasportas *Dynamics of the Unconscious* Part 1 unread (NEED_OWNER; no ingest). Mars psych still empty. Do not ingest forum quotes. Recount still deferred. This file's sequence for the *next* core is unchanged.
 - **1.1 note (2026-08-18)** — IL-1.3.56 cataloged Huber *The Planets* Mars chapter unread (NEED_OWNER; no ingest). Do not ingest masculine/tool-planet from TOC. Recount still deferred. This file's sequence for the *next* core is unchanged.
+- **1.1 note (2026-08-18)** — IL-1.3.57: Psychological Mars `ACCESS_BLOCKED` (3 dedicated loci, 0 bodies, 0 claims). §6.10 empty-slot + densify budget closed. Recount now allowed. Discovery for this slot stops. This file's sequence for the *next* core is unchanged.

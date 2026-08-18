@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.56:** Huber *The Planets* Mars chapter cataloged unread (NEED_OWNER; no ingest). Mars psych still empty. Do not ingest masculine from TOC. Do not loop p.138 or Dynamics. Densify Sun/Moon/Mercury/Saturn complete. CORE=0 is not a KPI. Remaining empty psych slot: Mars. Parent order: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`. CORE blocked.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.57:** Psychological Mars `ACCESS_BLOCKED` (3 dedicated loci NEED_OWNER; 0 readable bodies; 0 claims). Discovery for this slot stops. Do not hunt a fourth Mars book. §6.10 empty-slot + densify budget closed. Recount now allowed. CORE=0 is not a KPI. Parent order: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`. CORE blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -93,6 +93,15 @@ Status: Active working document
 - **Public contract changed?** no
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
+- **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.57 ACCESS_BLOCKED (2026-08-18)
+
+- **SoT before:** empty psych slot stayed open for discovery while NEED_OWNER loci existed; Mars could still trigger a 4th-book hunt after three dedicated unread chapters.
+- **SoT after:** `ACCESS_BLOCKED(slot)` — ≥3 quality independent dedicated loci, all access-closed → stop discovery for that slot. NEED_OWNER remains locus-level. Psychological Mars ACCESS_BLOCKED. §6.10 budget closed. Recount allowed. No ingest. No CORE.
+- **Public contract changed?** no
+- **Migration required?** no — not a schema enum
+- **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.11
 - **Backward compatible?** yes — no runtime wiring
 
 ## Architecture impact — Knowledge-core research order (2026-08-17)

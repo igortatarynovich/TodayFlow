@@ -380,7 +380,7 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Mercury Hermes opened. Venus p.69 / Mars p.138 NEED_OWNER (Google Books empty; Archive printdisabled; pirate dumps unused). Weiser 1993 ISBN 0-87728-741-4. Sasportas Mars p.184 reserve. 1.3.52: remaining Mercury chapters unread same-author densification. 1.3.54: p.138 still NEED_OWNER."
+      "notes": "Mercury Hermes opened. Venus p.69 / Mars p.138 NEED_OWNER (Google Books empty; Archive printdisabled; pirate dumps unused). Weiser 1993 ISBN 0-87728-741-4. Sasportas Mars p.184 reserve. 1.3.52: remaining Mercury chapters unread same-author densification. 1.3.54: p.138 still NEED_OWNER. 1.3.57: Mars p.138 remains NEED_OWNER inside ACCESS_BLOCKED psych slot; extraction-only when readable."
     },
     {
       "source_id": "src.psychological.sullivan_venus_jupiter",
@@ -604,7 +604,7 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "Weiser 1988 ISBN 0877286744. 1.3.55: Part 1 Sasportas The Astrology and Psychology of Aggression identified as dedicated psych Mars/aggression seminar. Google Books M9IEuEmeS0YC empty viewport; Archive dynamicsofuncons0000gree printdisabled. Pirate dumps unused. Forum/AbeBooks quotes of p.18 not ingested. Not Inner Planets p.138."
+      "notes": "Weiser 1988 ISBN 0877286744. 1.3.55: Part 1 Sasportas The Astrology and Psychology of Aggression. Google Books empty; Archive printdisabled. Pirate dumps unused. Forum/AbeBooks p.18 unused. Not Inner Planets p.138. 1.3.57: NEED_OWNER inside ACCESS_BLOCKED; extract only when readable."
     },
     {
       "source_id": "src.psychological.huber_planets",
@@ -619,7 +619,7 @@
       "legal_status": "copyrighted_edition",
       "ingest_rule": "research_paraphrase",
       "status": "candidate",
-      "notes": "HopeWell 2006 ISBN 9780954768027. 1.3.56: official API TOC identifies ch. Mars: The Masculine p.59. Chapter body unread. Parked psychological (no Huber enum). Garden lecture and Llewellyn review not this locus. Do not ingest tool-planet/masculine from TOC. Not Inner Planets p.138, not Dynamics Part 1. Pirate dumps unused."
+      "notes": "HopeWell 2006 ISBN 9780954768027. 1.3.56: official API TOC ch. Mars: The Masculine p.59 unread. Parked psychological (no Huber enum). Do not ingest masculine/tool-planet from TOC, garden lecture, or review. Not p.138, not Dynamics. Pirate dumps unused. 1.3.57: NEED_OWNER inside ACCESS_BLOCKED; extract only when readable."
     },
     {
       "source_id": "src.psychological.tarnas_prometheus",

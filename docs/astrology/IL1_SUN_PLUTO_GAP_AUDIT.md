@@ -1,7 +1,7 @@
 # IL-1 gap audit — Sun→Pluto corpus
 
-**Date:** 2026-08-17  
-**Status:** research audit (not product meaning, not CORE scoring). Owner queue **1.3.25** superseded for *discovery* by **1.3.29**. NEED_OWNER-blocks-locus **1.3.26** still holds for named closed pages. Hand Sun unread **1.3.27**. Corpus QA snapshot **1.3.28** — [IL1_CORPUS_QA.md](./IL1_CORPUS_QA.md). **1.3.29** school-first discovery; first `humanistic` class (Rudhyar Venus). **1.3.32–1.3.34** Rudhyar Uranus/Neptune/Pluto humanistic (objects withheld). **1.3.35** Rudhyar Sun humanistic (`function` unchanged). **1.3.36** Rudhyar Moon humanistic (`function` unchanged). **1.3.37** Rudhyar Mercury humanistic (`function` unchanged). **1.3.38** Greene *By Jove!* Psychology of Jupiter extract (`function` unchanged). **1.3.39** Rudhyar Saturn humanistic (`function` and `themes` unchanged). **1.3.40** Rudhyar Jupiter humanistic (`function` unchanged). **1.3.41** Venus psychological discovery (no ingest). **1.3.42** Mars psychological discovery (no ingest). **1.3.43** Uranus psychological discovery (no ingest). **1.3.44** Neptune psychological discovery (no ingest). **1.3.45** psych-budget lock + Pluto psychological ingest (Greene/Campion interview; object withheld). **1.3.46** Uranus psychological ingest (Tarnas official intro; object withheld). **1.3.47** Neptune psychological ingest (Tarnas official intro Neptune section; object withheld). **1.3.48** Venus psychological ingest (Sullivan official-site *Venus and Jupiter* excerpt; `function` unchanged). **1.3.49** Mars psychological discovery (no ingest; p.138 still NEED_OWNER). **1.3.50** Sun psychological densification (Greene Apollon Issue 1; Apollo's Chariot still NEED_OWNER). **1.3.51** Moon psychological densification (no ingest; Costello still NEED_OWNER). **1.3.52** Mercury psychological densification (no ingest; Inner Planets Hermes already ingested). **1.3.53** Saturn psychological densification (Tarnas official intro Saturn/senex; `function` and `themes` unchanged). **1.3.54** Mars psychological densification (no ingest; p.138 still NEED_OWNER). **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 cataloged unread (NEED_OWNER). **1.3.56** Huber *The Planets* Mars chapter cataloged unread (NEED_OWNER). Full recount deferred until Mars psych slot is also non-empty.  
+**Date:** 2026-08-18  
+**Status:** research audit (not product meaning, not CORE scoring). Owner queue **1.3.25** superseded for *discovery* by **1.3.29**. NEED_OWNER-blocks-locus **1.3.26** still holds for named closed pages. Hand Sun unread **1.3.27**. Corpus QA snapshot **1.3.28** — [IL1_CORPUS_QA.md](./IL1_CORPUS_QA.md). **1.3.29** school-first discovery; first `humanistic` class (Rudhyar Venus). **1.3.32–1.3.34** Rudhyar Uranus/Neptune/Pluto humanistic (objects withheld). **1.3.35** Rudhyar Sun humanistic (`function` unchanged). **1.3.36** Rudhyar Moon humanistic (`function` unchanged). **1.3.37** Rudhyar Mercury humanistic (`function` unchanged). **1.3.38** Greene *By Jove!* Psychology of Jupiter extract (`function` unchanged). **1.3.39** Rudhyar Saturn humanistic (`function` and `themes` unchanged). **1.3.40** Rudhyar Jupiter humanistic (`function` unchanged). **1.3.41** Venus psychological discovery (no ingest). **1.3.42** Mars psychological discovery (no ingest). **1.3.43** Uranus psychological discovery (no ingest). **1.3.44** Neptune psychological discovery (no ingest). **1.3.45** psych-budget lock + Pluto psychological ingest (Greene/Campion interview; object withheld). **1.3.46** Uranus psychological ingest (Tarnas official intro; object withheld). **1.3.47** Neptune psychological ingest (Tarnas official intro Neptune section; object withheld). **1.3.48** Venus psychological ingest (Sullivan official-site *Venus and Jupiter* excerpt; `function` unchanged). **1.3.49** Mars psychological discovery (no ingest; p.138 still NEED_OWNER). **1.3.50** Sun psychological densification (Greene Apollon Issue 1; Apollo's Chariot still NEED_OWNER). **1.3.51** Moon psychological densification (no ingest; Costello still NEED_OWNER). **1.3.52** Mercury psychological densification (no ingest; Inner Planets Hermes already ingested). **1.3.53** Saturn psychological densification (Tarnas official intro Saturn/senex; `function` and `themes` unchanged). **1.3.54** Mars psychological densification (no ingest; p.138 still NEED_OWNER). **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 cataloged unread (NEED_OWNER). **1.3.56** Huber *The Planets* Mars chapter cataloged unread (NEED_OWNER). **1.3.57** Psychological Mars `ACCESS_BLOCKED` (3 dedicated loci, 0 bodies, 0 claims). Recount now allowed.  
 **Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.6 — CORE = intersection of ingested **school classes** on the **same lemma**, not two classical authors. Parent research order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — do not score CORE from the first readable authors.  
 **Handoff:** [IL1_HANDOFF.md](./IL1_HANDOFF.md).
 
@@ -17,7 +17,7 @@ This file records what the ledger already contains. It does **not** rewrite `obj
 | Sign objects | 0 |
 | Outer-planet objects | 0 (Uranus / Neptune / Pluto = claims only) |
 | Planet claim rows | 491 (Sun 55 · Moon 40 · Mercury 37 · Venus 60 · Mars 52 · Jupiter 74 · Saturn **65** · Uranus 33 · Neptune 38 · Pluto 37) |
-| Psychological planet claims | **82** — Jupiter 19 · Saturn **11** · Pluto 10 · Uranus 9 · Neptune 9 · Venus 9 · Sun **12** · Moon 2 · Mercury 1 · Mars **0** |
+| Psychological planet claims | **82** — Jupiter 19 · Saturn **11** · Pluto 10 · Uranus 9 · Neptune 9 · Venus 9 · Sun **12** · Moon 2 · Mercury 1 · Mars **0 (`ACCESS_BLOCKED`)** |
 | `evidence_tier: core` | **0** |
 | Object `function` (Sun–Saturn) | unchanged classical elemental |
 
@@ -35,7 +35,7 @@ School classes in the planet ledgers: `classical` · `traditional` (Saturn only)
 | Moon | U | p | U Luminaries preview | U Rudhyar *New Mansions* | U | **p — Ch.4 not extracted** | draft, classical `function` |
 | Mercury | U | p | U Inner Planets Hermes | U Rudhyar *New Mansions* | U | **p — Ch.4 not extracted** | draft, classical `function` |
 | Venus | U | p | U Sullivan excerpt; p Inner Planets p.69 unread | U Rudhyar *New Mansions* | U | U | draft, classical `function` |
-| Mars | U | p | **p Inner Planets p.138 unread; p Dynamics Part 1 unread; p Huber Planets p.59 unread (1.3.56)** | U Rudhyar *New Mansions* | U | U | draft, classical `function` |
+| Mars | U | p | **ACCESS_BLOCKED** (p Inner Planets p.138; p Dynamics Part 1; p Huber Planets p.59 — 0 claims) | U Rudhyar *New Mansions* | U | U | draft, classical `function` |
 | Jupiter | U | p | U CPA **page** + *By Jove!* extract; Relating p.39 unread | U Rudhyar *New Mansions* | U | U | draft, classical `function` |
 | Saturn | U | U Houlding article | U Greene Introduction + Tarnas official intro senex | U Rudhyar *New Mansions* | **.** no Watters | U | draft, classical `function` / classical `themes` |
 | Uranus | . | . | U Tarnas official intro; p Outer Planets; Gods of Change unread | U Rudhyar *New Mansions* | . | U | **no object** |
@@ -139,9 +139,9 @@ Greene/Hand NEED_OWNER loci remain pending (do not replace with summaries of tho
 |------|--------|
 | Greene *Inner Planets* Venus p.69 (“The Great Harlot”) | NEED_OWNER — psych slot filled 1.3.48 from Sullivan excerpt, not this page |
 | Erin Sullivan *Venus and Jupiter* | **1.3.48 ingested** official-site Apollon excerpt; Dual Goddess seminar body still unread; CPA page/reviews still not claims |
-| Greene *Inner Planets* Mars p.138 | NEED_OWNER — psychological Mars still empty after 1.3.49 / 1.3.54 / 1.3.55 |
-| Sasportas *Dynamics of the Unconscious* Part 1 | NEED_OWNER — cataloged 1.3.55 unread (aggression seminar; Google empty; Archive printdisabled) |
-| Huber *The Planets and Their Psychological Meaning* Mars p.59 | NEED_OWNER — cataloged 1.3.56 unread (official API TOC *Mars: The Masculine*; do not ingest from TOC) |
+| Greene *Inner Planets* Mars p.138 | NEED_OWNER — inside Mars psych `ACCESS_BLOCKED` (1.3.57); extraction-only when readable |
+| Sasportas *Dynamics of the Unconscious* Part 1 | NEED_OWNER — cataloged 1.3.55 unread (aggression seminar; Google empty; Archive printdisabled); inside `ACCESS_BLOCKED` |
+| Huber *The Planets and Their Psychological Meaning* Mars p.59 | NEED_OWNER — cataloged 1.3.56 unread (official API TOC *Mars: The Masculine*; do not ingest from TOC); inside `ACCESS_BLOCKED` |
 | CPA Greene Mars webinars 2024 | page re-checked 1.3.42/1.3.49/1.3.54; transcript unread; not ingested |
 | Lynn Bell et al. *The Mars Quartet* | cataloged unread (jacket only; re-checked 1.3.49/1.3.54/1.3.55) |
 | Greene *The Outer Planets and Their Cycles* — Uranus / Neptune / Pluto | NEED_OWNER — Uranus/Neptune psych filled from Tarnas intro, not this volume; Pluto psych filled 1.3.45 from a different Greene locus |
@@ -159,11 +159,11 @@ Greene/Hand NEED_OWNER loci remain pending (do not replace with summaries of tho
 
 **Independent extraction (still locked):** extract from the opened locus **without** aiming to confirm Hand/Watters/Greene lemmas. Comparison is a later pass.
 
-**NEED_OWNER blocks a locus, not the pipeline (1.3.26 + 1.3.29):** a closed page stays pending. Do **not** fill it with surrogates of *that author*. Another independent author of the relevant school class may fill the semantic gap.
+**NEED_OWNER blocks a locus, not the pipeline (1.3.26 + 1.3.29).** `ACCESS_BLOCKED` (1.3.57) blocks **discovery for that slot** after ≥3 dedicated independent loci are all access-closed. A closed page stays pending. Do **not** fill it with surrogates of *that author*. Do **not** hunt a 20th source for an ACCESS_BLOCKED slot.
 
 Do **not** pad traditional (`ecb4cbe4`). Watters was never ingested for Saturn or the outers. That is a classification-gap source, not a CORE unlock.
 
-Next planet after this pass: Mars psych still empty after **1.3.56**. Huber Planets p.59 NEED_OWNER. Do not ingest masculine from TOC. Do not loop p.138 or Dynamics. Densify Sun/Moon/Mercury/Saturn complete. Costello Moon still NEED_OWNER. Inner Planets p.138 NEED_OWNER. Full recount deferred until Mars psych slot is also non-empty. CORE=0 is not a KPI.
+Next planet after this pass: **§6.10 closed.** Psychological Mars is `ACCESS_BLOCKED` (1.3.57). Do not hunt a fourth Mars book. Densify Sun/Moon/Mercury/Saturn complete. Costello Moon still NEED_OWNER. Recount now allowed. CORE=0 is not a KPI.
 
 ---
 
@@ -181,7 +181,7 @@ Minimum, per lemma:
 Practical implication:
 
 - **No outer-planet CORE** until the **same lemma** appears in more than one school class. Uranus: disruption ≠ transform/through ≠ Prometheus-freedom. Neptune: dissolution ≠ ecstasy/prenatal ≠ ocean-of-consciousness / thirst-for-transcendence. Pluto: reconstruction ≠ celestial-seed ≠ life-force-in-substance. Greene Outer Planets remains NEED_OWNER; Pluto psych is filled from a different Greene locus (1.3.45); Uranus and Neptune psych are filled from Tarnas intro (1.3.46 / 1.3.47), not Outer Planets.
-- **No Venus CORE** from moisture + bonding + inward-way + channel-for-Eros: five different categories, currently one class each except classical moisture. Inner Planets p.69 still NEED_OWNER. Mars psych still empty (p.138 NEED_OWNER). Uranus/Neptune psych exist (Tarnas intro) but are different categories from Hand disruption/dissolution and Rudhyar transform/ecstasy. Pluto psych exists (Greene/Campion) but is a different category from Hand reconstruction and Rudhyar seed. Rudhyar is **humanistic**, not a psych fill. *The Astrological Neptune* remains unread.
+- **No Venus CORE** from moisture + bonding + inward-way + channel-for-Eros: five different categories, currently one class each except classical moisture. Inner Planets p.69 still NEED_OWNER. Mars psych is `ACCESS_BLOCKED` (p.138 / Dynamics / Huber p.59 NEED_OWNER; 0 claims). Uranus/Neptune psych exist (Tarnas intro) but are different categories from Hand disruption/dissolution and Rudhyar transform/ecstasy. Pluto psych exists (Greene/Campion) but is a different category from Hand reconstruction and Rudhyar seed. Rudhyar is **humanistic**, not a psych fill. *The Astrological Neptune* remains unread.
 - **No “Saturn = structure” CORE** from the current mix. Cold/dry/malefic may later become CORE *if* another class states those lemmas; Hand/Greene currently do not.
 - **Do not** treat Watters + Hand as two school classes. Both are `professional`.
 - **Do not** treat Ptolemy + Lilly as CORE. Both are `classical`.
@@ -231,3 +231,4 @@ Until those gaps close, engine primary themes cannot be sourced from this catalo
 - **1.3.54** Mars psych densification (no ingest): p.138 still NEED_OWNER. Field re-checked; no legally readable dedicated natal-Mars principle locus. Do not loop a fourth Mars hunt without a new readable locus. `object.function` unchanged. No CORE.
 - **1.3.55** Mars psych discovery (no ingest): Sasportas *Dynamics of the Unconscious* Part 1 cataloged unread NEED_OWNER. Forum quotes unused. Not a substitute for p.138. `object.function` unchanged. No CORE.
 - **1.3.56** Mars psych discovery (no ingest): Huber *The Planets* ch. *Mars: The Masculine* p.59 cataloged unread NEED_OWNER. Do not ingest masculine/tool-planet from TOC. `object.function` unchanged. No CORE.
+- **1.3.57** Psychological Mars `ACCESS_BLOCKED` (no ingest): 3 dedicated independent loci, 0 readable bodies, 0 claims. Discovery for this slot stops. §6.10 budget closed. Recount now allowed. `object.function` unchanged. No CORE.

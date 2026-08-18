@@ -42,7 +42,9 @@
     "1.3.55: New dedicated psych Mars/aggression locus identified, body unread. Sasportas Dynamics of the Unconscious Part 1 (Weiser 1988 ISBN 0877286744). Google Books empty; Archive printdisabled. Pirate dumps unused. Forum/AbeBooks p.18 quotes not ingested. Not a substitute for Inner Planets p.138. object.function unchanged.",
     "Independent field 1.3.55: Arroyo Four Elements still front-matter; classify from opened locus if readable. George Ancient Practice is Hellenistic technique, not this psych slot. Lynn Bell official site still Mars Quartet jacket. Gerhardt in_dg_mars already skipped as natal/cultural essay.",
     "1.3.56: New dedicated psych Mars chapter identified, body unread. Huber The Planets and Their Psychological Meaning (HopeWell 2006 ISBN 9780954768027) ch. Mars: The Masculine p.59. Official API TOC only. Do not ingest tool-planet/masculine from TOC. object.function unchanged.",
-    "Independent field 1.3.56: API garden lecture is Huber system architecture, not Mars-alone. Llewellyn review unused. Hamaker Psychological Astrology planets-as-drives still unread (ebin pirate unused). Development of the Personality is childhood stages, not this locus. Clark vocation PDF is one-sentence Mars in a vocation essay."
+    "Independent field 1.3.56: API garden lecture is Huber system architecture, not Mars-alone. Llewellyn review unused. Hamaker Psychological Astrology planets-as-drives still unread (ebin pirate unused). Development of the Personality is childhood stages, not this locus. Clark vocation PDF is one-sentence Mars in a vocation essay.",
+    "1.3.57: Psychological Mars ACCESS_BLOCKED. 3 dedicated independent loci identified (Inner Planets p.138; Dynamics Part 1; Huber Planets p.59). 0 directly readable chapter bodies. 0 claims ingested.",
+    "1.3.57: No surrogate extraction. No function rewrite. No CORE. Discovery for this slot stops. When one of those three chapters is readable: extraction only, no new discovery. Mars Quartet jacket is not a fourth counted locus. §6.10 budget closed."
   ],
   "claims": [
     {

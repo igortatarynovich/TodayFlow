@@ -878,6 +878,9 @@ def test_watters_greene_luminaries_not_averaged():
     assert any("1.3.54" in note for note in mars_claims["gap_notes"])
     assert any("1.3.55" in note for note in mars_claims["gap_notes"])
     assert any("1.3.56" in note for note in mars_claims["gap_notes"])
+    assert any("1.3.57" in note for note in mars_claims["gap_notes"])
+    assert any("ACCESS_BLOCKED" in note for note in mars_claims["gap_notes"])
+    assert any("3 dedicated independent loci" in note for note in mars_claims["gap_notes"])
     assert any("mythic astrology" in note.lower() for note in mars_claims["gap_notes"])
     assert "src.psychological.greene_mars_cpa" in set(mars_claims["pending_source_ids"])
     assert "src.psychological.bell_mars_quartet" in set(mars_claims["pending_source_ids"])
@@ -1261,14 +1264,23 @@ def test_watters_greene_luminaries_not_averaged():
     assert dynamics["source_class"] == "psychological"
     assert dynamics["status"] == "candidate"
     assert "1.3.55" in dynamics["notes"]
+    assert "1.3.57" in dynamics["notes"]
+    assert "ACCESS_BLOCKED" in dynamics["notes"]
     assert "aggression" in dynamics["notes"].lower()
-    assert "printdisabled" in dynamics["notes"].lower()
+    assert "printdisabled" in dynamics["notes"].lower() or "archive" in dynamics["notes"].lower()
     huber = next(src for src in corpus["sources"] if src["source_id"] == "src.psychological.huber_planets")
     assert huber["source_class"] == "psychological"
     assert huber["status"] == "candidate"
     assert "1.3.56" in huber["notes"]
+    assert "1.3.57" in huber["notes"]
+    assert "ACCESS_BLOCKED" in huber["notes"]
     assert "masculine" in huber["notes"].lower()
     assert "unread" in huber["notes"].lower()
+    inner_planets = next(
+        src for src in corpus["sources"] if src["source_id"] == "src.psychological.greene_inner_planets"
+    )
+    assert "1.3.57" in inner_planets["notes"]
+    assert "ACCESS_BLOCKED" in inner_planets["notes"]
 
 
 def test_hand_uranus_claims_not_core():
