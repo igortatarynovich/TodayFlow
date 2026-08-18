@@ -118,7 +118,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 **IL-1 in flight:** наполнение модели планет (Sun→Pluto) **research-stable** (IL **1.3.59**). §6.10 remaining psych budget closed 1.3.57. Дальше планеты — только opportunistic extract уже названных NEED_OWNER loci, не hunt ради coverage. Это **не** шаблон для следующего ядра. CORE по астрологии по-прежнему не scored, не KPI, и не строится из «кто оказался читаемым».
 
-**Следующее IL-ядро = Layer 2 Signs.** Definition (§6.13) · schools/source types (§6.14) · literature map (§6.15) · selection criteria (§6.16) · shortlist (§6.17 / [IL1_LAYER2_SIGNS_SHORTLIST.md](./astrology/IL1_LAYER2_SIGNS_SHORTLIST.md)). Продолжать с шага 10 (первый ingest = Houlding ontology paragraphs only) **если named**. Ячейка C остаётся cell, не победитель. Не ingest 12 portraits. Не материализовать 12 sign objects до Architecture impact по required later-interpretive слотам. Houses/aspects уже имеют classical draft objects; ASC/MC и outers — отдельные ворота. Для любого **нового** ядра вне этого трека: шаги 1–9 обязательны до первого ingest.
+**Следующее IL-ядро = Layer 2 Signs.** Definition through shortlist (§6.13–§6.17) · first extract Houlding ontology (§6.18 / 1.3.64). Продолжать с шага 10: следующий named ingest = Rudhyar *Pulse of Life* Part One (**humanistic**). Ячейка C остаётся cell, не победитель, пока principle-глава не читаема. Не ingest 12 portraits. Не материализовать 12 sign objects до Architecture impact по required later-interpretive слотам. Houses/aspects уже имеют classical draft objects; ASC/MC и outers — отдельные ворота. Для любого **нового** ядра вне этого трека: шаги 1–9 обязательны до первого ingest.
 
 ---
 
@@ -155,4 +155,5 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - **1.1 note (2026-08-18)** — IL-1.3.60: Layer 2 schools + source types in IL §6.14. Reuse `source_class` enum; no new class. Literature map is next (step 7) from that table, not from Arroyo/Rudhyar pending IDs.
 - **1.1 note (2026-08-18)** — IL-1.3.61: Layer 2 literature map. Classical classification saturated. Minimal corpus named. First proposed ingest = Houlding triplicity ontology (not extracted). Criteria locked separately in 1.3.62.
 - **1.1 note (2026-08-18)** — IL-1.3.62: Layer 2 selection criteria locked (parent step 8). Epistemic ≠ access. Cell C unscored. Shortlist done in 1.3.63.
-- **1.1 note (2026-08-18)** — IL-1.3.63: Layer 2 shortlist locked (parent step 9). Houlding ontology IN; Pulse Part One IN; Cell C remains a cell; Hand Ch.10 later. Next = step 10 first named extract.
+- **1.1 note (2026-08-18)** — IL-1.3.63: Layer 2 shortlist locked (parent step 9). Houlding ontology IN; Pulse Part One IN; Cell C remains a cell; Hand Ch.10 later. First extract done in 1.3.64.
+- **1.1 note (2026-08-18)** — IL-1.3.64: Houlding triplicity ontology extracted (classification ledger only; rulers out; no sign objects). Next named ingest = Pulse of Life Part One (humanistic). Cell C still a cell.

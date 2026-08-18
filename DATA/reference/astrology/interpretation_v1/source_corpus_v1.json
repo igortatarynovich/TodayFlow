@@ -261,6 +261,21 @@
       "notes": "Opened Skyscript article, December 2003. Paraphrase only. Boundary/constraint lemmas stay school_specific; Mundane Signification catalog not copied; Greene membrane quote not ingested as Greene."
     },
     {
+      "source_id": "src.traditional.houlding_triplicities",
+      "source_class": "traditional",
+      "title": "The Classical Use of Triplicities",
+      "author": "Deborah Houlding",
+      "role": "traditional_living",
+      "use": [
+        "signs",
+        "history"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened Skyscript reprint of Traditional Astrologer 6 (Autumn 1994). Ontology paragraphs only. Rulers, Dorotheus fortune, dignity not ingested. Paraphrase only."
+    },
+    {
       "source_id": "src.traditional.abu_mashar_great_introduction",
       "source_class": "traditional",
       "title": "The Great Introduction",

@@ -96,7 +96,7 @@ This cell sets the grammar of the required later-interpretive slots. Schema stil
 | # | Status | School class | Locus | Constituent band | When to extract |
 |---|--------|--------------|-------|------------------|-----------------|
 | A | extracted | classical | Ptolemy · Lilly · Valens Aries | classification | already done |
-| **B** | **shortlisted** | traditional | Houlding triplicity **ontology paragraphs only** | classification ontology | **first** Layer 2 extract (step 10). Does not force 12 objects |
+| **B** | **extracted (1.3.64)** | traditional | Houlding triplicity **ontology paragraphs only** | classification ontology | Done. Rulers still out. No sign objects |
 | **C** | **shortlisted as a cell** | psychological | one of Arroyo Part II ch.9–12 / Martin structure lessons / Hamaker *Elements and Crosses* | later-interpretive structure | after a principle chapter is legally readable **and** passes L2-C7+C8. No winner in 1.3.63 |
 | **D** | **shortlisted** | humanistic | Rudhyar *Pulse of Life* Part One | cycle / phase-task | after B, when later-interpretive ingest is opened on purpose. Not a substitute for C |
 | **E** | **optional / later** | professional | Hand Ch.10 only | consulting grid (other lemma) | not needed to start. Before any Ch.11 portraits if professional is opened at all |
@@ -116,7 +116,7 @@ Both B and D are legally readable. Readability is therefore **not** the tie-brea
 3. **Cell C winner** — only after an opened chapter passes L2-C7 + L2-C8. Architecture impact still required before 12 `type=sign` objects.
 4. **Hand Ch.10** — optional, later, and only if the opened chapter shows a grammar not already used as other-lemma grid.
 
-**Not extracted in 1.3.63.** Next named extract, if the owner opens step 10: item 1 only. Do not extract 2–4 in the same pass.
+**Not extracted in 1.3.63.** **1.3.64 extracted item 1** (Houlding ontology). Next named extract: item 2 (Pulse Part One) as humanistic, not as C. Do not extract 3–4 in the same pass.
 
 ---
 
@@ -128,4 +128,4 @@ Both B and D are legally readable. Readability is therefore **not** the tie-brea
 - No CORE. Shortlist agreement is not semantic consensus.
 - No planet coverage hunt.
 
-**Stopped before step 10.** Next artifact: 1.3.64 Houlding ontology extract (bounded), if named. Cell C stays a cell until a principle chapter is readable.
+**Stopped before step 10.** Next artifact: 1.3.64 Houlding ontology extract (bounded), if named. Cell C stays a cell until a principle chapter is readable. **1.3.64 done** — classification claims only; no sign objects. Next = Pulse Part One.

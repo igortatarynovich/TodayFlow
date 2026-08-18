@@ -75,7 +75,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.63:** Layer 2 Signs shortlist (`docs/astrology/IL1_LAYER2_SIGNS_SHORTLIST.md`). Traditional = Houlding ontology. Cell C = one of Arroyo/Martin/Hamaker, no winner. Humanistic = Pulse Part One. Hand Ch.10 later. Next = 1.3.64 Houlding extract (not this pass). Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.64:** Houlding triplicity ontology extracted onto `astro.sign.classifications` (rulers out). No sign objects. Cell C still a cell. Next = 1.3.65 Rudhyar Pulse Part One (humanistic). Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -105,6 +105,15 @@ Status: Active working document
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
 - **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.64 Houlding ontology extract (2026-08-18)
+
+- **SoT before:** shortlist admitted Houlding ontology; classification ledger had Ptolemy/Lilly/Valens only.
+- **SoT after:** three traditional school_specific claims on `astro.sign.classifications`. Rulers out. No sign objects. Later-interpretive slots still unattested.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.64 §6.18 · claims ledger · corpus `src.traditional.houlding_triplicities`
+- **Backward compatible?** yes — planet ledgers untouched; pending Arroyo/Rudhyar unchanged
 
 ## Architecture impact — IL-1 1.3.63 Layer 2 shortlist (2026-08-18)
 

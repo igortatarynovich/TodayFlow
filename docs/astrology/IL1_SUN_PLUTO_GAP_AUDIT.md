@@ -202,7 +202,7 @@ There is **no EMPTY psych slot** left to discover. Independent densify of THIN M
 
 ### Next large step (not planet research)
 
-**Layer 2 Signs** — definition through shortlist done (§6.13–§6.17). Continue from **1.3.64 Houlding ontology extract (parent step 10)** if named. Cell C remains a cell — do not pick by access. Do not ingest 12 portraits. Do not start from Arroyo/Rudhyar pending IDs. Do not materialize 12 sign objects.
+**Layer 2 Signs** — definition through shortlist done (§6.13–§6.17). **1.3.64** Houlding ontology extracted (classification ledger; no sign objects). Continue from **1.3.65 Pulse of Life Part One** (humanistic). Cell C remains a cell — do not pick by access. Do not ingest 12 portraits. Do not start from Arroyo/Rudhyar pending IDs. Do not materialize 12 sign objects.
 
 ### Access queue (opportunistic extract only)
 
@@ -266,3 +266,4 @@ Continue Layer 2 from IL §6.15 / parent steps 8–9 (shortlist). Do not invent 
 - **1.3.61** Layer 2 literature map. Landscape, not shortlist.
 - **1.3.62** Layer 2 selection criteria locked. Next = 1.3.63 shortlist. Cell C unscored.
 - **1.3.63** Layer 2 shortlist locked. Next = 1.3.64 Houlding ontology extract. Cell C remains a cell.
+- **1.3.64** Houlding triplicity ontology extracted. No sign objects. Next = 1.3.65 Pulse Part One.

@@ -20,7 +20,8 @@
     "Lilly long/short ascension is rising-time technique, not Layer 2 meaning. Opened list puts Aquarius in both columns; not normalized.",
     "Valens I.2 calls Aries fiery and also by nature watery (thunder/hail weather). Do not use Valens to confirm Lilly fire, and do not collapse weather into element.",
     "Valens I.2 Aries is tropic. That is not Ptolemy equinoctial and not Lilly moveable/cardinal. Schema still cannot store the split; do not compare.",
-    "Valens I.3 (50 terms) is bounds/dignity, not Layer 2 meaning. Left in Foundation §2.5. Not copied here."
+    "Valens I.3 (50 terms) is bounds/dignity, not Layer 2 meaning. Left in Foundation §2.5. Not copied here.",
+    "1.3.64: Houlding triplicity ontology ingested (trigonal geometry; elemental labels later; no Ptolemy air/water-on-sign). Rulers, Dorotheus fortune, dignity, and technique not copied. Do not CORE with Lilly fire. Do not materialize 12 sign objects. Later-interpretive slots still unattested."
   ],
   "claims": [
     {
@@ -310,6 +311,54 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "mode"
+    },
+    {
+      "concept_id": "claim.sign.triplicity_trigonal_geometry",
+      "source_id": "src.traditional.houlding_triplicities",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Traditional Astrologer 6, Autumn 1994; Skyscript reprint",
+      "locus": "The Classical Use of Triplicities, Trigonal relationship of signs",
+      "school": "living_traditional",
+      "original_claim": "Houlding restates Manilius: a triangle inscribed in the zodiac marks trigonal signs, each pair separated by three intervening signs.",
+      "normalized_claim": "Triplicity is a trigonal grouping of signs, not an elemental nature of each sign",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "element",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    {
+      "concept_id": "claim.sign.elemental_labels_later",
+      "source_id": "src.traditional.houlding_triplicities",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Traditional Astrologer 6, Autumn 1994; Skyscript reprint",
+      "locus": "The Classical Use of Triplicities, Trigonal relationship of signs",
+      "school": "living_traditional",
+      "original_claim": "Houlding: the association of triplicities with elements arose from that geometry but was not explicitly stated by Ptolemy and his contemporaries.",
+      "normalized_claim": "Elemental labels on triplicities are later than Ptolemy's trigonal grouping",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "element",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    {
+      "concept_id": "claim.sign.no_ptolemy_air_water_sign_labels",
+      "source_id": "src.traditional.houlding_triplicities",
+      "source_class": "traditional",
+      "author": "Deborah Houlding",
+      "edition": "Traditional Astrologer 6, Autumn 1994; Skyscript reprint",
+      "locus": "The Classical Use of Triplicities, Trigonal relationship of signs",
+      "school": "living_traditional",
+      "original_claim": "Houlding: there was no characterisation of Aquarius as an air-sign or Scorpio as a water-sign in that early usage.",
+      "normalized_claim": "Ptolemy-era usage does not label Aquarius air-sign or Scorpio water-sign",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "element",
+      "reviewer": null,
+      "reviewed_at": null
     }
   ]
 }
