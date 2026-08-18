@@ -1834,19 +1834,76 @@ def test_layer2_schools_and_source_types_before_literature_map():
     jsonschema.validate(aries, claims_schema)
     assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.60" in canon
+    assert "1.3.60" in canon
     assert "### 6.14 Layer 2 Signs — schools and source types" in canon
     assert "not** the school list" in canon
-    assert "Stopped before step 7." in canon
+    assert "Stopped before step 7" in canon
     assert "evolutionary" in canon.lower()
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "literature map" in next_block.lower()
-    assert "step 7" in next_block
     assert "Do **not** start CORE scoring" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "§6.14" in parent
-    assert "шага 7" in parent
+    assert "Layer 2 Signs" in parent
+
+
+def test_layer2_literature_map_from_matrix_no_ingest():
+    """1.3.61: literature map from school × constituent matrix. No ingest, no sign objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    planets = [
+        "sun",
+        "moon",
+        "mercury",
+        "venus",
+        "mars",
+        "jupiter",
+        "saturn",
+        "uranus",
+        "neptune",
+        "pluto",
+    ]
+    total = 0
+    psych_n = 0
+    core_n = 0
+    for name in planets:
+        payload = json.loads((CLAIMS_DIR / f"astro.object.{name}.json").read_text(encoding="utf-8"))
+        jsonschema.validate(payload, claims_schema)
+        total += len(payload["claims"])
+        psych_n += sum(1 for row in payload["claims"] if row.get("source_class") == "psychological")
+        core_n += sum(1 for row in payload["claims"] if row.get("evidence_tier") == "core")
+    assert total == 491
+    assert psych_n == 82
+    assert core_n == 0
+    assert len(objects["objects"]) == 24
+    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
+    jsonschema.validate(aries, claims_schema)
+    assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
+    assert "src.psychological.rudhyar_personality" in aries["pending_source_ids"]
+    classifications = json.loads((CLAIMS_DIR / "astro.sign.classifications.json").read_text(encoding="utf-8"))
+    jsonschema.validate(classifications, claims_schema)
+    assert not any("houlding" in (row.get("source_id") or "") for row in classifications["claims"])
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.61" in canon
+    assert "### 6.15 Layer 2 Signs — literature map" in canon
+    lit = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_LITERATURE_MAP.md").read_text(encoding="utf-8")
+    assert "school × constituent" in lit or "School × constituent" in lit
+    assert "not a shortlist" in lit.lower() or "Not a shortlist" in lit
+    assert "Houlding" in lit and "triplicit" in lit.lower()
+    assert "Pulse of Life" in lit
+    assert "cookbook-risk" in lit
+    assert "Do **not** ingest from this page" in lit or "Do **not** ingest" in lit
+    assert "Hand Ch.11" in lit or "Ch.11" in lit
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "8–9" in next_block or "8-9" in next_block
+    assert "shortlist" in next_block.lower()
+    assert "Do **not** start CORE scoring" in next_block
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "1.3.61" in parent
+    assert "шагов 8–9" in parent
+
 
 
 

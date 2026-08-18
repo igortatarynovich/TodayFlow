@@ -64,7 +64,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.60:** Layer 2 Signs schools + source types (IL §6.14). Next = literature map (parent step 7) from that table, not from Arroyo/Rudhyar pending IDs. Planet fill remains research-stable. CORE scoring blocked. Dashboard numbers remain the 1.3.58 recount. Parent: `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.61:** Layer 2 Signs literature map (`docs/astrology/IL1_LAYER2_SIGNS_LITERATURE_MAP.md`). Next = parent steps 8–9 (criteria + shortlist). Do not ingest 12 portraits. Proposed first locus = Houlding triplicity ontology (not extracted). Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -94,6 +94,15 @@ Status: Active working document
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
 - **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.61 Layer 2 literature map (2026-08-18)
+
+- **SoT before:** schools/source types existed; bibliography could still start from Arroyo/Rudhyar pending IDs.
+- **SoT after:** literature map from the school × constituent matrix. Minimal corpus named. No ingest. No shortlist yet. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.61 §6.15 · `docs/astrology/IL1_LAYER2_SIGNS_LITERATURE_MAP.md`
+- **Backward compatible?** yes — planet ledgers untouched
 
 ## Architecture impact — IL-1 1.3.60 Layer 2 schools + source types (2026-08-18)
 

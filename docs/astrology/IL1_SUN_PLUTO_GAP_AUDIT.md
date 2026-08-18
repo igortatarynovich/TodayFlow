@@ -202,7 +202,7 @@ There is **no EMPTY psych slot** left to discover. Independent densify of THIN M
 
 ### Next large step (not planet research)
 
-**Layer 2 Signs** — definition (§6.13) and schools/source-types (§6.14) done. Continue from **parent step 7 (literature map)** using the school × constituent table. Do not start from Arroyo, Rudhyar, Greene, or Hand pending IDs. Do not ingest. Do not materialize 12 sign objects. Do not add a new `source_class`. Houses/aspects already have classical draft objects; ASC/MC still need locus + calc; outers stay claims-only.
+**Layer 2 Signs** — definition (§6.13), schools/source-types (§6.14), and literature map (§6.15) done. Continue from **parent steps 8–9 (criteria + shortlist)** using [IL1_LAYER2_SIGNS_LITERATURE_MAP.md](./IL1_LAYER2_SIGNS_LITERATURE_MAP.md). Do not ingest 12 portraits. Do not start from Arroyo/Rudhyar pending IDs. Do not materialize 12 sign objects.
 
 ### Access queue (opportunistic extract only)
 
@@ -230,7 +230,7 @@ When a **named** page becomes legally readable: extract only. `school_specific`.
 
 ### If no named planet locus is newly readable
 
-Continue Layer 2 from IL §6.14 / parent step 7 (literature map). Do not invent a 20th Mars source. Do not start CORE scoring. CORE-candidate audit remains **listing only** (this file §0): five Saturn lemmas, not scored.
+Continue Layer 2 from IL §6.15 / parent steps 8–9 (shortlist). Do not invent a 20th Mars source. Do not start CORE scoring. CORE-candidate audit remains **listing only** (this file §0): five Saturn lemmas, not scored.
 
 ---
 
