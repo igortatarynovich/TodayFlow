@@ -15,6 +15,7 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
+from todayflow_backend.core.llm_openai_compatible import llm_call_context
 from todayflow_backend.services.generation_jobs_v0 import (
     claim_job,
     complete_job_if_fresh,
@@ -73,13 +74,21 @@ def run_day_prewarm_job(job_id: int) -> None:
                 locale = str(payload.get("locale") or "ru")
                 timezone_name = str(payload.get("timezone") or "UTC")
 
-                outcome = prewarm_assemble_user_day(
-                    db,
-                    user=user,
-                    local_date=local_date,
-                    timezone_name=timezone_name,
-                    locale=locale,
-                )
+                outcome = None
+                with llm_call_context(
+                    trigger="prewarm",
+                    user_id=user_id,
+                    feature="today.prewarm",
+                    operation="today.generate",
+                    ensure_operation=True,
+                ):
+                    outcome = prewarm_assemble_user_day(
+                        db,
+                        user=user,
+                        local_date=local_date,
+                        timezone_name=timezone_name,
+                        locale=locale,
+                    )
 
                 fresh = get_job(db, job_id)
                 if fresh is None or fresh.fingerprint != fingerprint:

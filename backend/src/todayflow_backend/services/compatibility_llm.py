@@ -20,6 +20,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_default_chat_model,
     resolve_max_tokens,
 )
@@ -381,17 +382,22 @@ def generate_llm_base_model(
     user_prompt = json.dumps(payload, ensure_ascii=False)
     model_id = resolve_default_chat_model()
     try:
-        raw = chat_completion_text(
-            client,
-            model=model_id,
-            messages=[
-                {"role": "system", "content": sys_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            temperature=0.35,
-            max_tokens=resolve_max_tokens(900),
-            json_object=True,
-        )
+        with llm_call_context(
+            feature="compatibility.llm",
+            ensure_operation=True,
+            operation="compatibility.llm",
+        ):
+            raw = chat_completion_text(
+                client,
+                model=model_id,
+                messages=[
+                    {"role": "system", "content": sys_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                temperature=0.35,
+                max_tokens=resolve_max_tokens(900),
+                json_object=True,
+            )
         parsed = _parse_llm_json(raw or "")
         if not isinstance(parsed, dict):
             return None
@@ -590,17 +596,22 @@ def generate_llm_product_surface(
         scenario_tone=scenario_tone,
     )
     try:
-        raw_response = chat_completion_text(
-            client,
-            model=model_id,
-            messages=[
-                {"role": "system", "content": sys_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            temperature=0.55,
-            max_tokens=resolve_max_tokens(max_tokens),
-            json_object=True,
-        ) or ""
+        with llm_call_context(
+            feature="compatibility.editorial",
+            ensure_operation=True,
+            operation="compatibility.editorial",
+        ):
+            raw_response = chat_completion_text(
+                client,
+                model=model_id,
+                messages=[
+                    {"role": "system", "content": sys_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                temperature=0.55,
+                max_tokens=resolve_max_tokens(max_tokens),
+                json_object=True,
+            ) or ""
         parsed = _parse_llm_json(raw_response)
         if not parsed:
             raise ValueError("empty_llm_json")

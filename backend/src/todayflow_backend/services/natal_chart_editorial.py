@@ -14,6 +14,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_default_chat_model,
     resolve_max_tokens,
 )
@@ -622,17 +623,23 @@ def generate_natal_chart_editorial(
     model_id = resolve_default_chat_model()
     started_at = perf_counter()
     try:
-        content = chat_completion_text(
-            client,
-            model=model_id,
-            messages=[
-                {"role": "system", "content": _user_facing_system_prompt()},
-                {"role": "user", "content": user_prompt},
-            ],
-            temperature=0.45,
-            max_tokens=resolve_max_tokens(700),
-            json_object=True,
-        )
+        with llm_call_context(
+            feature="natal.editorial",
+            user_id=getattr(user, "id", None),
+            ensure_operation=True,
+            operation="natal.editorial",
+        ):
+            content = chat_completion_text(
+                client,
+                model=model_id,
+                messages=[
+                    {"role": "system", "content": _user_facing_system_prompt()},
+                    {"role": "user", "content": user_prompt},
+                ],
+                temperature=0.45,
+                max_tokens=resolve_max_tokens(700),
+                json_object=True,
+            )
         parsed = _parse_editorial_json(content) if content else None
         if not parsed:
             generation = learning_service.log_generation(

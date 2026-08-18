@@ -16,6 +16,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_default_chat_model,
 )
 from todayflow_backend.prompts.registry_v1 import get_prompt
@@ -380,17 +381,18 @@ def generate_natal_facts(
     }
     client = get_openai_compatible_client(operation="background")
     model = resolve_default_chat_model()
-    raw = chat_completion_text(
-        client,
-        model=model,
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False)},
-        ],
-        temperature=0.2,
-        max_tokens=2500,
-        json_object=True,
-    )
+    with llm_call_context(feature="natal.facts", ensure_operation=True, operation="natal.facts"):
+        raw = chat_completion_text(
+            client,
+            model=model,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False)},
+            ],
+            temperature=0.2,
+            max_tokens=2500,
+            json_object=True,
+        )
     parsed = _parse_json_object(raw or "")
     if not parsed:
         logger.warning("natal_facts: empty/invalid LLM JSON — fallback")

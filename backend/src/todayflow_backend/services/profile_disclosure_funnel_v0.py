@@ -19,6 +19,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_complex_chat_model,
 )
 from todayflow_backend.prompts.registry_v1 import get_prompt
@@ -118,16 +119,17 @@ def _call(
     client = get_openai_compatible_client(model=model)
     if client is None:
         return None, None
-    content = chat_completion_plain(
-        client,
-        model=model,
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": user},
-        ],
-        temperature=temperature,
-        max_tokens=funnel_step_max_tokens(depth_level),
-    )
+    with llm_call_context(feature="profile.disclosure"):
+        content = chat_completion_plain(
+            client,
+            model=model,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            temperature=temperature,
+            max_tokens=funnel_step_max_tokens(depth_level),
+        )
     if not content:
         return None, None
     return _parse_json_content(content), content
@@ -180,7 +182,12 @@ def _call_with_retry(
     for attempt in range(2):
         step_meta["attempts"] = attempt + 1
         attempt_t0 = perf_counter()
-        parsed, raw = _call(system, user, depth_level=depth_level, temperature=temperature)
+        with llm_call_context(
+            feature="profile.disclosure",
+            attempt=attempt,
+            retry_reason="schema_retry" if attempt else None,
+        ):
+            parsed, raw = _call(system, user, depth_level=depth_level, temperature=temperature)
         ok = bool(ok_fn(parsed))
         validation = {
             "ok": ok,

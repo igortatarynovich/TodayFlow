@@ -17,6 +17,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_complex_chat_model,
 )
 from todayflow_backend.prompts.registry_v1 import get_prompt
@@ -575,23 +576,25 @@ def build_character_engine_life_bundle_v0(
         {"role": "system", "content": system},
         {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
     ]
-    raw_text = chat_completion_text(
-        client,
-        model=model,
-        messages=messages,
-        temperature=0.35,
-        max_tokens=1600,
-        json_object=True,
-    )
-    if not raw_text:
+    with llm_call_context(feature="ce.stage4", ensure_operation=True, operation="ce.stage4"):
         raw_text = chat_completion_text(
             client,
             model=model,
             messages=messages,
-            temperature=0.2,
+            temperature=0.35,
             max_tokens=1600,
             json_object=True,
         )
+        if not raw_text:
+            with llm_call_context(attempt=1, retry_reason="empty_content"):
+                raw_text = chat_completion_text(
+                    client,
+                    model=model,
+                    messages=messages,
+                    temperature=0.2,
+                    max_tokens=1600,
+                    json_object=True,
+                )
     parsed = _parse_json_object(raw_text or "")
     if not parsed:
         return _deterministic(reason="llm_json_invalid", prompt_ver=prompt_version)

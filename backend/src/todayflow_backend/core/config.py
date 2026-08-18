@@ -118,6 +118,8 @@ class Settings(BaseSettings):
     llm_stream_read_timeout_seconds: float = 120.0  # LLM_STREAM_READ_TIMEOUT_SECONDS
     # Stream chat completions for Kimi (and when True). Avoids idle wait until full thinking finishes.
     llm_stream_completions: bool = True  # LLM_STREAM_COMPLETIONS
+    # Optional JSONL sidecar for per-request AI COGS (llm_usage_v1 also always goes to logs).
+    llm_usage_log_path: str | None = None  # LLM_USAGE_LOG_PATH
     # LLM_QUALITY_MODE:
     #   economize — legacy: tight max_tokens, cheap tiers, clipped context (AMLL cost control);
     #   rich — quality-first: full context, multi-step funnels, generous max_tokens, no cheap-tier preference.

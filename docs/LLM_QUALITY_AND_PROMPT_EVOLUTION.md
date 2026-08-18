@@ -99,6 +99,37 @@ Versioned prompts live under `todayflow_backend/prompts/`:
 - `disclosure_funnel` — per-surface step timings / prompt versions (child surfaces)  
 - existing `guide_funnel_*` fields for guide  
 
+## AI COGS (per-request usage)
+
+Every provider call in `llm_openai_compatible` emits one `llm_usage_v1` line:
+
+`feature → model → input_tokens → output_tokens → reasoning_tokens → cached_tokens → latency_ms → estimated_cost_usd → user_id / request_id / operation_id`
+
+- **Billed output:** `output_tokens` = provider `completion_tokens` (reasoning already inside). `reasoning_tokens` / `content_tokens` are breakdown only — never added twice to cost.
+- **`operation_id`:** one UUID per product operation (`today.generate`, `today.narrative`, profile/natal/CE/tarot…). Nested retries and child calls inherit it. HTTP `request_id` is fallback grouping only.
+- **Retry metadata:** `attempt`, `retry_reason` (`empty_content` | `parse_failed` | `gate_retry` | `json_mode_fallback` | `model_fallback` | …), plus booleans `parse_failed` / `empty_content` / `gate_retry`.
+- **`trigger`:** `user` | `prewarm` | `eval` | `script` | `background`. HTTP middleware sets `user`; prewarm/enrichment set their own; evals/scripts inferred from argv or `LLM_TRIGGER`.
+- Streaming Kimi requests `stream_options.include_usage`.
+- Optional JSONL: `LLM_USAGE_LOG_PATH=/tmp/todayflow_llm_usage.jsonl`
+- Report (feature × trigger × model × retry_reason + top-20 `operation_id`):
+
+```bash
+docker compose -f docker-compose.prod.yml logs backend --since 24h \
+  | PYTHONPATH=backend/src backend/.venv/bin/python backend/scripts/report_llm_cogs.py --stdin
+```
+
+This is ops instrumentation, not a generation SoT. Do not switch models until a day of tagged traffic shows which feature owns output tokens.
+
+Engineering budgets (target, not yet gated in router):
+
+| Operation | Budget |
+|-----------|--------|
+| Today opening | ≤ $0.003 |
+| Full daily generation | ≤ $0.01 |
+| Deep personal interpretation | ≤ $0.02 |
+| D1 active user | ≤ $0.03/day |
+| AI COGS | ≤ $0.50–0.90 / MAU / month |
+
 ## Rollback
 
 ```bash

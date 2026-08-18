@@ -17,6 +17,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_default_chat_model,
     resolve_max_tokens,
 )
@@ -3072,16 +3073,17 @@ def _openai_json(
     if isinstance(max_tokens_override, int) and max_tokens_override > 0:
         max_tokens = max_tokens_override
 
-    content = chat_completion_plain(
-        client,
-        model=resolve_default_chat_model(),
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": user},
-        ],
-        temperature=temperature,
-        max_tokens=resolve_max_tokens(max_tokens),
-    )
+    with llm_call_context(feature="today.narrative"):
+        content = chat_completion_plain(
+            client,
+            model=resolve_default_chat_model(),
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            temperature=temperature,
+            max_tokens=resolve_max_tokens(max_tokens),
+        )
     if not content:
         return None
     return _parse_json_content(content)

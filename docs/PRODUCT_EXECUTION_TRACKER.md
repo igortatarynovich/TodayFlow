@@ -1,8 +1,19 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-17
+Last updated: 2026-08-18
 Owner: Product + Engineering
 Status: Active working document
+
+**NOW (OPS / LLM, 2026-08-18):** **AI COGS instrumentation** — K2.6 stays. `llm_usage_v1` now has `operation_id`, `trigger` (user|prewarm|eval|script|background), retry metadata, billed output ≠ reasoning double-count. Report: feature×trigger×model×retry_reason + top-20 operation_id. Next: 24h data, then hard budgets.
+
+## Architecture impact — AI COGS llm_usage_v1 (2026-08-18)
+
+- **SoT before:** Nebius invoice only; no per-request tokens/cost. Streaming Kimi discarded usage + `reasoning_content`. AMLL token/cost fields were backlog.
+- **SoT after:** Each `chat.completions.create` emits `llm_usage_v1` with `operation_id`, `trigger`, retry metadata. Cost uses billed `completion_tokens` only (`reasoning_tokens` is breakdown). Prices = observed Token Factory rates (K2.6 $0.95/$4 per 1M). Optional `LLM_USAGE_LOG_PATH`. Generation text SoT unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — additive logs
+- **Canon updated?** yes — [LLM_QUALITY_AND_PROMPT_EVOLUTION.md](./LLM_QUALITY_AND_PROMPT_EVOLUTION.md) AI COGS · [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md) §3/§14 (token/cost 🟡)
+- **Backward compatible?** yes. `include_usage` on streams; retry without `stream_options` if the provider rejects it.
 
 **NOW (MOTION / MOON, 2026-08-17):** FOUNDATION_UI v0.7 — animation explains state or day mood; else delete. Surface budget: landing 7/10 · app 2–3/10 · share 5/10. No stars / particles / flying zodiac. Moon = live astronomical object (`DsCelestialMoon`, real phase). Today moon is static (no idle spin). Stack: CSS + Framer; WebGL only for the moon. SoT: FOUNDATION_UI §2.7 · §18.
 
@@ -1807,6 +1818,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-18 | Ops / LLM | **AI COGS llm_usage_v1** | **CODE** | Per-request feature/model/tokens/cost + operation_id/trigger/retry. Billed output does not double-count reasoning. Report: feature×trigger×model×retry_reason + top-20 ops. Do not switch model until that report. Canon: LLM_QUALITY AI COGS · AMLL token fields 🟡.
 - 2026-08-17 | Visual / Motion | **Motion budget + live Moon (no stars)** | **CANON + CODE** | FOUNDATION_UI v0.7 §2.7/§18. Landing 7/10 · app 2–3/10 · share 5/10. Today moon static. No Three.js. Natal starfield still debt.
 - 2026-08-17 | Brand / Copy | **Landing copy: three trust levels** | **CODE** | Точность / глубина / человечность as pillar kickers. Locked H1 unchanged. Rejected: «наука», «не алгоритм», «построить карту» as primary. [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.3.
 - 2026-08-17 | Brand / Copy | **Trust Layer on landing + ads brief** | **CODE** | Hero `trustLine` · `#trust` three pillars · footer · [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.1 §6 ads. No Horizons / no NASA endorsement / no finished IL catalog. Next = about/press if needed.

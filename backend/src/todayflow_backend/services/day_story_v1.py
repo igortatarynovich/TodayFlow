@@ -20,6 +20,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_default_chat_model,
     resolve_max_tokens,
 )
@@ -816,16 +817,21 @@ def call_day_story_llm_v1(
         )
 
     for attempt_idx in range(attempts):
-        content = chat_completion_plain(
-            client,
-            model=resolve_default_chat_model(),
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_sent},
-            ],
-            temperature=0.52,
-            max_tokens=resolve_max_tokens(1800),
-        )
+        with llm_call_context(
+            feature="today.day_story_editorial",
+            attempt=attempt_idx,
+            retry_reason="parse_failed" if attempt_idx else None,
+        ):
+            content = chat_completion_plain(
+                client,
+                model=resolve_default_chat_model(),
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user_sent},
+                ],
+                temperature=0.52,
+                max_tokens=resolve_max_tokens(1800),
+            )
         if not content:
             if capture is not None:
                 capture.record_attempt(
