@@ -2069,17 +2069,48 @@ def test_layer2_houlding_ontology_extract_no_sign_objects():
     assert "fortune" not in blob
     assert not any(row.get("evidence_tier") == "core" for row in classifications["claims"])
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.64" in canon
     assert "### 6.18 Layer 2 Signs — Houlding ontology extract" in canon
     assert "Stopped before Pulse Part One" in canon
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "1.3.65" in next_block
     assert "Pulse of Life" in next_block
     assert "humanistic" in next_block.lower()
     assert "Do **not** start CORE scoring" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.64" in parent
+
+
+def test_layer2_cell_c_access_blocked_no_ingest():
+    """1.3.65: Cell C ACCESS_BLOCKED. No fourth book. No sign objects. Pulse is not this slot."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    assert len(objects["objects"]) == 24
+    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
+    jsonschema.validate(aries, claims_schema)
+    assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
+    classifications = json.loads((CLAIMS_DIR / "astro.sign.classifications.json").read_text(encoding="utf-8"))
+    jsonschema.validate(classifications, claims_schema)
+    assert not any(row.get("source_class") == "psychological" for row in classifications["claims"])
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.65" in canon
+    assert "### 6.19 Layer 2 Signs — Cell C ACCESS_BLOCKED" in canon
+    assert "### Architecture impact — 1.3.65 Layer 2 Cell C ACCESS_BLOCKED" in canon
+    map_text = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_LITERATURE_MAP.md").read_text(encoding="utf-8")
+    assert "Layer 2 psychological later-interpretive (Cell C) **is** `ACCESS_BLOCKED`" in map_text
+    shortlist = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_SHORTLIST.md").read_text(encoding="utf-8")
+    assert "ACCESS_BLOCKED" in shortlist
+    assert "No winner" in shortlist or "no winner" in shortlist.lower()
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.66" in next_block
+    assert "Pulse of Life" in next_block
+    assert "ACCESS_BLOCKED" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "1.3.65" in parent
+    assert "ACCESS_BLOCKED" in parent
+
 
 
 

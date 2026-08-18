@@ -56,9 +56,9 @@ All three principle bodies remain **unread**. TOC/jacket **cannot** pass L2-C1. 
 
 | Candidate | What would be scored when a body opens | Access now | Decision |
 |-----------|----------------------------------------|------------|----------|
-| Arroyo *Astrology, Psychology, and the Four Elements* Part II ch.9–12 (p.73–124) | Does ch.9–12 generate motive/imbalance from element (or another named generator), or list types? Catalog leftover `arroyo_four_elements` is **not** auto-priority. Handbook of the same author = L2-C5 fail | NEED_OWNER (front matter/index only on this host) | **cell member.** Not selected |
-| Clare Martin *Mapping the Psyche* Vol. 1 — signs / elements / qualities lessons | Same L2-C7/C8 test. Independent of Arroyo. Greene-inspired CPA line is **not** a Greene substitute (L2-C5). Planet-in-sign walkthroughs = Layer 5, exclude | NEED_OWNER | **cell member.** Not selected |
-| Hamaker-Zondag *Elements and Crosses as the Basis of the Horoscope* (Weiser 1983 / Aquarian 1984) | Same test. Independent of both Arroyo and the CPA-London line. Strongest L2-C3 independence check **if** a first psych fill exists and still needs one | NEED_OWNER / Archive printdisabled | **cell member.** Not selected |
+| Arroyo *Astrology, Psychology, and the Four Elements* Part II ch.9–12 (p.73–124) | Does ch.9–12 generate motive/imbalance from element (or another named generator), or list types? Catalog leftover `arroyo_four_elements` is **not** auto-priority. Handbook of the same author = L2-C5 fail | NEED_OWNER (preview shell / front matter; body unread). Inside Cell C `ACCESS_BLOCKED` (1.3.65) | **cell member.** Not selected |
+| Clare Martin *Mapping the Psyche* Vol. 1 — signs / elements / qualities lessons | Same L2-C7/C8 test. Independent of Arroyo. Greene-inspired CPA line is **not** a Greene substitute (L2-C5). Planet-in-sign walkthroughs = Layer 5, exclude | NEED_OWNER (TOC/preview shell; body unread). Inside Cell C `ACCESS_BLOCKED` (1.3.65) | **cell member.** Not selected |
+| Hamaker-Zondag *Elements and Crosses as the Basis of the Horoscope* (Weiser 1983 / Aquarian 1984) | Same test. Independent of both Arroyo and the CPA-London line. Strongest L2-C3 independence check **if** a first psych fill exists and still needs one | NEED_OWNER (no legally readable body). Inside Cell C `ACCESS_BLOCKED` (1.3.65) | **cell member.** Not selected |
 | Greene 12-image chapters; Arroyo *Chart Interpretation Handbook* | L2-C2/C12 fail (portraits). Handbook also L2-C5 | mixed / unread | **out** |
 
 **Shortlist C = the cell:** “one of Arroyo Part II ch.9–12 / Martin Vol. 1 structure lessons / Hamaker *Elements and Crosses*. Winner TBD on the first legally readable principle chapter, scored then on L2-C7 + L2-C8.”
@@ -97,7 +97,7 @@ This cell sets the grammar of the required later-interpretive slots. Schema stil
 |---|--------|--------------|-------|------------------|-----------------|
 | A | extracted | classical | Ptolemy · Lilly · Valens Aries | classification | already done |
 | **B** | **extracted (1.3.64)** | traditional | Houlding triplicity **ontology paragraphs only** | classification ontology | Done. Rulers still out. No sign objects |
-| **C** | **shortlisted as a cell** | psychological | one of Arroyo Part II ch.9–12 / Martin structure lessons / Hamaker *Elements and Crosses* | later-interpretive structure | after a principle chapter is legally readable **and** passes L2-C7+C8. No winner in 1.3.63 |
+| **C** | **shortlisted as a cell; slot `ACCESS_BLOCKED` (1.3.65)** | psychological | one of Arroyo Part II ch.9–12 / Martin structure lessons / Hamaker *Elements and Crosses* | later-interpretive structure | extraction-only when a named principle chapter is legally readable **and** passes L2-C7+C8. No winner. No fourth book |
 | **D** | **shortlisted** | humanistic | Rudhyar *Pulse of Life* Part One | cycle / phase-task | after B, when later-interpretive ingest is opened on purpose. Not a substitute for C |
 | **E** | **optional / later** | professional | Hand Ch.10 only | consulting grid (other lemma) | not needed to start. Before any Ch.11 portraits if professional is opened at all |
 
@@ -116,7 +116,7 @@ Both B and D are legally readable. Readability is therefore **not** the tie-brea
 3. **Cell C winner** — only after an opened chapter passes L2-C7 + L2-C8. Architecture impact still required before 12 `type=sign` objects.
 4. **Hand Ch.10** — optional, later, and only if the opened chapter shows a grammar not already used as other-lemma grid.
 
-**Not extracted in 1.3.63.** **1.3.64 extracted item 1** (Houlding ontology). Next named extract: item 2 (Pulse Part One) as humanistic, not as C. Do not extract 3–4 in the same pass.
+**Not extracted in 1.3.63.** **1.3.64 extracted item 1** (Houlding ontology). **1.3.65:** item 3 (Cell C) is `ACCESS_BLOCKED` — discovery stops; not extracted. Next named extract: item 2 (Pulse Part One) as **1.3.66** humanistic, not as C. Do not extract 3–4 in the Pulse pass.
 
 ---
 
@@ -128,4 +128,4 @@ Both B and D are legally readable. Readability is therefore **not** the tie-brea
 - No CORE. Shortlist agreement is not semantic consensus.
 - No planet coverage hunt.
 
-**Stopped before step 10.** Next artifact: 1.3.64 Houlding ontology extract (bounded), if named. Cell C stays a cell until a principle chapter is readable. **1.3.64 done** — classification claims only; no sign objects. Next = Pulse Part One.
+**Stopped before step 10.** Next artifact: 1.3.64 Houlding ontology extract (bounded), if named. Cell C stays a cell until a principle chapter is readable. **1.3.64 done** — classification claims only; no sign objects. **1.3.65:** Cell C `ACCESS_BLOCKED`. Next = Pulse Part One (1.3.66).

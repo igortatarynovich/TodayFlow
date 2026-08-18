@@ -202,12 +202,13 @@ There is **no EMPTY psych slot** left to discover. Independent densify of THIN M
 
 ### Next large step (not planet research)
 
-**Layer 2 Signs** — definition through shortlist done (§6.13–§6.17). **1.3.64** Houlding ontology extracted (classification ledger; no sign objects). Continue from **1.3.65 Pulse of Life Part One** (humanistic). Cell C remains a cell — do not pick by access. Do not ingest 12 portraits. Do not start from Arroyo/Rudhyar pending IDs. Do not materialize 12 sign objects.
+**Layer 2 Signs** — definition through shortlist done (§6.13–§6.17). **1.3.64** Houlding ontology extracted (classification ledger; no sign objects). **1.3.65** Cell C `ACCESS_BLOCKED` (psychological later-interpretive; three named loci NEED_OWNER; no fourth book). Continue from **1.3.66 Pulse of Life Part One** (humanistic). Do not fill required psych slots from Rudhyar. Do not ingest 12 portraits. Do not start from Arroyo/Rudhyar pending IDs. Do not materialize 12 sign objects.
 
 ### Access queue (opportunistic extract only)
 
 When a **named** page becomes legally readable: extract only. `school_specific`. No `function` rewrite. No CORE. No `active`. Do **not** hunt a fourth analog if it stays closed.
 
+0. **Layer 2 Cell C** (`ACCESS_BLOCKED`, 1.3.65) — Arroyo Part II ch.9–12 **or** Martin Vol. 1 structure lessons **or** Hamaker *Elements and Crosses*. Extraction-only; then L2-C7+C8. Do not hunt a fourth. Do not fill from Pulse.
 1. **Psychological Mars** (`ACCESS_BLOCKED`) — Inner Planets p.138 **or** Dynamics Part 1 **or** Huber p.59. Highest access priority among planets: only ACCESS_BLOCKED psych slot. Do not hunt a fourth book.
 2. **Costello *The Astrological Moon*** — densify THIN Moon. NEED_OWNER.
 3. **Hand Ch.4 Sun → Moon → Mercury** — professional coverage inside an opened book. NEED_OWNER. ISBN 9780914918165.
@@ -266,4 +267,5 @@ Continue Layer 2 from IL §6.15 / parent steps 8–9 (shortlist). Do not invent 
 - **1.3.61** Layer 2 literature map. Landscape, not shortlist.
 - **1.3.62** Layer 2 selection criteria locked. Next = 1.3.63 shortlist. Cell C unscored.
 - **1.3.63** Layer 2 shortlist locked. Next = 1.3.64 Houlding ontology extract. Cell C remains a cell.
-- **1.3.64** Houlding triplicity ontology extracted. No sign objects. Next = 1.3.65 Pulse Part One.
+- **1.3.64** Houlding triplicity ontology extracted. No sign objects.
+- **1.3.65** Layer 2 Cell C `ACCESS_BLOCKED`. Next = 1.3.66 Pulse Part One.

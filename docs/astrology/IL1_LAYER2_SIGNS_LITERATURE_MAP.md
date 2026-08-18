@@ -116,7 +116,7 @@ Test for this cell: does the source **derive** motive / excess / deficiency from
 | **NEED_OWNER** | Arroyo Part II p.73–124. Martin *Mapping the Psyche* Vol. 1 sign/element/quality lessons. Hamaker *Elements and Crosses* (Weiser 1983 / Aquarian 1984). Hand Ch.10 (ISBN 9780914918165) |
 | **unknown / not required** | Firmicus sign lists. Greene 12-sign chapters. Arroyo *Chart Interpretation Handbook* |
 
-No Layer 2 slot is `ACCESS_BLOCKED`. Psychological later-interpretive has **three** independent principle candidates, all currently closed — that is `NEED_EVIDENCE` + three `NEED_OWNER` loci, **not** ACCESS_BLOCKED (the slot is empty *and* we have not failed three *dedicated readable hunts*; we have not tried extraction because bodies are closed). Do not hunt a fourth psych portrait book.
+No Layer 2 **classification** slot is `ACCESS_BLOCKED`. **1.3.65:** Layer 2 psychological later-interpretive (Cell C) **is** `ACCESS_BLOCKED`. Three independent principle candidates; dedicated readable hunt done; all three still closed (preview shell / TOC / controlled-lending listing, not the named chapter body); 0 later-interpretive psych claims. Loci remain `NEED_OWNER`. Discovery for this **slot** stops. Do not hunt a fourth psych portrait book. Pulse Part One is not this slot.
 
 ---
 

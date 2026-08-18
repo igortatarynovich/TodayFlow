@@ -75,7 +75,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.64:** Houlding triplicity ontology extracted onto `astro.sign.classifications` (rulers out). No sign objects. Cell C still a cell. Next = 1.3.65 Rudhyar Pulse Part One (humanistic). Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.65:** Layer 2 Cell C `ACCESS_BLOCKED` (psych later-interpretive; three NEED_OWNER; no fourth book). Houlding ontology already extracted. Next = 1.3.66 Rudhyar Pulse Part One (humanistic). Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -105,6 +105,15 @@ Status: Active working document
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
 - **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.65 Cell C ACCESS_BLOCKED (2026-08-18)
+
+- **SoT before:** Cell C was an open discovery cell; map said dedicated readable hunts had not been tried.
+- **SoT after:** Layer 2 psychological later-interpretive is `ACCESS_BLOCKED`. Three named loci NEED_OWNER. Discovery for the slot stops. Pulse is not a substitute. No sign objects. No claims this pass.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.65 §6.11 · §6.19 · map §3 · shortlist Cell C
+- **Backward compatible?** yes — Houlding claims untouched; required psych slots still unattested
 
 ## Architecture impact — IL-1 1.3.64 Houlding ontology extract (2026-08-18)
 
