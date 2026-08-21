@@ -261,7 +261,7 @@ Dry-run check: each pack has a verb, an aim, a condition of health, two branches
 - Signs / houses / aspects / ASC
 - Books · CORE · Co–Star ingest
 
-**Next named (one task):** schema pass **locked 1.3.80** ([PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md)). Next = write `canon` onto drafts, then Signs.
+**Next named (one task):** fill **locked 1.3.81**. Next = **1.3.82 composition smoke-test**, then Signs.
 
 ---
 

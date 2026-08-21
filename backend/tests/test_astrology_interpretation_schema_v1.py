@@ -2683,7 +2683,8 @@ def test_planet_canon_storage_v1():
     assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
 
     for obj in objects["objects"]:
-        assert "canon" not in obj
+        if obj["type"] != "celestial_object":
+            assert "canon" not in obj
 
     saturn_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.object.saturn")
     assert set(saturn_ex["canon"]) == {
@@ -2724,7 +2725,6 @@ def test_planet_canon_storage_v1():
     jsonschema.validate({"contract_version": "astrology_interpretation_v1", "objects": [outer]}, schema)
 
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.80" in canon
     assert "### 6.34 Planet Canon storage" in canon
     storage = (ROOT / "docs" / "astrology" / "PLANET_CANON_STORAGE_V1.md").read_text(encoding="utf-8")
     assert "canon.core_function" in storage
@@ -2735,6 +2735,126 @@ def test_planet_canon_storage_v1():
     assert "1.3.80" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
+
+
+SUN_SATURN_CANON_PACKS = {
+    "astro.object.sun": {
+        "core_function": ["identify", "vitalize", "will"],
+        "drive": ["purpose", "self-coherence"],
+        "needs": ["center", "continuity"],
+        "constructive": ["vitality", "integrity", "self-direction"],
+        "distorted": ["ego-inflation", "will-excess", "depletion"],
+        "domains": ["self", "identity", "vitality", "purpose"],
+    },
+    "astro.object.moon": {
+        "core_function": ["feel", "respond", "protect"],
+        "drive": ["safety"],
+        "needs": ["familiarity", "responsiveness"],
+        "constructive": ["attunement", "protection", "instinct"],
+        "distorted": ["fusion", "clinging", "reactivity"],
+        "domains": ["emotions", "needs", "security", "the-familiar"],
+    },
+    "astro.object.mercury": {
+        "core_function": ["think", "communicate", "learn"],
+        "drive": ["sense-making", "exchange"],
+        "needs": ["input", "channel"],
+        "constructive": ["clarity", "curiosity", "skill"],
+        "distorted": ["noise", "rumination", "pedantry"],
+        "domains": ["thinking", "communication", "learning", "information"],
+    },
+    "astro.object.venus": {
+        "core_function": ["attract", "value", "relate"],
+        "drive": ["pleasure", "bond"],
+        "needs": ["reciprocity", "worth"],
+        "constructive": ["affection", "taste", "fairness"],
+        "distorted": ["appeasement", "indulgence", "vanity"],
+        "domains": ["love", "attraction", "relationships", "values", "pleasure"],
+    },
+    "astro.object.mars": {
+        "core_function": ["act", "pursue", "assert"],
+        "drive": ["agency", "desire"],
+        "needs": ["autonomy", "outlet"],
+        "constructive": ["courage", "initiative", "decisiveness"],
+        "distorted": ["aggression", "impulsivity", "force"],
+        "domains": ["action", "desire", "competition", "confrontation"],
+    },
+    "astro.object.jupiter": {
+        "core_function": ["expand", "believe"],
+        "drive": ["growth", "opportunity", "meaning"],
+        "needs": ["horizon", "faith"],
+        "constructive": ["generosity", "perspective", "openness-to-opportunity"],
+        "distorted": ["excess", "inflation", "dogmatism"],
+        "domains": ["growth", "opportunity", "belief", "meaning"],
+    },
+    "astro.object.saturn": {
+        "core_function": ["limit", "structure", "mature"],
+        "drive": ["order"],
+        "needs": ["boundaries", "realism"],
+        "constructive": ["responsibility", "discipline", "form"],
+        "distorted": ["rigidity", "inhibition", "severity"],
+        "domains": ["limits", "structure", "responsibility", "discipline"],
+    },
+}
+
+CLASSICAL_FUNCTION = {
+    "astro.object.sun": "heating quality with moderate dryness",
+    "astro.object.moon": "moistening quality acting close to earth and bodies",
+    "astro.object.mercury": "convertible quality taking the nature of what it joins",
+    "astro.object.venus": "moist temperate quality disposed to pleasure and company",
+    "astro.object.mars": "heating and drying quality that contends",
+    "astro.object.jupiter": "temperate warming and moistening quality",
+    "astro.object.saturn": "cooling quality operating by distance from heat",
+}
+
+
+def test_planet_canon_sun_saturn_fill():
+    """1.3.81: copy locked packs onto object.canon. No function rewrite. Next = 1.3.82 smoke-test."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    _assert_il1_catalog_counts(objects)
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+
+    for object_id, pack in SUN_SATURN_CANON_PACKS.items():
+        obj = by_id[object_id]
+        assert obj["status"] == "draft"
+        assert obj["canon"] == pack
+        assert obj["function"] == CLASSICAL_FUNCTION[object_id]
+        assert isinstance(obj["domains"], dict)
+        assert set(obj["domains"]) == {"relationships", "money", "work", "self"}
+
+    mars_lemmas = " ".join(" ".join(v) for v in by_id["astro.object.mars"]["canon"].values())
+    assert "achievement" not in mars_lemmas
+    assert "will" not in by_id["astro.object.mars"]["canon"]["core_function"]
+    assert "control" not in by_id["astro.object.saturn"]["canon"]["drive"]
+    assert "purpose" not in by_id["astro.object.jupiter"]["canon"]["drive"]
+    assert "safety" in by_id["astro.object.moon"]["canon"]["drive"]
+    assert "affection" in by_id["astro.object.venus"]["canon"]["constructive"]
+
+    for obj in objects["objects"]:
+        if obj["type"] != "celestial_object":
+            assert "canon" not in obj
+    for object_id in ("astro.object.uranus", "astro.object.neptune", "astro.object.pluto"):
+        assert object_id not in by_id
+
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.81" in canon
+    assert "### 6.35 Planet Canon Sun–Saturn fill" in canon
+    fill = (ROOT / "docs" / "astrology" / "PLANET_CANON_SUN_SATURN_FILL_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "1.3.82" in fill
+    assert "Mars" in fill and "Saturn" in fill
+    assert "Capricorn" in fill
+    assert "4th" in fill
+    assert "Jupiter" in fill
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.81" in next_block
+    assert "1.3.82" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "Signs Mainstream" in next_block or "start Signs" in next_block
 
 
 

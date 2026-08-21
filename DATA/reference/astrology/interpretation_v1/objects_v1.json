@@ -41,6 +41,14 @@
         "self": "majesty and large heart, or arrogant vapour"
       },
       "tempo": "medium",
+      "canon": {
+        "core_function": ["identify", "vitalize", "will"],
+        "drive": ["purpose", "self-coherence"],
+        "needs": ["center", "continuity"],
+        "constructive": ["vitality", "integrity", "self-direction"],
+        "distorted": ["ego-inflation", "will-excess", "depletion"],
+        "domains": ["self", "identity", "vitality", "purpose"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sun.hot",
@@ -193,6 +201,14 @@
         "self": "soft unstedfast temperament; phlegmatic"
       },
       "tempo": "fast",
+      "canon": {
+        "core_function": ["feel", "respond", "protect"],
+        "drive": ["safety"],
+        "needs": ["familiarity", "responsiveness"],
+        "constructive": ["attunement", "protection", "instinct"],
+        "distorted": ["fusion", "clinging", "reactivity"],
+        "domains": ["emotions", "needs", "security", "the-familiar"]
+      },
       "provenance": [
         {
           "concept_id": "claim.moon.moist",
@@ -329,6 +345,14 @@
         "self": "politic intellect, or troublesome wit"
       },
       "tempo": "fast",
+      "canon": {
+        "core_function": ["think", "communicate", "learn"],
+        "drive": ["sense-making", "exchange"],
+        "needs": ["input", "channel"],
+        "constructive": ["clarity", "curiosity", "skill"],
+        "distorted": ["noise", "rumination", "pedantry"],
+        "domains": ["thinking", "communication", "learning", "information"]
+      },
       "provenance": [
         {
           "concept_id": "claim.mercury.convertible",
@@ -481,6 +505,14 @@
         "self": "neat, cheerful, easy of belief"
       },
       "tempo": "medium",
+      "canon": {
+        "core_function": ["attract", "value", "relate"],
+        "drive": ["pleasure", "bond"],
+        "needs": ["reciprocity", "worth"],
+        "constructive": ["affection", "taste", "fairness"],
+        "distorted": ["appeasement", "indulgence", "vanity"],
+        "domains": ["love", "attraction", "relationships", "values", "pleasure"]
+      },
       "provenance": [
         {
           "concept_id": "claim.venus.moist",
@@ -665,6 +697,14 @@
         "self": "choleric confidence, or furious rashness"
       },
       "tempo": "medium",
+      "canon": {
+        "core_function": ["act", "pursue", "assert"],
+        "drive": ["agency", "desire"],
+        "needs": ["autonomy", "outlet"],
+        "constructive": ["courage", "initiative", "decisiveness"],
+        "distorted": ["aggression", "impulsivity", "force"],
+        "domains": ["action", "desire", "competition", "confrontation"]
+      },
       "provenance": [
         {
           "concept_id": "claim.mars.hot",
@@ -833,6 +873,14 @@
         "self": "sanguine temperance, or hypocritical religion"
       },
       "tempo": "slow",
+      "canon": {
+        "core_function": ["expand", "believe"],
+        "drive": ["growth", "opportunity", "meaning"],
+        "needs": ["horizon", "faith"],
+        "constructive": ["generosity", "perspective", "openness-to-opportunity"],
+        "distorted": ["excess", "inflation", "dogmatism"],
+        "domains": ["growth", "opportunity", "belief", "meaning"]
+      },
       "provenance": [
         {
           "concept_id": "claim.jupiter.temperate",
@@ -1033,6 +1081,14 @@
         "self": "melancholy temperament; gravity or mistrust"
       },
       "tempo": "very_slow",
+      "canon": {
+        "core_function": ["limit", "structure", "mature"],
+        "drive": ["order"],
+        "needs": ["boundaries", "realism"],
+        "constructive": ["responsibility", "discipline", "form"],
+        "distorted": ["rigidity", "inhibition", "severity"],
+        "domains": ["limits", "structure", "responsibility", "discipline"]
+      },
       "provenance": [
         {
           "concept_id": "claim.saturn.cold",

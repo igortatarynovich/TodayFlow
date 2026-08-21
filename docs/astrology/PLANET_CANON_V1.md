@@ -463,7 +463,7 @@ LLM formulates. These packs do not.
 - Books · CORE · Co–Star ingest
 - Promoting remaining dry-run prose
 
-**Next named:** schema pass — **done 1.3.80** ([PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md)). Next = write `canon` onto objects. Not Signs yet.
+**Next named:** schema pass — **done 1.3.80**. Fill — **done 1.3.81**. Next = 1.3.82 smoke-test, not Signs.
 
 ---
 

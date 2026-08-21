@@ -171,7 +171,7 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Unlock Co–Star in-app scraping
 - Require 2/3 literal-word overlap
 
-**Next named (one task):** storage locked (1.3.80). Next = write `canon` onto Sun–Saturn drafts. Do not rewrite `function`.
+**Next named (one task):** fill locked (1.3.81). Next = **1.3.82 composition smoke-test**. Do not start Signs. Do not rewrite `function`.
 
 ---
 

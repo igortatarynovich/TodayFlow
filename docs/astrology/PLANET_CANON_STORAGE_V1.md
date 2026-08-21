@@ -64,7 +64,7 @@ Do not rename the grammar slot to fit the four-key object. Do not replace the fo
 | Signs / houses / aspects | omit | unchanged |
 | `status=active` | required on planets before activation (later gate) | still cannot be active with omitted Sun–Saturn legacy keys |
 
-This pass does **not** require `canon` on anything. Fill is the next named pass.
+This pass does **not** require `canon` on anything in 1.3.80. Fill = **1.3.81** (Sun–Saturn).
 
 ---
 
@@ -88,7 +88,7 @@ IL-4 still formulates. It must not be given only `function` and asked to invent 
 - Signs Mainstream map
 - Books · CORE · `active`
 
-**Next named:** write `canon` onto Sun–Saturn drafts from [PLANET_CANON_V1.md](./PLANET_CANON_V1.md). Do not rewrite elemental `function`. Outers still withheld (or a named structural+canon materialize). Then Signs Mainstream map.
+**Next named:** Sun–Saturn fill — **done 1.3.81.** Next = **1.3.82 composition smoke-test**, not Signs Mainstream map.
 
 ---
 
