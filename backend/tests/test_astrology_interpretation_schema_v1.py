@@ -52,6 +52,24 @@ LILLY_SIGN_GRID = {
     "pisces": ("mutable", "water", "negative"),
 }
 
+QUALITY_PERSONALITY = (
+    "choleric",
+    "melancholy",
+    "sanguine",
+    "phlegmatic",
+    "deceitful",
+    "idle",
+    "violent",
+    "luxurious",
+    "intemperate",
+    "barren",
+    "bestial",
+    "lascivious",
+    "sickly",
+    "effeminate",
+    "subtle",
+)
+
 
 def _assert_il1_catalog_counts(objects: dict) -> None:
     assert len(objects["objects"]) == 36
@@ -2273,16 +2291,74 @@ def test_layer2_lilly_classification_drafts_no_later_interpretive():
     assert any(row["concept_id"] == "claim.sign.aries.valens_fiery" for row in aries_claims["claims"])
     assert by_id["astro.sign.aries"]["element"] == "fire"
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.68" in canon
     assert "### 6.22 Layer 2 Signs — Lilly classification drafts" in canon
     assert "### Architecture impact — 1.3.68 Layer 2 Lilly classification drafts" in canon
-    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
-    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "Layer 2 Signs" in next_block
-    assert "Do **not** start CORE scoring" in next_block
-    assert "ACCESS_BLOCKED" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.68" in parent
+
+
+def test_layer2_classification_complete_interpretation_deferred():
+    """1.3.69: close-out audit. No ingest. Layer 2 classification-complete / interpretation-deferred."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    _assert_il1_catalog_counts(objects)
+    signs = [obj for obj in objects["objects"] if obj["type"] == "sign"]
+    keysets = {
+        tuple(sorted(k for k in obj.keys() if k != "provenance"))
+        for obj in signs
+    }
+    assert len(keysets) == 1
+    classifications = json.loads((CLAIMS_DIR / "astro.sign.classifications.json").read_text(encoding="utf-8"))
+    class_pairs = {(row["concept_id"], row["source_id"]) for row in classifications["claims"]}
+    collision_sources = {
+        "src.classical.ptolemy_tetrabiblos",
+        "src.classical.valens_anthologies",
+        "src.traditional.houlding_triplicities",
+        "src.humanistic.rudhyar_pulse_of_life",
+    }
+    used_class_sources = {row["source_id"] for row in classifications["claims"]}
+    assert collision_sources <= used_class_sources
+    for obj in signs:
+        name = obj["object_id"].split(".")[-1]
+        ledger = json.loads((CLAIMS_DIR / f"{obj['object_id']}.json").read_text(encoding="utf-8"))
+        claim_pairs = {(row["concept_id"], row["source_id"]) for row in ledger["claims"]}
+        quality = next(row for row in ledger["claims"] if row["concept_id"].endswith("lilly_quality"))
+        q = quality["original_claim"].lower()
+        for row in obj["provenance"]:
+            assert (row["concept_id"], row["source_id"]) in claim_pairs | class_pairs
+            assert row["source_id"] == "src.classical.lilly_christian_astrology"
+            assert row["source_id"] not in collision_sources
+            norm = row["normalized_claim"].lower()
+            for word in QUALITY_PERSONALITY:
+                assert word not in norm, (obj["object_id"], row["field"], word)
+        mode_row = next(row for row in obj["provenance"] if row["field"] == "mode")
+        if name in {"leo", "virgo"}:
+            assert "fixed" not in q and "common" not in q and "moveable" not in q and "cardinal" not in q
+            assert mode_row["concept_id"] in {"claim.sign.fixed_follow_turning", "claim.sign.bicorporeal"}
+        else:
+            assert mode_row["concept_id"].endswith("lilly_quality")
+        assert "optional on IL-1 draft type=sign" in " ".join(ledger["gap_notes"])
+        assert quality["field"] == "expression"
+        assert "expression" not in obj
+    notes = " ".join(classifications["gap_notes"])
+    assert "1.3.69" in notes
+    assert "classification-complete" in notes
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.69" in canon
+    assert "### 6.23 Layer 2 Signs — classification close-out" in canon
+    assert "### Architecture impact — 1.3.69 Layer 2 classification-complete / interpretation-deferred" in canon
+    closeout = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_CLOSEOUT.md").read_text(encoding="utf-8")
+    assert "classification-complete / interpretation-deferred" in closeout
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "classification-complete" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "not** Layer 2 literature" in next_block or "not Layer 2 literature" in next_block
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "1.3.69" in parent
+    assert "classification-complete" in parent
+
 
 
 

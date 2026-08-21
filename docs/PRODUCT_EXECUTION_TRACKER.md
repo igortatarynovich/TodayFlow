@@ -75,7 +75,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.68:** twelve `type=sign` drafts from Lilly CA I.16 classification. Later-interpretive omitted. Cell C `ACCESS_BLOCKED`. Next = do not fill later-interpretive; do not activate; Hand Ch.10 optional. Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.69:** Layer 2 Signs classification-complete / interpretation-deferred. Close-out audit passed. Cell C `ACCESS_BLOCKED` is a future evidence dependency, not a Layer 2 blocker. Next named IL-1 work is **not** sign literature. Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -123,6 +123,15 @@ Status: Active working document
 - **Migration required?** no — runtime must keep ignoring `draft`
 - **Canon updated?** yes — IL 1.3.68 §6.22 · `objects_v1.json`
 - **Backward compatible?** yes for runtime if it only reads `status=active`
+
+## Architecture impact — IL-1 1.3.69 Layer 2 close-out (2026-08-21)
+
+- **SoT before:** twelve Lilly drafts existed; Layer 2 could still be read as an open ingest track (Cell C / Pulse Part Two / Hand Ch.10 next).
+- **SoT after:** Layer 2 Signs is classification-complete / interpretation-deferred. Audit passed. No ingest. Catalog unchanged. Cell C remains ACCESS_BLOCKED as future evidence, not a Layer 2 blocker. Next Knowledge Core slice is not more sign literature.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.69 §6.23 · `docs/astrology/IL1_LAYER2_SIGNS_CLOSEOUT.md`
+- **Backward compatible?** yes
 
 ## Architecture impact — IL-1 1.3.66 Pulse Part One extract (2026-08-18)
 
