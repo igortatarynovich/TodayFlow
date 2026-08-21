@@ -2345,7 +2345,6 @@ def test_layer2_classification_complete_interpretation_deferred():
     assert "1.3.69" in notes
     assert "classification-complete" in notes
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.69" in canon
     assert "### 6.23 Layer 2 Signs — classification close-out" in canon
     assert "### Architecture impact — 1.3.69 Layer 2 classification-complete / interpretation-deferred" in canon
     closeout = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_CLOSEOUT.md").read_text(encoding="utf-8")
@@ -2354,10 +2353,60 @@ def test_layer2_classification_complete_interpretation_deferred():
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "classification-complete" in next_block
     assert "Do **not** start CORE scoring" in next_block
-    assert "not** Layer 2 literature" in next_block or "not Layer 2 literature" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.69" in parent
     assert "classification-complete" in parent
+
+
+def test_layer1_outers_definition_readiness_no_objects():
+    """1.3.70: outer definition/readiness. No ingest. No objects. Schema Layer 1 unchanged."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    _assert_il1_catalog_counts(objects)
+    ids = {obj["object_id"] for obj in objects["objects"]}
+    assert "astro.object.uranus" not in ids
+    assert "astro.object.neptune" not in ids
+    assert "astro.object.pluto" not in ids
+    layer1 = next(
+        branch
+        for branch in schema["$defs"]["knowledge_object"]["allOf"]
+        if branch.get("if", {}).get("properties", {}).get("layer", {}).get("const") == 1
+    )
+    required = layer1["then"]["required"]
+    assert required == [
+        "type",
+        "function",
+        "themes",
+        "positive_expression",
+        "shadow",
+        "domains",
+        "tempo",
+    ]
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert "heating" in by_id["astro.object.sun"]["function"]
+    assert "structure" not in by_id["astro.object.saturn"]["themes"]
+    for name in ("uranus", "neptune", "pluto"):
+        claims = json.loads((CLAIMS_DIR / f"astro.object.{name}.json").read_text(encoding="utf-8"))
+        assert all(row["evidence_tier"] != "core" for row in claims["claims"])
+        notes = " ".join(claims["gap_notes"]).lower()
+        assert "object withheld" in notes or "still withheld" in notes
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.70" in canon
+    assert "### 6.24 Layer 1 Outers — definition / readiness" in canon
+    assert "### Architecture impact — 1.3.70 Layer 1 outers definition / readiness" in canon
+    definition = (ROOT / "docs" / "astrology" / "IL1_LAYER1_OUTERS_DEFINITION.md").read_text(encoding="utf-8")
+    assert "Sufficiency bar" in definition
+    assert "Do not start from Hand" in definition
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.70" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "Hand" in next_block
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "1.3.70" in parent
+    assert "Layer 1 Outers" in parent
+
 
 
 

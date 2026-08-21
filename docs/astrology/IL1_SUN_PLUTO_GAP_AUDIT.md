@@ -202,7 +202,9 @@ There is **no EMPTY psych slot** left to discover. Independent densify of THIN M
 
 ### Next large step (not planet research)
 
-**Layer 2 Signs** — **classification-complete / interpretation-deferred** (1.3.69). Definition through shortlist done. Houlding ontology extracted. Cell C `ACCESS_BLOCKED` (future evidence, not a Layer 2 blocker). Pulse Part One extracted (humanistic). Later-interpretive optional and unfilled. Twelve Lilly classification drafts. Do not CORE. Do not reopen sign literature. Hand Ch.10 optional. Do not ingest 12 portraits.
+**Layer 2 Signs** — **classification-complete / interpretation-deferred** (1.3.69). Do not reopen sign literature.
+
+**Layer 1 Outers** — **1.3.70** definition/readiness (parent steps 1–4). Claims exist; objects withheld. Do not assemble from Hand. Sufficiency = omit meaning keys after named scoped schema impact, or keep withheld. ASC/MC later. Do not CORE.
 
 ### Access queue (opportunistic extract only)
 
@@ -273,3 +275,4 @@ Continue Layer 2 from IL §6.15 / parent steps 8–9 (shortlist). Do not invent 
 - **1.3.67** Later-interpretive optional on IL-1 draft `type=sign`.
 - **1.3.68** Twelve Lilly classification-only sign drafts. Later-interpretive omitted.
 - **1.3.69** Layer 2 classification-complete / interpretation-deferred. Next = do not reopen sign literature.
+- **1.3.70** Layer 1 Outers definition/readiness. Next = scoped optional-on-draft or keep withheld; not Hand ingest.

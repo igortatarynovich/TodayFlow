@@ -75,7 +75,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.69:** Layer 2 Signs classification-complete / interpretation-deferred. Close-out audit passed. Cell C `ACCESS_BLOCKED` is a future evidence dependency, not a Layer 2 blocker. Next named IL-1 work is **not** sign literature. Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.70:** Layer 1 Outers definition/readiness. Claims exist; objects withheld. Do not assemble Uranus from Hand. Next named = scoped optional-on-draft for outer meaning keys **or** keep withheld. Layer 2 stays closed. Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -132,6 +132,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — IL 1.3.69 §6.23 · `docs/astrology/IL1_LAYER2_SIGNS_CLOSEOUT.md`
 - **Backward compatible?** yes
+
+## Architecture impact — IL-1 1.3.70 Layer 1 outers definition (2026-08-21)
+
+- **SoT before:** outers withheld because required Layer 1 slots would fake consensus; next hole could be misread as another outer book.
+- **SoT after:** definition/readiness (parent steps 1–4). Outer `function` is later-interpretive, not classical elemental quality. Sufficiency: omit meaning keys after named scoped schema impact, or keep withheld. No ingest. No objects. Do not pick Hand. ASC/MC not this pass.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.70 §6.24 · `docs/astrology/IL1_LAYER1_OUTERS_DEFINITION.md`
+- **Backward compatible?** yes — catalog unchanged; Sun–Saturn `function` untouched
 
 ## Architecture impact — IL-1 1.3.66 Pulse Part One extract (2026-08-18)
 

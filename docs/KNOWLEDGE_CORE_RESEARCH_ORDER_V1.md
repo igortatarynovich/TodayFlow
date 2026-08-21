@@ -118,7 +118,9 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 **IL-1 in flight:** наполнение модели планет (Sun→Pluto) **research-stable** (IL **1.3.59**). §6.10 remaining psych budget closed 1.3.57. Дальше планеты — только opportunistic extract уже названных NEED_OWNER loci, не hunt ради coverage. Это **не** шаблон для следующего ядра. CORE по астрологии по-прежнему не scored, не KPI, и не строится из «кто оказался читаемым».
 
-**Следующее IL-ядро = Layer 2 Signs (closed 1.3.69 as classification-complete / interpretation-deferred).** Definition through shortlist (§6.13–§6.17) · first extract Houlding ontology (§6.18 / 1.3.64) · Cell C `ACCESS_BLOCKED` (§6.19 / 1.3.65) · Pulse Part One extract (§6.20 / 1.3.66) · later-interpretive optional on IL-1 draft `type=sign` (§6.21 / 1.3.67) · Lilly classification drafts (§6.22 / 1.3.68) · close-out audit (§6.23 / 1.3.69). Шаг 10 (ingest) readable start-set **done** — не продолжать с шага 10 для Layer 2 literature (Cell C / Pulse Part Two / Hand Ch.10 are not blockers). Houses/aspects already have classical draft objects; ASC/MC и outers — отдельные ворота. Для любого **нового** ядра вне этого трека: шаги 1–9 обязательны до первого ingest.
+**Layer 2 Signs closed 1.3.69** as classification-complete / interpretation-deferred. Definition through shortlist (§6.13–§6.17) · Houlding ontology (§6.18 / 1.3.64) · Cell C `ACCESS_BLOCKED` (§6.19 / 1.3.65) · Pulse Part One (§6.20 / 1.3.66) · later-interpretive optional (§6.21 / 1.3.67) · Lilly classification drafts (§6.22 / 1.3.68) · close-out (§6.23 / 1.3.69). Шаг 10 (ingest) readable start-set **done** — не продолжать с шага 10 для Layer 2 literature.
+
+**IL V1 literature freeze (1.3.71):** no new literature research until [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) is owner-approved. Layer 1 Outers definition (1.3.70) is a completed model slice, not the next book. ASC/MC remain `NEED_MODEL`. Houses/aspects already have classical draft objects. Для любого **нового** ядра вне IL V1: шаги 1–9 обязательны до первого ingest.
 
 ---
 
@@ -131,6 +133,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - Объявлять CORE / product meaning, пока не определены составляющие и не виден ландшафт, а не только shortlist.
 - Копировать астрологический `core` = school intersection в психологию или медицину.
 - Открывать параллельный «research v2» без указателя сюда.
+- Начинать новый IL literature/ingest pass, пока V1 Semantic Inventory не утверждён владельцем.
 
 ---
 
@@ -161,4 +164,6 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - **1.1 note (2026-08-18)** — IL-1.3.66: Rudhyar *Pulse of Life* Part One extracted as humanistic cycle (classification ledger; no sign objects). Part Two out. Cell C still ACCESS_BLOCKED. Schema requiredness demoted in 1.3.67.
 - **1.1 note (2026-08-21)** — IL-1.3.67: later-interpretive slots optional on IL-1 draft `type=sign`. Still unattested. Classification-only drafts followed in 1.3.68.
 - **1.1 note (2026-08-21)** — IL-1.3.68: twelve `type=sign` drafts from Lilly CA I.16 classification. Later-interpretive omitted. Collisions remain claims. Nothing active. Do not CORE.
-- **1.1 note (2026-08-21)** — IL-1.3.69: Layer 2 Signs close-out. Classification-complete / interpretation-deferred. No ingest. Cell C is a future evidence dependency, not a Layer 2 blocker. Do not reopen sign literature. Next named IL-1 core, if any, follows this file from step 1.
+- **1.1 note (2026-08-21)** — IL-1.3.69: Layer 2 Signs close-out. Classification-complete / interpretation-deferred. No ingest. Cell C is a future evidence dependency, not a Layer 2 blocker. Do not reopen sign literature.
+- **1.1 note (2026-08-21)** — IL-1.3.70: Layer 1 Outers definition/readiness (parent steps 1–4). No ingest. No objects. Outer `function` ≠ classical elemental `function`. Do not assemble Uranus from Hand. Next named = scoped optional-on-draft or keep withheld.
+- **1.1 note (2026-08-21)** — IL-1.3.71: Knowledge Core V1 Semantic Inventory. Literature freeze until owner approval. No Uranus / ASC / Mars / Layer 5 / new book. Inventory is the limiter; parent sequence unchanged.

@@ -6,12 +6,14 @@
 |----------|------|
 | [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) | **Interpretation Library** — semantic objects; runtime: Swiss → calc → IL → engine → expression. Публичный бренд Canon — [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md), не этот файл |
 | [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) | Parent: модель знания **до** литературы. IL-1 in-flight ≠ шаблон следующего ядра |
+| [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) | **V1 limiter (1.3.71):** Product need → layer → object → constituents → evidence → coverage → consumer → status. No new literature until owner-approved |
 | [IL1_HANDOFF.md](./IL1_HANDOFF.md) | Next-agent handoff: locked rules, catalog state, opened loci, next ingest |
 | [IL1_LAYER2_SIGNS_LITERATURE_MAP.md](./IL1_LAYER2_SIGNS_LITERATURE_MAP.md) | Layer 2 Signs literature map (1.3.61). Landscape from school × constituent matrix. Not shortlist, not ingest |
 | [IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md) | Layer 2 Signs selection criteria (1.3.62). Parent step 8. Not ingest. Epistemic ≠ access |
 | [IL1_LAYER2_SIGNS_SHORTLIST.md](./IL1_LAYER2_SIGNS_SHORTLIST.md) | Layer 2 Signs shortlist (1.3.63). Parent step 9. Cell C is a cell, not a winner. Close-out 1.3.69: classification-complete / interpretation-deferred |
 | [IL1_LAYER2_SIGNS_CLOSEOUT.md](./IL1_LAYER2_SIGNS_CLOSEOUT.md) | Layer 2 Signs close-out audit (1.3.69). Classification-complete / interpretation-deferred. Not ingest |
-| [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md) | **Live** Sun→Pluto recount (1.3.58 numbers). 1.3.59 planet fill research-stable. 1.3.69 Layer 2 classification-complete / interpretation-deferred. Cell C ACCESS_BLOCKED. Slot statuses COVERED / THIN / DISCOVERED / ACCESS_BLOCKED / EMPTY |
+| [IL1_LAYER1_OUTERS_DEFINITION.md](./IL1_LAYER1_OUTERS_DEFINITION.md) | Layer 1 Outers definition/readiness (1.3.70). Sufficiency bar without pretending consensus. Not ingest |
+| [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md) | **Live** Sun→Pluto recount (1.3.58 numbers). 1.3.59 planet fill research-stable. 1.3.69 Layer 2 closed. 1.3.70 outers definition. Cell C ACCESS_BLOCKED. Slot statuses COVERED / THIN / DISCOVERED / ACCESS_BLOCKED / EMPTY |
 | [source_corpus_v1.json](../../DATA/reference/astrology/interpretation_v1/source_corpus_v1.json) | Research corpus (все `candidate`; не approved ingest) |
 | [objects_v1.json](../../DATA/reference/astrology/interpretation_v1/objects_v1.json) | IL-1 knowledge objects (`draft` only; not `active`) |
 | [claims/](../../DATA/reference/astrology/interpretation_v1/claims/) | source → locus → paraphrase → `normalized_claim` |
