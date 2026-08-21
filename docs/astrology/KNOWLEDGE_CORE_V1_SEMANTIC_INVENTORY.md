@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-21  
 **Status:** **APPROVED** — V1 freeze map (owner 2026-08-21). Literature discovery is a tool against a named `KC-*` row, not a process.  
-**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.25–§6.33. Parent order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Today Meaning SoT: [TODAY_CONTENT_PIPELINE_V1.md](../today/TODAY_CONTENT_PIPELINE_V1.md). Identity/mechanics: [foundation_v1.md](../foundation_v1.md). Compose: [ASTROLOGY_COMPOSITION_MODEL.md](../ASTROLOGY_COMPOSITION_MODEL.md). Outer representation: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Product-meaning gate: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md). Split: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Grammar: [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md). Planet Canon: [PLANET_CANON_V1.md](./PLANET_CANON_V1.md). Recognition check: [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md).
+**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.25–§6.34. Parent order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Today Meaning SoT: [TODAY_CONTENT_PIPELINE_V1.md](../today/TODAY_CONTENT_PIPELINE_V1.md). Identity/mechanics: [foundation_v1.md](../foundation_v1.md). Compose: [ASTROLOGY_COMPOSITION_MODEL.md](../ASTROLOGY_COMPOSITION_MODEL.md). Outer representation: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Product-meaning gate: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md). Split: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Grammar: [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md). Planet Canon: [PLANET_CANON_V1.md](./PLANET_CANON_V1.md). Storage: [PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md). Recognition check: [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md).
 
 This file is the **V1 limiter**. IL V1 is not “complete astrology.” It is the minimum set of controlled semantic primitives sufficient for Today / Profile / Compatibility without the LLM inventing meanings. That is the IL-1 done criterion — not book count, claim count, school count, or CORE lemmas.
 
@@ -11,7 +11,7 @@ This file is the **V1 limiter**. IL V1 is not “complete astrology.” It is th
 ## Architecture impact
 
 - **SoT before:** parent order existed, but the next named IL pass was still a layer slice. Gap → author → closed book could run without a V1-wide constituent map.
-- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. **1.3.78:** Planet Canon grammar locked. **1.3.79:** Planet Canon V1 locked. Next execution = **schema pass**. Co–Star is a recognition check. Do not rewrite objects this inventory.
+- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. **1.3.78:** Planet Canon grammar locked. **1.3.79:** Planet Canon V1 locked. **1.3.80:** `canon` storage locked. Next execution = write `canon` onto Sun–Saturn drafts. Co–Star is a recognition check. Do not rewrite `function` this inventory.
 - **Public contract changed?** no (inventory). Outer schema delta is 1.3.72.
 - **Migration required?** no
 - **Canon updated?** yes — this file · IL §6.25 / §6.26 · parent · handoff · tracker
@@ -211,7 +211,7 @@ ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. D
 
 ---
 
-## 6. Execution order (LOCKED, then redirected 1.3.79)
+## 6. Execution order (LOCKED, then redirected 1.3.80)
 
 ```text
 1. Outer Planet Draft Representation V1        ✅ 1.3.72 schema/model
@@ -221,9 +221,10 @@ ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. D
 5. Mainstream Planet Semantic Map              ✅ 1.3.77  (territory + families; not Canon)
 6. Planet Canon grammar                        ✅ 1.3.78  (slots; dry-run; not fill)
 7. Planet Canon V1 fill                        ✅ 1.3.79  (packs + provenance; not schema)
-8. Schema pass                                 NEXT  map six slots onto storage
-9. Signs → Houses → Aspects → ASC/MC Mainstream maps
-10. IL-1 V1 close-out / IL-2 Composition
+8. Schema pass                                 ✅ 1.3.80  (`canon` nest; not object fill)
+9. Write `canon` onto planet drafts            NEXT  Sun–Saturn first; do not rewrite `function`
+10. Signs → Houses → Aspects → ASC/MC Mainstream maps
+11. IL-1 V1 close-out / IL-2 Composition
 ```
 
 Historical literature does not appear in this order. Lenses stay in the existing corpus. Co–Star is a check on Mainstream rows, not a source.
@@ -232,7 +233,8 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
-- **1.8 (2026-08-21)** — Planet Canon V1 (1.3.79). Ten packs + provenance. Next = schema pass.
+- **1.9 (2026-08-21)** — Planet Canon storage (1.3.80). Optional `canon` nest. Next = write packs onto drafts.
+- **1.8 (2026-08-21)** — Planet Canon V1 (1.3.79). Ten packs + provenance. Next = schema pass. **Done 1.3.80.**
 - **1.7 (2026-08-21)** — Planet Canon grammar (1.3.78). Six slots. tempo = Foundation. Next = 1.3.79 fill. **Done 1.3.79.**
 - **1.6 (2026-08-21)** — Mainstream Planet Semantic Map (1.3.77). Astrology.com = panel #3. Concept families locked. Next = Canon shape, not JSON. **Done 1.3.78.**
 - **1.5 (2026-08-21)** — Product Canon vs Lenses (1.3.76). Mainstream map was next. **Done 1.3.77.**

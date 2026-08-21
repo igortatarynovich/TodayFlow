@@ -27,6 +27,14 @@
         "self": "self-worth via responsibility; fear of inadequacy"
       },
       "tempo": "very_slow",
+      "canon": {
+        "core_function": ["limit", "structure", "mature"],
+        "drive": ["order"],
+        "needs": ["boundaries", "realism"],
+        "constructive": ["responsibility", "discipline", "form"],
+        "distorted": ["rigidity", "inhibition", "severity"],
+        "domains": ["limits", "structure", "responsibility", "discipline"]
+      },
       "provenance": [
         {
           "concept_id": "claim.schema.saturn.function",

@@ -171,7 +171,7 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Unlock Co–Star in-app scraping
 - Require 2/3 literal-word overlap
 
-**Next named (one task):** Planet Canon V1 locked (1.3.79). Next = schema mapping of the six slots. Still no object rewrite until that pass.
+**Next named (one task):** storage locked (1.3.80). Next = write `canon` onto Sun–Saturn drafts. Do not rewrite `function`.
 
 ---
 

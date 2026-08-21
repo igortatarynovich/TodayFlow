@@ -2642,7 +2642,6 @@ def test_planet_canon_v1_fill_with_provenance():
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.79" in canon
     assert "### 6.33 Planet Canon V1" in canon
     packs = (ROOT / "docs" / "astrology" / "PLANET_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
@@ -2664,7 +2663,78 @@ def test_planet_canon_v1_fill_with_provenance():
     assert "1.3.79" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
-    assert "schema pass" in next_block.lower()
+
+
+def test_planet_canon_storage_v1():
+    """1.3.80: optional canon nest. Grammar names unchanged. No object fill."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    example = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    jsonschema.validate(example, schema)
+    _assert_il1_catalog_counts(objects)
+
+    pack = schema["$defs"]["canon_pack"]
+    for key in ("core_function", "drive", "needs", "constructive", "distorted", "domains"):
+        assert key in pack["required"]
+        assert key in pack["properties"]
+    assert "tempo" not in pack["properties"]
+    assert "canon" in schema["$defs"]["knowledge_object"]["properties"]
+    assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
+
+    for obj in objects["objects"]:
+        assert "canon" not in obj
+
+    saturn_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.object.saturn")
+    assert set(saturn_ex["canon"]) == {
+        "core_function",
+        "drive",
+        "needs",
+        "constructive",
+        "distorted",
+        "domains",
+    }
+    assert saturn_ex["function"] == "structure, limits, time, responsibility"
+    assert isinstance(saturn_ex["domains"], dict)
+    assert isinstance(saturn_ex["canon"]["domains"], list)
+
+    partial = dict(saturn_ex)
+    partial["canon"] = {
+        "core_function": ["limit"],
+        "drive": ["order"],
+        "needs": ["boundaries"],
+        "constructive": ["form"],
+        "distorted": ["rigidity"],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [partial]},
+            schema,
+        )
+
+    outer = _minimal_outer_draft("astro.object.uranus")
+    outer["canon"] = {
+        "core_function": ["change", "disrupt"],
+        "drive": ["freedom"],
+        "needs": ["autonomy"],
+        "constructive": ["innovation"],
+        "distorted": ["disruption"],
+        "domains": ["change", "freedom", "innovation"],
+    }
+    jsonschema.validate({"contract_version": "astrology_interpretation_v1", "objects": [outer]}, schema)
+
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.80" in canon
+    assert "### 6.34 Planet Canon storage" in canon
+    storage = (ROOT / "docs" / "astrology" / "PLANET_CANON_STORAGE_V1.md").read_text(encoding="utf-8")
+    assert "canon.core_function" in storage
+    assert "four natal keys" in storage.lower() or "Four natal keys" in storage
+    assert "object fill" in storage.lower()
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.80" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
 
 
 

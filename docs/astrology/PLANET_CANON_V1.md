@@ -463,7 +463,7 @@ LLM formulates. These packs do not.
 - Books · CORE · Co–Star ingest
 - Promoting remaining dry-run prose
 
-**Next named:** schema pass — map these six slots onto storage. Do **not** shrink the grammar to old `function`/`themes`. Then Signs Mainstream map. Not before.
+**Next named:** schema pass — **done 1.3.80** ([PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md)). Next = write `canon` onto objects. Not Signs yet.
 
 ---
 

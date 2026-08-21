@@ -129,7 +129,7 @@ calc body
 
 Do not store `Mars in Capricorn` or `Mars square Saturn` as essays.
 
-Old IL compatibility is **not** a fill constraint. A later named schema pass maps these slots onto storage. It may add keys. It must not shrink the grammar to fit `function`/`themes`.
+Old IL compatibility is **not** a fill constraint. Storage is **1.3.80**: nested `canon` with these six names. Do not shrink the grammar to fit `function`/`themes`.
 
 ---
 
@@ -261,7 +261,7 @@ Dry-run check: each pack has a verb, an aim, a condition of health, two branches
 - Signs / houses / aspects / ASC
 - Books · CORE · Co–Star ingest
 
-**Next named (one task):** Planet Canon V1 **locked 1.3.79** ([PLANET_CANON_V1.md](./PLANET_CANON_V1.md)). Dry-run above is **not** the fill. Next = schema pass, then Signs.
+**Next named (one task):** schema pass **locked 1.3.80** ([PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md)). Next = write `canon` onto drafts, then Signs.
 
 ---
 

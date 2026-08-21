@@ -1,7 +1,7 @@
 # Knowledge Core research order v1
 
 **Статус:** ACCEPTED (порядок работы для семантических ядер).  
-**Версия:** 1.7 (2026-08-21).  
+**Версия:** 1.8 (2026-08-21).  
 **Владелец:** Product + Research.  
 **Не является:** Meaning SoT дня · IL lookup · Machine Contract · KASP (сбор данных пользователя).
 
@@ -121,7 +121,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 **Layer 2 Signs closed 1.3.69** as classification-complete / interpretation-deferred. Definition through shortlist (§6.13–§6.17) · Houlding ontology (§6.18 / 1.3.64) · Cell C `ACCESS_BLOCKED` (§6.19 / 1.3.65) · Pulse Part One (§6.20 / 1.3.66) · later-interpretive optional (§6.21 / 1.3.67) · Lilly classification drafts (§6.22 / 1.3.68) · close-out (§6.23 / 1.3.69). Шаг 10 (ingest) readable start-set **done** — не продолжать с шага 10 для Layer 2 literature.
 
-**IL V1 literature freeze (1.3.71, owner-approved):** new **books** only against a named row in [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md). **1.3.76:** Product Canon vs Lenses — [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). **1.3.77:** Mainstream planet map — [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). **1.3.78:** Planet Canon grammar — [PLANET_CANON_GRAMMAR_V1.md](./astrology/PLANET_CANON_GRAMMAR_V1.md). **1.3.79:** Planet Canon V1 — [PLANET_CANON_V1.md](./astrology/PLANET_CANON_V1.md). Next IL = **schema pass** (not a book, not object rewrite). ASC/MC remain `NEED_MODEL` until Mainstream + Canon reach them. Houses/aspects stay `DRAFT_CLASSICAL` until Mainstream reaches them. Для любого **нового** ядра вне IL V1: шаги 1–9 обязательны до первого ingest.
+**IL V1 literature freeze (1.3.71, owner-approved):** new **books** only against a named row in [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md). **1.3.76:** Product Canon vs Lenses — [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). **1.3.77:** Mainstream planet map — [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). **1.3.78:** Planet Canon grammar — [PLANET_CANON_GRAMMAR_V1.md](./astrology/PLANET_CANON_GRAMMAR_V1.md). **1.3.79:** Planet Canon V1 — [PLANET_CANON_V1.md](./astrology/PLANET_CANON_V1.md). **1.3.80:** Planet Canon storage — [PLANET_CANON_STORAGE_V1.md](./astrology/PLANET_CANON_STORAGE_V1.md). Next IL = write `canon` onto Sun–Saturn drafts (not a book, not rewrite `function`). ASC/MC remain `NEED_MODEL` until Mainstream + Canon reach them. Houses/aspects stay `DRAFT_CLASSICAL` until Mainstream reaches them. Для любого **нового** ядра вне IL V1: шаги 1–9 обязательны до первого ingest.
 
 ---
 
@@ -135,7 +135,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - Копировать астрологический `core` = school intersection в психологию или медицину.
 - Открывать параллельный «research v2» без указателя сюда.
 - Начинать новый IL literature/ingest pass, пока V1 Semantic Inventory не утверждён владельцем.
-- Менять архитектуру Interpretation Library, пока не зафиксировано разделение Product Canon / Lenses (IL 1.3.76). После фиксации — не открывать книги; Mainstream planet map = 1.3.77; grammar = 1.3.78; Planet Canon V1 = 1.3.79; следующий проход = schema pass.
+- Менять архитектуру Interpretation Library, пока не зафиксировано разделение Product Canon / Lenses (IL 1.3.76). После фиксации — не открывать книги; Mainstream planet map = 1.3.77; grammar = 1.3.78; Planet Canon V1 = 1.3.79; storage = 1.3.80; следующий проход = fill `canon` nest.
 
 ---
 
@@ -173,7 +173,8 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - **1.2 (2026-08-21)** — IL-1.3.73: TodayFlow Canon. Astrology product meaning is no longer school-intersection. §4 split: Canon vs research `core`.
 - **1.2 note (2026-08-21)** — IL-1.3.74: Evidence Corpus / Semantic Consensus / TodayFlow Canon. 491 claims stay. Next = short corpus pass, not a research cycle.
 - **1.3 (2026-08-21)** — IL-1.3.75: reverse-engineer Co–Star before another IL architecture or Canon-scoring pass. Phase 0 teardown in. IL frozen.
-- **1.7 (2026-08-21)** — IL-1.3.79: Planet Canon V1. Ten packs + direct/derived. Next = schema pass.
+- **1.8 (2026-08-21)** — IL-1.3.80: Planet Canon storage. Optional `canon` nest. Next = write packs onto Sun–Saturn drafts.
+- **1.7 (2026-08-21)** — IL-1.3.79: Planet Canon V1. Ten packs + direct/derived. Next = schema pass. **Done 1.3.80.**
 - **1.6 (2026-08-21)** — IL-1.3.78: Planet Canon grammar. Six slots. tempo = Foundation. Next = 1.3.79 fill, not schema. **Done 1.3.79.**
 - **1.5 (2026-08-21)** — IL-1.3.77: Mainstream Planet Semantic Map. Panel = Astrodienst · Cafe Astrology · Astrology.com. Concept families, not 2/3 word vote. Next = Planet Canon shape, not JSON. **Done 1.3.78.**
 - **1.4 (2026-08-21)** — IL-1.3.76: Product Canon vs Lenses. Mainstream convention is product meaning. Research corpus is lenses. CORE not a gate. Next = Mainstream planet map, not books. **Done 1.3.77.**
