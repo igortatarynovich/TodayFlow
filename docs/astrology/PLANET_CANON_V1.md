@@ -463,7 +463,7 @@ LLM formulates. These packs do not.
 - Books · CORE · Co–Star ingest
 - Promoting remaining dry-run prose
 
-**Next named:** schema pass — **done 1.3.80**. Fill — **done 1.3.81**. Smoke-test — **done 1.3.82**. Sign map — **done 1.3.83**. Sign grammar — **done 1.3.84**. Sign Canon fill — **done 1.3.85**. Next = Sign Canon storage.
+**Next named:** schema pass — **done 1.3.80**. Fill — **done 1.3.81**. Smoke-test — **done 1.3.82**. Sign map — **done 1.3.83**. Sign grammar — **done 1.3.84**. Sign Canon fill — **done 1.3.85**. Sign Canon storage — **done 1.3.86**. Next = write packs onto sign drafts.
 
 ---
 

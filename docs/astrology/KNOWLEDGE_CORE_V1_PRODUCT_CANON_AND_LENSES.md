@@ -171,13 +171,14 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Unlock Co–Star in-app scraping
 - Require 2/3 literal-word overlap
 
-**Next named (one task):** smoke-test locked (1.3.82). Sign map locked (1.3.83). Sign grammar locked (1.3.84). Sign Canon fill locked (1.3.85). Next = Sign Canon storage. Do not rewrite `function`.
+**Next named (one task):** smoke-test locked (1.3.82). Sign map locked (1.3.83). Sign grammar locked (1.3.84). Sign Canon fill locked (1.3.85). Sign Canon storage locked (1.3.86). Next = write packs onto sign drafts. Do not rewrite `function`.
 
 ---
 
 ## Changelog
 
-- **1.6 (2026-08-21)** — 1.3.85 Sign Canon fill. Twelve packs. Four gates. Next = storage, not objects.
+- **1.7 (2026-08-21)** — 1.3.86 Sign Canon storage. Optional `canon` on signs. Next = write packs, not houses.
+- **1.6 (2026-08-21)** — 1.3.85 Sign Canon fill. Twelve packs. Four gates. Next = storage, not objects. **Done 1.3.86.**
 - **1.5 (2026-08-21)** — 1.3.84 Sign Canon grammar. Two slots. Sign = how. Next = fill, not houses. **Done 1.3.85.**
 - **1.4 (2026-08-21)** — 1.3.83 sign map. Same panel. Classification is not proof. Trait ≠ manner named, not split. Next = Sign Canon grammar, not fill. **Done 1.3.84.**
 - **1.3 (2026-08-21)** — 1.3.79 Planet Canon V1 locked with direct/derived provenance.

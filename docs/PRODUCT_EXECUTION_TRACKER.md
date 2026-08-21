@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.85 Sign Canon fill.** Twelve packs (`manner` · `excess`). Next = Sign Canon storage. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.86 Sign Canon storage.** Optional `canon` on signs (`manner` · `excess`). Next = write packs onto sign drafts. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -197,6 +197,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — IL 1.3.75 §6.29 · teardown file · inventory execution order · parent 1.3
 - **Backward compatible?** yes. Deprecated as next pass: short corpus scoring.
+
+## Architecture impact — IL-1 1.3.86 Sign Canon storage (2026-08-21)
+
+- **SoT before:** twelve packs locked in a doc; `canon` on signs had no legal shape.
+- **SoT after:** optional `canon` on `type=sign` = `manner` · `excess`. Catalog unchanged. Next = write packs onto sign drafts.
+- **Public contract changed?** yes — optional sign `canon` nest
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/SIGN_CANON_STORAGE_V1.md` · IL 1.3.86 §6.40
+- **Backward compatible?** yes. Sign objects stay classification-only until fill.
 
 ## Architecture impact — IL-1 1.3.85 Sign Canon fill (2026-08-21)
 

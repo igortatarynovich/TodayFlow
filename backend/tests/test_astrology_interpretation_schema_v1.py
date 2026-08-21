@@ -2438,6 +2438,46 @@ def _minimal_outer_draft(object_id: str) -> dict:
     }
 
 
+def _minimal_sign_draft(object_id: str = "astro.sign.aries") -> dict:
+    body = object_id.rsplit(".", 1)[-1]
+    return {
+        "object_id": object_id,
+        "layer": 2,
+        "type": "sign",
+        "status": "draft",
+        "version": "0.1.0",
+        "phenomenon": body.capitalize(),
+        "machine_entity_code": f"astrology.sign.{body}",
+        "theme_clusters": ["timing"],
+        "polarity": ["neutral"],
+        "temporal_class": "natal",
+        "confidence": None,
+        "composed_from": [],
+        "curation_reason": None,
+        "mode": "cardinal",
+        "element": "fire",
+        "orientation": "positive",
+        "provenance": [
+            {
+                "concept_id": f"claim.sign.{body}.lilly_quality",
+                "source_id": "src.classical.lilly_christian_astrology",
+                "source_class": "classical",
+                "author": "William Lilly",
+                "edition": "Christian Astrology 1659; Wikisource p.93–98",
+                "school": "traditional_horary",
+                "reviewer": None,
+                "reviewed_at": None,
+                "locus": "Book I Chapter XVI",
+                "original_claim": "Classification-only illustration — not a Canon pack",
+                "normalized_claim": f"Lilly's {body.capitalize()} is cardinal",
+                "evidence_tier": "school_specific",
+                "review_status": "extracted",
+                "field": "mode",
+            }
+        ],
+    }
+
+
 def test_outer_planet_draft_representation_optional_on_draft():
     """1.3.72: outer meaning keys optional on draft. Sun–Saturn still required. No objects yet."""
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
@@ -2910,7 +2950,7 @@ def test_sign_canon_grammar_v1():
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.85" in canon
+    assert "**Версия:** 1.3.86" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -2948,7 +2988,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.85" in canon
+    assert "**Версия:** 1.3.86" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs
@@ -2999,6 +3039,102 @@ def test_sign_canon_v1_fill_with_provenance():
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.85" in next_block
     assert "Sign Canon storage" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+
+
+def test_sign_canon_storage_v1():
+    """1.3.86: optional sign_canon_pack. Grammar names unchanged. No object fill."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    example = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    jsonschema.validate(example, schema)
+    _assert_il1_catalog_counts(objects)
+
+    pack = schema["$defs"]["sign_canon_pack"]
+    assert pack["required"] == ["manner", "excess"]
+    assert "core_function" not in pack["properties"]
+    assert "canon" in schema["$defs"]["knowledge_object"]["properties"]
+    assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
+
+    for obj in objects["objects"]:
+        if obj["type"] == "sign":
+            assert "canon" not in obj
+            for key in LATER_INTERPRETIVE_KEYS:
+                assert key not in obj
+
+    cap_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.sign.capricorn")
+    assert cap_ex["canon"] == {
+        "manner": ["reserved", "disciplined", "structured"],
+        "excess": ["withholding", "hardening"],
+    }
+    assert "excess" not in cap_ex
+    assert cap_ex["mode"] == "cardinal"
+    saturn_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.object.saturn")
+    assert "manner" not in saturn_ex["canon"]
+
+    sign = _minimal_sign_draft("astro.sign.capricorn")
+    sign["mode"] = "cardinal"
+    sign["element"] = "earth"
+    sign["orientation"] = "negative"
+    sign["canon"] = {
+        "manner": ["reserved", "disciplined", "structured"],
+        "excess": ["withholding", "hardening"],
+    }
+    jsonschema.validate(
+        {"contract_version": "astrology_interpretation_v1", "objects": [sign]},
+        schema,
+    )
+
+    partial = dict(sign)
+    partial["canon"] = {"manner": ["reserved"]}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [partial]},
+            schema,
+        )
+
+    planet_pack_on_sign = dict(sign)
+    planet_pack_on_sign["canon"] = {
+        "core_function": ["limit"],
+        "drive": ["order"],
+        "needs": ["boundaries"],
+        "constructive": ["form"],
+        "distorted": ["rigidity"],
+        "domains": ["limits"],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [planet_pack_on_sign]},
+            schema,
+        )
+
+    sign_pack_on_planet = dict(saturn_ex)
+    sign_pack_on_planet["canon"] = {
+        "manner": ["reserved"],
+        "excess": ["hardening"],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [sign_pack_on_planet]},
+            schema,
+        )
+
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.40 Sign Canon storage" in canon
+    storage = (ROOT / "docs" / "astrology" / "SIGN_CANON_STORAGE_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "canon.manner" in storage
+    assert "later-interpretive" in storage.lower()
+    assert "object fill" in storage.lower()
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.86" in next_block
+    assert "write packs onto sign drafts" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
 

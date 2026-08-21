@@ -208,6 +208,6 @@ This is **not** IL-4 Expression. Expression still cannot choose meaning. Canon s
 - No schema change.
 - The Pluto table in §4 is a **method example**, not product text.
 
-**Next named (1.3.82):** smoke-test in ([PLANET_CANON_COMPOSITION_SMOKE_V1.md](./PLANET_CANON_COMPOSITION_SMOKE_V1.md)). Sign map in ([MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md)). Sign grammar in ([SIGN_CANON_GRAMMAR_V1.md](./SIGN_CANON_GRAMMAR_V1.md)). Sign Canon fill in ([SIGN_CANON_V1.md](./SIGN_CANON_V1.md)). Next = Sign Canon storage. Not QUALITY. Not rewrite `function`. Not CORE.
+**Next named (1.3.82):** smoke-test in ([PLANET_CANON_COMPOSITION_SMOKE_V1.md](./PLANET_CANON_COMPOSITION_SMOKE_V1.md)). Sign map in ([MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md)). Sign grammar in ([SIGN_CANON_GRAMMAR_V1.md](./SIGN_CANON_GRAMMAR_V1.md)). Sign Canon fill in ([SIGN_CANON_V1.md](./SIGN_CANON_V1.md)). Sign Canon storage in ([SIGN_CANON_STORAGE_V1.md](./SIGN_CANON_STORAGE_V1.md)). Next = write packs onto sign drafts. Not QUALITY. Not rewrite `function`. Not CORE.
 
 Hypothesis (still true, not executing as a ledger-scoring pass): the 491 planet claims are a usable **Lens** dataset; they were asked to pick product meaning. Schema 1.3.72 remains valid. Co–Star remains a recognition check.

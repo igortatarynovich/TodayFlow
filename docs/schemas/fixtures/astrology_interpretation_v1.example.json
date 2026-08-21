@@ -102,6 +102,46 @@
           "reviewed_at": null
         }
       ]
+    },
+    {
+      "object_id": "astro.sign.capricorn",
+      "layer": 2,
+      "type": "sign",
+      "status": "schema_example",
+      "version": "0.0.0",
+      "phenomenon": "Capricorn",
+      "machine_entity_code": "astrology.sign.capricorn",
+      "theme_clusters": ["timing"],
+      "polarity": ["neutral"],
+      "temporal_class": "natal",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "mode": "cardinal",
+      "element": "earth",
+      "orientation": "negative",
+      "canon": {
+        "manner": ["reserved", "disciplined", "structured"],
+        "excess": ["withholding", "hardening"]
+      },
+      "provenance": [
+        {
+          "concept_id": "claim.schema.capricorn.canon",
+          "source_id": "schema_example",
+          "source_class": "schema_example",
+          "author": null,
+          "edition": null,
+          "locus": null,
+          "school": null,
+          "original_claim": "Form illustration only — not a reviewed meaning claim",
+          "normalized_claim": "Capricorn manner is reserved, disciplined, structured",
+          "evidence_tier": "editorial",
+          "review_status": "schema_example",
+          "field": "mode",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      ]
     }
   ]
 }

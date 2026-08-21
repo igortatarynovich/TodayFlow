@@ -301,7 +301,7 @@ Astrodienst compact: sensitive, compassionate, helpful, sociable, very adaptable
 
 Territory is the input. Canon is a **model PlanetInSign can use**. Do not stop at personality keywords.
 
-Grammar locked 1.3.84. Fill locked 1.3.85 ([SIGN_CANON_V1.md](./SIGN_CANON_V1.md)). Next = Sign Canon storage, then write packs onto sign drafts, then repeat smoke-test. **House Canon after that.**
+Grammar locked 1.3.84. Fill locked 1.3.85 ([SIGN_CANON_V1.md](./SIGN_CANON_V1.md)). Storage locked 1.3.86 ([SIGN_CANON_STORAGE_V1.md](./SIGN_CANON_STORAGE_V1.md)). Next = write packs onto sign drafts, then repeat smoke-test. **House Canon after that.**
 
 Schema today still has sign `mode` · `element` · `orientation` only. Mapping families onto manner slots is done in fill, not this file. Storage is the next named pass.
 
@@ -316,7 +316,7 @@ Schema today still has sign `mode` · `element` · `orientation` only. Mapping f
 - A 2/3 word spreadsheet
 - Repairing 1.3.82 PARTIAL
 
-**Next named:** Sign Canon Grammar — **done 1.3.84.** Sign Canon fill — **done 1.3.85.** Next = Sign Canon storage. House Canon later.
+**Next named:** Sign Canon Grammar — **done 1.3.84.** Sign Canon fill — **done 1.3.85.** Sign Canon storage — **done 1.3.86.** Next = write packs onto sign drafts. House Canon later.
 
 ---
 

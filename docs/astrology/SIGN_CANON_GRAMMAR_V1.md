@@ -281,7 +281,7 @@ out:      humanitarian as arena · disrupt as Uranus
 - Reopen 1.3.83 research · books · CORE · Co–Star ingest
 - Repair PARTIAL by writing manner onto catalog objects
 
-**Next named:** Sign Canon fill — **done 1.3.85** ([SIGN_CANON_V1.md](./SIGN_CANON_V1.md)). Next = Sign Canon storage. Then write packs onto sign drafts. Then repeat smoke-test. House Canon after that.
+**Next named:** Sign Canon fill — **done 1.3.85** ([SIGN_CANON_V1.md](./SIGN_CANON_V1.md)). Sign Canon storage — **done 1.3.86** ([SIGN_CANON_STORAGE_V1.md](./SIGN_CANON_STORAGE_V1.md)). Next = write packs onto sign drafts. Then repeat smoke-test. House Canon after that.
 
 ---
 
