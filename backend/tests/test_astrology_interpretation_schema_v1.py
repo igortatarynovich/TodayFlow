@@ -2562,7 +2562,6 @@ def test_product_canon_vs_lenses_mainstream_not_objects():
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.76" in canon
     assert "### 6.30 Product Canon vs Lenses" in canon
     split = (
         ROOT / "docs" / "astrology" / "KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md"
@@ -2572,7 +2571,7 @@ def test_product_canon_vs_lenses_mainstream_not_objects():
     assert "not a product gate" in split.lower() or "not a gate" in split.lower()
     assert "Astrodienst" in split
     assert "Cafe Astrology" in split
-    assert "identity · self · vitality" in split
+    assert "self · identity · vitality" in split
     method = (ROOT / "docs" / "astrology" / "TODAYFLOW_CANON_V1.md").read_text(encoding="utf-8")
     assert "Mainstream V1" in method
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
@@ -2581,6 +2580,36 @@ def test_product_canon_vs_lenses_mainstream_not_objects():
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
     assert "Mainstream" in next_block
+
+
+def test_mainstream_planet_semantic_map_v1():
+    """1.3.77: Mainstream planet map. Concept families. No ingest. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.77" in canon
+    assert "### 6.31 Mainstream Planet Semantic Map" in canon
+    planet_map = (
+        ROOT / "docs" / "astrology" / "MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md"
+    ).read_text(encoding="utf-8")
+    assert "Astrology.com" in planet_map
+    assert "concept family" in planet_map.lower() or "concept families" in planet_map.lower()
+    assert "2/3" in planet_map
+    assert "self · identity · vitality" in planet_map
+    assert "power · intensity · compulsion" in planet_map
+    assert "Not JSON" in planet_map or "not JSON" in planet_map
+    assert "core function" in planet_map.lower()
+    split = (
+        ROOT / "docs" / "astrology" / "KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md"
+    ).read_text(encoding="utf-8")
+    assert "Astrology.com" in split
+    assert "2/3 literal-word" in split.lower() or "2/3 literal" in split.lower()
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.77" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "Canon **shape**" in next_block or "Canon shape" in next_block
 
 
 

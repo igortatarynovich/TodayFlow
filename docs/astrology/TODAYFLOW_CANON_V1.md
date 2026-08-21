@@ -208,6 +208,6 @@ This is **not** IL-4 Expression. Expression still cannot choose meaning. Canon s
 - No schema change.
 - The Pluto table in §4 is a **method example**, not product text.
 
-**Next named (1.3.76):** Mainstream Western Astrology V1 **planet** map from the bounded modern panel. Confirm or edit the working draft in [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) §3. Not a book. Not object rewrite. Not CORE. Not Co–Star ingest.
+**Next named (1.3.77):** Mainstream planet map is in ([MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md)). Next = TodayFlow Planet Canon **shape**. Not JSON dump. Not object rewrite. Not CORE. Not Co–Star ingest.
 
 Hypothesis (still true, not executing as a ledger-scoring pass): the 491 planet claims are a usable **Lens** dataset; they were asked to pick product meaning. Schema 1.3.72 remains valid. Co–Star remains a recognition check.

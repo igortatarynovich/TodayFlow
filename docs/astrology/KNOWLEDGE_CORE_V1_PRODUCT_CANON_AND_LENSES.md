@@ -44,20 +44,18 @@ Author wording stays in research/provenance. It is not copied into user-facing C
 
 Not one book. Not Google frequency. Not CORE.
 
-**Mainstream meaning** = a meaning that independently and regularly appears in several major **contemporary** sources of Western astrology, and is not a specialty of one school or one author.
+**Mainstream meaning** = a **concept family** that independently shows up in the bounded contemporary panel, even if the wording differs. Sources sketch territory. Near-synonyms collapse (`assertion` / `taking action` / `readiness for action` = one family). We do not prove it. We do not run a 2/3 literal-word vote.
 
-We do not have to prove it. We have to **fix the convention**.
+A family is *not* mainstream if:
 
-A lemma is *not* mainstream if:
-
-- it appears in only one of the panel sources
 - it is a Greene-only, Lilly-only, Rudhyar-only, or Hand-only category
 - it is a slogan invented at runtime by an LLM
-- it is the most-Googled word with no second independent modern source
+- it is the most-Googled word with no panel support
+- it belongs to another planet’s stem
 
-Owner preliminary pass (not yet the locked map): Astrodienst gives Sun identity/will/vitality; Moon emotions/subconscious; Mercury thought/communication; Venus attraction/relationships; Mars assertion/aggression; Jupiter expansion/meaning; Saturn limitation/form; Uranus liberation/disruption; Neptune dissolution of limits/mysticism; Pluto transformation. Other modern sources repeat the same frame and extend it (Mars action/desire, Saturn structure/limits/maturity, Uranus change/freedom/originality, Neptune imagination/dissolution, Pluto power/transformation).
+**Panel (locked 1.3.77):** Astrodienst · Cafe Astrology · **Astrology.com**.
 
-That stability is the V1 foundation. It is convention, not objective truth.
+Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md).
 
 ---
 
@@ -83,7 +81,7 @@ Meaning sources for Mainstream V1 (encyclopedia/reference class, not monographs)
 |---|--------|------|
 | 1 | Astrodienst / astro.com | Independent modern reference |
 | 2 | Cafe Astrology | Independent modern popular reference |
-| 3 | One more source of the **same class** | Named at the start of the planet pass. Not a book. Not a school monograph. |
+| 3 | **Astrology.com** | Mass contemporary reference (locked 1.3.77) |
 
 **Recognition check (not a meaning source):** Co–Star and other successful products. After a Mainstream row exists, ask: would a contemporary user recognize this as “what astrology says”? If our Saturn is academically neat and unrecognizable next to Co–Star’s discipline/limits language, the row is wrong for the product.
 
@@ -91,21 +89,21 @@ Do not ingest Co–Star, Cafe Astrology, or Astrodienst paragraphs into `claims/
 
 ---
 
-## 3. Working draft — planet Mainstream territory
+## 3. Planet Mainstream territory
 
-**Status:** owner working draft. **Not** written into objects. **Not** Canon lock. Next named pass confirms or edits this table against the panel in §2.1.
+**Status:** locked as territory in [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) (1.3.77). **Not** Canon. **Not** objects.
 
 | Planet | Mainstream semantic territory |
 |--------|-------------------------------|
-| Sun | identity · self · vitality · will · purpose |
+| Sun | self · identity · vitality · will · purpose |
 | Moon | emotions · needs · instincts · security · subconscious |
 | Mercury | thinking · communication · learning · information |
-| Venus | attraction · love · relationships · values · pleasure |
+| Venus | love · attraction · relationships · values · pleasure |
 | Mars | action · drive · desire · assertion · conflict |
 | Jupiter | growth · expansion · opportunity · belief · meaning |
 | Saturn | limits · responsibility · structure · discipline · maturity |
 | Uranus | change · disruption · freedom · independence · innovation |
-| Neptune | imagination · ideals · dissolution · sensitivity · illusion |
+| Neptune | imagination · ideals · sensitivity · illusion · dissolution |
 | Pluto | power · intensity · compulsion · transformation · regeneration |
 
 Words that IL previously forbade as CORE slogans (`Uranus = change`, `Pluto = transformation`) **may appear here as Mainstream territory**. They still must not be:
@@ -122,14 +120,14 @@ TodayFlow’s job is to **structure** that territory, not to invent a different 
 
 Mainstream says: Mars = action, desire, assertion, aggression, drive.
 
-TodayFlow may structure that as (shape example, **not** an object lock, **not** a schema change this pass):
+TodayFlow may structure that as (shape example, **not** an object lock; Canon-shape pass is next):
 
 ```text
-function     → initiate / pursue
-need         → agency
-constructive → courage, decisive action, assertion
-shadow       → aggression, impulsivity, conflict
-domains      → action, desire, competition
+core function:  pursue / act
+inner drive:    agency / desire
+constructive:   courage · initiative · decisive action · healthy assertion
+distorted:      aggression · impulsivity · unnecessary conflict
+domains:        action · competition · sexuality/desire · confrontation
 ```
 
 That is **our data**. No runtime research.
@@ -181,13 +179,15 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Open a book
 - Score CORE
 - Change JSON Schema
-- Start the Astrodienst / Cafe Astrology extract
+- Start the Astrodienst / Cafe Astrology extract as IL claims
 - Unlock Co–Star in-app scraping
+- Require 2/3 literal-word overlap
 
-**Next named (one task):** Mainstream Western Astrology V1 **planet** map from the §2.1 panel. Confirm or edit §3. Still no object rewrite until that map is owner-locked.
+**Next named (one task):** TodayFlow Planet Canon **shape** (generative slots). Map 1.3.77 is in. Still no object rewrite.
 
 ---
 
 ## Changelog
 
+- **1.1 (2026-08-21)** — 1.3.77 planet map. Astrology.com locked as panel #3. Concept families, not 2/3 word vote. Territory table first-term order updated. Next = Canon shape, not JSON.
 - **1.0 (2026-08-21)** — Product Canon vs Lenses locked. Mainstream operational definition. Planet territory = working draft. Co–Star = recognition check. CORE not a gate. No objects.

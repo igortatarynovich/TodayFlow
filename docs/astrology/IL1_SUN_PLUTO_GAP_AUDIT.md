@@ -8,7 +8,7 @@
 
 This file records what the ledger already contains. It does **not** rewrite `object.function`, set `active`, invent T1–T4, ingest claims, or open a new bibliography.
 
-**NOW (1.3.76):** Product Canon vs Lenses. Next ≠ this dashboard. Next = Mainstream V1 planet map. Do not score CORE from these KPIs. Do not rewrite objects from this file.
+**NOW (1.3.77):** Mainstream Planet Semantic Map locked. Next ≠ this dashboard. Next = Planet Canon shape. Do not score CORE from these KPIs. Do not rewrite objects from this file.
 
 ---
 
