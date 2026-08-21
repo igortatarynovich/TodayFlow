@@ -75,7 +75,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.65:** Layer 2 Cell C `ACCESS_BLOCKED` (psych later-interpretive; three NEED_OWNER; no fourth book). Houlding ontology already extracted. Next = 1.3.66 Rudhyar Pulse Part One (humanistic). Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.66:** Rudhyar Pulse Part One extracted as humanistic cycle onto `astro.sign.classifications`. No sign objects. Cell C `ACCESS_BLOCKED`. Next = do not materialize 12 objects; Hand Ch.10 optional. Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -105,6 +105,15 @@ Status: Active working document
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
 - **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.66 Pulse Part One extract (2026-08-18)
+
+- **SoT before:** Pulse Part One shortlisted as humanistic; later-interpretive humanistic cell empty.
+- **SoT after:** three humanistic school_specific claims on `astro.sign.classifications`. Part Two out. Required psych slots not filled. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.66 §6.20 · claims ledger · corpus `src.humanistic.rudhyar_pulse_of_life`
+- **Backward compatible?** yes — Cell C still ACCESS_BLOCKED; planet ledgers untouched
 
 ## Architecture impact — IL-1 1.3.65 Cell C ACCESS_BLOCKED (2026-08-18)
 

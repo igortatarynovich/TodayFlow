@@ -21,7 +21,8 @@
     "Valens I.2 calls Aries fiery and also by nature watery (thunder/hail weather). Do not use Valens to confirm Lilly fire, and do not collapse weather into element.",
     "Valens I.2 Aries is tropic. That is not Ptolemy equinoctial and not Lilly moveable/cardinal. Schema still cannot store the split; do not compare.",
     "Valens I.3 (50 terms) is bounds/dignity, not Layer 2 meaning. Left in Foundation §2.5. Not copied here.",
-    "1.3.64: Houlding triplicity ontology ingested (trigonal geometry; elemental labels later; no Ptolemy air/water-on-sign). Rulers, Dorotheus fortune, dignity, and technique not copied. Do not CORE with Lilly fire. Do not materialize 12 sign objects. Later-interpretive slots still unattested."
+    "1.3.64: Houlding triplicity ontology ingested (trigonal geometry; elemental labels later; no Ptolemy air/water-on-sign). Rulers, Dorotheus fortune, dignity, and technique not copied. Do not CORE with Lilly fire. Do not materialize 12 sign objects. Later-interpretive slots still unattested.",
+    "1.3.66: Rudhyar Pulse of Life Part One ingested as humanistic cycle (complementary tides; four turning points; more-or-less phases). Not psychological. Required psych slots not filled. Part Two twelve phases not extracted. Do not CORE with Lilly, Houlding, or Cell C. No sign objects."
   ],
   "claims": [
     {
@@ -357,6 +358,54 @@
       "evidence_tier": "school_specific",
       "review_status": "extracted",
       "field": "element",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    {
+      "concept_id": "claim.sign.zodiac_dynamic_process",
+      "source_id": "src.humanistic.rudhyar_pulse_of_life",
+      "source_class": "humanistic",
+      "author": "Dane Rudhyar",
+      "edition": "The Pulse of Life, David McKay 1943; Khaldea archival HTML",
+      "locus": "Part One p.1 The Zodiac as a Dynamic Process (khaldea pofl_p1p1)",
+      "school": "humanistic",
+      "original_claim": "Rudhyar: reality is two complementary tides in cyclic waxing and waning (Yang and Yin). A sign is a phase of that process, not a permanent set of characteristics.",
+      "normalized_claim": "The zodiac is a dynamic process of two complementary tides, not a set of static sign types.",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "orientation",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    {
+      "concept_id": "claim.sign.day_night_four_turning_points",
+      "source_id": "src.humanistic.rudhyar_pulse_of_life",
+      "source_class": "humanistic",
+      "author": "Dane Rudhyar",
+      "edition": "The Pulse of Life, David McKay 1943; Khaldea archival HTML",
+      "locus": "Part One p.10 four critical moments (khaldea pofl_p1p10)",
+      "school": "humanistic",
+      "original_claim": "Day-force waxes as days lengthen; Night-force as nights lengthen. Four moments: Capricorn winter (Night max), Aries spring (equal), Cancer summer (Day max), Libra fall (equal).",
+      "normalized_claim": "Capricorn, Aries, Cancer, and Libra are Day/Night turning points of the year-cycle, not schema-cardinal as such.",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "mode",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    {
+      "concept_id": "claim.sign.phase_more_or_less",
+      "source_id": "src.humanistic.rudhyar_pulse_of_life",
+      "source_class": "humanistic",
+      "author": "Dane Rudhyar",
+      "edition": "The Pulse of Life, David McKay 1943; Khaldea archival HTML",
+      "locus": "Part One p.10 more or less, not either-or (khaldea pofl_p1p10)",
+      "school": "humanistic",
+      "original_claim": "Every zodiacal sign is a state of human experience in which more or less of two basic forces are active. Understanding is never either-or.",
+      "normalized_claim": "A sign is a more-or-less mix of two cyclic forces, not an either-or personality type.",
+      "evidence_tier": "school_specific",
+      "review_status": "extracted",
+      "field": "orientation",
       "reviewer": null,
       "reviewed_at": null
     }

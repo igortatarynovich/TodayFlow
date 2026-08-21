@@ -98,7 +98,7 @@ This cell sets the grammar of the required later-interpretive slots. Schema stil
 | A | extracted | classical | Ptolemy · Lilly · Valens Aries | classification | already done |
 | **B** | **extracted (1.3.64)** | traditional | Houlding triplicity **ontology paragraphs only** | classification ontology | Done. Rulers still out. No sign objects |
 | **C** | **shortlisted as a cell; slot `ACCESS_BLOCKED` (1.3.65)** | psychological | one of Arroyo Part II ch.9–12 / Martin structure lessons / Hamaker *Elements and Crosses* | later-interpretive structure | extraction-only when a named principle chapter is legally readable **and** passes L2-C7+C8. No winner. No fourth book |
-| **D** | **shortlisted** | humanistic | Rudhyar *Pulse of Life* Part One | cycle / phase-task | after B, when later-interpretive ingest is opened on purpose. Not a substitute for C |
+| **D** | **extracted (1.3.66)** | humanistic | Rudhyar *Pulse of Life* Part One | cycle / phase-task | Done. Part Two still later densify. Not a substitute for C |
 | **E** | **optional / later** | professional | Hand Ch.10 only | consulting grid (other lemma) | not needed to start. Before any Ch.11 portraits if professional is opened at all |
 
 Five rows. One psychological **cell**, not three textbooks. Hand is not in the start set.
@@ -116,7 +116,7 @@ Both B and D are legally readable. Readability is therefore **not** the tie-brea
 3. **Cell C winner** — only after an opened chapter passes L2-C7 + L2-C8. Architecture impact still required before 12 `type=sign` objects.
 4. **Hand Ch.10** — optional, later, and only if the opened chapter shows a grammar not already used as other-lemma grid.
 
-**Not extracted in 1.3.63.** **1.3.64 extracted item 1** (Houlding ontology). **1.3.65:** item 3 (Cell C) is `ACCESS_BLOCKED` — discovery stops; not extracted. Next named extract: item 2 (Pulse Part One) as **1.3.66** humanistic, not as C. Do not extract 3–4 in the Pulse pass.
+**1.3.64 extracted item 1** (Houlding ontology). **1.3.65:** item 3 (Cell C) is `ACCESS_BLOCKED`. **1.3.66 extracted item 2** (Pulse Part One) as humanistic, not as C. Do not extract 3–4 in a Pulse densify pass. Part Two remains later densify.
 
 ---
 
@@ -128,4 +128,4 @@ Both B and D are legally readable. Readability is therefore **not** the tie-brea
 - No CORE. Shortlist agreement is not semantic consensus.
 - No planet coverage hunt.
 
-**Stopped before step 10.** Next artifact: 1.3.64 Houlding ontology extract (bounded), if named. Cell C stays a cell until a principle chapter is readable. **1.3.64 done** — classification claims only; no sign objects. **1.3.65:** Cell C `ACCESS_BLOCKED`. Next = Pulse Part One (1.3.66).
+**Stopped before step 10.** Next artifact: 1.3.64 Houlding ontology extract (bounded), if named. Cell C stays a cell until a principle chapter is readable. **1.3.64 done** — classification claims only; no sign objects. **1.3.65:** Cell C `ACCESS_BLOCKED`. **1.3.66 done** — Pulse Part One humanistic; no sign objects. Next = do not materialize 12 objects; Hand Ch.10 optional.

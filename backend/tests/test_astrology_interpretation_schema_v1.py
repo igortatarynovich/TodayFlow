@@ -2073,8 +2073,6 @@ def test_layer2_houlding_ontology_extract_no_sign_objects():
     assert "Stopped before Pulse Part One" in canon
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "Pulse of Life" in next_block
-    assert "humanistic" in next_block.lower()
     assert "Do **not** start CORE scoring" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.64" in parent
@@ -2093,7 +2091,6 @@ def test_layer2_cell_c_access_blocked_no_ingest():
     jsonschema.validate(classifications, claims_schema)
     assert not any(row.get("source_class") == "psychological" for row in classifications["claims"])
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.65" in canon
     assert "### 6.19 Layer 2 Signs — Cell C ACCESS_BLOCKED" in canon
     assert "### Architecture impact — 1.3.65 Layer 2 Cell C ACCESS_BLOCKED" in canon
     map_text = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_LITERATURE_MAP.md").read_text(encoding="utf-8")
@@ -2101,16 +2098,78 @@ def test_layer2_cell_c_access_blocked_no_ingest():
     shortlist = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_SHORTLIST.md").read_text(encoding="utf-8")
     assert "ACCESS_BLOCKED" in shortlist
     assert "No winner" in shortlist or "no winner" in shortlist.lower()
-    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
-    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "1.3.66" in next_block
-    assert "Pulse of Life" in next_block
-    assert "ACCESS_BLOCKED" in next_block
-    assert "Do **not** start CORE scoring" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.65" in parent
     assert "ACCESS_BLOCKED" in parent
 
 
-
-
+def test_layer2_pulse_part_one_extract_no_sign_objects():
+    """1.3.66: Pulse Part One humanistic on classifications. No psych slots. No Part Two. No sign objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
+    corpus_schema = json.loads(CORPUS_SCHEMA.read_text(encoding="utf-8"))
+    corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
+    jsonschema.validate(corpus, corpus_schema)
+    assert len(corpus["sources"]) <= 80
+    assert any(src["source_id"] == "src.humanistic.rudhyar_pulse_of_life" for src in corpus["sources"])
+    pulse_src = next(src for src in corpus["sources"] if src["source_id"] == "src.humanistic.rudhyar_pulse_of_life")
+    assert pulse_src["source_class"] == "humanistic"
+    planets = [
+        "sun",
+        "moon",
+        "mercury",
+        "venus",
+        "mars",
+        "jupiter",
+        "saturn",
+        "uranus",
+        "neptune",
+        "pluto",
+    ]
+    total = 0
+    psych_n = 0
+    core_n = 0
+    for name in planets:
+        payload = json.loads((CLAIMS_DIR / f"astro.object.{name}.json").read_text(encoding="utf-8"))
+        jsonschema.validate(payload, claims_schema)
+        total += len(payload["claims"])
+        psych_n += sum(1 for row in payload["claims"] if row.get("source_class") == "psychological")
+        core_n += sum(1 for row in payload["claims"] if row.get("evidence_tier") == "core")
+    assert total == 491
+    assert psych_n == 82
+    assert core_n == 0
+    assert len(objects["objects"]) == 24
+    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
+    jsonschema.validate(aries, claims_schema)
+    assert "src.psychological.rudhyar_personality" in aries["pending_source_ids"]
+    assert not any(row.get("source_id") == "src.humanistic.rudhyar_pulse_of_life" for row in aries["claims"])
+    classifications = json.loads((CLAIMS_DIR / "astro.sign.classifications.json").read_text(encoding="utf-8"))
+    jsonschema.validate(classifications, claims_schema)
+    pulse = [row for row in classifications["claims"] if row.get("source_id") == "src.humanistic.rudhyar_pulse_of_life"]
+    assert len(pulse) == 3
+    assert all(row["source_class"] == "humanistic" for row in pulse)
+    assert all(row["evidence_tier"] == "school_specific" for row in pulse)
+    assert {row["field"] for row in pulse} <= {"orientation", "mode"}
+    forbidden = ("motivation", "strengths", "excess", "deficiency", "behavioral_tendencies")
+    assert not any(row["field"] in forbidden for row in pulse)
+    assert {row["concept_id"] for row in pulse} == {
+        "claim.sign.zodiac_dynamic_process",
+        "claim.sign.day_night_four_turning_points",
+        "claim.sign.phase_more_or_less",
+    }
+    blob = " ".join((row.get("original_claim") or "") + " " + (row.get("normalized_claim") or "") for row in pulse).lower()
+    assert "personality type" in blob or "either-or" in blob
+    assert "aries =" not in blob
+    assert not any(row.get("source_class") == "psychological" for row in pulse)
+    assert not any(row.get("evidence_tier") == "core" for row in classifications["claims"])
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.66" in canon
+    assert "### 6.20 Layer 2 Signs — Pulse Part One extract" in canon
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "Do **not** materialize 12 sign objects" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "ACCESS_BLOCKED" in next_block
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "1.3.66" in parent
