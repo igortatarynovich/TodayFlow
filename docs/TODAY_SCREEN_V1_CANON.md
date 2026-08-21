@@ -1,7 +1,9 @@
-# Today Screen v1 — сценарий экрана (канон)
+# Today Screen v1 — сценарий экрана (исторический)
 
-**Статус:** `ACCEPTED` — источник истины для experience layer Today v1.  
-**Версия:** 4.2 (2026-07-02) — **Day Story + Ritual Gates + continuous dialogue**  
+> **SUBORDINATE / не SoT · 2026-08-21.** Нарезка экрана Today = [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY → RITUAL → MY DAY → EVENING). Смысл дня = [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md). North Star = [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md) §6. Этот файл — Goal Loop / ritual-gates notes до cutover; не открывать как действующий experience-канон.
+
+**Статус:** `SUBORDINATE` — не experience SoT.  
+**Версия:** 4.2 (2026-07-02) — **Day Story + Ritual Gates** (исторический default path)  
 **Владелец:** Product (sign-off) + Engineering (паритет web / iOS / Android)
 
 **Это не:** Figma, wireframe, CSS.  
@@ -34,7 +36,7 @@
 
 **Legacy path:** S0–S10 phase FSM — `?experience=1` · PR2 Goal Loop gate · см. §5–6 ниже.
 
-**North star:** [PIM_PRODUCT_NORTH_STAR.md](archive/PIM_PRODUCT_NORTH_STAR.md) — §0.2 **usefulness → retention → data** · §1 Platform (Learning Δ).
+**North star:** [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md) §6 — usefulness → retention → data · Learning Δ. Archived pointer: [PIM_PRODUCT_NORTH_STAR.md](archive/PIM_PRODUCT_NORTH_STAR.md).
 
 **Дневной цикл (experience spine):**
 

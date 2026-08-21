@@ -47,6 +47,27 @@ LLM не выбирает mood/energy, главных drivers, окна врем
 
 Два человека в одной **day-location / timezone** + одна версия правил → **один и тот же Global Day**.
 
+### Who knows what (LOCKED)
+
+IL / Canon — atomic astrology. Character Engine — the person. Neither layer owns the other.
+
+```text
+Interpretation Library  знает астрологию.  Не знает человека.
+Character Engine        знает человека.    Не знает астрологию.
+Personal Meaning        = композиция atomic sky meaning × natal/CE context.
+```
+
+Planet = what · Sign = how · House = where · Aspect = relation — это **только** астрологический atomic layer. Он **не** кодирует Global vs Personal. Персонализацию **не** заталкивать в Canon.
+
+| Профиль дня | Цепочка | Не содержит |
+|-------------|---------|-------------|
+| **Global Day** | astronomical facts → IL atoms → composition → global semantic frame | натал, Character Engine, карта, число, цели |
+| **Personal Day** | global/natal astrological frame + Character Engine → personal relevance | переписывание Global energy/drivers/windows |
+
+LLM формулирует каждый слой **после** этих решений, в пределах structured payload. Текущий Personal = wrapper over `day_story` — другой продукт, не этот канон.
+
+Personal Model — единственный authority **о человеке**, не единственный владелец всей семантики продукта. Иначе астрология снова въедет в person-модель и получится монолит.
+
 ### Downstream non-mutation (LOCKED)
 
 ```text
