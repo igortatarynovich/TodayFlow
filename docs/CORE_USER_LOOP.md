@@ -1,6 +1,11 @@
 # Core User Loop — Theme → Action → Progress
 
-**Статус:** принято (гипотеза **главного объекта продукта** — проверяется, не wire).  
+**Status:** EXPERIENCE / HISTORY — **не semantic SoT** · **2026-08-21**  
+**Meaning SoT:** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).  
+**Product cycle:** [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — `today` · `ritual` · `my_day` · `evening`.  
+Этот файл — **experience / history** (гипотеза Theme→Action→Progress). Не читать как канон смысла дня и не как карту живых экранов.
+
+**Статус (experience):** принято (гипотеза **главного объекта продукта** — проверяется, не wire).  
 **Версия:** 1.0 (2026-06-01).  
 **Владелец:** Product + Engineering.
 

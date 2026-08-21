@@ -6,7 +6,7 @@
 
 **Роль:** **северная звезда** артефакта Intelligence — всё остальное средства, не цели.
 
-**Критерий успеха продукта (операционно):** [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) — завершённый цикл → **ценность PIM** ↑ (Learning Δ > 0).
+**Критерий успеха продукта (операционно):** [TODAYFLOW_PRODUCT_CANON_UNIFIED.md §6](../TODAYFLOW_PRODUCT_CANON_UNIFIED.md#6-критерий-успеха-north-star) — завершённый цикл → **ценность PIM** ↑ (Learning Δ > 0).
 
 **Связь:** [CORE_PRODUCT_CANON.md](../archive/CORE_PRODUCT_CANON.md), [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) (кем становится пользователь), [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md), [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md), [KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md](../KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md), [INTERPRETATION_LAYER_AND_REFERENCE.md](../explainability/INTERPRETATION_LAYER_AND_REFERENCE.md), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](../DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [DAY_CONTEXT_V0.md](../DAY_CONTEXT_V0.md).
 
