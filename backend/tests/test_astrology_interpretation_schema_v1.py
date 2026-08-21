@@ -2723,7 +2723,7 @@ def test_planet_canon_storage_v1():
     assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
 
     for obj in objects["objects"]:
-        if obj["type"] != "celestial_object":
+        if obj["type"] not in ("celestial_object", "sign"):
             assert "canon" not in obj
 
     saturn_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.object.saturn")
@@ -2872,7 +2872,7 @@ def test_planet_canon_sun_saturn_fill():
     assert "affection" in by_id["astro.object.venus"]["canon"]["constructive"]
 
     for obj in objects["objects"]:
-        if obj["type"] != "celestial_object":
+        if obj["type"] not in ("celestial_object", "sign"):
             assert "canon" not in obj
     for object_id in ("astro.object.uranus", "astro.object.neptune", "astro.object.pluto"):
         assert object_id not in by_id
@@ -2931,7 +2931,6 @@ def test_mainstream_sign_semantic_map_v1():
         assert "**Include**" in sign_map
     by_id = {obj["object_id"]: obj for obj in objects["objects"]}
     cap = by_id["astro.sign.capricorn"]
-    assert "canon" not in cap
     assert cap["mode"] == "cardinal"
     assert cap["element"] == "earth"
     assert cap["orientation"] == "negative"
@@ -2950,7 +2949,7 @@ def test_sign_canon_grammar_v1():
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.86" in canon
+    assert "**Версия:** 1.3.87" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -2970,7 +2969,7 @@ def test_sign_canon_grammar_v1():
     assert "earth" in grammar.lower()
     assert "not locked" in grammar.lower() or "Dry-run" in grammar
     by_id = {obj["object_id"]: obj for obj in objects["objects"]}
-    assert "canon" not in by_id["astro.sign.capricorn"]
+    assert by_id["astro.sign.capricorn"]["mode"] == "cardinal"
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.84" in next_block
@@ -2988,7 +2987,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.86" in canon
+    assert "**Версия:** 1.3.87" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs
@@ -3033,8 +3032,6 @@ def test_sign_canon_v1_fill_with_provenance():
     assert "Origin control" in packs
     assert "Domicile collision" in packs
     assert "Discrimination" in packs
-    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
-    assert "canon" not in by_id["astro.sign.capricorn"]
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.85" in next_block
@@ -3060,7 +3057,6 @@ def test_sign_canon_storage_v1():
 
     for obj in objects["objects"]:
         if obj["type"] == "sign":
-            assert "canon" not in obj
             for key in LATER_INTERPRETIVE_KEYS:
                 assert key not in obj
 
@@ -3134,7 +3130,110 @@ def test_sign_canon_storage_v1():
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.86" in next_block
-    assert "write packs onto sign drafts" in next_block
+    assert "1.3.87" in next_block or "1.3.88" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+
+
+SIGN_CANON_PACKS = {
+    "astro.sign.aries": {
+        "manner": ["initiating", "direct", "headlong"],
+        "excess": ["premature-charge", "over-direct"],
+    },
+    "astro.sign.taurus": {
+        "manner": ["slow-and-steady", "steadfast", "patient"],
+        "excess": ["immovable", "over-holding"],
+    },
+    "astro.sign.gemini": {
+        "manner": ["mobile", "versatile", "switching"],
+        "excess": ["scattered", "unstaying"],
+    },
+    "astro.sign.cancer": {
+        "manner": ["close", "indirect", "holding"],
+        "excess": ["clinging", "sideways-defense"],
+    },
+    "astro.sign.leo": {
+        "manner": ["central", "warm", "displayed"],
+        "excess": ["over-display", "center-demand"],
+    },
+    "astro.sign.virgo": {
+        "manner": ["precise", "discerning", "utilitarian"],
+        "excess": ["over-critique", "over-refine"],
+    },
+    "astro.sign.libra": {
+        "manner": ["balancing", "tactful", "proportionate"],
+        "excess": ["indecision", "over-accommodation"],
+    },
+    "astro.sign.scorpio": {
+        "manner": ["intense", "probing", "concentrated"],
+        "excess": ["possessive", "corrosive"],
+    },
+    "astro.sign.sagittarius": {
+        "manner": ["exploratory", "free", "far-ranging"],
+        "excess": ["uncommitted-ranging", "overshoot"],
+    },
+    "astro.sign.capricorn": {
+        "manner": ["reserved", "disciplined", "structured"],
+        "excess": ["withholding", "hardening"],
+    },
+    "astro.sign.aquarius": {
+        "manner": ["detached", "unconventional", "original"],
+        "excess": ["cold-distance", "idea-obstinacy"],
+    },
+    "astro.sign.pisces": {
+        "manner": ["permeable", "imaginal", "adaptive"],
+        "excess": ["unfocused", "impression-as-fact"],
+    },
+}
+
+
+def test_sign_canon_materialization_v1():
+    """1.3.87: copy locked packs onto sign object.canon. No lemma rewrite. Next = 1.3.88 smoke-test."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    _assert_il1_catalog_counts(objects)
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+
+    for object_id, pack in SIGN_CANON_PACKS.items():
+        obj = by_id[object_id]
+        assert obj["status"] == "draft"
+        assert obj["canon"] == pack
+        assert obj["mode"] in ("cardinal", "fixed", "mutable")
+        assert obj["element"] in ("fire", "earth", "air", "water")
+        assert obj["orientation"] in ("positive", "negative")
+        for key in LATER_INTERPRETIVE_KEYS:
+            assert key not in obj
+
+    cap = by_id["astro.sign.capricorn"]
+    assert cap["mode"] == "cardinal"
+    assert cap["element"] == "earth"
+    assert cap["orientation"] == "negative"
+    assert "ambition" not in cap["canon"]["manner"]
+    assert "communicate" not in by_id["astro.sign.gemini"]["canon"]["manner"]
+    assert "assert" not in by_id["astro.sign.aries"]["canon"]["manner"]
+    assert cap["canon"]["excess"] == ["withholding", "hardening"]
+
+    for obj in objects["objects"]:
+        if obj["type"] in ("house", "aspect"):
+            assert "canon" not in obj
+    for object_id, pack in SUN_SATURN_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == pack
+
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.41 Sign Canon materialization" in canon
+    fill = (ROOT / "docs" / "astrology" / "SIGN_CANON_MATERIALIZATION_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "1.3.88" in fill
+    assert "object.canon" in fill
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.87" in next_block
+    assert "1.3.88" in next_block
+    assert "Planet × Sign" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
 

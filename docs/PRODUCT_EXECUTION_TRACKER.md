@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.86 Sign Canon storage.** Optional `canon` on signs (`manner` · `excess`). Next = write packs onto sign drafts. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.87 Sign Canon materialization.** Twelve sign drafts carry `canon.manner` / `canon.excess`. Next = 1.3.88 Planet × Sign smoke-test. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -197,6 +197,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — IL 1.3.75 §6.29 · teardown file · inventory execution order · parent 1.3
 - **Backward compatible?** yes. Deprecated as next pass: short corpus scoring.
+
+## Architecture impact — IL-1 1.3.87 Sign Canon materialization (2026-08-21)
+
+- **SoT before:** schema nest existed; twelve sign drafts were classification-only.
+- **SoT after:** twelve drafts carry locked `canon`. Classification unchanged. Later-interpretive `excess` omitted. Next = 1.3.88 smoke-test (separate gate).
+- **Public contract changed?** yes — twelve draft signs now include `canon`
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/SIGN_CANON_MATERIALIZATION_V1.md` · IL 1.3.87 §6.41
+- **Backward compatible?** yes. Runtime still ignores `draft`.
 
 ## Architecture impact — IL-1 1.3.86 Sign Canon storage (2026-08-21)
 

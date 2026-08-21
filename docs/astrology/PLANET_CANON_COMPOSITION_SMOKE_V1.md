@@ -231,7 +231,7 @@ No FAIL row. No silent repair.
 - Sign/house object edits · pair catalog rows  
 - Inventing `earth → practical` to flip PARTIAL to PASS  
 
-**Next named:** Signs Mainstream Semantic Map — **done 1.3.83**. Sign Canon grammar — **done 1.3.84**. Sign Canon fill — **done 1.3.85**. Sign Canon storage — **done 1.3.86**. Next = write packs onto sign drafts. House Canon later.
+**Next named:** Signs Mainstream Semantic Map — **done 1.3.83**. Sign Canon grammar — **done 1.3.84**. Sign Canon fill — **done 1.3.85**. Sign Canon storage — **done 1.3.86**. Sign Canon materialization — **done 1.3.87**. Next = 1.3.88 Planet × Sign smoke-test. House Canon later.
 
 ---
 

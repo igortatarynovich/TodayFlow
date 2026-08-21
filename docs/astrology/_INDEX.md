@@ -13,6 +13,7 @@
 | [SIGN_CANON_GRAMMAR_V1.md](./SIGN_CANON_GRAMMAR_V1.md) | **1.3.84 sign grammar:** `manner` · `excess`. Not fill |
 | [SIGN_CANON_V1.md](./SIGN_CANON_V1.md) | **1.3.85 Sign Canon:** twelve packs + origin. Storage = 1.3.86 |
 | [SIGN_CANON_STORAGE_V1.md](./SIGN_CANON_STORAGE_V1.md) | **1.3.86 storage:** optional `canon` nest on `type=sign` (`manner` · `excess`) |
+| [SIGN_CANON_MATERIALIZATION_V1.md](./SIGN_CANON_MATERIALIZATION_V1.md) | **1.3.87 materialization:** twelve drafts carry locked packs. Not smoke-test |
 | [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md) | **1.3.78 grammar:** six engine slots. tempo = Foundation. Dry-run ≠ fill |
 | [PLANET_CANON_V1.md](./PLANET_CANON_V1.md) | **1.3.79 Planet Canon:** ten packs + direct/derived. Storage = 1.3.80 |
 | [PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md) | **1.3.80 storage:** optional `canon` nest |

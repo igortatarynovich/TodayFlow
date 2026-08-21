@@ -1353,6 +1353,10 @@
       "mode": "cardinal",
       "element": "fire",
       "orientation": "positive",
+      "canon": {
+        "manner": ["initiating", "direct", "headlong"],
+        "excess": ["premature-charge", "over-direct"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.aries.lilly_quality",
@@ -1425,6 +1429,10 @@
       "mode": "fixed",
       "element": "earth",
       "orientation": "negative",
+      "canon": {
+        "manner": ["slow-and-steady", "steadfast", "patient"],
+        "excess": ["immovable", "over-holding"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.taurus.lilly_quality",
@@ -1497,6 +1505,10 @@
       "mode": "mutable",
       "element": "air",
       "orientation": "positive",
+      "canon": {
+        "manner": ["mobile", "versatile", "switching"],
+        "excess": ["scattered", "unstaying"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.gemini.lilly_quality",
@@ -1569,6 +1581,10 @@
       "mode": "cardinal",
       "element": "water",
       "orientation": "negative",
+      "canon": {
+        "manner": ["close", "indirect", "holding"],
+        "excess": ["clinging", "sideways-defense"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.cancer.lilly_quality",
@@ -1641,6 +1657,10 @@
       "mode": "fixed",
       "element": "fire",
       "orientation": "positive",
+      "canon": {
+        "manner": ["central", "warm", "displayed"],
+        "excess": ["over-display", "center-demand"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.fixed_follow_turning",
@@ -1713,6 +1733,10 @@
       "mode": "mutable",
       "element": "earth",
       "orientation": "negative",
+      "canon": {
+        "manner": ["precise", "discerning", "utilitarian"],
+        "excess": ["over-critique", "over-refine"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.bicorporeal",
@@ -1785,6 +1809,10 @@
       "mode": "cardinal",
       "element": "air",
       "orientation": "positive",
+      "canon": {
+        "manner": ["balancing", "tactful", "proportionate"],
+        "excess": ["indecision", "over-accommodation"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.libra.lilly_quality",
@@ -1857,6 +1885,10 @@
       "mode": "fixed",
       "element": "water",
       "orientation": "negative",
+      "canon": {
+        "manner": ["intense", "probing", "concentrated"],
+        "excess": ["possessive", "corrosive"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.scorpio.lilly_quality",
@@ -1929,6 +1961,10 @@
       "mode": "mutable",
       "element": "fire",
       "orientation": "positive",
+      "canon": {
+        "manner": ["exploratory", "free", "far-ranging"],
+        "excess": ["uncommitted-ranging", "overshoot"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.sagittarius.lilly_quality",
@@ -2001,6 +2037,10 @@
       "mode": "cardinal",
       "element": "earth",
       "orientation": "negative",
+      "canon": {
+        "manner": ["reserved", "disciplined", "structured"],
+        "excess": ["withholding", "hardening"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.capricorn.lilly_quality",
@@ -2073,6 +2113,10 @@
       "mode": "fixed",
       "element": "air",
       "orientation": "positive",
+      "canon": {
+        "manner": ["detached", "unconventional", "original"],
+        "excess": ["cold-distance", "idea-obstinacy"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.aquarius.lilly_quality",
@@ -2145,6 +2189,10 @@
       "mode": "mutable",
       "element": "water",
       "orientation": "negative",
+      "canon": {
+        "manner": ["permeable", "imaginal", "adaptive"],
+        "excess": ["unfocused", "impression-as-fact"]
+      },
       "provenance": [
         {
           "concept_id": "claim.sign.pisces.lilly_quality",
