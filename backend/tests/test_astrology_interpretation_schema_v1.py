@@ -28,6 +28,47 @@ FORBIDDEN_SURFACE_KEYS = (
     "screen_copy",
 )
 
+LATER_INTERPRETIVE_KEYS = (
+    "motivation",
+    "expression",
+    "strengths",
+    "excess",
+    "deficiency",
+    "behavioral_tendencies",
+)
+
+LILLY_SIGN_GRID = {
+    "aries": ("cardinal", "fire", "positive"),
+    "taurus": ("fixed", "earth", "negative"),
+    "gemini": ("mutable", "air", "positive"),
+    "cancer": ("cardinal", "water", "negative"),
+    "leo": ("fixed", "fire", "positive"),
+    "virgo": ("mutable", "earth", "negative"),
+    "libra": ("cardinal", "air", "positive"),
+    "scorpio": ("fixed", "water", "negative"),
+    "sagittarius": ("mutable", "fire", "positive"),
+    "capricorn": ("cardinal", "earth", "negative"),
+    "aquarius": ("fixed", "air", "positive"),
+    "pisces": ("mutable", "water", "negative"),
+}
+
+
+def _assert_il1_catalog_counts(objects: dict) -> None:
+    assert len(objects["objects"]) == 36
+    by_type: dict[str, list] = {}
+    for obj in objects["objects"]:
+        by_type.setdefault(obj["type"], []).append(obj)
+    assert len(by_type["celestial_object"]) == 7
+    assert len(by_type["sign"]) == 12
+    assert len(by_type["house"]) == 12
+    assert len(by_type["aspect"]) == 5
+    assert all(obj["status"] != "active" for obj in objects["objects"])
+    for sign in by_type["sign"]:
+        assert sign["status"] == "draft"
+        assert sign["layer"] == 2
+        for key in LATER_INTERPRETIVE_KEYS:
+            assert key not in sign, sign["object_id"]
+
 
 def _collect_property_names(node, acc: set[str]) -> None:
     if not isinstance(node, dict):
@@ -189,7 +230,7 @@ def test_houses_and_aspects_from_opened_loci_only():
         "astro.aspect.trine",
         "astro.aspect.opposition",
     }
-    assert not any(obj["type"] == "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     assert "astro.object.asc" not in by_id
     assert "astro.object.mc" not in by_id
     for obj in houses:
@@ -253,7 +294,7 @@ def test_sign_classifications_do_not_invent_layer2_psychology():
     schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
     jsonschema.validate(claims, schema)
     notes = " ".join(claims["gap_notes"])
-    assert "No Layer 2 sign objects yet" in notes
+    assert "1.3.68" in notes
     assert "optional on IL-1 draft" in notes
     assert "Element conflict" in notes
     assert "Mode conflict" in notes
@@ -282,7 +323,7 @@ def test_sign_classifications_do_not_invent_layer2_psychology():
         else:
             assert used == {"src.classical.lilly_christian_astrology"}
         assert all(row["evidence_tier"] != "core" for row in sign_claims["claims"])
-        assert any("No Layer 2 object" in n for n in sign_claims["gap_notes"])
+        assert any("1.3.68 classification-only draft" in n for n in sign_claims["gap_notes"])
         assert not any("fiery/cardinal/equinoctial here" in n for n in sign_claims["gap_notes"])
 
 
@@ -308,7 +349,7 @@ def test_valens_and_lilly19_collisions_not_averaged():
     square_claims = json.loads((CLAIMS_DIR / "astro.aspect.square.json").read_text(encoding="utf-8"))
     assert any(row["concept_id"] == "claim.aspect.square.imperfect_enmity" for row in square_claims["claims"])
     assert any("moiet" in n.lower() for n in square_claims["gap_notes"])
-    assert not any(obj["type"] == "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
 
 
 def test_houlding_first_traditional_class_not_averaged():
@@ -1416,7 +1457,7 @@ def test_hand_uranus_claims_not_core():
     assert "prometheus" in notes
     assert "mythic astrology" in notes
     assert all(row["evidence_tier"] != "core" for row in claims["claims"])
-    assert len(objects["objects"]) == 24
+    _assert_il1_catalog_counts(objects)
 
 
 def test_hand_neptune_claims_not_core():
@@ -1556,7 +1597,7 @@ def test_hand_neptune_claims_not_core():
     assert "1.3.47" in notes
     assert "mythic astrology" in notes
     assert all(row["evidence_tier"] != "core" for row in claims["claims"])
-    assert len(objects["objects"]) == 24
+    _assert_il1_catalog_counts(objects)
 
 
 def test_hand_pluto_claims_not_core():
@@ -1689,7 +1730,7 @@ def test_hand_pluto_claims_not_core():
     assert all(row["evidence_tier"] != "core" for row in claims["claims"])
     concept_fields = {row["concept_id"]: row["field"] for row in claims["claims"]}
     assert concept_fields["claim.pluto.gradual_not_uranian_sudden"] == "tempo"
-    assert len(objects["objects"]) == 24
+    _assert_il1_catalog_counts(objects)
 
 
 def test_sun_pluto_live_recount_after_access_blocked():
@@ -1775,8 +1816,7 @@ def test_planet_fill_research_stable_layer2_definition():
     assert total == 491
     assert psych_n == 82
     assert core_n == 0
-    assert len(objects["objects"]) == 24
-    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "1.3.59" in canon
     assert "### 6.12 Planet fill research-stable (1.3.59)" in canon
@@ -1828,8 +1868,7 @@ def test_layer2_schools_and_source_types_before_literature_map():
     assert total == 491
     assert psych_n == 82
     assert core_n == 0
-    assert len(objects["objects"]) == 24
-    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
     jsonschema.validate(aries, claims_schema)
     assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
@@ -1875,8 +1914,7 @@ def test_layer2_literature_map_from_matrix_no_ingest():
     assert total == 491
     assert psych_n == 82
     assert core_n == 0
-    assert len(objects["objects"]) == 24
-    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
     jsonschema.validate(aries, claims_schema)
     assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
@@ -1929,8 +1967,7 @@ def test_layer2_selection_criteria_locked_no_shortlist_no_ingest():
     assert total == 491
     assert psych_n == 82
     assert core_n == 0
-    assert len(objects["objects"]) == 24
-    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
     jsonschema.validate(aries, claims_schema)
     assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
@@ -1985,8 +2022,7 @@ def test_layer2_shortlist_scored_from_criteria_no_ingest():
     assert total == 491
     assert psych_n == 82
     assert core_n == 0
-    assert len(objects["objects"]) == 24
-    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
     jsonschema.validate(aries, claims_schema)
     assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
@@ -2045,8 +2081,7 @@ def test_layer2_houlding_ontology_extract_no_sign_objects():
     assert total == 491
     assert psych_n == 82
     assert core_n == 0
-    assert len(objects["objects"]) == 24
-    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
     jsonschema.validate(aries, claims_schema)
     assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
@@ -2082,8 +2117,7 @@ def test_layer2_cell_c_access_blocked_no_ingest():
     """1.3.65: Cell C ACCESS_BLOCKED. No fourth book. No sign objects. Pulse is not this slot."""
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     claims_schema = json.loads(CLAIMS_SCHEMA.read_text(encoding="utf-8"))
-    assert len(objects["objects"]) == 24
-    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
     jsonschema.validate(aries, claims_schema)
     assert "src.psychological.arroyo_four_elements" in aries["pending_source_ids"]
@@ -2138,8 +2172,7 @@ def test_layer2_pulse_part_one_extract_no_sign_objects():
     assert total == 491
     assert psych_n == 82
     assert core_n == 0
-    assert len(objects["objects"]) == 24
-    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
     jsonschema.validate(aries, claims_schema)
     assert "src.psychological.rudhyar_personality" in aries["pending_source_ids"]
@@ -2171,7 +2204,7 @@ def test_layer2_pulse_part_one_extract_no_sign_objects():
 
 
 def test_layer2_later_interpretive_optional_no_sign_objects():
-    """1.3.67: later-interpretive optional on IL-1 draft type=sign. Still 0 objects. Not filled."""
+    """1.3.67: later-interpretive optional on IL-1 draft type=sign. Not filled from Pulse/QUALITY."""
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     jsonschema.validate(objects, schema)
@@ -2187,9 +2220,7 @@ def test_layer2_later_interpretive_optional_no_sign_objects():
     props = schema["$defs"]["knowledge_object"]["properties"]
     for name in forbidden:
         assert name in props
-    assert len(objects["objects"]) == 24
-    assert all(obj["type"] != "sign" for obj in objects["objects"])
-    assert all(obj["status"] != "active" for obj in objects["objects"])
+    _assert_il1_catalog_counts(objects)
     classifications = json.loads((CLAIMS_DIR / "astro.sign.classifications.json").read_text(encoding="utf-8"))
     notes = " ".join(classifications["gap_notes"])
     assert "1.3.67" in notes
@@ -2199,19 +2230,60 @@ def test_layer2_later_interpretive_optional_no_sign_objects():
     aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
     assert "optional on IL-1 draft type=sign" in " ".join(aries["gap_notes"])
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.67" in canon
     assert "### 6.21 Layer 2 Signs — later-interpretive optional on IL-1 draft" in canon
     assert "### Architecture impact — 1.3.67 Layer 2 later-interpretive optional on IL-1 draft" in canon
-    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
-    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "1.3.68" in next_block
-    assert "classification only" in next_block.lower() or "classification-only" in next_block.lower()
-    assert "Do **not** start CORE scoring" in next_block
-    assert "Lilly" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.67" in parent
     shortlist = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_SHORTLIST.md").read_text(encoding="utf-8")
     assert "1.3.67" in shortlist
+
+
+def test_layer2_lilly_classification_drafts_no_later_interpretive():
+    """1.3.68: twelve type=sign drafts from Lilly grid. Later-interpretive omitted. Not CORE. Nothing active."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    _assert_il1_catalog_counts(objects)
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    for name, (mode, element, orientation) in LILLY_SIGN_GRID.items():
+        obj = by_id[f"astro.sign.{name}"]
+        assert obj["mode"] == mode
+        assert obj["element"] == element
+        assert obj["orientation"] == orientation
+        assert obj["theme_clusters"] == ["timing"]
+        assert obj["polarity"] == ["neutral"]
+        assert obj["machine_entity_code"] == f"astrology.sign.{name}"
+        fields = {row["field"]: row for row in obj["provenance"]}
+        assert set(fields) == {"mode", "element", "orientation"}
+        assert all(row["source_id"] == "src.classical.lilly_christian_astrology" for row in obj["provenance"])
+        assert all(row["evidence_tier"] == "school_specific" for row in obj["provenance"])
+        assert all(row["source_class"] == "classical" for row in obj["provenance"])
+        blob = " ".join(row["normalized_claim"].lower() for row in obj["provenance"])
+        assert "choleric" not in blob
+        assert "deceitful" not in blob
+        assert "idle" not in blob
+        assert "violent" not in blob
+    leo_mode = next(row for row in by_id["astro.sign.leo"]["provenance"] if row["field"] == "mode")
+    assert leo_mode["concept_id"] == "claim.sign.fixed_follow_turning"
+    virgo_mode = next(row for row in by_id["astro.sign.virgo"]["provenance"] if row["field"] == "mode")
+    assert virgo_mode["concept_id"] == "claim.sign.bicorporeal"
+    aries_elem = next(row for row in by_id["astro.sign.aries"]["provenance"] if row["field"] == "element")
+    assert aries_elem["concept_id"] == "claim.sign.aries.lilly_quality"
+    aries_claims = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
+    assert any(row["concept_id"] == "claim.sign.aries.valens_fiery" for row in aries_claims["claims"])
+    assert by_id["astro.sign.aries"]["element"] == "fire"
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.68" in canon
+    assert "### 6.22 Layer 2 Signs — Lilly classification drafts" in canon
+    assert "### Architecture impact — 1.3.68 Layer 2 Lilly classification drafts" in canon
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "Layer 2 Signs" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "ACCESS_BLOCKED" in next_block
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "1.3.68" in parent
+
 
 
 

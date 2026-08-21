@@ -8,11 +8,11 @@
     "src.psychological.rudhyar_personality"
   ],
   "gap_notes": [
-    "No Layer 2 sign objects yet. 1.3.67: motivation / strengths / excess / deficiency / behavioral_tendencies stay in the model but are optional on IL-1 draft type=sign. Opened classical divisions (Ptolemy I.14–I.15, I.21; Lilly CA I.16) do not attest them. Do not invent those slots. Classification-only drafts wait for a named pass.",
+    "1.3.68: twelve classification-only type=sign drafts from Lilly CA I.16. Later-interpretive slots stay in the model but are optional on IL-1 draft type=sign and remain unfilled. Opened classical divisions (Ptolemy I.14–I.15, I.21; Lilly CA I.16 QUALITY adjectives) do not attest them. Do not invent those slots.",
     "Element conflict: Lilly assigns fire/earth/air/water triplicities. Ptolemy I.21 groups the same four triangles but by winds/directions and planetary lords, not Aristotelian elements on the signs. Do not treat Ptolemy as attesting Aries=fire.",
     "Mode conflict: schema has cardinal|fixed|mutable. Lilly names Aries/Cancer/Libra/Capricorn moveable and cardinal. Ptolemy splits tropical (Cancer, Capricorn) from equinoctial (Aries, Libra). Schema cannot store that split; do not silently collapse Ptolemy into cardinal.",
     "Ptolemy I.15 dismisses quadrupedal/terrestrial/fruitful labels as unimportant. Lilly CA I.16 uses them (e.g. significator in Aries: rash, hardy, lascivious). Not compared.",
-    "Lilly CA I.16 nature/quality of all twelve signs is now opened. Diseases/places/kingdoms/corporature remain horary accidentalia. Layer 2 objects still withheld this pass (1.3.67 demoted requiredness; object-slot Lilly grid is a later named Architecture impact).",
+    "Lilly CA I.16 nature/quality of all twelve signs is now opened. Diseases/places/kingdoms/corporature remain horary accidentalia. 1.3.68 object slots are Lilly mode/element/orientation only; QUALITY personality adjectives not copied.",
     "CORE cannot be scored for sign meaning packages.",
     "Commanding/obeying: Lilly's Aries–Virgo vs Libra–Pisces list matches Ptolemy I.17 summer/winter semicircle grouping (compared). Ptolemy also defines a pair-relation by equal distance from the equinox; Lilly's list does not attest that geometry. Do not collapse.",
     "Ptolemy I.18 beholding/equal power (equal distance from a tropic) is not the same lemma as Lilly Antiscion (CA I.16 p.89–91). Lilly cites 'PTOL. APHO.' and adds Contrantiscion as square/opposition. Attribution is not consensus.",
@@ -21,9 +21,10 @@
     "Valens I.2 calls Aries fiery and also by nature watery (thunder/hail weather). Do not use Valens to confirm Lilly fire, and do not collapse weather into element.",
     "Valens I.2 Aries is tropic. That is not Ptolemy equinoctial and not Lilly moveable/cardinal. Schema still cannot store the split; do not compare.",
     "Valens I.3 (50 terms) is bounds/dignity, not Layer 2 meaning. Left in Foundation §2.5. Not copied here.",
-    "1.3.64: Houlding triplicity ontology ingested (trigonal geometry; elemental labels later; no Ptolemy air/water-on-sign). Rulers, Dorotheus fortune, dignity, and technique not copied. Do not CORE with Lilly fire. Do not materialize 12 sign objects. Later-interpretive slots still unattested.",
-    "1.3.66: Rudhyar Pulse of Life Part One ingested as humanistic cycle (complementary tides; four turning points; more-or-less phases). Not psychological. Later-interpretive slots not filled. Part Two twelve phases not extracted. Do not CORE with Lilly, Houlding, or Cell C. No sign objects.",
-    "1.3.67: schema later-interpretive slots optional on IL-1 draft type=sign. Still unattested. Still 0 objects. Do not fill from Pulse, Lilly QUALITY, or Cell C."
+    "1.3.64: Houlding triplicity ontology ingested (trigonal geometry; elemental labels later; no Ptolemy air/water-on-sign). Rulers, Dorotheus fortune, dignity, and technique not copied. Do not CORE with Lilly fire. Later-interpretive slots still unattested.",
+    "1.3.66: Rudhyar Pulse of Life Part One ingested as humanistic cycle (complementary tides; four turning points; more-or-less phases). Not psychological. Later-interpretive slots not filled. Part Two twelve phases not extracted. Do not CORE with Lilly, Houlding, or Cell C.",
+    "1.3.67: schema later-interpretive slots optional on IL-1 draft type=sign. Still unattested. Do not fill from Pulse, Lilly QUALITY, or Cell C.",
+    "1.3.68: twelve type=sign drafts. Object.mode/element/orientation = Lilly grid (school_specific). Ptolemy winds, Valens weather, Houlding labels-later, Rudhyar tides stay in claims. Nothing active. CORE not scored."
   ],
   "claims": [
     {

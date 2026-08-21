@@ -8,12 +8,12 @@
     "src.psychological.rudhyar_personality"
   ],
   "gap_notes": [
-    "No Layer 2 object yet (1.3.67): later-interpretive slots are optional on IL-1 draft type=sign. Lilly CA I.16 QUALITY still does not fill motivation / strengths / excess / deficiency / behavioral_tendencies without invention. Classification-only drafts wait for a named pass.",
+                "1.3.68 classification-only draft: Lilly CA I.16 mode/element/orientation as school_specific object values. Later-interpretive slots remain optional on IL-1 draft type=sign and are omitted. QUALITY adjectives (choleric, deceitful, idle) not copied into object slots. Collisions stay in claims — do not CORE.",
     "Element and mode remain two-system: this Lilly QUALITY line is not Ptolemy winds / tropical-vs-equinoctial. Do not collapse into one taxonomy.",
     "Diseases, places, kingdoms, corporature from the same chapter are horary accidentalia — not copied into a sign knowledge object.",
     "Rulership/exaltation identity stays in Foundation §2.5 — not duplicated here as meaning.",
     "CORE cannot be scored.",
-    "Valens I.2 opened: Aries fiery AND watery (weather). Still no Layer 2 object. Do not compare fire with Lilly."
+    "Valens I.2 opened: Aries fiery AND watery (weather). Object.element is Lilly fire (1.3.68). Do not compare Valens weather with Lilly fire."
   ],
   "claims": [
     {

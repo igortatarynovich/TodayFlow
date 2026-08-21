@@ -75,7 +75,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.67:** later-interpretive slots optional on IL-1 draft `type=sign`. Still unattested. No sign objects. Cell C `ACCESS_BLOCKED`. Next = classification-only drafts (Lilly grid as school_specific object values), if named. Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.68:** twelve `type=sign` drafts from Lilly CA I.16 classification. Later-interpretive omitted. Cell C `ACCESS_BLOCKED`. Next = do not fill later-interpretive; do not activate; Hand Ch.10 optional. Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -114,6 +114,15 @@ Status: Active working document
 - **Migration required?** no — zero live sign objects
 - **Canon updated?** yes — IL 1.3.67 §6.21 · `astrology_interpretation_v1.schema.json`
 - **Backward compatible?** yes for runtime (nothing `active`); old sign validators that required psych keys will fail a future classification-only draft
+
+## Architecture impact — IL-1 1.3.68 Lilly classification drafts (2026-08-21)
+
+- **SoT before:** later-interpretive optional; 0 `type=sign` objects; classification only in claims.
+- **SoT after:** twelve `draft` `type=sign` objects. Object `mode`/`element`/`orientation` = Lilly CA I.16 school_specific (masculine→`positive`, feminine→`negative`). Later-interpretive omitted. QUALITY personality adjectives not copied. Collisions remain claims. `theme_clusters=["timing"]` is year-span clustering, not Pulse. Nothing `active`. CORE not scored.
+- **Public contract changed?** yes — catalog now has 12 sign records (`draft` only)
+- **Migration required?** no — runtime must keep ignoring `draft`
+- **Canon updated?** yes — IL 1.3.68 §6.22 · `objects_v1.json`
+- **Backward compatible?** yes for runtime if it only reads `status=active`
 
 ## Architecture impact — IL-1 1.3.66 Pulse Part One extract (2026-08-18)
 
