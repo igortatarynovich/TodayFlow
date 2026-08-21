@@ -4,7 +4,7 @@
 **Версия:** 1.5 (2026-06-23)  
 **Владелец:** Engineering + Product
 
-**North star продукта:** [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) — завершённый день → ценность PIM ↑.
+**North star продукта:** [TODAYFLOW_PRODUCT_CANON_UNIFIED.md §6](../TODAYFLOW_PRODUCT_CANON_UNIFIED.md#6-критерий-успеха-north-star) — завершённый день → ценность PIM ↑.
 
 **North star вопрос ревью:**
 
@@ -186,7 +186,7 @@ Learning Δ = 0  →  PIM Δ = 0  →  PR подозрителен
 
 ### 1.6 PIM ROI (новые сценарии и roadmap)
 
-См. [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) §5.
+См. [TODAYFLOW_PRODUCT_CANON_UNIFIED.md §6](../TODAYFLOW_PRODUCT_CANON_UNIFIED.md#6-критерий-успеха-north-star) (PIM ROI).
 
 | Вопрос | Заполнить в PR |
 |--------|----------------|
@@ -396,7 +396,7 @@ Exclude: historical, archive_only, very_low
 
 **Reject:** sticky ritual (D7 ok · evening weak) · IR-first KPI.
 
-Full spec: [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) §0.2 · [PR2_PREFLIGHT.md](../archive/PR2_PREFLIGHT.md) §15.
+Full spec: [TODAYFLOW_PRODUCT_CANON_UNIFIED.md §6](../TODAYFLOW_PRODUCT_CANON_UNIFIED.md#6-критерий-успеха-north-star) · [PR2_PREFLIGHT.md](../archive/PR2_PREFLIGHT.md) §15.
 
 ---
 
@@ -404,7 +404,7 @@ Full spec: [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) §0
 
 **Freeze:** новый канон (C18+, новые docs) — **пауза**. Достаточно архитектуры на месяцы; нужно **столкновение с кодом**.
 
-**Главный результат сессии:** измеримый критерий успеха — [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md). Актив продукта = **PIM**. Не C10–C17 по отдельности.
+**Главный результат сессии:** измеримый критерий успеха — [TODAYFLOW_PRODUCT_CANON_UNIFIED.md §6](../TODAYFLOW_PRODUCT_CANON_UNIFIED.md#6-критерий-успеха-north-star). Актив продукта = **PIM**. Не C10–C17 по отдельности.
 
 ### Gate 1 — открыть PR1: PIM-мышление, не Today-мышление
 

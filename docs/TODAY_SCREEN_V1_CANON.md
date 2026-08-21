@@ -1,10 +1,15 @@
 # Today Screen v1 — сценарий экрана (канон)
 
-**Статус:** `ACCEPTED` — источник истины для experience layer Today v1.  
+**Status:** EXPERIENCE / HISTORY — **не semantic SoT** · **2026-08-21**  
+**Meaning SoT:** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).  
+**Product cycle:** [TODAY_PRODUCT_FLOW_V1](./today/TODAY_PRODUCT_FLOW_V1.md) — `today` · `ritual` · `my_day` · `evening`.  
+Этот файл — **experience / history** (ритуал, goal loop, S0–S10). Не читать как канон смысла дня и не как карту живых экранов.
+
+**Статус (experience):** `ACCEPTED` как исторический слой Today v1.  
 **Версия:** 4.2 (2026-07-02) — **Day Story + Ritual Gates + continuous dialogue**  
 **Владелец:** Product (sign-off) + Engineering (паритет web / iOS / Android)
 
-**Это не:** Figma, wireframe, CSS.  
+**Это не:** Figma, wireframe, CSS, semantic SoT.  
 **Это:** пошаговый сценарий Today + ссылки на **продуктовую модель** ([HUMAN_DECISION_MODEL_V1.md](./HUMAN_DECISION_MODEL_V1.md)).
 
 **Слои (стек TodayFlow):**
@@ -34,7 +39,7 @@
 
 **Legacy path:** S0–S10 phase FSM — `?experience=1` · PR2 Goal Loop gate · см. §5–6 ниже.
 
-**North star:** [PIM_PRODUCT_NORTH_STAR.md](archive/PIM_PRODUCT_NORTH_STAR.md) — §0.2 **usefulness → retention → data** · §1 Platform (Learning Δ).
+**North star:** [TODAYFLOW_PRODUCT_CANON_UNIFIED.md §6](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md#6-критерий-успеха-north-star) — **usefulness → retention → data** · Learning Δ.
 
 **Дневной цикл (experience spine):**
 

@@ -1,12 +1,16 @@
 # DayContext v0 — спецификация
 
-**Статус:** черновик контракта (`day_context_v0`), согласован с [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) и текущим бэкендом `POST /today/narrative`.  
+**Status:** INPUT / ASSEMBLY CONTRACT — **не semantic SoT** · **2026-08-21**  
+**Meaning SoT:** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).  
+Этот файл — входной/сборочный контракт (`day_context_v0`). Не читать как канон смысла дня.
+
+**Статус (contract):** черновик контракта (`day_context_v0`), согласован с [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) и текущим бэкендом `POST /today/narrative`.  
 **Машиночитаемая схема:** [docs/schemas/day_context_v0.schema.json](./schemas/day_context_v0.schema.json).  
 **CI:** job `day-context-schema` → `scripts/validate_day_context_contract.py`.
 
 ## Назначение
 
-`DayContext` — один логический пакет фактов и сжатых интерпретаций для **дня** (`target_date`), из которого собираются промпты narrative, объяснимость UI и (далее) события обучения. Целевой **смысловой** слой дня — **DayModel** (см. [DAY_ENGINE_AND_COHERENCE.md §10](./DAY_ENGINE_AND_COHERENCE.md#10-daymodel-и-decision-engine-закрытый-канон)); DayContext — вход в его расчёт, а не замена. v0 **не меняет** форму ответа `today_day_v1` и payload surfaces; это входной/промежуточный контракт для сборщика (**DE-2** — встроен в `build_today_narrative`, см. ниже).
+`DayContext` — один логический пакет фактов и сжатых интерпретаций для **дня** (`target_date`), из которого собираются промпты narrative, объяснимость UI и (далее) события обучения. Целевой **смысловой** слой дня — [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md); **DayModel** (см. [DAY_ENGINE_AND_COHERENCE.md §10](./DAY_ENGINE_AND_COHERENCE.md#10-daymodel-и-decision-engine-закрытый-канон)) — слой сборки, не Meaning SoT. DayContext — вход в расчёт, а не замена. v0 **не меняет** форму ответа `today_day_v1` и payload surfaces; это входной/промежуточный контракт для сборщика (**DE-2** — встроен в `build_today_narrative`, см. ниже).
 
 ## Корень объекта
 

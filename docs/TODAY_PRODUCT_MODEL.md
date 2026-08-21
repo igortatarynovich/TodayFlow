@@ -1,6 +1,11 @@
 # Today — продуктовая модель
 
-**Статус:** принято (воронка / Theme→Action→Progress). **Дневной ScreenFlow** — не здесь: [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY · RITUAL · MY DAY · EVENING).  
+**Status:** EXPERIENCE / HISTORY — **не semantic SoT** · **2026-08-21**  
+**Meaning SoT:** [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).  
+**Product cycle:** [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — `today` · `ritual` · `my_day` · `evening`.  
+Этот файл — **experience / history** (воронка Theme→Action→Progress). Не читать как канон смысла дня.
+
+**Статус (experience):** принято (воронка / Theme→Action→Progress). **Дневной ScreenFlow** — не здесь: FLOW_V1.  
 **Версия:** 1.1 (2026-06-01).  
 **Владелец:** Product + Engineering.
 

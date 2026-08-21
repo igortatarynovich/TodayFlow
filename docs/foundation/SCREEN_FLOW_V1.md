@@ -1,10 +1,13 @@
 # SCREEN_FLOW_V1
 
-**Статус:** ACTIVE  
+**Статус:** ACTIVE — **pager mechanics only**  
 **Версия:** 1.0 (2026-07-30)  
 **Контракт:** Discrete product steps via transform — **viewport lock** + **swipe** + **keyboard** + **a11y**
 
-Канон для полноэкранного (one-act-at-a-time) продуктового потока шагов — **Today ScreenFlow**. **Product cycle (LOCKED):** [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md) — **TODAY → RITUAL → MY DAY → EVENING**. Pager mechanics живут здесь; jobs экрана — там.
+**Не product map.** Карта живых экранов — только [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md) — `today` · `ritual` · `my_day` · `evening`.  
+[TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md) — **не authority**; historical six-block map.
+
+Канон полноэкранного (one-act-at-a-time) pager — **Today ScreenFlow**. Pager mechanics живут здесь; jobs экрана — в FLOW_V1.
 
 **Визуальный родитель:** [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) — surface/motion/radius/gap.
 
