@@ -8,7 +8,7 @@
 
 This file records what the ledger already contains. It does **not** rewrite `object.function`, set `active`, invent T1–T4, ingest claims, or open a new bibliography.
 
-**NOW (1.3.78):** Planet Canon grammar locked. Next ≠ this dashboard. Next = 1.3.79 fill. Do not score CORE from these KPIs. Do not rewrite objects from this file.
+**NOW (1.3.79):** Planet Canon V1 locked. Next ≠ this dashboard. Next = schema pass. Do not score CORE from these KPIs. Do not rewrite objects from this file.
 
 ---
 

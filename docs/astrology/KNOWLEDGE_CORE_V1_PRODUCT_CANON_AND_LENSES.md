@@ -171,12 +171,13 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Unlock Co–Star in-app scraping
 - Require 2/3 literal-word overlap
 
-**Next named (one task):** **1.3.79** fill ten planet packs from 1.3.77 using the 1.3.78 grammar. No literature. No schema. Still no object rewrite until fill is locked.
+**Next named (one task):** Planet Canon V1 locked (1.3.79). Next = schema mapping of the six slots. Still no object rewrite until that pass.
 
 ---
 
 ## Changelog
 
-- **1.2 (2026-08-21)** — 1.3.78 Planet Canon grammar. Six slots. tempo out. needs ≠ drive. Next = 1.3.79 fill, not schema.
+- **1.3 (2026-08-21)** — 1.3.79 Planet Canon V1 locked with direct/derived provenance.
+- **1.2 (2026-08-21)** — 1.3.78 Planet Canon grammar. Six slots. tempo out. needs ≠ drive. Next = 1.3.79 fill, not schema. **Done 1.3.79.**
 - **1.1 (2026-08-21)** — 1.3.77 planet map. Astrology.com locked as panel #3. Concept families, not 2/3 word vote. Territory table first-term order updated. Next = Canon shape, not JSON. **Done 1.3.78.**
 - **1.0 (2026-08-21)** — Product Canon vs Lenses locked. Mainstream operational definition. Planet territory = working draft. Co–Star = recognition check. CORE not a gate. No objects.

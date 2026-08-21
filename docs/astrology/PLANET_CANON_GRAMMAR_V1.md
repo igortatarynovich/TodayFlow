@@ -261,10 +261,11 @@ Dry-run check: each pack has a verb, an aim, a condition of health, two branches
 - Signs / houses / aspects / ASC
 - Books · CORE · Co–Star ingest
 
-**Next named (one task):** **1.3.79** fill all ten planet packs from locked 1.3.77 using this grammar. No new literature. Still no schema until a later named storage pass.
+**Next named (one task):** Planet Canon V1 **locked 1.3.79** ([PLANET_CANON_V1.md](./PLANET_CANON_V1.md)). Dry-run above is **not** the fill. Next = schema pass, then Signs.
 
 ---
 
 ## Changelog
 
+- **1.1 (2026-08-21)** — 1.3.79 fill locked in PLANET_CANON_V1.md. Dry-run remains illustrative only.
 - **1.0 (2026-08-21)** — 1.3.78. Six Canon slots. `tempo` → Foundation/runtime. `needs` ≠ `drive`. Dry-run only. Grammar before schema.

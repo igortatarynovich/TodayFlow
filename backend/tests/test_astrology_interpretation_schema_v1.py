@@ -2615,7 +2615,6 @@ def test_planet_canon_grammar_v1():
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.78" in canon
     assert "### 6.32 Planet Canon grammar" in canon
     grammar = (ROOT / "docs" / "astrology" / "PLANET_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
@@ -2636,7 +2635,36 @@ def test_planet_canon_grammar_v1():
     assert "1.3.78" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
-    assert "1.3.79 fill" in next_block or "1.3.79" in next_block
+
+
+def test_planet_canon_v1_fill_with_provenance():
+    """1.3.79: Planet Canon V1 packs + direct/derived. No ingest. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.79" in canon
+    assert "### 6.33 Planet Canon V1" in canon
+    packs = (ROOT / "docs" / "astrology" / "PLANET_CANON_V1.md").read_text(encoding="utf-8")
+    assert "direct" in packs
+    assert "derived" in packs
+    assert "direct-secondary" in packs
+    assert "achievement" in packs
+    assert "coercive-control" in packs
+    assert "openness-to-opportunity" in packs
+    assert "appeasement" in packs
+    assert "dogmatism" in packs
+    assert "containment" in packs
+    assert "### Sun" in packs
+    assert "### Pluto" in packs
+    assert "Sun ↔ Mars" in packs
+    assert "Saturn ↔ Pluto" in packs
+    assert "schema pass" in packs.lower()
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.79" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "schema pass" in next_block.lower()
 
 
 

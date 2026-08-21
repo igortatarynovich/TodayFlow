@@ -228,7 +228,7 @@ Schema today still has `function` · `themes` · `positive_expression` · `shado
 - Dumping §3 into JSON
 - A 2/3 word spreadsheet
 
-**Next named:** Planet Canon grammar **done 1.3.78**. Fill = **1.3.79** from this map. No new literature.
+**Next named:** Planet Canon V1 **locked 1.3.79**. Schema next. No new literature.
 
 ---
 

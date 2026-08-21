@@ -10,6 +10,7 @@
 | [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) | **1.3.76 split:** Mainstream → TodayFlow Canon → runtime. Research corpus → Lenses. CORE not a gate. Not ingest |
 | [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) | **1.3.77 planet map:** territory + include/secondary/exclude. Not Canon. Not JSON |
 | [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md) | **1.3.78 grammar:** six engine slots. tempo = Foundation. Dry-run ≠ fill |
+| [PLANET_CANON_V1.md](./PLANET_CANON_V1.md) | **1.3.79 Planet Canon:** ten packs + direct/derived. Not schema |
 | [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) | TodayFlow Canon structuring. Mainstream V1 / Canon / Lenses. Runtime: atoms → composition → LLM formulates |
 | [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) | Co–Star teardown Phase 0. **Recognition check** on Mainstream rows. Not IL ingest. Not the product-meaning source |
 | [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md) | Outer Planet Draft Representation (1.3.72). Meaning keys optional on IL-1 draft outers. Fill waits for Canon. Not ingest, not objects |
