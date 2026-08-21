@@ -2853,6 +2853,59 @@ def test_planet_canon_sun_saturn_fill():
     assert "Signs Mainstream" in next_block or "start Signs" in next_block
 
 
+def test_mainstream_sign_semantic_map_v1():
+    """1.3.83: Mainstream sign map. Concept families. No ingest. No objects. No manner."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "### 6.37 Mainstream Sign Semantic Map" in canon
+    assert "**Версия:** 1.3.83" in canon
+    sign_map = (
+        ROOT / "docs" / "astrology" / "MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md"
+    ).read_text(encoding="utf-8")
+    assert "Astrology.com" in sign_map
+    assert "Astrodienst" in sign_map
+    assert "Cafe Astrology" in sign_map
+    assert "concept family" in sign_map.lower() or "concept families" in sign_map.lower()
+    assert "earth" in sign_map.lower() and "practical" in sign_map.lower()
+    assert "cardinal" in sign_map.lower() and "initiating" in sign_map.lower()
+    assert "trait ≠ manner" in sign_map.lower() or "Trait ≠ manner" in sign_map
+    assert "ambition · discipline · endurance" in sign_map
+    assert "initiative · energy · courage" in sign_map
+    assert "Not JSON" in sign_map or "not JSON" in sign_map
+    assert "manner operator" in sign_map.lower() or "manner" in sign_map.lower()
+    for sign in (
+        "Aries",
+        "Taurus",
+        "Gemini",
+        "Cancer",
+        "Leo",
+        "Virgo",
+        "Libra",
+        "Scorpio",
+        "Sagittarius",
+        "Capricorn",
+        "Aquarius",
+        "Pisces",
+    ):
+        assert f"### {sign}" in sign_map
+        assert "**Include**" in sign_map
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    cap = by_id["astro.sign.capricorn"]
+    assert "canon" not in cap
+    assert cap["mode"] == "cardinal"
+    assert cap["element"] == "earth"
+    assert cap["orientation"] == "negative"
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.83" in next_block
+    assert "1.3.84" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "Sign Canon Grammar" in next_block or "Sign Canon grammar" in next_block
+
+
+
 
 
 

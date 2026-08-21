@@ -55,7 +55,7 @@ A family is *not* mainstream if:
 
 **Panel (locked 1.3.77):** Astrodienst · Cafe Astrology · **Astrology.com**.
 
-Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md).
+Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Sign map: [MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md).
 
 ---
 
@@ -171,12 +171,13 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Unlock Co–Star in-app scraping
 - Require 2/3 literal-word overlap
 
-**Next named (one task):** smoke-test locked (1.3.82). Next = Signs Mainstream map as territory for Sign Canon grammar. Do not rewrite `function`.
+**Next named (one task):** smoke-test locked (1.3.82). Sign map locked (1.3.83). Next = Sign Canon grammar. Do not rewrite `function`.
 
 ---
 
 ## Changelog
 
+- **1.4 (2026-08-21)** — 1.3.83 sign map. Same panel. Classification is not proof. Trait ≠ manner named, not split. Next = Sign Canon grammar, not fill.
 - **1.3 (2026-08-21)** — 1.3.79 Planet Canon V1 locked with direct/derived provenance.
 - **1.2 (2026-08-21)** — 1.3.78 Planet Canon grammar. Six slots. tempo out. needs ≠ drive. Next = 1.3.79 fill, not schema. **Done 1.3.79.**
 - **1.1 (2026-08-21)** — 1.3.77 planet map. Astrology.com locked as panel #3. Concept families, not 2/3 word vote. Territory table first-term order updated. Next = Canon shape, not JSON. **Done 1.3.78.**

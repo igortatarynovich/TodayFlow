@@ -52,7 +52,7 @@ Seven celestial_object drafts. Zero outer objects. Signs / houses / aspects have
 - Signs Mainstream map
 - IL-2 engine
 
-**Next named:** **1.3.82 composition smoke-test** — **done.** Next = Signs Mainstream map as territory for Sign Canon grammar, not QUALITY fill.
+**Next named:** **1.3.82 composition smoke-test** — **done.** Sign map — **done 1.3.83.** Next = Sign Canon grammar, not QUALITY fill.
 
 ---
 

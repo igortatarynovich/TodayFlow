@@ -231,7 +231,7 @@ No FAIL row. No silent repair.
 - Sign/house object edits · pair catalog rows  
 - Inventing `earth → practical` to flip PARTIAL to PASS  
 
-**Next named:** Signs Mainstream Semantic Map as **territory for Sign Canon grammar** (not portraits, not Lilly QUALITY). House Canon is a later named gap. Do not scale the same six-slot model onto signs until that grammar exists.
+**Next named:** Signs Mainstream Semantic Map — **done 1.3.83** ([MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md)). Next = Sign Canon Grammar (which atoms PlanetInSign needs). House Canon later. Do not fill signs from Lilly QUALITY.
 
 ---
 
