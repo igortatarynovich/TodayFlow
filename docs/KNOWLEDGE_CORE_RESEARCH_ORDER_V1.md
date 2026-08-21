@@ -1,7 +1,7 @@
 # Knowledge Core research order v1
 
 **Статус:** ACCEPTED (порядок работы для семантических ядер).  
-**Версия:** 1.1 (2026-08-17).  
+**Версия:** 1.4 (2026-08-21).  
 **Владелец:** Product + Research.  
 **Не является:** Meaning SoT дня · IL lookup · Machine Contract · KASP (сбор данных пользователя).
 
@@ -12,7 +12,7 @@
 ## Architecture impact
 
 - **SoT before:** корпус и ingest начинались от доступных авторов и открытых страниц. IL-1 хорошо зафиксировал provenance/claims, но слишком рано превратил Greene и Hand из сильных кандидатов в обязательные источники. Архитектура исследования частично зависела от доступности двух книг.
-- **SoT after:** семантическое ядро проектируется **до** выбора литературы. Источники подбираются под модель, а не модель под первого доступного автора. Порядок ниже — стандарт для любого следующего ядра (астрология CORE, нумерология, психология, практики, медицина и прочие системы знаний).
+- **SoT after:** семантическое ядро проектируется **до** выбора литературы. Для астрологии IL продуктовый смысл с **1.3.76** = Mainstream convention → TodayFlow Canon. Исторический корпус = lenses, не arbiter. CORE не gate. Co–Star = recognition check. Источники подбираются под модель, а не модель под первого доступного автора. Порядок ниже — стандарт для любого следующего ядра (астрология, нумерология, психология, практики, медицина и прочие системы знаний).
 - **Public contract changed?** no
 - **Migration required?** no — IL-1 claims / `object.function` / evidence tiers не переписываются этим документом
 - **Canon updated?** yes — этот файл; IL §6.9 указывает сюда как на parent; трекер
@@ -100,10 +100,11 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 | Домен | Чем держится «ядро» |
 |-------|---------------------|
-| Астрология (IL) | межшкольная конвергенция по **одному lemma** (`core` / `supported` / `school_specific`). Два классика ≠ CORE. Watters+Hand оба `professional` ≠ две школы |
+| Астрология (IL **продуктовый смысл**) | **Mainstream V1 → TodayFlow Canon** (1.3.76): contemporary convention from a bounded modern panel, then our structuring. Не intersection школ. Не Google. Не 491-claim vote. |
+| Астрология (IL **research / lenses**) | Existing corpus as interpretive lenses. `evidence_tier=core` = optional cross-tradition metadata. Это **не** product gate. |
 | Психология, медицина, клинические утверждения о теле/поведении | **иерархия доказательности** задаётся заранее (шаг 6–8): исследование / консенсус / учебник / школа / anecdote. Межшкольная конвергенция астрологии **не** заменяет эту иерархию и не повышает клинический вес |
 
-Если домен смешанный (psychological astrology, «healing» в астрологическом тексте): астрологический lemma остаётся school-convergence; медицинское/клиническое утверждение либо вне ядра (ledger-only, как IL body rows), либо проходит свою иерархию. Не усреднять.
+Если домен смешанный (psychological astrology, «healing» в астрологическом тексте): астрологический lemma идёт в Canon + school range; медицинское/клиническое утверждение либо вне ядра (ledger-only, как IL body rows), либо проходит свою иерархию. Не усреднять.
 
 ---
 
@@ -120,7 +121,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 **Layer 2 Signs closed 1.3.69** as classification-complete / interpretation-deferred. Definition through shortlist (§6.13–§6.17) · Houlding ontology (§6.18 / 1.3.64) · Cell C `ACCESS_BLOCKED` (§6.19 / 1.3.65) · Pulse Part One (§6.20 / 1.3.66) · later-interpretive optional (§6.21 / 1.3.67) · Lilly classification drafts (§6.22 / 1.3.68) · close-out (§6.23 / 1.3.69). Шаг 10 (ingest) readable start-set **done** — не продолжать с шага 10 для Layer 2 literature.
 
-**IL V1 literature freeze (1.3.71):** no new literature research until [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) is owner-approved. Layer 1 Outers definition (1.3.70) is a completed model slice, not the next book. ASC/MC remain `NEED_MODEL`. Houses/aspects already have classical draft objects. Для любого **нового** ядра вне IL V1: шаги 1–9 обязательны до первого ingest.
+**IL V1 literature freeze (1.3.71, owner-approved):** new **books** only against a named row in [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md). **1.3.76:** Product Canon vs Lenses — [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Next IL = Mainstream V1 planet map from a bounded modern panel (not a book, not object rewrite). ASC/MC remain `NEED_MODEL` until that map. Houses/aspects stay `DRAFT_CLASSICAL` until Mainstream reaches them. Для любого **нового** ядра вне IL V1: шаги 1–9 обязательны до первого ingest.
 
 ---
 
@@ -130,10 +131,11 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - Строить архитектуру исследования вокруг доступности 1–2 книг.
 - Охотиться за 20-м источником пустого слота, когда ≥3 dedicated loci уже найдены и все закрыты по доступу (`ACCESS_BLOCKED`).
 - Читать новый источник к уже извлечённым категориям другого автора.
-- Объявлять CORE / product meaning, пока не определены составляющие и не виден ландшафт, а не только shortlist.
+- Объявлять CORE как product meaning. Для астрологии IL продукт = TodayFlow Canon (1.3.73), не intersection. Не объявлять Canon, пока нет representative field и owner lock.
 - Копировать астрологический `core` = school intersection в психологию или медицину.
 - Открывать параллельный «research v2» без указателя сюда.
 - Начинать новый IL literature/ingest pass, пока V1 Semantic Inventory не утверждён владельцем.
+- Менять архитектуру Interpretation Library, пока не зафиксировано разделение Product Canon / Lenses (IL 1.3.76). После фиксации — не открывать книги; следующий проход = Mainstream panel, не объект.
 
 ---
 
@@ -166,4 +168,9 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - **1.1 note (2026-08-21)** — IL-1.3.68: twelve `type=sign` drafts from Lilly CA I.16 classification. Later-interpretive omitted. Collisions remain claims. Nothing active. Do not CORE.
 - **1.1 note (2026-08-21)** — IL-1.3.69: Layer 2 Signs close-out. Classification-complete / interpretation-deferred. No ingest. Cell C is a future evidence dependency, not a Layer 2 blocker. Do not reopen sign literature.
 - **1.1 note (2026-08-21)** — IL-1.3.70: Layer 1 Outers definition/readiness (parent steps 1–4). No ingest. No objects. Outer `function` ≠ classical elemental `function`. Do not assemble Uranus from Hand. Next named = scoped optional-on-draft or keep withheld.
-- **1.1 note (2026-08-21)** — IL-1.3.71: Knowledge Core V1 Semantic Inventory. Literature freeze until owner approval. No Uranus / ASC / Mars / Layer 5 / new book. Inventory is the limiter; parent sequence unchanged.
+- **1.1 note (2026-08-21)** — IL-1.3.71: Knowledge Core V1 Semantic Inventory. Owner-approved freeze map. Literature only against a named `KC-*` row. IL-1 done criterion = minimum controlled primitives, not bibliography.
+- **1.1 note (2026-08-21)** — IL-1.3.72: Outer Planet Draft Representation. Meaning keys optional on IL-1 draft outers. Sun–Saturn unchanged. No objects. Fill waits for Canon (1.3.73).
+- **1.2 (2026-08-21)** — IL-1.3.73: TodayFlow Canon. Astrology product meaning is no longer school-intersection. §4 split: Canon vs research `core`.
+- **1.2 note (2026-08-21)** — IL-1.3.74: Evidence Corpus / Semantic Consensus / TodayFlow Canon. 491 claims stay. Next = short corpus pass, not a research cycle.
+- **1.3 (2026-08-21)** — IL-1.3.75: reverse-engineer Co–Star before another IL architecture or Canon-scoring pass. Phase 0 teardown in. IL frozen.
+- **1.4 (2026-08-21)** — IL-1.3.76: Product Canon vs Lenses. Mainstream convention is product meaning. Research corpus is lenses. CORE not a gate. Next = Mainstream planet map, not books.

@@ -86,4 +86,4 @@ Those are **other named passes**. They are not Layer 2 incompleteness.
 
 ## Next
 
-Do **not** start another Layer 2 ingest. The next Knowledge Core slice, when named, follows the parent order from step 1 if it is a new semantic core. Houses and aspects already have classical drafts. Do not reopen sign literature to look complete.
+Do **not** start another Layer 2 ingest. The next Knowledge Core slice is **not** more sign literature. Inventory APPROVED. TodayFlow Canon 1.3.73 is in; next named = Sun–Pluto claim audit (existing ledger), not outer CORE fill.

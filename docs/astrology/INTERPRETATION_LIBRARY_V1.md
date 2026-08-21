@@ -1,18 +1,18 @@
 # Interpretation Library v1 — ontology / schema
 
 **Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (36 draft objects: classical seven · 12 signs classification-only · 12 houses · 5 major aspects; Uranus Hand-1981 + Rudhyar NMNM + Tarnas intro *claims* without object; Neptune Hand-1981 + Rudhyar NMNM + Tarnas intro *claims* without object; Pluto Hand-1981 + Rudhyar NMNM + Greene/Campion interview *claims* without object; nothing `active`).  
-**Версия:** 1.3.71 (2026-08-21).  
-**Методология:** слои / evidence tiers / provenance **LOCKED** до закрытия IL-1. Parent research order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — модель знания **до** литературы. **1.3.29** school-first остаётся для opportunistic extract уже названных loci. **1.3.30** запрещает строить следующее ядро / CORE от первого доступного автора. **1.3.45** remaining planet budget = empty psychological slots (Pluto→Uranus→Neptune→Venus→Mars). **1.3.46** Uranus psychological filled (Tarnas official intro). **1.3.47** Neptune psychological filled (same Tarnas PDF, Neptune section, after field check). **1.3.48** Venus psychological filled (Sullivan official-site *Venus and Jupiter* excerpt). **1.3.49** Mars psychological field re-checked, still empty. **1.3.50** Sun psychological densified (Greene Apollon Issue 1 / astro.com in_sungod). **1.3.51** Moon psychological field re-checked, still only Luminaries preview. **1.3.52** Mercury psychological field re-checked, still only Inner Planets Hermes. **1.3.53** Saturn psychological densified (Tarnas official intro senex section). **1.3.54** Mars psychological field re-checked, still empty. **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 identified unread (NEED_OWNER). **1.3.56** Huber *The Planets* Mars chapter identified unread (NEED_OWNER). **1.3.57** `ACCESS_BLOCKED(semantic slot)` — Psychological Mars. **1.3.58** live Sun→Pluto recount (1.3.44 dashboard retired). **1.3.59** planet research-stable; opportunistic/access-driven; Layer 2 definition pass started (no bibliography). **1.3.60** Layer 2 schools + source types (parent steps 5–6); literature map still waits. **1.3.61** Layer 2 literature map (parent step 7); no ingest. **1.3.62** Layer 2 selection criteria (parent step 8); no shortlist, no ingest. **1.3.63** Layer 2 shortlist (parent step 9); no ingest. **1.3.64** Houlding triplicity ontology extract (parent step 10); no sign objects. **1.3.65** Layer 2 psychological later-interpretive `ACCESS_BLOCKED` (Cell C). **1.3.66** Rudhyar *Pulse of Life* Part One extract (humanistic; no sign objects). **1.3.67** later-interpretive slots optional on IL-1 draft `type=sign` (still unattested; no objects that pass). **1.3.68** twelve Lilly classification-only `type=sign` drafts. **1.3.69** Layer 2 classification-complete / interpretation-deferred (close-out audit; no ingest). **1.3.70** Layer 1 outers definition/readiness (parent steps 1–4; no ingest, no objects). **1.3.71** Knowledge Core V1 Semantic Inventory — literature freeze until owner approval; no Uranus / ASC / Mars / Layer 5 / new book. `source_class=humanistic` с 1.3.29. Дальше — только баги модели, пока карта не утверждена.  
+**Версия:** 1.3.76 (2026-08-21).  
+**Методология:** слои / evidence tiers / provenance **LOCKED** до закрытия IL-1. Parent research order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — модель знания **до** литературы. **1.3.29** school-first остаётся для opportunistic extract уже названных loci. **1.3.30** запрещает строить следующее ядро / CORE от первого доступного автора. **1.3.45** remaining planet budget = empty psychological slots (Pluto→Uranus→Neptune→Venus→Mars). **1.3.46** Uranus psychological filled (Tarnas official intro). **1.3.47** Neptune psychological filled (same Tarnas PDF, Neptune section, after field check). **1.3.48** Venus psychological filled (Sullivan official-site *Venus and Jupiter* excerpt). **1.3.49** Mars psychological field re-checked, still empty. **1.3.50** Sun psychological densified (Greene Apollon Issue 1 / astro.com in_sungod). **1.3.51** Moon psychological field re-checked, still only Luminaries preview. **1.3.52** Mercury psychological field re-checked, still only Inner Planets Hermes. **1.3.53** Saturn psychological densified (Tarnas official intro senex section). **1.3.54** Mars psychological field re-checked, still empty. **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 identified unread (NEED_OWNER). **1.3.56** Huber *The Planets* Mars chapter identified unread (NEED_OWNER). **1.3.57** `ACCESS_BLOCKED(semantic slot)` — Psychological Mars. **1.3.58** live Sun→Pluto recount (1.3.44 dashboard retired). **1.3.59** planet research-stable; opportunistic/access-driven; Layer 2 definition pass started (no bibliography). **1.3.60** Layer 2 schools + source types (parent steps 5–6); literature map still waits. **1.3.61** Layer 2 literature map (parent step 7); no ingest. **1.3.62** Layer 2 selection criteria (parent step 8); no shortlist, no ingest. **1.3.63** Layer 2 shortlist (parent step 9); no ingest. **1.3.64** Houlding triplicity ontology extract (parent step 10); no sign objects. **1.3.65** Layer 2 psychological later-interpretive `ACCESS_BLOCKED` (Cell C). **1.3.66** Rudhyar *Pulse of Life* Part One extract (humanistic; no sign objects). **1.3.67** later-interpretive slots optional on IL-1 draft `type=sign` (still unattested; no objects that pass). **1.3.68** twelve Lilly classification-only `type=sign` drafts. **1.3.69** Layer 2 classification-complete / interpretation-deferred (close-out audit; no ingest). **1.3.70** Layer 1 outers definition/readiness (parent steps 1–4; no ingest, no objects). **1.3.71** Knowledge Core V1 Semantic Inventory — literature freeze; owner-approved 2026-08-21. **1.3.73** TodayFlow Canon — semantic selection. CORE demoted from product gate. **1.3.74** three layers: Evidence Corpus · Semantic Consensus · TodayFlow Canon. **1.3.75** IL architecture frozen pending Co–Star teardown. **1.3.76** Product Canon vs Lenses. `source_class=humanistic` с 1.3.29. Дальше — Mainstream planet map, не книги.  
 **Владелец:** Product + Research.  
 **Данные:** `DATA/reference/astrology/interpretation_v1/` — corpus · `claims/` · `objects_v1.json` (draft).  
-**Handoff (next agent):** [IL1_HANDOFF.md](./IL1_HANDOFF.md) — freeze: [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) awaiting owner approval; не продолжать ingest.  
-**Gap audit (live 1.3.58 recount):** [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md) — 1.3.24/1.3.44 snapshots retired. Owner queue **1.3.25** superseded for *discovery* by **1.3.29**. NEED_OWNER-blocks-locus **1.3.26** still holds for named closed pages. Hand Ch.4 Sun unread **1.3.27**. Corpus QA snapshot **1.3.28** — [IL1_CORPUS_QA.md](./IL1_CORPUS_QA.md). **1.3.29** reopens source discovery (school-first). **1.3.30** parent: knowledge-core research order. **1.3.31** Rudhyar Mars humanistic. **1.3.32** Rudhyar Uranus humanistic. **1.3.33** Rudhyar Neptune humanistic. **1.3.34** Rudhyar Pluto humanistic. **1.3.35** Rudhyar Sun humanistic. **1.3.36** Rudhyar Moon humanistic. **1.3.37** Rudhyar Mercury humanistic. **1.3.38** Greene *By Jove!* Psychology of Jupiter extract (psychological). **1.3.39** Rudhyar Saturn humanistic. **1.3.40** Rudhyar Jupiter humanistic. **1.3.41** Venus psychological discovery (no ingest). **1.3.42** Mars psychological discovery (no ingest). **1.3.43** Uranus psychological discovery (no ingest). **1.3.44** Neptune psychological discovery (no ingest). **1.3.45** psych-budget lock + Pluto psychological ingest (Greene/Campion interview; object withheld). **1.3.46** Uranus psychological ingest (Tarnas official intro; object withheld). **1.3.47** Neptune psychological ingest (Tarnas official intro Neptune section; object withheld). **1.3.48** Venus psychological ingest (Sullivan official-site *Venus and Jupiter* excerpt; `function` unchanged). **1.3.49** Mars psychological discovery (no ingest; p.138 still NEED_OWNER). **1.3.50** Sun psychological densification (Greene Apollon Issue 1; Apollo's Chariot still NEED_OWNER). **1.3.51** Moon psychological densification (no ingest; Costello still NEED_OWNER). **1.3.52** Mercury psychological densification (no ingest; Inner Planets Hermes already ingested). **1.3.53** Saturn psychological densification (Tarnas official intro Saturn/senex; Greene Introduction not re-ingested). **1.3.54** Mars psychological densification (no ingest; p.138 still NEED_OWNER). **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 cataloged unread (NEED_OWNER; not ingested). **1.3.56** Huber *The Planets and Their Psychological Meaning* Mars chapter cataloged unread (NEED_OWNER; not ingested). **1.3.57** Psychological Mars `ACCESS_BLOCKED` (three dedicated loci, 0 readable bodies, 0 claims). **1.3.58** live Sun→Pluto recount; 1.3.44 dashboard retired. **1.3.59** planet research-stable (opportunistic extract only); Layer 2 definition pass started. **1.3.60** Layer 2 schools + source types (no literature map, no ingest). **1.3.61** Layer 2 Signs literature map (no ingest). **1.3.62** Layer 2 selection criteria (no shortlist, no ingest). **1.3.63** Layer 2 shortlist (no ingest). **1.3.64** Houlding triplicity ontology extract (no sign objects). **1.3.65** Cell C `ACCESS_BLOCKED`. **1.3.66** Pulse Part One extract (humanistic). **1.3.67** later-interpretive optional on IL-1 draft `type=sign`. **1.3.68** Lilly classification-only sign drafts. **1.3.69** Layer 2 classification-complete / interpretation-deferred. **1.3.70** Layer 1 outers definition/readiness. **1.3.71** V1 Semantic Inventory (literature freeze). CORE still unscored.  
+**Handoff (next agent):** [IL1_HANDOFF.md](./IL1_HANDOFF.md) — 1.3.76 Product Canon vs Lenses. Next = Mainstream V1 planet map from bounded modern panel. Do not rewrite objects / Outer fill / ASC/MC / books / CORE.  
+**Gap audit (live 1.3.58 recount):** [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md) — 1.3.24/1.3.44 snapshots retired. Owner queue **1.3.25** superseded for *discovery* by **1.3.29**. NEED_OWNER-blocks-locus **1.3.26** still holds for named closed pages. Hand Ch.4 Sun unread **1.3.27**. Corpus QA snapshot **1.3.28** — [IL1_CORPUS_QA.md](./IL1_CORPUS_QA.md). **1.3.29** reopens source discovery (school-first). **1.3.30** parent: knowledge-core research order. **1.3.31** Rudhyar Mars humanistic. **1.3.32** Rudhyar Uranus humanistic. **1.3.33** Rudhyar Neptune humanistic. **1.3.34** Rudhyar Pluto humanistic. **1.3.35** Rudhyar Sun humanistic. **1.3.36** Rudhyar Moon humanistic. **1.3.37** Rudhyar Mercury humanistic. **1.3.38** Greene *By Jove!* Psychology of Jupiter extract (psychological). **1.3.39** Rudhyar Saturn humanistic. **1.3.40** Rudhyar Jupiter humanistic. **1.3.41** Venus psychological discovery (no ingest). **1.3.42** Mars psychological discovery (no ingest). **1.3.43** Uranus psychological discovery (no ingest). **1.3.44** Neptune psychological discovery (no ingest). **1.3.45** psych-budget lock + Pluto psychological ingest (Greene/Campion interview; object withheld). **1.3.46** Uranus psychological ingest (Tarnas official intro; object withheld). **1.3.47** Neptune psychological ingest (Tarnas official intro Neptune section; object withheld). **1.3.48** Venus psychological ingest (Sullivan official-site *Venus and Jupiter* excerpt; `function` unchanged). **1.3.49** Mars psychological discovery (no ingest; p.138 still NEED_OWNER). **1.3.50** Sun psychological densification (Greene Apollon Issue 1; Apollo's Chariot still NEED_OWNER). **1.3.51** Moon psychological densification (no ingest; Costello still NEED_OWNER). **1.3.52** Mercury psychological densification (no ingest; Inner Planets Hermes already ingested). **1.3.53** Saturn psychological densification (Tarnas official intro Saturn/senex; Greene Introduction not re-ingested). **1.3.54** Mars psychological densification (no ingest; p.138 still NEED_OWNER). **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 cataloged unread (NEED_OWNER; not ingested). **1.3.56** Huber *The Planets and Their Psychological Meaning* Mars chapter cataloged unread (NEED_OWNER; not ingested). **1.3.57** Psychological Mars `ACCESS_BLOCKED` (three dedicated loci, 0 readable bodies, 0 claims). **1.3.58** live Sun→Pluto recount; 1.3.44 dashboard retired. **1.3.59** planet research-stable (opportunistic extract only); Layer 2 definition pass started. **1.3.60** Layer 2 schools + source types (no literature map, no ingest). **1.3.61** Layer 2 Signs literature map (no ingest). **1.3.62** Layer 2 selection criteria (no shortlist, no ingest). **1.3.63** Layer 2 shortlist (no ingest). **1.3.64** Houlding triplicity ontology extract (no sign objects). **1.3.65** Cell C `ACCESS_BLOCKED`. **1.3.66** Pulse Part One extract (humanistic). **1.3.67** later-interpretive optional on IL-1 draft `type=sign`. **1.3.68** Lilly classification-only sign drafts. **1.3.69** Layer 2 classification-complete / interpretation-deferred. **1.3.70** Layer 1 outers definition/readiness. **1.3.71** V1 Semantic Inventory (APPROVED freeze map). **1.3.74** three layers (Evidence Corpus / Semantic Consensus / TodayFlow Canon). **1.3.75** IL architecture frozen; Co–Star teardown Phase 0. **1.3.76** Product Canon vs Lenses. CORE still unscored (not a gate).  
 **Схема:** [astrology_interpretation_v1.schema.json](../schemas/astrology_interpretation_v1.schema.json) · claims ledger [astrology_claims_v1.schema.json](../schemas/astrology_claims_v1.schema.json).  
 **Пример формы (не SoT смысла):** [astrology_interpretation_v1.example.json](../schemas/fixtures/astrology_interpretation_v1.example.json).
 
 **Роль:** семантическая база астрологических примитивов (данные, не пользовательский текст). Для **Today** это шаг 2 pipeline ([TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный Meaning SoT дня**): «Astrology Interpretation Canon (lookup)». Не второй канон дня. Тот же lookup читают Profile · Compatibility · Tarot-context.
 
-**Публичный язык (не этот файл):** Canon как нормализованное пересечение исторических слоёв + точность NASA/JPL — [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md). IL = методика и lookup. Бренд / лендинг / реклама читают Trust Layer.
+**Публичный язык (не этот файл):** бренд / лендинг / реклама читают [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md). Product meaning = Mainstream → TodayFlow Canon ([KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md)), не пересечение исторических школ.
 
 ---
 
@@ -277,6 +277,60 @@
 - **Canon updated?** yes — this doc §6.24 · changelog 1.3.70 · `docs/astrology/IL1_LAYER1_OUTERS_DEFINITION.md`
 - **Backward compatible?** yes — catalog still 36 draft; outers still withheld; Sun–Saturn `function` untouched
 
+### Architecture impact — 1.3.71 Knowledge Core V1 Semantic Inventory
+
+- **SoT before:** parent order existed, but the next named IL pass was still a layer slice (Signs → Outers). Gap → author → closed book → other author could run without a V1-wide constituent map.
+- **SoT after:** [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) is the V1 limiter. No new literature research / ingest until owner approval. Question is what IL V1 must know, not which book is next. Named NEED_OWNER planet extract remains opportunistic (1.3.59), not discovery.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this doc §6.25 · changelog 1.3.71 · inventory file · parent research order · handoff · tracker
+- **Backward compatible?** yes — catalog / claims / schema unchanged
+
+### Architecture impact — 1.3.72 Outer Planet Draft Representation
+
+- **SoT before:** Layer 1 schema required `function` · `themes` · `positive_expression` · `shadow` · `domains` · `tempo` on every celestial_object, so outer objects stayed withheld (single-school fake or invented natal `domains`). Inventory owner named this schema pass before ASC/MC.
+- **SoT after:** those keys stay in the model and stay unattested as object-slot meaning. They are **optional** on IL-1 draft `astro.object.uranus` / `neptune` / `pluto`. Sun–Saturn requiredness unchanged. School packages stay in the claims ledger. No `packages[]` field. No synthetic collapse (Uranus ≠ change, Neptune ≠ intuition, Pluto ≠ transformation). `domains` and `tempo` omit on a structural draft. No objects this pass (analog 1.3.67). `active` with omitted meaning keys forbidden. Next named = materialize structural drafts if they follow [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md).
+- **Public contract changed?** yes — JSON Schema Layer 1 meaning keys not required on the three outer `object_id`s
+- **Migration required?** no — 0 live outer objects
+- **Canon updated?** yes — this doc §6.26 · changelog 1.3.72 · schema · representation file
+- **Backward compatible?** yes for runtime (nothing `active`). Old Layer-1 validators that required meaning keys on every celestial_object will reject a future structural outer draft
+
+### Architecture impact — 1.3.73 TodayFlow Canon (semantic selection)
+
+- **SoT before:** product meaning waited on CORE = lemma intersection across school classes. Engine: primary theme from `core` ∪ `supported`. `editorial` could not be the sole user-facing basis. Next named pass was materialize outer drafts.
+- **SoT after:** [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) is the product-meaning gate. CORE remains a research characteristic on claims, not permission. Schools = range control. Criteria: prevalence · recognition · distinctiveness · product utility · composability. Synthesis: human field → optional LLM cluster/draft → owner lock. LLM does not decide prevalence. IL-3 (future) reads Canon object slots. Outer schema 1.3.72 stands; filling `function` waits. Next named = Sun–Pluto audit of existing claims, not a book, not CORE scoring.
+- **Public contract changed?** no JSON this pass
+- **Migration required?** no
+- **Canon updated?** yes — this doc §6.6 · §6.7 · §6.27 · changelog 1.3.73 · TODAYFLOW_CANON_V1.md · parent §4
+- **Backward compatible?** yes for runtime. Deprecated as product gate: “do not use until CORE.”
+
+### Architecture impact — 1.3.74 Evidence Corpus / Semantic Consensus / TodayFlow Canon
+
+- **SoT before:** 1.3.73 locked Canon criteria but Corpus, Consensus, and Canon could still be read as one pile. Next could still look like a long research cycle or Outer fill.
+- **SoT after:** three layers are distinct. Existing claims = Evidence Corpus (keep; ~491 planet rows). Consensus = contemporary prevalence scored on the five axes. Canon = owner-locked static atoms, our wording, composition-shaped. Runtime stays calc → atoms → composition → LLM formulates. LLM build-time assistant / runtime expression only. Age and readability are not extra weight. Legal: concept prevalence, not copied prose. Next = **short** corpus-through-method pass, not Outer / ASC / books.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this doc §6.28 · changelog 1.3.74 · [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) §0
+- **Backward compatible?** yes — catalog / claims / schema unchanged
+
+### Architecture impact — 1.3.75 IL architecture frozen pending Co–Star teardown
+
+- **SoT before:** next named IL pass was a short Evidence Corpus → Semantic Consensus → Canon proposal on planet claims. Knowledge Core still optimized as school/literature work. Co–Star was a landing-layout principle and a forbidden IL source.
+- **SoT after:** IL architecture / Canon execution / Outer fill / ASC–MC / literature is frozen. Empirical base = [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md). Calc must be correct; meaning must be consistent, recognizable, useful. Quality criteria = feels-like-me / specific / noticing / share / return. Do not copy Co–Star. Next = teardown Phase 1 (in-app corpus), not a corpus-scoring pass.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this doc §6.29 · changelog 1.3.75 · teardown file · inventory execution order · parent
+- **Backward compatible?** yes — catalog / claims / schema unchanged; “next = short corpus pass” superseded
+
+### Architecture impact — 1.3.76 Product Canon vs Lenses
+
+- **SoT before:** product meaning still waited on school-convergence or a pass over the 491-claim ledger; IL unlock waited on Co–Star in-app Phase 1.
+- **SoT after:** **Mainstream conventions → TodayFlow Canon → runtime.** **Research corpus → Lenses** (education / SEO / deep dives / provenance). CORE is not a gate. Co–Star is a recognition check. No new books. No object rewrite. Next = Mainstream V1 planet map from a bounded modern panel (Astrodienst, Cafe Astrology, one more reference).
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) · this doc §6.30 · changelog 1.3.76
+- **Backward compatible?** yes — catalog / claims / schema unchanged. 491 claims kept as lenses.
+
 ---
 
 ## 0. Зачем останавливать Today-контент
@@ -290,7 +344,7 @@ Pipeline уже назвал дыру: **Astrology Interpretation Canon (lookup)
 
 **Freeze (Today content):** не расширять narrative prompts / formula banks / slot-polish, пока нет IL-3 Engine (темы выбираются до LLM). I0 и product cycle **не** переоткрываются.
 
-**Freeze (методология IL):** не менять слои / evidence tiers / provenance shape до первых ~100 объектов (IL-1). **1.3.29–1.3.30** — исключения: author-first очередь и фиксация ядра от доступных книг. **1.3.45** — remaining planet budget = empty psychological slots. **1.3.57** — `ACCESS_BLOCKED(slot)`. **1.3.59** — planet fill research-stable / opportunistic; Layer 2 definition before bibliography. **1.3.60** — Layer 2 schools + source types before literature map. **1.3.61** — Layer 2 literature map before shortlist/ingest. **1.3.62** — Layer 2 selection criteria before shortlist. **1.3.63** — Layer 2 shortlist before ingest. **1.3.64** — Houlding ontology extract; no sign objects. **1.3.65** — Layer 2 Cell C `ACCESS_BLOCKED`. **1.3.66** — Pulse Part One extract (humanistic). **1.3.67** — later-interpretive optional on IL-1 draft `type=sign`; objects still withheld. **1.3.68** — twelve Lilly classification-only sign drafts; later-interpretive omitted. **1.3.69** — Layer 2 classification-complete / interpretation-deferred; do not reopen sign literature. **1.3.70** — Layer 1 outers definition/readiness; do not assemble Uranus from Hand. Следующее ядро: полный research order. Дальше — только баги модели.
+**Freeze (методология IL):** не менять слои / evidence tiers / provenance shape до первых ~100 объектов (IL-1). **1.3.29–1.3.30** — исключения: author-first очередь и фиксация ядра от доступных книг. **1.3.45** — remaining planet budget = empty psychological slots. **1.3.57** — `ACCESS_BLOCKED(slot)`. **1.3.59** — planet fill research-stable / opportunistic; Layer 2 definition before bibliography. **1.3.60** — Layer 2 schools + source types before literature map. **1.3.61** — Layer 2 literature map before shortlist/ingest. **1.3.62** — Layer 2 selection criteria before shortlist. **1.3.63** — Layer 2 shortlist before ingest. **1.3.64** — Houlding ontology extract; no sign objects. **1.3.65** — Layer 2 Cell C `ACCESS_BLOCKED`. **1.3.66** — Pulse Part One extract (humanistic). **1.3.67** — later-interpretive optional on IL-1 draft `type=sign`; objects still withheld. **1.3.68** — twelve Lilly classification-only sign drafts; later-interpretive omitted. **1.3.69** — Layer 2 classification-complete / interpretation-deferred; do not reopen sign literature. **1.3.70** — Layer 1 outers definition/readiness; do not assemble Uranus from Hand. **1.3.71** — V1 Semantic Inventory; owner-approved freeze map. **1.3.72** — Outer Planet Draft Representation; meaning keys optional on draft outers; no objects. **1.3.73** — TodayFlow Canon; CORE demoted from product gate (enum unchanged). **1.3.74** — Evidence Corpus / Semantic Consensus / TodayFlow Canon split. **1.3.75** — IL architecture frozen; Co–Star teardown first. **1.3.76** — Product Canon vs Lenses. Literature only against a named `KC-*` row. Дальше — Mainstream planet map, не книги.
 
 **Разрешено параллельно:** транспортная честность, routing, visual foundation, DS, баги, геометрия, ScreenFlow без новой семантики, **Swiss licensing gate** (не блокирует research IL-1).
 
@@ -345,6 +399,7 @@ scale the library
 Пользовательский provenance позже: школьный слой (*Traditional* · *Modern psychological* · *Cross-tradition* · *TodayFlow synthesis*), не locus («Lilly p.57»). Это [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md) / Expression, не ingest IL-1.
 
 **IL-0 закрыт** (2026-08-17) как foundation. Следующий execution slice = **IL-1**.  
+**IL-1 done criterion (locked with inventory):** минимальный набор контролируемых semantic primitives, достаточный для Today / Profile / Compatibility без того, чтобы LLM изобретал значения. Не количество книг, claims, школ или CORE-лемм. IL V1 не обязан содержать «полную астрологию». **Как выбирается примитив:** [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) — не CORE-пересечение.  
 Масштаб библиотеки — только после IL-4.
 
 ### Runtime stack (Swiss *в* IL-системе)
@@ -435,7 +490,7 @@ v1.1: North Node · South Node · Chiron · Lilith (Mean Apogee) — identity у
 
 Не статья «Что такое Сатурн».
 
-**IL-1 fill:** Valens I.1 — topical/significator catalog (sect, colour, taste), не Ptolemy/Lilly elemental qualities. Saturn injuries from cold+moisture не схлопывать в dryness. Greene Weiser Classics 2021 Introduction — первый `psychological` school_class: psychic process / pain-toward-self-discovery остаются `school_specific`. Houlding *Saturn: The Great Teacher* (Skyscript 2003) — living-traditional: cold/dry/malefic/slow compared; personal boundary and mature-through-constraint остаются `school_specific`. Watters *Astrology For Today* 2003 (Skyscript planet intros) — classification gap: modern general practical, parked `source_class=professional` / `school=modern_general_practical`, not Houlding traditional and not Hand; `school_specific` only. Greene *The Luminaries* preview — Sun/Moon psychological `school_specific` (solar consciousness / embodiment); Greene *The Inner Planets* preview — Mercury Hermes-spontaneity `school_specific`. Greene *By Jove!* authorized astro.com extract — Jupiter individuation-teleology / gluttony-as-unconscious-quest `school_specific` (not CPA page, not Hand expansion). Rudhyar *New Mansions for New Men* (1938; Khaldea archival) Venus, Mars, Uranus, Neptune, Pluto, Sun, Moon, Mercury, Saturn, Jupiter — `humanistic` school_class: inward way / first-gesture / transform-through / ecstasy-realm / celestial-seed / light-as-integration / song-of-life / weaver-of-relationship / I-am-I-boundaries / organizer-of-functions `school_specific`; не psychological и не CORE с Greene или Hand. Do not collapse to consciousness vs unconscious as CORE. Body/health/fertility rows stay in the claims ledger, not `object.domains`. `function` черновиков не усреднять. Не записывать Ptolemy в подтверждающие structure-setting. Uranus, Neptune and Pluto: Hand 1981 + Rudhyar NMNM + psychological claims ledger only (objects withheld). Calc already emits all three. **1.3.70:** withheld because required celestial_object meaning slots would force a school fill or invent natal domains — not because the ledger is empty. Definition/readiness in §6.24. Do not assemble from Hand. ASC/MC still closed.
+**IL-1 fill:** Valens I.1 — topical/significator catalog (sect, colour, taste), не Ptolemy/Lilly elemental qualities. Saturn injuries from cold+moisture не схлопывать в dryness. Greene Weiser Classics 2021 Introduction — первый `psychological` school_class: psychic process / pain-toward-self-discovery остаются `school_specific`. Houlding *Saturn: The Great Teacher* (Skyscript 2003) — living-traditional: cold/dry/malefic/slow compared; personal boundary and mature-through-constraint остаются `school_specific`. Watters *Astrology For Today* 2003 (Skyscript planet intros) — classification gap: modern general practical, parked `source_class=professional` / `school=modern_general_practical`, not Houlding traditional and not Hand; `school_specific` only. Greene *The Luminaries* preview — Sun/Moon psychological `school_specific` (solar consciousness / embodiment); Greene *The Inner Planets* preview — Mercury Hermes-spontaneity `school_specific`. Greene *By Jove!* authorized astro.com extract — Jupiter individuation-teleology / gluttony-as-unconscious-quest `school_specific` (not CPA page, not Hand expansion). Rudhyar *New Mansions for New Men* (1938; Khaldea archival) Venus, Mars, Uranus, Neptune, Pluto, Sun, Moon, Mercury, Saturn, Jupiter — `humanistic` school_class: inward way / first-gesture / transform-through / ecstasy-realm / celestial-seed / light-as-integration / song-of-life / weaver-of-relationship / I-am-I-boundaries / organizer-of-functions `school_specific`; не psychological и не CORE с Greene или Hand. Do not collapse to consciousness vs unconscious as CORE. Body/health/fertility rows stay in the claims ledger, not `object.domains`. `function` черновиков не усреднять. Не записывать Ptolemy в подтверждающие structure-setting. Uranus, Neptune and Pluto: Hand 1981 + Rudhyar NMNM + psychological claims ledger only (objects withheld). Calc already emits all three. **1.3.70:** withheld because required celestial_object meaning slots would force a school fill or invent natal domains — not because the ledger is empty. Definition/readiness in §6.24. **1.3.72:** those slots optional on IL-1 draft outers only; objects still withheld this pass (analog 1.3.67). Do not assemble from Hand. ASC/MC still closed.
 
 ### Layer 2 — Signs
 
@@ -570,9 +625,11 @@ Sky × Natal × Profile × Current goals/context  →  Relevance
 
 ---
 
-## 5. LLM — только IL-4 Expression
+## 5. LLM — Expression и (отдельно) Canon-synthesis
 
-LLM **не** решает, что означает Saturn square Venus.
+LLM **не** решает в runtime, что означает Saturn square Venus. IL-4 Expression по-прежнему только озвучивает уже выбранный pack.
+
+**IL-1 Canon synthesis (1.3.73)** — другой, gated research tool: модель может кластеризовать / набросать нормализацию **из поля, которое собрал человек**. Она не решает, что популярно, не изобретает поле, не копирует автора в Canon. Owner lock обязателен. См. [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) §6.
 
 Вход (expression pack):
 
@@ -669,51 +726,54 @@ IL-1 research artifacts (pipeline, not a new ontology): `DATA/reference/astrolog
 
 `constraint` · `relationship testing` · `value reassessment` · `financial restraint` · `self-worth` · `distance` · `commitment` · `maturation`
 
-Смотрим пересечение.
+Смотрим **диапазон**, не голосование за истину.
 
-Если 4 независимых источника: restriction + relationships + values + maturation → кандидат в **CORE**.
+Если 4 независимых источника держат restriction + relationships + values + maturation — это сильный **prevalence** сигнал для TodayFlow Canon, не автоматический `core` и не «истина Сатурна».
 
-Если один автор: «обязательно произойдёт расставание» → **не** входит в базу автоматически. Максимум `school_specific` после review, чаще `rejected`.
+Если один автор: «обязательно произойдёт расставание» → не база Canon. Максимум `school_tint` / `school_specific` после review, чаще `out`.
 
 ### 6.6 Уровни доказательности
 
-| `evidence_tier` | Смысл | Что можно в продукте |
-|-----------------|-------|----------------------|
-| **core** | почти все выбранные школы | primary theme Today / Profile |
-| **supported** | несколько авторитетных источников | supporting signals |
-| **school_specific** | одна школа | tint; не выдавать как «астрология говорит» |
-| **editorial** | нормализация TodayFlow | только с reviewer; не маскировать под традицию |
+`evidence_tier` — **исследовательская** метка на claim. С 1.3.73 она **не** разрешает и не запрещает продукт.
+
+| `evidence_tier` | Исследовательский смысл | Продукт (после 1.3.73) |
+|-----------------|-------------------------|------------------------|
+| **core** | lemma attested across independent traditions | research characteristic only; **not** a permission bit |
+| **supported** | several authorities, not full range | may inform Canon scoring; not automatic supporting theme |
+| **school_specific** | one school | default tint; range control; not «астрология говорит» |
+| **editorial** | TodayFlow normalization note | not product by itself; **owner-locked Canon** on the object is the product meaning |
 
 Разница обязательна:
 
-- Пока CORE по Saturn **не scored**: classical cold/dry/malefic, Houlding boundary/constraint и Greene psychic-process — разные категории, не пересечение. Не записывать Ptolemy в `schools_confirming` для structure-setting.
-- не CORE: *Saturn square Venus значит, что партнёр отдалится*
+- CORE по Saturn **не scored** и больше не является gate. Classical cold/dry/malefic, Houlding boundary/constraint и Greene psychic-process — разные категории. Не записывать Ptolemy в `schools_confirming` для structure-setting.
+- не Canon: *Saturn square Venus значит, что партнёр отдалится*
+- не интернет-гороскоп: самое частое слово без distinctiveness / mechanism
 
-Канон — не усреднённая «одна астрология». Provenance держит слои различимыми. Когда приходят Greene, Hand, Rudhyar, Sasportas, Martin, Arroyo, George: смотреть, что с классическим claim произошло (продолжено / переосмыслено / психологизировано / заменено). Классические lemmas **не затирать** современным пакетом. Не объявлять два современных автора одной school class, чтобы получить CORE.
+Канон — не усреднённая «одна астрология» и не intersection. Provenance держит слои различимыми. Классические lemmas **не затирать**. Школы нужны, чтобы не построить карикатуру.
 
-Это следствие **публичное**: бренд не продаёт одну современную трактовку как единственную истину. Копирайт (лендинг, реклама) — [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md), не этот §6.
+Публичный бренд по-прежнему не продаёт одну трактовку как единственную истину ([Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md)). **Продуктовый lookup** использует один owner-locked TodayFlow Canon, чтобы LLM не изобретал значения.
 
-Engine: primary theme только из `core` ∪ `supported`. `editorial` не может быть единственным основанием пользовательского утверждения.
+IL-3 (когда будет wired): primary theme из **Canon object slots**. Не ждать `evidence_tier=core`. `school_specific` остаётся tint.
 
 ### 6.7 Пайплайн (не 50 книг вручную в таблицу)
 
 ```text
 corpus (classical + traditional + psychological + humanistic + professional)
         ↓
-извлечение утверждений
+извлечение утверждений (claims ledger)
         ↓
-нормализация (свои lemmas)
+representative field (human; LLM does not pick the field)
         ↓
-сопоставление авторов
+clusters + Canon criteria (prevalence · recognition · distinctiveness · utility · composability)
         ↓
-consensus scoring → evidence_tier
+owner lock → TodayFlow Canon
         ↓
-human review
-        ↓
-Interpretation Library object
+Interpretation Library object slots
 ```
 
-LLM в этом пайплайне **может** помогать извлекать кандидаты-утверждения из текста, который исследователь уже легально читает. Не может быть источником. Каждая строка проходит human review.
+`consensus scoring → core` больше не шаг продукта. LLM может предлагать кластеры из уже собранного поля; human review + owner lock обязательны. Не источник.
+
+LLM также может помогать извлекать кандидаты-утверждения из текста, который исследователь уже легально читает. Не может быть источником поля.
 
 ### 6.8 Provenance (IP)
 
@@ -1007,9 +1067,92 @@ Full table: [IL1_LAYER1_OUTERS_DEFINITION.md](./IL1_LAYER1_OUTERS_DEFINITION.md)
 
 **4. Definitions.** Outer `function` ≠ Sun–Saturn elemental `function`. Structural coverage ≠ “Hand wrote a function sentence.” CORE still requires the same lemma across school classes.
 
-**Sufficiency (working, not applied):** a structural draft may exist only after meaning keys are optional/omitted on IL-1 draft *outers* (named Architecture impact) **or** the object stays withheld. Do not pick an object-slot school in the same pass. Do not fill `domains`. Analog: 1.3.67 before 1.3.68.
+**Sufficiency:** schema demotion applied in **1.3.72**. Structural drafts may omit later-interpretive keys. Do not pick an object-slot school in the same pass as the demotion. Analog: 1.3.67 before 1.3.68. Do not fill `domains` or `tempo`. Do not assemble Uranus from Hand.
 
-**Stopped before step 5.** Schools/source types for outer *drafts* wait. Next named pass, if named = scoped schema optional-on-draft **or** keep withheld. Do not assemble Uranus from Hand.
+### 6.25 Knowledge Core V1 Semantic Inventory (1.3.71)
+
+Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Limiter: [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md).
+
+**Owner-approved 2026-08-21** as the V1 freeze map. New literature discovery only against a named `KC-*` row with a missing V1-required constituent (row X → consumer Y → missing Z).
+
+IL V1 = minimum controlled primitives for Today / Profile / Compatibility, not complete astrology. Houses/aspects stay `DRAFT_CLASSICAL`. KC-T-PHASE is fact-only. Execution order: outer schema (1.3.72) → materialize outer drafts if the model holds → ASC/MC definition → ASC/MC decision → IL-1 close-out → IL-2.
+
+### 6.26 Outer Planet Draft Representation (1.3.72)
+
+Full table: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Analog: 1.3.67.
+
+**Locked:** on IL-1 draft `astro.object.uranus` / `neptune` / `pluto`, `function` · `themes` · `positive_expression` · `shadow` · `domains` · `tempo` are **optional**. Sun–Saturn unchanged. School-specific packages stay in the claims ledger (no new `packages[]` field). Synthetic collapse forbidden. `domains` and `tempo` omit on a structural draft. No objects this pass. `active` with omitted meaning keys forbidden.
+
+**Ledger check:** three honest structural drafts are possible *after* this demotion, if materialize omits later-interpretive keys and does not pick Hand. That materialize waits until TodayFlow Canon selection (1.3.73) exists — not CORE fill.
+
+### 6.27 TodayFlow Canon — semantic selection (1.3.73)
+
+Full lock: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md).
+
+Astrology has no laboratory truth of the kind CORE-as-intersection was extracting. TodayFlow needs a **controlled modern semantic core**: prevalent and recognizable, not an internet horoscope, not one-author copy.
+
+**Locked:** product meaning = owner-locked TodayFlow Canon. Criteria = prevalence · recognition · distinctiveness · product utility · composability. Schools = range control. CORE = research characteristic, not a permission bit. Synthesis = human field → optional LLM cluster/draft → owner lock. LLM does not decide prevalence.
+
+**Not this pass:** ingest · objects · CORE scoring · LLM clustering run · outer `function` fill · Sun–Pluto rewrite.
+
+**Next named:** audit existing Sun–Pluto claims against the criteria. Hypothesis: the ledger is already enough; the hole was the selection rule.
+
+### 6.28 Three layers — Corpus / Consensus / Canon (1.3.74)
+
+Same file: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) §0.
+
+Do not mix:
+
+1. **Evidence Corpus** — what sources assert (existing claims; keep).
+2. **Semantic Consensus** — what is prevalent in contemporary practice (five axes; not CORE intersection; not “the LLM thinks Mars is action”).
+3. **TodayFlow Canon** — what we lock as static product atoms, in our lemmas.
+
+Runtime: Canon → Composition Engine → LLM realization. That restores the original stack (cheap, repeatable, testable, LLM-swappable). LLM does not re-decide Saturn each request.
+
+Ptolemy/Lilly get no extra weight for age. Greene/Hand get no extra weight for readability. New books only where Consensus cannot be judged from the ledger.
+
+**Not this pass:** ingest · objects · Outer fill · ASC/MC · research cycle.
+
+**Next named (superseded 1.3.75):** short planet-claim pass through Consensus → Canon proposal — **do not run**. IL architecture is frozen pending the Co–Star teardown.
+
+---
+
+### 6.29 IL architecture frozen — Co–Star teardown first (1.3.75)
+
+Owner 2026-08-21: stop changing Interpretation Library architecture until a Co–Star Semantic & Content Engine teardown exists as empirical base.
+
+SoT: [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) (Phase 0 public 101 + store listings).
+
+Do **not** copy Co–Star. Reverse-engineer it. Quality criteria are user-facing (feels like me / specific / noticing / share / return), not “does Saturn match Lilly?” Calculation layer must be correct. Meaning layer must be consistent, recognizable, useful.
+
+**Frozen:** schema/ontology changes · Outer fill · ASC/MC literature · Corpus → Consensus → Canon scoring pass · CORE scoring · new books except a named inventory row that the teardown proves missing.
+
+**Still forbidden as IL ingest (§6.3):** Co–Star sentences, Do/Don’t, pushes. The teardown file is research, not a claim source.
+
+**Next named:** Phase 1 of that teardown (in-app screens in `docs/audits/costar_teardown_corpus/`) remains a **recognition check**, not the IL unlock. **Superseded as next IL task by 1.3.76.**
+
+---
+
+### 6.30 Product Canon vs Lenses (1.3.76)
+
+Full lock: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md).
+
+**Mainstream meaning** = independently and regularly attested in several major contemporary Western sources, not a single school or author. Fix the convention; do not prove it.
+
+```text
+Mainstream conventions  →  TodayFlow Canon  →  main runtime
+Research corpus         →  Lenses           →  education / SEO / deep dives / provenance
+```
+
+TodayFlow Canon is unique **structuring** of mainstream astrology, not a unique astrology. Historical claims stay. They are not averaged and they do not gate runtime. CORE is metadata, not a permission bit.
+
+Co–Star / successful products: recognition check after a Mainstream row, not a copy source, not an IL ingest.
+
+**No new books.** Finite map: Planets → Signs → Houses → Aspects → ASC/MC.
+
+**Not this pass:** ingest · object rewrite · schema · Outer fill · CORE scoring.
+
+**Next named:** Mainstream V1 **planet** map from Astrodienst, Cafe Astrology, and one more modern reference of that class. Confirm the working draft in the split file §3. Still no object rewrite until that map is owner-locked.
 
 ---
 
@@ -1021,7 +1164,7 @@ Full table: [IL1_LAYER1_OUTERS_DEFINITION.md](./IL1_LAYER1_OUTERS_DEFINITION.md)
 
 Дальше комбинации **композиционно**. Вручную curated в IL-1 — **candidates**, где сложение атомов *может* врать; IL-2 подтверждает или разжалует.
 
-Не начинать с 10 000 комбинаций. Не менять методологию до конца IL-1. Порядок = **Sequence (LOCKED)** выше.
+Не начинать с 10 000 комбинаций. Методология отбора смысла: **1.3.76 Product Canon vs Lenses** (Mainstream → Canon → runtime; corpus → Lenses). 1.3.73–1.3.74 criteria still describe Canon *structuring*. Слои / provenance shape без нового enum.
 
 | ID | Работа | Выход |
 |----|--------|--------|
@@ -1080,7 +1223,13 @@ Full table: [IL1_LAYER1_OUTERS_DEFINITION.md](./IL1_LAYER1_OUTERS_DEFINITION.md)
 
 ## 10. Changelog
 
-- **1.3.70 (2026-08-21)** — IL-1 process (no ingest, no CORE, no objects, no schema change, planet ledgers / `function` untouched): Layer 1 Outers definition/readiness (parent steps 1–4). Structural vs later-interpretive split for Uranus/Neptune/Pluto. Outer `function` is a school meaning package, not classical elemental quality. Sufficiency bar: omit meaning keys on a future draft (after named scoped schema impact) or keep withheld. Do not pick Hand as object-slot school. `domains` natal set unattested. ASC/MC not this pass. Signs stay closed. Next = optional-on-draft schema pass if named, not another outer book.
+- **1.3.76 (2026-08-21)** — IL-1 architecture (no ingest, no objects, no schema): Product Canon vs Lenses. Mainstream = contemporary convention from a bounded modern panel. Research corpus = lenses. CORE not a gate. Co–Star = recognition check. Next = Mainstream planet map, not books, not object rewrite.
+- **1.3.75 (2026-08-21)** — IL-1 freeze (no ingest, no objects, no schema): stop Interpretation Library architecture changes. Empirical base = Co–Star Semantic & Content Engine teardown Phase 0. Next = teardown Phase 1 (in-app corpus), not Corpus→Canon scoring, not Outer/ASC/books. Co–Star copy still forbidden as IL source. **Superseded as “next named pass” by 1.3.76.**
+- **1.3.74 (2026-08-21)** — IL-1 architecture (no ingest, no objects, no schema): split Evidence Corpus / Semantic Consensus / TodayFlow Canon. 491 planet claims stay as corpus. Runtime remains calc → atoms → composition → LLM formulates. Next = short corpus-through-method pass, not Outer/ASC/books. **Superseded as “next named pass” by 1.3.75.**
+- **1.3.73 (2026-08-21)** — IL-1 methodology (no ingest, no CORE scoring, no objects, schema enum unchanged): TodayFlow Canon. Product meaning is owner-locked Canon scored on prevalence / recognition / distinctiveness / utility / composability. CORE demoted to research characteristic. Schools remain range control.
+- **1.3.72 (2026-08-21)** — IL-1 schema (no ingest, no CORE, no objects, planet ledgers / `function` untouched): Outer Planet Draft Representation. Meaning keys `function` / `themes` / `positive_expression` / `shadow` / `domains` / `tempo` optional on IL-1 draft Uranus/Neptune/Pluto only. Sun–Saturn still required. School packages stay in claims. No synthetic collapse. No objects this pass. Materialize waits for Canon selection (1.3.73).
+- **1.3.71 (2026-08-21)** — IL-1 process (no ingest, no CORE, no objects, no schema change): Knowledge Core V1 Semantic Inventory. Owner-approved freeze map 2026-08-21. Literature only against a named `KC-*` row. IL-1 done criterion = minimum controlled primitives, not bibliography.
+- **1.3.70 (2026-08-21)** — IL-1 process (no ingest, no CORE, no objects, no schema change, planet ledgers / `function` untouched): Layer 1 Outers definition/readiness (parent steps 1–4). Structural vs later-interpretive split for Uranus/Neptune/Pluto. Outer `function` is a school meaning package, not classical elemental quality. Sufficiency bar: omit meaning keys on a future draft (after named scoped schema impact) or keep withheld. Do not pick Hand as object-slot school. `domains` natal set unattested. ASC/MC not this pass. Signs stay closed. Next = optional-on-draft schema pass if named, not another outer book. **Superseded as “next named pass” by 1.3.71 inventory freeze.**
 - **1.3.69 (2026-08-21)** — IL-1 process (no ingest, no CORE, no `active`, catalog unchanged): Layer 2 Signs close-out audit. Classification-complete / interpretation-deferred. Uniform 12-draft structure; Lilly provenance; QUALITY leakage absent from object slots and `normalized_claim`; collisions remain claims. Cell C stays ACCESS_BLOCKED as future evidence, not a Layer 2 blocker. Do not reopen Cell C / Pulse Part Two / Hand Ch.10 as the next Layer 2 task. Next Knowledge Core slice is not more sign literature.
 - **1.3.68 (2026-08-21)** — IL-1 catalog (no CORE, no `active`, planet ledgers untouched): twelve `type=sign` drafts. `mode` / `element` / `orientation` = Lilly CA I.16 school_specific. Later-interpretive omitted. QUALITY personality adjectives not copied. Collisions remain claims. `theme_clusters=["timing"]` is year-span clustering, not Pulse. Close-out followed in 1.3.69.
 - **1.3.67 (2026-08-21)** — IL-1 schema (no ingest, no CORE, no sign objects, planet ledgers untouched): later-interpretive slots `motivation` / `expression` / `strengths` / `excess` / `deficiency` / `behavioral_tendencies` become **optional** on IL-1 draft `type=sign`. They stay in the model. Not filled from Pulse, Lilly QUALITY, or Cell C. Classification `mode` / `element` / `orientation` stay required. No 12 objects this pass. Classification-only drafts followed in 1.3.68.

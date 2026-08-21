@@ -206,12 +206,22 @@
           "type": "string",
           "enum": ["orb", "angularity", "natal_weight", "composed", "fixed"]
         },
-        "function": { "$ref": "#/$defs/lemma" },
+        "function": {
+          "$ref": "#/$defs/lemma",
+          "description": "On Sun–Saturn: elemental quality (required). On IL-1 draft Uranus/Neptune/Pluto: later-interpretive school package; optional (1.3.72). Do not fill from Hand to satisfy schema. Do not collapse to change/intuition/transformation."
+        },
         "themes": { "$ref": "#/$defs/lemma_list" },
         "positive_expression": { "$ref": "#/$defs/lemma" },
         "shadow": { "$ref": "#/$defs/lemma" },
-        "domains": { "$ref": "#/$defs/domains" },
-        "tempo": { "type": "string", "enum": ["fast", "medium", "slow", "very_slow"] },
+        "domains": {
+          "$ref": "#/$defs/domains",
+          "description": "Four natal keys. Unattested on outers. Optional on IL-1 draft Uranus/Neptune/Pluto (1.3.72); omit on a structural outer draft."
+        },
+        "tempo": {
+          "type": "string",
+          "enum": ["fast", "medium", "slow", "very_slow"],
+          "description": "Required on Sun–Saturn. Optional on IL-1 draft outers (1.3.72); not automatically structural (Swiss period is astronomy facts_only)."
+        },
         "mode": { "type": "string", "enum": ["cardinal", "fixed", "mutable"] },
         "element": { "type": "string", "enum": ["fire", "earth", "air", "water"] },
         "orientation": { "type": "string", "enum": ["positive", "negative"] },
@@ -259,16 +269,39 @@
         {
           "if": { "properties": { "layer": { "const": 1 } }, "required": ["layer"] },
           "then": {
+            "required": ["type"],
+            "properties": { "type": { "const": "celestial_object" } }
+          }
+        },
+        {
+          "if": {
+            "allOf": [
+              { "properties": { "layer": { "const": 1 } }, "required": ["layer"] },
+              {
+                "not": {
+                  "properties": {
+                    "object_id": {
+                      "enum": [
+                        "astro.object.uranus",
+                        "astro.object.neptune",
+                        "astro.object.pluto"
+                      ]
+                    }
+                  },
+                  "required": ["object_id"]
+                }
+              }
+            ]
+          },
+          "then": {
             "required": [
-              "type",
               "function",
               "themes",
               "positive_expression",
               "shadow",
               "domains",
               "tempo"
-            ],
-            "properties": { "type": { "const": "celestial_object" } }
+            ]
           }
         },
         {

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 import jsonschema
+import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMA = ROOT / "docs" / "schemas" / "astrology_interpretation_v1.schema.json"
@@ -35,6 +36,21 @@ LATER_INTERPRETIVE_KEYS = (
     "excess",
     "deficiency",
     "behavioral_tendencies",
+)
+
+OUTER_MEANING_KEYS = (
+    "function",
+    "themes",
+    "positive_expression",
+    "shadow",
+    "domains",
+    "tempo",
+)
+
+OUTER_OBJECT_IDS = (
+    "astro.object.uranus",
+    "astro.object.neptune",
+    "astro.object.pluto",
 )
 
 LILLY_SIGN_GRID = {
@@ -2359,7 +2375,7 @@ def test_layer2_classification_complete_interpretation_deferred():
 
 
 def test_layer1_outers_definition_readiness_no_objects():
-    """1.3.70: outer definition/readiness. No ingest. No objects. Schema Layer 1 unchanged."""
+    """1.3.70: outer definition/readiness. No ingest. No objects. Catalog unchanged."""
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     jsonschema.validate(objects, schema)
@@ -2368,21 +2384,6 @@ def test_layer1_outers_definition_readiness_no_objects():
     assert "astro.object.uranus" not in ids
     assert "astro.object.neptune" not in ids
     assert "astro.object.pluto" not in ids
-    layer1 = next(
-        branch
-        for branch in schema["$defs"]["knowledge_object"]["allOf"]
-        if branch.get("if", {}).get("properties", {}).get("layer", {}).get("const") == 1
-    )
-    required = layer1["then"]["required"]
-    assert required == [
-        "type",
-        "function",
-        "themes",
-        "positive_expression",
-        "shadow",
-        "domains",
-        "tempo",
-    ]
     by_id = {obj["object_id"]: obj for obj in objects["objects"]}
     assert "heating" in by_id["astro.object.sun"]["function"]
     assert "structure" not in by_id["astro.object.saturn"]["themes"]
@@ -2392,20 +2393,195 @@ def test_layer1_outers_definition_readiness_no_objects():
         notes = " ".join(claims["gap_notes"]).lower()
         assert "object withheld" in notes or "still withheld" in notes
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.70" in canon
     assert "### 6.24 Layer 1 Outers — definition / readiness" in canon
     assert "### Architecture impact — 1.3.70 Layer 1 outers definition / readiness" in canon
     definition = (ROOT / "docs" / "astrology" / "IL1_LAYER1_OUTERS_DEFINITION.md").read_text(encoding="utf-8")
     assert "Sufficiency bar" in definition
     assert "Do not start from Hand" in definition
-    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
-    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "1.3.70" in next_block
-    assert "Do **not** start CORE scoring" in next_block
-    assert "Hand" in next_block
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.70" in parent
     assert "Layer 1 Outers" in parent
+
+
+def _minimal_outer_draft(object_id: str) -> dict:
+    body = object_id.rsplit(".", 1)[-1].capitalize()
+    return {
+        "object_id": object_id,
+        "layer": 1,
+        "type": "celestial_object",
+        "status": "draft",
+        "version": "0.1.0",
+        "phenomenon": body,
+        "machine_entity_code": f"astrology.planet.{body.lower()}",
+        "theme_clusters": ["timing"],
+        "polarity": ["neutral"],
+        "temporal_class": "natal",
+        "confidence": None,
+        "composed_from": [],
+        "curation_reason": None,
+        "provenance": [
+            {
+                "concept_id": f"claim.{body.lower()}.structural_identity",
+                "source_id": "schema_example",
+                "source_class": "internal_normalization",
+                "author": None,
+                "edition": None,
+                "locus": None,
+                "school": None,
+                "original_claim": "Structural identity only — not a school function package",
+                "normalized_claim": f"{body} is a calc-emitted lookup primitive",
+                "evidence_tier": "editorial",
+                "review_status": "extracted",
+                "field": "phenomenon",
+            }
+        ],
+    }
+
+
+def test_outer_planet_draft_representation_optional_on_draft():
+    """1.3.72: outer meaning keys optional on draft. Sun–Saturn still required. No objects yet."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    _assert_il1_catalog_counts(objects)
+    ids = {obj["object_id"] for obj in objects["objects"]}
+    for object_id in OUTER_OBJECT_IDS:
+        assert object_id not in ids
+        draft = _minimal_outer_draft(object_id)
+        for key in OUTER_MEANING_KEYS:
+            assert key not in draft
+        jsonschema.validate({"contract_version": "astrology_interpretation_v1", "objects": [draft]}, schema)
+
+    sun = next(obj for obj in objects["objects"] if obj["object_id"] == "astro.object.sun")
+    stripped = {k: v for k, v in sun.items() if k != "function"}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate({"contract_version": "astrology_interpretation_v1", "objects": [stripped]}, schema)
+
+    fake = _minimal_outer_draft("astro.object.uranus")
+    fake["function"] = "change, rebellion, freedom"
+    jsonschema.validate({"contract_version": "astrology_interpretation_v1", "objects": [fake]}, schema)
+    # Schema may accept the string; fill-rule forbids writing it. Catalog must not contain it.
+    assert all(
+        "change, rebellion" not in obj.get("function", "")
+        for obj in objects["objects"]
+        if obj["type"] == "celestial_object"
+    )
+
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "### 6.26 Outer Planet Draft Representation" in canon
+    representation = (ROOT / "docs" / "astrology" / "IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md").read_text(
+        encoding="utf-8"
+    )
+    assert "optional on draft" in representation.lower()
+    assert "Do not collapse" in representation or "synthetic collapse" in representation.lower()
+    inventory = (ROOT / "docs" / "astrology" / "KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md").read_text(
+        encoding="utf-8"
+    )
+    assert "**APPROVED**" in inventory
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.72" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+
+
+def test_todayflow_canon_semantic_selection_no_objects():
+    """1.3.73: TodayFlow Canon methodology. CORE demoted. No ingest. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    ids = {obj["object_id"] for obj in objects["objects"]}
+    assert "astro.object.uranus" not in ids
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "### 6.27 TodayFlow Canon" in canon
+    assert "research characteristic" in canon
+    method = (ROOT / "docs" / "astrology" / "TODAYFLOW_CANON_V1.md").read_text(encoding="utf-8")
+    assert "prevalence" in method.lower()
+    assert "recognition" in method.lower()
+    assert "distinctiveness" in method.lower()
+    assert "composability" in method.lower()
+    assert "LLM does not decide" in method
+    assert "not a permission bit" in method.lower() or "not a permission bit" in canon.lower()
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "TodayFlow Canon" in parent
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.73" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+
+
+def test_todayflow_three_layers_corpus_consensus_canon():
+    """1.3.74: Evidence Corpus / Semantic Consensus / TodayFlow Canon. No ingest. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "### 6.28 Three layers" in canon
+    method = (ROOT / "docs" / "astrology" / "TODAYFLOW_CANON_V1.md").read_text(encoding="utf-8")
+    assert "## 0. Three layers" in method
+    assert "Evidence Corpus" in method
+    assert "Semantic Consensus" in method
+    assert "TodayFlow Canon" in method
+    assert "cheap inference" in method.lower()
+    assert "swappable LLM" in method.lower() or "swappable LLM" in method
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.74" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "research cycle" in next_block.lower()
+
+
+def test_il_architecture_frozen_pending_costar_teardown():
+    """1.3.75: freeze IL architecture; Co-Star teardown is next. No ingest. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "### 6.29 IL architecture frozen" in canon
+    teardown = (
+        ROOT / "docs" / "audits" / "COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md"
+    ).read_text(encoding="utf-8")
+    assert "Astrology model" in teardown
+    assert "Semantic model" in teardown
+    assert "Content engine" in teardown
+    assert "Product psychology" in teardown
+    assert "Calculation" in teardown
+    assert "Meaning" in teardown
+    inventory = (
+        ROOT / "docs" / "astrology" / "KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md"
+    ).read_text(encoding="utf-8")
+    assert "Co–Star" in inventory or "Co-Star" in inventory
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.75" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "teardown" in next_block.lower()
+
+
+def test_product_canon_vs_lenses_mainstream_not_objects():
+    """1.3.76: Product Canon vs Lenses. Mainstream convention. No ingest. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.76" in canon
+    assert "### 6.30 Product Canon vs Lenses" in canon
+    split = (
+        ROOT / "docs" / "astrology" / "KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md"
+    ).read_text(encoding="utf-8")
+    assert "Mainstream meaning" in split
+    assert "Lenses" in split
+    assert "not a product gate" in split.lower() or "not a gate" in split.lower()
+    assert "Astrodienst" in split
+    assert "Cafe Astrology" in split
+    assert "identity · self · vitality" in split
+    method = (ROOT / "docs" / "astrology" / "TODAYFLOW_CANON_V1.md").read_text(encoding="utf-8")
+    assert "Mainstream V1" in method
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.76" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "Mainstream" in next_block
+
 
 
 

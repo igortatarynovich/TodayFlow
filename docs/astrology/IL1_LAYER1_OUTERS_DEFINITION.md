@@ -81,4 +81,4 @@ Before parent step 5 (schools/source types for *outer drafts as a distinct model
 
 **Not this pass:** schema change · three objects · Hand as object factory · tempo from Swiss · ASC/MC definition · Layer 5 · CORE · `active` · coverage hunt · Sign literature.
 
-**Next named pass, if named:** schema optional-on-draft for outer later-interpretive keys (scoped so classical seven stay required) — still no objects in that pass — **or** keep withheld. Do not skip to “assemble Uranus from Hand.”
+**Next named pass:** Outer Planet Draft Representation **1.3.72 is in**. Next = materialize structural drafts if they omit later-interpretive keys. Do not skip to “assemble Uranus from Hand.” ASC/MC after that (parent steps 1–4).

@@ -8,6 +8,8 @@
 
 This file records what the ledger already contains. It does **not** rewrite `object.function`, set `active`, invent T1–T4, ingest claims, or open a new bibliography.
 
+**NOW (1.3.76):** Product Canon vs Lenses. Next ≠ this dashboard. Next = Mainstream V1 planet map. Do not score CORE from these KPIs. Do not rewrite objects from this file.
+
 ---
 
 ## 0. KPI dashboard (order locked)
@@ -204,9 +206,17 @@ There is **no EMPTY psych slot** left to discover. Independent densify of THIN M
 
 **Layer 2 Signs** — **classification-complete / interpretation-deferred** (1.3.69). Do not reopen sign literature.
 
-**Layer 1 Outers** — **1.3.70** definition/readiness (parent steps 1–4). Claims exist; objects withheld. Do not assemble from Hand. Sufficiency = omit meaning keys after named scoped schema impact, or keep withheld. ASC/MC later. Do not CORE.
+**Layer 1 Outers** — **1.3.70** definition/readiness (parent steps 1–4). Claims exist; objects withheld. Do not assemble from Hand.
+
+**1.3.71:** V1 Semantic Inventory **APPROVED**. Literature only against a named `KC-*` row.
+
+**1.3.72:** Outer Planet Draft Representation. Meaning keys optional on draft outers. Objects still withheld.
+
+**1.3.73:** TodayFlow Canon. Product meaning is owner-locked Canon, not CORE. Next = Sun–Pluto claim audit on existing claims. Do not fill outers by intersection.
 
 ### Access queue (opportunistic extract only)
+
+**1.3.71:** this is **not** a research backlog. Do not hunt these titles. Extract **only** if a named page becomes legally readable.
 
 When a **named** page becomes legally readable: extract only. `school_specific`. No `function` rewrite. No CORE. No `active`. Do **not** hunt a fourth analog if it stays closed.
 
@@ -233,7 +243,7 @@ When a **named** page becomes legally readable: extract only. `school_specific`.
 
 ### If no named planet locus is newly readable
 
-Continue Layer 2 from IL §6.15 / parent steps 8–9 (shortlist). Do not invent a 20th Mars source. Do not start CORE scoring. CORE-candidate audit remains **listing only** (this file §0): five Saturn lemmas, not scored.
+Stop. Do not continue Layer 2 literature. Do not invent a 20th Mars source. Do not start CORE scoring. Next named work is owner approval of [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md).
 
 ---
 
