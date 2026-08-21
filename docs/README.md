@@ -39,14 +39,15 @@
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — JSON / Machine Contract build order (не порядок исследования смысла)
-- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.81):** Sun–Saturn `canon` filled; next = 1.3.82 smoke-test, not Signs. Исторический корпус = lenses
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.82):** smoke-test in (aspect PASS, sign/house PARTIAL); next = Sign Canon path. Исторический корпус = lenses
 - [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) — **IL V1 freeze map (APPROVED):** что библиотека должна знать. Books только против named `KC-*` row. IL-1 done = минимальные primitives
 - [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) — **Product Canon vs Lenses (1.3.76):** Mainstream → Canon → runtime. Corpus → education / SEO / deep dives
 - [astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) — **Mainstream planet map (1.3.77):** concept families. Not Canon, not JSON
 - [astrology/PLANET_CANON_GRAMMAR_V1.md](./astrology/PLANET_CANON_GRAMMAR_V1.md) — **Planet Canon grammar (1.3.78):** engine slots. tempo not Canon. Dry-run ≠ fill
 - [astrology/PLANET_CANON_V1.md](./astrology/PLANET_CANON_V1.md) — **Planet Canon V1 (1.3.79):** ten packs + provenance. Storage = 1.3.80
 - [astrology/PLANET_CANON_STORAGE_V1.md](./astrology/PLANET_CANON_STORAGE_V1.md) — **Planet Canon storage (1.3.80):** optional `canon` nest
-- [astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md](./astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md) — **Sun–Saturn fill (1.3.81):** product `canon` on seven drafts. Next = 1.3.82 smoke-test
+- [astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md](./astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md) — **Sun–Saturn fill (1.3.81):** product `canon` on seven drafts
+- [astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md](./astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.82):** aspect PASS; sign/house PARTIAL
 - [audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](./audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) — Co–Star teardown Phase 0: **recognition check**, не источник смысла
 - [TODAYFLOW_CANON_V1.md](./astrology/TODAYFLOW_CANON_V1.md) — **структуризация Mainstream** в Canon-атомы. Runtime: атомы → композиция → LLM формулирует. CORE не gate
 - [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md)

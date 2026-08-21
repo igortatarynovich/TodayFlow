@@ -8,7 +8,7 @@
 
 This file records what the ledger already contains. It does **not** rewrite `object.function`, set `active`, invent T1–T4, ingest claims, or open a new bibliography.
 
-**NOW (1.3.81):** Sun–Saturn `canon` filled. Next ≠ this dashboard. Next = 1.3.82 composition smoke-test, not Signs. Do not score CORE from these KPIs. Do not rewrite `function` from this file.
+**NOW (1.3.82):** composition smoke-test locked. Next ≠ this dashboard. Next = Signs Mainstream map for Sign Canon grammar. Do not score CORE from these KPIs. Do not rewrite `function` from this file.
 
 ---
 

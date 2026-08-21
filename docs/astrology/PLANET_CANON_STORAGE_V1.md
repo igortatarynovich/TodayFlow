@@ -88,7 +88,7 @@ IL-4 still formulates. It must not be given only `function` and asked to invent 
 - Signs Mainstream map
 - Books · CORE · `active`
 
-**Next named:** Sun–Saturn fill — **done 1.3.81.** Next = **1.3.82 composition smoke-test**, not Signs Mainstream map.
+**Next named:** Sun–Saturn fill — **done 1.3.81.** Smoke-test — **done 1.3.82.** Next = Signs Mainstream map for Sign Canon grammar.
 
 ---
 

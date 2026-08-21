@@ -12,7 +12,8 @@
 | [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md) | **1.3.78 grammar:** six engine slots. tempo = Foundation. Dry-run ≠ fill |
 | [PLANET_CANON_V1.md](./PLANET_CANON_V1.md) | **1.3.79 Planet Canon:** ten packs + direct/derived. Storage = 1.3.80 |
 | [PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md) | **1.3.80 storage:** optional `canon` nest |
-| [PLANET_CANON_SUN_SATURN_FILL_V1.md](./PLANET_CANON_SUN_SATURN_FILL_V1.md) | **1.3.81 fill:** Sun–Saturn `canon` from locked packs. Next = 1.3.82 |
+| [PLANET_CANON_SUN_SATURN_FILL_V1.md](./PLANET_CANON_SUN_SATURN_FILL_V1.md) | **1.3.81 fill:** Sun–Saturn `canon` from locked packs |
+| [PLANET_CANON_COMPOSITION_SMOKE_V1.md](./PLANET_CANON_COMPOSITION_SMOKE_V1.md) | **1.3.82 smoke:** aspect PASS; sign/house PARTIAL |
 | [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) | TodayFlow Canon structuring. Mainstream V1 / Canon / Lenses. Runtime: atoms → composition → LLM formulates |
 | [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) | Co–Star teardown Phase 0. **Recognition check** on Mainstream rows. Not IL ingest. Not the product-meaning source |
 | [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md) | Outer Planet Draft Representation (1.3.72). Meaning keys optional on IL-1 draft outers. Fill waits for Canon. Not ingest, not objects |

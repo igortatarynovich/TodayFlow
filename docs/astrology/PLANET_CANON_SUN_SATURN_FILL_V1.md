@@ -52,14 +52,7 @@ Seven celestial_object drafts. Zero outer objects. Signs / houses / aspects have
 - Signs Mainstream map
 - IL-2 engine
 
-**Next named:** **1.3.82 composition smoke-test** (data-level, not IL-2) on:
-
-- Mars □ Saturn
-- Venus × Capricorn
-- Moon × 4th house
-- Jupiter △ Sun
-
-Pass = six planet slots + existing sign/house/aspect **atoms** (placeholders allowed) compose without `themes` and without pair-specific prose. Fail = fix grammar/packs while only seven objects carry `canon`. Do **not** start Signs Mainstream map until this gate passes.
+**Next named:** **1.3.82 composition smoke-test** — **done.** Next = Signs Mainstream map as territory for Sign Canon grammar, not QUALITY fill.
 
 ---
 

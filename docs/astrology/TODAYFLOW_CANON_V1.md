@@ -208,6 +208,6 @@ This is **not** IL-4 Expression. Expression still cannot choose meaning. Canon s
 - No schema change.
 - The Pluto table in §4 is a **method example**, not product text.
 
-**Next named (1.3.81):** Sun–Saturn `canon` is on the drafts ([PLANET_CANON_SUN_SATURN_FILL_V1.md](./PLANET_CANON_SUN_SATURN_FILL_V1.md)). Next = **1.3.82 composition smoke-test**. Not Signs. Not rewrite `function`. Not CORE.
+**Next named (1.3.82):** smoke-test in ([PLANET_CANON_COMPOSITION_SMOKE_V1.md](./PLANET_CANON_COMPOSITION_SMOKE_V1.md)). Next = Signs Mainstream map for Sign Canon grammar. Not QUALITY. Not rewrite `function`. Not CORE.
 
 Hypothesis (still true, not executing as a ledger-scoring pass): the 491 planet claims are a usable **Lens** dataset; they were asked to pick product meaning. Schema 1.3.72 remains valid. Co–Star remains a recognition check.
