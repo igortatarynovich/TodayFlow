@@ -254,7 +254,7 @@ def test_sign_classifications_do_not_invent_layer2_psychology():
     jsonschema.validate(claims, schema)
     notes = " ".join(claims["gap_notes"])
     assert "No Layer 2 sign objects yet" in notes
-    assert "later interpretive layer" in notes
+    assert "optional on IL-1 draft" in notes
     assert "Element conflict" in notes
     assert "Mode conflict" in notes
     compared = {row["concept_id"] for row in claims["claims"] if row["review_status"] == "compared"}
@@ -2164,12 +2164,57 @@ def test_layer2_pulse_part_one_extract_no_sign_objects():
     assert not any(row.get("source_class") == "psychological" for row in pulse)
     assert not any(row.get("evidence_tier") == "core" for row in classifications["claims"])
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.66" in canon
     assert "### 6.20 Layer 2 Signs — Pulse Part One extract" in canon
-    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
-    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
-    assert "Do **not** materialize 12 sign objects" in next_block
-    assert "Do **not** start CORE scoring" in next_block
-    assert "ACCESS_BLOCKED" in next_block
+    assert "1.3.66" in canon
     parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
     assert "1.3.66" in parent
+
+
+def test_layer2_later_interpretive_optional_no_sign_objects():
+    """1.3.67: later-interpretive optional on IL-1 draft type=sign. Still 0 objects. Not filled."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    layer2 = next(
+        branch
+        for branch in schema["$defs"]["knowledge_object"]["allOf"]
+        if branch.get("if", {}).get("properties", {}).get("layer", {}).get("const") == 2
+    )
+    required = layer2["then"]["required"]
+    assert required == ["type", "mode", "element", "orientation"]
+    forbidden = ("motivation", "expression", "strengths", "excess", "deficiency", "behavioral_tendencies")
+    assert not any(name in required for name in forbidden)
+    props = schema["$defs"]["knowledge_object"]["properties"]
+    for name in forbidden:
+        assert name in props
+    assert len(objects["objects"]) == 24
+    assert all(obj["type"] != "sign" for obj in objects["objects"])
+    assert all(obj["status"] != "active" for obj in objects["objects"])
+    classifications = json.loads((CLAIMS_DIR / "astro.sign.classifications.json").read_text(encoding="utf-8"))
+    notes = " ".join(classifications["gap_notes"])
+    assert "1.3.67" in notes
+    assert "optional on IL-1 draft" in notes
+    pulse = [row for row in classifications["claims"] if row.get("source_id") == "src.humanistic.rudhyar_pulse_of_life"]
+    assert not any(row["field"] in ("motivation", "strengths", "excess", "deficiency", "behavioral_tendencies") for row in pulse)
+    aries = json.loads((CLAIMS_DIR / "astro.sign.aries.json").read_text(encoding="utf-8"))
+    assert "optional on IL-1 draft type=sign" in " ".join(aries["gap_notes"])
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.67" in canon
+    assert "### 6.21 Layer 2 Signs — later-interpretive optional on IL-1 draft" in canon
+    assert "### Architecture impact — 1.3.67 Layer 2 later-interpretive optional on IL-1 draft" in canon
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.68" in next_block
+    assert "classification only" in next_block.lower() or "classification-only" in next_block.lower()
+    assert "Do **not** start CORE scoring" in next_block
+    assert "Lilly" in next_block
+    parent = (ROOT / "docs" / "KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md").read_text(encoding="utf-8")
+    assert "1.3.67" in parent
+    shortlist = (ROOT / "docs" / "astrology" / "IL1_LAYER2_SIGNS_SHORTLIST.md").read_text(encoding="utf-8")
+    assert "1.3.67" in shortlist
+
+
+
+
+
+

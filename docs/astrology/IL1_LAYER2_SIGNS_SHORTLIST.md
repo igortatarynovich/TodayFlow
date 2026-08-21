@@ -65,7 +65,7 @@ All three principle bodies remain **unread**. TOC/jacket **cannot** pass L2-C1. 
 
 Do **not** pick the book whose TOC is closest. Do **not** pick whoever becomes readable first *unless* that opened chapter actually passes L2-C7 + L2-C8. If the first opened chapter is a 12-type walkthrough, it is **out** of C even if it was the only readable one; try the next cell member. Do not hunt a fourth psych portrait book.
 
-This cell sets the grammar of the required later-interpretive slots. Schema still requires those slots for `type=sign`. **Do not materialize 12 objects** from C, and do not fill those slots from Rudhyar because C is closed.
+This cell sets the grammar of the later-interpretive slots. **1.3.67:** those slots are optional on IL-1 draft `type=sign` and still unattested. **Do not fill them from C or from Rudhyar.** Classification-only drafts are a later named pass, not this cell.
 
 ### D. Later interpretive — humanistic
 
@@ -128,4 +128,4 @@ Both B and D are legally readable. Readability is therefore **not** the tie-brea
 - No CORE. Shortlist agreement is not semantic consensus.
 - No planet coverage hunt.
 
-**Stopped before step 10.** Next artifact: 1.3.64 Houlding ontology extract (bounded), if named. Cell C stays a cell until a principle chapter is readable. **1.3.64 done** — classification claims only; no sign objects. **1.3.65:** Cell C `ACCESS_BLOCKED`. **1.3.66 done** — Pulse Part One humanistic; no sign objects. Next = do not materialize 12 objects; Hand Ch.10 optional.
+**Stopped before step 10.** Next artifact: 1.3.64 Houlding ontology extract (bounded), if named. Cell C stays a cell until a principle chapter is readable. **1.3.64 done** — classification claims only; no sign objects. **1.3.65:** Cell C `ACCESS_BLOCKED`. **1.3.66 done** — Pulse Part One humanistic; no sign objects. **1.3.67 done** — later-interpretive optional on IL-1 draft; no objects. Next named = classification-only drafts, if named.

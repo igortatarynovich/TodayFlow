@@ -215,12 +215,18 @@
         "mode": { "type": "string", "enum": ["cardinal", "fixed", "mutable"] },
         "element": { "type": "string", "enum": ["fire", "earth", "air", "water"] },
         "orientation": { "type": "string", "enum": ["positive", "negative"] },
-        "motivation": { "$ref": "#/$defs/lemma" },
+        "motivation": {
+          "$ref": "#/$defs/lemma",
+          "description": "Later-interpretive. Optional on IL-1 draft type=sign (1.3.67). Do not fill from Pulse, Lilly QUALITY, or an unread Cell C chapter."
+        },
         "expression": { "$ref": "#/$defs/lemma" },
         "strengths": { "$ref": "#/$defs/lemma_list" },
         "excess": { "$ref": "#/$defs/lemma_list" },
         "deficiency": { "$ref": "#/$defs/lemma_list" },
-        "behavioral_tendencies": { "$ref": "#/$defs/lemma_list" },
+        "behavioral_tendencies": {
+          "$ref": "#/$defs/lemma_list",
+          "description": "Later-interpretive. Optional on IL-1 draft type=sign (1.3.67). Do not fill from Pulse, Lilly QUALITY, or an unread Cell C chapter."
+        },
         "domain": { "$ref": "#/$defs/lemma" },
         "internal_meaning": { "$ref": "#/$defs/lemma" },
         "external_manifestations": { "$ref": "#/$defs/lemma_list" },
@@ -272,13 +278,7 @@
               "type",
               "mode",
               "element",
-              "orientation",
-              "motivation",
-              "expression",
-              "strengths",
-              "excess",
-              "deficiency",
-              "behavioral_tendencies"
+              "orientation"
             ],
             "properties": { "type": { "const": "sign" } }
           }

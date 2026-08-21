@@ -75,7 +75,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-18):** IL-1 **1.3.66:** Rudhyar Pulse Part One extracted as humanistic cycle onto `astro.sign.classifications`. No sign objects. Cell C `ACCESS_BLOCKED`. Next = do not materialize 12 objects; Hand Ch.10 optional. Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.67:** later-interpretive slots optional on IL-1 draft `type=sign`. Still unattested. No sign objects. Cell C `ACCESS_BLOCKED`. Next = classification-only drafts (Lilly grid as school_specific object values), if named. Planet fill remains research-stable. CORE scoring blocked.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -105,6 +105,15 @@ Status: Active working document
 - **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
 - **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
 - **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.67 later-interpretive optional (2026-08-21)
+
+- **SoT before:** Layer 2 schema required later-interpretive slots on every `type=sign`, which blocked classification-only drafts.
+- **SoT after:** those slots stay in the model and stay unattested; they are optional on IL-1 draft `type=sign`. Classification `mode` / `element` / `orientation` stay required. No 12 objects this pass. Do not fill from Pulse / Lilly QUALITY / Cell C.
+- **Public contract changed?** yes — JSON Schema Layer 2 `required` list
+- **Migration required?** no — zero live sign objects
+- **Canon updated?** yes — IL 1.3.67 §6.21 · `astrology_interpretation_v1.schema.json`
+- **Backward compatible?** yes for runtime (nothing `active`); old sign validators that required psych keys will fail a future classification-only draft
 
 ## Architecture impact — IL-1 1.3.66 Pulse Part One extract (2026-08-18)
 
