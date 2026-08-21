@@ -173,11 +173,29 @@ def test_day_story_to_today_contract_marks_absent_domains():
     assert contract.get("primary_action") == "Не удалось загрузить."
     assert contract["personal_growth"].get("development_point") == "Не удалось загрузить."
     assert contract["global_context"].get("period") == "Не удалось загрузить."
+    # Global Day Engine is independent of Personal interpretation (I0).
+    assert isinstance(contract.get("global_day"), dict)
+    # Color is downstream of Personal Day — leftover catalog/props must not leak.
+    assert contract.get("color_guide") is None
     assert validate_today_contract_v1(contract) == []
     for did in ("work", "money", "relationships", "energy"):
         assert contract["domains"][did].get("evidence_status") == "absent"
     assert contract["day_story"]["trace"]["confidence"] is not None
     assert "story_limitations" in contract["progress"]
+
+
+def test_unavailable_contract_strips_leftover_color_props():
+    story = _sample_story()
+    story["day_scenario"] = {
+        "ready": False,
+        "props": {"color": {"name": "Янтарный"}, "avoid_color": {"name": "Холодный стальной"}},
+    }
+    contract = day_story_to_today_contract_v1(story, generation_id="color-leak")
+    assert contract["day_story"]["interpretation_status"] == "unavailable"
+    assert contract.get("color_guide") is None
+    props = (contract["day_story"].get("day_scenario") or {}).get("props") or {}
+    assert props.get("color") is None
+    assert props.get("avoid_color") is None
 
 
 def test_day_story_to_today_contract_forwards_day_personal():

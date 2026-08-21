@@ -912,6 +912,18 @@ export function isDayAssembling(contract: TodayContractV1 | null | undefined): b
   return storyStatus === "assembling";
 }
 
+/** Personal Day meaning missing — MY DAY color/timeline/focus must not invent leftovers. */
+export function isTodayInterpretationUnavailable(
+  contract: TodayContractV1 | null | undefined,
+): boolean {
+  if (!contract) return false;
+  const storyStatus = String(contract.day_story?.interpretation_status || "").trim();
+  const progressStatus = String(
+    (contract.progress as { interpretation_status?: unknown } | undefined)?.interpretation_status || "",
+  ).trim();
+  return storyStatus === "unavailable" || progressStatus === "unavailable";
+}
+
 /** PR-3: domain is showable only with present evidence and non-empty copy. */
 export function isDomainLensPresent(lens: DomainLensV1 | null | undefined): boolean {
   if (!lens) return false;

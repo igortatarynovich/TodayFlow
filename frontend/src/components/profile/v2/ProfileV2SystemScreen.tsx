@@ -154,6 +154,7 @@ export function ProfileV2SystemScreen({
               line={journey.recognition.line}
               identityCore={journey.recognition.identityCore}
               archetypeSeed={journey.recognition.archetypeSeed}
+              hasWhy={Boolean(journey.why)}
             />
 
             {journey.why ? (

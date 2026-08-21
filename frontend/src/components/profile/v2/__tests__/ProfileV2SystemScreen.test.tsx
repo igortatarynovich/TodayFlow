@@ -170,9 +170,14 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-system")).toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-person-story")).not.toBeInTheDocument();
 
-    // Hero: archetype name as H1; body prefers identity_core over recognition_line
+    // Hero: archetype name as H1; first-frame line is recognition_line, not identity_core
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Исследователь/i);
-    expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent(/ясный фокус/i);
+    expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent(
+      "Ты первым видишь структуру.",
+    );
+    expect(screen.getByTestId("profile-v2-recognition-line")).not.toHaveTextContent(/ясный фокус/i);
+    expect(screen.getByTestId("profile-v2-recognition-signal")).toHaveTextContent(/Почему именно ты/i);
+    expect(screen.queryByTestId("profile-v2-identity-core")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-identity-markers")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-essence-foundation")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-chart-signature")).not.toBeInTheDocument();
@@ -257,10 +262,15 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-detail-cultural_catalog")).toBeInTheDocument();
   });
 
-  it("shows full identity_core as the only Act 1 body (no collapse / no dupe)", () => {
+  it("keeps identity_core behind the one first-frame signal", async () => {
+    const user = userEvent.setup();
     renderJourney();
+    expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent(
+      "Ты первым видишь структуру.",
+    );
     expect(screen.queryByTestId("profile-v2-identity-core")).not.toBeInTheDocument();
-    expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent(/ясный фокус/i);
+    await user.click(screen.getByTestId("profile-v2-recognition-signal"));
+    expect(screen.getByTestId("profile-v2-identity-core")).toHaveTextContent(/ясный фокус/i);
   });
 
   it("surfaces relationship and money styles on character scroll", () => {
@@ -332,11 +342,13 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-effort").textContent).not.toMatch(/%/);
   });
 
-  it("keeps Act 1 to share-core only: one name, one recognition line, no fact pills", () => {
+  it("keeps Act 1 to share-core only: portrait, name, one line, one signal, no fact pills", () => {
     renderJourney();
     const hero = screen.getByTestId("profile-v2-recognition");
     expect(within(hero).getAllByRole("heading", { level: 1 })).toHaveLength(1);
-    expect(screen.getByTestId("profile-v2-recognition-line")).toBeInTheDocument();
+    expect(within(hero).getByTestId("profile-v2-recognition-line")).toBeInTheDocument();
+    expect(within(hero).getByTestId("profile-v2-recognition-signal")).toBeInTheDocument();
+    expect(within(hero).queryByText(/Твоя суть/i)).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-identity-markers")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-essence-foundation")).not.toBeInTheDocument();
   });

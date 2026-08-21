@@ -1,5 +1,6 @@
 import {
   isDayNotReady,
+  isTodayInterpretationUnavailable,
   localCalendarDateISO,
   readDayLifecycle,
   type TodayContractV1,
@@ -25,6 +26,21 @@ describe("day lifecycle C5 helpers", () => {
       progress: { day_lifecycle: { status: "ready" } },
     } as TodayContractV1;
     expect(isDayNotReady(ready)).toBe(false);
+  });
+
+  it("detects Personal Day interpretation unavailable", () => {
+    const unavailable = {
+      generation_id: "1",
+      progress: { interpretation_status: "unavailable" },
+      day_story: { contract_version: "day_story_v1", interpretation_status: "unavailable" },
+    } as TodayContractV1;
+    expect(isTodayInterpretationUnavailable(unavailable)).toBe(true);
+    expect(
+      isTodayInterpretationUnavailable({
+        generation_id: "1",
+        day_story: { contract_version: "day_story_v1", interpretation_status: "ok" },
+      } as TodayContractV1),
+    ).toBe(false);
   });
 
   it("localCalendarDateISO matches local Y-M-D", () => {

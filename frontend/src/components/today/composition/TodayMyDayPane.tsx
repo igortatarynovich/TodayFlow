@@ -10,6 +10,7 @@ import {
 } from "@/design-system";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
+import { TODAY_UNAVAILABLE_COPY } from "@/lib/todaySlotAvailability";
 
 type Props = {
   headline?: string | null;
@@ -21,6 +22,8 @@ type Props = {
   colorCard?: ReactNode;
   extraCards?: ReactNode;
   depthLayer?: ReactNode;
+  /** Personal Day meaning missing — one honest status, no leftover color/timeline/focus. */
+  meaningUnavailable?: boolean;
 };
 
 /**
@@ -37,7 +40,21 @@ export function TodayMyDayPane({
   colorCard = null,
   extraCards = null,
   depthLayer = null,
+  meaningUnavailable = false,
 }: Props) {
+  if (meaningUnavailable) {
+    return (
+      <div className={layout.stack} data-testid="today-my-day" data-fallback="unavailable">
+        <DsContentCard
+          tone="glass"
+          testId="today-my-day-unavailable"
+          title={TODAY_UNAVAILABLE_COPY}
+        />
+        {extraCards}
+      </div>
+    );
+  }
+
   return (
     <div className={layout.stack} data-testid="today-my-day">
       {headline ? (

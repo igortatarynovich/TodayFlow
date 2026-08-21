@@ -195,3 +195,44 @@ describe("buildTodayDayStoryViewModel tarot personal layer", () => {
     expect(story.glance.helpful[0]?.comment || "").not.toMatch(/Повешенный|стиле/i);
   });
 });
+
+describe("buildTodayDayStoryViewModel color on unavailable", () => {
+  it("does not resolve morning/catalog color when interpretation is unavailable", () => {
+    const contract: TodayContractV1 = {
+      ...sampleContract,
+      color_guide: { name: "Янтарный", intensity: "ярко" },
+      day_story: {
+        contract_version: "day_story_v1",
+        interpretation_status: "unavailable",
+        theme: "Ровный продуктивный ритм.",
+        day_scenario: { props: { color: { name: "Янтарный" } } },
+      },
+    };
+    const vm = buildTodayCompositionViewModel({
+      contract,
+      cardName: null,
+      cardMeaning: null,
+      numerologyValue: null,
+      numerologyMeaning: null,
+      morningRitualData: {
+        celestial_events: { daily_symbols: { color: { name: "Янтарный", benefit_ru: "тёплая поддержка" } } },
+      } as never,
+    });
+    const story = buildTodayDayStoryViewModel({
+      base: vm,
+      contract,
+      dateISO: "2026-08-18",
+      cardName: null,
+      cardMeaning: null,
+      numerologyValue: null,
+      numerologyMeaning: null,
+      morningRitualData: {
+        celestial_events: { daily_symbols: { color: { name: "Янтарный", benefit_ru: "тёплая поддержка" } } },
+      } as never,
+      yesterdayClosed: false,
+      todayOpened: true,
+      engagement: createEmptyDayEngagement(),
+    });
+    expect(story.colorGuide).toBeNull();
+  });
+});

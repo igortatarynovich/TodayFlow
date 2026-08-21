@@ -1,6 +1,6 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-18
+Last updated: 2026-08-21
 Owner: Product + Engineering
 Status: Active working document
 
@@ -14,6 +14,17 @@ Status: Active working document
 - **Migration required?** no — additive logs
 - **Canon updated?** yes — [LLM_QUALITY_AND_PROMPT_EVOLUTION.md](./LLM_QUALITY_AND_PROMPT_EVOLUTION.md) AI COGS · [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md) §3/§14 (token/cost 🟡)
 - **Backward compatible?** yes. `include_usage` on streams; retry without `stream_options` if the provider rejects it.
+
+**DONE (CODE, 2026-08-18):** **Today unavailable honesty** — MY DAY no longer mixes «Не удалось загрузить.» with leftover focus title, catalog/morning color, or independent natal timeline. `color_guide` null when interpretation unavailable; Global Day Engine stays on the contract (I0). Canon: TODAY_PRODUCT_FLOW_V1 §3.
+
+## Architecture impact — Today unavailable MY DAY (2026-08-18)
+
+- **SoT before:** unavailable shell copy in period/growth/action; leftover scenario color + morning catalog still became «цвет дня»; MY DAY fetched `day_facts` clocks independently; leftover `conflict.short_name` counted as authoritative story.
+- **SoT after:** `color_guide=null` on unavailable; MY DAY = one honest status, omit color/natal timeline/leftover focus; `global_day` still attached (Engine, not Personal interpretation).
+- **Public contract changed?** yes — `color_guide` null on unavailable; `global_day` present on unavailable.
+- **Migration required?** no version bump; next GET + FE rebuild.
+- **Canon updated?** yes — `docs/today/TODAY_PRODUCT_FLOW_V1.md` §3.
+- **Backward compatible?** failure copy still used for navigational slots; clients expecting a color swatch on a failed Personal Day lose that invent.
 
 **NOW (MOTION / MOON, 2026-08-17):** FOUNDATION_UI v0.7 — animation explains state or day mood; else delete. Surface budget: landing 7/10 · app 2–3/10 · share 5/10. No stars / particles / flying zodiac. Moon = live astronomical object (`DsCelestialMoon`, real phase). Today moon is static (no idle spin). Stack: CSS + Framer; WebGL only for the moon. SoT: FOUNDATION_UI §2.7 · §18.
 
@@ -75,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.70:** Layer 1 Outers definition/readiness. Claims exist; objects withheld. Do not assemble Uranus from Hand. Next named = scoped optional-on-draft for outer meaning keys **or** keep withheld. Layer 2 stays closed. Planet fill remains research-stable. CORE scoring blocked.
+**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.83 Mainstream Sign Semantic Map.** Territory locked. Next = Sign Canon grammar (1.3.84). Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -141,6 +152,123 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — IL 1.3.70 §6.24 · `docs/astrology/IL1_LAYER1_OUTERS_DEFINITION.md`
 - **Backward compatible?** yes — catalog unchanged; Sun–Saturn `function` untouched
+
+## Architecture impact — IL-1 1.3.71 Knowledge Core V1 Semantic Inventory (2026-08-21)
+
+- **SoT before:** next named IL pass was still a layer slice (outers schema or ASC). Literature could restart from any gap.
+- **SoT after:** V1-wide inventory is the **owner-approved** freeze map. New literature only if row X → consumer Y → missing Z. IL-1 done criterion = minimum controlled primitives, not bibliography.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.71 §6.25 · `docs/astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md`
+- **Backward compatible?** yes — no catalog/schema change
+
+## Architecture impact — IL-1 1.3.72 Outer Planet Draft Representation (2026-08-21)
+
+- **SoT before:** Layer 1 required meaning keys on every celestial_object, so outers stayed withheld.
+- **SoT after:** those keys optional on IL-1 draft Uranus/Neptune/Pluto only. Sun–Saturn unchanged. School packages stay in claims. No objects this pass. Fill waits for TodayFlow Canon (1.3.73).
+- **Public contract changed?** yes — JSON Schema Layer 1 requiredness scoped
+- **Migration required?** no — 0 outer objects
+- **Canon updated?** yes — IL 1.3.72 §6.26 · `docs/astrology/IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md` · `astrology_interpretation_v1.schema.json`
+- **Backward compatible?** yes for runtime (`draft` ignored)
+
+## Architecture impact — IL-1 1.3.73 TodayFlow Canon (2026-08-21)
+
+- **SoT before:** product meaning waited on CORE = school-intersection. Next named was outer materialize.
+- **SoT after:** TodayFlow Canon is the product-meaning gate. CORE is research metadata, not permission. Criteria: prevalence · recognition · distinctiveness · utility · composability. Next = Sun–Pluto claim audit on the existing ledger. Outer schema 1.3.72 stands; `function` fill waits.
+- **Public contract changed?** no JSON this pass. Future IL-3 reads Canon slots, not `evidence_tier=core`.
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.73 §6.27 · `docs/astrology/TODAYFLOW_CANON_V1.md` · parent §4
+- **Backward compatible?** yes for runtime. Deprecated as product gate: wait-for-CORE.
+
+## Architecture impact — IL-1 1.3.74 Corpus / Consensus / Canon (2026-08-21)
+
+- **SoT before:** Canon criteria existed; Corpus, Consensus, and Canon could still collapse into one pile; next could look like a long research cycle.
+- **SoT after:** three layers distinct. 491 claims = Evidence Corpus (keep). Runtime = Canon → composition → LLM formulates. Next = short corpus pass. Not Outer / ASC / books.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.74 §6.28 · TODAYFLOW_CANON_V1.md §0
+- **Backward compatible?** yes
+
+## Architecture impact — IL-1 1.3.75 Co–Star teardown freeze (2026-08-21)
+
+- **SoT before:** next named IL pass was a short Evidence Corpus → Semantic Consensus → Canon proposal. Co–Star was landing layout + forbidden IL source.
+- **SoT after:** IL architecture frozen. Empirical base = `docs/audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md` (Phase 0). Calc must be correct; meaning must be consistent, recognizable, useful. Quality criteria = feels-like-me / specific / noticing / share / return. Do not copy Co–Star. Next = Phase 1 in-app corpus, not Canon scoring.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.75 §6.29 · teardown file · inventory execution order · parent 1.3
+- **Backward compatible?** yes. Deprecated as next pass: short corpus scoring.
+
+## Architecture impact — IL-1 1.3.83 Mainstream Sign Semantic Map (2026-08-21)
+
+- **SoT before:** 1.3.82 named a missing Sign Canon manner operator. Next risk: personality dumps or `earth` → practical.
+- **SoT after:** same panel as planets. Include/secondary/exclude locked for 12 signs. Classification is not proof. Trait ≠ manner named, not split. Next = Sign Canon grammar.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md` · IL 1.3.83 §6.37
+- **Backward compatible?** yes. Sign objects stay classification-only.
+
+## Architecture impact — IL-1 1.3.82 composition smoke-test (2026-08-21)
+
+- **SoT before:** planet `canon` on seven drafts; next could have been Signs as content.
+- **SoT after:** four constructions scored. Aspect PASS. Sign/house PARTIAL. Next = Signs Mainstream as Sign Canon territory.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.82 §6.36
+- **Backward compatible?** yes
+
+## Architecture impact — IL-1 1.3.81 Sun–Saturn canon fill (2026-08-21)
+
+- **SoT before:** `canon` nest existed; packs lived in a doc.
+- **SoT after:** seven planet drafts have product `canon` separate from classical `function`. Next = 1.3.82 smoke-test, not Signs.
+- **Public contract changed?** yes — seven drafts include `canon`
+- **Migration required?** no — still `draft`
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md` · IL 1.3.81 §6.35 · `objects_v1.json`
+- **Backward compatible?** yes for runtime (`draft`)
+
+## Architecture impact — IL-1 1.3.80 Planet Canon storage (2026-08-21)
+
+- **SoT before:** Canon packs lived only in a doc. Risk of stuffing them into `function` / four-key `domains`.
+- **SoT after:** optional `canon` nest with six grammar names. Legacy keys not product meaning. Catalog unchanged.
+- **Public contract changed?** yes — optional `canon`
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_STORAGE_V1.md` · IL 1.3.80 §6.34 · schema
+- **Backward compatible?** yes for current catalog
+
+## Architecture impact — IL-1 1.3.79 Planet Canon V1 (2026-08-21)
+
+- **SoT before:** grammar locked; dry-run could be promoted without origin control.
+- **SoT after:** ten packs locked. Each atom is direct or derived. Four audits. Next = schema pass.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_V1.md` · IL 1.3.79 §6.33
+- **Backward compatible?** yes. Catalog unchanged.
+
+## Architecture impact — IL-1 1.3.78 Planet Canon grammar (2026-08-21)
+
+- **SoT before:** next was Canon shape; risk of starting from old JSON keys including `tempo`.
+- **SoT after:** six engine slots. `tempo` = Foundation. `needs` ≠ `drive`. Dry-run ≠ fill. Next = 1.3.79 fill from 1.3.77. No schema.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_GRAMMAR_V1.md` · IL 1.3.78 §6.32
+- **Backward compatible?** yes. Catalog unchanged.
+
+## Architecture impact — IL-1 1.3.77 Mainstream Planet Semantic Map (2026-08-21)
+
+- **SoT before:** panel #3 unnamed; mainstream could be misread as 2/3 word vote; planet table was a draft.
+- **SoT after:** panel = Astrodienst · Cafe Astrology · Astrology.com. Concept families locked. Territory is not Canon and not JSON. Next = Planet Canon shape.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md` · IL 1.3.77 §6.31
+- **Backward compatible?** yes. Catalog unchanged.
+
+## Architecture impact — IL-1 1.3.76 Product Canon vs Lenses (2026-08-21)
+
+- **SoT before:** product meaning from school-convergence or the 491-claim ledger; IL unlock waited on Co–Star in-app Phase 1.
+- **SoT after:** Mainstream conventions → TodayFlow Canon → runtime. Research corpus → Lenses. CORE not a gate. Co–Star = recognition check. Next = Mainstream planet map. No books. No object rewrite.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md` · IL 1.3.76 §6.30
+- **Backward compatible?** yes. 491 claims kept as lenses.
 
 ## Architecture impact — IL-1 1.3.66 Pulse Part One extract (2026-08-18)
 
@@ -1891,7 +2019,6 @@ Historical note:
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
 - 2026-08-18 | Ops / LLM | **AI COGS llm_usage_v1** | **CODE** | Per-request feature/model/tokens/cost + operation_id/trigger/retry. Billed output does not double-count reasoning. Report: feature×trigger×model×retry_reason + top-20 ops. Do not switch model until that report. Canon: LLM_QUALITY AI COGS · AMLL token fields 🟡.
-- 2026-08-17 | Visual / Motion | **Motion budget + live Moon (no stars)** | **CANON + CODE** | FOUNDATION_UI v0.7 §2.7/§18. Landing 7/10 · app 2–3/10 · share 5/10. Today moon static. No Three.js. Natal starfield still debt.
 - 2026-08-17 | Brand / Copy | **Landing copy: three trust levels** | **CODE** | Точность / глубина / человечность as pillar kickers. Locked H1 unchanged. Rejected: «наука», «не алгоритм», «построить карту» as primary. [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.3.
 - 2026-08-17 | Brand / Copy | **Trust Layer on landing + ads brief** | **CODE** | Hero `trustLine` · `#trust` three pillars · footer · [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.1 §6 ads. No Horizons / no NASA endorsement / no finished IL catalog. Next = about/press if needed.
 - 2026-08-17 | Brand / Copy | **Trust Layer locked — two pillars + NASA/JPL bounds** | **CANON** | [TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) v1.0. Canon ≠ averaged astrology; provenance is brand language. Astronomy copy = Swiss/DE431 live, not Horizons. Next = landing + ads. Voice Canon v1.9 acquisition exception.

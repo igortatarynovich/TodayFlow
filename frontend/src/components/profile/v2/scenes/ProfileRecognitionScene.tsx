@@ -1,36 +1,60 @@
 "use client";
 
+import { useState } from "react";
 import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
-import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
+import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
 import styles from "@/design-system/profile/dsProfileV2System.module.css";
 import { ArchetypeHeroVisual } from "@/components/visualIdentity/ArchetypeHeroVisual";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { MotionDrift } from "@/design-system/motion";
 import { resolveArchetypeIllustrationSlug } from "@/lib/visualIdentity/registry";
+import { compactProfileCopy } from "@/lib/profilePage/truncateProfileCopy";
 
 export type ProfileRecognitionSceneProps = {
   name: string | null;
   line: string | null;
-  /** Full identity_core — preferred body when present (no collapse / no duplicate). */
+  /** Kitchen text — never the first-frame line. Behind the one signal. */
   identityCore: string | null;
   archetypeSeed: string | null;
+  /** When set, the signal can move to Why if there is no deeper core. */
+  hasWhy?: boolean;
 };
 
-const recognitionNav = PROFILE_V2_DEPTH_NAV[0];
+const LINE_MAX = 120;
+
+function sameLine(a: string, b: string): boolean {
+  return a.trim().toLowerCase() === b.trim().toLowerCase();
+}
 
 /**
- * Act 1: archetype name + one full identity body + visual.
- * Prefer identity_core; fall back to recognition_line. No toggle / no dupe.
+ * First viewport @390: portrait → name → one personal line → one signal.
+ * identity_core is disclosure, not the line. No act badge.
  */
 export function ProfileRecognitionScene({
   name,
   line,
   identityCore,
   archetypeSeed,
+  hasWhy = false,
 }: ProfileRecognitionSceneProps) {
   const hasPortraitSlot = Boolean(resolveArchetypeIllustrationSlug(archetypeSeed));
-  const body = (identityCore?.trim() || line?.trim() || "") || null;
   const copy = PROFILE_V2_COPY.zones.recognition;
+  const core = identityCore?.trim() || "";
+  const lineText =
+    compactProfileCopy(line?.trim() || "", LINE_MAX) ||
+    compactProfileCopy(core, LINE_MAX) ||
+    null;
+  const deeper = core && lineText && !sameLine(core, lineText) ? core : null;
+  const [open, setOpen] = useState(false);
+  const showSignal = Boolean(deeper) || hasWhy;
+
+  function onSignal() {
+    if (deeper) {
+      setOpen((v) => !v);
+      return;
+    }
+    document.getElementById("profile-v2-why")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   return (
     <section
@@ -45,11 +69,6 @@ export function ProfileRecognitionScene({
       </div>
 
       <div className={`${styles.journeyHeroCopy} ${profileMotionStyles.heroEnter}`}>
-        <p className={styles.journeyStepIndex}>
-          <span className={styles.journeyStepBadge}>{recognitionNav.step.replace(/^0/, "")}</span>
-          <span>{copy.title}</span>
-        </p>
-        {copy.lead ? <p className={styles.zoneLead}>{copy.lead}</p> : null}
         {name ? (
           <h1
             id="profile-v2-recognition-title"
@@ -63,10 +82,28 @@ export function ProfileRecognitionScene({
             {copy.title}
           </h1>
         )}
-        {body ? (
+        {lineText ? (
           <p className={styles.journeyRecognitionLine} data-testid="profile-v2-recognition-line">
-            {body}
+            {lineText}
           </p>
+        ) : null}
+        {showSignal ? (
+          <div className={styles.recognitionDeeper}>
+            <button
+              type="button"
+              className={styles.recognitionDeeperToggle}
+              onClick={onSignal}
+              aria-expanded={deeper ? open : undefined}
+              data-testid="profile-v2-recognition-signal"
+            >
+              {deeper && open ? copy.deeperHide : copy.signalLabel}
+            </button>
+            {deeper && open ? (
+              <p className={styles.recognitionDeeperBody} data-testid="profile-v2-identity-core">
+                {deeper}
+              </p>
+            ) : null}
+          </div>
         ) : null}
       </div>
 

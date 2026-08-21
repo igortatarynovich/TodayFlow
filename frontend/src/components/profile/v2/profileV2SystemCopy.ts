@@ -23,7 +23,8 @@ export const PROFILE_V2_COPY = {
     recognition: {
       title: "Твоя суть",
       lead: "",
-      deeperLabel: "Как это звучит полнее",
+      signalLabel: "Почему именно ты",
+      deeperLabel: "Почему именно ты",
       deeperHide: "Свернуть",
     },
     why: {

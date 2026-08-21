@@ -187,6 +187,27 @@ describe("Glance Daily Focus — prioritize / avoid", () => {
     expect(focus.avoid).toMatch(/тредов|конфликт/i);
   });
 
+  it("does not mix leftover theme or shell copy when interpretation is unavailable", () => {
+    const focus = buildGlanceDailyFocus(
+      {
+        ...minimalContract,
+        global_context: { period: "Не удалось загрузить." },
+        personal_growth: { development_point: "Не удалось загрузить." },
+        primary_action: "Не удалось загрузить.",
+        day_story: {
+          contract_version: "day_story_v1",
+          interpretation_status: "unavailable",
+          theme: "Ровный продуктивный ритм.",
+          do: ["Не удалось загрузить."],
+        },
+      },
+      null,
+    );
+    expect(focus.title).toBe("");
+    expect(focus.prioritize).toBeNull();
+    expect(focus.avoid).toBeNull();
+  });
+
   it("folds tarot trap into empty avoid only; keeps day_story avoid", () => {
     const withAvoid = buildGlanceDailyFocus(
       {
