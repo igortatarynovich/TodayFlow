@@ -261,7 +261,7 @@ Dry-run check: each pack has a verb, an aim, a condition of health, two branches
 - Signs / houses / aspects / ASC
 - Books · CORE · Co–Star ingest
 
-**Next named (one task):** smoke-test **locked 1.3.82**. Sign map **locked 1.3.83**. Sign grammar **locked 1.3.84**. Next = Sign Canon fill.
+**Next named (one task):** smoke-test **locked 1.3.82**. Sign map **locked 1.3.83**. Sign grammar **locked 1.3.84**. Sign Canon fill **locked 1.3.85**. Next = Sign Canon storage.
 
 ---
 

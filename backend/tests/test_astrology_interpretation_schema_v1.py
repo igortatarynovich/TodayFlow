@@ -2910,7 +2910,7 @@ def test_sign_canon_grammar_v1():
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.84" in canon
+    assert "**Версия:** 1.3.85" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -2934,7 +2934,71 @@ def test_sign_canon_grammar_v1():
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.84" in next_block
+    assert "1.3.85" in next_block
     assert "Sign Canon fill" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+
+
+def test_sign_canon_v1_fill_with_provenance():
+    """1.3.85: Sign Canon V1 packs + origin. Four gates. No schema. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.39 Sign Canon V1 fill" in canon
+    assert "**Версия:** 1.3.85" in canon
+    packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
+    assert "direct" in packs
+    assert "derived" in packs
+    assert "direct-secondary" in packs
+    for sign in (
+        "Aries",
+        "Taurus",
+        "Gemini",
+        "Cancer",
+        "Leo",
+        "Virgo",
+        "Libra",
+        "Scorpio",
+        "Sagittarius",
+        "Capricorn",
+        "Aquarius",
+        "Pisces",
+    ):
+        assert f"### {sign}" in packs
+        assert "manner:" in packs
+        assert "excess:" in packs
+    assert "reserved · disciplined · structured" in packs
+    assert "intense · probing · concentrated" in packs
+    cap = packs.split("### Capricorn")[1].split("### Aquarius")[0]
+    cap_manner = cap.split("```text")[1].split("```")[0]
+    assert "reserved" in cap_manner
+    assert "disciplined" in cap_manner
+    assert "structured" in cap_manner
+    assert "ambition" not in cap_manner
+    assert "achievement" not in cap_manner
+    assert "ambition / achievement" in cap
+    gemini_manner = packs.split("### Gemini")[1].split("```text")[1].split("```")[0]
+    assert "communicate" not in gemini_manner
+    assert "think" not in gemini_manner
+    aries_manner = packs.split("### Aries")[1].split("```text")[1].split("```")[0]
+    assert "assert" not in aries_manner
+    assert "act" not in aries_manner
+    assert "Mercury × Capricorn" in packs
+    assert "Mars × Capricorn" in packs
+    assert "Moon × Capricorn" in packs
+    assert "Venus × Scorpio" in packs
+    assert "Origin control" in packs
+    assert "Domicile collision" in packs
+    assert "Discrimination" in packs
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert "canon" not in by_id["astro.sign.capricorn"]
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.85" in next_block
+    assert "Sign Canon storage" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
 

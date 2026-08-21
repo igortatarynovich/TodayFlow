@@ -281,10 +281,11 @@ out:      humanitarian as arena · disrupt as Uranus
 - Reopen 1.3.83 research · books · CORE · Co–Star ingest
 - Repair PARTIAL by writing manner onto catalog objects
 
-**Next named:** Sign Canon fill from this grammar (origin control, all 12, especially Venus × Capricorn). Then storage. Then repeat smoke-test. House Canon after that.
+**Next named:** Sign Canon fill — **done 1.3.85** ([SIGN_CANON_V1.md](./SIGN_CANON_V1.md)). Next = Sign Canon storage. Then write packs onto sign drafts. Then repeat smoke-test. House Canon after that.
 
 ---
 
 ## Changelog
 
+- **1.1 (2026-08-21)** — Fill locked 1.3.85. Grammar unchanged. Dry-run lemmas remain illustrative; locked values live in SIGN_CANON_V1.
 - **1.0 (2026-08-21)** — 1.3.84. Sign = manner. Two slots (`manner` · `excess`). Territory narrower than Canon is expected. Dry-run only. Grammar before fill.

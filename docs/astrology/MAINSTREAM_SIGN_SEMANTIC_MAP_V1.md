@@ -297,15 +297,13 @@ Astrodienst compact: sensitive, compassionate, helpful, sociable, very adaptable
 
 ---
 
-## 6. Forward look — Sign Canon Grammar (not locked)
+## 6. Forward look — Sign Canon (grammar and fill now locked)
 
 Territory is the input. Canon is a **model PlanetInSign can use**. Do not stop at personality keywords.
 
-Owner shape is **unknown until 1.3.84**. That pass names which atoms a sign must carry so a planet function can be modified in manner. It may drop ambitious-as-trait. It may keep structured/practical as manner. It must not invent families that are not on this map.
+Grammar locked 1.3.84. Fill locked 1.3.85 ([SIGN_CANON_V1.md](./SIGN_CANON_V1.md)). Next = Sign Canon storage, then write packs onto sign drafts, then repeat smoke-test. **House Canon after that.**
 
-Then: dry-run all 12, especially Venus × Capricorn → Sign Canon fill → storage/schema → repeat smoke-test. **House Canon after that.**
-
-Schema today still has sign `mode` · `element` · `orientation` only. Mapping families onto manner slots is the grammar pass. **Not this file.**
+Schema today still has sign `mode` · `element` · `orientation` only. Mapping families onto manner slots is done in fill, not this file. Storage is the next named pass.
 
 ---
 
@@ -318,7 +316,7 @@ Schema today still has sign `mode` · `element` · `orientation` only. Mapping f
 - A 2/3 word spreadsheet
 - Repairing 1.3.82 PARTIAL
 
-**Next named:** Sign Canon Grammar — **done 1.3.84.** Next = Sign Canon fill. House Canon later.
+**Next named:** Sign Canon Grammar — **done 1.3.84.** Sign Canon fill — **done 1.3.85.** Next = Sign Canon storage. House Canon later.
 
 ---
 
