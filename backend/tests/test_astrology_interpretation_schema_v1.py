@@ -2587,7 +2587,6 @@ def test_mainstream_planet_semantic_map_v1():
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.77" in canon
     assert "### 6.31 Mainstream Planet Semantic Map" in canon
     planet_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md"
@@ -2609,7 +2608,35 @@ def test_mainstream_planet_semantic_map_v1():
     assert "1.3.77" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
-    assert "Canon **shape**" in next_block or "Canon shape" in next_block
+
+
+def test_planet_canon_grammar_v1():
+    """1.3.78: Planet Canon grammar. Six slots. tempo out. No ingest. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.78" in canon
+    assert "### 6.32 Planet Canon grammar" in canon
+    grammar = (ROOT / "docs" / "astrology" / "PLANET_CANON_GRAMMAR_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "core_function" in grammar
+    assert "drive" in grammar
+    assert "needs" in grammar
+    assert "constructive" in grammar
+    assert "distorted" in grammar
+    assert "domains" in grammar
+    assert "tempo" in grammar.lower()
+    assert "not a Canon slot" in grammar or "not Canon" in grammar
+    assert "needs` ≠ `drive" in grammar or "needs ≠ drive" in grammar
+    assert "Dry-run" in grammar or "dry-run" in grammar
+    assert "1.3.79" in grammar
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.78" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "1.3.79 fill" in next_block or "1.3.79" in next_block
 
 
 

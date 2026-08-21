@@ -120,19 +120,7 @@ TodayFlow’s job is to **structure** that territory, not to invent a different 
 
 Mainstream says: Mars = action, desire, assertion, aggression, drive.
 
-TodayFlow may structure that as (shape example, **not** an object lock; Canon-shape pass is next):
-
-```text
-core function:  pursue / act
-inner drive:    agency / desire
-constructive:   courage · initiative · decisive action · healthy assertion
-distorted:      aggression · impulsivity · unnecessary conflict
-domains:        action · competition · sexuality/desire · confrontation
-```
-
-That is **our data**. No runtime research.
-
-Schema today still uses `function` · `themes` · `positive_expression` · `shadow` · `domains`. Mapping of `need` / `constructive` onto those keys is a later named schema pass. Do not add keys in this file’s wake.
+Grammar locked in [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md) (1.3.78): `core_function` · `drive` · `needs` · `constructive` · `distorted` · `domains`. `needs` ≠ `drive`. `tempo` is Foundation/runtime, not Canon. Schema mapping is a later named pass. Do not shrink the grammar to old IL keys.
 
 Do the same structuring for signs, houses, aspects, then ASC/MC. Then check Co–Star (recognition), not copy.
 
@@ -183,11 +171,12 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Unlock Co–Star in-app scraping
 - Require 2/3 literal-word overlap
 
-**Next named (one task):** TodayFlow Planet Canon **shape** (generative slots). Map 1.3.77 is in. Still no object rewrite.
+**Next named (one task):** **1.3.79** fill ten planet packs from 1.3.77 using the 1.3.78 grammar. No literature. No schema. Still no object rewrite until fill is locked.
 
 ---
 
 ## Changelog
 
-- **1.1 (2026-08-21)** — 1.3.77 planet map. Astrology.com locked as panel #3. Concept families, not 2/3 word vote. Territory table first-term order updated. Next = Canon shape, not JSON.
+- **1.2 (2026-08-21)** — 1.3.78 Planet Canon grammar. Six slots. tempo out. needs ≠ drive. Next = 1.3.79 fill, not schema.
+- **1.1 (2026-08-21)** — 1.3.77 planet map. Astrology.com locked as panel #3. Concept families, not 2/3 word vote. Territory table first-term order updated. Next = Canon shape, not JSON. **Done 1.3.78.**
 - **1.0 (2026-08-21)** — Product Canon vs Lenses locked. Mainstream operational definition. Planet territory = working draft. Co–Star = recognition check. CORE not a gate. No objects.

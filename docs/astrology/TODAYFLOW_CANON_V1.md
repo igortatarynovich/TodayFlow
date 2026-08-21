@@ -36,7 +36,7 @@ The other extreme is also forbidden: LLM inventing “popular” meanings at run
 | Layer | Holds | Does not hold |
 |-------|-------|----------------|
 | **Mainstream V1** (was “Semantic Consensus”) | Contemporary Western convention from a bounded modern panel. Operational definition in the split file. | Google frequency. One author. Historical heat/dry as Today function. |
-| **TodayFlow Canon** | Unique structuring of that convention (function / need / constructive / shadow / domains — our lemmas). | Copied paragraphs. Runtime LLM invention. A private astrology. |
+| **TodayFlow Canon** | Unique structuring of that convention (`core_function` / `drive` / `needs` / `constructive` / `distorted` / `domains` — our lemmas). | Copied paragraphs. Runtime LLM invention. A private astrology. `tempo` as meaning. |
 | **Research Corpus / Lenses** (was “Evidence Corpus”) | What classical / traditional / psychological / humanistic / professional sources assert. Existing claims + provenance. | Product default. CORE permission. |
 
 Then:
@@ -208,6 +208,6 @@ This is **not** IL-4 Expression. Expression still cannot choose meaning. Canon s
 - No schema change.
 - The Pluto table in §4 is a **method example**, not product text.
 
-**Next named (1.3.77):** Mainstream planet map is in ([MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md)). Next = TodayFlow Planet Canon **shape**. Not JSON dump. Not object rewrite. Not CORE. Not Co–Star ingest.
+**Next named (1.3.78):** Planet Canon grammar is in ([PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md)). Next = **1.3.79 fill**. Not schema. Not object rewrite. Not CORE. Not Co–Star ingest.
 
 Hypothesis (still true, not executing as a ledger-scoring pass): the 491 planet claims are a usable **Lens** dataset; they were asked to pick product meaning. Schema 1.3.72 remains valid. Co–Star remains a recognition check.

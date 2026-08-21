@@ -39,10 +39,11 @@
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — JSON / Machine Contract build order (не порядок исследования смысла)
-- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.77):** Mainstream planet map locked; next = Canon shape. Исторический корпус = lenses
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.78):** Planet Canon grammar locked; next = 1.3.79 fill. Исторический корпус = lenses
 - [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) — **IL V1 freeze map (APPROVED):** что библиотека должна знать. Books только против named `KC-*` row. IL-1 done = минимальные primitives
 - [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) — **Product Canon vs Lenses (1.3.76):** Mainstream → Canon → runtime. Corpus → education / SEO / deep dives
 - [astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) — **Mainstream planet map (1.3.77):** concept families. Not Canon, not JSON
+- [astrology/PLANET_CANON_GRAMMAR_V1.md](./astrology/PLANET_CANON_GRAMMAR_V1.md) — **Planet Canon grammar (1.3.78):** engine slots. tempo not Canon. Dry-run ≠ fill
 - [audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](./audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) — Co–Star teardown Phase 0: **recognition check**, не источник смысла
 - [TODAYFLOW_CANON_V1.md](./astrology/TODAYFLOW_CANON_V1.md) — **структуризация Mainstream** в Canon-атомы. Runtime: атомы → композиция → LLM формулирует. CORE не gate
 - [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md)

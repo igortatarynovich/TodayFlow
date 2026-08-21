@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-21  
 **Status:** **APPROVED** — V1 freeze map (owner 2026-08-21). Literature discovery is a tool against a named `KC-*` row, not a process.  
-**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.25–§6.31. Parent order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Today Meaning SoT: [TODAY_CONTENT_PIPELINE_V1.md](../today/TODAY_CONTENT_PIPELINE_V1.md). Identity/mechanics: [foundation_v1.md](../foundation_v1.md). Compose: [ASTROLOGY_COMPOSITION_MODEL.md](../ASTROLOGY_COMPOSITION_MODEL.md). Outer representation: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Product-meaning gate: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md). Split: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Recognition check: [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md).
+**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.25–§6.32. Parent order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Today Meaning SoT: [TODAY_CONTENT_PIPELINE_V1.md](../today/TODAY_CONTENT_PIPELINE_V1.md). Identity/mechanics: [foundation_v1.md](../foundation_v1.md). Compose: [ASTROLOGY_COMPOSITION_MODEL.md](../ASTROLOGY_COMPOSITION_MODEL.md). Outer representation: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Product-meaning gate: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md). Split: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Grammar: [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md). Recognition check: [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md).
 
 This file is the **V1 limiter**. IL V1 is not “complete astrology.” It is the minimum set of controlled semantic primitives sufficient for Today / Profile / Compatibility without the LLM inventing meanings. That is the IL-1 done criterion — not book count, claim count, school count, or CORE lemmas.
 
@@ -11,7 +11,7 @@ This file is the **V1 limiter**. IL V1 is not “complete astrology.” It is th
 ## Architecture impact
 
 - **SoT before:** parent order existed, but the next named IL pass was still a layer slice. Gap → author → closed book could run without a V1-wide constituent map.
-- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. Next execution = Planet Canon shape. Co–Star is a recognition check. Do not rewrite objects this inventory.
+- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. **1.3.78:** Planet Canon grammar locked. Next execution = **1.3.79 fill**. Co–Star is a recognition check. Do not rewrite objects this inventory.
 - **Public contract changed?** no (inventory). Outer schema delta is 1.3.72.
 - **Migration required?** no
 - **Canon updated?** yes — this file · IL §6.25 / §6.26 · parent · handoff · tracker
@@ -38,7 +38,7 @@ Product question first. A layer is a job, not a bookshelf.
 | Layer | Job | Holds | Must not hold |
 |-------|-----|-------|----------------|
 | **Foundation** | astronomical/astrological **identities and mechanics** | names, rulers, dates, orbs, house system, geometry, Swiss emit | meaning of Saturn, character of Aries |
-| **Planets** | what **function/process** the body is | `function` · `themes` · `positive_expression` · `shadow` · `domains` · `tempo` | planet-in-sign recipes, `today_message` |
+| **Planets** | what **function/process** the body is | **Canon grammar (1.3.78):** `core_function` · `drive` · `needs` · `constructive` · `distorted` · `domains`. Schema storage still `function` · `themes` · `positive_expression` · `shadow` · `domains` · `tempo` until a later named pass. `tempo` in schema ≠ Canon | planet-in-sign recipes, `today_message` |
 | **Signs** | **how** a function is expressed | classification: `mode` · `element` · `orientation`. Later-interpretive: `motivation` · `expression` · `strengths` · `excess` · `deficiency` · `behavioral_tendencies` | ruler/dates (Foundation), planet×sign (Layer 5) |
 | **Houses** | **where** in experience | `domain` · `internal_meaning` · `external_manifestations` · `people` · `activities` · `resources` · `risks` | ASC as a house; turned-house technique |
 | **Aspects** | **how two functions interact** | `angle` · `interaction` · `requires_action` | pair cookbooks (Mars□Saturn is Layer 5 / IL-2) |
@@ -211,7 +211,7 @@ ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. D
 
 ---
 
-## 6. Execution order (LOCKED, then redirected 1.3.77)
+## 6. Execution order (LOCKED, then redirected 1.3.78)
 
 ```text
 1. Outer Planet Draft Representation V1        ✅ 1.3.72 schema/model
@@ -219,8 +219,8 @@ ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. D
 3. Co–Star Semantic & Content Engine teardown  ✅ Phase 0 (1.3.75)  recognition check
 4. Product Canon vs Lenses                     ✅ 1.3.76 split
 5. Mainstream Planet Semantic Map              ✅ 1.3.77  (territory + families; not Canon)
-6. TodayFlow Planet Canon shape                NEXT  generative slots; no object fill
-7. Fill Canon / materialize outers             after shape lock
+6. Planet Canon grammar                        ✅ 1.3.78  (slots; dry-run; not fill)
+7. Fill ten planet packs                       NEXT  1.3.79 from 1.3.77; no literature; no schema
 8. Signs → Houses → Aspects → ASC/MC Mainstream maps
 9. IL-1 V1 close-out
 10. IL-2 Composition
@@ -232,7 +232,8 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
-- **1.6 (2026-08-21)** — Mainstream Planet Semantic Map (1.3.77). Astrology.com = panel #3. Concept families locked. Next = Canon shape, not JSON.
+- **1.7 (2026-08-21)** — Planet Canon grammar (1.3.78). Six slots. tempo = Foundation. Next = 1.3.79 fill.
+- **1.6 (2026-08-21)** — Mainstream Planet Semantic Map (1.3.77). Astrology.com = panel #3. Concept families locked. Next = Canon shape, not JSON. **Done 1.3.78.**
 - **1.5 (2026-08-21)** — Product Canon vs Lenses (1.3.76). Mainstream map was next. **Done 1.3.77.**
 - **1.4 (2026-08-21)** — IL architecture frozen (1.3.75). Co–Star teardown Phase 0. Next was Phase 1 in-app. **Superseded as “next” by 1.5 / 1.3.76.**
 - **1.3 (2026-08-21)** — three layers locked (1.3.74): Evidence Corpus / Semantic Consensus / TodayFlow Canon. 491 claims stay. Next = short corpus pass, not Outer/ASC/books. **Superseded as “next” by 1.4 / 1.3.75.**

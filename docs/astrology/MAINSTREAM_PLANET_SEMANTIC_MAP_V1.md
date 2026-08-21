@@ -228,7 +228,7 @@ Schema today still has `function` · `themes` · `positive_expression` · `shado
 - Dumping §3 into JSON
 - A 2/3 word spreadsheet
 
-**Next named (one task):** TodayFlow **Planet Canon shape** — generative slots for the ten include-families. Still no object fill until that shape is locked. Then one fill pass.
+**Next named:** Planet Canon grammar **done 1.3.78**. Fill = **1.3.79** from this map. No new literature.
 
 ---
 
