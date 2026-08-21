@@ -318,7 +318,7 @@ Schema today still has sign `mode` · `element` · `orientation` only. Mapping f
 - A 2/3 word spreadsheet
 - Repairing 1.3.82 PARTIAL
 
-**Next named:** Sign Canon Grammar V1 — which atoms PlanetInSign needs. Not fill. Not houses.
+**Next named:** Sign Canon Grammar — **done 1.3.84.** Next = Sign Canon fill. House Canon later.
 
 ---
 

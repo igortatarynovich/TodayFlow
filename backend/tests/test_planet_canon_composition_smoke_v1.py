@@ -145,11 +145,12 @@ def test_composition_smoke_four_constructions():
     assert "**Verdict:** PARTIAL" in smoke
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.83" in canon
+    assert "**Версия:** 1.3.84" in canon
     assert "### 6.36 Planet Canon composition smoke" in canon
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.82" in next_block
     assert "1.3.83" in next_block
+    assert "1.3.84" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
     assert "Sign Canon" in next_block

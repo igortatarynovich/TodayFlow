@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.83 Mainstream Sign Semantic Map.** Territory locked. Next = Sign Canon grammar (1.3.84). Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-21):** IL-1 **1.3.84 Sign Canon grammar.** Two slots (`manner` · `excess`). Next = Sign Canon fill. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -197,6 +197,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — IL 1.3.75 §6.29 · teardown file · inventory execution order · parent 1.3
 - **Backward compatible?** yes. Deprecated as next pass: short corpus scoring.
+
+## Architecture impact — IL-1 1.3.84 Sign Canon grammar (2026-08-21)
+
+- **SoT before:** sign territory locked; next risk was copying planet six slots or dumping all families into Sign Canon.
+- **SoT after:** Sign = manner (how). Two slots: `manner` · `excess`. Canon narrower than territory is expected. Next = Sign Canon fill.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/SIGN_CANON_GRAMMAR_V1.md` · IL 1.3.84 §6.38
+- **Backward compatible?** yes. Sign objects stay classification-only.
 
 ## Architecture impact — IL-1 1.3.83 Mainstream Sign Semantic Map (2026-08-21)
 

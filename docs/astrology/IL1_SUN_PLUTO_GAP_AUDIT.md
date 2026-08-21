@@ -8,7 +8,7 @@
 
 This file records what the ledger already contains. It does **not** rewrite `object.function`, set `active`, invent T1–T4, ingest claims, or open a new bibliography.
 
-**NOW (1.3.83):** Signs Mainstream map locked. Next ≠ this dashboard. Next = Sign Canon grammar. Do not score CORE from these KPIs. Do not rewrite `function` from this file.
+**NOW (1.3.84):** Sign Canon grammar locked. Next ≠ this dashboard. Next = Sign Canon fill. Do not score CORE from these KPIs. Do not rewrite `function` from this file.
 
 ---
 

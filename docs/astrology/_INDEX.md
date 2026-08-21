@@ -10,6 +10,7 @@
 | [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) | **1.3.76 split:** Mainstream → TodayFlow Canon → runtime. Research corpus → Lenses. CORE not a gate. Not ingest |
 | [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) | **1.3.77 planet map:** territory + include/secondary/exclude. Not Canon. Not JSON |
 | [MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md) | **1.3.83 sign map:** territory + include/secondary/exclude. Not manner. Not JSON |
+| [SIGN_CANON_GRAMMAR_V1.md](./SIGN_CANON_GRAMMAR_V1.md) | **1.3.84 sign grammar:** `manner` · `excess`. Not fill |
 | [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md) | **1.3.78 grammar:** six engine slots. tempo = Foundation. Dry-run ≠ fill |
 | [PLANET_CANON_V1.md](./PLANET_CANON_V1.md) | **1.3.79 Planet Canon:** ten packs + direct/derived. Storage = 1.3.80 |
 | [PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md) | **1.3.80 storage:** optional `canon` nest |
