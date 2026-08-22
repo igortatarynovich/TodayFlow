@@ -2951,7 +2951,7 @@ def test_mainstream_house_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.43 Mainstream House Semantic Map" in canon
-    assert "**Версия:** 1.3.89" in canon
+    assert "**Версия:** 1.3.90" in canon
     house_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -3005,13 +3005,54 @@ def test_mainstream_house_semantic_map_v1():
     assert "STOP Signs" in next_block
 
 
+def test_house_canon_grammar_v1():
+    """1.3.90: House Canon grammar. One slot (arena). Not fill. Not objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.44 House Canon grammar" in canon
+    assert "**Версия:** 1.3.90" in canon
+    grammar = (ROOT / "docs" / "astrology" / "HOUSE_CANON_GRAMMAR_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "**arena**" in grammar
+    assert "Deletion test" in grammar
+    assert "**Surplus**" in grammar
+    assert "planet.domains" in grammar or "planet.canon.domains" in grammar
+    assert "House ≠ Sign" in grammar
+    assert "House ≠ Angle" in grammar or "1st ≠ ASC" in grammar
+    assert "Moon × 4th" in grammar
+    assert "Moon × 10th" in grammar
+    assert "Mars × 4th" in grammar
+    assert "Venus × 4th" in grammar
+    assert "Venus × 5th" in grammar
+    assert "Venus × 7th" in grammar
+    assert "Mercury × 3rd" in grammar
+    assert "Mercury × 9th" in grammar
+    assert "Saturn × 10th" in grammar
+    assert "not locked" in grammar.lower() or "Dry-run" in grammar
+    assert "One. Not two." in grammar or "One required slot" in grammar
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert "canon" not in by_id["astro.house.04"]
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.90" in next_block
+    assert "1.3.89" in next_block
+    assert "House Canon fill" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "STOP Signs" in next_block
+
+
 def test_sign_canon_grammar_v1():
     """1.3.84: Sign Canon grammar. Two slots. Not fill. Not objects."""
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.89" in canon
+    assert "**Версия:** 1.3.90" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3049,7 +3090,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.89" in canon
+    assert "**Версия:** 1.3.90" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs

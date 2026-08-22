@@ -307,7 +307,7 @@ Astrodienst compact: spheres where the individual no longer plays a part; hospit
 
 Territory is the input. Canon is a **model PlanetInHouse can use**. Do not stop at twelve life-area keywords.
 
-Next named = **House Canon grammar**: which properties route a known planet function into an arena. Canon is allowed — and expected — to be **narrower** than this territory. People-dumps, parent-gender, and institution lists may stay out.
+Next named = **House Canon grammar** — **done 1.3.90** ([HOUSE_CANON_GRAMMAR_V1.md](./HOUSE_CANON_GRAMMAR_V1.md)). Next = House Canon fill. Canon is allowed — and expected — to be **narrower** than this territory. People-dumps, parent-gender, and institution lists may stay out.
 
 Do not write `Moon in 4th` essays. Do not replace Lilly `domain` on the object in this pass.
 
@@ -316,14 +316,14 @@ Do not write `Moon in 4th` essays. Do not replace Lilly `domain` on the object i
 ## 7. This pass does not do
 
 - Object rewrite · Lilly overwrite · schema · CORE · books · Houlding *Houses*
-- House Canon grammar · lemma assignment · Moon × 4th application
+- House Canon grammar · lemma assignment · Moon × 4th application — **grammar done 1.3.90**; fill still later
 - Aspect / ASC/MC maps
 - Sign pack edits
 - Dumping §3 into JSON
 - A 2/3 word spreadsheet
 - Repairing 1.3.88 House PARTIAL
 
-**Next named:** House Canon Grammar V1. Not fill. Not objects. Not aspects.
+**Next named:** House Canon Grammar V1 — **done 1.3.90.** Next = House Canon fill. Not objects. Not schema. Not aspects.
 
 ---
 

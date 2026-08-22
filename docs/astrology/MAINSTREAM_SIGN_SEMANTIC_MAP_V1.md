@@ -316,7 +316,7 @@ Schema today still has sign `mode` · `element` · `orientation` only. Mapping f
 - A 2/3 word spreadsheet
 - Repairing 1.3.82 PARTIAL
 
-**Next named:** Sign Canon Grammar — **done 1.3.84.** Sign Canon fill — **done 1.3.85.** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Houses Mainstream map — **done 1.3.89.** Next = House Canon grammar. STOP Signs.
+**Next named:** Sign Canon Grammar — **done 1.3.84.** Sign Canon fill — **done 1.3.85.** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Houses Mainstream map — **done 1.3.89.** House Canon grammar — **done 1.3.90.** Next = House Canon fill. STOP Signs.
 
 ---
 
