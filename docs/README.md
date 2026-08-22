@@ -39,7 +39,7 @@
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — JSON / Machine Contract build order (не порядок исследования смысла)
-- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.98):** stored Planet × Aspect smoke PASS. STOP Aspects. Houses closed (1.3.93). Next = ASC/MC. Исторический корпус = lenses
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.99):** Angle Canon model locked (orientation loci). 1.3.98 stored Planet × Aspect smoke PASS. STOP Aspects. Houses closed (1.3.93). Next = Mainstream Angle map. Исторический корпус = lenses
 - [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) — **IL V1 freeze map (APPROVED):** что библиотека должна знать. Books только против named `KC-*` row. IL-1 done = минимальные primitives
 - [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) — **Product Canon vs Lenses (1.3.76):** Mainstream → Canon → runtime. Corpus → education / SEO / deep dives
 - [astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) — **Mainstream planet map (1.3.77):** concept families. Not Canon, not JSON
@@ -54,6 +54,7 @@
 - [astrology/ASPECT_CANON_V1.md](./astrology/ASPECT_CANON_V1.md) — **Aspect Canon V1 (1.3.96):** five packs + provenance. Storage = 1.3.97 **done**
 - [astrology/ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md](./astrology/ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md) — **Aspect Canon storage + materialization (1.3.97):** `aspect_canon_pack` (`relation`); five drafts carry locked packs; `interaction` unchanged
 - [astrology/ASPECT_CANON_COMPOSITION_SMOKE_V1.md](./astrology/ASPECT_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.98):** stored Planet × Aspect PASS. STOP Aspects
+- [astrology/ANGLE_CANON_MODEL_V1.md](./astrology/ANGLE_CANON_MODEL_V1.md) — **Angle Canon model (1.3.99):** parent 1–4. Orientation loci. Not fill
 - [astrology/SIGN_CANON_GRAMMAR_V1.md](./astrology/SIGN_CANON_GRAMMAR_V1.md) — **Sign Canon grammar (1.3.84):** manner · excess. Dry-run ≠ fill
 - [astrology/SIGN_CANON_V1.md](./astrology/SIGN_CANON_V1.md) — **Sign Canon V1 (1.3.85):** twelve packs + provenance. Storage = 1.3.86
 - [astrology/SIGN_CANON_STORAGE_V1.md](./astrology/SIGN_CANON_STORAGE_V1.md) — **Sign Canon storage (1.3.86):** optional `canon` nest on signs (`manner` · `excess`)

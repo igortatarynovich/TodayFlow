@@ -1,7 +1,7 @@
 # TodayFlow Canon V1 — semantic selection
 
 **Date:** 2026-08-21  
-**Status:** LOCKED (architecture + methodology). **Product vs Lenses split: 1.3.76.** **Not** ingest. **Not** objects. **Not** CORE scoring. **Not** LLM synthesis run. **Not** Sun–Pluto fill. **Not** Outer fill. **Not** ASC/MC.  
+**Status:** LOCKED (architecture + methodology). **Product vs Lenses split: 1.3.76.** **Not** ingest. **Not** objects. **Not** CORE scoring. **Not** LLM synthesis run. **Not** Sun–Pluto fill. **Not** Outer fill. **Not** Angle fill.  
 **Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.27–§6.30. Split: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Inventory: [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md). Parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Outer schema: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md).
 
 The original architecture was right: a prepared knowledge layer, not astrology generated on the fly.

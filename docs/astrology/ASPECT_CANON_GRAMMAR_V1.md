@@ -386,13 +386,14 @@ out:       7th partnership · 4th home · square as the opposition · one pole d
 - Sign / House pack edits · books · CORE · Co–Star ingest
 - IL-2 composition rules · surface-specific aspect grammars
 
-**Next named:** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = ASC/MC → final atomic smoke → Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Houses.** **STOP Signs.** Do not reopen 1.3.94 research.
+**Next named:** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** Angle Canon model — **done 1.3.99.** **STOP Aspects.** Next = Mainstream Angle Semantic Map → grammar → fill → storage → angle smoke → final atomic smoke → Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Houses.** **STOP Signs.** Do not reopen 1.3.94 research.
 
 ---
 
 ## Changelog
 
-- **1.3 (2026-08-22)** — Aspect Canon storage/materialization locked 1.3.97. Grammar unchanged. Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = ASC/MC.
+- **1.4 (2026-08-22)** — Angle Canon model locked 1.3.99. Grammar unchanged. Next = Mainstream Angle Semantic Map.
+- **1.3 (2026-08-22)** — Aspect Canon storage/materialization locked 1.3.97. Grammar unchanged. Stored Planet × Aspect smoke — **done 1.3.98.** Angle model — **done 1.3.99.** **STOP Aspects.**
 - **1.2 (2026-08-22)** — Aspect Canon fill locked 1.3.96. Grammar unchanged. Next = storage/materialization. **Done 1.3.97.**
 - **1.1 (2026-08-22)** — Owner proof tightened. Central question = minimal payload to bind two known functions without prior interpretation. Conjunction mixed-valence locked as a guard, not a leftover. Aspect Canon ≠ mini-Composition Engine (pretty sentences are IL-2). Dry-run requires four mechanisms plus trine-vs-sextile on one pair. Slot count unchanged (one: `relation`).
 - **1.0 (2026-08-22)** — 1.3.95. Aspect = relation (how two functions meet). One slot (`relation`). Effort / `requires_action` surplus. `relation` ≠ stored `interaction`. Dry-run only. Grammar before fill.

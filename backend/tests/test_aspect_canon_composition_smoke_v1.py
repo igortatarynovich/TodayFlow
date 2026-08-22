@@ -182,7 +182,7 @@ def test_aspect_canon_composition_smoke_v1():
     assert "square `interaction`: `friction`" in prior
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.98" in canon
+    assert "**Версия:** 1.3.99" in canon
     assert "### 6.52 Planet × Aspect composition smoke" in canon
 
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]

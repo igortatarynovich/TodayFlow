@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-21  
 **Status:** **APPROVED** — V1 freeze map (owner 2026-08-21). Literature discovery is a tool against a named `KC-*` row, not a process.  
-**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.25–§6.46. Parent order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Today Meaning SoT: [TODAY_CONTENT_PIPELINE_V1.md](../today/TODAY_CONTENT_PIPELINE_V1.md). Identity/mechanics: [foundation_v1.md](../foundation_v1.md). Compose: [ASTROLOGY_COMPOSITION_MODEL.md](../ASTROLOGY_COMPOSITION_MODEL.md). Outer representation: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Product-meaning gate: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md). Split: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Sign map: [MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md). House map: [MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md](./MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md). House grammar: [HOUSE_CANON_GRAMMAR_V1.md](./HOUSE_CANON_GRAMMAR_V1.md). House Canon: [HOUSE_CANON_V1.md](./HOUSE_CANON_V1.md). House storage: [HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md](./HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md). House smoke: [HOUSE_CANON_COMPOSITION_SMOKE_V1.md](./HOUSE_CANON_COMPOSITION_SMOKE_V1.md). Aspect map: [MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md](./MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md). Aspect grammar: [ASPECT_CANON_GRAMMAR_V1.md](./ASPECT_CANON_GRAMMAR_V1.md). Aspect Canon: [ASPECT_CANON_V1.md](./ASPECT_CANON_V1.md). Sign grammar: [SIGN_CANON_GRAMMAR_V1.md](./SIGN_CANON_GRAMMAR_V1.md). Sign Canon: [SIGN_CANON_V1.md](./SIGN_CANON_V1.md). Sign storage: [SIGN_CANON_STORAGE_V1.md](./SIGN_CANON_STORAGE_V1.md). Sign materialization: [SIGN_CANON_MATERIALIZATION_V1.md](./SIGN_CANON_MATERIALIZATION_V1.md). Sign smoke: [SIGN_CANON_COMPOSITION_SMOKE_V1.md](./SIGN_CANON_COMPOSITION_SMOKE_V1.md). Grammar: [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md). Planet Canon: [PLANET_CANON_V1.md](./PLANET_CANON_V1.md). Storage: [PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md). Fill: [PLANET_CANON_SUN_SATURN_FILL_V1.md](./PLANET_CANON_SUN_SATURN_FILL_V1.md). Smoke: [PLANET_CANON_COMPOSITION_SMOKE_V1.md](./PLANET_CANON_COMPOSITION_SMOKE_V1.md). Recognition check: [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md).
+**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.25–§6.46. Parent order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Today Meaning SoT: [TODAY_CONTENT_PIPELINE_V1.md](../today/TODAY_CONTENT_PIPELINE_V1.md). Identity/mechanics: [foundation_v1.md](../foundation_v1.md). Compose: [ASTROLOGY_COMPOSITION_MODEL.md](../ASTROLOGY_COMPOSITION_MODEL.md). Outer representation: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Product-meaning gate: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md). Split: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Sign map: [MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md). House map: [MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md](./MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md). House grammar: [HOUSE_CANON_GRAMMAR_V1.md](./HOUSE_CANON_GRAMMAR_V1.md). House Canon: [HOUSE_CANON_V1.md](./HOUSE_CANON_V1.md). House storage: [HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md](./HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md). House smoke: [HOUSE_CANON_COMPOSITION_SMOKE_V1.md](./HOUSE_CANON_COMPOSITION_SMOKE_V1.md). Aspect map: [MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md](./MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md). Aspect grammar: [ASPECT_CANON_GRAMMAR_V1.md](./ASPECT_CANON_GRAMMAR_V1.md). Aspect Canon: [ASPECT_CANON_V1.md](./ASPECT_CANON_V1.md). Sign grammar: [SIGN_CANON_GRAMMAR_V1.md](./SIGN_CANON_GRAMMAR_V1.md). Sign Canon: [SIGN_CANON_V1.md](./SIGN_CANON_V1.md). Sign storage: [SIGN_CANON_STORAGE_V1.md](./SIGN_CANON_STORAGE_V1.md). Sign materialization: [SIGN_CANON_MATERIALIZATION_V1.md](./SIGN_CANON_MATERIALIZATION_V1.md). Sign smoke: [SIGN_CANON_COMPOSITION_SMOKE_V1.md](./SIGN_CANON_COMPOSITION_SMOKE_V1.md). Grammar: [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md). Planet Canon: [PLANET_CANON_V1.md](./PLANET_CANON_V1.md). Storage: [PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md). Fill: [PLANET_CANON_SUN_SATURN_FILL_V1.md](./PLANET_CANON_SUN_SATURN_FILL_V1.md). Smoke: [PLANET_CANON_COMPOSITION_SMOKE_V1.md](./PLANET_CANON_COMPOSITION_SMOKE_V1.md). Aspect smoke: [ASPECT_CANON_COMPOSITION_SMOKE_V1.md](./ASPECT_CANON_COMPOSITION_SMOKE_V1.md). Angle model: [ANGLE_CANON_MODEL_V1.md](./ANGLE_CANON_MODEL_V1.md). Recognition check: [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md).
 
 This file is the **V1 limiter**. IL V1 is not “complete astrology.” It is the minimum set of controlled semantic primitives sufficient for Today / Profile / Compatibility without the LLM inventing meanings. That is the IL-1 done criterion — not book count, claim count, school count, or CORE lemmas.
 
@@ -11,7 +11,7 @@ This file is the **V1 limiter**. IL V1 is not “complete astrology.” It is th
 ## Architecture impact
 
 - **SoT before:** parent order existed, but the next named IL pass was still a layer slice. Gap → author → closed book could run without a V1-wide constituent map.
-- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. **1.3.78:** Planet Canon grammar locked. **1.3.79:** Planet Canon V1 locked. **1.3.80:** `canon` storage locked. **1.3.81:** Sun–Saturn `canon` filled. **1.3.82:** smoke-test — aspect PASS, sign/house PARTIAL (house PARTIAL is now a snapshot). **1.3.83:** Signs Mainstream map locked. **1.3.84:** Sign Canon grammar locked. **1.3.85:** Sign Canon fill locked. **1.3.86:** Sign Canon storage locked. **1.3.87:** Sign Canon materialization locked. **1.3.88:** Planet × Sign smoke-test PASS. **1.3.89:** Houses Mainstream map locked. **1.3.90:** House Canon grammar locked. **1.3.91:** House Canon fill locked. **1.3.92:** House Canon storage/materialization locked. **1.3.93:** Planet × House smoke PASS. **STOP Houses.** **1.3.94:** Aspects Mainstream map locked. **1.3.95:** Aspect Canon grammar locked. **1.3.96:** Aspect Canon fill locked. **1.3.97:** Aspect Canon storage/materialization locked. 1.3.98 stored Planet × Aspect smoke locked. Next execution = ASC/MC. STOP Signs. Co–Star is a recognition check. Do not rewrite `function` this inventory.
+- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. **1.3.78:** Planet Canon grammar locked. **1.3.79:** Planet Canon V1 locked. **1.3.80:** `canon` storage locked. **1.3.81:** Sun–Saturn `canon` filled. **1.3.82:** smoke-test — aspect PASS, sign/house PARTIAL (house PARTIAL is now a snapshot). **1.3.83:** Signs Mainstream map locked. **1.3.84:** Sign Canon grammar locked. **1.3.85:** Sign Canon fill locked. **1.3.86:** Sign Canon storage locked. **1.3.87:** Sign Canon materialization locked. **1.3.88:** Planet × Sign smoke-test PASS. **1.3.89:** Houses Mainstream map locked. **1.3.90:** House Canon grammar locked. **1.3.91:** House Canon fill locked. **1.3.92:** House Canon storage/materialization locked. **1.3.93:** Planet × House smoke PASS. **STOP Houses.** **1.3.94:** Aspects Mainstream map locked. **1.3.95:** Aspect Canon grammar locked. **1.3.96:** Aspect Canon fill locked. **1.3.97:** Aspect Canon storage/materialization locked. 1.3.98 stored Planet × Aspect smoke locked. **1.3.99:** Angle Canon model locked (orientation loci). Next execution = Mainstream Angle Semantic Map. STOP Signs. Co–Star is a recognition check. Do not rewrite `function` this inventory.
 - **Public contract changed?** no (inventory). Outer schema delta is 1.3.72.
 - **Migration required?** no
 - **Canon updated?** yes — this file · IL §6.25 / §6.26 · parent · handoff · tracker
@@ -42,7 +42,7 @@ Product question first. A layer is a job, not a bookshelf.
 | **Signs** | **how** a function is expressed | classification: `mode` · `element` · `orientation`. Later-interpretive: `motivation` · `expression` · `strengths` · `excess` · `deficiency` · `behavioral_tendencies` | ruler/dates (Foundation), planet×sign (Layer 5) |
 | **Houses** | **where** in experience | `domain` · `internal_meaning` · `external_manifestations` · `people` · `activities` · `resources` · `risks` | ASC as a house; turned-house technique |
 | **Aspects** | **how two functions interact** | `angle` · `interaction` · `requires_action` | pair cookbooks (Mars□Saturn is Layer 5 / IL-2) |
-| **Angles** | role of **ASC / MC** | Layer 1 objects, constituents **not yet defined** | House 1 / House 10 substitution |
+| **Angles** | which **chart-edge orientation** a function attaches to | compositional type locked 1.3.99 (orientation locus); named slots unspecified | House 1 / House 10 substitution; `arena` / `manner` by analogy |
 | **Compositions** | planet×sign · planet×house · planet×aspect×planet | IL-2 **rules** by default; IL-1 gold list = **candidates** only where atoms may lie | 10 000 JSON horoscopes |
 | **Time** | natal vs transit (vs later techniques) | `temporal_class` clustering; Layer 5 types `natal_aspect` · `transit_to_natal` · `transit_through_house` | progressions / returns as IL V1 objects (see OUT_OF_V1) |
 
@@ -141,10 +141,10 @@ Pair meaning (Saturn□Venus) is **not** Layer 4. It is composition (KC-C-\*).
 
 | ID | Product need | Semantic layer | Object | Required constituents | Evidence requirement | Current coverage | Runtime consumer | Status |
 |----|--------------|----------------|--------|----------------------|----------------------|------------------|------------------|--------|
-| KC-ANG-ASC | What ASC *is* as a role | Angles | `astro.object.asc` (gold set) | **undefined** — parent steps 1–4 never run | calc already emits; locus + model before ingest | 0 objects, 0 dedicated claims | Profile chart · Overlay angularity · Compat axes | `NEED_MODEL` |
-| KC-ANG-MC | What MC *is* as a role | Angles | `astro.object.mc` | **undefined** | same | 0 objects, 0 dedicated claims | Profile vocation axis · Overlay | `NEED_MODEL` |
+| KC-ANG-ASC | What ASC *is* as a role | Angles | `astro.object.asc` (gold set) | orientation-locus type locked 1.3.99; named Canon slots unspecified (grammar) | calc already emits; Mainstream map next; no books | 0 objects, 0 dedicated claims | Profile chart · Overlay angularity · Compat axes | parent 1–4 done; slots unspecified |
+| KC-ANG-MC | What MC *is* as a role | Angles | `astro.object.mc` | same | same | 0 objects, 0 dedicated claims | Profile vocation/height axis · Overlay | parent 1–4 done; slots unspecified |
 
-No ASC/MC book until constituents are defined. House 1 / House 10 drafts are not a substitute.
+No ASC/MC book. House 1 / House 10 drafts are not a substitute. Parent 1–4 closed 1.3.99 (orientation loci). Cookbooks stay out of queue.
 
 ### 3.7 Compositions
 
@@ -193,7 +193,7 @@ Examples against the current tree:
 | Greene *Outer Planets* / Tarnas *Prometheus* / *Astrological Neptune* | Densify already-COVERED psych slots. Representation is schema (1.3.72), not empty ledger. **Out of queue.** |
 | Pulse Part Two / Hand Ch.10 / Cell C fourth book | KC-S-LINT is `DEFERRED_V1` + `ACCESS_BLOCKED`. **Out of queue.** |
 | Fourth Mars psych book | KC-P-MAR psych is `ACCESS_BLOCKED`. **Out of queue.** |
-| Any ASC cookbook | KC-ANG-ASC is `NEED_MODEL`. **Out of queue** until steps 1–4. |
+| Any ASC cookbook | KC-ANG-ASC type is locked. **Out of queue** — Mainstream panel is not a cookbook; grammar/fill not started. |
 | Layer 5 transit cookbook | KC-C-\* is `CANDIDATE`; IL-2 not started. **Out of queue.** |
 | Named NEED_OWNER page (p.138, Costello, Hand Ch.4 Sun) that **opens** | Access extract against an existing row. Not discovery. Allowed under 1.3.59 even during freeze. |
 
@@ -207,11 +207,11 @@ Examples against the current tree:
 4. **Houses and Aspects stay `DRAFT_CLASSICAL` — APPROVED.** Do not “catch up” school counts to Planets/Signs. Structural atoms are enough for the next stage. New research only if IL-2 hits a specific semantic insufficiency. **Coverage symmetry between layers is not a goal.**
 5. **Next named pass after approval = outer schema (done 1.3.72), not ASC/MC and not literature.** **1.3.73** inserts TodayFlow Canon *before* filling meaning keys. Then: Sun–Pluto claim audit → materialize outer drafts under Canon (not CORE) → ASC/MC definition → ASC/MC decision → IL-1 V1 close-out → IL-2 Composition.
 
-ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. Do not start from a book.
+ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Do not start from a book. Next = Mainstream Angle map.
 
 ---
 
-## 6. Execution order (LOCKED, then redirected 1.3.98)
+## 6. Execution order (LOCKED, then redirected 1.3.99)
 
 ```text
 1. Outer Planet Draft Representation V1        ✅ 1.3.72 schema/model
@@ -240,7 +240,8 @@ ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. D
 24. Aspect Canon fill                          ✅ 1.3.96  five packs; origin direct; not schema
 25. Aspect Canon storage / materialization     ✅ 1.3.97  aspect_canon_pack; five drafts; interaction unchanged
 26. Stored Planet × Aspect smoke → STOP Aspects ✅ 1.3.98  stored source; Square≠Opposition; Trine≠Sextile
-27. ASC/MC                                     NEXT     NEED_MODEL; parent 1–4
+27. ASC/MC parent 1–4                          ✅ 1.3.99  orientation loci; slots unspecified
+28. Mainstream Angle Semantic Map              NEXT     same panel; not grammar; not fill
 ```
 
 Historical literature does not appear in this order. Lenses stay in the existing corpus. Co–Star is a check on Mainstream rows, not a source.
@@ -249,7 +250,8 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
-- **1.27 (2026-08-22)** — Stored Planet × Aspect smoke (1.3.98). Four gates PASS. Trine vs Sextile on one pair. STOP Aspects. Next = ASC/MC.
+- **1.28 (2026-08-22)** — Angle Canon model (1.3.99). Parent 1–4. Orientation loci. Named slots unspecified. Next = Mainstream Angle Semantic Map.
+- **1.27 (2026-08-22)** — Stored Planet × Aspect smoke (1.3.98). Four gates PASS. Trine vs Sextile on one pair. STOP Aspects. Angle model — **done 1.3.99.**
 - **1.26 (2026-08-22)** — Aspect Canon storage/materialization (1.3.97). Five drafts carry `canon.relation`. `interaction` unchanged. Next = 1.3.98 stored Planet × Aspect smoke. **Done 1.3.98.**
 - **1.25 (2026-08-22)** — Aspect Canon fill (1.3.96). Five packs. Origin direct. Mixed-valence guard. Next = storage/materialization. **Done 1.3.97.**
 - **1.24 (2026-08-22)** — Aspect Canon grammar (1.3.95). One slot (`relation`). Effort / `requires_action` surplus. Next = Aspect Canon fill. **Done 1.3.96.**
