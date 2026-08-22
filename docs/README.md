@@ -39,13 +39,14 @@
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — JSON / Machine Contract build order (не порядок исследования смысла)
-- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.90):** House Canon grammar in; next = House Canon fill. Исторический корпус = lenses
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.91):** House Canon fill in; next = storage/materialization. Исторический корпус = lenses
 - [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) — **IL V1 freeze map (APPROVED):** что библиотека должна знать. Books только против named `KC-*` row. IL-1 done = минимальные primitives
 - [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) — **Product Canon vs Lenses (1.3.76):** Mainstream → Canon → runtime. Corpus → education / SEO / deep dives
 - [astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) — **Mainstream planet map (1.3.77):** concept families. Not Canon, not JSON
 - [astrology/MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md) — **Mainstream sign map (1.3.83):** concept families. Not manner, not JSON
 - [astrology/MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md) — **Mainstream house map (1.3.89):** concept families. Not Canon, not JSON. House ≠ ASC
 - [astrology/HOUSE_CANON_GRAMMAR_V1.md](./astrology/HOUSE_CANON_GRAMMAR_V1.md) — **House Canon grammar (1.3.90):** one slot (`arena`). Dry-run ≠ fill
+- [astrology/HOUSE_CANON_V1.md](./astrology/HOUSE_CANON_V1.md) — **House Canon V1 (1.3.91):** twelve packs + provenance. Storage = 1.3.92
 - [astrology/SIGN_CANON_GRAMMAR_V1.md](./astrology/SIGN_CANON_GRAMMAR_V1.md) — **Sign Canon grammar (1.3.84):** manner · excess. Dry-run ≠ fill
 - [astrology/SIGN_CANON_V1.md](./astrology/SIGN_CANON_V1.md) — **Sign Canon V1 (1.3.85):** twelve packs + provenance. Storage = 1.3.86
 - [astrology/SIGN_CANON_STORAGE_V1.md](./astrology/SIGN_CANON_STORAGE_V1.md) — **Sign Canon storage (1.3.86):** optional `canon` nest on signs (`manner` · `excess`)

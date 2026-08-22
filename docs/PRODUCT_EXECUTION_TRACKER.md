@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.90 House Canon grammar.** One slot (`arena`). planet.domains ≠ house.arena. Catalog unchanged. Next = House Canon fill. STOP Signs. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.91 House Canon fill.** Twelve `arena` packs from locked territory. Catalog unchanged. Next = House Canon storage/materialization. STOP Signs. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -197,6 +197,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — IL 1.3.75 §6.29 · teardown file · inventory execution order · parent 1.3
 - **Backward compatible?** yes. Deprecated as next pass: short corpus scoring.
+
+## Architecture impact — IL-1 1.3.91 House Canon fill (2026-08-22)
+
+- **SoT before:** grammar locked one slot; dry-run lemmas were illustrative. Risk: dump 1.3.89 families or write pair interpretations.
+- **SoT after:** twelve packs locked with origin tags. Five gates. Destination-noun test. Catalog untouched. Next = storage/materialization.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/HOUSE_CANON_V1.md` · IL 1.3.91 §6.45
+- **Backward compatible?** yes. House objects stay `DRAFT_CLASSICAL`.
 
 ## Architecture impact — IL-1 1.3.90 House Canon grammar (2026-08-22)
 

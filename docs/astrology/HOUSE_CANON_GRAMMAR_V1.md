@@ -306,10 +306,11 @@ out:      Capricorn manner · MC · `limit` as the 10th’s verb
 - Sign pack edits · books · CORE · Co–Star ingest
 - Houlding *The Houses* · Lilly overwrite
 
-**Next named:** House Canon fill. Not objects. Not schema. Not aspects. **STOP Signs.**
+**Next named:** House Canon fill — **done 1.3.91** ([HOUSE_CANON_V1.md](./HOUSE_CANON_V1.md)). Next = House Canon storage / materialization. Then Planet × House smoke-test. **STOP Houses** after PASS.
 
 ---
 
 ## Changelog
 
+- **1.1 (2026-08-22)** — Fill locked 1.3.91. Grammar unchanged. Dry-run lemmas remain illustrative; locked values live in HOUSE_CANON_V1.
 - **1.0 (2026-08-22)** — 1.3.90. House = arena (where). One slot (`arena`). planet.domains ≠ house.arena. Deletion test drops excess/people/events. Dry-run only. Grammar before fill.

@@ -2951,7 +2951,7 @@ def test_mainstream_house_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.43 Mainstream House Semantic Map" in canon
-    assert "**Версия:** 1.3.90" in canon
+    assert "**Версия:** 1.3.91" in canon
     house_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -3013,7 +3013,7 @@ def test_house_canon_grammar_v1():
         encoding="utf-8"
     )
     assert "### 6.44 House Canon grammar" in canon
-    assert "**Версия:** 1.3.90" in canon
+    assert "**Версия:** 1.3.91" in canon
     grammar = (ROOT / "docs" / "astrology" / "HOUSE_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3046,13 +3046,89 @@ def test_house_canon_grammar_v1():
     assert "STOP Signs" in next_block
 
 
+def test_house_canon_v1_fill_with_provenance():
+    """1.3.91: House Canon V1 packs + origin. Five gates. No schema. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.45 House Canon V1 fill" in canon
+    assert "**Версия:** 1.3.91" in canon
+    packs = (ROOT / "docs" / "astrology" / "HOUSE_CANON_V1.md").read_text(encoding="utf-8")
+    assert "direct" in packs
+    assert "Destination noun" in packs or "destination noun" in packs.lower()
+    for heading in (
+        "1st House",
+        "2nd House",
+        "3rd House",
+        "4th House",
+        "5th House",
+        "6th House",
+        "7th House",
+        "8th House",
+        "9th House",
+        "10th House",
+        "11th House",
+        "12th House",
+    ):
+        assert f"### {heading}" in packs
+        assert "arena:" in packs
+    fourth = packs.split("### 4th House")[1].split("### 5th House")[0]
+    fourth_arena = fourth.split("```text")[1].split("```")[0]
+    assert "home" in fourth_arena
+    assert "family" in fourth_arena
+    assert "roots" in fourth_arena
+    assert "private-base" in fourth_arena
+    assert "emotional" not in fourth_arena
+    assert "seek" not in fourth_arena
+    assert "Cancer" not in fourth_arena
+    tenth = packs.split("### 10th House")[1].split("### 11th House")[0]
+    tenth_arena = tenth.split("```text")[1].split("```")[0]
+    assert "career" in tenth_arena
+    assert "public-role" in tenth_arena
+    assert "home" not in tenth_arena
+    sixth = packs.split("### 6th House")[1].split("### 7th House")[0]
+    sixth_arena = sixth.split("```text")[1].split("```")[0]
+    assert "daily-work" in sixth_arena
+    assert "career" not in sixth_arena
+    second = packs.split("### 2nd House")[1].split("### 3rd House")[0]
+    second_arena = second.split("```text")[1].split("```")[0]
+    eighth = packs.split("### 8th House")[1].split("### 9th House")[0]
+    eighth_arena = eighth.split("```text")[1].split("```")[0]
+    assert "personal-resources" in second_arena
+    assert "shared-resources" in eighth_arena
+    assert "shared-resources" not in second_arena
+    fifth = packs.split("### 5th House")[1].split("### 6th House")[0]
+    fifth_arena = fifth.split("```text")[1].split("```")[0]
+    seventh = packs.split("### 7th House")[1].split("### 8th House")[0]
+    seventh_arena = seventh.split("```text")[1].split("```")[0]
+    assert "romance" in fifth_arena
+    assert "partnership" in seventh_arena
+    assert "partnership" not in fifth_arena
+    assert "Moon × 4th" in packs
+    assert "Mars × 4th" in packs
+    assert "Venus × 4th" in packs
+    assert "seek emotional security at home" in packs
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert "canon" not in by_id["astro.house.04"]
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.91" in next_block
+    assert "1.3.90" in next_block
+    assert "House Canon storage" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "STOP Signs" in next_block
+
+
 def test_sign_canon_grammar_v1():
     """1.3.84: Sign Canon grammar. Two slots. Not fill. Not objects."""
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.90" in canon
+    assert "**Версия:** 1.3.91" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3090,7 +3166,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.90" in canon
+    assert "**Версия:** 1.3.91" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs
