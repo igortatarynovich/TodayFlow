@@ -8,7 +8,7 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
-from todayflow_backend.core.llm_openai_compatible import llm_operation
+from todayflow_backend.core.llm_openai_compatible import llm_call_context, llm_operation
 from todayflow_backend.services.generation_jobs_v0 import (
     claim_job,
     complete_job_if_fresh,
@@ -51,6 +51,13 @@ def run_today_story_enrichment_job(job_id: int) -> None:
             core_profile = get_core_profile_service().build_cached_or_baseline(db, user)
 
             with llm_operation("background"):
+              with llm_call_context(
+                  trigger="background",
+                  user_id=user_id,
+                  ensure_operation=True,
+                  operation="today.generate",
+                  feature="today.enrichment",
+              ):
                 story, gen_id, used_fallback = _build_day_story_record(
                     db,
                     user=user,

@@ -38,9 +38,40 @@
 - Color layer B: [color/COLOR_LAYER_B_V1.md](./color/COLOR_LAYER_B_V1.md) — 5 live + Champagne pending
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
-- [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md)
+- [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — JSON / Machine Contract build order (не порядок исследования смысла)
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.102):** Angle Canon fill locked. 1.3.101 grammar (`orientation`). 1.3.100 Mainstream Angle map. 1.3.99 orientation loci. 1.3.98 stored Planet × Aspect smoke PASS. STOP Aspects. Houses closed (1.3.93). Next = Angle Canon storage/materialization. Исторический корпус = lenses
+- [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) — **IL V1 freeze map (APPROVED):** что библиотека должна знать. Books только против named `KC-*` row. IL-1 done = минимальные primitives
+- [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) — **Product Canon vs Lenses (1.3.76):** Mainstream → Canon → runtime. Corpus → education / SEO / deep dives
+- [astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) — **Mainstream planet map (1.3.77):** concept families. Not Canon, not JSON
+- [astrology/MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md) — **Mainstream sign map (1.3.83):** concept families. Not manner, not JSON
+- [astrology/MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md) — **Mainstream house map (1.3.89):** concept families. Not Canon, not JSON. House ≠ ASC
+- [astrology/HOUSE_CANON_GRAMMAR_V1.md](./astrology/HOUSE_CANON_GRAMMAR_V1.md) — **House Canon grammar (1.3.90):** one slot (`arena`). Dry-run ≠ fill
+- [astrology/HOUSE_CANON_V1.md](./astrology/HOUSE_CANON_V1.md) — **House Canon V1 (1.3.91):** twelve packs + provenance. Storage = 1.3.92 **done**
+- [astrology/HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md](./astrology/HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md) — **House Canon storage + materialization (1.3.92):** `house_canon_pack` (`arena`); twelve drafts carry locked packs
+- [astrology/HOUSE_CANON_COMPOSITION_SMOKE_V1.md](./astrology/HOUSE_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.93):** PlanetInHouse PASS. STOP Houses
+- [astrology/MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md) — **Mainstream aspect map (1.3.94):** concept families. Relation ≠ theme. Not grammar, not JSON
+- [astrology/ASPECT_CANON_GRAMMAR_V1.md](./astrology/ASPECT_CANON_GRAMMAR_V1.md) — **Aspect Canon grammar (1.3.95):** one slot (`relation`). Dry-run ≠ fill
+- [astrology/ASPECT_CANON_V1.md](./astrology/ASPECT_CANON_V1.md) — **Aspect Canon V1 (1.3.96):** five packs + provenance. Storage = 1.3.97 **done**
+- [astrology/ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md](./astrology/ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md) — **Aspect Canon storage + materialization (1.3.97):** `aspect_canon_pack` (`relation`); five drafts carry locked packs; `interaction` unchanged
+- [astrology/ASPECT_CANON_COMPOSITION_SMOKE_V1.md](./astrology/ASPECT_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.98):** stored Planet × Aspect PASS. STOP Aspects
+- [astrology/ANGLE_CANON_MODEL_V1.md](./astrology/ANGLE_CANON_MODEL_V1.md) — **Angle Canon model (1.3.99):** parent 1–4. Orientation loci. Not fill
+- [astrology/MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md) — **Mainstream angle map (1.3.100):** concept families. House 1/10 not proof. Not grammar
+- [astrology/ANGLE_CANON_GRAMMAR_V1.md](./astrology/ANGLE_CANON_GRAMMAR_V1.md) — **Angle Canon grammar (1.3.101):** one slot (`orientation`). Include-first. Secondary = collision-zone. Not fill
+- [astrology/ANGLE_CANON_V1.md](./astrology/ANGLE_CANON_V1.md) — **Angle Canon V1 (1.3.102):** two packs + origin. Collision vs House 1/10. Storage next
+- [astrology/SIGN_CANON_GRAMMAR_V1.md](./astrology/SIGN_CANON_GRAMMAR_V1.md) — **Sign Canon grammar (1.3.84):** manner · excess. Dry-run ≠ fill
+- [astrology/SIGN_CANON_V1.md](./astrology/SIGN_CANON_V1.md) — **Sign Canon V1 (1.3.85):** twelve packs + provenance. Storage = 1.3.86
+- [astrology/SIGN_CANON_STORAGE_V1.md](./astrology/SIGN_CANON_STORAGE_V1.md) — **Sign Canon storage (1.3.86):** optional `canon` nest on signs (`manner` · `excess`)
+- [astrology/SIGN_CANON_MATERIALIZATION_V1.md](./astrology/SIGN_CANON_MATERIALIZATION_V1.md) — **Sign Canon materialization (1.3.87):** twelve drafts carry locked packs
+- [astrology/PLANET_CANON_GRAMMAR_V1.md](./astrology/PLANET_CANON_GRAMMAR_V1.md) — **Planet Canon grammar (1.3.78):** engine slots. tempo not Canon. Dry-run ≠ fill
+- [astrology/PLANET_CANON_V1.md](./astrology/PLANET_CANON_V1.md) — **Planet Canon V1 (1.3.79):** ten packs + provenance. Storage = 1.3.80
+- [astrology/PLANET_CANON_STORAGE_V1.md](./astrology/PLANET_CANON_STORAGE_V1.md) — **Planet Canon storage (1.3.80):** optional `canon` nest
+- [astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md](./astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md) — **Sun–Saturn fill (1.3.81):** product `canon` on seven drafts
+- [astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md](./astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.82):** aspect PASS; sign/house PARTIAL *(house PARTIAL = snapshot after 1.3.93)*
+- [audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](./audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) — Co–Star teardown Phase 0: **recognition check**, не источник смысла
+- [TODAYFLOW_CANON_V1.md](./astrology/TODAYFLOW_CANON_V1.md) — **структуризация Mainstream** в Canon-атомы. Runtime: атомы → композиция → LLM формулирует. CORE не gate
 - [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md)
 - [ASTROLOGY_MACHINE_CONTRACT.md](./ASTROLOGY_MACHINE_CONTRACT.md) · [ASTROLOGY_COMPOSITION_MODEL.md](./ASTROLOGY_COMPOSITION_MODEL.md) · [CROSS_DOMAIN_MACHINE_VALIDATION.md](./CROSS_DOMAIN_MACHINE_VALIDATION.md)
+- Astrology meaning: [astrology/INTERPRETATION_LIBRARY_V1.md](./astrology/INTERPRETATION_LIBRARY_V1.md) — **Interpretation Library** (semantic objects; IL-1 drafts, nothing `active`). Corpus: `DATA/reference/astrology/interpretation_v1/source_corpus_v1.json`. Index: [astrology/_INDEX.md](./astrology/_INDEX.md). Публичный язык Canon ≠ IL: [content/TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md)
 - [EVOLUTION_CALCULATION_CONTRACT.md](./EVOLUTION_CALCULATION_CONTRACT.md) — **запрет `evolution_stage` в API** до UEM-2
 - Tarot: [tarot/TAROT_INTERPRETATION_ENGINE_V1.md](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) · [tarot/TAROT_CARD_BASE_V1.md](./tarot/TAROT_CARD_BASE_V1.md) (base meanings SoT) · [tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md)
 - Numerology: [numerology/NUMBER_BASE_V1.md](./numerology/NUMBER_BASE_V1.md) (digit SoT) · [numerology/NUMEROLOGY_INTEGRATION_SPEC_V1.md](./numerology/NUMEROLOGY_INTEGRATION_SPEC_V1.md)
@@ -48,14 +79,14 @@
 
 ## Today · Profile (experience)
 
-**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation.  
+**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. Step 2 lookup = [astrology/INTERPRETATION_LIBRARY_V1.md](./astrology/INTERPRETATION_LIBRARY_V1.md) (не второй канон дня).  
 **Today product cycle (экраны):** [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — TODAY → RITUAL → MY DAY → EVENING. Не плодить второй канон смысла.
 
 - [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный канон смысла / content pipeline Today**
 - [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — **единственный канон продуктового цикла / ScreenFlow Today**
 - [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) — SoT **расчёта фактов** (не сюжет); питает Global Day
 - [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — **SUPERSEDED** как product map; current-code until cutover
-- [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual** SoT (§11 Day Atmosphere)
+- [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual** SoT (§2 ten-layer language · natal as composition · §11 Day Atmosphere)
 - [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) — legacy engine notes / I0–I8 hygiene (**не** Meaning SoT)
 - [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) — experience layer (ритуал/goal loop); meaning → pipeline
 - [today/TODAY_WAVE2_EXECUTION_PLAN.md](./today/TODAY_WAVE2_EXECUTION_PLAN.md) — Wave 2 action plan (Tap → Verdict → Glance)
@@ -72,6 +103,7 @@
 - [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — **Практики** SoT: цикл состояния · locked need/format · сессия · music layer ([index](./practices/_INDEX.md))
 - [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md)
 - [EXPLAIN_MEANING_NOT_MECHANISM.md](./explainability/EXPLAIN_MEANING_NOT_MECHANISM.md)
+- **Brand / Trust (копирайт лендинга и рекламы):** [content/TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) — лендинг = бренд-поверхность (H1 = locked line); точность NASA/JPL + многослойный Canon; in-product голос остаётся [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) ([index](./content/_INDEX.md))
 
 ## Статусы · схемы · i18n
 
@@ -100,7 +132,7 @@
 Screen-level и PIM-слой (`pim/`, `today-language/`, `explainability/`) — уточняют unified, не заменяют его.  
 **Не плодить** второй «канон дня» / «Meaning SoT» рядом с `TODAY_CONTENT_PIPELINE_V1`.
 
-**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §11–§15 (Day Atmosphere · DS audit · DS canon `--tf-*` / `Ds*`). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
+**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §2 ten-layer language + **§2.7 Moon = live object (no stars)** + **§18 motion budget** (landing 7/10 · app 2–3/10 · share 5/10) + §11–§15 (Day Atmosphere · DS). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
 
 ## Правило записи (обязательно)
 

@@ -1,33 +1,23 @@
-/** Product UI web landing — editorial copy (RU). Guest Story Surface P0. */
+/** Product UI web landing — brand surface, not a slogan bolted onto Guest Story.
+ * Narrative SoT: docs/content/TODAYFLOW_TRUST_LAYER.md §5 (Co-Star principle: thesis before merchandising).
+ * Do not invent astronomy, NASA partnership, or “one true astrology” copy.
+ */
 
 import { GUEST_ACCESS_LIMITS } from "@/lib/guestAccessLimits";
 
 export const PRODUCT_WEB_LANDING_HERO = {
-  titleLead: "TodayFlow видит не только твой день,",
-  titleTail: "а то, как дни складываются в тебя",
-  subtitle:
-    "Не предсказание на сегодня, а история, которая помнит вчера. Тема, фокус и короткий шаг — в том же формате, что будет у твоего Today.",
-  fragmentEyebrow: "Пример дня",
-  fragmentThemeLabel: "Тема",
-  fragmentTheme:
-    "Если с утра уже пять «срочных» дел — день скорее про одно главное, не про все сразу",
-  fragmentFocusLabel: "Фокус",
-  fragmentFocus: "Где действовать · где беречь силы",
+  brand: "TodayFlow",
+  beats: [
+    "Точные астрономические данные.",
+    "Столетия астрологической интерпретации.",
+    "Один личный взгляд.",
+  ],
+  manifesto:
+    "Не гадаем по знаку. Положения планет — эфемериды NASA JPL. Смысл — из разных исторических слоёв, не из одной модной школы. Взгляд собирается для тебя.",
   primaryCtaDemo: "Посмотреть, как это работает",
-  primaryCtaCompat: "Посмотреть динамику вашей связи",
   loginCta: "Войти",
-  toolsEyebrow: "Инструменты для момента",
-  toolsTarotLabel: "Таро",
-  toolsPracticesLabel: "Практики",
+  learnMore: "Узнать, на чём стоит",
 } as const;
-
-export const PRODUCT_WEB_LANDING_ORBIT_NODES = [
-  { id: "sun", label: "Фокус", style: { top: "18%", left: "68%" } },
-  { id: "moon", label: "Темп", style: { top: "32%", left: "14%" } },
-  { id: "path", label: "Шаг", style: { top: "58%", left: "72%" } },
-  { id: "star", label: "Вечер", style: { top: "72%", left: "20%" } },
-  { id: "sage", label: "Память", style: { top: "82%", left: "52%" } },
-] as const;
 
 export type LandingServiceSection = {
   id: "tarot" | "compatibility" | "practices";
@@ -39,11 +29,11 @@ export type LandingServiceSection = {
   icon: "tarot" | "users" | "activity";
 };
 
-/** One viewport per guest service — nav scrolls here; CTA opens the product route. */
+/** Guest chapters after the brand thesis — Compatibility stays a full chapter, not a hero dual-CTA. */
 export const PRODUCT_WEB_LANDING_SERVICE_SECTIONS: LandingServiceSection[] = [
   {
     id: "compatibility",
-    eyebrow: "Без регистрации",
+    eyebrow: "Двое",
     title: "Совместимость — две карты рядом",
     body: `${GUEST_ACCESS_LIMITS.compatibilityChecks} проверки пар бесплатно: увидишь, где вы усиливаете друг друга и где лучше беречь границы.`,
     href: "/compatibility",
@@ -70,12 +60,12 @@ export const PRODUCT_WEB_LANDING_SERVICE_SECTIONS: LandingServiceSection[] = [
   },
 ];
 
-/** После регистрации — обещание Today (статичное превью, без персональных данных). */
+/** After the thesis — one personal perspective, with continuity as the product proof. */
 export const PRODUCT_WEB_LANDING_TODAY_PROMISE = {
-  eyebrow: "После демо и Profile",
+  eyebrow: "Один личный взгляд",
   title: "Твой Today каждое утро",
   tags: ["Тема дня", "Фокус", "Память о вчера"],
-  body: "Не общий гороскоп. Персональный экран дня: на что обратить внимание, один главный шаг и вечернее закрытие — чтобы завтра продолжить с того, что было.",
+  body: "Не общий гороскоп на знак. Персональный экран дня: на что обратить внимание, один главный шаг и вечернее закрытие — чтобы завтра продолжить с того, что было.",
   cards: [
     {
       id: "theme",
@@ -88,47 +78,53 @@ export const PRODUCT_WEB_LANDING_TODAY_PROMISE = {
 } as const;
 
 /**
- * Почему возвращаются — product reasons, не фейковые отзывы с именем+должностью
- * (FOUNDATION_UI §12 · TODAY_LANGUAGE antipatterns: no invented testimonials).
+ * Trust Layer on acquisition (docs/content/TODAYFLOW_TRUST_LAYER.md).
+ * Astronomy claim = NASA JPL ephemerides via Swiss, live.
+ * Interpretation = method (layered Canon), not a finished in-app catalog.
  */
-export const PRODUCT_WEB_LANDING_RETURN_REASONS = {
-  title: "Зачем возвращаются",
+export const PRODUCT_WEB_LANDING_TRUST = {
+  eyebrow: "Три опоры",
+  title: "На чём стоит TodayFlow",
+  body: "Астрологию часто считают произвольной. Мы разделяем слои: небо можно посчитать; смысл не выдаём за единственную истину одной школы. Взгляд собирается для тебя.",
   items: [
     {
-      id: "morning",
-      title: "Утро с направлением",
-      body: "Открываешь Today — видно, куда смотреть сегодня, без общей ленты советов на все случаи жизни.",
+      id: "sky",
+      kicker: "Точность",
+      title: "Астрономия, а не приближение",
+      body: "Где Солнце, Луна и планеты — проверяемые положения, не таблица «на знак». Считаем по эфемеридам NASA JPL. Карта строится на координатах неба в момент рождения — не на упрощённом гороскопе.",
     },
     {
-      id: "memory",
-      title: "День не обнуляется",
-      body: "Вечернее закрытие сохраняет нить: завтра начинается не с нуля, а с того, что уже было важным.",
+      id: "canon",
+      kicker: "Глубина",
+      title: "Столетия толкования — не с нуля",
+      body: "Смыслы не выдумываются с чистого листа. Canon собирает разные исторические слои и школы и хранит, откуда каждое утверждение. Не одна модная трактовка как вся традиция.",
     },
     {
-      id: "today-not-portrait",
-      title: "Про сегодня, не про анкету",
-      body: "Сначала день и один шаг. Глубокая карта личности — когда она нужна, а не как стена на входе.",
+      id: "person",
+      kicker: "Человечность",
+      title: "Не таблица и не общий гороскоп",
+      body: "Одна и та же карта звучит по-разному в разных школах. Мы собираем не шаблон, а один честный взгляд: твоя карта, этот день и то, что уже было вчера.",
     },
   ],
 } as const;
 
 export const PRODUCT_WEB_LANDING_FINAL = {
-  title: "Завтра утром TodayFlow вспомнит сегодня.",
+  title: "Точные положения неба. Смысл — именно для тебя.",
   subtitle: "Сначала посмотри демо-день — потом собери Profile, который сделает Today твоим.",
   cta: "Собрать мой Today",
 } as const;
 
 /**
- * Landing screens — Guest Story Surface P0.
- * Compatibility stays strong in nav; Tarot is nav; Practices section only (low-weight).
+ * Landing screens — brand thesis first (Trust Layer §5), then product chapters.
+ * Guest Story P0 path (demo → invite) stays; dual hero CTA and #why are retired.
  */
 export const PRODUCT_WEB_LANDING_SCREENS = [
-  { id: "hero", role: "curiosity", nav: false },
+  { id: "hero", role: "brand", nav: false },
+  { id: "trust", role: "thesis", nav: true, navLabel: "На чём стоит" },
+  { id: "today", role: "promise", nav: true, navLabel: "Сегодня" },
   { id: "compatibility", role: "guest-trial", nav: true, navLabel: "Совместимость" },
   { id: "tarot", role: "guest-trial", nav: true, navLabel: "Таро" },
   { id: "practices", role: "guest-trial", nav: false },
-  { id: "today", role: "promise", nav: true, navLabel: "Как это работает" },
-  { id: "why", role: "return", nav: true, navLabel: "Почему возвращаются" },
   { id: "cta", role: "close", nav: false },
 ] as const;
 
@@ -152,8 +148,14 @@ export const PRODUCT_WEB_LANDING_NAV = (
   label: s.navLabel,
 }));
 
+export const PRODUCT_WEB_LANDING_SEO = {
+  description:
+    "Точные астрономические данные. Столетия астрологической интерпретации. Один личный взгляд. Не общий гороскоп — день, собранный для тебя.",
+} as const;
+
 export const PRODUCT_WEB_LANDING_FOOTER = {
-  tagline: "Не только день — история, которая помнит вчера.",
+  tagline:
+    "Точные астрономические данные. Столетия астрологической интерпретации. Один личный взгляд.",
   companyLinks: [
     { href: "/help", label: "О нас" },
     { href: "/help", label: "Философия" },

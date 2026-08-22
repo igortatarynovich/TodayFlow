@@ -1,4 +1,6 @@
-/** Landing editorial — demo copy, not user-specific. */
+/** Landing editorial — demo copy, not user-specific.
+ * Brand/trust claims: docs/content/TODAYFLOW_TRUST_LAYER.md
+ */
 
 export const LANDING_HERO = {
   title: "Каждый день открывает что-то новое о тебе.",

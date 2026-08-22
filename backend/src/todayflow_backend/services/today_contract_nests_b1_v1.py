@@ -221,12 +221,27 @@ def build_color_guide_v1(
     return out
 
 
+def _interpretation_unavailable(contract: dict[str, Any] | None) -> bool:
+    """Personal Day meaning missing — color is downstream of that layer, not a catalog leftover."""
+    out = _as_dict(contract)
+    story = _as_dict(out.get("day_story"))
+    progress = _as_dict(out.get("progress"))
+    return (
+        str(story.get("interpretation_status") or "").strip() == "unavailable"
+        or str(progress.get("interpretation_status") or "").strip() == "unavailable"
+    )
+
+
 def attach_color_guide_to_contract(
     contract: dict[str, Any],
     *,
     target_date: date | None = None,
 ) -> dict[str, Any]:
     out = contract if isinstance(contract, dict) else {}
+    if _interpretation_unavailable(out):
+        # TODAY_PRODUCT_FLOW_V1: PERSONAL DAY → COLOR. Catalog / leftover props are not a substitute.
+        out["color_guide"] = None
+        return out
     month = target_date.month if isinstance(target_date, date) else None
     guide = build_color_guide_v1(day_story=_as_dict(out.get("day_story")), target_month=month)
     out["color_guide"] = guide

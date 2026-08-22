@@ -1,4 +1,4 @@
-# TodayFlow — Product Canon (Unified v1.10)
+# TodayFlow — Product Canon (Unified v1.12)
 
 **Дата:** 2026-07-25
 **Статус:** предлагаемая замена для четырёх документов, которые одновременно называли себя главными:
@@ -8,7 +8,7 @@
 
 | Документ | Почему остаётся отдельно |
 |---|---|
-| `TODAY_PRODUCT_MODEL.md` | Уровень **экрана** Today (Today Package, воронка сборки), не всего продукта — верно ограничен по scope, менять не нужно |
+| `TODAY_PRODUCT_MODEL.md` | **SUBORDINATE (2026-08-21)** — историческая воронка; ScreenFlow = [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) |
 | `PROFILE_SCREEN_MASTER.md` | Уровень **UI** Profile — так же верно ограничен |
 | `TODAYFLOW_PRODUCT_BUILD_MAP.md` (Entity Catalog / build order) | Это **рабочий трекер** сущностей и порядка сборки — меняется еженедельно; философская часть (6-шаговый закон, Entity Rules, Design Tokens) перенесена сюда в §5, а сам файл остаётся **только** живым списком entity + build order, без претензии быть «главным документом продукта» |
 | `audits/FULL_USER_PATH_CANON_V1.md` | Уже единственный SoT пути пользователя (22.07) — этот канон **ссылается** на него, не дублирует |
@@ -21,14 +21,16 @@
 
 TodayFlow — не набор эзотерических инструментов, а система, которая строит и непрерывно развивает **Personal Model** человека и через неё принимает все персональные решения в продукте. Внешнее обещание рынку: персональный ежедневный ориентир, который **помнит, что было вчера**. Ядро — Personal Core (имя, дата/время/место рождения) → **Profile** (личная карта: натал, нумерология, архетипы, сферы жизни) → каждый день собирается **Today** (что важно, чего избегать, один шаг) через объективный контекст дня + персональный слой, поданный LLM-нарративом.
 
+Опоры знания для рынка (лендинг · реклама) — отдельно от in-product голоса: **точные астрономические данные** (NASA/JPL через Swiss) и **столетия интерпретации** как нормализованное пересечение исторических слоёв, не одна усреднённая астрология. SoT копирайта: [content/TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md).
+
 ---
 
 ## 1. Терминология (обязательно, не путать в разговорах)
 
 | Термин | Что это | Не путать с |
 |---|---|---|
-| **Personal Model** | Главная продуктовая сущность — живое цифровое представление человека. Рабочее имя; **смысловой SoT построения личности** = Character Engine ([profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md)) | «Profile» как SoT — Profile это UI-проекция |
-| **Character Engine** | Движок личности: Raw Sources → Evidence Graph → ядро → Internal Engine → противоречия → сцены → компас (derived). Единый SoT «кто этот человек» для всей платформы | Экран `/profile` · набор независимых LLM-генераторов |
+| **Personal Model** | Главная продуктовая сущность — живое цифровое представление человека. **Единственный authority о человеке** (не обо всей семантике продукта). Смысловой SoT личности = Character Engine ([profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md)) | «Profile» как SoT — Profile это UI-проекция · владелец астрологии (это IL) |
+| **Character Engine** | Движок личности: Raw Sources → Evidence Graph → ядро → Internal Engine → противоречия → сцены → компас (derived). Единый SoT **«кто этот человек»** | Экран `/profile` · Interpretation Library · набор независимых LLM-генераторов |
 | **Profile** (экран) | **Первая** UI-проекция Character Engine — вкладка «Профиль» | Character Engine / Personal Model целиком |
 | **Projection** | Экран/flow, который читает модель (Profile, Today, Compat, Tarot, …), пишет обратно, делает модель понятнее | «раздел приложения» · собственный personality-корень |
 | **PIM** | Инфраструктура обновления Personal Model (Knowledge Atoms, Learning Δ) — невидима пользователю | UI-функция |
@@ -47,7 +49,8 @@ TodayFlow — не набор эзотерических инструменто�
 
 **Инварианты:**
 - никогда не «завершена» — нет «100% profile complete» как финала;
-- единственный источник истины — Today, Compatibility и другие модули ничего не «знают» сами, знает только Personal Model.
+- **единственный authority о человеке** — Today, Compatibility и другие модули не строят вторую личность; знают человека только через Personal Model / Character Engine;
+- **не** единственный владелец всей семантики продукта. Астрологический atomic meaning = Interpretation Library ([astrology/INTERPRETATION_LIBRARY_V1.md](./astrology/INTERPRETATION_LIBRARY_V1.md)). IL не знает человека. CE не знает астрологию. Personal meaning = композиция этих двух слоёв ([today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md)).
 
 ---
 
@@ -61,7 +64,7 @@ TodayFlow — не набор эзотерических инструменто�
 | Понять себя | **Profile** |
 | Посмотреть совместимость | **Compatibility** |
 | Получить ответ на вопрос | **Tarot** |
-| Изменить жизнь регулярными действиями | **Growth** (и зоны Today: Practice · Goals · Tracking) |
+| Изменить жизнь регулярными действиями | **Growth** (вход из Today / Profile / Tarot; не отдельный шаг ScreenFlow) |
 
 4 обязательных top-level JTBD: понять себя · понять другого человека · принять решение · понять что делать сегодня. Каждая крупная поверхность/route/API должна отвечать хотя бы одному.
 
@@ -79,19 +82,22 @@ TodayFlow — не набор эзотерических инструменто�
 
 **Правило UI:** пользователь не видит дисциплин (астрология/нумерология/психология/PIM/DayModel как primary framing) — только ответы на человеческие вопросы. Natal + numerology = доказательная база, не витрина.
 
-### 3.3 Today (daily dashboard)
+### 3.3 Today (daily cycle)
 
-Не «астро-экран» и не линейный сценарий — ежедневный дашборд (аналог Apple Health для дня): много виджетов, один вопрос. Hero за ~10 сек — дальше исследование по желанию.
+Не гороскоп по сферам и не линейный ритуал-first сценарий. Ощущение как у приложения погоды: сначала сводка общего дня, по желанию — линзы и «для меня».
 
-| Zone | Содержание | Launch v1 |
-|---|---|---|
-| 1 · Overview | Hero · тема дня · energy · фокус | ✅ core |
-| 2 · Guidance | что делать · чего избегать | ✅ do/don't |
-| 3 · Daily Symbols | карта · число · символ… | ✅ card+number, остальное 🟡 |
-| 4 · Practice | одна рекомендованная практика | 🟡 one rec |
-| 5 · Goals | цель дня | 🟡 optional |
-| 6 · Tracking | привычки · цикл · mood | v2+ |
-| 7 · Evening | закрытие дня → завтра | ✅ core |
+**Нарезка экрана (LOCKED):** [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — ровно четыре поверхности. Цвет / практика / действие / timeline — тап или карточка **внутри** шага, не новые шаги.
+
+| # | id | Вопрос | Слой смысла |
+|---|----|--------|-------------|
+| 1 | `today` | Какой сегодня день? | **Global Day** (небо; без натала / карты / числа) |
+| 2 | `ritual` | Посмотри на день ещё с двух сторон | Card + Number **линзы** |
+| 3 | `my_day` | Что это значит *для меня*? | **Personal Day** (omit guest) |
+| 4 | `evening` | За что я благодарен этому дню? | User response → история |
+
+Смысл слоёв — [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md), не этот файл.
+
+*Исторический launch-эскиз (не карта экрана):* семь зон Overview · Guidance · Symbols · Practice · Goals · Tracking · Evening. Не восстанавливать как product map.
 
 ### 3.4 Profile (карта человека)
 
@@ -120,7 +126,7 @@ Personal Model — общий SoT для Profile и Maps, но **UI-дом ра�
 
 - **Compatibility**: «Кто мы друг для друга» — библиотека, не один калькулятор. Public L1 (две даты → инсайты) standalone; Personal L2 через Model. Launch: Public L1 + Personal hook; полная библиотека типов — v2+.
 - **Tarot**: живой ритуал (вопрос → расклад → карты → расшифровка → связь с тобой → действие), не «выберите карту». Launch: card-of-day в Today + существующие spreads; question-first flow — v2+.
-- **Growth**: не mega-nav, а teaser/рекомендация из Today (zone 4) + существующие routes (`/practices`, `/habits`, `/asceticisms`, `/affirmations`).
+- **Growth**: не mega-nav, а teaser/рекомендация **внутри** `my_day` + существующие routes (`/practices`, `/habits`, `/asceticisms`, `/affirmations`).
 
 ### 3.6 Maps — вторая половина продукта *(не вторая половина Profile)*
 
@@ -359,3 +365,5 @@ Zone 4 **не создаёт** привычки/аскезы — только з
 | 2026-07-24 | v1.8 — §10 JTBD packs ×6 → **backlog v2** (не launch); post-freeze scope, не core daily loop |
 | 2026-07-25 | v1.9 — §3.4 Profile = драматургия характера (PROFILE_EXPERIENCE_SCENARIO_V1); не энциклопедия слотов |
 | 2026-07-25 | v1.10 — §1 Character Engine термин; Profile = первая проекция; Scenario v1.1 |
+| 2026-08-17 | v1.11 — §0 pointer: Trust Layer (NASA/JPL astronomy + layered Canon) is brand/copy SoT; Personal Model unchanged |
+| 2026-08-21 | v1.12 — §3.3 = four surfaces (PRODUCT_FLOW); §1–§2: Personal Model = sole **person** authority, not owner of astrology meaning (IL). TODAY_PRODUCT_MODEL demoted |

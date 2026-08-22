@@ -3,7 +3,7 @@
 **Статус:** ACTIVE — канон **текстов и советов** (дочерний к umbrella)  
 **Владелец:** Product + Content + Engineering  
 **Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — вычисления · цели · аскезы · натал · весь продукт  
-**Связь:** [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [rfc/RFC_DAILY_STATE_V0.md](../rfc/RFC_DAILY_STATE_V0.md) · [DAILY_INTERPRETATION_ENGINE_PHASE.md](../DAILY_INTERPRETATION_ENGINE_PHASE.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) · [content/TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md) · [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md)
+**Связь:** [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [rfc/RFC_DAILY_STATE_V0.md](../rfc/RFC_DAILY_STATE_V0.md) · [DAILY_INTERPRETATION_ENGINE_PHASE.md](../DAILY_INTERPRETATION_ENGINE_PHASE.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) · [content/TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md) · [content/TODAYFLOW_TRUST_LAYER.md](../content/TODAYFLOW_TRUST_LAYER.md) · [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) · астро-смысл: [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md)
 
 ---
 
@@ -36,6 +36,8 @@ TodayFlow помогает человеку **понимать день и пр�
 - пользователю **не** показывают scores, ranks, registry, «алгоритм выбрал»;
 - пользователю **показывают** понятное основание («карта дня + как ты отметил энергию + тема завершения») и практический смысл;
 - цепочка всё равно существует в контракте (`based_on` / provenance), даже если UI раскрывает её мягко.
+
+**Публичный trust (не путать с таблицей выше):** на лендинге и в рекламе две опоры — точность неба и глубина Canon. Это [Trust Layer](../content/TODAYFLOW_TRUST_LAYER.md), не user-facing механизм Today.
 
 ---
 

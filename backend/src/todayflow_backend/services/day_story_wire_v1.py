@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 from todayflow_backend.api.morning_ritual import MorningRitualResponse
 from todayflow_backend.core.llm_openai_compatible import (
     is_llm_chat_configured,
+    llm_call_context,
     resolve_default_chat_model,
 )
 from todayflow_backend.db import models as db_models
@@ -561,13 +562,19 @@ def _build_day_story_record(
                 call_day_scenario_native_llm_c1,
             )
 
-            native_scenario = call_day_scenario_native_llm_c1(
-                llm_input,
-                interpretation=interpretation,
-                ritual_context=safe_ritual,
-                celestial_events=ce or None,
-                meta_out=native_meta,
-            )
+            with llm_call_context(
+                ensure_operation=True,
+                operation="today.generate",
+                feature="today.native_day_story",
+                user_id=getattr(user, "id", None),
+            ):
+                native_scenario = call_day_scenario_native_llm_c1(
+                    llm_input,
+                    interpretation=interpretation,
+                    ritual_context=safe_ritual,
+                    celestial_events=ce or None,
+                    meta_out=native_meta,
+                )
             used_fallback = native_scenario is None
             story = None
         else:

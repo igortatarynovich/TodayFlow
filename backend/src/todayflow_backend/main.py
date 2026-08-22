@@ -2,6 +2,8 @@
 
 import os
 
+from uuid import uuid4
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -13,6 +15,7 @@ from slowapi.middleware import SlowAPIMiddleware
 
 from todayflow_backend.api.routes import router
 from todayflow_backend.core.config import settings
+from todayflow_backend.core.llm_openai_compatible import llm_call_context
 from todayflow_backend.core.logging_config import setup_logging
 from todayflow_backend.core.monitoring import capture_exception, init_monitoring
 from todayflow_backend.core.rate_limit import limiter
@@ -58,6 +61,16 @@ _PERSONALIZED_PREFIXES = (
     "/auth/me",
     "/day-symbols",
 )
+
+
+@app.middleware("http")
+async def llm_request_context(request: Request, call_next):
+    """Attach request_id to nested LLM usage events (feature set by services)."""
+    rid = (request.headers.get("x-request-id") or "").strip() or str(uuid4())
+    with llm_call_context(request_id=rid, trigger="user"):
+        response = await call_next(request)
+    response.headers.setdefault("X-Request-ID", rid)
+    return response
 
 
 @app.middleware("http")

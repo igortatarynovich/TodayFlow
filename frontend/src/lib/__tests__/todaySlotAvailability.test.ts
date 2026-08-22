@@ -2,6 +2,7 @@ import { ApiError } from "@/lib/api";
 import {
   TODAY_NO_CONNECTION_COPY,
   TODAY_UNAVAILABLE_COPY,
+  isHonestUnavailableCopy,
   todaySlotFailureCopy,
   todaySlotFailureFromError,
 } from "@/lib/todaySlotAvailability";
@@ -15,6 +16,9 @@ describe("todaySlotAvailability", () => {
   it("does not invent sphere/day content for unavailable", () => {
     expect(todaySlotFailureCopy("unavailable")).toBe(TODAY_UNAVAILABLE_COPY);
     expect(TODAY_UNAVAILABLE_COPY).not.toMatch(/спокойн|сигнал|сфер|calm/i);
+    expect(isHonestUnavailableCopy(TODAY_UNAVAILABLE_COPY)).toBe(true);
+    expect(isHonestUnavailableCopy(TODAY_NO_CONNECTION_COPY)).toBe(true);
+    expect(isHonestUnavailableCopy("Ровный продуктивный ритм.")).toBe(false);
   });
 
   it("maps auth errors to unavailable, not no_connection", () => {

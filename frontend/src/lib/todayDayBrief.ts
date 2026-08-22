@@ -11,8 +11,10 @@ import type { DayVisualMode } from "@/lib/dayAtmosphere";
 import { DAY_MODE_LABELS_RU, DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 import { resolveCelestialMoonPhase } from "@/lib/celestialMoonPhase";
 import type { TodayContractGlobalDayWindowV1, TodayContractV1 } from "@/lib/todayContract";
+import { isTodayInterpretationUnavailable } from "@/lib/todayContract";
 import type { HandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 import { buildTodaySkyStripModel, inSign, type TodaySkyStripModel } from "@/lib/todaySkyToday";
+import { isHonestUnavailableCopy } from "@/lib/todaySlotAvailability";
 
 export type TodayDayWhyFactor = {
   id: string;
@@ -145,6 +147,12 @@ function clean(s: string | null | undefined): string | null {
   return t ? t : null;
 }
 
+function productLine(s: string | null | undefined): string | null {
+  const t = clean(s);
+  if (!t || isHonestUnavailableCopy(t)) return null;
+  return t;
+}
+
 function normalizeKey(s: string): string {
   return s.toLowerCase().replace(/\s+/g, " ").trim();
 }
@@ -152,6 +160,7 @@ function normalizeKey(s: string): string {
 export function cleanAmbassadorWhy(s: string | null | undefined): string | null {
   const t = clean(s);
   if (!t) return null;
+  if (isHonestUnavailableCopy(t)) return null;
   if (KITCHEN_MECHANISM_RE.test(t)) return null;
   if (t.length > 320 && (t.match(/\./g) || []).length >= 4) return null;
   return t;
@@ -162,7 +171,7 @@ function uniqTrim(items: Array<string | null | undefined>, max: number): string[
   const seen = new Set<string>();
   for (const raw of items) {
     const t = clean(raw);
-    if (!t) continue;
+    if (!t || isHonestUnavailableCopy(t)) continue;
     const key = normalizeKey(t);
     if (seen.has(key)) continue;
     seen.add(key);
@@ -820,12 +829,12 @@ export function buildTodayDayBriefModel(input: {
   const visualMode = resolveVisualMode(input.contract);
 
   const atmosphereLine =
-    clean(input.headline) ||
-    clean(story?.headline_anchor) ||
-    clean(story?.theme) ||
-    clean(story?.day_thesis?.label_ru) ||
-    clean(story?.day_thesis?.label) ||
-    clean(input.contract.global_context?.period) ||
+    productLine(input.headline) ||
+    productLine(story?.headline_anchor) ||
+    productLine(story?.theme) ||
+    productLine(story?.day_thesis?.label_ru) ||
+    productLine(story?.day_thesis?.label) ||
+    productLine(input.contract.global_context?.period) ||
     null;
 
   const essence =
@@ -852,12 +861,13 @@ export function buildTodayDayBriefModel(input: {
     cleanAmbassadorWhy(story?.advantage) ||
     (doItems.length > 1 ? doItems.slice(1).join(" · ") : null);
 
-  const personalLine =
-    clipCompassProse(
-      cleanAmbassadorWhy(story?.day_scenario?.conflict?.why_personal) ||
-        cleanAmbassadorWhy(input.contract.personal_growth?.development_point),
-      180,
-    ) || null;
+  const personalLine = isTodayInterpretationUnavailable(input.contract)
+    ? null
+    : clipCompassProse(
+        cleanAmbassadorWhy(story?.day_scenario?.conflict?.why_personal) ||
+          cleanAmbassadorWhy(input.contract.personal_growth?.development_point),
+        180,
+      ) || null;
 
   const skyStrip = input.loading ? null : buildTodaySkyStripModel(input.contract, null);
   const lunarCaption = input.loading

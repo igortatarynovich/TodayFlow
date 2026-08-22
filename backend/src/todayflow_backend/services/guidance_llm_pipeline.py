@@ -19,6 +19,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_guidance_chat_model,
     resolve_max_tokens,
 )
@@ -149,17 +150,22 @@ def refine_guidance_session_answer(
         from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
 
         system = with_practitioner_persona(SYSTEM_EN if is_en else SYSTEM_RU, locale="en" if is_en else "ru")
-        content = chat_completion_text(
-            client,
-            model=model_id,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_message},
-            ],
-            temperature=0.45,
-            max_tokens=resolve_max_tokens(1400),
-            json_object=settings.guidance_llm_json_object,
-        )
+        with llm_call_context(
+            feature="guidance.pipeline",
+            ensure_operation=True,
+            operation="guidance.pipeline",
+        ):
+            content = chat_completion_text(
+                client,
+                model=model_id,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user_message},
+                ],
+                temperature=0.45,
+                max_tokens=resolve_max_tokens(1400),
+                json_object=settings.guidance_llm_json_object,
+            )
         parsed = _parse_answer_json(content) if content else None
         if not parsed:
             return None
@@ -253,17 +259,22 @@ def refine_guidance_clarification_answer(
         question_assessment={"flags": [clarification_goal]},
     )
     try:
-        content = chat_completion_text(
-            client,
-            model=model_id,
-            messages=[
-                {"role": "system", "content": sys},
-                {"role": "user", "content": user_message},
-            ],
-            temperature=0.4,
-            max_tokens=resolve_max_tokens(900),
-            json_object=settings.guidance_llm_json_object,
-        )
+        with llm_call_context(
+            feature="guidance.clarify",
+            ensure_operation=True,
+            operation="guidance.clarify",
+        ):
+            content = chat_completion_text(
+                client,
+                model=model_id,
+                messages=[
+                    {"role": "system", "content": sys},
+                    {"role": "user", "content": user_message},
+                ],
+                temperature=0.4,
+                max_tokens=resolve_max_tokens(900),
+                json_object=settings.guidance_llm_json_object,
+            )
         parsed = _parse_answer_json(content) if content else None
         if parsed and learning_service and db is not None:
             try:

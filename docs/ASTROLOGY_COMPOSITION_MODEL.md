@@ -56,6 +56,8 @@ Major aspects only: `conjunction`, `sextile`, `square`, `trine`, `opposition`.
 
 Legacy `planet_in_sign_relationships.json` — **content only**; не Machine Contract catalog.
 
+**Interpretation Library Layer 5** ([INTERPRETATION_LIBRARY_V1](astrology/INTERPRETATION_LIBRARY_V1.md)): curated semantic objects (`DATA/reference/astrology/interpretation_v1/`) allowed **only** where composition of atoms is unreliable (`curation_reason: non_compositional`). IL-1 gold list = **candidates**; IL-2 may demote to composed. Это не machine JSON и не каталог всех пар. ACM freeze на `DATA/reference/astrology/machine/` composite files **не снимается**.
+
 ---
 
 ## 3. Astrology Composition Engine (фаза 2 — backlog)
@@ -133,12 +135,15 @@ Allowed prefix roots only: `astrology.sign.`, `astrology.planet.`, `astrology.ho
 - [x] P0.8 — 39 atomic drafts + loader + validator  
 - [ ] P0.9 — cross-domain with atomic compose  
 - [ ] Composition Engine spec (expand §3) — фаза 2 ticket  
+- [ ] Interpretation Library atoms (IL-1) then curated Layer 5 — [INTERPRETATION_LIBRARY_V1](astrology/INTERPRETATION_LIBRARY_V1.md)  
 - [ ] P1.0 — DayModel astro slice from composed daily signals  
 
 ---
 
 ## 8. Changelog
 
+- **1.0.2 (2026-08-17)** — IL-1 Layer 5 gold list = curated candidates; IL-2 may demote to composed (IL activation gate; no ACM freeze change).
+- **1.0.1 (2026-08-17)** — Layer 5 interpretation objects ≠ machine composites; pointer to Interpretation Library.
 - **1.0 (2026-05-31)** — atomic-only P0.8 freeze; composite → Composition Engine; CDMV anchor via mars+aries atoms.
 
 ---

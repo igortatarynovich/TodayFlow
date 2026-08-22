@@ -1140,7 +1140,7 @@
   gap: clamp(1.25rem, 3.5vw, 2.75rem);
   align-items: center;
   padding: clamp(1.5rem, 4vw, 3rem) clamp(1.15rem, 4vw, 2.75rem);
-  min-height: 0;
+  min-height: min(88dvh, 720px);
   border-radius: clamp(1.5rem, 4vw, 2.25rem);
   border: 1px solid var(--tf-border, var(--tf-border));
   background:
@@ -1340,11 +1340,11 @@
 .journeyRecognitionLine {
   margin: 1rem 0 0;
   max-width: 28rem;
-  font-family: var(--tf-font-display);
-  font-size: clamp(1.1rem, 2vw, 1.35rem);
-  line-height: 1.4;
-  font-style: italic;
-  color: var(--tf-ink-soft, var(--tf-caption));
+  font-family: var(--tf-font-body);
+  font-size: var(--tf-type-body-size);
+  line-height: var(--tf-type-body-line, 1.55);
+  font-style: normal;
+  color: var(--tf-ink-secondary, var(--tf-caption));
 }
 
 .recognitionDeeper {
@@ -1357,8 +1357,11 @@
   border: 0;
   background: transparent;
   padding: 0;
-  font-size: var(--tf-type-body-size);
+  margin-top: 0.35rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
   cursor: pointer;
   text-align: left;
@@ -1680,9 +1683,9 @@
 .journeyHeroName {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: clamp(2.15rem, 5vw, 3.25rem);
+  font-size: var(--tf-type-hero-size);
   font-weight: 600;
-  line-height: 1.05;
+  line-height: var(--tf-type-hero-line, 1.08);
   letter-spacing: -0.03em;
   color: var(--tf-ink);
 }

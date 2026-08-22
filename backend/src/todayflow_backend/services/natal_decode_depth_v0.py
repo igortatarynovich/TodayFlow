@@ -23,6 +23,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_complex_chat_model,
 )
 from todayflow_backend.db import models
@@ -498,17 +499,23 @@ def generate_natal_decode_depth_v0(
     try:
         model = resolve_complex_chat_model()
         client = get_openai_compatible_client(model=model)
-        raw = chat_completion_text(
-            client,
-            model=model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_msg},
-            ],
-            temperature=0.45,
-            max_tokens=2800,
-            json_object=True,
-        )
+        with llm_call_context(
+            feature="natal.decode",
+            user_id=user_id,
+            ensure_operation=True,
+            operation="natal.decode",
+        ):
+            raw = chat_completion_text(
+                client,
+                model=model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user_msg},
+                ],
+                temperature=0.45,
+                max_tokens=2800,
+                json_object=True,
+            )
     except Exception:
         logger.exception("natal_decode_depth LLM failed user_id=%s", user_id)
         return {

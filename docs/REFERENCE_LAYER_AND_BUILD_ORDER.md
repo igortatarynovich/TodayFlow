@@ -38,6 +38,8 @@ Reference Layer — **единый слой смыслов и правил**, н
 
 ИИ **не должен** каждый раз заново «знать», что такое карта Таро, число 7 или Венера в Раке. Справочник хранит истину; LLM **адаптирует** уже зафиксированный смысл под пользователя и день.
 
+Как **исследовать** систему знаний до того, как смысл попадёт в справочник: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Этот документ — порядок JSON / Machine Contract, не порядок литературы.
+
 **Цепочка продукта (канон):**
 
 ```
@@ -92,9 +94,9 @@ Reference Layer → Profile → Daily Context → Personal Intelligence Layer
 **Entities:** `ZodiacSign`, `Planet`, `House`, `Aspect`, `Element`, `Modality`, `MoonPhase`, `PlanetaryCycle`, `PlanetInSign`, `PlanetInHouse`, `AspectRelation`, `CrossDomainBridge`, `TransitTheme`.
 
 **Machine:** коды, орбы, polarity, tension_level, life_domain, оси Internal Model.  
-**Content:** keywords, themes, category lenses (love / money / work / energy / communication / health / decisions).
+**Content:** [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md) — semantic knowledge objects (не гороскопы). Legacy keywords/psychology in `DATA/astrology_reference/*.json` — не SoT после `active` атомов IL.
 
-**Текущее хранение:** `DATA/astrology_reference/*.json`, loader `todayflow_backend.data.astrology`.
+**Текущее хранение:** machine `DATA/reference/astrology/machine/`; meaning catalog `DATA/reference/astrology/interpretation_v1/` (IL-1 drafts in `objects_v1.json`, nothing `active`); legacy `DATA/astrology_reference/*.json`.
 
 ### 2.2 Tarot
 
@@ -467,6 +469,7 @@ Daily Context → DayModel → PIL (retrieval + refinement) → split Generation
 | Astrology | PlanetInHouse | `planet_in_house_relationships.json` | planet, house, relation_code | meaning snippets | Personal Map, Profile | partial |
 | Astrology | CrossDomainBridge | `cross_domain_bridges.json` | bridge_id, from_domain, to_domain | — | Narrative engine | partial |
 | Astrology | TransitTheme | — (computed + future ref) | transit_code, house_activation, tension | category blurbs | Daily foundation, Horoscope | missing |
+| Astrology | InterpretationObject | `DATA/reference/astrology/interpretation_v1/` + [IL v1](astrology/INTERPRETATION_LIBRARY_V1.md) | object_id, layer, theme_clusters, polarity | lemmas (not user prose) | Interpretation Engine → Today/Profile/Compat | missing (IL-0 schema only) |
 | Tarot | TarotCard (major) | `DATA/reference/tarot/machine/*.json` + legacy content in `tarot_major_arcana.json` | vector axes, tempo, risk, confidence | upright, reversed, keywords | Today ritual, DayModel v1 preview loader | partial (22 machine drafts + P0.4 loader) |
 | Tarot | TarotCard (minor) | — | suit, rank, correspondences | meanings per category | Tarot spreads | missing |
 | Tarot | TarotSpread | `tarot_spreads.json` | spread_id, positions[] | position labels | API Guidance, Tarot UI | partial |
@@ -519,6 +522,7 @@ Daily Context → DayModel → PIL (retrieval + refinement) → split Generation
 | [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md) | API как актив: Gate (after UKM), cache/reuse, token ROI |
 | [ASTROLOGY_COMPOSITION_MODEL.md](./ASTROLOGY_COMPOSITION_MODEL.md) | P0.8 gate — atomic only; composites → Composition Engine |
 | [ASTROLOGY_MACHINE_CONTRACT.md](./ASTROLOGY_MACHINE_CONTRACT.md) | P0.7 — astro Machine Layer (third SoT pillar) |
+| [astrology/INTERPRETATION_LIBRARY_V1.md](astrology/INTERPRETATION_LIBRARY_V1.md) | Semantic meaning objects; LLM expresses packs |
 | [CROSS_DOMAIN_MACHINE_VALIDATION.md](./CROSS_DOMAIN_MACHINE_VALIDATION.md) | P0.9 — one coordinate system; gates P1.0 DayModel |
 | [ONTOLOGY_AND_FOUNDATION_PHASES.md](./ONTOLOGY_AND_FOUNDATION_PHASES.md) | **5 фаз построения**; текущий этап = онтология мира |
 | [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md) | **Откуда** CD появляются, confirm, retire, filling policy; data-first freeze |

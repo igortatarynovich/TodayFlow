@@ -4,7 +4,7 @@
 **Type:** static user-facing base meanings (lookup)  
 **Data:** `DATA/reference/numerology/number_base_v1/numbers.json`  
 **Loader:** `todayflow_backend.data.number_base_v1`  
-**Related:** [DAY_SYMBOL_REVEAL_CANON_V1.md](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md) · foundation constants §8 draft
+**Related:** [DAY_SYMBOL_REVEAL_CANON_V1.md](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md) · foundation constants §8 draft · [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (any *rebuild* of this meaning core starts at step 1: model before literature; do not lock a numerology author first)
 
 ---
 

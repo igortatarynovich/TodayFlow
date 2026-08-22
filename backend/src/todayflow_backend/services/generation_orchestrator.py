@@ -636,22 +636,29 @@ def run_today_narrative_pipeline(
 ) -> tuple[dict[str, Any], int, bool, dict[str, Any] | None]:
     """Единая точка входа API для Today narrative; внутри — существующий `build_today_narrative`."""
 
+    from todayflow_backend.core.llm_openai_compatible import llm_call_context
     from todayflow_backend.services.today_narrative import build_today_narrative
 
-    return build_today_narrative(
-        db,
+    with llm_call_context(
+        ensure_operation=True,
+        operation="today.narrative",
+        feature="today.narrative",
         user_id=user_id,
-        insight_depth_tier=insight_depth_tier,
-        target_date=target_date,
-        locale=locale,
-        surface=surface,
-        core_profile=core_profile,
-        fusion_dump=fusion_dump,
-        parent_generation_id=parent_generation_id,
-        deepen_topic=deepen_topic,
-        policy_version=policy_version,
-        voice_profile=voice_profile,
-        ritual_context=ritual_context,
-        depth_level=depth_level,
-        celestial_events=celestial_events,
-    )
+    ):
+        return build_today_narrative(
+            db,
+            user_id=user_id,
+            insight_depth_tier=insight_depth_tier,
+            target_date=target_date,
+            locale=locale,
+            surface=surface,
+            core_profile=core_profile,
+            fusion_dump=fusion_dump,
+            parent_generation_id=parent_generation_id,
+            deepen_topic=deepen_topic,
+            policy_version=policy_version,
+            voice_profile=voice_profile,
+            ritual_context=ritual_context,
+            depth_level=depth_level,
+            celestial_events=celestial_events,
+        )

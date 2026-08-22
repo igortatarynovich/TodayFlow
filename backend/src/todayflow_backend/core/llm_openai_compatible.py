@@ -8,13 +8,23 @@ from __future__ import annotations
 import logging
 from contextlib import contextmanager
 from contextvars import ContextVar
+from dataclasses import dataclass, field
+from time import perf_counter
 from typing import Any, Iterator
 
 from todayflow_backend.core.config import settings
+from todayflow_backend.core.llm_usage_telemetry_v1 import (
+    emit_llm_usage_v1,
+    llm_call_context,
+    parse_usage_obj,
+)
 
 logger = logging.getLogger(__name__)
 
 _llm_operation_ctx: ContextVar[str] = ContextVar("llm_operation", default="sync")
+
+# Re-export so call sites can tag feature/user without a second import.
+_ = llm_call_context
 
 
 @contextmanager
@@ -268,19 +278,60 @@ def _message_content(resp: Any) -> str | None:
         return None
 
 
-def _consume_chat_stream(stream: Any) -> str | None:
-    """Accumulate assistant ``content`` deltas; ignore ``reasoning_content`` (Kimi thinking)."""
-    parts: list[str] = []
-    for chunk in stream:
-        try:
-            delta = chunk.choices[0].delta
-        except (AttributeError, IndexError, TypeError):
-            continue
-        piece = getattr(delta, "content", None)
+@dataclass
+class _StreamCollect:
+    text: str | None
+    usage: dict[str, int] = field(default_factory=dict)
+    reasoning_chars: int = 0
+    content_chars: int = 0
+    finish_reason: str | None = None
+
+
+def _delta_text(delta: Any, *names: str) -> str:
+    for name in names:
+        piece = getattr(delta, name, None)
         if piece:
-            parts.append(str(piece))
-    text = "".join(parts).strip()
-    return text or None
+            return str(piece)
+        if isinstance(delta, dict) and delta.get(name):
+            return str(delta.get(name))
+    return ""
+
+
+def _consume_chat_stream(stream: Any) -> _StreamCollect:
+    """Accumulate assistant ``content``; count ``reasoning_content`` for COGS, do not return it."""
+    parts: list[str] = []
+    reasoning_chars = 0
+    usage: dict[str, int] = {}
+    finish_reason: str | None = None
+    for chunk in stream:
+        chunk_usage = parse_usage_obj(getattr(chunk, "usage", None))
+        if chunk_usage:
+            usage = chunk_usage
+        try:
+            choices = chunk.choices or []
+        except (AttributeError, TypeError):
+            continue
+        if not choices:
+            continue
+        choice0 = choices[0]
+        fr = getattr(choice0, "finish_reason", None)
+        if fr:
+            finish_reason = str(fr)
+        delta = getattr(choice0, "delta", None)
+        if delta is None:
+            continue
+        piece = _delta_text(delta, "content")
+        if piece:
+            parts.append(piece)
+        reasoning_chars += len(_delta_text(delta, "reasoning_content", "reasoning"))
+    text = "".join(parts).strip() or None
+    return _StreamCollect(
+        text=text,
+        usage=usage,
+        reasoning_chars=reasoning_chars,
+        content_chars=len(text or ""),
+        finish_reason=finish_reason,
+    )
 
 
 def _build_chat_kwargs(
@@ -301,6 +352,15 @@ def _build_chat_kwargs(
     return kw
 
 
+def _prompt_chars(messages: list[dict[str, str]]) -> int:
+    return sum(len(str(m.get("content") or "")) for m in messages)
+
+
+def _is_stream_options_rejected(exc: BaseException) -> bool:
+    msg = str(exc).lower()
+    return "stream_options" in msg or "include_usage" in msg
+
+
 def _create_chat_collect(
     client: Any,
     *,
@@ -312,6 +372,35 @@ def _create_chat_collect(
     response_format: dict[str, Any] | None = None,
 ) -> str | None:
     """One provider call; streams Kimi to avoid idle ReadTimeout during thinking."""
+    t0 = perf_counter()
+    streamed = _should_stream_completion(model)
+    json_object = bool(response_format)
+    usage: dict[str, int] = {}
+    reasoning_chars = 0
+    content_chars = 0
+    text: str | None = None
+    failure: str | None = None
+    tokens_source = "provider_usage"
+
+    def _emit(*, ok: bool) -> None:
+        emit_llm_usage_v1(
+            model=model,
+            input_tokens=usage.get("prompt_tokens") or None,
+            output_tokens=usage.get("completion_tokens") or None,
+            reasoning_tokens=usage.get("reasoning_tokens") or None,
+            cached_tokens=usage.get("cached_tokens") or 0,
+            prompt_chars=_prompt_chars(messages),
+            content_chars=content_chars,
+            reasoning_chars=reasoning_chars,
+            tokens_source=tokens_source if usage else "estimated_chars",
+            max_tokens=max_tokens,
+            latency_ms=int((perf_counter() - t0) * 1000),
+            ok=ok,
+            failure_class=failure,
+            streamed=streamed,
+            json_object=json_object,
+        )
+
     kw = _build_chat_kwargs(
         model=model,
         messages=messages,
@@ -321,12 +410,37 @@ def _create_chat_collect(
     )
     if response_format is not None:
         kw["response_format"] = response_format
-    if _should_stream_completion(model):
-        kw["stream"] = True
-        stream = client.chat.completions.create(**kw)
-        return _consume_chat_stream(stream)
-    resp = client.chat.completions.create(**kw)
-    return _message_content(resp)
+    try:
+        if streamed:
+            kw["stream"] = True
+            kw["stream_options"] = {"include_usage": True}
+            try:
+                stream = client.chat.completions.create(**kw)
+            except Exception as exc:
+                if not _is_stream_options_rejected(exc):
+                    raise
+                kw.pop("stream_options", None)
+                stream = client.chat.completions.create(**kw)
+            collected = _consume_chat_stream(stream)
+            text = collected.text
+            usage = collected.usage
+            reasoning_chars = collected.reasoning_chars
+            content_chars = collected.content_chars
+        else:
+            resp = client.chat.completions.create(**kw)
+            text = _message_content(resp)
+            usage = parse_usage_obj(getattr(resp, "usage", None))
+            content_chars = len(text or "")
+        if not usage:
+            tokens_source = "estimated_chars"
+        if not text:
+            failure = "empty"
+        _emit(ok=bool(text))
+        return text
+    except Exception as exc:
+        failure = classify_llm_call_failure(exc)
+        _emit(ok=False)
+        raise
 
 
 def _is_timeout_like_error(exc: BaseException) -> bool:
@@ -442,14 +556,15 @@ def chat_completion_text(
     chain = resolve_chat_model_chain(model)
     last_kind: str | None = None
     for idx, mid in enumerate(chain):
-        text, kind = _chat_completion_text_once(
-            client,
-            model=mid,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            json_object=json_object,
-        )
+        with llm_call_context(retry_reason="model_fallback" if idx > 0 else None):
+            text, kind = _chat_completion_text_once(
+                client,
+                model=mid,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                json_object=json_object,
+            )
         if text:
             if idx > 0:
                 logger.warning(
@@ -527,14 +642,16 @@ def _chat_completion_text_once(
                 exc,
             )
     try:
-        text = _create_chat_collect(
-            client,
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=effective_max,
-            reasoning_effort=reasoning_effort,
-        )
+        plain_retry = bool(json_object)
+        with llm_call_context(retry_reason="json_mode_fallback" if plain_retry else None):
+            text = _create_chat_collect(
+                client,
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=effective_max,
+                reasoning_effort=reasoning_effort,
+            )
         if text:
             return text, None
         return None, "empty"
@@ -596,14 +713,15 @@ def chat_completion_plain_with_status(
     for idx, mid in enumerate(chain):
         last_mid = mid
         try:
-            text = _create_chat_collect(
-                client,
-                model=mid,
-                messages=messages,
-                temperature=temperature,
-                max_tokens=resolve_max_tokens(max_tokens, model=mid),
-                reasoning_effort=_reasoning_effort_for_model(mid, json_object=False),
-            )
+            with llm_call_context(retry_reason="model_fallback" if idx > 0 else None):
+                text = _create_chat_collect(
+                    client,
+                    model=mid,
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=resolve_max_tokens(max_tokens, model=mid),
+                    reasoning_effort=_reasoning_effort_for_model(mid, json_object=False),
+                )
             if text:
                 if idx > 0:
                     logger.warning(

@@ -14,6 +14,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     llm_operation,
     resolve_default_chat_model,
     resolve_max_tokens,
@@ -666,18 +667,28 @@ def call_tarot_interpretation_llm_v1(
 
     system = with_practitioner_persona(_SYSTEM_RU, locale="ru")
 
-    for attempt_idx in range(attempts):
-        content = chat_completion_text(
-            client,
-            model=model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_sent},
-            ],
-            temperature=0.55,
-            max_tokens=resolve_max_tokens(1400, model=model),
-            json_object=True,
-        )
+    with llm_call_context(
+        feature="tarot.interpretation",
+        ensure_operation=True,
+        operation="tarot.interpretation",
+    ):
+      for attempt_idx in range(attempts):
+        with llm_call_context(
+            feature="tarot.interpretation",
+            attempt=attempt_idx,
+            retry_reason=("empty_content" if attempt_idx else None),
+        ):
+            content = chat_completion_text(
+                client,
+                model=model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user_sent},
+                ],
+                temperature=0.55,
+                max_tokens=resolve_max_tokens(1400, model=model),
+                json_object=True,
+            )
         if not content:
             logger.warning("tarot_llm empty response attempt=%s", attempt_idx)
             continue

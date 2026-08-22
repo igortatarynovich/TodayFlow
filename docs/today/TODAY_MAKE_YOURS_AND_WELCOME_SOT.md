@@ -1,7 +1,8 @@
-# Today — Welcome glass · Progress · Make yours (SoT)
+# Today — Welcome glass · Progress · Make yours (composition notes)
 
-**Status:** ACTIVE · 2026-08-09  
-**Presentation:** [TODAY_SCREEN_SCENARIO_V3](./TODAY_SCREEN_SCENARIO_V3.md) v3.3 handoff  
+**Status:** SUBORDINATE · 2026-08-21  
+**Product cycle:** [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) — TODAY → RITUAL → MY DAY → EVENING. This file is **not** a screen map.  
+**V3 / v3.3 handoff:** historical only ([TODAY_SCREEN_SCENARIO_V3](./TODAY_SCREEN_SCENARIO_V3.md)) — **не** presentation SoT.  
 **Rule:** FE may **compose** existing signals; may **not invent** calm/product copy on empty or transport failure.
 
 ---

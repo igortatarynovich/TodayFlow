@@ -19,6 +19,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain_with_status,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_default_chat_model,
     resolve_max_tokens,
 )
@@ -1200,6 +1201,7 @@ def call_day_scenario_native_llm_c1(
             meta["user_message_format"] = "dramaturgy_brief_c4_v1"
 
     last_pers_defects: list[dict[str, str]] = []
+    pending_retry_reason: str | None = None
 
     for attempt_idx in range(attempts):
         if retry_feedback:
@@ -1208,18 +1210,23 @@ def call_day_scenario_native_llm_c1(
             user_sent_chars = len(user_sent)
         attempt_t0 = perf_counter()
         attempt_model = resolve_native_attempt_model(attempt_idx)
-        content, provider_kind, used_model = chat_completion_plain_with_status(
-            client,
-            model=attempt_model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_sent},
-            ],
-            temperature=0.52,
-            max_tokens=resolve_max_tokens(4800),
-            # Gate/parse retries stay on Kimi — do not hop to dry DeepSeek.
-            allow_model_fallback=int(attempt_idx) == 0,
-        )
+        with llm_call_context(
+            feature="today.native_day_story",
+            attempt=attempt_idx,
+            retry_reason=pending_retry_reason,
+        ):
+            content, provider_kind, used_model = chat_completion_plain_with_status(
+                client,
+                model=attempt_model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user_sent},
+                ],
+                temperature=0.52,
+                max_tokens=resolve_max_tokens(4800),
+                # Gate/parse retries stay on Kimi — do not hop to dry DeepSeek.
+                allow_model_fallback=int(attempt_idx) == 0,
+            )
         if used_model:
             model_name = str(used_model)
         attempt_ms = int((perf_counter() - attempt_t0) * 1000)
@@ -1281,6 +1288,7 @@ def call_day_scenario_native_llm_c1(
                     status="parse_fail",
                     reject_reason="json_parse_failed",
                 )
+            pending_retry_reason = "parse_failed"
             continue
         normalized = normalize_native_scenario_llm_c1(parsed)
         # Align declared depth with pack if model omitted it
@@ -1327,6 +1335,7 @@ def call_day_scenario_native_llm_c1(
                     reject_reason=reason,
                 )
             retry_feedback = "Исправь schema/validation ошибки: " + "; ".join(hard_errors[:6])
+            pending_retry_reason = "gate_retry"
             continue
         # Soft native findings (e.g. parallel_forecast regex) → capture only.
         if soft_native and capture is not None:
@@ -1444,6 +1453,7 @@ def call_day_scenario_native_llm_c1(
                     except Exception:
                         pass
                 retry_feedback = feedback
+                pending_retry_reason = "gate_retry"
                 continue
             reason = ";".join(str(d.get("code")) for d in pers_defects[:8])
             attempt_rows.append(
@@ -1561,6 +1571,7 @@ def call_day_scenario_native_llm_c1(
                     except Exception:
                         pass
                 retry_feedback = feedback
+                pending_retry_reason = "gate_retry"
                 continue
             reason = ";".join(str(d.get("code")) for d in editorial[:8])
             attempt_rows.append(
@@ -1664,6 +1675,7 @@ def call_day_scenario_native_llm_c1(
                     reject_reason=reason,
                 )
             retry_feedback = "Исправь structural/SoT ошибки: " + "; ".join(hard[:6])
+            pending_retry_reason = "gate_retry"
             continue
         heal_fc = healed_failure_class(attempt_heals)
         attempt_rows.append(

@@ -15,6 +15,14 @@ export const TODAY_NO_CONNECTION_COPY = "Нет соединения.";
 /** Server answered but flagged degraded / is_fallback — no inventable content. */
 export const TODAY_UNAVAILABLE_COPY = "Не удалось загрузить.";
 
+export function isHonestUnavailableCopy(value: string | null | undefined): boolean {
+  const t = String(value || "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!t) return false;
+  return t === TODAY_UNAVAILABLE_COPY || t === TODAY_NO_CONNECTION_COPY;
+}
+
 export function todaySlotFailureCopy(reason: TodaySlotLoadFailure): string {
   return reason === "no_connection" ? TODAY_NO_CONNECTION_COPY : TODAY_UNAVAILABLE_COPY;
 }

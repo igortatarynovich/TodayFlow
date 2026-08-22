@@ -20,6 +20,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_default_chat_model,
     resolve_max_tokens,
 )
@@ -816,16 +817,21 @@ def call_day_story_llm_v1(
         )
 
     for attempt_idx in range(attempts):
-        content = chat_completion_plain(
-            client,
-            model=resolve_default_chat_model(),
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_sent},
-            ],
-            temperature=0.52,
-            max_tokens=resolve_max_tokens(1800),
-        )
+        with llm_call_context(
+            feature="today.day_story_editorial",
+            attempt=attempt_idx,
+            retry_reason="parse_failed" if attempt_idx else None,
+        ):
+            content = chat_completion_plain(
+                client,
+                model=resolve_default_chat_model(),
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user_sent},
+                ],
+                temperature=0.52,
+                max_tokens=resolve_max_tokens(1800),
+            )
         if not content:
             if capture is not None:
                 capture.record_attempt(
@@ -912,6 +918,22 @@ def call_day_story_llm_v1(
             model_version=model_name,
         )
     return None
+
+
+def _day_scenario_for_contract(scenario: dict[str, Any] | None, *, unavailable: bool) -> dict[str, Any] | None:
+    """Forward day_scenario; on unavailable strip leftover color/props so catalog cannot seed a fake colour of the day."""
+    if not isinstance(scenario, dict):
+        return None
+    if not unavailable:
+        return scenario
+    out = dict(scenario)
+    props = dict(out.get("props") or {}) if isinstance(out.get("props"), dict) else {}
+    props["color"] = None
+    props["avoid_color"] = None
+    out["props"] = props
+    out["ready"] = False
+    out["runtime_sot"] = False
+    return out
 
 
 def day_story_to_today_contract_v1(
@@ -1014,8 +1036,9 @@ def day_story_to_today_contract_v1(
             if isinstance(story.get("interpretive_chorus"), dict)
             else None
         ),
-        "day_scenario": (
-            story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else None
+        "day_scenario": _day_scenario_for_contract(
+            story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else None,
+            unavailable=unavailable,
         ),
         "trace": trace,
     }
@@ -1079,8 +1102,10 @@ def day_story_to_today_contract_v1(
         "generation_id": generation_id or "",
         "day_story": day_story_out,
     }
+    # I0: Global Day Engine is independent of Personal interpretation.
+    # Keep windows/drivers/energy even when meaning slots are unavailable.
+    contract["global_day"] = global_day
     if not unavailable:
-        contract["global_day"] = global_day
         personal_day = build_personal_day_nest_v1(story)
         if personal_day is not None:
             contract["personal_day"] = personal_day

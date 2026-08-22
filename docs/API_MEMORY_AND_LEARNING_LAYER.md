@@ -157,7 +157,7 @@ flowchart TD
 
 **Уже есть:** `user_id`, `surface`, `model`, `input_payload`, `prompt_version_id`, `system_prompt`, `user_prompt`, `duration_ms`.
 
-**Gap:** `context_slice_id`, token counts, cost, `gate_decision`, `purpose`.
+**Gap:** `context_slice_id`, `gate_decision`, `purpose`. Live per-call tokens/cost: `llm_usage_v1` logs (not yet columns on `generation_logs`).
 
 ---
 
@@ -429,7 +429,7 @@ flowchart LR
 | Context hash | 🟡 | `day_context_sha256` in `input_payload` |
 | Event ↔ generation link | 🟡 | `generation_id` in meaning events |
 | LLM Call Gate artifact | ⬜ | backlog |
-| Token/cost fields | ⬜ | backlog |
+| Token/cost fields | 🟡 | `llm_usage_v1` log + optional JSONL; not yet `generation_logs` columns |
 | Similarity reuse | ⬜ | backlog |
 | Training examples table | ⬜ | backlog |
 | Dataset status workflow | ⬜ | backlog |
@@ -452,5 +452,6 @@ flowchart LR
 
 ## 16. Changelog
 
+- **1.2 (2026-08-18)** — Live per-request AI COGS: `llm_usage_v1` (feature/model/tokens/cost). Does not yet persist Request Record rows.
 - **1.1 (2026-05-31)** — Gate v1 **after** UKM-3; decisions on Knowledge slice, not raw events.
 - **1.0 (2026-05-31)** — первый канон AMLL: Gate, Request/Response/Reaction records, Learning Signals, cache/reuse, dataset policy, token ROI, PIL integration.

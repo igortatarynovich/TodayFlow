@@ -41,6 +41,9 @@
 | Внутреннее устройство → проявления → выводы | Энциклопедия источников |
 | Один движок, много проекций | Независимые генераторы «отношений / карьеры / энергии» |
 | SoT платформы | SoT только экрана `/profile` |
+| SoT **человека** | SoT астрологии (это [Interpretation Library](../astrology/INTERPRETATION_LIBRARY_V1.md)) |
+
+CE **не** владеет atomic astrology. IL **не** владеет человеком. Personal meaning — только композиция; см. [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md) I0.
 
 ---
 

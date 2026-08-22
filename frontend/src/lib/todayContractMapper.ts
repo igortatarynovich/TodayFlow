@@ -1,8 +1,10 @@
 import type { TodayContractV1 } from "@/lib/todayContract";
+import { isTodayInterpretationUnavailable } from "@/lib/todayContract";
 
 export function hasAuthoritativeDayStory(contract: TodayContractV1): boolean {
   const ds = contract.day_story;
   if (!ds) return false;
+  if (isTodayInterpretationUnavailable(contract)) return false;
   return Boolean(
     (ds.story && ds.story.trim()) ||
       (ds.theme && ds.theme.trim()) ||

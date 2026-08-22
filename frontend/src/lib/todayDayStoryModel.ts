@@ -1,7 +1,7 @@
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
 import type { TodayContractV1 } from "@/lib/todayContract";
-import { isDomainLensPresent } from "@/lib/todayContract";
+import { isDomainLensPresent, isTodayInterpretationUnavailable } from "@/lib/todayContract";
 import type { DayEngagementState } from "@/lib/todayDayEngagement";
 import { isLowEnergyMood } from "@/lib/todayDayDialogue";
 import {
@@ -320,7 +320,9 @@ export function buildTodayDayStoryViewModel(input: {
       }
     | null
     | undefined;
-  const colorGuide = resolveTodayDayColorGuide({
+  const colorGuide = isTodayInterpretationUnavailable(input.contract)
+    ? null
+    : resolveTodayDayColorGuide({
     // Scenario talisman / props color wins over morning catalog name (B4 / v3.1).
     name: talisman?.color ?? propsColor?.name ?? input.colorLine ?? apiColor?.name,
     api: apiColor,

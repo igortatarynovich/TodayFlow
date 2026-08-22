@@ -22,6 +22,7 @@ import { ProductWebShellBridge } from "@/components/product-ui/ProductWebShellBr
 import { ProductWebShellConfigProvider } from "@/components/product-ui/productWebShellConfig";
 import { ProductWebShellLayout } from "@/components/product-ui/ProductWebShellLayout";
 import { TodayCycleProvider } from "@/components/providers/TodayCycleProvider";
+import { PRODUCT_WEB_LANDING_SEO } from "@/components/product-ui/productWebLandingContent";
 
 const GlobalLevelStrip = dynamic(
   () => import("@/components/rewards/GlobalLevelStrip").then((m) => m.GlobalLevelStrip),
@@ -41,8 +42,7 @@ export const metadata = {
     default: "TodayFlow",
     template: "%s | TodayFlow"
   },
-  description:
-    "TodayFlow видит не только твой день, а то, как дни складываются в тебя — с памятью о вчера, не общий гороскоп.",
+  description: PRODUCT_WEB_LANDING_SEO.description,
   keywords: ["самопознание", "персональный день", "TodayFlow", "профиль", "таро", "совместимость"],
   authors: [{ name: "TodayFlow" }],
   creator: "TodayFlow",
@@ -70,21 +70,20 @@ export const metadata = {
     url: "/",
     siteName: "TodayFlow",
     title: "TodayFlow",
-    description:
-      "TodayFlow видит не только твой день, а то, как дни складываются в тебя — с памятью о вчера, не общий гороскоп.",
+    description: PRODUCT_WEB_LANDING_SEO.description,
     images: [
       {
         url: "/images/hero-meditation.png",
         width: 1920,
         height: 1080,
-        alt: "TodayFlow — персональный день с памятью о вчера",
+        alt: "TodayFlow — точные астрономические данные, столетия интерпретации, один личный взгляд",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "TodayFlow",
-    description: "Не только день — история, которая помнит вчера.",
+    description: PRODUCT_WEB_LANDING_SEO.description,
     images: ["/images/hero-meditation.png"],
   },
   robots: {

@@ -12,6 +12,7 @@ from todayflow_backend.services.today_contract_assembler_v1 import (
 )
 from todayflow_backend.services.today_contract_nests_b1_v1 import (
     attach_b1_nests_to_contract,
+    attach_color_guide_to_contract,
     build_color_guide_v1,
     build_welcome_glass_v1,
 )
@@ -115,6 +116,21 @@ def test_attach_nests_on_contract_dict():
     assert out["welcome_glass"]["good_for"] == ["Шаг", "Пауза"]
     assert out["color_guide"]["name"] == "Изумрудный"
     assert out["today_progress"] == {"rows": []}
+
+
+def test_color_guide_omitted_when_interpretation_unavailable():
+    """PERSONAL DAY → COLOR. Leftover scenario/catalog name is not a substitute."""
+    contract = {
+        "day_story": {
+            "interpretation_status": "unavailable",
+            "day_scenario": {"props": {"color": {"name": "Янтарный"}}},
+            "talisman": {"color": "Янтарный"},
+        }
+    }
+    out = attach_color_guide_to_contract(contract, target_date=date(2026, 8, 18))
+    assert out["color_guide"] is None
+    nested = attach_b1_nests_to_contract(dict(contract), target_date=date(2026, 8, 18))
+    assert nested["color_guide"] is None
 
 
 def test_welcome_glass_reason_does_not_fail_legacy_key_validation():

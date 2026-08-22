@@ -324,6 +324,29 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.personalLine).not.toContain("точка роста");
   });
 
+  it("does not treat unavailable shell copy as personalLine or atmosphere", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_context: { period: "Не удалось загрузить." },
+        personal_growth: { development_point: "Не удалось загрузить." },
+        day_story: {
+          contract_version: "day_story_v1",
+          interpretation_status: "unavailable",
+          theme: "Ровный продуктивный ритм.",
+          day_scenario: {
+            conflict: { why_personal: "тебе обычно проще держать слово" },
+          },
+        },
+      },
+      dateLabel: "18 августа",
+      salutation: "Привет",
+    });
+    expect(model.personalLine).toBeNull();
+    expect(model.atmosphereLine).toBe("Ровный продуктивный ритм.");
+    expect(model.doItems).toEqual([]);
+  });
+
   it("reads Global driver and strength/risk chips from global_day", () => {
     const model = buildTodayDayBriefModel({
       contract: {

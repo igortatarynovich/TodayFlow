@@ -10,4 +10,5 @@
 - [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) — практика дня / recommendation в Today
 - [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) — visual tokens (Practices не вводит параллельный Figma-канон экрана)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md) — Practice / Habit / Ascetic registries
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — если практики станут **системой знаний** (не только экран): модель до литературы; клинические/психологические утверждения — своя иерархия доказательности
 - Legacy catalog keys в коде: map → need/format IDs, не SoT шапки
