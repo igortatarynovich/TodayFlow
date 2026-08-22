@@ -207,10 +207,11 @@ No FAIL row. No silent repair. No catalog edit.
 - Inventing `earth → practical` or `cardinal → initiating`  
 - House Mainstream / House Canon grammar (map locked 1.3.89; grammar is next)
 
-**Next named:** Houses Mainstream map — **done 1.3.89.** House Canon grammar — **done 1.3.90.** House Canon fill — **done 1.3.91.** House Canon storage/materialization — **done 1.3.92.** Next = **1.3.93 Planet × House composition smoke**. **STOP Signs.** Do not improve packs without a named Composition Engine failure.
+**Next named:** Houses Mainstream map — **done 1.3.89.** House Canon grammar — **done 1.3.90.** House Canon fill — **done 1.3.91.** House Canon storage/materialization — **done 1.3.92.** Planet × House smoke — **done 1.3.93.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Next = **Aspect Canon fill**. **STOP Signs.** Do not improve packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
+- **1.1 (2026-08-22)** — House live state is 1.3.93 PASS. This file’s Moon × 4th PARTIAL is a snapshot of the catalog then.
 - **1.0 (2026-08-22)** — 1.3.88. PlanetInSign PASS from stored manner. Discrimination and operator gates pass. Classification is not the operator. House row remains PARTIAL. Catalog unchanged.

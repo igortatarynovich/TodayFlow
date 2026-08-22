@@ -1,6 +1,6 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-21
+Last updated: 2026-08-22
 Owner: Product + Engineering
 Status: Active working document
 
@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.92 House Canon storage + materialization.** Twelve house drafts carry locked `canon.arena`. Lilly fields unchanged. Next = 1.3.93 Planet × House smoke. STOP Signs. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.95 Aspect Canon grammar.** One slot (`relation`). Effort / `requires_action` surplus. Dry-run ≠ fill. **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = Aspect Canon fill. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -206,6 +206,33 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/HOUSE_CANON_V1.md` · IL 1.3.91 §6.45
 - **Backward compatible?** yes. House objects stay `DRAFT_CLASSICAL`.
+
+## Architecture impact — IL-1 1.3.95 Aspect Canon grammar (2026-08-22)
+
+- **SoT before:** 1.3.94 locked aspect territory. One-slot vs two-atom Canon undecided. Risk: two atoms because Signs had two or because `requires_action` exists; copy `interaction` as Canon; write pair essays.
+- **SoT after:** Aspect = relation (how two functions meet). One required slot (`relation`). Effort / participation / `requires_action` surplus. Stored `interaction` is classical grain, not this slot. Dry-run only. Catalog untouched. Next = Aspect Canon fill.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ASPECT_CANON_GRAMMAR_V1.md` · IL 1.3.95 §6.49
+- **Backward compatible?** yes (`draft`). Deprecated as grammar source: Foundation §2.4; `requires_action` as a second atom.
+
+## Architecture impact — IL-1 1.3.94 Mainstream Aspect Semantic Map (2026-08-22)
+
+- **SoT before:** Houses closed (1.3.93 PASS). Risk: skip the map because `friction` / `flow` already compose; paste Foundation §2.4; treat square as “challenge causes growth.”
+- **SoT after:** same panel as planets/signs/houses. Five major-aspect territories + include/secondary/exclude. Aspect = relation between functions, not a theme. One-slot vs two-atom Canon undecided. Catalog untouched. Next = Aspect Canon grammar.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md` · IL 1.3.94 §6.48
+- **Backward compatible?** yes. Aspect objects stay `DRAFT_CLASSICAL`.
+
+## Architecture impact — IL-1 1.3.93 Planet × House composition smoke (2026-08-22)
+
+- **SoT before:** 1.3.92 stored `canon.arena`. 1.3.82 / 1.3.88 Moon × 4th PARTIAL. Risk: Lilly `domain` as operator, or pair essays to force PASS.
+- **SoT after:** PlanetInHouse reads stored `house.canon.arena`. Moon × 4th ≠ Moon × 10th. Same 4th pack on Moon / Mars / Venus. Historical PARTIAL = snapshot. Catalog unchanged. **STOP Houses.**
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/HOUSE_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.93 §6.47
+- **Backward compatible?** yes (`draft`). Deprecated as next step: improving House packs without a named Composition Engine failure.
 
 ## Architecture impact — IL-1 1.3.92 House Canon storage + materialization (2026-08-22)
 

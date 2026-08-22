@@ -6,7 +6,7 @@
 
 Signs split schema and catalog copy. Houses do not: one atomic pass writes the nest **and** copies locked 1.3.91 packs onto the twelve `astro.house.*` drafts. Lemma strings are identical to the locked text blocks. Origin tables stay in HOUSE_CANON_V1.md.
 
-Smoke-test is **not** this pass. That gate is **1.3.93**.
+Smoke-test is **not** this pass. That gate is **1.3.93** (**done**).
 
 ---
 
@@ -87,16 +87,18 @@ IL-4 still formulates. It must not be given only Lilly `domain` and asked to inv
 ## 4. This pass does not do
 
 - Lemma / family revision
-- 1.3.93 Planet × House smoke-test
+- 1.3.93 Planet × House smoke-test — **done**
 - Aspect / ASC/MC maps or objects
 - IL-2 engine · runtime wiring
 - `active`
 - Overwrite Lilly `domain`
 
-**Next named:** **1.3.93 Planet × House Composition Smoke V1.** Discrimination: Moon × 4th ≠ Moon × 10th. Composability: same stored 4th pack on Moon / Mars / Venus. Historical 1.3.82 Moon × 4th PARTIAL must become PASS from **stored** `house.canon.arena`. Then **STOP Houses.** Do not enrich packs.
+**Next named:** **1.3.93 Planet × House Composition Smoke V1** — **done.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Next = **Aspect Canon fill**. Discrimination: Moon × 4th ≠ Moon × 10th. Composability: same stored 4th pack on Moon / Mars / Venus. Historical 1.3.82 Moon × 4th PARTIAL is now a snapshot; live frame reads **stored** `house.canon.arena`. **STOP Houses.** Do not enrich packs.
 
 ---
 
 ## Changelog
 
+- **1.2 (2026-08-22)** — 1.3.95 Aspect Canon grammar. Next = Aspect Canon fill.
+- **1.1 (2026-08-22)** — 1.3.93 Planet × House smoke PASS. Historical PARTIAL is a snapshot. Next = Aspect Canon grammar after 1.3.94 map. **Done 1.3.95.**
 - **1.0 (2026-08-22)** — 1.3.92. `$defs.house_canon_pack` (`arena`). Twelve house drafts carry locked 1.3.91 packs. Lilly fields unchanged. Next = 1.3.93 Planet × House smoke-test.

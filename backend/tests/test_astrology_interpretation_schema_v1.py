@@ -2995,7 +2995,7 @@ def test_mainstream_house_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.43 Mainstream House Semantic Map" in canon
-    assert "**Версия:** 1.3.92" in canon
+    assert "**Версия:** 1.3.95" in canon
     house_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -3054,7 +3054,7 @@ def test_house_canon_grammar_v1():
         encoding="utf-8"
     )
     assert "### 6.44 House Canon grammar" in canon
-    assert "**Версия:** 1.3.92" in canon
+    assert "**Версия:** 1.3.95" in canon
     grammar = (ROOT / "docs" / "astrology" / "HOUSE_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3095,7 +3095,7 @@ def test_house_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.45 House Canon V1 fill" in canon
-    assert "**Версия:** 1.3.92" in canon
+    assert "**Версия:** 1.3.95" in canon
     packs = (ROOT / "docs" / "astrology" / "HOUSE_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "Destination noun" in packs or "destination noun" in packs.lower()
@@ -3169,7 +3169,7 @@ def test_sign_canon_grammar_v1():
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.92" in canon
+    assert "**Версия:** 1.3.95" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3207,7 +3207,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.92" in canon
+    assert "**Версия:** 1.3.95" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs
@@ -3610,7 +3610,7 @@ def test_house_canon_storage_materialization_v1():
         encoding="utf-8"
     )
     assert "### 6.46 House Canon storage and materialization" in canon
-    assert "**Версия:** 1.3.92" in canon
+    assert "**Версия:** 1.3.95" in canon
     storage = (
         ROOT / "docs" / "astrology" / "HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md"
     ).read_text(encoding="utf-8")
@@ -3645,8 +3645,97 @@ def test_house_canon_storage_materialization_v1():
     assert "STOP Signs" in next_block
 
 
+def test_mainstream_aspect_semantic_map_v1():
+    """1.3.94: Mainstream aspect map. Concept families. No ingest. No objects. No Canon slots."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.48 Mainstream Aspect Semantic Map" in canon
+    assert "**Версия:** 1.3.95" in canon
+    aspect_map = (
+        ROOT / "docs" / "astrology" / "MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md"
+    ).read_text(encoding="utf-8")
+    assert "Astrology.com" in aspect_map
+    assert "Astrodienst" in aspect_map
+    assert "Cafe Astrology" in aspect_map
+    assert "concept family" in aspect_map.lower() or "concept families" in aspect_map.lower()
+    assert "relation, not a theme" in aspect_map.lower() or "relation, not theme" in aspect_map.lower()
+    assert "challenge causes growth" in aspect_map.lower() or "challenge-causes-growth" in aspect_map
+    assert "one slot vs two atoms" in aspect_map.lower() or "one `relation` slot" in aspect_map
+    assert "Not JSON" in aspect_map or "not JSON" in aspect_map
+    assert "blend · unite · fuse · immediate-connection" in aspect_map
+    assert "friction · blockage · cross-purposes · demand-for-action" in aspect_map
+    assert "easy-flow · support · natural-ease · complementary" in aspect_map
+    assert "orbs" in aspect_map.lower()
+    assert "applying" in aspect_map.lower()
+    for heading in (
+        "Conjunction",
+        "Opposition",
+        "Square",
+        "Trine",
+        "Sextile",
+    ):
+        assert f"### {heading}" in aspect_map
+        assert "**Include**" in aspect_map
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert by_id["astro.aspect.square"]["interaction"] == "friction"
+    assert by_id["astro.aspect.trine"]["interaction"] == "flow"
+    assert "canon" not in by_id["astro.aspect.square"]
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.94" in next_block
+    assert "1.3.93" in next_block
+    assert "Aspect Canon" in next_block or "Aspect Canon grammar" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "STOP Houses" in next_block
+    assert "STOP Signs" in next_block
 
 
+def test_aspect_canon_grammar_v1():
+    """1.3.95: Aspect Canon grammar. One slot (relation). Not fill. Not objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.49 Aspect Canon grammar" in canon
+    assert "**Версия:** 1.3.95" in canon
+    grammar = (ROOT / "docs" / "astrology" / "ASPECT_CANON_GRAMMAR_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "**relation**" in grammar
+    assert "Deletion test" in grammar
+    assert "**Surplus**" in grammar
+    assert "requires_action" in grammar
+    assert "object.interaction" in grammar or "stored `interaction`" in grammar
+    assert "Aspect ≠ theme" in grammar
+    assert "Mars □ Saturn" in grammar
+    assert "Jupiter △ Sun" in grammar
+    assert "Mars ☍ Saturn" in grammar
+    assert "Venus △ Mars" in grammar
+    assert "Venus ✶ Mars" in grammar
+    assert "Sun ☌ Mercury" in grammar
+    assert "Venus □ Saturn" in grammar
+    assert "Moon ☍ Saturn" in grammar
+    assert "not locked" in grammar.lower() or "Dry-run" in grammar
+    assert "One. Not two." in grammar or "One required slot" in grammar
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert by_id["astro.aspect.square"]["interaction"] == "friction"
+    assert by_id["astro.aspect.trine"]["interaction"] == "flow"
+    assert by_id["astro.aspect.sextile"]["interaction"] == "flow"
+    assert "canon" not in by_id["astro.aspect.square"]
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.95" in next_block
+    assert "1.3.94" in next_block
+    assert "Aspect Canon fill" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "STOP Houses" in next_block
+    assert "STOP Signs" in next_block
 
 
 

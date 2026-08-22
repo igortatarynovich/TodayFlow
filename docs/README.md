@@ -39,7 +39,7 @@
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — JSON / Machine Contract build order (не порядок исследования смысла)
-- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.92):** House Canon storage/materialization in; next = Planet × House smoke. Исторический корпус = lenses
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.95):** Aspect Canon grammar in (one slot: `relation`); Houses closed (1.3.93 PASS). Next = Aspect Canon fill. Исторический корпус = lenses
 - [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) — **IL V1 freeze map (APPROVED):** что библиотека должна знать. Books только против named `KC-*` row. IL-1 done = минимальные primitives
 - [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) — **Product Canon vs Lenses (1.3.76):** Mainstream → Canon → runtime. Corpus → education / SEO / deep dives
 - [astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) — **Mainstream planet map (1.3.77):** concept families. Not Canon, not JSON
@@ -48,6 +48,9 @@
 - [astrology/HOUSE_CANON_GRAMMAR_V1.md](./astrology/HOUSE_CANON_GRAMMAR_V1.md) — **House Canon grammar (1.3.90):** one slot (`arena`). Dry-run ≠ fill
 - [astrology/HOUSE_CANON_V1.md](./astrology/HOUSE_CANON_V1.md) — **House Canon V1 (1.3.91):** twelve packs + provenance. Storage = 1.3.92 **done**
 - [astrology/HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md](./astrology/HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md) — **House Canon storage + materialization (1.3.92):** `house_canon_pack` (`arena`); twelve drafts carry locked packs
+- [astrology/HOUSE_CANON_COMPOSITION_SMOKE_V1.md](./astrology/HOUSE_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.93):** PlanetInHouse PASS. STOP Houses
+- [astrology/MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md) — **Mainstream aspect map (1.3.94):** concept families. Relation ≠ theme. Not grammar, not JSON
+- [astrology/ASPECT_CANON_GRAMMAR_V1.md](./astrology/ASPECT_CANON_GRAMMAR_V1.md) — **Aspect Canon grammar (1.3.95):** one slot (`relation`). Dry-run ≠ fill
 - [astrology/SIGN_CANON_GRAMMAR_V1.md](./astrology/SIGN_CANON_GRAMMAR_V1.md) — **Sign Canon grammar (1.3.84):** manner · excess. Dry-run ≠ fill
 - [astrology/SIGN_CANON_V1.md](./astrology/SIGN_CANON_V1.md) — **Sign Canon V1 (1.3.85):** twelve packs + provenance. Storage = 1.3.86
 - [astrology/SIGN_CANON_STORAGE_V1.md](./astrology/SIGN_CANON_STORAGE_V1.md) — **Sign Canon storage (1.3.86):** optional `canon` nest on signs (`manner` · `excess`)
@@ -56,7 +59,7 @@
 - [astrology/PLANET_CANON_V1.md](./astrology/PLANET_CANON_V1.md) — **Planet Canon V1 (1.3.79):** ten packs + provenance. Storage = 1.3.80
 - [astrology/PLANET_CANON_STORAGE_V1.md](./astrology/PLANET_CANON_STORAGE_V1.md) — **Planet Canon storage (1.3.80):** optional `canon` nest
 - [astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md](./astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md) — **Sun–Saturn fill (1.3.81):** product `canon` on seven drafts
-- [astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md](./astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.82):** aspect PASS; sign/house PARTIAL
+- [astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md](./astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.82):** aspect PASS; sign/house PARTIAL *(house PARTIAL = snapshot after 1.3.93)*
 - [audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](./audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) — Co–Star teardown Phase 0: **recognition check**, не источник смысла
 - [TODAYFLOW_CANON_V1.md](./astrology/TODAYFLOW_CANON_V1.md) — **структуризация Mainstream** в Canon-атомы. Runtime: атомы → композиция → LLM формулирует. CORE не gate
 - [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md)
