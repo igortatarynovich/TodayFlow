@@ -306,7 +306,7 @@ out:      Capricorn manner · MC · `limit` as the 10th’s verb
 - Sign pack edits · books · CORE · Co–Star ingest
 - Houlding *The Houses* · Lilly overwrite
 
-**Next named:** House Canon fill — **done 1.3.91** ([HOUSE_CANON_V1.md](./HOUSE_CANON_V1.md)). Next = House Canon storage / materialization. Then Planet × House smoke-test. **STOP Houses** after PASS.
+**Next named:** House Canon fill — **done 1.3.91** ([HOUSE_CANON_V1.md](./HOUSE_CANON_V1.md)). House Canon storage/materialization — **done 1.3.92.** Next = **1.3.93 Planet × House composition smoke**. Then **STOP Houses** after PASS.
 
 ---
 

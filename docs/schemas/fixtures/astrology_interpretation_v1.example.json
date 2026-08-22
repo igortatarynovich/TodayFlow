@@ -142,6 +142,49 @@
           "reviewed_at": null
         }
       ]
+    },
+    {
+      "object_id": "astro.house.04",
+      "layer": 3,
+      "type": "house",
+      "status": "schema_example",
+      "version": "0.0.0",
+      "phenomenon": "4th house",
+      "machine_entity_code": "astrology.house.04",
+      "theme_clusters": ["home"],
+      "polarity": ["neutral"],
+      "temporal_class": "natal",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "domain": "father, land, hidden things, and endings",
+      "internal_meaning": "fathers, inheritances, the earth, hidden treasure, and the end of a matter",
+      "external_manifestations": ["lands, houses, tenements, tillage"],
+      "people": ["fathers in general"],
+      "activities": ["tillage"],
+      "resources": ["lands, hidden treasure, ancient dwellings"],
+      "risks": ["barren, stony or woody ground when so signified"],
+      "canon": {
+        "arena": ["home", "family", "roots", "private-base"]
+      },
+      "provenance": [
+        {
+          "concept_id": "claim.schema.house.04.arena",
+          "source_id": "schema_example",
+          "source_class": "schema_example",
+          "author": null,
+          "edition": null,
+          "locus": null,
+          "school": null,
+          "original_claim": "Form illustration only — not a reviewed meaning claim",
+          "normalized_claim": "4th house arena is home, family, roots, private-base",
+          "evidence_tier": "editorial",
+          "review_status": "schema_example",
+          "field": "domain",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      ]
     }
   ]
 }

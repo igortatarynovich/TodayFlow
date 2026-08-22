@@ -207,7 +207,7 @@ No FAIL row. No silent repair. No catalog edit.
 - Inventing `earth → practical` or `cardinal → initiating`  
 - House Mainstream / House Canon grammar (map locked 1.3.89; grammar is next)
 
-**Next named:** Houses Mainstream map — **done 1.3.89.** House Canon grammar — **done 1.3.90.** House Canon fill — **done 1.3.91.** Next = House Canon storage/materialization. **STOP Signs.** Do not improve packs without a named Composition Engine failure.
+**Next named:** Houses Mainstream map — **done 1.3.89.** House Canon grammar — **done 1.3.90.** House Canon fill — **done 1.3.91.** House Canon storage/materialization — **done 1.3.92.** Next = **1.3.93 Planet × House composition smoke**. **STOP Signs.** Do not improve packs without a named Composition Engine failure.
 
 ---
 

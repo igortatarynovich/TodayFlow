@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.91 House Canon fill.** Twelve `arena` packs from locked territory. Catalog unchanged. Next = House Canon storage/materialization. STOP Signs. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.92 House Canon storage + materialization.** Twelve house drafts carry locked `canon.arena`. Lilly fields unchanged. Next = 1.3.93 Planet × House smoke. STOP Signs. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -206,6 +206,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/HOUSE_CANON_V1.md` · IL 1.3.91 §6.45
 - **Backward compatible?** yes. House objects stay `DRAFT_CLASSICAL`.
+
+## Architecture impact — IL-1 1.3.92 House Canon storage + materialization (2026-08-22)
+
+- **SoT before:** House Canon lived in a doc. Twelve house drafts were Lilly `domain` / `people` / `activities` only. Schema forbade `canon` on `type=house`.
+- **SoT after:** `type=house` may carry optional `canon` as `$defs.house_canon_pack` (`arena` only). Twelve drafts carry locked 1.3.91 packs. Lilly fields unchanged. Status `draft`. Aspects omit `canon`. ASC/MC not materialized. Runtime still ignores `draft`.
+- **Public contract changed?** yes — optional house `canon` nest; twelve draft houses now include `canon`
+- **Migration required?** no — nothing `active`
+- **Canon updated?** yes — `docs/astrology/HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md` · IL 1.3.92 §6.46 · schema `$defs.house_canon_pack` · `objects_v1.json`
+- **Backward compatible?** yes for runtime (`draft`). Clients that only read Lilly `domain` still see CA I.7.
 
 ## Architecture impact — IL-1 1.3.90 House Canon grammar (2026-08-22)
 

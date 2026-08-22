@@ -42,12 +42,35 @@
       },
       "tempo": "medium",
       "canon": {
-        "core_function": ["identify", "vitalize", "will"],
-        "drive": ["purpose", "self-coherence"],
-        "needs": ["center", "continuity"],
-        "constructive": ["vitality", "integrity", "self-direction"],
-        "distorted": ["ego-inflation", "will-excess", "depletion"],
-        "domains": ["self", "identity", "vitality", "purpose"]
+        "core_function": [
+          "identify",
+          "vitalize",
+          "will"
+        ],
+        "drive": [
+          "purpose",
+          "self-coherence"
+        ],
+        "needs": [
+          "center",
+          "continuity"
+        ],
+        "constructive": [
+          "vitality",
+          "integrity",
+          "self-direction"
+        ],
+        "distorted": [
+          "ego-inflation",
+          "will-excess",
+          "depletion"
+        ],
+        "domains": [
+          "self",
+          "identity",
+          "vitality",
+          "purpose"
+        ]
       },
       "provenance": [
         {
@@ -202,12 +225,34 @@
       },
       "tempo": "fast",
       "canon": {
-        "core_function": ["feel", "respond", "protect"],
-        "drive": ["safety"],
-        "needs": ["familiarity", "responsiveness"],
-        "constructive": ["attunement", "protection", "instinct"],
-        "distorted": ["fusion", "clinging", "reactivity"],
-        "domains": ["emotions", "needs", "security", "the-familiar"]
+        "core_function": [
+          "feel",
+          "respond",
+          "protect"
+        ],
+        "drive": [
+          "safety"
+        ],
+        "needs": [
+          "familiarity",
+          "responsiveness"
+        ],
+        "constructive": [
+          "attunement",
+          "protection",
+          "instinct"
+        ],
+        "distorted": [
+          "fusion",
+          "clinging",
+          "reactivity"
+        ],
+        "domains": [
+          "emotions",
+          "needs",
+          "security",
+          "the-familiar"
+        ]
       },
       "provenance": [
         {
@@ -346,12 +391,35 @@
       },
       "tempo": "fast",
       "canon": {
-        "core_function": ["think", "communicate", "learn"],
-        "drive": ["sense-making", "exchange"],
-        "needs": ["input", "channel"],
-        "constructive": ["clarity", "curiosity", "skill"],
-        "distorted": ["noise", "rumination", "pedantry"],
-        "domains": ["thinking", "communication", "learning", "information"]
+        "core_function": [
+          "think",
+          "communicate",
+          "learn"
+        ],
+        "drive": [
+          "sense-making",
+          "exchange"
+        ],
+        "needs": [
+          "input",
+          "channel"
+        ],
+        "constructive": [
+          "clarity",
+          "curiosity",
+          "skill"
+        ],
+        "distorted": [
+          "noise",
+          "rumination",
+          "pedantry"
+        ],
+        "domains": [
+          "thinking",
+          "communication",
+          "learning",
+          "information"
+        ]
       },
       "provenance": [
         {
@@ -506,12 +574,36 @@
       },
       "tempo": "medium",
       "canon": {
-        "core_function": ["attract", "value", "relate"],
-        "drive": ["pleasure", "bond"],
-        "needs": ["reciprocity", "worth"],
-        "constructive": ["affection", "taste", "fairness"],
-        "distorted": ["appeasement", "indulgence", "vanity"],
-        "domains": ["love", "attraction", "relationships", "values", "pleasure"]
+        "core_function": [
+          "attract",
+          "value",
+          "relate"
+        ],
+        "drive": [
+          "pleasure",
+          "bond"
+        ],
+        "needs": [
+          "reciprocity",
+          "worth"
+        ],
+        "constructive": [
+          "affection",
+          "taste",
+          "fairness"
+        ],
+        "distorted": [
+          "appeasement",
+          "indulgence",
+          "vanity"
+        ],
+        "domains": [
+          "love",
+          "attraction",
+          "relationships",
+          "values",
+          "pleasure"
+        ]
       },
       "provenance": [
         {
@@ -698,12 +790,35 @@
       },
       "tempo": "medium",
       "canon": {
-        "core_function": ["act", "pursue", "assert"],
-        "drive": ["agency", "desire"],
-        "needs": ["autonomy", "outlet"],
-        "constructive": ["courage", "initiative", "decisiveness"],
-        "distorted": ["aggression", "impulsivity", "force"],
-        "domains": ["action", "desire", "competition", "confrontation"]
+        "core_function": [
+          "act",
+          "pursue",
+          "assert"
+        ],
+        "drive": [
+          "agency",
+          "desire"
+        ],
+        "needs": [
+          "autonomy",
+          "outlet"
+        ],
+        "constructive": [
+          "courage",
+          "initiative",
+          "decisiveness"
+        ],
+        "distorted": [
+          "aggression",
+          "impulsivity",
+          "force"
+        ],
+        "domains": [
+          "action",
+          "desire",
+          "competition",
+          "confrontation"
+        ]
       },
       "provenance": [
         {
@@ -874,12 +989,35 @@
       },
       "tempo": "slow",
       "canon": {
-        "core_function": ["expand", "believe"],
-        "drive": ["growth", "opportunity", "meaning"],
-        "needs": ["horizon", "faith"],
-        "constructive": ["generosity", "perspective", "openness-to-opportunity"],
-        "distorted": ["excess", "inflation", "dogmatism"],
-        "domains": ["growth", "opportunity", "belief", "meaning"]
+        "core_function": [
+          "expand",
+          "believe"
+        ],
+        "drive": [
+          "growth",
+          "opportunity",
+          "meaning"
+        ],
+        "needs": [
+          "horizon",
+          "faith"
+        ],
+        "constructive": [
+          "generosity",
+          "perspective",
+          "openness-to-opportunity"
+        ],
+        "distorted": [
+          "excess",
+          "inflation",
+          "dogmatism"
+        ],
+        "domains": [
+          "growth",
+          "opportunity",
+          "belief",
+          "meaning"
+        ]
       },
       "provenance": [
         {
@@ -1082,12 +1220,34 @@
       },
       "tempo": "very_slow",
       "canon": {
-        "core_function": ["limit", "structure", "mature"],
-        "drive": ["order"],
-        "needs": ["boundaries", "realism"],
-        "constructive": ["responsibility", "discipline", "form"],
-        "distorted": ["rigidity", "inhibition", "severity"],
-        "domains": ["limits", "structure", "responsibility", "discipline"]
+        "core_function": [
+          "limit",
+          "structure",
+          "mature"
+        ],
+        "drive": [
+          "order"
+        ],
+        "needs": [
+          "boundaries",
+          "realism"
+        ],
+        "constructive": [
+          "responsibility",
+          "discipline",
+          "form"
+        ],
+        "distorted": [
+          "rigidity",
+          "inhibition",
+          "severity"
+        ],
+        "domains": [
+          "limits",
+          "structure",
+          "responsibility",
+          "discipline"
+        ]
       },
       "provenance": [
         {
@@ -1354,8 +1514,15 @@
       "element": "fire",
       "orientation": "positive",
       "canon": {
-        "manner": ["initiating", "direct", "headlong"],
-        "excess": ["premature-charge", "over-direct"]
+        "manner": [
+          "initiating",
+          "direct",
+          "headlong"
+        ],
+        "excess": [
+          "premature-charge",
+          "over-direct"
+        ]
       },
       "provenance": [
         {
@@ -1430,8 +1597,15 @@
       "element": "earth",
       "orientation": "negative",
       "canon": {
-        "manner": ["slow-and-steady", "steadfast", "patient"],
-        "excess": ["immovable", "over-holding"]
+        "manner": [
+          "slow-and-steady",
+          "steadfast",
+          "patient"
+        ],
+        "excess": [
+          "immovable",
+          "over-holding"
+        ]
       },
       "provenance": [
         {
@@ -1506,8 +1680,15 @@
       "element": "air",
       "orientation": "positive",
       "canon": {
-        "manner": ["mobile", "versatile", "switching"],
-        "excess": ["scattered", "unstaying"]
+        "manner": [
+          "mobile",
+          "versatile",
+          "switching"
+        ],
+        "excess": [
+          "scattered",
+          "unstaying"
+        ]
       },
       "provenance": [
         {
@@ -1582,8 +1763,15 @@
       "element": "water",
       "orientation": "negative",
       "canon": {
-        "manner": ["close", "indirect", "holding"],
-        "excess": ["clinging", "sideways-defense"]
+        "manner": [
+          "close",
+          "indirect",
+          "holding"
+        ],
+        "excess": [
+          "clinging",
+          "sideways-defense"
+        ]
       },
       "provenance": [
         {
@@ -1658,8 +1846,15 @@
       "element": "fire",
       "orientation": "positive",
       "canon": {
-        "manner": ["central", "warm", "displayed"],
-        "excess": ["over-display", "center-demand"]
+        "manner": [
+          "central",
+          "warm",
+          "displayed"
+        ],
+        "excess": [
+          "over-display",
+          "center-demand"
+        ]
       },
       "provenance": [
         {
@@ -1734,8 +1929,15 @@
       "element": "earth",
       "orientation": "negative",
       "canon": {
-        "manner": ["precise", "discerning", "utilitarian"],
-        "excess": ["over-critique", "over-refine"]
+        "manner": [
+          "precise",
+          "discerning",
+          "utilitarian"
+        ],
+        "excess": [
+          "over-critique",
+          "over-refine"
+        ]
       },
       "provenance": [
         {
@@ -1810,8 +2012,15 @@
       "element": "air",
       "orientation": "positive",
       "canon": {
-        "manner": ["balancing", "tactful", "proportionate"],
-        "excess": ["indecision", "over-accommodation"]
+        "manner": [
+          "balancing",
+          "tactful",
+          "proportionate"
+        ],
+        "excess": [
+          "indecision",
+          "over-accommodation"
+        ]
       },
       "provenance": [
         {
@@ -1886,8 +2095,15 @@
       "element": "water",
       "orientation": "negative",
       "canon": {
-        "manner": ["intense", "probing", "concentrated"],
-        "excess": ["possessive", "corrosive"]
+        "manner": [
+          "intense",
+          "probing",
+          "concentrated"
+        ],
+        "excess": [
+          "possessive",
+          "corrosive"
+        ]
       },
       "provenance": [
         {
@@ -1962,8 +2178,15 @@
       "element": "fire",
       "orientation": "positive",
       "canon": {
-        "manner": ["exploratory", "free", "far-ranging"],
-        "excess": ["uncommitted-ranging", "overshoot"]
+        "manner": [
+          "exploratory",
+          "free",
+          "far-ranging"
+        ],
+        "excess": [
+          "uncommitted-ranging",
+          "overshoot"
+        ]
       },
       "provenance": [
         {
@@ -2038,8 +2261,15 @@
       "element": "earth",
       "orientation": "negative",
       "canon": {
-        "manner": ["reserved", "disciplined", "structured"],
-        "excess": ["withholding", "hardening"]
+        "manner": [
+          "reserved",
+          "disciplined",
+          "structured"
+        ],
+        "excess": [
+          "withholding",
+          "hardening"
+        ]
       },
       "provenance": [
         {
@@ -2114,8 +2344,15 @@
       "element": "air",
       "orientation": "positive",
       "canon": {
-        "manner": ["detached", "unconventional", "original"],
-        "excess": ["cold-distance", "idea-obstinacy"]
+        "manner": [
+          "detached",
+          "unconventional",
+          "original"
+        ],
+        "excess": [
+          "cold-distance",
+          "idea-obstinacy"
+        ]
       },
       "provenance": [
         {
@@ -2190,8 +2427,15 @@
       "element": "water",
       "orientation": "negative",
       "canon": {
-        "manner": ["permeable", "imaginal", "adaptive"],
-        "excess": ["unfocused", "impression-as-fact"]
+        "manner": [
+          "permeable",
+          "imaginal",
+          "adaptive"
+        ],
+        "excess": [
+          "unfocused",
+          "impression-as-fact"
+        ]
       },
       "provenance": [
         {
@@ -2284,6 +2528,13 @@
       "risks": [
         "blemish in head or face when malefics occupy"
       ],
+      "canon": {
+        "arena": [
+          "self-presentation",
+          "appearance",
+          "first-impression"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.01.domain",
@@ -2406,6 +2657,13 @@
       "risks": [
         "dispersion of substance when Sun or Mars occupy"
       ],
+      "canon": {
+        "arena": [
+          "possessions",
+          "money",
+          "personal-resources"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.02.domain",
@@ -2514,6 +2772,13 @@
       "risks": [
         "seldom quiet when the Moon is here in a moveable sign"
       ],
+      "canon": {
+        "arena": [
+          "everyday-communication",
+          "siblings-neighbors",
+          "local-learning"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.03.domain",
@@ -2622,6 +2887,14 @@
       "risks": [
         "barren, stony or woody ground when so signified"
       ],
+      "canon": {
+        "arena": [
+          "home",
+          "family",
+          "roots",
+          "private-base"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.04.domain",
@@ -2730,6 +3003,13 @@
       "risks": [
         "disobedient children when Mars or Saturn occupy"
       ],
+      "canon": {
+        "arena": [
+          "play",
+          "creativity",
+          "romance"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.05.domain",
@@ -2839,6 +3119,13 @@
       "risks": [
         "sickness; an unfortunate cadent place with no aspect to the ascendant"
       ],
+      "canon": {
+        "arena": [
+          "daily-work",
+          "routine",
+          "health-maintenance"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.06.domain",
@@ -2998,6 +3285,13 @@
       "risks": [
         "ill in marriage when Saturn or Mars are unfortunate here"
       ],
+      "canon": {
+        "arena": [
+          "partnership",
+          "one-to-one",
+          "contracts"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.07.domain",
@@ -3139,6 +3433,13 @@
       "risks": [
         "death; fear and anguish of mind; poisons, stone, strangury"
       ],
+      "canon": {
+        "arena": [
+          "shared-resources",
+          "crisis",
+          "intimacy"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.08.domain",
@@ -3245,6 +3546,13 @@
       "risks": [
         "atheism or desperate sect when malefics occupy"
       ],
+      "canon": {
+        "arena": [
+          "philosophy",
+          "far-travel",
+          "higher-learning"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.09.domain",
@@ -3354,6 +3662,14 @@
       "risks": [
         "little esteem or joy in profession when Saturn or the South Node occupy"
       ],
+      "canon": {
+        "arena": [
+          "career",
+          "public-role",
+          "reputation",
+          "calling"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.10.domain",
@@ -3461,6 +3777,13 @@
       "risks": [
         "false friends"
       ],
+      "canon": {
+        "arena": [
+          "friends",
+          "groups",
+          "community"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.11.domain",
@@ -3568,6 +3891,13 @@
       "risks": [
         "sorrow, imprisonment, self-undoing, secret malice"
       ],
+      "canon": {
+        "arena": [
+          "hidden",
+          "retreat",
+          "behind-the-scenes"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.house.12.domain",

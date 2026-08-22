@@ -369,7 +369,7 @@ No Mars-keyed or Venus-keyed 4th lemma.
 - Fill leftover territory families for symmetry
 - A second house slot
 
-**Next named:** House Canon storage / materialization (one pass). Then Planet × House stored smoke-test. **STOP Houses** after that PASS. Do not enrich packs for richness. Next semantic owner after house smoke = Aspect.
+**Next named:** House Canon storage / materialization — **done 1.3.92.** Next = **1.3.93 Planet × House composition smoke**. Then **STOP Houses**. Do not enrich packs for richness. Next semantic owner after house smoke = Aspect.
 
 ---
 

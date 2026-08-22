@@ -133,7 +133,12 @@ def test_sign_canon_composition_smoke_v1():
     assert moon_fourth["verdict"] == "PARTIAL"
     assert moon_fourth["house_arena_lemmas"] is None
     assert moon_fourth["missing"] == "house_canon.domain_lemmas"
-    assert "canon" not in by_id["astro.house.04"]
+    assert by_id["astro.house.04"]["canon"]["arena"] == [
+        "home",
+        "family",
+        "roots",
+        "private-base",
+    ]
 
     smoke = SMOKE.read_text(encoding="utf-8")
     assert "Venus × Capricorn — **PASS**" in smoke
@@ -149,7 +154,7 @@ def test_sign_canon_composition_smoke_v1():
     assert "Venus × Capricorn — **PARTIAL**" in prior
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.91" in canon
+    assert "**Версия:** 1.3.92" in canon
     assert "### 6.42 Planet × Sign composition smoke" in canon
 
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]

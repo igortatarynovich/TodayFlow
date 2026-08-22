@@ -2478,6 +2478,50 @@ def _minimal_sign_draft(object_id: str = "astro.sign.aries") -> dict:
     }
 
 
+def _minimal_house_draft(object_id: str = "astro.house.04") -> dict:
+    number = object_id.rsplit(".", 1)[-1]
+    return {
+        "object_id": object_id,
+        "layer": 3,
+        "type": "house",
+        "status": "draft",
+        "version": "0.1.0",
+        "phenomenon": f"{int(number)}th house",
+        "machine_entity_code": f"astrology.house.{number}",
+        "theme_clusters": ["home"],
+        "polarity": ["neutral"],
+        "temporal_class": "natal",
+        "confidence": None,
+        "composed_from": [],
+        "curation_reason": None,
+        "domain": "father, land, hidden things, and endings",
+        "internal_meaning": "fathers, inheritances, the earth, hidden treasure, and the end of a matter",
+        "external_manifestations": ["lands, houses, tenements, tillage"],
+        "people": ["fathers in general"],
+        "activities": ["tillage"],
+        "resources": ["lands, hidden treasure, ancient dwellings"],
+        "risks": ["barren, stony or woody ground when so signified"],
+        "provenance": [
+            {
+                "concept_id": f"claim.house.{number}.lilly_domain",
+                "source_id": "src.classical.lilly_christian_astrology",
+                "source_class": "classical",
+                "author": "William Lilly",
+                "edition": "Christian Astrology 1659; Wikisource",
+                "school": "traditional_horary",
+                "reviewer": None,
+                "reviewed_at": None,
+                "locus": "Book I Chapter VII",
+                "original_claim": "Classification-only illustration — not a Canon pack",
+                "normalized_claim": "Lilly house domain remains classical prose",
+                "evidence_tier": "school_specific",
+                "review_status": "extracted",
+                "field": "domain",
+            }
+        ],
+    }
+
+
 def test_outer_planet_draft_representation_optional_on_draft():
     """1.3.72: outer meaning keys optional on draft. Sun–Saturn still required. No objects yet."""
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
@@ -2723,7 +2767,7 @@ def test_planet_canon_storage_v1():
     assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
 
     for obj in objects["objects"]:
-        if obj["type"] not in ("celestial_object", "sign"):
+        if obj["type"] not in ("celestial_object", "sign", "house"):
             assert "canon" not in obj
 
     saturn_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.object.saturn")
@@ -2872,7 +2916,7 @@ def test_planet_canon_sun_saturn_fill():
     assert "affection" in by_id["astro.object.venus"]["canon"]["constructive"]
 
     for obj in objects["objects"]:
-        if obj["type"] not in ("celestial_object", "sign"):
+        if obj["type"] not in ("celestial_object", "sign", "house"):
             assert "canon" not in obj
     for object_id in ("astro.object.uranus", "astro.object.neptune", "astro.object.pluto"):
         assert object_id not in by_id
@@ -2951,7 +2995,7 @@ def test_mainstream_house_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.43 Mainstream House Semantic Map" in canon
-    assert "**Версия:** 1.3.91" in canon
+    assert "**Версия:** 1.3.92" in canon
     house_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -2985,10 +3029,7 @@ def test_mainstream_house_semantic_map_v1():
         assert f"### {heading}" in house_map
         assert "**Include**" in house_map
     by_id = {obj["object_id"]: obj for obj in objects["objects"]}
-    assert "canon" not in by_id["astro.house.04"]
-    for obj in objects["objects"]:
-        if obj["type"] == "house":
-            assert "canon" not in obj
+    assert by_id["astro.house.04"]["domain"] == "father, land, hidden things, and endings"
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.89" in next_block
@@ -3013,7 +3054,7 @@ def test_house_canon_grammar_v1():
         encoding="utf-8"
     )
     assert "### 6.44 House Canon grammar" in canon
-    assert "**Версия:** 1.3.91" in canon
+    assert "**Версия:** 1.3.92" in canon
     grammar = (ROOT / "docs" / "astrology" / "HOUSE_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3035,7 +3076,7 @@ def test_house_canon_grammar_v1():
     assert "not locked" in grammar.lower() or "Dry-run" in grammar
     assert "One. Not two." in grammar or "One required slot" in grammar
     by_id = {obj["object_id"]: obj for obj in objects["objects"]}
-    assert "canon" not in by_id["astro.house.04"]
+    assert by_id["astro.house.04"]["domain"] == "father, land, hidden things, and endings"
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.90" in next_block
@@ -3054,7 +3095,7 @@ def test_house_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.45 House Canon V1 fill" in canon
-    assert "**Версия:** 1.3.91" in canon
+    assert "**Версия:** 1.3.92" in canon
     packs = (ROOT / "docs" / "astrology" / "HOUSE_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "Destination noun" in packs or "destination noun" in packs.lower()
@@ -3111,7 +3152,7 @@ def test_house_canon_v1_fill_with_provenance():
     assert "Venus × 4th" in packs
     assert "seek emotional security at home" in packs
     by_id = {obj["object_id"]: obj for obj in objects["objects"]}
-    assert "canon" not in by_id["astro.house.04"]
+    assert by_id["astro.house.04"]["domain"] == "father, land, hidden things, and endings"
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.91" in next_block
@@ -3128,7 +3169,7 @@ def test_sign_canon_grammar_v1():
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.91" in canon
+    assert "**Версия:** 1.3.92" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3166,7 +3207,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.91" in canon
+    assert "**Версия:** 1.3.92" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs
@@ -3394,7 +3435,7 @@ def test_sign_canon_materialization_v1():
     assert cap["canon"]["excess"] == ["withholding", "hardening"]
 
     for obj in objects["objects"]:
-        if obj["type"] in ("house", "aspect"):
+        if obj["type"] == "aspect":
             assert "canon" not in obj
     for object_id, pack in SUN_SATURN_CANON_PACKS.items():
         assert by_id[object_id]["canon"] == pack
@@ -3415,6 +3456,194 @@ def test_sign_canon_materialization_v1():
     assert "Planet × Sign" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
+
+
+HOUSE_CANON_PACKS = {
+    "astro.house.01": {"arena": ["self-presentation", "appearance", "first-impression"]},
+    "astro.house.02": {"arena": ["possessions", "money", "personal-resources"]},
+    "astro.house.03": {"arena": ["everyday-communication", "siblings-neighbors", "local-learning"]},
+    "astro.house.04": {"arena": ["home", "family", "roots", "private-base"]},
+    "astro.house.05": {"arena": ["play", "creativity", "romance"]},
+    "astro.house.06": {"arena": ["daily-work", "routine", "health-maintenance"]},
+    "astro.house.07": {"arena": ["partnership", "one-to-one", "contracts"]},
+    "astro.house.08": {"arena": ["shared-resources", "crisis", "intimacy"]},
+    "astro.house.09": {"arena": ["philosophy", "far-travel", "higher-learning"]},
+    "astro.house.10": {"arena": ["career", "public-role", "reputation", "calling"]},
+    "astro.house.11": {"arena": ["friends", "groups", "community"]},
+    "astro.house.12": {"arena": ["hidden", "retreat", "behind-the-scenes"]},
+}
+
+
+def test_house_canon_storage_materialization_v1():
+    """1.3.92: house_canon_pack + copy locked 1.3.91 packs. Lilly fields unchanged. Next = 1.3.93 smoke."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    example = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    jsonschema.validate(example, schema)
+    _assert_il1_catalog_counts(objects)
+
+    pack = schema["$defs"]["house_canon_pack"]
+    assert pack["required"] == ["arena"]
+    assert set(pack["properties"]) == {"arena"}
+    assert "domains" not in pack["properties"]
+    assert "manner" not in pack["properties"]
+    assert "excess" not in pack["properties"]
+    assert "canon" in schema["$defs"]["knowledge_object"]["properties"]
+    assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
+
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    for object_id, locked in HOUSE_CANON_PACKS.items():
+        obj = by_id[object_id]
+        assert obj["status"] == "draft"
+        assert obj["type"] == "house"
+        assert obj["canon"] == locked
+        assert "domains" not in obj["canon"]
+        assert "manner" not in obj["canon"]
+        assert "excess" not in obj["canon"]
+        assert isinstance(obj["domain"], str)
+        assert obj["people"]
+        assert obj["activities"]
+
+    fourth = by_id["astro.house.04"]
+    assert fourth["canon"]["arena"] == ["home", "family", "roots", "private-base"]
+    assert fourth["domain"] == "father, land, hidden things, and endings"
+    assert "seek" not in " ".join(fourth["canon"]["arena"])
+    assert "emotional" not in " ".join(fourth["canon"]["arena"])
+    assert by_id["astro.house.01"]["domain"] == "life, stature, and the querent's person"
+    assert "home" not in by_id["astro.house.10"]["canon"]["arena"]
+    assert "career" not in by_id["astro.house.04"]["canon"]["arena"]
+    assert "astro.object.asc" not in by_id
+    assert "astro.object.mc" not in by_id
+
+    for obj in objects["objects"]:
+        if obj["type"] == "aspect":
+            assert "canon" not in obj
+    for object_id, planet_pack in SUN_SATURN_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == planet_pack
+    for object_id, sign_pack in SIGN_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == sign_pack
+
+    house_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.house.04")
+    assert house_ex["canon"] == {"arena": ["home", "family", "roots", "private-base"]}
+    assert house_ex["domain"] == "father, land, hidden things, and endings"
+    assert "manner" not in house_ex["canon"]
+
+    house = _minimal_house_draft("astro.house.04")
+    jsonschema.validate(
+        {"contract_version": "astrology_interpretation_v1", "objects": [house]},
+        schema,
+    )
+
+    filled = dict(house)
+    filled["canon"] = {"arena": ["home", "family", "roots", "private-base"]}
+    jsonschema.validate(
+        {"contract_version": "astrology_interpretation_v1", "objects": [filled]},
+        schema,
+    )
+
+    partial = dict(house)
+    partial["canon"] = {}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [partial]},
+            schema,
+        )
+
+    second_slot = dict(house)
+    second_slot["canon"] = {
+        "arena": ["home"],
+        "excess": ["clinging"],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [second_slot]},
+            schema,
+        )
+
+    domains_key = dict(house)
+    domains_key["canon"] = {"domains": ["home"]}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [domains_key]},
+            schema,
+        )
+
+    sign_pack_on_house = dict(house)
+    sign_pack_on_house["canon"] = {
+        "manner": ["reserved"],
+        "excess": ["hardening"],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [sign_pack_on_house]},
+            schema,
+        )
+
+    planet_pack_on_house = dict(house)
+    planet_pack_on_house["canon"] = {
+        "core_function": ["limit"],
+        "drive": ["order"],
+        "needs": ["boundaries"],
+        "constructive": ["form"],
+        "distorted": ["rigidity"],
+        "domains": ["limits"],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [planet_pack_on_house]},
+            schema,
+        )
+
+    house_pack_on_sign = _minimal_sign_draft("astro.sign.capricorn")
+    house_pack_on_sign["mode"] = "cardinal"
+    house_pack_on_sign["element"] = "earth"
+    house_pack_on_sign["orientation"] = "negative"
+    house_pack_on_sign["canon"] = {"arena": ["home"]}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [house_pack_on_sign]},
+            schema,
+        )
+
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.46 House Canon storage and materialization" in canon
+    assert "**Версия:** 1.3.92" in canon
+    storage = (
+        ROOT / "docs" / "astrology" / "HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md"
+    ).read_text(encoding="utf-8")
+    assert "canon.arena" in storage
+    assert "Lilly" in storage
+    assert "1.3.93" in storage
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.92" in next_block
+    assert "1.3.91" in next_block
+    assert "1.3.90" in next_block
+    assert "1.3.89" in next_block
+    assert "1.3.88" in next_block
+    assert "1.3.87" in next_block
+    assert "1.3.86" in next_block
+    assert "1.3.85" in next_block
+    assert "1.3.84" in next_block
+    assert "1.3.83" in next_block
+    assert "1.3.82" in next_block
+    assert "Planet × House" in next_block
+    assert "Planet × Sign" in next_block
+    assert "Sign Canon fill" in next_block
+    assert "Sign Canon storage" in next_block
+    assert "Sign Canon grammar" in next_block
+    assert "House Canon storage" in next_block
+    assert "House Canon fill" in next_block
+    assert "House Canon grammar" in next_block or "House Canon Grammar" in next_block
+    assert "Mainstream" in next_block
+    assert "House" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "STOP Signs" in next_block
+
 
 
 

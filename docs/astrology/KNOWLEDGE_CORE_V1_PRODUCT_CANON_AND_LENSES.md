@@ -171,13 +171,14 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Unlock Co–Star in-app scraping
 - Require 2/3 literal-word overlap
 
-**Next named (one task):** smoke-test locked (1.3.82). Sign map locked (1.3.83). Sign grammar locked (1.3.84). Sign Canon fill locked (1.3.85). Sign Canon storage locked (1.3.86). Sign Canon materialization locked (1.3.87). Planet × Sign smoke-test locked (1.3.88). Houses Mainstream map locked (1.3.89). House Canon grammar locked (1.3.90). House Canon fill locked (1.3.91). Next = House Canon storage/materialization. STOP Signs. Do not rewrite `function`.
+**Next named (one task):** smoke-test locked (1.3.82). Sign map locked (1.3.83). Sign grammar locked (1.3.84). Sign Canon fill locked (1.3.85). Sign Canon storage locked (1.3.86). Sign Canon materialization locked (1.3.87). Planet × Sign smoke-test locked (1.3.88). Houses Mainstream map locked (1.3.89). House Canon grammar locked (1.3.90). House Canon fill locked (1.3.91). House Canon storage/materialization — **done 1.3.92.** Next = **1.3.93 Planet × House composition smoke**. STOP Signs. Do not rewrite `function`.
 
 ---
 
 ## Changelog
 
-- **1.12 (2026-08-22)** — 1.3.91 House Canon fill. Twelve packs. Destination-noun test. Next = storage/materialization.
+- **1.13 (2026-08-22)** — 1.3.92 House Canon storage/materialization. Twelve drafts carry `canon.arena`. Next = Planet × House smoke.
+- **1.12 (2026-08-22)** — 1.3.91 House Canon fill. Twelve packs. Destination-noun test. Next = storage/materialization. **Done 1.3.92.**
 - **1.11 (2026-08-22)** — 1.3.90 House Canon grammar. One slot (`arena`). planet.domains ≠ house.arena. Next = fill, not objects. **Done 1.3.91.**
 - **1.10 (2026-08-22)** — 1.3.89 Mainstream House Semantic Map. Same panel. House ≠ angle. House ≠ natural sign. Next = House Canon grammar, not fill. **Done 1.3.90.**
 - **1.9 (2026-08-22)** — 1.3.88 Planet × Sign smoke-test. PASS. STOP Signs. Next = Houses Mainstream. **Done 1.3.89.**

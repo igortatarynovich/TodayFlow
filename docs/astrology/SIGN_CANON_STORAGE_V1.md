@@ -94,7 +94,7 @@ IL-4 still formulates. It must not be given only `mode=cardinal` and asked to in
 - Fill later-interpretive `excess`
 - Copy planet six slots onto signs
 
-**Next named:** write `canon` onto the twelve sign drafts from [SIGN_CANON_V1.md](./SIGN_CANON_V1.md) — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Houses Mainstream map — **done 1.3.89.** House Canon grammar — **done 1.3.90.** House Canon fill — **done 1.3.91.** Next = House Canon storage/materialization. STOP Signs.
+**Next named:** write `canon` onto the twelve sign drafts from [SIGN_CANON_V1.md](./SIGN_CANON_V1.md) — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Houses Mainstream map — **done 1.3.89.** House Canon grammar — **done 1.3.90.** House Canon fill — **done 1.3.91.** House Canon storage/materialization — **done 1.3.92.** Next = **1.3.93 Planet × House composition smoke**. STOP Signs.
 
 ---
 
