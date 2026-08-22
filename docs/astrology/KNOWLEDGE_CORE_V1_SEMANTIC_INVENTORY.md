@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-21  
 **Status:** **APPROVED** — V1 freeze map (owner 2026-08-21). Literature discovery is a tool against a named `KC-*` row, not a process.  
-**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.25–§6.41. Parent order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Today Meaning SoT: [TODAY_CONTENT_PIPELINE_V1.md](../today/TODAY_CONTENT_PIPELINE_V1.md). Identity/mechanics: [foundation_v1.md](../foundation_v1.md). Compose: [ASTROLOGY_COMPOSITION_MODEL.md](../ASTROLOGY_COMPOSITION_MODEL.md). Outer representation: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Product-meaning gate: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md). Split: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Sign map: [MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md). Sign grammar: [SIGN_CANON_GRAMMAR_V1.md](./SIGN_CANON_GRAMMAR_V1.md). Sign Canon: [SIGN_CANON_V1.md](./SIGN_CANON_V1.md). Sign storage: [SIGN_CANON_STORAGE_V1.md](./SIGN_CANON_STORAGE_V1.md). Sign materialization: [SIGN_CANON_MATERIALIZATION_V1.md](./SIGN_CANON_MATERIALIZATION_V1.md). Grammar: [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md). Planet Canon: [PLANET_CANON_V1.md](./PLANET_CANON_V1.md). Storage: [PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md). Fill: [PLANET_CANON_SUN_SATURN_FILL_V1.md](./PLANET_CANON_SUN_SATURN_FILL_V1.md). Smoke: [PLANET_CANON_COMPOSITION_SMOKE_V1.md](./PLANET_CANON_COMPOSITION_SMOKE_V1.md). Recognition check: [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md).
+**Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) §6.25–§6.42. Parent order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Today Meaning SoT: [TODAY_CONTENT_PIPELINE_V1.md](../today/TODAY_CONTENT_PIPELINE_V1.md). Identity/mechanics: [foundation_v1.md](../foundation_v1.md). Compose: [ASTROLOGY_COMPOSITION_MODEL.md](../ASTROLOGY_COMPOSITION_MODEL.md). Outer representation: [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Product-meaning gate: [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md). Split: [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Sign map: [MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md). Sign grammar: [SIGN_CANON_GRAMMAR_V1.md](./SIGN_CANON_GRAMMAR_V1.md). Sign Canon: [SIGN_CANON_V1.md](./SIGN_CANON_V1.md). Sign storage: [SIGN_CANON_STORAGE_V1.md](./SIGN_CANON_STORAGE_V1.md). Sign materialization: [SIGN_CANON_MATERIALIZATION_V1.md](./SIGN_CANON_MATERIALIZATION_V1.md). Sign smoke: [SIGN_CANON_COMPOSITION_SMOKE_V1.md](./SIGN_CANON_COMPOSITION_SMOKE_V1.md). Grammar: [PLANET_CANON_GRAMMAR_V1.md](./PLANET_CANON_GRAMMAR_V1.md). Planet Canon: [PLANET_CANON_V1.md](./PLANET_CANON_V1.md). Storage: [PLANET_CANON_STORAGE_V1.md](./PLANET_CANON_STORAGE_V1.md). Fill: [PLANET_CANON_SUN_SATURN_FILL_V1.md](./PLANET_CANON_SUN_SATURN_FILL_V1.md). Smoke: [PLANET_CANON_COMPOSITION_SMOKE_V1.md](./PLANET_CANON_COMPOSITION_SMOKE_V1.md). Recognition check: [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md).
 
 This file is the **V1 limiter**. IL V1 is not “complete astrology.” It is the minimum set of controlled semantic primitives sufficient for Today / Profile / Compatibility without the LLM inventing meanings. That is the IL-1 done criterion — not book count, claim count, school count, or CORE lemmas.
 
@@ -11,7 +11,7 @@ This file is the **V1 limiter**. IL V1 is not “complete astrology.” It is th
 ## Architecture impact
 
 - **SoT before:** parent order existed, but the next named IL pass was still a layer slice. Gap → author → closed book could run without a V1-wide constituent map.
-- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. **1.3.78:** Planet Canon grammar locked. **1.3.79:** Planet Canon V1 locked. **1.3.80:** `canon` storage locked. **1.3.81:** Sun–Saturn `canon` filled. **1.3.82:** smoke-test — aspect PASS, sign/house PARTIAL. **1.3.83:** Signs Mainstream map locked. **1.3.84:** Sign Canon grammar locked. **1.3.85:** Sign Canon fill locked. **1.3.86:** Sign Canon storage locked. **1.3.87:** Sign Canon materialization locked. Next execution = 1.3.88 Planet × Sign smoke-test. Co–Star is a recognition check. Do not rewrite `function` this inventory.
+- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. **1.3.78:** Planet Canon grammar locked. **1.3.79:** Planet Canon V1 locked. **1.3.80:** `canon` storage locked. **1.3.81:** Sun–Saturn `canon` filled. **1.3.82:** smoke-test — aspect PASS, sign/house PARTIAL. **1.3.83:** Signs Mainstream map locked. **1.3.84:** Sign Canon grammar locked. **1.3.85:** Sign Canon fill locked. **1.3.86:** Sign Canon storage locked. **1.3.87:** Sign Canon materialization locked. **1.3.88:** Planet × Sign smoke-test PASS. Next execution = Houses Mainstream map → House Canon grammar. STOP Signs. Co–Star is a recognition check. Do not rewrite `function` this inventory.
 - **Public contract changed?** no (inventory). Outer schema delta is 1.3.72.
 - **Migration required?** no
 - **Canon updated?** yes — this file · IL §6.25 / §6.26 · parent · handoff · tracker
@@ -211,7 +211,7 @@ ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. D
 
 ---
 
-## 6. Execution order (LOCKED, then redirected 1.3.87)
+## 6. Execution order (LOCKED, then redirected 1.3.88)
 
 ```text
 1. Outer Planet Draft Representation V1        ✅ 1.3.72 schema/model
@@ -229,8 +229,8 @@ ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. D
 13. Sign Canon fill                            ✅ 1.3.85  12 packs + origin; not schema
 14. Sign Canon storage                         ✅ 1.3.86  sign_canon_pack; not object fill
 15. Sign Canon materialization                 ✅ 1.3.87  12 drafts; later-interpretive omitted
-16. Planet × Sign composition smoke            NEXT  1.3.88
-17. Houses Mainstream map → House Canon grammar
+16. Planet × Sign composition smoke            ✅ 1.3.88  PlanetInSign PASS; house PARTIAL
+17. Houses Mainstream map → House Canon grammar NEXT
 18. IL-1 V1 close-out / IL-2 Composition
 ```
 
@@ -240,7 +240,8 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
-- **1.16 (2026-08-21)** — Sign Canon materialization (1.3.87). Twelve drafts. Next = 1.3.88 smoke-test.
+- **1.17 (2026-08-22)** — Planet × Sign composition smoke (1.3.88). PASS. STOP Signs. Next = Houses Mainstream.
+- **1.16 (2026-08-21)** — Sign Canon materialization (1.3.87). Twelve drafts. Next = 1.3.88 smoke-test. **Done 1.3.88.**
 - **1.15 (2026-08-21)** — Sign Canon storage (1.3.86). Optional `canon` on signs. Next = write packs onto drafts. **Done 1.3.87.**
 - **1.14 (2026-08-21)** — Sign Canon fill (1.3.85). Twelve packs. Four gates. Next = Sign Canon storage. **Done 1.3.86.**
 - **1.13 (2026-08-21)** — Sign Canon grammar (1.3.84). Two slots. Sign = how. Next = Sign Canon fill. **Done 1.3.85.**

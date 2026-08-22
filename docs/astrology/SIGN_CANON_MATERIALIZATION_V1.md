@@ -55,10 +55,10 @@ Twelve `type=sign` drafts. Houses / aspects still omit `canon`. Sun–Saturn pla
 - IL-2 engine
 - `active`
 
-**Next named:** **1.3.88 Planet × Sign Composition Smoke V1** (separate gate). After PASS: STOP Signs; House Canon. Do not improve packs after a passing smoke-test without a named Composition Engine failure.
+**Next named:** **1.3.88 Planet × Sign Composition Smoke V1** — **done.** STOP Signs. Next = Houses Mainstream map → House Canon grammar. Do not improve packs after a passing smoke-test without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.0 (2026-08-21)** — 1.3.87. Twelve sign `canon` packs copied from 1.3.85. Later-interpretive `excess` omitted. Next = 1.3.88 smoke-test, not House Canon.
+- **1.0 (2026-08-21)** — 1.3.87. Twelve sign `canon` packs copied from 1.3.85. Later-interpretive `excess` omitted. Next = 1.3.88 smoke-test, not House Canon. **Done 1.3.88.**

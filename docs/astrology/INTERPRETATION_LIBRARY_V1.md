@@ -1,11 +1,11 @@
 # Interpretation Library v1 — ontology / schema
 
 **Статус:** ACCEPTED (канон схемы и порядка работ) — **IL-1 in progress** (36 draft objects: classical seven · 12 signs classification + `canon` · 12 houses · 5 major aspects; Uranus Hand-1981 + Rudhyar NMNM + Tarnas intro *claims* without object; Neptune Hand-1981 + Rudhyar NMNM + Tarnas intro *claims* without object; Pluto Hand-1981 + Rudhyar NMNM + Greene/Campion interview *claims* without object; nothing `active`).  
-**Версия:** 1.3.87 (2026-08-21).  
+**Версия:** 1.3.88 (2026-08-22).  
 **Методология:** слои / evidence tiers / provenance **LOCKED** до закрытия IL-1. Parent research order: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — модель знания **до** литературы. **1.3.29** school-first остаётся для opportunistic extract уже названных loci. **1.3.30** запрещает строить следующее ядро / CORE от первого доступного автора. **1.3.45** remaining planet budget = empty psychological slots (Pluto→Uranus→Neptune→Venus→Mars). **1.3.46** Uranus psychological filled (Tarnas official intro). **1.3.47** Neptune psychological filled (same Tarnas PDF, Neptune section, after field check). **1.3.48** Venus psychological filled (Sullivan official-site *Venus and Jupiter* excerpt). **1.3.49** Mars psychological field re-checked, still empty. **1.3.50** Sun psychological densified (Greene Apollon Issue 1 / astro.com in_sungod). **1.3.51** Moon psychological field re-checked, still only Luminaries preview. **1.3.52** Mercury psychological field re-checked, still only Inner Planets Hermes. **1.3.53** Saturn psychological densified (Tarnas official intro senex section). **1.3.54** Mars psychological field re-checked, still empty. **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 identified unread (NEED_OWNER). **1.3.56** Huber *The Planets* Mars chapter identified unread (NEED_OWNER). **1.3.57** `ACCESS_BLOCKED(semantic slot)` — Psychological Mars. **1.3.58** live Sun→Pluto recount (1.3.44 dashboard retired). **1.3.59** planet research-stable; opportunistic/access-driven; Layer 2 definition pass started (no bibliography). **1.3.60** Layer 2 schools + source types (parent steps 5–6); literature map still waits. **1.3.61** Layer 2 literature map (parent step 7); no ingest. **1.3.62** Layer 2 selection criteria (parent step 8); no shortlist, no ingest. **1.3.63** Layer 2 shortlist (parent step 9); no ingest. **1.3.64** Houlding triplicity ontology extract (parent step 10); no sign objects. **1.3.65** Layer 2 psychological later-interpretive `ACCESS_BLOCKED` (Cell C). **1.3.66** Rudhyar *Pulse of Life* Part One extract (humanistic; no sign objects). **1.3.67** later-interpretive slots optional on IL-1 draft `type=sign` (still unattested; no objects that pass). **1.3.68** twelve Lilly classification-only `type=sign` drafts. **1.3.69** Layer 2 classification-complete / interpretation-deferred (close-out audit; no ingest). **1.3.70** Layer 1 outers definition/readiness (parent steps 1–4; no ingest, no objects). **1.3.71** Knowledge Core V1 Semantic Inventory — literature freeze; owner-approved 2026-08-21. **1.3.73** TodayFlow Canon — semantic selection. CORE demoted from product gate. **1.3.74** three layers: Evidence Corpus · Semantic Consensus · TodayFlow Canon. **1.3.75** IL architecture frozen pending Co–Star teardown. **1.3.76** Product Canon vs Lenses. **1.3.77** Mainstream Planet Semantic Map. **1.3.78** Planet Canon grammar. **1.3.79** Planet Canon V1 fill. **1.3.80** Planet Canon storage (`canon` nest). **1.3.81** Sun–Saturn `canon` fill. **1.3.82** composition smoke-test. **1.3.83** Mainstream Sign Semantic Map. **1.3.84** Sign Canon grammar. **1.3.85** Sign Canon fill. **1.3.86** Sign Canon storage. **1.3.87** Sign Canon materialization. `source_class=humanistic` с 1.3.29. Дальше — 1.3.88 Planet × Sign smoke-test, не книги.  
 **Владелец:** Product + Research.  
 **Данные:** `DATA/reference/astrology/interpretation_v1/` — corpus · `claims/` · `objects_v1.json` (draft).  
-**Handoff (next agent):** [IL1_HANDOFF.md](./IL1_HANDOFF.md) — 1.3.87 Sign Canon materialization in. Next = 1.3.88 Planet × Sign smoke-test. No books / CORE.  
+**Handoff (next agent):** [IL1_HANDOFF.md](./IL1_HANDOFF.md) — 1.3.88 Planet × Sign smoke-test in. Next = Houses Mainstream map → House Canon grammar. STOP Signs. No books / CORE.  
 **Gap audit (live 1.3.58 recount):** [IL1_SUN_PLUTO_GAP_AUDIT.md](./IL1_SUN_PLUTO_GAP_AUDIT.md) — 1.3.24/1.3.44 snapshots retired. Owner queue **1.3.25** superseded for *discovery* by **1.3.29**. NEED_OWNER-blocks-locus **1.3.26** still holds for named closed pages. Hand Ch.4 Sun unread **1.3.27**. Corpus QA snapshot **1.3.28** — [IL1_CORPUS_QA.md](./IL1_CORPUS_QA.md). **1.3.29** reopens source discovery (school-first). **1.3.30** parent: knowledge-core research order. **1.3.31** Rudhyar Mars humanistic. **1.3.32** Rudhyar Uranus humanistic. **1.3.33** Rudhyar Neptune humanistic. **1.3.34** Rudhyar Pluto humanistic. **1.3.35** Rudhyar Sun humanistic. **1.3.36** Rudhyar Moon humanistic. **1.3.37** Rudhyar Mercury humanistic. **1.3.38** Greene *By Jove!* Psychology of Jupiter extract (psychological). **1.3.39** Rudhyar Saturn humanistic. **1.3.40** Rudhyar Jupiter humanistic. **1.3.41** Venus psychological discovery (no ingest). **1.3.42** Mars psychological discovery (no ingest). **1.3.43** Uranus psychological discovery (no ingest). **1.3.44** Neptune psychological discovery (no ingest). **1.3.45** psych-budget lock + Pluto psychological ingest (Greene/Campion interview; object withheld). **1.3.46** Uranus psychological ingest (Tarnas official intro; object withheld). **1.3.47** Neptune psychological ingest (Tarnas official intro Neptune section; object withheld). **1.3.48** Venus psychological ingest (Sullivan official-site *Venus and Jupiter* excerpt; `function` unchanged). **1.3.49** Mars psychological discovery (no ingest; p.138 still NEED_OWNER). **1.3.50** Sun psychological densification (Greene Apollon Issue 1; Apollo's Chariot still NEED_OWNER). **1.3.51** Moon psychological densification (no ingest; Costello still NEED_OWNER). **1.3.52** Mercury psychological densification (no ingest; Inner Planets Hermes already ingested). **1.3.53** Saturn psychological densification (Tarnas official intro Saturn/senex; Greene Introduction not re-ingested). **1.3.54** Mars psychological densification (no ingest; p.138 still NEED_OWNER). **1.3.55** Sasportas *Dynamics of the Unconscious* Part 1 cataloged unread (NEED_OWNER; not ingested). **1.3.56** Huber *The Planets and Their Psychological Meaning* Mars chapter cataloged unread (NEED_OWNER; not ingested). **1.3.57** Psychological Mars `ACCESS_BLOCKED` (three dedicated loci, 0 readable bodies, 0 claims). **1.3.58** live Sun→Pluto recount; 1.3.44 dashboard retired. **1.3.59** planet research-stable (opportunistic extract only); Layer 2 definition pass started. **1.3.60** Layer 2 schools + source types (no literature map, no ingest). **1.3.61** Layer 2 Signs literature map (no ingest). **1.3.62** Layer 2 selection criteria (no shortlist, no ingest). **1.3.63** Layer 2 shortlist (no ingest). **1.3.64** Houlding triplicity ontology extract (no sign objects). **1.3.65** Cell C `ACCESS_BLOCKED`. **1.3.66** Pulse Part One extract (humanistic). **1.3.67** later-interpretive optional on IL-1 draft `type=sign`. **1.3.68** Lilly classification-only sign drafts. **1.3.69** Layer 2 classification-complete / interpretation-deferred. **1.3.70** Layer 1 outers definition/readiness. **1.3.71** V1 Semantic Inventory (APPROVED freeze map). **1.3.74** three layers (Evidence Corpus / Semantic Consensus / TodayFlow Canon). **1.3.75** IL architecture frozen; Co–Star teardown Phase 0. **1.3.76** Product Canon vs Lenses. **1.3.77** Mainstream Planet Semantic Map. **1.3.78** Planet Canon grammar. **1.3.79** Planet Canon V1. **1.3.80** Planet Canon storage. **1.3.81** Sun–Saturn `canon` fill. **1.3.82** composition smoke-test. **1.3.83** Mainstream Sign Semantic Map. **1.3.84** Sign Canon grammar. **1.3.85** Sign Canon fill. **1.3.86** Sign Canon storage. **1.3.87** Sign Canon materialization. CORE still unscored (not a gate).  
 **Схема:** [astrology_interpretation_v1.schema.json](../schemas/astrology_interpretation_v1.schema.json) · claims ledger [astrology_claims_v1.schema.json](../schemas/astrology_claims_v1.schema.json).  
 **Пример формы (не SoT смысла):** [astrology_interpretation_v1.example.json](../schemas/fixtures/astrology_interpretation_v1.example.json).
@@ -424,11 +424,20 @@
 ### Architecture impact — 1.3.87 Sign Canon materialization
 
 - **SoT before:** schema nest existed; twelve sign drafts were classification-only.
-- **SoT after:** twelve sign drafts carry `object.canon` = locked 1.3.85 packs. Lilly `mode`/`element`/`orientation` unchanged. Later-interpretive `excess` omitted. Status `draft`. Next = 1.3.88 smoke-test, not House Canon.
+- **SoT after:** twelve sign drafts carry `object.canon` = locked 1.3.85 packs. Lilly `mode`/`element`/`orientation` unchanged. Later-interpretive `excess` omitted. Status `draft`. Next = 1.3.88 smoke-test, not House Canon. **Done 1.3.88.**
 - **Public contract changed?** yes — twelve draft signs now include `canon`
 - **Migration required?** no — still `draft`
 - **Canon updated?** yes — this doc §6.41 · [SIGN_CANON_MATERIALIZATION_V1.md](./SIGN_CANON_MATERIALIZATION_V1.md) · `objects_v1.json`
 - **Backward compatible?** yes for runtime (`draft`). Classification still Lilly.
+
+### Architecture impact — 1.3.88 Planet × Sign composition smoke
+
+- **SoT before:** 1.3.82 Venus × Capricorn PARTIAL (`manner: null`). Packs on drafts (1.3.87). Risk: `mode`/`element` as operator, or pair essays to force PASS.
+- **SoT after:** PlanetInSign frames read `sign.canon.manner`. Operator / discrimination / classification-independence PASS. House row stays PARTIAL. Catalog unchanged. STOP Signs.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this doc §6.42 · [SIGN_CANON_COMPOSITION_SMOKE_V1.md](./SIGN_CANON_COMPOSITION_SMOKE_V1.md)
+- **Backward compatible?** yes (`draft`). 1.3.82 remains the historical PARTIAL snapshot.
 
 ---
 
@@ -443,7 +452,7 @@ Pipeline уже назвал дыру: **Astrology Interpretation Canon (lookup)
 
 **Freeze (Today content):** не расширять narrative prompts / formula banks / slot-polish, пока нет IL-3 Engine (темы выбираются до LLM). I0 и product cycle **не** переоткрываются.
 
-**Freeze (методология IL):** не менять слои / evidence tiers / provenance shape до первых ~100 объектов (IL-1). **1.3.29–1.3.30** — исключения: author-first очередь и фиксация ядра от доступных книг. **1.3.45** — remaining planet budget = empty psychological slots. **1.3.57** — `ACCESS_BLOCKED(slot)`. **1.3.59** — planet fill research-stable / opportunistic; Layer 2 definition before bibliography. **1.3.60** — Layer 2 schools + source types before literature map. **1.3.61** — Layer 2 literature map before shortlist/ingest. **1.3.62** — Layer 2 selection criteria before shortlist. **1.3.63** — Layer 2 shortlist before ingest. **1.3.64** — Houlding ontology extract; no sign objects. **1.3.65** — Layer 2 Cell C `ACCESS_BLOCKED`. **1.3.66** — Pulse Part One extract (humanistic). **1.3.67** — later-interpretive optional on IL-1 draft `type=sign`; objects still withheld. **1.3.68** — twelve Lilly classification-only sign drafts; later-interpretive omitted. **1.3.69** — Layer 2 classification-complete / interpretation-deferred; do not reopen sign literature. **1.3.70** — Layer 1 outers definition/readiness; do not assemble Uranus from Hand. **1.3.71** — V1 Semantic Inventory; owner-approved freeze map. **1.3.72** — Outer Planet Draft Representation; meaning keys optional on draft outers; no objects. **1.3.73** — TodayFlow Canon; CORE demoted from product gate (enum unchanged). **1.3.74** — Evidence Corpus / Semantic Consensus / TodayFlow Canon split. **1.3.75** — IL architecture frozen; Co–Star teardown first. **1.3.76** — Product Canon vs Lenses. **1.3.77** — Mainstream Planet Semantic Map. **1.3.78** — Planet Canon grammar. **1.3.79** — Planet Canon V1 fill. **1.3.80** — Planet Canon storage. **1.3.81** — Sun–Saturn `canon` fill. **1.3.82** — composition smoke-test. **1.3.83** — Mainstream Sign Semantic Map. **1.3.84** — Sign Canon grammar. **1.3.85** — Sign Canon fill. **1.3.86** — Sign Canon storage. **1.3.87** — Sign Canon materialization. Literature only against a named `KC-*` row. Дальше — 1.3.88 Planet × Sign smoke-test, не книги.
+**Freeze (методология IL):** не менять слои / evidence tiers / provenance shape до первых ~100 объектов (IL-1). **1.3.29–1.3.30** — исключения: author-first очередь и фиксация ядра от доступных книг. **1.3.45** — remaining planet budget = empty psychological slots. **1.3.57** — `ACCESS_BLOCKED(slot)`. **1.3.59** — planet fill research-stable / opportunistic; Layer 2 definition before bibliography. **1.3.60** — Layer 2 schools + source types before literature map. **1.3.61** — Layer 2 literature map before shortlist/ingest. **1.3.62** — Layer 2 selection criteria before shortlist. **1.3.63** — Layer 2 shortlist before ingest. **1.3.64** — Houlding ontology extract; no sign objects. **1.3.65** — Layer 2 Cell C `ACCESS_BLOCKED`. **1.3.66** — Pulse Part One extract (humanistic). **1.3.67** — later-interpretive optional on IL-1 draft `type=sign`; objects still withheld. **1.3.68** — twelve Lilly classification-only sign drafts; later-interpretive omitted. **1.3.69** — Layer 2 classification-complete / interpretation-deferred; do not reopen sign literature. **1.3.70** — Layer 1 outers definition/readiness; do not assemble Uranus from Hand. **1.3.71** — V1 Semantic Inventory; owner-approved freeze map. **1.3.72** — Outer Planet Draft Representation; meaning keys optional on draft outers; no objects. **1.3.73** — TodayFlow Canon; CORE demoted from product gate (enum unchanged). **1.3.74** — Evidence Corpus / Semantic Consensus / TodayFlow Canon split. **1.3.75** — IL architecture frozen; Co–Star teardown first. **1.3.76** — Product Canon vs Lenses. **1.3.77** — Mainstream Planet Semantic Map. **1.3.78** — Planet Canon grammar. **1.3.79** — Planet Canon V1 fill. **1.3.80** — Planet Canon storage. **1.3.81** — Sun–Saturn `canon` fill. **1.3.82** — composition smoke-test. **1.3.83** — Mainstream Sign Semantic Map. **1.3.84** — Sign Canon grammar. **1.3.85** — Sign Canon fill. **1.3.86** — Sign Canon storage. **1.3.87** — Sign Canon materialization. **1.3.88** — Planet × Sign composition smoke. Literature only against a named `KC-*` row. Дальше — Houses Mainstream / House Canon, не книги. Не улучшать Sign packs без named Composition Engine failure.
 
 **Разрешено параллельно:** транспортная честность, routing, visual foundation, DS, баги, геометрия, ScreenFlow без новой семантики, **Swiss licensing gate** (не блокирует research IL-1).
 
@@ -1354,7 +1363,7 @@ Pipeline: `planet.canon` → modifier/operator atoms → deterministic frame →
 
 **Not this pass:** IL-2 · pair catalog · `earth` → practical · house prose as Canon · object edits.
 
-**Next named:** Signs Mainstream Semantic Map — **done 1.3.83.** Sign Canon grammar — **done 1.3.84.** Sign Canon fill — **done 1.3.85.** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Next = 1.3.88 Planet × Sign smoke-test. House Canon after PASS. Do not fill signs from Lilly QUALITY.
+**Next named:** Signs Mainstream Semantic Map — **done 1.3.83.** Sign Canon grammar — **done 1.3.84.** Sign Canon fill — **done 1.3.85.** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Next = Houses Mainstream map → House Canon grammar. STOP Signs. Do not fill signs from Lilly QUALITY.
 
 ---
 
@@ -1368,7 +1377,7 @@ Consumer is known (1.3.82 manner operator) but **not executed** here. Trait ≠ 
 
 **Not this pass:** Sign Canon slots · Venus × Capricorn application · object fill · schema · houses.
 
-**Next named:** Sign Canon Grammar V1 — **done 1.3.84.** Sign Canon fill — **done 1.3.85.** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Next = 1.3.88 Planet × Sign smoke-test. Not houses.
+**Next named:** Sign Canon Grammar V1 — **done 1.3.84.** Sign Canon fill — **done 1.3.85.** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Next = Houses Mainstream map → House Canon grammar. STOP Signs.
 
 ---
 
@@ -1380,7 +1389,7 @@ Planet = what. Sign = how. Two slots: `manner` · `excess`. Not the planet six-s
 
 **Not this pass:** fill · schema · objects · House Canon · smoke-test repair.
 
-**Next named:** Sign Canon fill — **done 1.3.85.** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Next = 1.3.88 Planet × Sign smoke-test.
+**Next named:** Sign Canon fill — **done 1.3.85.** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Next = Houses Mainstream map → House Canon grammar. STOP Signs.
 
 ---
 
@@ -1392,7 +1401,7 @@ Twelve packs. Two slots only (`manner` · `excess`). Origin `direct` / `direct-s
 
 **Not this pass:** schema · objects · `active` · smoke-test repair · House Canon.
 
-**Next named:** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Next = 1.3.88 Planet × Sign smoke-test. Then House Canon after PASS.
+**Next named:** Sign Canon storage — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Next = Houses Mainstream map → House Canon grammar. STOP Signs.
 
 ---
 
@@ -1406,7 +1415,7 @@ Do **not** map Sign Canon into later-interpretive `excess` / `motivation` / `exp
 
 **Not this pass:** object fill · House Canon · `active` · books · CORE.
 
-**Next named:** write `canon` onto the twelve sign drafts — **done 1.3.87.** Next = **1.3.88 Planet × Sign Composition Smoke V1**. House Canon after PASS.
+**Next named:** write `canon` onto the twelve sign drafts — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Next = Houses Mainstream map → House Canon grammar. STOP Signs.
 
 ---
 
@@ -1420,7 +1429,27 @@ Product manner and Lilly classification are now separate **on the object**, not 
 
 **Not this pass:** schema · new lemmas · later-interpretive fill · House Canon · 1.3.88 smoke-test · `active`.
 
-**Next named:** **1.3.88 Planet × Sign Composition Smoke V1** (separate gate). After PASS: STOP Signs; House Canon. Do not improve packs without a named Composition Engine failure.
+**Next named:** Planet × Sign smoke-test — **done 1.3.88.** STOP Signs. Next = Houses Mainstream map → House Canon grammar.
+
+---
+
+### 6.42 Planet × Sign composition smoke (1.3.88)
+
+Full lock: [SIGN_CANON_COMPOSITION_SMOKE_V1.md](./SIGN_CANON_COMPOSITION_SMOKE_V1.md).
+
+Pipeline: `planet.canon` × `sign.canon.manner` → deterministic PlanetInSign frame → PASS / PARTIAL / FAIL. No LLM. Classification attached, not an operator. 1.3.82 Venus × Capricorn PARTIAL stands as history; live frames now PASS.
+
+| Construction | Verdict | Missing |
+|--------------|---------|---------|
+| Venus × Capricorn | PASS | none |
+| Venus × Scorpio | PASS | none |
+| Mercury / Mars / Moon × Capricorn | PASS | none |
+| Mars × Aries vs Mars × Capricorn | PASS | none (same `mode=cardinal`) |
+| Moon × 4th | PARTIAL | House Canon domain lemmas |
+
+**Not this pass:** IL-2 · pair catalog · `earth` → practical · pack revision · House Canon · object edits.
+
+**Next named:** Houses Mainstream map → House Canon grammar. **STOP Signs.** Do not improve packs without a named Composition Engine failure.
 
 ---
 
@@ -1432,12 +1461,12 @@ Product manner and Lilly classification are now separate **on the object**, not 
 
 Дальше комбинации **композиционно**. Вручную curated в IL-1 — **candidates**, где сложение атомов *может* врать; IL-2 подтверждает или разжалует.
 
-Не начинать с 10 000 комбинаций. Методология отбора смысла: **1.3.76–1.3.82** Mainstream → grammar → packs → storage → fill → smoke-test. **1.3.83** Sign Mainstream map. **1.3.84** Sign Canon grammar. **1.3.85** Sign Canon fill. **1.3.86** Sign Canon storage. **1.3.87** Sign Canon materialization. Дальше 1.3.88 Planet × Sign smoke-test, не pair essays. Слои / provenance shape без нового enum.
+Не начинать с 10 000 комбинаций. Методология отбора смысла: **1.3.76–1.3.82** Mainstream → grammar → packs → storage → fill → smoke-test. **1.3.83** Sign Mainstream map. **1.3.84** Sign Canon grammar. **1.3.85** Sign Canon fill. **1.3.86** Sign Canon storage. **1.3.87** Sign Canon materialization. **1.3.88** Planet × Sign smoke-test PASS. Дальше Houses Mainstream / House Canon, не pair essays. Слои / provenance shape без нового enum.
 
 | ID | Работа | Выход |
 |----|--------|--------|
 | **IL-0** | Foundation: корпус, evidence, provenance, declared gates | ✅ 2026-08-17 |
-| **IL-1** | ~100 surface-neutral objects из корпуса + review | in progress (36 drafts: planets 7 · signs 12 classification-only · houses 12 · aspects 5; Uranus, Neptune and Pluto claims without objects) |
+| **IL-1** | ~100 surface-neutral objects из корпуса + review | in progress (36 drafts: planets 7 · signs 12 with `canon` manner/excess · houses 12 · aspects 5; Uranus, Neptune and Pluto claims without objects) |
 | **IL-2** | Composition rules (не полный каталог пар) | after IL-1; may demote Layer 5 candidates to composed |
 | **IL-3** | Interpretation Engine (sky → themes) | after IL-2 |
 | **IL-4** | Expression (LLM / voice per surface) | after IL-3 |
@@ -1491,7 +1520,8 @@ Product manner and Lilly classification are now separate **on the object**, not 
 
 ## 10. Changelog
 
-- **1.3.87 (2026-08-21)** — IL-1 catalog (no schema, no synthesis, no later-interpretive fill): copy 1.3.85 packs onto twelve sign `object.canon`. Classification unchanged. Next = 1.3.88 Planet × Sign smoke-test, not House Canon.
+- **1.3.88 (2026-08-22)** — IL-1 diagnostic (no ingest, no object change, no schema): Planet × Sign composition smoke. Venus × Capricorn PASS from stored manner. Discrimination / operator / classification-independence PASS. Moon × 4th PARTIAL. STOP Signs. Next = Houses Mainstream → House Canon grammar.
+- **1.3.87 (2026-08-21)** — IL-1 catalog (no schema, no synthesis, no later-interpretive fill): copy 1.3.85 packs onto twelve sign `object.canon`. Classification unchanged. Next = 1.3.88 Planet × Sign smoke-test, not House Canon. **Done 1.3.88.**
 - **1.3.86 (2026-08-21)** — IL-1 schema (no object fill, no CORE, catalog unchanged): Sign Canon storage. Optional `canon` nest on `type=sign` with `manner` · `excess`. Legacy later-interpretive `excess` not the product map. Next = write packs onto sign drafts. **Done 1.3.87.**
 - **1.3.85 (2026-08-21)** — IL-1 process (no ingest, no object change, no schema): Sign Canon V1 fill. Twelve packs. Origin direct/derived. Four gates. Cross-planet dry-run. Unused families stay in territory. Next = Sign Canon storage, not objects. **Done 1.3.86.**
 - **1.3.84 (2026-08-21)** — IL-1 process (no ingest, no object change, no schema): Sign Canon grammar. Two slots (`manner` · `excess`). Sign = how, not person. Canon narrower than territory is expected. Next = Sign Canon fill, not houses. **Done 1.3.85.**

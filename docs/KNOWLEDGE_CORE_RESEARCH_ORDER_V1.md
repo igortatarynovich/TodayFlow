@@ -173,7 +173,8 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - **1.2 (2026-08-21)** — IL-1.3.73: TodayFlow Canon. Astrology product meaning is no longer school-intersection. §4 split: Canon vs research `core`.
 - **1.2 note (2026-08-21)** — IL-1.3.74: Evidence Corpus / Semantic Consensus / TodayFlow Canon. 491 claims stay. Next = short corpus pass, not a research cycle.
 - **1.3 (2026-08-21)** — IL-1.3.75: reverse-engineer Co–Star before another IL architecture or Canon-scoring pass. Phase 0 teardown in. IL frozen.
-- **1.15 (2026-08-21)** — IL-1.3.87: Sign Canon materialization. Twelve drafts. Next = 1.3.88 Planet × Sign smoke-test.
+- **1.16 (2026-08-22)** — IL-1.3.88: Planet × Sign composition smoke. PlanetInSign PASS. STOP Signs. Next = Houses Mainstream map → House Canon grammar.
+- **1.15 (2026-08-21)** — IL-1.3.87: Sign Canon materialization. Twelve drafts. Next = 1.3.88 Planet × Sign smoke-test. **Done 1.3.88.**
 - **1.14 (2026-08-21)** — IL-1.3.86: Sign Canon storage. Optional `canon` on `type=sign`. Next = write packs onto sign drafts. **Done 1.3.87.**
 - **1.13 (2026-08-21)** — IL-1.3.85: Sign Canon fill. Twelve packs. Four gates. Next = Sign Canon storage. **Done 1.3.86.**
 - **1.12 (2026-08-21)** — IL-1.3.84: Sign Canon grammar. Two slots (`manner` · `excess`). Sign = how. Next = Sign Canon fill. **Done 1.3.85.**
