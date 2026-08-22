@@ -55,7 +55,7 @@ Twelve `type=sign` drafts. Houses / aspects still omit `canon`. Sun–Saturn pla
 - IL-2 engine
 - `active`
 
-**Next named:** **1.3.88 Planet × Sign Composition Smoke V1** — **done.** Houses Mainstream map — **done 1.3.89.** House Canon grammar — **done 1.3.90.** House Canon fill — **done 1.3.91.** STOP Signs. House Canon storage/materialization — **done 1.3.92.** Planet × House smoke — **done 1.3.93.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Next = **Aspect Canon fill**. Do not improve packs after a passing smoke-test without a named Composition Engine failure.
+**Next named:** **1.3.88 Planet × Sign Composition Smoke V1** — **done.** Houses Mainstream map — **done 1.3.89.** House Canon grammar — **done 1.3.90.** House Canon fill — **done 1.3.91.** STOP Signs. House Canon storage/materialization — **done 1.3.92.** Planet × House smoke — **done 1.3.93.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Next = **1.3.98 stored Planet × Aspect smoke**. Do not improve packs after a passing smoke-test without a named Composition Engine failure.
 
 ---
 

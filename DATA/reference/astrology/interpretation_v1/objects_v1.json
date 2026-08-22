@@ -4019,6 +4019,13 @@
       "angle": 0,
       "interaction": "merging",
       "requires_action": false,
+      "canon": {
+        "relation": [
+          "blend",
+          "fuse",
+          "immediate-connection"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.aspect.conjunction.bodily",
@@ -4187,6 +4194,13 @@
       "angle": 60,
       "interaction": "flow",
       "requires_action": false,
+      "canon": {
+        "relation": [
+          "ease-with-participation",
+          "directed-potential",
+          "cooperation"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.aspect.sextile.harmonious",
@@ -4340,6 +4354,13 @@
       "angle": 90,
       "interaction": "friction",
       "requires_action": false,
+      "canon": {
+        "relation": [
+          "friction",
+          "blockage",
+          "cross-purposes"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.aspect.square.discordant",
@@ -4476,6 +4497,13 @@
       "angle": 120,
       "interaction": "flow",
       "requires_action": false,
+      "canon": {
+        "relation": [
+          "easy-flow",
+          "support",
+          "natural-ease"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.aspect.trine.harmonious",
@@ -4628,6 +4656,13 @@
       "angle": 180,
       "interaction": "polarization",
       "requires_action": false,
+      "canon": {
+        "relation": [
+          "polarity",
+          "facing",
+          "the-other"
+        ]
+      },
       "provenance": [
         {
           "concept_id": "claim.aspect.opposition.discordant",

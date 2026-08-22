@@ -2522,6 +2522,46 @@ def _minimal_house_draft(object_id: str = "astro.house.04") -> dict:
     }
 
 
+def _minimal_aspect_draft(object_id: str = "astro.aspect.square") -> dict:
+    name = object_id.rsplit(".", 1)[-1]
+    return {
+        "object_id": object_id,
+        "layer": 4,
+        "type": "aspect",
+        "status": "draft",
+        "version": "0.1.0",
+        "phenomenon": name,
+        "machine_entity_code": f"astrology.aspect.{name}",
+        "theme_clusters": ["power"],
+        "polarity": ["challenging"],
+        "temporal_class": "natal",
+        "confidence": None,
+        "composed_from": [],
+        "curation_reason": None,
+        "angle": 90,
+        "interaction": "friction",
+        "requires_action": False,
+        "provenance": [
+            {
+                "concept_id": f"claim.aspect.{name}.interaction",
+                "source_id": "src.classical.ptolemy_tetrabiblos",
+                "source_class": "classical",
+                "author": "Claudius Ptolemy / J.M. Ashmand trans.",
+                "edition": "Ashmand 1822; Gutenberg ebook 70850",
+                "school": "hellenistic",
+                "reviewer": None,
+                "reviewed_at": None,
+                "locus": "Tetrabiblos Book I Chapter XIII",
+                "original_claim": "Classification-only illustration — not a Canon pack",
+                "normalized_claim": "Stored interaction remains classical grain",
+                "evidence_tier": "school_specific",
+                "review_status": "extracted",
+                "field": "interaction",
+            }
+        ],
+    }
+
+
 def test_outer_planet_draft_representation_optional_on_draft():
     """1.3.72: outer meaning keys optional on draft. Sun–Saturn still required. No objects yet."""
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
@@ -2767,7 +2807,7 @@ def test_planet_canon_storage_v1():
     assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
 
     for obj in objects["objects"]:
-        if obj["type"] not in ("celestial_object", "sign", "house"):
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
             assert "canon" not in obj
 
     saturn_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.object.saturn")
@@ -2916,7 +2956,7 @@ def test_planet_canon_sun_saturn_fill():
     assert "affection" in by_id["astro.object.venus"]["canon"]["constructive"]
 
     for obj in objects["objects"]:
-        if obj["type"] not in ("celestial_object", "sign", "house"):
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
             assert "canon" not in obj
     for object_id in ("astro.object.uranus", "astro.object.neptune", "astro.object.pluto"):
         assert object_id not in by_id
@@ -2995,7 +3035,7 @@ def test_mainstream_house_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.43 Mainstream House Semantic Map" in canon
-    assert "**Версия:** 1.3.95" in canon
+    assert "**Версия:** 1.3.97" in canon
     house_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -3054,7 +3094,7 @@ def test_house_canon_grammar_v1():
         encoding="utf-8"
     )
     assert "### 6.44 House Canon grammar" in canon
-    assert "**Версия:** 1.3.95" in canon
+    assert "**Версия:** 1.3.97" in canon
     grammar = (ROOT / "docs" / "astrology" / "HOUSE_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3095,7 +3135,7 @@ def test_house_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.45 House Canon V1 fill" in canon
-    assert "**Версия:** 1.3.95" in canon
+    assert "**Версия:** 1.3.97" in canon
     packs = (ROOT / "docs" / "astrology" / "HOUSE_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "Destination noun" in packs or "destination noun" in packs.lower()
@@ -3169,7 +3209,7 @@ def test_sign_canon_grammar_v1():
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.95" in canon
+    assert "**Версия:** 1.3.97" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3207,7 +3247,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.95" in canon
+    assert "**Версия:** 1.3.97" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs
@@ -3435,7 +3475,7 @@ def test_sign_canon_materialization_v1():
     assert cap["canon"]["excess"] == ["withholding", "hardening"]
 
     for obj in objects["objects"]:
-        if obj["type"] == "aspect":
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
             assert "canon" not in obj
     for object_id, pack in SUN_SATURN_CANON_PACKS.items():
         assert by_id[object_id]["canon"] == pack
@@ -3471,6 +3511,24 @@ HOUSE_CANON_PACKS = {
     "astro.house.10": {"arena": ["career", "public-role", "reputation", "calling"]},
     "astro.house.11": {"arena": ["friends", "groups", "community"]},
     "astro.house.12": {"arena": ["hidden", "retreat", "behind-the-scenes"]},
+}
+
+ASPECT_CANON_PACKS = {
+    "astro.aspect.conjunction": {"relation": ["blend", "fuse", "immediate-connection"]},
+    "astro.aspect.opposition": {"relation": ["polarity", "facing", "the-other"]},
+    "astro.aspect.square": {"relation": ["friction", "blockage", "cross-purposes"]},
+    "astro.aspect.trine": {"relation": ["easy-flow", "support", "natural-ease"]},
+    "astro.aspect.sextile": {
+        "relation": ["ease-with-participation", "directed-potential", "cooperation"]
+    },
+}
+
+ASPECT_INTERACTION = {
+    "astro.aspect.conjunction": "merging",
+    "astro.aspect.opposition": "polarization",
+    "astro.aspect.square": "friction",
+    "astro.aspect.trine": "flow",
+    "astro.aspect.sextile": "flow",
 }
 
 
@@ -3517,7 +3575,7 @@ def test_house_canon_storage_materialization_v1():
     assert "astro.object.mc" not in by_id
 
     for obj in objects["objects"]:
-        if obj["type"] == "aspect":
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
             assert "canon" not in obj
     for object_id, planet_pack in SUN_SATURN_CANON_PACKS.items():
         assert by_id[object_id]["canon"] == planet_pack
@@ -3610,7 +3668,7 @@ def test_house_canon_storage_materialization_v1():
         encoding="utf-8"
     )
     assert "### 6.46 House Canon storage and materialization" in canon
-    assert "**Версия:** 1.3.95" in canon
+    assert "**Версия:** 1.3.97" in canon
     storage = (
         ROOT / "docs" / "astrology" / "HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md"
     ).read_text(encoding="utf-8")
@@ -3653,7 +3711,7 @@ def test_mainstream_aspect_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.48 Mainstream Aspect Semantic Map" in canon
-    assert "**Версия:** 1.3.95" in canon
+    assert "**Версия:** 1.3.97" in canon
     aspect_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -3682,7 +3740,7 @@ def test_mainstream_aspect_semantic_map_v1():
     by_id = {obj["object_id"]: obj for obj in objects["objects"]}
     assert by_id["astro.aspect.square"]["interaction"] == "friction"
     assert by_id["astro.aspect.trine"]["interaction"] == "flow"
-    assert "canon" not in by_id["astro.aspect.square"]
+    assert by_id["astro.aspect.square"]["canon"]["relation"]
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.94" in next_block
@@ -3702,7 +3760,7 @@ def test_aspect_canon_grammar_v1():
         encoding="utf-8"
     )
     assert "### 6.49 Aspect Canon grammar" in canon
-    assert "**Версия:** 1.3.95" in canon
+    assert "**Версия:** 1.3.97" in canon
     grammar = (ROOT / "docs" / "astrology" / "ASPECT_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3722,16 +3780,294 @@ def test_aspect_canon_grammar_v1():
     assert "Moon ☍ Saturn" in grammar
     assert "not locked" in grammar.lower() or "Dry-run" in grammar
     assert "One. Not two." in grammar or "One required slot" in grammar
+    assert "mixed-valence" in grammar
+    assert "mini-Composition Engine" in grammar
+    assert "IL-2" in grammar
+    assert "minimal payload" in grammar.lower() or "minimal aspect payload" in grammar.lower()
+    assert "both sides remain" in grammar.lower() or "both poles" in grammar.lower()
+    assert "Today / Profile / Compatibility" in grammar or "Today/Profile/Compatibility" in grammar
     by_id = {obj["object_id"]: obj for obj in objects["objects"]}
     assert by_id["astro.aspect.square"]["interaction"] == "friction"
     assert by_id["astro.aspect.trine"]["interaction"] == "flow"
     assert by_id["astro.aspect.sextile"]["interaction"] == "flow"
-    assert "canon" not in by_id["astro.aspect.square"]
+    assert by_id["astro.aspect.square"]["canon"]["relation"]
     handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
     next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
     assert "1.3.95" in next_block
     assert "1.3.94" in next_block
     assert "Aspect Canon fill" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "STOP Houses" in next_block
+    assert "STOP Signs" in next_block
+
+
+def test_aspect_canon_v1_fill_with_provenance():
+    """1.3.96: Aspect Canon V1 packs + origin. Five gates. No schema. No objects."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.50 Aspect Canon V1 fill" in canon
+    assert "**Версия:** 1.3.97" in canon
+    packs = (ROOT / "docs" / "astrology" / "ASPECT_CANON_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "direct" in packs
+    assert "mixed-valence" in packs
+    assert "Topology, not meaning" in packs or "topology, not meaning" in packs.lower()
+    for heading in (
+        "Conjunction",
+        "Opposition",
+        "Square",
+        "Trine",
+        "Sextile",
+    ):
+        assert f"### {heading}" in packs
+        assert "relation:" in packs
+    square = packs.split("### Square")[1].split("### Trine")[0]
+    square_rel = square.split("```text")[1].split("```")[0]
+    assert "friction" in square_rel
+    assert "blockage" in square_rel
+    assert "cross-purposes" in square_rel
+    assert "growth" not in square_rel
+    assert "challenge" not in square_rel
+    trine = packs.split("### Trine")[1].split("### Sextile")[0]
+    trine_rel = trine.split("```text")[1].split("```")[0]
+    assert "easy-flow" in trine_rel
+    assert "natural-ease" in trine_rel
+    assert "luck" not in trine_rel
+    sextile = packs.split("### Sextile")[1].split("## 3.")[0]
+    sextile_rel = sextile.split("```text")[1].split("```")[0]
+    assert "ease-with-participation" in sextile_rel
+    assert "directed-potential" in sextile_rel
+    assert "natural-ease" not in sextile_rel
+    conjunction = packs.split("### Conjunction")[1].split("### Opposition")[0]
+    conj_rel = conjunction.split("```text")[1].split("```")[0]
+    assert "blend" in conj_rel
+    assert "fuse" in conj_rel
+    assert "immediate-connection" in conj_rel
+    assert "harmonious" not in conj_rel
+    assert "difficult" not in conj_rel
+    opposition = packs.split("### Opposition")[1].split("### Square")[0]
+    opp_rel = opposition.split("```text")[1].split("```")[0]
+    assert "polarity" in opp_rel
+    assert "facing" in opp_rel
+    assert "friction" not in opp_rel
+    assert "Mars □ Saturn" in packs
+    assert "Venus □ Saturn" in packs
+    assert "Jupiter △ Sun" in packs
+    assert "Venus △ Mars" in packs
+    assert "Venus ✶ Mars" in packs
+    assert "Sun ☌ Mercury" in packs
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert by_id["astro.aspect.square"]["interaction"] == "friction"
+    assert by_id["astro.aspect.sextile"]["interaction"] == "flow"
+    assert by_id["astro.aspect.square"]["canon"]["relation"]
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.96" in next_block
+    assert "1.3.95" in next_block
+    assert "storage" in next_block.lower() or "materialization" in next_block.lower()
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "STOP Houses" in next_block
+    assert "STOP Signs" in next_block
+
+
+def test_aspect_canon_storage_materialization_v1():
+    """1.3.97: aspect_canon_pack + copy locked 1.3.96 packs. interaction unchanged. Next = 1.3.98 smoke."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    example = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    jsonschema.validate(example, schema)
+    _assert_il1_catalog_counts(objects)
+
+    pack = schema["$defs"]["aspect_canon_pack"]
+    assert pack["required"] == ["relation"]
+    assert set(pack["properties"]) == {"relation"}
+    assert pack.get("additionalProperties") is False
+    assert "requires_action" not in pack["properties"]
+    assert "valence" not in pack["properties"]
+    assert "interaction" not in pack["properties"]
+    assert "arena" not in pack["properties"]
+    assert "manner" not in pack["properties"]
+    assert "canon" in schema["$defs"]["knowledge_object"]["properties"]
+    assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
+
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    for object_id, locked in ASPECT_CANON_PACKS.items():
+        obj = by_id[object_id]
+        assert obj["status"] == "draft"
+        assert obj["type"] == "aspect"
+        assert obj["canon"] == locked
+        assert obj["interaction"] == ASPECT_INTERACTION[object_id]
+        assert obj["requires_action"] is False
+        assert "requires_action" not in obj["canon"]
+        assert "valence" not in obj["canon"]
+        assert "orb" not in obj["canon"]
+        assert "pair" not in obj["canon"]
+
+    square = by_id["astro.aspect.square"]
+    assert square["canon"]["relation"] == ["friction", "blockage", "cross-purposes"]
+    assert square["interaction"] == "friction"
+    opposition = by_id["astro.aspect.opposition"]
+    assert opposition["canon"]["relation"] == ["polarity", "facing", "the-other"]
+    assert opposition["interaction"] == "polarization"
+    assert square["canon"] != opposition["canon"]
+    trine = by_id["astro.aspect.trine"]
+    sextile = by_id["astro.aspect.sextile"]
+    assert trine["interaction"] == "flow"
+    assert sextile["interaction"] == "flow"
+    assert trine["canon"] != sextile["canon"]
+    conjunction = by_id["astro.aspect.conjunction"]
+    assert conjunction["interaction"] == "merging"
+    assert conjunction["canon"] != trine["canon"]
+    lemmas = " ".join(conjunction["canon"]["relation"])
+    assert "harmonious" not in lemmas
+    assert "difficult" not in lemmas
+    assert "growth" not in " ".join(square["canon"]["relation"])
+    assert "luck" not in " ".join(trine["canon"]["relation"])
+    assert "astro.object.asc" not in by_id
+    assert "astro.object.mc" not in by_id
+
+    for obj in objects["objects"]:
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
+            assert "canon" not in obj
+    for object_id, planet_pack in SUN_SATURN_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == planet_pack
+    for object_id, sign_pack in SIGN_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == sign_pack
+    for object_id, house_pack in HOUSE_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == house_pack
+
+    square_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.aspect.square")
+    assert square_ex["canon"] == {"relation": ["friction", "blockage", "cross-purposes"]}
+    assert square_ex["interaction"] == "friction"
+    assert "arena" not in square_ex["canon"]
+
+    aspect = _minimal_aspect_draft("astro.aspect.square")
+    jsonschema.validate(
+        {"contract_version": "astrology_interpretation_v1", "objects": [aspect]},
+        schema,
+    )
+
+    filled = dict(aspect)
+    filled["canon"] = {"relation": ["friction", "blockage", "cross-purposes"]}
+    jsonschema.validate(
+        {"contract_version": "astrology_interpretation_v1", "objects": [filled]},
+        schema,
+    )
+
+    partial = dict(aspect)
+    partial["canon"] = {}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [partial]},
+            schema,
+        )
+
+    second_slot = dict(aspect)
+    second_slot["canon"] = {
+        "relation": ["friction"],
+        "arena": ["home"],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [second_slot]},
+            schema,
+        )
+
+    action_key = dict(aspect)
+    action_key["canon"] = {
+        "relation": ["friction"],
+        "requires_action": False,
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [action_key]},
+            schema,
+        )
+
+    house_pack_on_aspect = dict(aspect)
+    house_pack_on_aspect["canon"] = {"arena": ["home"]}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [house_pack_on_aspect]},
+            schema,
+        )
+
+    sign_pack_on_aspect = dict(aspect)
+    sign_pack_on_aspect["canon"] = {
+        "manner": ["reserved"],
+        "excess": ["hardening"],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [sign_pack_on_aspect]},
+            schema,
+        )
+
+    planet_pack_on_aspect = dict(aspect)
+    planet_pack_on_aspect["canon"] = {
+        "core_function": ["limit"],
+        "drive": ["order"],
+        "needs": ["boundaries"],
+        "constructive": ["form"],
+        "distorted": ["rigidity"],
+        "domains": ["limits"],
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [planet_pack_on_aspect]},
+            schema,
+        )
+
+    aspect_pack_on_house = _minimal_house_draft("astro.house.04")
+    aspect_pack_on_house["canon"] = {"relation": ["friction"]}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [aspect_pack_on_house]},
+            schema,
+        )
+
+    combo = next(obj for obj in example["objects"] if obj["type"] == "transit_to_natal")
+    combo_with_canon = dict(combo)
+    combo_with_canon["canon"] = {"relation": ["friction"]}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [combo_with_canon]},
+            schema,
+        )
+
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.51 Aspect Canon storage and materialization" in canon
+    assert "**Версия:** 1.3.97" in canon
+    storage = (
+        ROOT / "docs" / "astrology" / "ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md"
+    ).read_text(encoding="utf-8")
+    assert "canon.relation" in storage
+    assert "interaction" in storage
+    assert "1.3.98" in storage
+    assert "verbatim" in storage.lower() or "1.3.96 packs" in storage
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.97" in next_block
+    assert "1.3.96" in next_block
+    assert "1.3.95" in next_block
+    assert "1.3.94" in next_block
+    assert "1.3.93" in next_block
+    assert "1.3.92" in next_block
+    assert "1.3.91" in next_block
+    assert "1.3.90" in next_block
+    assert "Planet × Aspect" in next_block or "stored Planet × Aspect" in next_block
+    assert "Aspect Canon fill" in next_block
+    assert "House Canon fill" in next_block
+    assert "House Canon storage" in next_block
     assert "Do **not** start CORE scoring" in next_block
     assert "classification-complete" in next_block
     assert "STOP Houses" in next_block

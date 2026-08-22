@@ -185,6 +185,45 @@
           "reviewed_at": null
         }
       ]
+    },
+    {
+      "object_id": "astro.aspect.square",
+      "layer": 4,
+      "type": "aspect",
+      "status": "schema_example",
+      "version": "0.0.0",
+      "phenomenon": "square",
+      "machine_entity_code": "astrology.aspect.square",
+      "theme_clusters": ["power", "change"],
+      "polarity": ["challenging"],
+      "temporal_class": "natal",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "angle": 90,
+      "interaction": "friction",
+      "requires_action": false,
+      "canon": {
+        "relation": ["friction", "blockage", "cross-purposes"]
+      },
+      "provenance": [
+        {
+          "concept_id": "claim.schema.aspect.square.relation",
+          "source_id": "schema_example",
+          "source_class": "schema_example",
+          "author": null,
+          "edition": null,
+          "locus": null,
+          "school": null,
+          "original_claim": "Form illustration only — not a reviewed meaning claim",
+          "normalized_claim": "Square relation is friction, blockage, cross-purposes",
+          "evidence_tier": "editorial",
+          "review_status": "schema_example",
+          "field": "interaction",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      ]
     }
   ]
 }

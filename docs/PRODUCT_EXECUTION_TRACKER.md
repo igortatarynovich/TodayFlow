@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.95 Aspect Canon grammar.** One slot (`relation`). Effort / `requires_action` surplus. Dry-run ≠ fill. **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = Aspect Canon fill. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.97 Aspect Canon storage/materialization.** Five drafts carry `canon.relation`. `interaction` unchanged. **1.3.96 fill stands.** **1.3.95 grammar stands.** **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = 1.3.98 stored Planet × Aspect smoke. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -207,10 +207,28 @@ Status: Active working document
 - **Canon updated?** yes — `docs/astrology/HOUSE_CANON_V1.md` · IL 1.3.91 §6.45
 - **Backward compatible?** yes. House objects stay `DRAFT_CLASSICAL`.
 
+## Architecture impact — IL-1 1.3.96 Aspect Canon fill (2026-08-22)
+
+- **SoT before:** grammar locked one slot; dry-run lemmas were illustrative. Risk: dump 1.3.94 families, stamp conjunction good/bad, write growth into square, or pretty lemmas for Today copy.
+- **SoT after:** five packs locked. Origin `direct` from 1.3.94 include. Five gates. Conjunction mixed-valence is a pack guard, not a lemma. Catalog untouched at fill. Storage — **done 1.3.97.**
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ASPECT_CANON_V1.md` · IL 1.3.96 §6.50
+- **Backward compatible?** yes (`draft`). Deprecated: treating 1.3.95 dry-run wording as locked values.
+
+## Architecture impact — IL-1 1.3.97 Aspect Canon storage/materialization (2026-08-22)
+
+- **SoT before:** Aspect Canon lived in a doc. Five aspect drafts were `angle` / `interaction` / `requires_action` only. Schema forbade `canon` on `type=aspect`.
+- **SoT after:** `type=aspect` may carry optional `canon` as `$defs.aspect_canon_pack` (`relation` only). Five drafts carry locked 1.3.96 packs. Stored `interaction` unchanged. Combos still omit `canon`. Status `draft`. Runtime unchanged. Next = 1.3.98 stored Planet × Aspect smoke.
+- **Public contract changed?** yes — optional aspect `canon` nest; five draft aspects now include `canon`
+- **Migration required?** no — nothing `active`
+- **Canon updated?** yes — `docs/astrology/ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md` · IL 1.3.97 §6.51 · schema `$defs.aspect_canon_pack` · `objects_v1.json`
+- **Backward compatible?** yes for runtime (`draft`)
+
 ## Architecture impact — IL-1 1.3.95 Aspect Canon grammar (2026-08-22)
 
 - **SoT before:** 1.3.94 locked aspect territory. One-slot vs two-atom Canon undecided. Risk: two atoms because Signs had two or because `requires_action` exists; copy `interaction` as Canon; write pair essays.
-- **SoT after:** Aspect = relation (how two functions meet). One required slot (`relation`). Effort / participation / `requires_action` surplus. Stored `interaction` is classical grain, not this slot. Dry-run only. Catalog untouched. Next = Aspect Canon fill.
+- **SoT after:** Aspect = topology/quality of the link, not its meaning. One required slot (`relation`). Effort / participation / `requires_action` surplus. Conjunction stays mixed-valence. Extra slots for a pretty sentence are IL-2, not Canon. Stored `interaction` is classical grain, not this slot. Dry-run only. Catalog untouched. Next = Aspect Canon fill.
 - **Public contract changed?** no
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/ASPECT_CANON_GRAMMAR_V1.md` · IL 1.3.95 §6.49

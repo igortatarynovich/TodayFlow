@@ -23,6 +23,8 @@
 | [HOUSE_CANON_COMPOSITION_SMOKE_V1.md](./HOUSE_CANON_COMPOSITION_SMOKE_V1.md) | **1.3.93 smoke:** PlanetInHouse PASS; STOP Houses |
 | [MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md](./MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md) | **1.3.94 aspect map:** territory + include/secondary/exclude. Not Canon. Not JSON |
 | [ASPECT_CANON_GRAMMAR_V1.md](./ASPECT_CANON_GRAMMAR_V1.md) | **1.3.95 aspect grammar:** one slot (`relation`). Not fill |
+| [ASPECT_CANON_V1.md](./ASPECT_CANON_V1.md) | **1.3.96 Aspect Canon:** five packs + origin. Storage = 1.3.97 **done** |
+| [ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md](./ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md) | **1.3.97 storage:** `aspect_canon_pack` (`relation`); five drafts; `interaction` unchanged |
 | [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) | TodayFlow Canon structuring. Mainstream V1 / Canon / Lenses. Runtime: atoms → composition → LLM formulates |
 | [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) | Co–Star teardown Phase 0. **Recognition check** on Mainstream rows. Not IL ingest. Not the product-meaning source |
 | [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md) | Outer Planet Draft Representation (1.3.72). Meaning keys optional on IL-1 draft outers. Fill waits for Canon. Not ingest, not objects |

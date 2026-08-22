@@ -97,7 +97,8 @@ def test_house_canon_composition_smoke_v1():
 
     for obj in payload["objects"]:
         if obj["type"] == "aspect":
-            assert "canon" not in obj
+            assert obj["canon"]["relation"]
+            assert obj["interaction"] in ("merging", "friction", "flow", "polarization")
 
     smoke = SMOKE.read_text(encoding="utf-8")
     assert "Moon × 4th house — **PASS**" in smoke
@@ -114,7 +115,7 @@ def test_house_canon_composition_smoke_v1():
     assert "Moon × 4th house — **PARTIAL**" in prior_planet
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.95" in canon
+    assert "**Версия:** 1.3.97" in canon
     assert "### 6.47 Planet × House composition smoke" in canon
 
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]
