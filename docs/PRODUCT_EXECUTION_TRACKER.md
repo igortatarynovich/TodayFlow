@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.88 Planet × Sign composition smoke.** PlanetInSign PASS from stored `canon.manner`. House row stays PARTIAL. STOP Signs. Next = Houses Mainstream map → House Canon grammar. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.89 Mainstream House Semantic Map.** Territory + families locked. House ≠ ASC. House ≠ natural sign. Catalog unchanged. Next = House Canon grammar. STOP Signs. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -197,6 +197,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — IL 1.3.75 §6.29 · teardown file · inventory execution order · parent 1.3
 - **Backward compatible?** yes. Deprecated as next pass: short corpus scoring.
+
+## Architecture impact — IL-1 1.3.89 Mainstream House Semantic Map (2026-08-22)
+
+- **SoT before:** 1.3.88 PlanetInSign PASS. Moon × 4th PARTIAL. Risk: paste Lilly, paste Foundation §2.3, equate House 1 with ASC, or derive arenas from natural signs.
+- **SoT after:** same panel as planets/signs. Twelve house territories + include/secondary/exclude. House ≠ angle. House ≠ natural sign. Catalog untouched. Next = House Canon grammar.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md` · IL 1.3.89 §6.43
+- **Backward compatible?** yes. House objects stay `DRAFT_CLASSICAL`.
 
 ## Architecture impact — IL-1 1.3.88 Planet × Sign composition smoke (2026-08-22)
 

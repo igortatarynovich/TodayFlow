@@ -149,7 +149,7 @@ def test_sign_canon_composition_smoke_v1():
     assert "Venus × Capricorn — **PARTIAL**" in prior
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.88" in canon
+    assert "**Версия:** 1.3.89" in canon
     assert "### 6.42 Planet × Sign composition smoke" in canon
 
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]

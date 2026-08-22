@@ -513,7 +513,7 @@ Capricorn does not receive `initiating` from cardinal.
 - Repair PARTIAL by writing manner onto catalog objects
 - Fill leftover territory families for symmetry
 
-**Next named:** Sign Canon storage (schema nest for `manner` · `excess`) — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Next = Houses Mainstream map → House Canon grammar. STOP Signs.
+**Next named:** Sign Canon storage (schema nest for `manner` · `excess`) — **done 1.3.86.** Sign Canon materialization — **done 1.3.87.** Planet × Sign smoke-test — **done 1.3.88.** Houses Mainstream map — **done 1.3.89.** Next = House Canon grammar. STOP Signs.
 
 ---
 

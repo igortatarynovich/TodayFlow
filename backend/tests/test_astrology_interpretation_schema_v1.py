@@ -2943,13 +2943,75 @@ def test_mainstream_sign_semantic_map_v1():
     assert "Sign Canon Grammar" in next_block or "Sign Canon grammar" in next_block
 
 
+def test_mainstream_house_semantic_map_v1():
+    """1.3.89: Mainstream house map. Concept families. No ingest. No objects. No Canon slots."""
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    _assert_il1_catalog_counts(objects)
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.43 Mainstream House Semantic Map" in canon
+    assert "**Версия:** 1.3.89" in canon
+    house_map = (
+        ROOT / "docs" / "astrology" / "MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md"
+    ).read_text(encoding="utf-8")
+    assert "Astrology.com" in house_map
+    assert "Astrodienst" in house_map
+    assert "Cafe Astrology" in house_map
+    assert "concept family" in house_map.lower() or "concept families" in house_map.lower()
+    assert "House 1 ≠ ASC" in house_map
+    assert "1st = Aries" in house_map
+    assert "Lilly" in house_map
+    assert "Foundation §2.3" in house_map
+    assert "angular" in house_map.lower()
+    assert "Not JSON" in house_map or "not JSON" in house_map
+    assert "home · family · roots · private-base" in house_map
+    assert "career · public-role · reputation · calling" in house_map
+    assert "daily-work / job" in house_map and "career / public-role" in house_map
+    for heading in (
+        "1st House",
+        "2nd House",
+        "3rd House",
+        "4th House",
+        "5th House",
+        "6th House",
+        "7th House",
+        "8th House",
+        "9th House",
+        "10th House",
+        "11th House",
+        "12th House",
+    ):
+        assert f"### {heading}" in house_map
+        assert "**Include**" in house_map
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    assert "canon" not in by_id["astro.house.04"]
+    for obj in objects["objects"]:
+        if obj["type"] == "house":
+            assert "canon" not in obj
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.89" in next_block
+    assert "1.3.88" in next_block
+    assert "1.3.82" in next_block
+    assert "House Canon Grammar" in next_block or "House Canon grammar" in next_block
+    assert "Sign Canon fill" in next_block
+    assert "Sign Canon storage" in next_block
+    assert "Sign Canon grammar" in next_block
+    assert "Planet × Sign" in next_block
+    assert "Mainstream" in next_block
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "STOP Signs" in next_block
+
+
 def test_sign_canon_grammar_v1():
     """1.3.84: Sign Canon grammar. Two slots. Not fill. Not objects."""
     objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.88" in canon
+    assert "**Версия:** 1.3.89" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -2987,7 +3049,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.88" in canon
+    assert "**Версия:** 1.3.89" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs

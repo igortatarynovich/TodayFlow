@@ -55,7 +55,7 @@ Twelve `type=sign` drafts. Houses / aspects still omit `canon`. Sun–Saturn pla
 - IL-2 engine
 - `active`
 
-**Next named:** **1.3.88 Planet × Sign Composition Smoke V1** — **done.** STOP Signs. Next = Houses Mainstream map → House Canon grammar. Do not improve packs after a passing smoke-test without a named Composition Engine failure.
+**Next named:** **1.3.88 Planet × Sign Composition Smoke V1** — **done.** Houses Mainstream map — **done 1.3.89.** STOP Signs. Next = House Canon grammar. Do not improve packs after a passing smoke-test without a named Composition Engine failure.
 
 ---
 
