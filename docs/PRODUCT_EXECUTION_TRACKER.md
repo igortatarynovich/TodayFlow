@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.97 Aspect Canon storage/materialization.** Five drafts carry `canon.relation`. `interaction` unchanged. **1.3.96 fill stands.** **1.3.95 grammar stands.** **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = 1.3.98 stored Planet × Aspect smoke. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.98 stored Planet × Aspect smoke PASS.** Four gates. `canon.relation` is the operator. **STOP Aspects.** **1.3.97 storage stands.** **1.3.96 fill stands.** **1.3.95 grammar stands.** **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = ASC/MC. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -219,11 +219,20 @@ Status: Active working document
 ## Architecture impact — IL-1 1.3.97 Aspect Canon storage/materialization (2026-08-22)
 
 - **SoT before:** Aspect Canon lived in a doc. Five aspect drafts were `angle` / `interaction` / `requires_action` only. Schema forbade `canon` on `type=aspect`.
-- **SoT after:** `type=aspect` may carry optional `canon` as `$defs.aspect_canon_pack` (`relation` only). Five drafts carry locked 1.3.96 packs. Stored `interaction` unchanged. Combos still omit `canon`. Status `draft`. Runtime unchanged. Next = 1.3.98 stored Planet × Aspect smoke.
+- **SoT after:** `type=aspect` may carry optional `canon` as `$defs.aspect_canon_pack` (`relation` only). Five drafts carry locked 1.3.96 packs. Stored `interaction` unchanged. Combos still omit `canon`. Status `draft`. Runtime unchanged. Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = ASC/MC.
 - **Public contract changed?** yes — optional aspect `canon` nest; five draft aspects now include `canon`
 - **Migration required?** no — nothing `active`
 - **Canon updated?** yes — `docs/astrology/ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md` · IL 1.3.97 §6.51 · schema `$defs.aspect_canon_pack` · `objects_v1.json`
 - **Backward compatible?** yes for runtime (`draft`)
+
+## Architecture impact — IL-1 1.3.98 Stored Planet × Aspect composition smoke (2026-08-22)
+
+- **SoT before:** 1.3.82 scored AspectPair PASS from `interaction`. 1.3.97 stored `canon.relation`. Trine and sextile still share `interaction=flow`.
+- **SoT after:** live AspectPair frames read `astro.aspect.*.canon.relation`. Four gates PASS. Historical 1.3.82 AspectPair = snapshot. Catalog unchanged. **STOP Aspects.** Next = ASC/MC.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ASPECT_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.98 §6.52
+- **Backward compatible?** yes (`draft`)
 
 ## Architecture impact — IL-1 1.3.95 Aspect Canon grammar (2026-08-22)
 

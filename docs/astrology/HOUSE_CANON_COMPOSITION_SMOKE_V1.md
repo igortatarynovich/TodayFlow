@@ -163,7 +163,7 @@ Do not edit 1.3.82 or 1.3.88 verdicts to rewrite history. Do not treat those PAR
 - Inventing `4th = Cancer` or Lilly `domain` as arena  
 - Aspect Mainstream / Aspect Canon grammar — map **done 1.3.94**; grammar **done 1.3.95**
 
-**Next named:** Mainstream Aspect Semantic Map V1 — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Next = **1.3.98 stored Planet × Aspect smoke**. **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house packs without a named Composition Engine failure.
+**Next named:** Mainstream Aspect Semantic Map V1 — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = **ASC/MC**. **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house packs without a named Composition Engine failure.
 
 ---
 

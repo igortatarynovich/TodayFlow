@@ -171,13 +171,14 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Unlock Co–Star in-app scraping
 - Require 2/3 literal-word overlap
 
-**Next named (one task):** smoke-test locked (1.3.82). Sign map locked (1.3.83). Sign grammar locked (1.3.84). Sign Canon fill locked (1.3.85). Sign Canon storage locked (1.3.86). Sign Canon materialization locked (1.3.87). Planet × Sign smoke-test locked (1.3.88). Houses Mainstream map locked (1.3.89). House Canon grammar locked (1.3.90). House Canon fill locked (1.3.91). House Canon storage/materialization — **done 1.3.92.** Planet × House smoke — **done 1.3.93.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Next = **1.3.98 stored Planet × Aspect smoke**. STOP Houses. STOP Signs. Do not rewrite `function`.
+**Next named (one task):** smoke-test locked (1.3.82). Sign map locked (1.3.83). Sign grammar locked (1.3.84). Sign Canon fill locked (1.3.85). Sign Canon storage locked (1.3.86). Sign Canon materialization locked (1.3.87). Planet × Sign smoke-test locked (1.3.88). Houses Mainstream map locked (1.3.89). House Canon grammar locked (1.3.90). House Canon fill locked (1.3.91). House Canon storage/materialization — **done 1.3.92.** Planet × House smoke — **done 1.3.93.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = **ASC/MC**. STOP Houses. STOP Signs. Do not rewrite `function`.
 
 ---
 
 ## Changelog
 
-- **1.16 (2026-08-22)** — 1.3.97 Aspect Canon storage/materialization. Five drafts carry `canon.relation`. Next = 1.3.98 stored Planet × Aspect smoke.
+- **1.17 (2026-08-22)** — 1.3.98 stored Planet × Aspect smoke PASS. STOP Aspects. Next = ASC/MC.
+- **1.16 (2026-08-22)** — 1.3.97 Aspect Canon storage/materialization. Five drafts carry `canon.relation`. Next = 1.3.98 stored Planet × Aspect smoke. **Done 1.3.98.**
 - **1.15 (2026-08-22)** — 1.3.96 Aspect Canon fill. Five packs. Next = storage/materialization. **Done 1.3.97.**
 - **1.14 (2026-08-22)** — 1.3.95 Aspect Canon grammar. One slot (`relation`). Next = Aspect Canon fill. **Done 1.3.96.**
 - **1.13 (2026-08-22)** — 1.3.92 House Canon storage/materialization. Twelve drafts carry `canon.arena`. Next = Planet × House smoke.

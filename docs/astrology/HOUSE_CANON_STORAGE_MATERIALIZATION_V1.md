@@ -93,7 +93,7 @@ IL-4 still formulates. It must not be given only Lilly `domain` and asked to inv
 - `active`
 - Overwrite Lilly `domain`
 
-**Next named:** **1.3.93 Planet × House Composition Smoke V1** — **done.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Next = **1.3.98 stored Planet × Aspect smoke**. Discrimination: Moon × 4th ≠ Moon × 10th. Composability: same stored 4th pack on Moon / Mars / Venus. Historical 1.3.82 Moon × 4th PARTIAL is now a snapshot; live frame reads **stored** `house.canon.arena`. **STOP Houses.** Do not enrich packs.
+**Next named:** **1.3.93 Planet × House Composition Smoke V1** — **done.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = **ASC/MC**. Discrimination: Moon × 4th ≠ Moon × 10th. Composability: same stored 4th pack on Moon / Mars / Venus. Historical 1.3.82 Moon × 4th PARTIAL is now a snapshot; live frame reads **stored** `house.canon.arena`. **STOP Houses.** Do not enrich packs.
 
 ---
 

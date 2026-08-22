@@ -271,5 +271,5 @@ If both payloads were generic ease, fill would fail. They are not.
 
 ## Changelog
 
-- **1.1 (2026-08-22)** — 1.3.97 Aspect Canon storage/materialization. Five drafts carry `canon.relation`. Grammar unchanged. Next = 1.3.98 stored Planet × Aspect smoke.
+- **1.1 (2026-08-22)** — 1.3.97 Aspect Canon storage/materialization. Five drafts carry `canon.relation`. Grammar unchanged. Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = ASC/MC.
 - **1.0 (2026-08-22)** — 1.3.96. Five packs locked. Origin direct from 1.3.94 include. Five gates. Mixed-valence conjunction as pack guard. Cross-pair dry-run. Unused families stay in territory. Technical lemmas kept.

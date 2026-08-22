@@ -263,13 +263,13 @@ Do not write `Mars square Saturn` essays. Do not replace `object.interaction` in
 - A 2/3 word spreadsheet
 - Reopening 1.3.82 / 1.3.88 PARTIAL snapshots
 
-**Next named:** Aspect Canon Grammar V1 — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Next = 1.3.98 stored Planet × Aspect smoke. **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house packs without a named Composition Engine failure.
+**Next named:** Aspect Canon Grammar V1 — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = ASC/MC. **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.3 (2026-08-22)** — Aspect Canon storage/materialization locked 1.3.97. Next = 1.3.98 stored Planet × Aspect smoke.
+- **1.3 (2026-08-22)** — Aspect Canon storage/materialization locked 1.3.97. Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = ASC/MC.
 - **1.2 (2026-08-22)** — Aspect Canon fill locked 1.3.96. Next = storage/materialization. **Done 1.3.97.**
 - **1.1 (2026-08-22)** — Aspect Canon grammar locked 1.3.95. One slot (`relation`). One-slot vs two-atom is no longer open. Next = Aspect Canon fill. **Done 1.3.96.**
 - **1.0 (2026-08-22)** — 1.3.94. Same three-source panel as planets/signs/houses. Five major-aspect territories + include/secondary/exclude. Aspect = relation, not theme. Square growth-narrative excluded as stem. One-slot vs two-atom Canon undecided. Not Canon, not JSON. Next = Aspect Canon grammar. **Done 1.3.95.**

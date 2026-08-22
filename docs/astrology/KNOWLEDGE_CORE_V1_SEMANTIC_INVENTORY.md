@@ -11,7 +11,7 @@ This file is the **V1 limiter**. IL V1 is not “complete astrology.” It is th
 ## Architecture impact
 
 - **SoT before:** parent order existed, but the next named IL pass was still a layer slice. Gap → author → closed book could run without a V1-wide constituent map.
-- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. **1.3.78:** Planet Canon grammar locked. **1.3.79:** Planet Canon V1 locked. **1.3.80:** `canon` storage locked. **1.3.81:** Sun–Saturn `canon` filled. **1.3.82:** smoke-test — aspect PASS, sign/house PARTIAL (house PARTIAL is now a snapshot). **1.3.83:** Signs Mainstream map locked. **1.3.84:** Sign Canon grammar locked. **1.3.85:** Sign Canon fill locked. **1.3.86:** Sign Canon storage locked. **1.3.87:** Sign Canon materialization locked. **1.3.88:** Planet × Sign smoke-test PASS. **1.3.89:** Houses Mainstream map locked. **1.3.90:** House Canon grammar locked. **1.3.91:** House Canon fill locked. **1.3.92:** House Canon storage/materialization locked. **1.3.93:** Planet × House smoke PASS. **STOP Houses.** **1.3.94:** Aspects Mainstream map locked. **1.3.95:** Aspect Canon grammar locked. **1.3.96:** Aspect Canon fill locked. **1.3.97:** Aspect Canon storage/materialization locked. Next execution = 1.3.98 stored Planet × Aspect smoke. STOP Signs. Co–Star is a recognition check. Do not rewrite `function` this inventory.
+- **SoT after:** this inventory is the **owner-approved V1 freeze map**. New **books** remain forbidden unless a named `KC-*` row has a V1-required constituent that is actually missing. **1.3.76:** product meaning comes from Mainstream convention. **1.3.77:** planet map locked. **1.3.78:** Planet Canon grammar locked. **1.3.79:** Planet Canon V1 locked. **1.3.80:** `canon` storage locked. **1.3.81:** Sun–Saturn `canon` filled. **1.3.82:** smoke-test — aspect PASS, sign/house PARTIAL (house PARTIAL is now a snapshot). **1.3.83:** Signs Mainstream map locked. **1.3.84:** Sign Canon grammar locked. **1.3.85:** Sign Canon fill locked. **1.3.86:** Sign Canon storage locked. **1.3.87:** Sign Canon materialization locked. **1.3.88:** Planet × Sign smoke-test PASS. **1.3.89:** Houses Mainstream map locked. **1.3.90:** House Canon grammar locked. **1.3.91:** House Canon fill locked. **1.3.92:** House Canon storage/materialization locked. **1.3.93:** Planet × House smoke PASS. **STOP Houses.** **1.3.94:** Aspects Mainstream map locked. **1.3.95:** Aspect Canon grammar locked. **1.3.96:** Aspect Canon fill locked. **1.3.97:** Aspect Canon storage/materialization locked. 1.3.98 stored Planet × Aspect smoke locked. Next execution = ASC/MC. STOP Signs. Co–Star is a recognition check. Do not rewrite `function` this inventory.
 - **Public contract changed?** no (inventory). Outer schema delta is 1.3.72.
 - **Migration required?** no
 - **Canon updated?** yes — this file · IL §6.25 / §6.26 · parent · handoff · tracker
@@ -131,7 +131,7 @@ Houses have drafts **and** stored Canon arena. PlanetInHouse PASS (1.3.93). **ST
 
 | ID | Product need | Semantic layer | Object | Required constituents | Evidence requirement | Current coverage | Runtime consumer | Status |
 |----|--------------|----------------|--------|----------------------|----------------------|------------------|------------------|--------|
-| KC-A-5 | How two functions interact | Aspects | conjunction · opposition · square · trine · sextile | `angle` · `interaction` · `requires_action` · product `canon.relation` | geometry compared; qualitative systems (Ptolemy harmonious/discordant vs Lilly enmity) stay claims, not object defaults. Mainstream territory locked 1.3.94; grammar locked 1.3.95 — one slot `relation`; fill locked 1.3.96 — five packs, mixed-valence guard; storage locked 1.3.97 — `canon.relation` on five drafts | 5 drafts; `interaction` is schema enum (trine and sextile both `flow`); Canon `relation` stored, not an alias of `interaction` | Today major aspects · Overlay · Compat | `DRAFT_CLASSICAL` + stored Canon |
+| KC-A-5 | How two functions interact | Aspects | conjunction · opposition · square · trine · sextile | `angle` · `interaction` · `requires_action` · product `canon.relation` | geometry compared; qualitative systems stay claims. Mainstream territory locked 1.3.94; grammar 1.3.95; fill 1.3.96; storage 1.3.97; Planet×Aspect smoke PASS 1.3.98 | 5 drafts; `interaction` enum (trine and sextile both `flow`); live operator is stored `canon.relation`. **STOP Aspects.** | Today major aspects · Overlay · Compat | `DRAFT_CLASSICAL` + stored Canon |
 | KC-A-REQ | Do not `active` an unevidenced boolean | Aspects | `requires_action` | unambiguous representation **or** runtime contract | activation gate 1.3.8 | `false` on draft ≠ «does not require action» | IL-3 when wired | `DEFERRED_V1` (gate, not a book) |
 | KC-A-MIN | Minor aspects | Aspects | quincunx etc. | — | Foundation §2.4 | OOS v1 | — | `OUT_OF_V1` |
 
@@ -211,7 +211,7 @@ ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. D
 
 ---
 
-## 6. Execution order (LOCKED, then redirected 1.3.97)
+## 6. Execution order (LOCKED, then redirected 1.3.98)
 
 ```text
 1. Outer Planet Draft Representation V1        ✅ 1.3.72 schema/model
@@ -239,7 +239,8 @@ ASC/MC are second because they are `NEED_MODEL`: constituents are not defined. D
 23. Aspect Canon grammar                       ✅ 1.3.95  one slot (`relation`); dry-run ≠ fill
 24. Aspect Canon fill                          ✅ 1.3.96  five packs; origin direct; not schema
 25. Aspect Canon storage / materialization     ✅ 1.3.97  aspect_canon_pack; five drafts; interaction unchanged
-26. Stored Planet × Aspect smoke               NEXT     stored source; Square≠Opposition; Trine≠Sextile
+26. Stored Planet × Aspect smoke → STOP Aspects ✅ 1.3.98  stored source; Square≠Opposition; Trine≠Sextile
+27. ASC/MC                                     NEXT     NEED_MODEL; parent 1–4
 ```
 
 Historical literature does not appear in this order. Lenses stay in the existing corpus. Co–Star is a check on Mainstream rows, not a source.
@@ -248,7 +249,8 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
-- **1.26 (2026-08-22)** — Aspect Canon storage/materialization (1.3.97). Five drafts carry `canon.relation`. `interaction` unchanged. Next = 1.3.98 stored Planet × Aspect smoke.
+- **1.27 (2026-08-22)** — Stored Planet × Aspect smoke (1.3.98). Four gates PASS. Trine vs Sextile on one pair. STOP Aspects. Next = ASC/MC.
+- **1.26 (2026-08-22)** — Aspect Canon storage/materialization (1.3.97). Five drafts carry `canon.relation`. `interaction` unchanged. Next = 1.3.98 stored Planet × Aspect smoke. **Done 1.3.98.**
 - **1.25 (2026-08-22)** — Aspect Canon fill (1.3.96). Five packs. Origin direct. Mixed-valence guard. Next = storage/materialization. **Done 1.3.97.**
 - **1.24 (2026-08-22)** — Aspect Canon grammar (1.3.95). One slot (`relation`). Effort / `requires_action` surplus. Next = Aspect Canon fill. **Done 1.3.96.**
 - **1.23 (2026-08-22)** — Mainstream Aspect Semantic Map (1.3.94). Same panel. Relation ≠ theme. Next = Aspect Canon grammar. **Done 1.3.95.**
