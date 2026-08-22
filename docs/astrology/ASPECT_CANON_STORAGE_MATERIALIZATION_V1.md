@@ -108,7 +108,7 @@ IL-4 still formulates. It must not be given only `interaction=flow` and asked to
 - `active`
 - Sign / House pack edits
 
-**Next named:** 1.3.98 stored Planet × Aspect composition smoke — **done.** Four gates PASS. **STOP Aspects.** Angle model — **done 1.3.99.** Next = Mainstream Angle Semantic Map. Then grammar → fill → storage → angle smoke → final atomic smoke → Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Houses.** **STOP Signs.** Do not enrich packs.
+**Next named:** 1.3.98 stored Planet × Aspect composition smoke — **done.** Four gates PASS. **STOP Aspects.** Angle model — **done 1.3.99.** Mainstream Angle map — **done 1.3.100.** Next = Angle Canon grammar. Sequence: grammar → fill → storage → stored Planet×Angle smoke → STOP Angles → final atomic smoke → Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Houses.** **STOP Signs.** Do not enrich packs.
 
 ---
 

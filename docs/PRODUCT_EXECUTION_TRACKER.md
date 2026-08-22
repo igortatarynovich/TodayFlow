@@ -86,7 +86,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.99 Angle Canon model locked.** Orientation loci. Named slots unspecified. **1.3.98 stored Planet × Aspect smoke PASS.** Four gates. `canon.relation` is the operator. **STOP Aspects.** **1.3.97 storage stands.** **1.3.96 fill stands.** **1.3.95 grammar stands.** **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = Mainstream Angle Semantic Map. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.100 Mainstream Angle Semantic Map locked.** Same panel. House 1/10 not proof. Angular strength not meaning. Planet-on-angle cookbooks out. **1.3.99 Angle Canon model stands.** Orientation loci. Named slots unspecified. **1.3.98 stored Planet × Aspect smoke PASS.** Four gates. `canon.relation` is the operator. **STOP Aspects.** **1.3.97 storage stands.** **1.3.96 fill stands.** **1.3.95 grammar stands.** **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = Angle Canon grammar. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -225,10 +225,19 @@ Status: Active working document
 - **Canon updated?** yes — `docs/astrology/ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md` · IL 1.3.97 §6.51 · schema `$defs.aspect_canon_pack` · `objects_v1.json`
 - **Backward compatible?** yes for runtime (`draft`)
 
+## Architecture impact — IL-1 1.3.100 Mainstream Angle Semantic Map (2026-08-22)
+
+- **SoT before:** 1.3.99 locked orientation loci. Risk: skip the map and invent an operator; paste House 1 / House 10; treat angular = louder as meaning; ingest planet-conjunct-ASC/MC recipes.
+- **SoT after:** same panel. ASC + MC territories + include/secondary/exclude. House 1/10 vocabulary is not proof. Angular prominence is not meaning. Planet-on-angle cookbooks are out. Catalog untouched. Next = Angle Canon grammar, not fill. Sequence: grammar → fill → storage → stored Planet×Angle smoke → STOP Angles → final atomic smoke.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md` · IL 1.3.100 §6.54
+- **Backward compatible?** yes (`draft`)
+
 ## Architecture impact — IL-1 1.3.99 Angle Canon model (2026-08-22)
 
 - **SoT before:** KC-ANG-ASC / KC-ANG-MC were `NEED_MODEL`. House Canon forbids `1st = ASC` / `10th = MC`. Risk: copy `arena`, treat angles as routing anchors, or paste mask/career cookbooks.
-- **SoT after:** ASC and MC are orientation loci (horizon vs meridian). Routing stays House. Projection-strength stays Foundation. Named Canon slots unspecified. Catalog unchanged. Next = Mainstream Angle Semantic Map, not fill.
+- **SoT after:** ASC and MC are orientation loci (horizon vs meridian). Routing stays House. Projection-strength stays Foundation. Named Canon slots unspecified. Catalog unchanged. Mainstream Angle map — **done 1.3.100.**
 - **Public contract changed?** no
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/ANGLE_CANON_MODEL_V1.md` · IL 1.3.99 §6.53

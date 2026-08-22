@@ -203,7 +203,7 @@ Grammar may name slots **only if**:
 4. The slot is not Planet `core_function`.
 5. The slot is not `stronger` / luck / vocation-as-fate.
 
-Fill is forbidden until that grammar exists. Objects are forbidden until storage is named. Final atomic smoke (Planet + Sign + House + Aspect + Angle in one frame) is forbidden until angle atoms are stored.
+Fill is forbidden until that grammar exists. Objects are forbidden until storage is named. Stored Planet×Angle smoke is forbidden until packs are on drafts. Final atomic smoke is forbidden until Angles are closed the same way Planet / Sign / House / Aspect were: stored-source gate, then STOP Angles.
 
 ---
 
@@ -222,10 +222,11 @@ Fill is forbidden until that grammar exists. Objects are forbidden until storage
 
 ---
 
-**Next named:** Mainstream Angle Semantic Map (same panel as planets / signs / houses / aspects). Territory + include/secondary/exclude. Not grammar. Not fill. Not objects. Then Angle Canon grammar → fill → storage → angle smoke → **final atomic smoke** (one frame with stored Planet + Sign + House + Aspect + Angle) → Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not start CORE scoring. Do not start ASC cookbooks.
+**Next named:** Mainstream Angle Semantic Map — **done 1.3.100.** Next = Angle Canon grammar. Sequence (do not skip): grammar → fill → storage/materialization → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not start CORE scoring. Do not start ASC cookbooks.
 
 ---
 
 ## Changelog
 
+- **1.1 (2026-08-22)** — Mainstream Angle map locked 1.3.100. Sequence corrected: stored Planet×Angle smoke and STOP Angles before final atomic smoke.
 - **1.0 (2026-08-22)** — 1.3.99. Parent steps 1–4. Angles = orientation loci (horizon vs meridian). Routing / projection / public–private-as-payload rejected. Named slots unspecified. Catalog unchanged.

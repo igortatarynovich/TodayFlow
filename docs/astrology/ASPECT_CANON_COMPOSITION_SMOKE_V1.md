@@ -185,7 +185,7 @@ Do not edit 1.3.82 verdicts to rewrite history. Do not treat `interaction=flow` 
 - ASC/MC maps or objects  
 - Sign / House pack edits  
 
-**Next named:** ASC/MC definition (parent steps 1–4) — **done 1.3.99.** Next = Mainstream Angle Semantic Map. Then grammar → fill → storage → angle smoke → final atomic smoke → Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
+**Next named:** Mainstream Angle Semantic Map — **done 1.3.100.** Next = Angle Canon grammar. Sequence: grammar → fill → storage → stored Planet×Angle smoke → STOP Angles → final atomic smoke → FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
 
 ---
 
