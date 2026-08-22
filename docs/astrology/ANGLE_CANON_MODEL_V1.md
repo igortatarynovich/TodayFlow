@@ -160,7 +160,7 @@ Parent step 3 is the **set**, not a grammar. Named lemma slots are not copied fr
 | Identity (not IL meaning) | calc emit · longitude · occupying sign as **fact** | Already true. Does not justify an IL pack |
 | Compositional type | orientation locus (horizon vs meridian) | **Locked** |
 | Discrimination requirement | ASC pack ≠ MC pack in any later fill | **Locked as a gate.** Lemmas wait |
-| Named Canon slots | unknown count and names | **Unspecified.** Grammar is the next family pass after a Mainstream map. Do not assume one slot because Houses had one |
+| Named Canon slots | one required: `orientation` (1.3.101) | **Unspecified** at 1.3.99; **locked in grammar.** Do not copy `arena` / `manner` / `relation` |
 | Exclude | house `arena` copy · sign `manner` copy · planet `core_function` copy · mask cookbook · career cookbook · angular=stronger · DSC/IC objects · pair essays | Locked out |
 
 The full set of *model* constituents is therefore: type + discrimination + “slots named later without analogy.” That is enough to end `NEED_MODEL`. It is not enough to fill.
@@ -222,11 +222,12 @@ Fill is forbidden until that grammar exists. Objects are forbidden until storage
 
 ---
 
-**Next named:** Mainstream Angle Semantic Map — **done 1.3.100.** Next = Angle Canon grammar. Sequence (do not skip): grammar → fill → storage/materialization → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not start CORE scoring. Do not start ASC cookbooks.
+**Next named:** Mainstream Angle Semantic Map — **done 1.3.100.** Angle Canon grammar — **done 1.3.101** (one slot: `orientation`). Angle Canon fill — **done 1.3.102.** Next = storage/materialization. Sequence (do not skip): storage/materialization → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not start CORE scoring. Do not start ASC cookbooks.
 
 ---
 
 ## Changelog
 
+- **1.2 (2026-08-22)** — Angle Canon grammar locked 1.3.101. One slot (`orientation`). Include-first. Secondary = collision-zone. Next = Angle Canon fill.
 - **1.1 (2026-08-22)** — Mainstream Angle map locked 1.3.100. Sequence corrected: stored Planet×Angle smoke and STOP Angles before final atomic smoke.
 - **1.0 (2026-08-22)** — 1.3.99. Parent steps 1–4. Angles = orientation loci (horizon vs meridian). Routing / projection / public–private-as-payload rejected. Named slots unspecified. Catalog unchanged.

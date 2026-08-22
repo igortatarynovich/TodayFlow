@@ -239,10 +239,11 @@ Do not write `Mars conjunct ASC` essays. Do not materialize `astro.object.asc` i
 
 **Sequence (locked, not skipped):** Angle map (this file) → grammar → fill → storage/materialization → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2.
 
-**Next named:** Angle Canon Grammar V1. Not fill. Not objects. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
+**Next named:** Angle Canon grammar — **done 1.3.101.** Angle Canon fill — **done 1.3.102.** Next = storage/materialization. Sequence: storage → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.0 (2026-08-22)** — 1.3.100. Same three-source panel. ASC + MC territories + include/secondary/exclude. House 1/10 vocabulary not proof. Angular strength not meaning. Planet-on-angle cookbooks out. Not Canon, not JSON. Next = Angle Canon grammar.
+- **1.1 (2026-08-22)** — Angle Canon grammar locked 1.3.101. One slot (`orientation`). Map unchanged. Next = Angle Canon fill.
+- **1.0 (2026-08-22)** — 1.3.100. Same three-source panel. ASC + MC territories + include/secondary/exclude. House 1/10 vocabulary not proof. Angular strength not meaning. Planet-on-angle cookbooks out. Not Canon, not JSON. Angle Canon grammar — **done 1.3.101.**
