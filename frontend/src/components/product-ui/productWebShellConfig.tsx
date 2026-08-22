@@ -20,10 +20,6 @@ export type ProductWebShellConfig = {
    * Omit or leave undefined to use a single-track main (PR-2: no empty column).
    */
   rail?: ReactNode;
-  sidebar?: ReactNode;
-  theme?: "light" | "dark";
-  /** Emotional mood (FOUNDATION_UI §8). */
-  mood?: import("@/lib/productMoodTheme").ProductMood;
   mainWide?: boolean;
   /** Page draws its own internal columns: main spans the body; do not also set rail. */
   fullMain?: boolean;
@@ -51,7 +47,7 @@ export function useProductWebShellConfigState(): ProductWebShellConfig {
   return ctx?.config ?? EMPTY_CONFIG;
 }
 
-/** Per-page shell options (rail, mainWide, profile chip) — consumed by layout-level ProductWebAppShell. */
+/** Per-page options only: identity, rail, gutters. Chrome type/color/theme are not page-owned. */
 export function ProductWebShellConfigBridge({ config }: { config: ProductWebShellConfig }) {
   const ctx = useContext(ProductWebShellConfigContext);
   useLayoutEffect(() => {

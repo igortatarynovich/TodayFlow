@@ -36,6 +36,11 @@ export function beginAuthSession(token: string): void {
   clearAuthMeCache();
   localStorage.setItem(AUTH_TOKEN_KEY, trimmed);
   notifyAuthSessionChanged();
+  void import("@/lib/warmTodayDayBundle")
+    .then(({ warmTodayDayBundle }) => {
+      void warmTodayDayBundle();
+    })
+    .catch(() => {});
 }
 
 /** Logout / 401 — wipe credentials and user caches without navigation. */

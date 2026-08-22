@@ -456,6 +456,8 @@ Legacy aliases: `--tf-body` → secondary · `--tf-caption` / `--tf-ink-muted` /
 
 **Product chrome (`data-product-web-shell`):** outer `.tf-shell` is intentionally full-bleed (sidebar + main track). That does **not** waive the content column — every primary reading/CTA stack inside main uses `max-width: var(--tf-shell-max)` (+ gutter). Long prose / leads use `var(--tf-shell-readable)`. `--tf-ds-page-max` stays on landing/catalog sections only.
 
+**Один chrome на всех product routes** (`usesProductWebAppShell` — Today · Profile · Compatibility · Tarot · Practices · account/settings и остальные in-app экраны): сайдбар, нижнее меню, семейство шрифтов, роли кегля, ink и фон фрейма **не** меняются от страницы. Страница задаёт только rail / `fullMain` / содержимое main. Запрещено: per-page `theme`/`mood` на шелл, отдельный dark/void Tarot-каркас, другой font-size у nav.
+
 **Запрещено:** `max-width: 26rem` на product screens · случайные `820px` / `760px` / `880px` / `22–28rem` как колонка страницы · хаб на `90rem` вместо shell-max.
 
 **Продукт ведёт пользователя:** секция = вопрос → визуальный якорь → **полный** ответ → CTA раскрытия. Не список label+число без meaning.
@@ -533,7 +535,7 @@ TODAYFLOW_FOUNDATION_UI
 | **Day-phase** | `data-day-phase` | часы на `/today` | процедурная текстура **только вне** `data-day-mode` (не перекрашивает шелл вечером) | `day-phase-atmosphere.css` gated `:not([data-day-mode])` |
 | **Day Atmosphere** | `data-day-mode` (8) | **сюжет дня** | фон, декор, motion · **сквозной шелл** (sidebar/frame) на всех product routes | §12–§13 |
 
-**Продуктовый SoT (2026-08-03):** на app shell день один — не выделяем разделы отдельными dark/void темами (Tarot immersive dark снят). Экранные акты Today = плоские glass Block как Glance (без ActShell-матрёшки). Totem color / heatmap mood — не шелл. Сайдбар / ink / glass blocks — одни `--day-*` + `--tf-ink` (тёмный читаемый ink) на всех product routes; `html[data-theme]` не задаётся (только frame); mood `night` / clock evening не перекрашивают chrome.
+**Продуктовый SoT (2026-08-03):** на app shell день один — не выделяем разделы отдельными dark/void темами (Tarot immersive dark снят). Экранные акты Today = плоские glass Block как Glance (без ActShell-матрёшки). Totem color / heatmap mood — не шелл. Сайдбар / ink / glass blocks — одни `--day-*` + `--tf-ink` (тёмный читаемый ink) на всех product routes; `html[data-theme]` не задаётся (только frame); mood `night` / clock evening не перекрашивают chrome. Страницы не передают `theme`/`mood` в `ProductWebAppShell` — chrome один.
 
 ### 11.2 Оси, из которых собирается режим (внутренние, не CSS)
 
@@ -956,7 +958,7 @@ Story frame — общая визуальная грамматика для Glan
 - Состав и honest-omit правила контента (TODAY_SCREEN_SCENARIO_V3 — не трогается).
 - Цвета CTA/error/success/warning (§0/§4).
 - Навигационная механика (свайп/keyboard/analytics) — SCREEN_FLOW_V1 §1.1–§1.4, §1.7–§1.9 без изменений.
-- Product bottom tab bar (`DsMobileTabBar`) всегда доступен; ScreenFlow высота = `100dvh − nav`.
+- Product bottom tab bar (`DsMobileTabBar`) всегда доступен (`position: fixed`); ScreenFlow высота = `100dvh − nav`. Product `appMain` — единый вертикальный скролл на всех экранах шелла.
 
 ### 16.6 Domain icons (закрыто)
 

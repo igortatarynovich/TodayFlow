@@ -7,7 +7,6 @@ import { profileWebChromeBundle } from "@/components/product-ui/profileWebChrome
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import type { ProfileRailAnchor } from "@/lib/product-ui/profileWebFigmaHelpers";
 import { getLocale } from "@/lib/i18n";
-import { useProductDayNightTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 import s from "@/components/product-ui/productWebScreens.module.css";
@@ -48,7 +47,6 @@ export function ProfileWebScreen({
   const chrome = useMemo(() => profileWebChromeBundle(resolvedLocale), [resolvedLocale]);
   const resolvedTitle = title ?? chrome.pageTitle;
   const resolvedSubtitle = subtitle ?? chrome.pageSubtitle;
-  const preferredTheme = useProductDayNightTheme();
 
   const todayLabel = new Intl.DateTimeFormat(resolvedLocale === "ru" ? "ru-RU" : "en-US", {
     day: "numeric",
@@ -85,8 +83,6 @@ export function ProfileWebScreen({
       coreProfile,
       mainWide: true,
       fullMain: false,
-      // Day/night by local clock on all profile shells.
-      theme: preferredTheme,
       rail: rail ?? anchorsRail,
     };
   }, [
@@ -94,7 +90,6 @@ export function ProfileWebScreen({
     coreProfile,
     displayName,
     isV2,
-    preferredTheme,
     profileMeta,
     rail,
     railAnchors,

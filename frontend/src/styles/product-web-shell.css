@@ -23,3 +23,23 @@ html[data-product-web-shell] .tf-shell {
   display: flex;
   flex-direction: column;
 }
+
+/*
+ * One chrome language on every product route (FOUNDATION_UI §7 / §11.1).
+ * Pages must not inherit route-void ink, marketing body color, or per-screen fonts.
+ */
+html[data-product-web-shell] body {
+  color: var(--tf-ink, #2a2520);
+  font-family: var(--tf-font-body);
+  background: var(--tf-page, #fff9f5);
+}
+
+html[data-product-web-shell] [data-product-web-frame] {
+  color: var(--tf-ink, #2a2520);
+  font-family: var(--tf-font-body);
+}
+
+html[data-product-web-shell] [data-product-web-chrome] {
+  color: var(--tf-ink, #2a2520);
+  font-family: var(--tf-font-body);
+}

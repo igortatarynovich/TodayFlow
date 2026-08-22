@@ -968,7 +968,11 @@ function contractFromFirstTodayPackage(
   };
 }
 
-/** Deterministic contract when `/today/contract` is unavailable (offline, LLM quota, etc.). */
+/**
+ * Test / fixture helper only.
+ * Do **not** paint this as live Today — it invents a First Today package.
+ * Product path: wait, then «Нет соединения.» / «Не удалось загрузить.»
+ */
 export function buildFallbackTodayContract(input: {
   coreProfile?: CoreProfile | null;
 } = {}): TodayContractV1 {
@@ -1006,7 +1010,8 @@ export async function fetchTodayContractV1(targetDate?: string): Promise<TodayCo
   if (targetDate) params.set("target_date", targetDate);
   params.set("timezone", clientTimezone());
   const qs = `?${params.toString()}`;
-  // Hard client budget: if contract LLM stalls, Today must paint via fallback — not hang forever.
+  // Hard client budget: if contract LLM stalls, Today stays on the waiting surface
+  // (or honest unavailable) — never invent a First Today package.
   const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
   const timer =
     controller && typeof window !== "undefined"

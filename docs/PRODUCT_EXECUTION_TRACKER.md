@@ -4,6 +4,24 @@ Last updated: 2026-08-22
 Owner: Product + Engineering
 Status: Active working document
 
+## Architecture impact — One product shell chrome on every in-app page (2026-08-17)
+
+- **SoT before:** Pages could pass `theme`/`mood` into `ProductWebAppShell`; Tarot section atmosphere still painted ritual void (`#07080c`); `data-product-web-shell` also fired on `/` and `/auth`.
+- **SoT after:** Chrome (sidebar, tab bar, type, ink, frame bg) is identical on every `usesProductWebAppShell` route. Pages may set rail / `fullMain` / main content only. Day Atmosphere still tints the shared wash; it does not fork a per-section shell.
+- **Public contract changed?** no
+- **Migration required?** no — FE chrome only
+- **Canon updated?** yes — `docs/TODAYFLOW_FOUNDATION_UI.md` §7 · §11.1
+- **Backward compatible?** yes; marketing `/` `/auth*` `/onboarding*` stay outside App Shell
+
+## Architecture impact — Login must not paint First Today fallback (2026-08-17)
+
+- **SoT before:** Post-auth used localStorage `hasCompletedFirstToday()`; missing flag → `/today?first=1` chip gate. Missing `/today/contract` → FE invented `buildFallbackTodayContract` (First Today package) as live paint.
+- **SoT after:** Login home = `/today`. First Today (`?first=1`) only from explicit onboarding routes. Contract miss → wait / «Нет соединения.» / «Не удалось загрузить.» — no invented day.
+- **Public contract changed?** no
+- **Migration required?** no — client routing + paint only
+- **Canon updated?** yes — `docs/FIRST_DAY_EXPERIENCE.md` §2 post-auth
+- **Backward compatible?** yes; onboarding still `router.replace(FIRST_TODAY_PATH)`
+
 **NOW (OPS / LLM, 2026-08-18):** **AI COGS instrumentation** — K2.6 stays. `llm_usage_v1` now has `operation_id`, `trigger` (user|prewarm|eval|script|background), retry metadata, billed output ≠ reasoning double-count. Report: feature×trigger×model×retry_reason + top-20 operation_id. Next: 24h data, then hard budgets.
 
 ## Architecture impact — AI COGS llm_usage_v1 (2026-08-18)

@@ -600,3 +600,10 @@
     transform: none;
   }
 }
+
+/* Product shell owns the page canvas — do not stack a second void viewport. */
+:global([data-product-web-frame]) .root {
+  min-height: 0;
+  background: transparent;
+  color: var(--tf-ink, #2a2520);
+}

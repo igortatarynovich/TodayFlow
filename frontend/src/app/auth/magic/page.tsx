@@ -3,9 +3,8 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { postJson } from "@/lib/api";
-import { claimGuestProfileAfterAuth } from "@/lib/claimGuestProfile";
+import { resolveTargetAfterAuthSession } from "@/lib/authRedirect";
 import { beginAuthSession } from "@/lib/authSession";
-import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 import { LoadingSpinner } from "@/components/orbit";
 
 type MagicLoginResponse = {
@@ -29,17 +28,8 @@ function MagicLoginInner() {
       try {
         const response = await postJson<MagicLoginResponse>("/auth/magic-login", { token });
         beginAuthSession(response.token);
-
-        const claim = await claimGuestProfileAfterAuth();
-        if (claim.status === "ready") {
-          router.replace("/today?first=1");
-          return;
-        }
-        if (claim.status === "needs_refine") {
-          router.replace(claim.refinePath);
-          return;
-        }
-        router.replace(VALUE_FIRST_PATHS.firstToday);
+        const target = await resolveTargetAfterAuthSession();
+        router.replace(target);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Не удалось войти по ссылке.");
       }

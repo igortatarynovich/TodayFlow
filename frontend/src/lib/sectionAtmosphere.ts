@@ -32,7 +32,7 @@ export const SECTION_THEME_COLORS: Record<SectionAtmosphere, string> = {
   profile: "#f6f5f2",
   compatibility: "#f6f5f2",
   practices: "#faf9f7",
-  tarot: "#07080c",
+  tarot: "#fff9f5",
   default: "#fff9f5",
 };
 
