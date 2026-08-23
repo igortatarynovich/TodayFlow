@@ -114,10 +114,11 @@ IL-4 still formulates. It must not be given House 1 `arena` and asked to invent 
 - Sign / House / Aspect / Planet pack edits
 - Fill leftover include for symmetry
 
-**Next named:** stored Planet×Angle composition smoke. Discrimination: Mars AT ASC ≠ Mars AT MC ≠ Mars IN 1st ≠ Mars IN 10th, from **stored** `canon.orientation` vs `house.canon.arena`. Then **STOP Angles** → final atomic smoke → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs.
+**Next named:** stored Planet×Angle composition smoke — **done 1.3.104.** Discrimination: Mars AT ASC ≠ Mars AT MC ≠ Mars IN 1st ≠ Mars IN 10th, from **stored** `canon.orientation` vs `house.canon.arena`. **STOP Angles.** Next = final atomic smoke → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs.
 
 ---
 
 ## Changelog
 
-- **1.0 (2026-08-22)** — 1.3.103. `$defs.angle_canon_pack` (`orientation`). Two angle drafts carry locked 1.3.102 packs. Next = stored Planet×Angle smoke.
+- **1.1 (2026-08-23)** — 1.3.104 stored Planet×Angle smoke PASS. Storage unchanged. STOP Angles. Next = final atomic smoke.
+- **1.0 (2026-08-22)** — 1.3.103. `$defs.angle_canon_pack` (`orientation`). Two angle drafts carry locked 1.3.102 packs. stored Planet×Angle smoke — **done 1.3.104.**

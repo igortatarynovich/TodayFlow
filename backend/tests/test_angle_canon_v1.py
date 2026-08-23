@@ -96,7 +96,7 @@ def test_angle_canon_v1_fill():
     assert "`orientation`" in grammar
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.103" in canon
+    assert "**Версия:** 1.3.104" in canon
     assert "### 6.56 Angle Canon fill" in canon
     assert canon.count("**Версия:**") == 1
 
@@ -104,9 +104,11 @@ def test_angle_canon_v1_fill():
     assert "30. Angle Canon fill" in inventory
     assert "✅ 1.3.102" in inventory.split("30. Angle Canon fill")[1].split("31.")[0]
     assert "✅ 1.3.103" in inventory.split("31. Angle Canon storage")[1].split("32.")[0]
-    assert "NEXT" in inventory.split("32.")[1].split("```")[0]
+    assert "✅ 1.3.104" in inventory.split("32.")[1].split("33.")[0]
+    assert "NEXT" in inventory.split("33.")[1].split("```")[0]
 
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.104" in next_block
     assert "1.3.103" in next_block
     assert "1.3.102" in next_block
     assert "1.3.101" in next_block

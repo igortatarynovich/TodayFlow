@@ -171,13 +171,14 @@ IL-4 still cannot choose meaning. It receives Canon atoms.
 - Unlock Co–Star in-app scraping
 - Require 2/3 literal-word overlap
 
-**Next named (one task):** smoke-test locked (1.3.82). Sign map locked (1.3.83). Sign grammar locked (1.3.84). Sign Canon fill locked (1.3.85). Sign Canon storage locked (1.3.86). Sign Canon materialization locked (1.3.87). Planet × Sign smoke-test locked (1.3.88). Houses Mainstream map locked (1.3.89). House Canon grammar locked (1.3.90). House Canon fill locked (1.3.91). House Canon storage/materialization — **done 1.3.92.** Planet × House smoke — **done 1.3.93.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** Angle Canon model — **done 1.3.99.** Mainstream Angle Semantic Map — **done 1.3.100.** Angle Canon grammar — **done 1.3.101.** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** **STOP Aspects.** Next = **stored Planet×Angle smoke**. STOP Houses. STOP Signs. Do not rewrite `function`.
+**Next named (one task):** smoke-test locked (1.3.82). Sign map locked (1.3.83). Sign grammar locked (1.3.84). Sign Canon fill locked (1.3.85). Sign Canon storage locked (1.3.86). Sign Canon materialization locked (1.3.87). Planet × Sign smoke-test locked (1.3.88). Houses Mainstream map locked (1.3.89). House Canon grammar locked (1.3.90). House Canon fill locked (1.3.91). House Canon storage/materialization — **done 1.3.92.** Planet × House smoke — **done 1.3.93.** Mainstream Aspect Semantic Map — **done 1.3.94.** Aspect Canon grammar — **done 1.3.95.** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** Angle Canon model — **done 1.3.99.** Mainstream Angle Semantic Map — **done 1.3.100.** Angle Canon grammar — **done 1.3.101.** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** stored Planet×Angle smoke — **done 1.3.104.** **STOP Angles.** **STOP Aspects.** Next = **final atomic smoke**. STOP Houses. STOP Signs. Do not rewrite `function`.
 
 ---
 
 ## Changelog
 
-- **1.22 (2026-08-22)** — 1.3.103 Angle Canon storage/materialization. Two drafts carry `canon.orientation`. Next = stored Planet×Angle smoke.
+- **1.23 (2026-08-23)** — 1.3.104 stored Planet×Angle smoke PASS. STOP Angles. Next = final atomic smoke.
+- **1.22 (2026-08-22)** — 1.3.103 Angle Canon storage/materialization. Two drafts carry `canon.orientation`. stored Planet×Angle smoke — **done 1.3.104.**
 - **1.21 (2026-08-22)** — 1.3.102 Angle Canon fill. Two packs. Origin direct. Storage/materialization — **done 1.3.103.**
 - **1.20 (2026-08-22)** — 1.3.101 Angle Canon grammar. One slot (`orientation`). Include-first. Angle Canon fill — **done 1.3.102.**
 - **1.19 (2026-08-22)** — 1.3.100 Mainstream Angle Semantic Map. Same panel. Angle Canon grammar — **done 1.3.101.**
