@@ -10,7 +10,7 @@
 Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.106** Knowledge Core V1 FREEZE · **1.3.105** final atomic smoke PASS · **1.3.104** stored Planet × Angle smoke PASS · **1.3.103** Angle Canon storage/materialization · **1.3.102** Angle Canon fill · **1.3.101** Angle Canon grammar · **1.3.100** Mainstream Angle Semantic Map · **1.3.99** Angle Canon model · **1.3.98** stored Planet × Aspect smoke PASS · **1.3.97** Aspect Canon storage/materialization · **1.3.96** Aspect Canon fill · **1.3.95** Aspect Canon grammar · **1.3.94** Mainstream Aspect Semantic Map · **1.3.93** Planet × House smoke PASS · **1.3.92** House Canon storage/materialization · **1.3.91** House Canon fill · **1.3.90** House Canon grammar · **1.3.89** Mainstream House Semantic Map · **1.3.88** Planet × Sign smoke-test · **1.3.87** Sign Canon materialization · **1.3.86** Sign Canon storage · **1.3.85** Sign Canon fill · **1.3.84** Sign Canon grammar · **1.3.83** Mainstream Sign Semantic Map · **1.3.82** composition smoke-test · **1.3.81** Sun–Saturn `canon` fill · **1.3.80** Planet Canon storage · **1.3.79** Planet Canon V1 · **1.3.78** Planet Canon grammar · **1.3.77** Mainstream planet map · **1.3.76** Product Canon vs Lenses · **1.3.75** Co–Star teardown Phase 0 · **1.3.74** Corpus/Consensus/Canon · **1.3.73** TodayFlow Canon · **1.3.72** outer draft representation · **1.3.71** V1 inventory APPROVED · **1.3.70** outers definition · **1.3.69** Layer 2 close-out · **1.3.68** Lilly classification drafts · **1.3.67** later-interpretive optional · **1.3.66** Pulse Part One extract · **1.3.65** Cell C ACCESS_BLOCKED · **1.3.64** Houlding ontology extract · **1.3.63** shortlist · **1.3.62** selection criteria · **1.3.61** literature map · **1.3.60** schools + source types · **1.3.59** planet research-stable; CORE unscored). Parent: [`KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Inventory: [`KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md`](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md). Split: [`KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md`](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [`MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md`](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Grammar: [`PLANET_CANON_GRAMMAR_V1.md`](./PLANET_CANON_GRAMMAR_V1.md). Planet Canon: [`PLANET_CANON_V1.md`](./PLANET_CANON_V1.md). Storage: [`PLANET_CANON_STORAGE_V1.md`](./PLANET_CANON_STORAGE_V1.md). Fill: [`PLANET_CANON_SUN_SATURN_FILL_V1.md`](./PLANET_CANON_SUN_SATURN_FILL_V1.md). Smoke: [`PLANET_CANON_COMPOSITION_SMOKE_V1.md`](./PLANET_CANON_COMPOSITION_SMOKE_V1.md). Sign map: [`MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md`](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md). Sign grammar: [`SIGN_CANON_GRAMMAR_V1.md`](./SIGN_CANON_GRAMMAR_V1.md). Sign Canon: [`SIGN_CANON_V1.md`](./SIGN_CANON_V1.md). Sign storage: [`SIGN_CANON_STORAGE_V1.md`](./SIGN_CANON_STORAGE_V1.md). Sign materialization: [`SIGN_CANON_MATERIALIZATION_V1.md`](./SIGN_CANON_MATERIALIZATION_V1.md). Sign smoke: [`SIGN_CANON_COMPOSITION_SMOKE_V1.md`](./SIGN_CANON_COMPOSITION_SMOKE_V1.md). House map: [`MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md`](./MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md). House grammar: [`HOUSE_CANON_GRAMMAR_V1.md`](./HOUSE_CANON_GRAMMAR_V1.md). House Canon: [`HOUSE_CANON_V1.md`](./HOUSE_CANON_V1.md). House storage: [`HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md`](./HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md). House smoke: [`HOUSE_CANON_COMPOSITION_SMOKE_V1.md`](./HOUSE_CANON_COMPOSITION_SMOKE_V1.md). Aspect map: [`MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md`](./MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md). Aspect grammar: [`ASPECT_CANON_GRAMMAR_V1.md`](./ASPECT_CANON_GRAMMAR_V1.md). Aspect Canon: [`ASPECT_CANON_V1.md`](./ASPECT_CANON_V1.md). Aspect storage: [`ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md`](./ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md). Aspect smoke: [`ASPECT_CANON_COMPOSITION_SMOKE_V1.md`](./ASPECT_CANON_COMPOSITION_SMOKE_V1.md). Angle smoke: [`ANGLE_CANON_COMPOSITION_SMOKE_V1.md`](./ANGLE_CANON_COMPOSITION_SMOKE_V1.md). Atomic smoke: [`ATOMIC_CANON_COMPOSITION_SMOKE_V1.md`](./ATOMIC_CANON_COMPOSITION_SMOKE_V1.md). Freeze: [`KNOWLEDGE_CORE_V1_FREEZE.md`](./KNOWLEDGE_CORE_V1_FREEZE.md). Angle storage: [`ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md`](./ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md). Angle Canon: [`ANGLE_CANON_V1.md`](./ANGLE_CANON_V1.md). Angle grammar: [`ANGLE_CANON_GRAMMAR_V1.md`](./ANGLE_CANON_GRAMMAR_V1.md). Angle model: [`ANGLE_CANON_MODEL_V1.md`](./ANGLE_CANON_MODEL_V1.md). Angle map: [`MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md`](./MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md). Canon selection: [`TODAYFLOW_CANON_V1.md`](./TODAYFLOW_CANON_V1.md). Teardown: [`COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md`](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md). Representation: [`IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md`](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Map: [`IL1_LAYER2_SIGNS_LITERATURE_MAP.md`](./IL1_LAYER2_SIGNS_LITERATURE_MAP.md). Criteria: [`IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md`](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md). Shortlist: [`IL1_LAYER2_SIGNS_SHORTLIST.md`](./IL1_LAYER2_SIGNS_SHORTLIST.md). Audit (live dashboard): [`IL1_SUN_PLUTO_GAP_AUDIT.md`](./IL1_SUN_PLUTO_GAP_AUDIT.md). QA snapshot: [`IL1_CORPUS_QA.md`](./IL1_CORPUS_QA.md).  
 Today Meaning SoT remains [`docs/today/TODAY_CONTENT_PIPELINE_V1.md`](../today/TODAY_CONTENT_PIPELINE_V1.md). IL is pipeline step 2 lookup only.
 
-Prior chat: [IL-1 ingest and gates](0dd63406-cfcc-47b2-b184-780f5aada991)
+Prior chat: [Knowledge Core V1 FREEZE](0c589057-9823-4af2-8990-114e10a93556)
 
 ---
 
@@ -488,88 +488,103 @@ Product authority: canon `docs/` → tracker → **server**. Git is a ledger. `m
 
 ## 5. Paste into the next chat
 
+Copy the block in the latest owner chat (this file is the living SoT; the paste below is the current named pass).
+
 ```text
-Continue Interpretation Library IL-1 ingest.
+TodayFlow. Продукт: Personal Model → Profile + Today. SoT = docs/, не git. Не reopen locks.
 
-Handoff: docs/astrology/IL1_HANDOFF.md
-Canon: docs/astrology/INTERPRETATION_LIBRARY_V1.md
+СОСТОЯНИЕ
+- Branch: il/il-1-ingest (tracks origin/il/il-1-ingest). Не merge в main. Draft PR #17 vs main — stale; не merge.
+- Tip: 7f2f7e9f — 1.3.106 Knowledge Core V1 FREEZE, committed + pushed.
+- Catalog: 38 draft / 0 active. Schema/objects не менять без named Architecture impact.
+- Runtime игнорирует draft. Не deploy. Не set active. Не CORE scoring.
+- Prior: [Knowledge Core V1 FREEZE](0c589057-9823-4af2-8990-114e10a93556)
+  Prior smoke: [IL-1 atomic smoke](437da7a7-3241-4548-b080-dd5882e9e034)
 
-LOCKED: sequence IL-0✅ → IL-1 now → IL-2 rules → IL-3 engine → IL-4 expression.
-Do not polish the IL document. Do not reopen layers / evidence tiers / provenance shape.
-Do not materialize 12 sign objects. Do not set status=active.
-Do not mix Profile/Trust/landing/motion into IL commits.
+ЧТО УЖЕ ЗАКРЫТО (не трогать packs / lemmas)
+Planet  core_function  what     1.3.82
+Sign    manner         how      1.3.88
+House   arena          where    1.3.93
+Aspect  relation       relation 1.3.98   (не interaction; Trine≠Sextile при interaction=flow)
+Angle   orientation    locus    1.3.104  STOP Angles
+Joint   five families           1.3.105  PASS
+FREEZE  V1 atoms                1.3.106  FROZEN
 
-Transfer SHA: ecb4cbe4. Catalog 36 draft / 0 active / 12 classification-only signs / CORE unscored is correct.
-1.3.45 locked remaining planet budget: empty psych slots were Pluto → Uranus → Neptune → Venus → Mars; Jupiter psych paused. CORE=0 is not a KPI.
-Canon §6.9: NEED_OWNER(author/locus) ≠ NEED_EVIDENCE(semantic slot).
-Canon §6.10: remaining IL-1 planet budget is psychological coverage of empty slots — **closed 1.3.57**.
-Canon §6.11: ACCESS_BLOCKED(slot) ≠ NEED_OWNER(locus). ≥3 dedicated independent loci, all access-closed → stop discovery for that slot.
-Canon §6.12: planet fill is research-stable. Do not generate planet research to raise coverage. Opportunistic extract only.
-Canon §6.13: Layer 2 Signs definition pass (parent steps 1–4) started. Do not start from Arroyo/Rudhyar.
-Canon §6.14: Layer 2 schools + source types. Reuse source_class enum. No new enum.
-Canon §6.15 / IL1_LAYER2_SIGNS_LITERATURE_MAP.md: literature map done. Landscape, not shortlist.
-Canon §6.16 / IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md: selection criteria locked. Epistemic ≠ access.
-Canon §6.17 / IL1_LAYER2_SIGNS_SHORTLIST.md: shortlist locked. Cell C is a cell, not a winner.
-Canon §6.18: Houlding ontology extracted (1.3.64). Rulers out. No sign objects.
-Canon §6.19: Cell C ACCESS_BLOCKED (1.3.65). Three named loci NEED_OWNER. No fourth book. Pulse is not this slot.
-Canon §6.20: Pulse Part One extracted (1.3.66). Humanistic. Later-interpretive not filled. Part Two out.
-Canon §6.21: later-interpretive optional on IL-1 draft `type=sign` (1.3.67).
-Canon §6.22: twelve Lilly classification drafts (1.3.68). Later-interpretive omitted. Nothing active.
-Canon §6.23 / IL1_LAYER2_SIGNS_CLOSEOUT.md: Layer 2 classification-complete / interpretation-deferred (1.3.69). Do not reopen sign literature.
-Canon §6.24 / IL1_LAYER1_OUTERS_DEFINITION.md: outers definition/readiness (1.3.70). Do not assemble from Hand.
-Canon §6.25 / KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md: V1 freeze map **APPROVED** (1.3.71). Literature only against a named `KC-*` row.
-Canon §6.26 / IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md: outer meaning keys optional on IL-1 draft (1.3.72). No objects this pass.
-Canon §6.27 / TODAYFLOW_CANON_V1.md: product meaning = TodayFlow Canon; CORE demoted (1.3.73).
-Canon §6.28: Evidence Corpus / Semantic Consensus / TodayFlow Canon (1.3.74).
-Canon §6.29 / COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md: Co–Star teardown Phase 0 (1.3.75). Recognition check, not IL unlock.
-Canon §6.30 / KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md: Product Canon vs Lenses (1.3.76). Mainstream → Canon → runtime. Corpus → lenses.
-Canon §6.31 / MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md: Mainstream planet map (1.3.77). Territory + families. Not Canon. Not JSON.
-Canon §6.32 / PLANET_CANON_GRAMMAR_V1.md: Planet Canon grammar (1.3.78). Six slots. tempo = Foundation. Dry-run ≠ fill.
-Canon §6.33 / PLANET_CANON_V1.md: Planet Canon V1 (1.3.79). Ten packs. direct/derived. Storage = 1.3.80.
-Canon §6.34 / PLANET_CANON_STORAGE_V1.md: Planet Canon storage (1.3.80). Optional `canon` nest.
-Canon §6.35 / PLANET_CANON_SUN_SATURN_FILL_V1.md: Sun–Saturn `canon` fill (1.3.81). Product meaning on object.
-Canon §6.36 / PLANET_CANON_COMPOSITION_SMOKE_V1.md: composition smoke-test (1.3.82). Aspect PASS. Sign/house PARTIAL (historical).
-Canon §6.42 / SIGN_CANON_COMPOSITION_SMOKE_V1.md: Planet × Sign smoke-test (1.3.88). PlanetInSign PASS. House PARTIAL. STOP Signs.
-Canon §6.43 / MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md: Mainstream house map (1.3.89). Territory + families. Not Canon. Not JSON.
-Canon §6.44 / HOUSE_CANON_GRAMMAR_V1.md: House Canon grammar (1.3.90). One slot (`arena`). Dry-run ≠ fill.
-Canon §6.45 / HOUSE_CANON_V1.md: House Canon fill (1.3.91). Twelve packs. Destination-noun test.
-Canon §6.46 / HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md: House Canon storage + materialization (1.3.92). `arena` on twelve drafts. Lilly unchanged.
-Do not build the next semantic core from the first readable author.
-Psychology/medicine: evidence hierarchy ≠ astrology school-convergence.
-Sun→Pluto live recount (1.3.58): docs/astrology/IL1_SUN_PLUTO_GAP_AUDIT.md — 1.3.44 dashboard retired. Access queue is opportunistic, not the next large step.
-QA snapshot (303 rows, historical): docs/astrology/IL1_CORPUS_QA.md
-Do not teach historical slogans as CORE. Mainstream territory may use modern convention words; structure them in Canon.
-Do not classify Rudhyar as psychological. Do not CORE Rudhyar with Greene.
-No pirate dumps. No surrogate fill of NEED_OWNER loci with summaries of those authors.
-NEED_OWNER remain: Inner Planets p.69 / p.138; Outer Planets volume; Greene *The Astrological Neptune*; Hand Ch.4 Sun/Moon/Mercury; Greene *Apollo's Chariot*; Costello *The Astrological Moon*.
-Next IL-1: **1.3.102 Angle Canon fill locked; next = storage/materialization; 1.3.101 grammar stands (orientation); 1.3.100 map stands; 1.3.99 model stands; 1.3.98 stored Planet × Aspect smoke PASS; STOP Aspects; 1.3.97 storage stands; 1.3.96 fill stands; 1.3.95 grammar stands; 1.3.94 map stands; 1.3.93 House PASS; STOP Houses; STOP Signs** (not QUALITY; not rewrite `function`; not literature books; not Outer fill; Co–Star teardown = recognition check). Inventory APPROVED. 1.3.72 outer optional-keys stand. 1.3.80 storage stands. 1.3.81 `canon` stands. 1.3.73–1.3.74 Canon structuring stands. No new books. Layer 2 stays classification-complete. Named-locus planet extract only if a listed page opens. Do not hunt coverage. Do not CORE. Mars is ACCESS_BLOCKED. EMPTY psych slots = 0.
-Saturn psych densified 1.3.53 from Tarnas intro senex; do not merge with Greene psychic-process, Hand structure, or Rudhyar I-am-I.
-Mercury psych still only Inner Planets Hermes after 1.3.52; remaining chapters unread.
-Costello *The Astrological Moon* still NEED_OWNER; Moon psych still only Luminaries preview.
-Do not ingest Relating, Mythic Astrology, or remaining Sullivan Dual Goddess seminar body from jacket/reviews.
-Do not merge Greene Apollon carrier / cosmocrator / inner-light with Luminaries solar-consciousness, Rudhyar light-as-integration, or Watters essential-self.
-Do not substitute Apollo's Chariot with Apollon Issue 1.
-Do not ingest Relating, Mythic Astrology, or remaining Sullivan Dual Goddess seminar body from jacket/reviews.
-Do not merge Sullivan channel-for-Eros with Hand bonding, Watters love/desire, or Rudhyar inward-way.
-Do not merge Tarnas Prometheus-freedom with Hand disruption or Rudhyar transform.
-Do not merge Tarnas ocean-of-consciousness / Nirvana-and-Maya with Hand dissolution or Rudhyar ecstasy.
-Do not merge Rudhyar organizer-of-functions with Hand expansion or Greene teleology.
-Do not merge Greene Jupiter teleology with Hand expansion or Watters enlargement.
-Do not materialize a Pluto object. Do not merge Rudhyar seed with Hand reconstruction or Greene life-force.
-Do not merge Rudhyar light-as-integration with Greene solar-consciousness, Greene Apollon inner-light/carrier, or Watters essential-self.
-Do not merge Rudhyar song-of-life with Greene embodiment or Watters night-world.
-Do not merge Rudhyar weaver with Greene Hermes or Watters mind.
-Do not ingest Clark *Crossing the Threshold* as natal Mercury, or remaining Inner Planets Mercury chapters after Hermes.
-Do not merge Tarnas senex / Chronos / threshold-guardian / limit-necessity with Greene psychic-process, Hand resistance/structure, Houlding personal-boundary, or Rudhyar I-am-I / Ring-Pass-Not.
-Do not rewrite Saturn themes with structure.
-New reputable authors allowed until semantic saturation. No automatic CORE.
-No readable locus → leave the gap; try the next independent candidate of that school class — unless the slot is ACCESS_BLOCKED (§6.11).
-Do not add a modern_general_practical source_class enum.
-Research-first: official site/school → publisher preview → authorized archive → legally readable book.
-Ask the owner only for a specific closed locus (edition + pages).
-Do not ingest Greene watery houses or Houlding Mundane Signification as a catalog.
-Do not import T1-T4 / schools_confirming / T2 excerpts into object slots.
-Do not rewrite planet function slots. Do not copy medical rows into object.domains.
-Do not redesign TodayFlow.
-Live recount 1.3.58 is the planet dashboard. 1.3.59: planet fill research-stable. 1.3.69: Layer 2 classification-complete / interpretation-deferred. 1.3.70: outers definition/readiness. 1.3.71: V1 inventory APPROVED. 1.3.72: outer draft representation (schema). 1.3.73: TodayFlow Canon (CORE demoted). Do not CORE. Named locus readable → extract; otherwise do not hunt. No new book without row X → consumer Y → missing Z.
+Locked packs (verbatim):
+- mars   act · pursue · assert
+- venus  attract · value · relate
+- saturn limit · structure · mature
+- moon   feel · respond · protect
+- aries  initiating · direct · headlong
+- capricorn reserved · disciplined · structured
+- house.01  self-presentation · appearance · first-impression
+- house.04  home · family · roots · private-base
+- house.10  career · public-role · reputation · calling
+- square friction · blockage · cross-purposes
+- asc    doorway-meeting · how-met · automatic-response
+- mc     culmination · outer-mark · aiming
+
+1.3.105/1.3.106 gates: stored source; 7/12/12/5/2; Mars IN Aries ≠ Mars IN 1st ≠ Mars AT ASC ≠ Mars □ Saturn; occupancy ≠ conjunction; House 1 ≠ ASC; no cookbooks (нет «Mars in Aries = look aggressive», «planet in 1st = on ASC», «MC = career»).
+
+OUT of V1 atoms: Uranus/Neptune/Pluto = claims, no objects; DSC/IC out of V1; CORE unscored (not a gate); Layer 5 = candidates; later-interpretive signs deferred; Co–Star = recognition check, not source. Gold-set 41 is not the done criterion.
+
+ОЧЕРЕДЬ (locked)
+fill 1.3.102 → storage 1.3.103 → Planet×Angle smoke 1.3.104 → STOP Angles → final atomic smoke 1.3.105 PASS → Knowledge Core V1 FREEZE 1.3.106 FROZEN → ЭТОТ ПРОХОД: IL-2 composition rules.
+
+NEXT NAMED = IL-2 (один проход). Composition **rules** (weights, conflict, merge), не pair catalog. Не Layer 5 essays. Не pack rewrite. Не `active`.
+
+IL-2 — ЧТО ЭТО
+Не литература. Не smoke. Не freeze reopen. Не 10 000 JSON horoscopes.
+Это Composition Engine rules: как складывать пять stored atoms без LLM-invented meanings и без cookbook objects.
+IL-2 may demote Layer 5 gold candidates to composed.
+
+Читай ПЕРВЫМ (назвать paths+sections в Architecture impact):
+1. docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md
+2. docs/astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md — § Freeze (primitives), KC-C-RULES, step 35
+3. docs/ASTROLOGY_COMPOSITION_MODEL.md
+4. docs/astrology/INTERPRETATION_LIBRARY_V1.md — Sequence · Layer 5 · §6.60 · §7 IL-2 row
+5. docs/astrology/ATOMIC_CANON_COMPOSITION_SMOKE_V1.md
+6. docs/astrology/IL1_HANDOFF.md §3
+7. docs/PRODUCT_EXECUTION_TRACKER.md NOW
+8. AGENTS.md Architecture impact
+
+IL-2 ДОЛЖЕН
+- Стартовать от frozen atoms, не от gold-set 41 и не от CORE.
+- Держать пять jobs: what / how / where / relation / orientation locus.
+- Occupancy ≠ conjunction; House 1 ≠ ASC; MC ≠ career; interaction ≠ relation.
+- Architecture impact block. Не новый «canonical v2».
+
+IL-2 НЕ ДОЛЖЕН
+- lemma rewrite / pack enrich / function rewrite / schema change без named impact
+- set active / runtime wiring / LLM copy / Today prompts
+- books / CORE scoring / Co–Star ingest
+- Layer 5 pair essays as the catalog; ASC cookbooks; outer objects
+- occupancy = conjunction; House 1 = ASC; MC = career; interaction as relation
+- merge to main mid-IL; deploy
+- reopen FREEZE / Angles / Aspects / Houses / Signs packs
+
+STOP Angles. STOP Aspects. STOP Houses. STOP Signs.
+Do not start CORE scoring. Do not start ASC cookbooks.
+Layer 2 Signs = classification-complete / interpretation-deferred.
+
+Git: only il/il-1-ingest. Commit/push только если owner попросит. Не --no-verify. Не force push.
+
+Тесты (host python3 часто без pytest → backend/.venv/bin/python; pytest.ini --cov → -o addopts=):
+cd /opt/TodayFlow/backend && .venv/bin/python -m pytest \
+  tests/test_knowledge_core_v1_freeze.py \
+  tests/test_atomic_canon_composition_smoke_v1.py \
+  tests/test_angle_canon_composition_smoke_v1.py \
+  tests/test_angle_canon_v1.py \
+  tests/test_angle_canon_grammar_v1.py \
+  tests/test_mainstream_angle_semantic_map_v1.py \
+  tests/test_angle_canon_model_v1.py \
+  tests/test_aspect_canon_composition_smoke_v1.py \
+  tests/test_astrology_interpretation_schema_v1.py \
+  tests/test_house_canon_composition_smoke_v1.py \
+  tests/test_sign_canon_composition_smoke_v1.py \
+  tests/test_planet_canon_composition_smoke_v1.py \
+  -q --tb=short --noconftest -o addopts=
+(1.3.106 baseline: 65 passed. Не claim CI green unless GitHub checks on the SHA.)
+
+Сделай IL-2 composition rules. Не pair catalog. Не книги. Не active. Не reopen freeze.
 ```
