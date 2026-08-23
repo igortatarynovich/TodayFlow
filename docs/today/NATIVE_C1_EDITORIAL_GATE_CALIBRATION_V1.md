@@ -60,6 +60,10 @@ Generation reaches LLM; failure is **editorial gate** on Global stage:
 # Reject reason rollup (production DB)
 python backend/scripts/collect_native_gate_rejects_v1.py --days 7
 
-# Regression
+# Regression matrix (force rebuild — slow, uses live LLM)
+python backend/scripts/native_c1_regression_matrix_v1.py --date 2026-08-23
+python backend/scripts/native_c1_regression_matrix_v1.py --user-id 26 --date 2026-08-23
+
+# Unit regression
 pytest backend/tests/test_native_c1_editorial_gate_calibration_v1.py -q
 ```
