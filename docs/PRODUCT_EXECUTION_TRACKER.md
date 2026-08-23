@@ -104,9 +104,9 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** **IL-4 editorial consume 1.3.113 LOCKED** (Today / Profile / Compatibility generation phrases `il4_expression_pack`; fill-empty / reject-invalid; public JSON unchanged). **IL-4 surface attach 1.3.112 LOCKED**. **calc → IL wire 1.3.111 LOCKED**. **library scale 1.3.110 LOCKED**. IL-4 **1.3.109** voice packs, not meaning. IL-3 **1.3.108** sky-internal rank ≠ user relevance. IL-2 **1.3.107** stands. FREEZE **1.3.106** stands. Catalog 38 draft / 0 `active`. Five stored families = V1 atoms. **STOP Angles.** Not pair catalog. Not `active`. Not Relevance/Prioritization. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-23):** **Today meaning polish 1.3.114 LOCKED** (native astrology chorus binds to IL-4 packs; prompt c4.2; public JSON unchanged). **IL-4 editorial consume 1.3.113 LOCKED**. **IL-4 surface attach 1.3.112 LOCKED**. **calc → IL wire 1.3.111 LOCKED**. **library scale 1.3.110 LOCKED**. IL-4 **1.3.109** voice packs, not meaning. IL-3 **1.3.108** sky-internal rank ≠ user relevance. IL-2 **1.3.107** stands. FREEZE **1.3.106** stands. Catalog 38 draft / 0 `active`. Five stored families = V1 atoms. **STOP Angles.** Not pair catalog. Not `active`. Not Relevance/Prioritization. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste. Co–Star = recognition check.
 
-**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish is owner-directed. Editorial paths **consume** IL-4 packs (1.3.113). I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
+**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
 ## Architecture impact — IL sequence lock (2026-08-17)
 
@@ -287,6 +287,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — Today 1.3.114 meaning polish (2026-08-23)
+
+- **SoT before:** Consume 1.3.113 put IL4_MEANING on LLM input. Native prompt still let `interpretive_chorus.astrology` invent parallel sky meaning from flat facts.
+- **SoT after:** Today Meaning Polish V1 binds the astrology chorus voice to IL-4 lemmas when a pack is present. `TODAY_IL4_CHORUS` instruction; reject empty astrology chorus; fill-empty `human_meaning` only. Conflict/scenes stay DRAMATURGY_BRIEF + I0. Prompt `day-scenario-native-c4.2`. Public JSON unchanged. Consume 1.3.113 stands.
+- **Public contract changed?** no — internal LLM input / editorial gate
+- **Migration required?** no — refresh/force_rebuild picks up c4.2
+- **Canon updated?** yes — `docs/today/TODAY_MEANING_POLISH_V1.md` · inventory step 42 / KC-C-TODAY-POLISH · IL §6.68
+- **Backward compatible?** yes — missing pack omits polish instruction
 
 ## Architecture impact — IL-1 1.3.113 IL-4 editorial consume (2026-08-23)
 

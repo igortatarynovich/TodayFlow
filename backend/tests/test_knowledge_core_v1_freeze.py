@@ -132,7 +132,7 @@ def test_knowledge_core_v1_freeze():
     assert "Layer 5 = candidates" in inventory or "Layer 5" in freeze
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.113" in canon
+    assert "**Версия:** 1.3.114" in canon
     assert "### 6.60 Knowledge Core V1 FREEZE" in canon
     assert canon.count("**Версия:**") == 1
 

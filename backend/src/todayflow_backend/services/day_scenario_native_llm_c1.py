@@ -156,7 +156,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c4.1"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c4.2"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -1174,6 +1174,11 @@ def call_day_scenario_native_llm_c1(
         protected_block,
         reject_invalid_output,
     )
+    from todayflow_backend.services.today_meaning_polish_v1 import (
+        augment_native_system,
+        fill_empty_astrology_chorus,
+        reject_invalid_native,
+    )
 
     il4_pack = user_json.get("il4_expression_pack") if isinstance(user_json.get("il4_expression_pack"), dict) else None
     user_full, user_base = format_native_user_message_c4(
@@ -1194,6 +1199,7 @@ def call_day_scenario_native_llm_c1(
 
     system = with_practitioner_persona(_NATIVE_SYS_RU, locale="ru")
     system = augment_system_prompt(system, il4_pack, locale="ru")
+    system = augment_native_system(system, il4_pack, locale="ru")
     system_chars = len(system or "")
     user_sent_chars = len(user_sent or "")
     if capture is not None:
@@ -1277,6 +1283,7 @@ def call_day_scenario_native_llm_c1(
             return None
         parsed = _parse_json_content(content)
         il4_reject = reject_invalid_output(parsed, il4_pack) if parsed else None
+        polish_reject = reject_invalid_native(parsed, il4_pack) if parsed and not il4_reject else None
         if il4_reject:
             attempt_rows.append(
                 {
@@ -1293,6 +1300,24 @@ def call_day_scenario_native_llm_c1(
             retry_feedback = (
                 "IL4_MEANING: формулируй леммы пакета; не добавляй темы; "
                 "не озвучивай dropped; не меняй text лемм."
+            )
+            continue
+        if polish_reject:
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": NATIVE_FAILURE_PARSE,
+                    "reject_reason": f"today_polish:{polish_reject}",
+                    "model": model_name or None,
+                    "user_sent_chars": len(user_sent or ""),
+                    "raw_chars": len(content),
+                }
+            )
+            pending_retry_reason = "today_polish_rejected"
+            retry_feedback = (
+                "TODAY_IL4_CHORUS: interpretive_chorus.astrology обязан фразировать IL4_MEANING; "
+                "conflict/scenes — из DRAMATURGY_BRIEF."
             )
             continue
         if not parsed:
@@ -1320,6 +1345,7 @@ def call_day_scenario_native_llm_c1(
             pending_retry_reason = "parse_failed"
             continue
         normalized = normalize_native_scenario_llm_c1(parsed)
+        normalized = fill_empty_astrology_chorus(normalized, il4_pack)
         # Align declared depth with pack if model omitted it
         if not normalized.get("personalization_depth"):
             normalized["personalization_depth"] = pers_pack.get("evidence_depth") or DEPTH_GENERAL

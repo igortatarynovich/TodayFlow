@@ -41,7 +41,7 @@ Five stored families = V1 atoms: Planet `core_function` · Sign `manner` · Hous
 
 **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Layer 2 Signs = classification-complete / interpretation-deferred.
 
-**Next named:** IL-2 composition rules — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach IL-4 to product surfaces — **done 1.3.112.** Consume IL-4 in editorial generation — **done 1.3.113.** Not a new “canonical v2.”
+**Next named:** IL-2 composition rules — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach IL-4 to product surfaces — **done 1.3.112.** Consume IL-4 in editorial generation — **done 1.3.113.** Today meaning polish — **done 1.3.114.** Not a new “canonical v2.”
 
 ---
 
@@ -179,9 +179,10 @@ Default: IL-2 Composition Engine from atoms ([ACM](../ASTROLOGY_COMPOSITION_MODE
 | KC-C-SCALE | Which constructions locked engines cover | Scale | 6 types × stored atoms; not a catalog | cartesian counts; gold composed vs candidate; wire named not live | after IL-4 expression (1.3.109) | **locked 1.3.110** — [LIBRARY_SCALE_V1.md](./LIBRARY_SCALE_V1.md) | wire calc → IL — done 1.3.111 | `LOCKED` |
 | KC-C-WIRE | Calc snapshot → IL-4 pack | Wire | duck-typed chart → SkyFact → IL-2/3/4 | library layer live; product surfaces not attached | after library scale (1.3.110) | **locked 1.3.111** — [CALC_IL_WIRE_V1.md](./CALC_IL_WIRE_V1.md) | attach IL-4 to product surfaces — done 1.3.112 | `LOCKED` |
 | KC-C-ATTACH | Product surfaces read IL-4 packs | Attach | LLM input `il4_expression_pack`; gateway only | Today / Profile / Compatibility; public JSON unchanged | after wire (1.3.111) | **locked 1.3.112** — [IL4_SURFACE_ATTACH_V1.md](./IL4_SURFACE_ATTACH_V1.md) | consume in editorial generation — done 1.3.113 | `LOCKED` |
-| KC-C-CONSUME | Editorial generation phrases IL-4 packs | Consume | prompt + protected prefix; fill-empty / reject-invalid | Today native · Profile LLM · Compatibility when pack present | after attach (1.3.112) | **locked 1.3.113** — [IL4_EDITORIAL_CONSUME_V1.md](./IL4_EDITORIAL_CONSUME_V1.md) | owner-directed Today meaning polish | `LOCKED` |
+| KC-C-CONSUME | Editorial generation phrases IL-4 packs | Consume | prompt + protected prefix; fill-empty / reject-invalid | Today native · Profile LLM · Compatibility when pack present | after attach (1.3.112) | **locked 1.3.113** — [IL4_EDITORIAL_CONSUME_V1.md](./IL4_EDITORIAL_CONSUME_V1.md) | Today meaning polish — done 1.3.114 | `LOCKED` |
+| KC-C-TODAY-POLISH | Today native chorus binds to IL-4 | Polish | astrology voice phrases pack; conflict/scenes stay brief | Today native only | after consume (1.3.113) | **locked 1.3.114** — [TODAY_MEANING_POLISH_V1.md](../today/TODAY_MEANING_POLISH_V1.md) | owner-directed post-polish | `LOCKED` |
 
-Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Consume 1.3.113 stands.**
+Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Consume 1.3.113 stands.** **Polish 1.3.114 stands.**
 
 ### 3.8 Time — natal vs transit vs later
 
@@ -229,7 +230,7 @@ Examples against the current tree:
 4. **Houses and Aspects stay `DRAFT_CLASSICAL` — APPROVED.** Do not “catch up” school counts to Planets/Signs. Structural atoms are enough for the next stage. New research only if IL-2 hits a specific semantic insufficiency. **Coverage symmetry between layers is not a goal.**
 5. **Next named pass after approval = outer schema (done 1.3.72), not ASC/MC and not literature.** **1.3.73** inserts TodayFlow Canon *before* filling meaning keys. Then: Sun–Pluto claim audit → materialize outer drafts under Canon (not CORE) → ASC/MC definition → ASC/MC decision → IL-1 V1 close-out → IL-2 Composition.
 
-ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle map locked 1.3.100. Angle Canon grammar locked 1.3.101 (`orientation`). Angle Canon fill locked 1.3.102. Angle Canon storage/materialization locked 1.3.103. Stored Planet×Angle smoke PASS 1.3.104. Final atomic smoke PASS 1.3.105. Knowledge Core V1 FREEZE **done 1.3.106.** IL-2 composition rules **done 1.3.107.** IL-3 Interpretation Engine **done 1.3.108.** IL-4 Expression **done 1.3.109.** Library scale **done 1.3.110.** Wire calc → IL **done 1.3.111.** Attach IL-4 **done 1.3.112.** Consume IL-4 **done 1.3.113.** **STOP Angles.** Do not start from a book. Next named = owner-directed Today meaning polish.
+ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle map locked 1.3.100. Angle Canon grammar locked 1.3.101 (`orientation`). Angle Canon fill locked 1.3.102. Angle Canon storage/materialization locked 1.3.103. Stored Planet×Angle smoke PASS 1.3.104. Final atomic smoke PASS 1.3.105. Knowledge Core V1 FREEZE **done 1.3.106.** IL-2 composition rules **done 1.3.107.** IL-3 Interpretation Engine **done 1.3.108.** IL-4 Expression **done 1.3.109.** Library scale **done 1.3.110.** Wire calc → IL **done 1.3.111.** Attach IL-4 **done 1.3.112.** Consume IL-4 **done 1.3.113.** Today meaning polish **done 1.3.114.** **STOP Angles.** Do not start from a book. Next named = owner-directed post-polish.
 
 ---
 
@@ -277,6 +278,7 @@ ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle m
 39. Wire calc → IL                             ✅ 1.3.111 library layer; product surfaces not attached
 40. Attach IL-4 to product surfaces           ✅ 1.3.112 LLM input; public JSON unchanged
 41. Consume IL-4 in editorial generation      ✅ 1.3.113 phrase packs; fill-empty / reject-invalid
+42. Today meaning polish                      ✅ 1.3.114 native astrology chorus binds to IL-4
 ```
 
 Historical literature does not appear in this order. Lenses stay in the existing corpus. Co–Star is a check on Mainstream rows, not a source.
@@ -285,6 +287,7 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
+- **1.44 (2026-08-23)** — Today meaning polish (1.3.114). Native astrology chorus binds to IL-4. KC-C-TODAY-POLISH locked.
 - **1.43 (2026-08-23)** — IL-4 editorial consume (1.3.113). Generation phrases packs. KC-C-CONSUME locked.
 - **1.42 (2026-08-23)** — IL-4 surface attach (1.3.112). Product LLM inputs read IL-4 packs. KC-C-ATTACH locked. Next named = consume. **Done 1.3.113.**
 - **1.41 (2026-08-23)** — Calc → IL wire (1.3.111). Library layer live. KC-C-WIRE locked. Next named = attach IL-4 packs to product surfaces. **Done 1.3.112.**

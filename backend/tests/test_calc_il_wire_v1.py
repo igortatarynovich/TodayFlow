@@ -278,7 +278,7 @@ def test_calc_il_wire_v1():
     assert "KC-C-WIRE" in inventory
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.113" in canon
+    assert "**Версия:** 1.3.114" in canon
     assert "### 6.65" in canon
     assert canon.count("**Версия:**") == 1
 

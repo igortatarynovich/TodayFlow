@@ -55,7 +55,7 @@ Personality / Character Engine still does not read astrology (I0). Compatibility
 - Deploy / merge to `main` without owner
 - Personality_v1 / CE astrology inject · synastry chart plumbing
 
-Today *meaning polish* may resume as an **owner-directed** pass now that editorial paths consume packs. Not this file.
+Today *meaning polish* may resume as an **owner-directed** pass after consume 1.3.113. **Done 1.3.114.** This consume file does not reopen.
 
 ---
 
