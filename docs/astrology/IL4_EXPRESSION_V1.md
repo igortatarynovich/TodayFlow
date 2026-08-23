@@ -13,7 +13,7 @@ Catalog **38 draft / 0 `active`**. Unchanged this pass. Runtime still ignores `d
 ## Architecture impact
 
 - **SoT before:** IL-3 returns ranked frames with verbatim lemmas (1.3.108). Sequence named Expression as the generative layer. Handoff §3 locked **voice ≠ meaning**, but there was no pack, so a next pass could still let an LLM choose Saturn □ Venus, write Today prompts as meaning SoT, merge House 1 into ASC, or treat user relevance as astrological rank.
-- **SoT after:** IL-4 **rules + library** are the voice SoT. Input = IL-3 theme list + surface (`today` · `profile` · `compatibility`). Output = expression pack. Lemmas copied verbatim. Rank order unchanged. Surfaces differ in **tone / length / focus metadata**, not in meaning. No person fields. No LLM call. Next named = **library scale**. Freeze, IL-2, and IL-3 stand. Not a “canonical v2.”
+- **SoT after:** IL-4 **rules + library** are the voice SoT. Input = IL-3 theme list + surface (`today` · `profile` · `compatibility`). Output = expression pack. Lemmas copied verbatim. Rank order unchanged. Surfaces differ in **tone / length / focus metadata**, not in meaning. No person fields. No LLM call. Next named = **library scale**. **Done 1.3.110.** Freeze, IL-2, and IL-3 stand. Not a “canonical v2.”
 - **Public contract changed?** no
 - **Migration required?** no
 - **Canon updated?** yes — this file · IL §6.63 · inventory KC-C-EXPR + step 37 · ACM pointer · freeze §3 · handoff §3 · tracker NOW
@@ -87,10 +87,11 @@ Five jobs stay partitioned on every voiced line.
 - Reopen FREEZE / IL-2 / IL-3 / Angles / Aspects / Houses / Signs
 - A parallel “canonical v2”
 
-**Next named:** library scale (not a pair catalog, not `active`). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
+**Next named:** library scale — **done 1.3.110.** Next = wire calc → IL (not a pair catalog, not `active`). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
 
 ---
 
 ## Changelog
 
-- **1.0 (2026-08-23)** — 1.3.109. IL-4 Expression. Voice packs for already ranked themes. Catalog unchanged. Next named = library scale.
+- **1.1 (2026-08-23)** — Library scale done 1.3.110. These packs stand. Next named = wire calc → IL.
+- **1.0 (2026-08-23)** — 1.3.109. IL-4 Expression. Voice packs for already ranked themes. Catalog unchanged. Next named = library scale. **Done 1.3.110.**

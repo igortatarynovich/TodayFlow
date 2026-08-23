@@ -83,11 +83,12 @@ Five jobs stay partitioned on every composed frame.
 - Reopen FREEZE / IL-2 / Angles / Aspects / Houses / Signs
 - A parallel “canonical v2”
 
-**Next named:** IL-4 Expression — **done 1.3.109.** Next = library scale. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
+**Next named:** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Next = wire calc → IL. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
 
 ---
 
 ## Changelog
 
-- **1.1 (2026-08-23)** — IL-4 Expression done 1.3.109. This engine stands. Next named = library scale.
+- **1.2 (2026-08-23)** — Library scale done 1.3.110. This engine stands. Next named = wire calc → IL.
+- **1.1 (2026-08-23)** — IL-4 Expression done 1.3.109. This engine stands. Next named = library scale. **Done 1.3.110.**
 - **1.0 (2026-08-23)** — 1.3.108. IL-3 Interpretation Engine. Sky-internal theme rank. Catalog unchanged. Next named = IL-4. **Done 1.3.109.**

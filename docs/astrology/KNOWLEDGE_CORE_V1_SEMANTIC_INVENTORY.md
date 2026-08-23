@@ -41,7 +41,7 @@ Five stored families = V1 atoms: Planet `core_function` · Sign `manner` · Hous
 
 **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Layer 2 Signs = classification-complete / interpretation-deferred.
 
-**Next named:** IL-2 composition rules — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Next = library scale. Not a new “canonical v2.”
+**Next named:** IL-2 composition rules — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Next = wire calc → IL. Not a new “canonical v2.”
 
 ---
 
@@ -175,9 +175,10 @@ Default: IL-2 Composition Engine from atoms ([ACM](../ASTROLOGY_COMPOSITION_MODE
 | KC-C-TH | How a transiting body occupies a natal house | Compositions | `transit_through_house` | same | same | Saturn/Jupiter composed; Uranus/Pluto remain candidates; 0 objects | Overlay slow background | `COMPOSED` + `CANDIDATE` remainder |
 | KC-C-RULES | Compose without a catalog | Compositions | IL-2 rules | weights, conflict, merge | after IL-1 atoms (declared 1.3.106) | **locked 1.3.107** — [IL2_COMPOSITION_RULES_V1.md](./IL2_COMPOSITION_RULES_V1.md) | IL-3 | `LOCKED` |
 | KC-C-ENGINE | Rank sky themes without a person | Compositions | IL-3 engine | IL-2 frames; transit band before natal; no user fields | after IL-2 rules (1.3.107) | **locked 1.3.108** — [IL3_INTERPRETATION_ENGINE_V1.md](./IL3_INTERPRETATION_ENGINE_V1.md) | IL-4 | `LOCKED` |
-| KC-C-EXPR | Voice already chosen themes | Expression | IL-4 packs | IL-3 themes; surface tone/length/focus; lemmas verbatim; no user fields | after IL-3 engine (1.3.108) | **locked 1.3.109** — [IL4_EXPRESSION_V1.md](./IL4_EXPRESSION_V1.md) | library scale | `LOCKED` |
+| KC-C-EXPR | Voice already chosen themes | Expression | IL-4 packs | IL-3 themes; surface tone/length/focus; lemmas verbatim; no user fields | after IL-3 engine (1.3.108) | **locked 1.3.109** — [IL4_EXPRESSION_V1.md](./IL4_EXPRESSION_V1.md) | named wire | `LOCKED` |
+| KC-C-SCALE | Which constructions locked engines cover | Scale | 6 types × stored atoms; not a catalog | cartesian counts; gold composed vs candidate; wire named not live | after IL-4 expression (1.3.109) | **locked 1.3.110** — [LIBRARY_SCALE_V1.md](./LIBRARY_SCALE_V1.md) | wire calc → IL | `LOCKED` |
 
-Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Next named = library scale.**
+Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Next named = wire calc → IL.**
 
 ### 3.8 Time — natal vs transit vs later
 
@@ -225,7 +226,7 @@ Examples against the current tree:
 4. **Houses and Aspects stay `DRAFT_CLASSICAL` — APPROVED.** Do not “catch up” school counts to Planets/Signs. Structural atoms are enough for the next stage. New research only if IL-2 hits a specific semantic insufficiency. **Coverage symmetry between layers is not a goal.**
 5. **Next named pass after approval = outer schema (done 1.3.72), not ASC/MC and not literature.** **1.3.73** inserts TodayFlow Canon *before* filling meaning keys. Then: Sun–Pluto claim audit → materialize outer drafts under Canon (not CORE) → ASC/MC definition → ASC/MC decision → IL-1 V1 close-out → IL-2 Composition.
 
-ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle map locked 1.3.100. Angle Canon grammar locked 1.3.101 (`orientation`). Angle Canon fill locked 1.3.102. Angle Canon storage/materialization locked 1.3.103. Stored Planet×Angle smoke PASS 1.3.104. Final atomic smoke PASS 1.3.105. Knowledge Core V1 FREEZE **done 1.3.106.** IL-2 composition rules **done 1.3.107.** IL-3 Interpretation Engine **done 1.3.108.** IL-4 Expression **done 1.3.109.** **STOP Angles.** Do not start from a book. Next named = library scale.
+ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle map locked 1.3.100. Angle Canon grammar locked 1.3.101 (`orientation`). Angle Canon fill locked 1.3.102. Angle Canon storage/materialization locked 1.3.103. Stored Planet×Angle smoke PASS 1.3.104. Final atomic smoke PASS 1.3.105. Knowledge Core V1 FREEZE **done 1.3.106.** IL-2 composition rules **done 1.3.107.** IL-3 Interpretation Engine **done 1.3.108.** IL-4 Expression **done 1.3.109.** Library scale **done 1.3.110.** **STOP Angles.** Do not start from a book. Next named = wire calc → IL.
 
 ---
 
@@ -269,7 +270,8 @@ ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle m
 35. IL-2 composition rules                     ✅ 1.3.107 role weights, conflict, merge; Layer 5 demoted where atoms exist
 36. IL-3 Interpretation Engine                 ✅ 1.3.108 sky-internal theme rank; not user relevance; not expression
 37. IL-4 Expression                            ✅ 1.3.109 voice for already chosen themes; not meaning; not `active`
-38. Library scale                              NEXT     after IL-4; not pair catalog; not `active`
+38. Library scale                              ✅ 1.3.110 616 composed cells; gold 43/12; wire named, not live
+39. Wire calc → IL                             NEXT     implement named wire; not pair catalog; not `active`
 ```
 
 Historical literature does not appear in this order. Lenses stay in the existing corpus. Co–Star is a check on Mainstream rows, not a source.
@@ -278,7 +280,8 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
-- **1.39 (2026-08-23)** — IL-4 Expression (1.3.109). Voice packs. KC-C-EXPR locked. Next named = library scale.
+- **1.40 (2026-08-23)** — Library scale (1.3.110). Coverage contract. KC-C-SCALE locked. Next named = wire calc → IL.
+- **1.39 (2026-08-23)** — IL-4 Expression (1.3.109). Voice packs. KC-C-EXPR locked. Next named = library scale. **Done 1.3.110.**
 - **1.38 (2026-08-23)** — IL-3 Interpretation Engine (1.3.108). Sky-internal theme rank. KC-C-ENGINE locked. Next named = IL-4. **Done 1.3.109.**
 - **1.37 (2026-08-23)** — IL-3 boundary: sky → astrological themes; not user relevance. Not a new SoT file. Handoff §3. **Done 1.3.108.**
 - **1.36 (2026-08-23)** — IL-2 composition rules (1.3.107). Role weights, conflict, merge. KC-C-RULES locked. Layer 5 gold composed where atoms exist. Next named = IL-3. **Done 1.3.108.**

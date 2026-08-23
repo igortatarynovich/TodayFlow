@@ -164,7 +164,7 @@ def test_atomic_canon_composition_smoke_v1():
     assert "Venus × Capricorn — **PASS**" in SIGN_SMOKE.read_text(encoding="utf-8")
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.109" in canon
+    assert "**Версия:** 1.3.110" in canon
     assert "### 6.59 Final atomic smoke" in canon
     assert canon.count("**Версия:**") == 1
 

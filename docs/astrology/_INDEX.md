@@ -33,10 +33,11 @@
 | [ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md](./ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md) | **1.3.103 storage:** `angle_canon_pack` (`orientation`); two drafts; smoke **done 1.3.104** |
 | [ANGLE_CANON_COMPOSITION_SMOKE_V1.md](./ANGLE_CANON_COMPOSITION_SMOKE_V1.md) | **1.3.104 smoke:** stored Planet × Angle PASS. Occupancy ≠ conjunction. STOP Angles |
 | [ATOMIC_CANON_COMPOSITION_SMOKE_V1.md](./ATOMIC_CANON_COMPOSITION_SMOKE_V1.md) | **1.3.105 smoke:** five stored families. Operators discriminate. FREEZE **done 1.3.106** |
-| [KNOWLEDGE_CORE_V1_FREEZE.md](./KNOWLEDGE_CORE_V1_FREEZE.md) | **1.3.106 freeze:** five stored families = V1 atoms. Catalog unchanged. IL-2 **done 1.3.107**. IL-3 **done 1.3.108**. IL-4 **done 1.3.109** |
-| [IL2_COMPOSITION_RULES_V1.md](./IL2_COMPOSITION_RULES_V1.md) | **1.3.107 IL-2:** composition rules (weights, conflict, merge). Not a pair catalog. IL-3 **done 1.3.108**. IL-4 **done 1.3.109**. Next = library scale |
-| [IL3_INTERPRETATION_ENGINE_V1.md](./IL3_INTERPRETATION_ENGINE_V1.md) | **1.3.108 IL-3:** Interpretation Engine. Sky-internal theme rank ≠ user relevance. IL-4 **done 1.3.109**. Next = library scale |
-| [IL4_EXPRESSION_V1.md](./IL4_EXPRESSION_V1.md) | **1.3.109 IL-4:** Expression. Voice for already chosen themes. Not meaning. Next = library scale |
+| [KNOWLEDGE_CORE_V1_FREEZE.md](./KNOWLEDGE_CORE_V1_FREEZE.md) | **1.3.106 freeze:** five stored families = V1 atoms. Catalog unchanged. IL-2 **done 1.3.107**. IL-3 **done 1.3.108**. IL-4 **done 1.3.109**. Library scale **done 1.3.110** |
+| [IL2_COMPOSITION_RULES_V1.md](./IL2_COMPOSITION_RULES_V1.md) | **1.3.107 IL-2:** composition rules (weights, conflict, merge). Not a pair catalog. IL-3 **done 1.3.108**. IL-4 **done 1.3.109**. Library scale **done 1.3.110**. Next = wire calc → IL |
+| [IL3_INTERPRETATION_ENGINE_V1.md](./IL3_INTERPRETATION_ENGINE_V1.md) | **1.3.108 IL-3:** Interpretation Engine. Sky-internal theme rank ≠ user relevance. IL-4 **done 1.3.109**. Library scale **done 1.3.110**. Next = wire calc → IL |
+| [IL4_EXPRESSION_V1.md](./IL4_EXPRESSION_V1.md) | **1.3.109 IL-4:** Expression. Voice for already chosen themes. Not meaning. Library scale **done 1.3.110** |
+| [LIBRARY_SCALE_V1.md](./LIBRARY_SCALE_V1.md) | **1.3.110 library scale:** V1 coverage contract. 616 composed cells. Wire named, not live. Next = wire calc → IL |
 | [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) | TodayFlow Canon structuring. Mainstream V1 / Canon / Lenses. Runtime: atoms → composition → LLM formulates |
 | [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) | Co–Star teardown Phase 0. **Recognition check** on Mainstream rows. Not IL ingest. Not the product-meaning source |
 | [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md) | Outer Planet Draft Representation (1.3.72). Meaning keys optional on IL-1 draft outers. Fill waits for Canon. Not ingest, not objects |

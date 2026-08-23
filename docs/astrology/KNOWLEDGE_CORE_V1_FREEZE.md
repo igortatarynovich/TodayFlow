@@ -74,9 +74,9 @@ Do not reopen packs without a named Composition Engine failure.
 
 ## 3. Next named
 
-**IL-2** composition **rules** — **done 1.3.107**. **IL-3** Interpretation Engine — **done 1.3.108** (sky-internal theme rank). **IL-4** Expression — **done 1.3.109** (voice, not meaning). Not `active`. Not freeze reopen.
+**IL-2** composition **rules** — **done 1.3.107**. **IL-3** Interpretation Engine — **done 1.3.108** (sky-internal theme rank). **IL-4** Expression — **done 1.3.109** (voice, not meaning). **Library scale** — **done 1.3.110** (coverage contract; wire named, not live). Not `active`. Not freeze reopen.
 
-**Next named: library scale.** Do **not** start library scale in the same pass as this freeze. That pass is closed.
+**Next named: wire calc → IL.** Do **not** start that wire in the same pass as this freeze. That freeze pass is closed.
 
 ---
 
@@ -94,7 +94,8 @@ Do not reopen packs without a named Composition Engine failure.
 
 ## Changelog
 
-- **1.3 (2026-08-23)** — IL-4 Expression done 1.3.109. This freeze stands. Next named = library scale.
+- **1.4 (2026-08-23)** — Library scale done 1.3.110. This freeze stands. Next named = wire calc → IL.
+- **1.3 (2026-08-23)** — IL-4 Expression done 1.3.109. This freeze stands. Next named = library scale. **Done 1.3.110.**
 - **1.2 (2026-08-23)** — IL-3 engine done 1.3.108. This freeze stands. Next named = IL-4. **Done 1.3.109.**
 - **1.1 (2026-08-23)** — IL-2 composition rules done 1.3.107. This freeze stands. Next named = IL-3. **Done 1.3.108.**
 - **1.0 (2026-08-23)** — 1.3.106. Knowledge Core V1 FROZEN on five stored families. Catalog unchanged. Next named = IL-2. **Done 1.3.107.**
