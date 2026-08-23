@@ -53,7 +53,7 @@ Prompt version: `day-scenario-native-c4.2`.
 - Profile / Compatibility polish · synastry chart plumbing · personality_v1 IL-4
 - Hard overwrite of filled slots · Relevance / Prioritization
 - Deploy / merge to `main` without owner
-- Split Global / Personal LLM (I0 violation fix) — separate pass
+- Split Global / Personal LLM (I0 violation fix) — **done 1.3.116** [NATIVE_C1_I0_GENERATION_SPLIT_V1.md](./NATIVE_C1_I0_GENERATION_SPLIT_V1.md)
 
 ---
 

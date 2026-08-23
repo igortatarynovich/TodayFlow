@@ -121,7 +121,7 @@ def test_il4_editorial_consume_v1():
     assert "Today prompts" in rules or "meaning SoT" in rules
     assert "1.3.112" in ATTACH.read_text(encoding="utf-8")
 
-    assert "**Версия:** 1.3.115" in IL.read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.116" in IL.read_text(encoding="utf-8")
     assert "### 6.67" in IL.read_text(encoding="utf-8")
 
     inventory = INVENTORY.read_text(encoding="utf-8")

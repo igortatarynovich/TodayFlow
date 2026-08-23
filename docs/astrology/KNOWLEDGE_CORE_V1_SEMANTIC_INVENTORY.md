@@ -182,6 +182,7 @@ Default: IL-2 Composition Engine from atoms ([ACM](../ASTROLOGY_COMPOSITION_MODE
 | KC-C-CONSUME | Editorial generation phrases IL-4 packs | Consume | prompt + protected prefix; fill-empty / reject-invalid | Today native · Profile LLM · Compatibility when pack present | after attach (1.3.112) | **locked 1.3.113** — [IL4_EDITORIAL_CONSUME_V1.md](./IL4_EDITORIAL_CONSUME_V1.md) | Today meaning polish — done 1.3.114 | `LOCKED` |
 | KC-C-TODAY-POLISH | Today native chorus binds to IL-4 | Polish | astrology voice phrases pack; conflict/scenes stay brief | Today native only | after consume (1.3.113) | **locked 1.3.114** — [TODAY_MEANING_POLISH_V1.md](../today/TODAY_MEANING_POLISH_V1.md) | synastry editorial IL-4 — done 1.3.115 | `LOCKED` |
 | KC-C-COMPAT-EDITORIAL | Synastry editorial phrases IL-4 | Compat editorial | attach + consume when charts supplied | synastry endpoint | after polish (1.3.114) | **locked 1.3.115** — [COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md](./COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md) | owner-directed post-IL polish | `LOCKED` |
+| KC-C-I0-SPLIT | Native C1 I0 generation split | I0 split | Global stage + Personal overlay; personal consumes GLOBAL_LOCKED | Today native C1 only | after compat editorial (1.3.115) | **locked 1.3.116** — [NATIVE_C1_I0_GENERATION_SPLIT_V1.md](../today/NATIVE_C1_I0_GENERATION_SPLIT_V1.md) | Profile polish or deploy | `LOCKED` |
 
 Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Consume 1.3.113 stands.** **Polish 1.3.114 stands.** **Compat editorial 1.3.115 stands.**
 
@@ -289,6 +290,7 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
+- **1.46 (2026-08-23)** — Native C1 I0 generation split (1.3.116). Global + Personal LLM stages. KC-C-I0-SPLIT locked.
 - **1.45 (2026-08-23)** — Compatibility synastry editorial IL-4 (1.3.115). KC-C-COMPAT-EDITORIAL locked.
 - **1.44 (2026-08-23)** — Today meaning polish (1.3.114). Native astrology chorus binds to IL-4. KC-C-TODAY-POLISH locked.
 - **1.43 (2026-08-23)** — IL-4 editorial consume (1.3.113). Generation phrases packs. KC-C-CONSUME locked.

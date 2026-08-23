@@ -104,7 +104,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** **Compatibility synastry editorial IL-4 1.3.115 LOCKED** (editorial phrases packs when charts supplied; prompt v1.1). **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. **Knowledge Core V1 FREEZE 1.3.106 stands**. **IL-2 1.3.107 stands**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
+**NOW (FOUNDATION, 2026-08-23):** **Native C1 I0 generation split 1.3.116 LOCKED** (Global stage + Personal overlay; prompt c5.0). **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
@@ -287,6 +287,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — Today 1.3.116 Native C1 I0 split (2026-08-23)
+
+- **SoT before:** One native C1 LLM call produced chorus + conflict + scenes + natal + personalization together — I0 Global/Personal boundary violated in generation.
+- **SoT after:** Native C1 I0 Generation Split V1. Global stage (sky/card/number + conflict + scenes); optional Personal overlay stage from `GLOBAL_LOCKED`. Merge overlay-only; personal degrade → Global-only. Prompt `day-scenario-native-c5.0`. IL-4 attach/consume/polish unchanged. Public JSON unchanged.
+- **Public contract changed?** no — generation order / internal LLM stages only
+- **Migration required?** no — refresh picks up c5.0
+- **Canon updated?** yes — `docs/today/NATIVE_C1_I0_GENERATION_SPLIT_V1.md` · inventory step 44 / KC-C-I0-SPLIT · IL §6.70 · TODAY_CONTENT_PIPELINE table · TODAY_MEANING_POLISH
+- **Backward compatible?** yes — same day_scenario projection; cached days until regenerate
 
 ## Architecture impact — Compatibility 1.3.115 synastry editorial IL-4 (2026-08-23)
 

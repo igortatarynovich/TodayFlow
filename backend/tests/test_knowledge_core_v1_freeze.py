@@ -132,7 +132,7 @@ def test_knowledge_core_v1_freeze():
     assert "Layer 5 = candidates" in inventory or "Layer 5" in freeze
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.115" in canon
+    assert "**Версия:** 1.3.116" in canon
     assert "### 6.60 Knowledge Core V1 FREEZE" in canon
     assert canon.count("**Версия:**") == 1
 
@@ -177,9 +177,9 @@ def test_knowledge_core_v1_freeze():
 
     tracker = TRACKER.read_text(encoding="utf-8")
     now = tracker.split("**NOW (FOUNDATION")[1].split("**PAUSED")[0]
-    assert "1.3.106" in now
-    assert "FREEZE" in now
-    assert "IL-2" in now
+    assert "1.3.116" in now
+    assert "FREEZE" in HANDOFF.read_text(encoding="utf-8") or "FREEZE" in tracker
+    assert "IL-4" in now or "1.3.113" in now
     assert "38 draft / 0 `active`" in now or "38 draft / 0 active" in now
 
     smoke = ATOMIC_SMOKE.read_text(encoding="utf-8")

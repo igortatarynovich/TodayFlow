@@ -1,10 +1,10 @@
-"""Phase C1 — Native day_scenario LLM generation.
+"""Phase C1 — Native day_scenario LLM generation (I0 split: Global stage + Personal overlay).
 
-LLM returns one scenario JSON (chorus · conflict · scenes · prop_material).
+LLM returns scenario JSON via two stages when personalization pack requires it.
 Deterministic engine still builds props from scenes.
 Legacy expect/trap/do schema is not runtime SoT (kept only for eval/compare).
 
-Canon: docs/DAY_SCENARIO_V1.md · docs/audits/DAY_SCENARIO_NATIVE_LLM_C1.md
+Canon: docs/today/NATIVE_C1_I0_GENERATION_SPLIT_V1.md · docs/DAY_SCENARIO_V1.md
 """
 
 from __future__ import annotations
@@ -156,7 +156,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c4.2"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c5.0"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -1215,594 +1215,227 @@ def call_day_scenario_native_llm_c1(
             meta["dramaturgy_brief_c4"] = brief
             meta["dramaturgy_brief_protected"] = True
             meta["user_message_format"] = "dramaturgy_brief_c4_v1"
+            meta["i0_split_generation"] = True
 
     last_pers_defects: list[dict[str, str]] = []
     pending_retry_reason: str | None = None
 
-    for attempt_idx in range(attempts):
-        if retry_feedback:
-            # Keep brief intact; append feedback after protected base
-            user_sent = f"{user_base}\n\n---\n{retry_feedback}"[:18000]
-            user_sent_chars = len(user_sent)
-        attempt_t0 = perf_counter()
-        attempt_model = resolve_native_attempt_model(attempt_idx)
+    from todayflow_backend.services.native_c1_i0_generation_split_v1 import (
+        augment_global_system,
+        augment_personal_system,
+        orchestrate_i0_split_generation,
+    )
+
+    def _process_global_stage_parsed(parsed: dict[str, Any]) -> tuple[dict[str, Any] | None, str | None]:
+        il4_reject = reject_invalid_output(parsed, il4_pack)
+        if il4_reject:
+            return None, f"il4_consume:{il4_reject}"
+        polish_reject = reject_invalid_native(parsed, il4_pack)
+        if polish_reject:
+            return None, f"today_polish:{polish_reject}"
+        normalized_local = normalize_native_scenario_llm_c1(parsed)
+        normalized_local = fill_empty_astrology_chorus(normalized_local, il4_pack)
+        normalized_local, native_heals = apply_soft_native_heals(normalized_local)
+        errors_local = validate_native_scenario_llm_c1(normalized_local, allowed_evidence_ids=allowed)
+        legacy_raw = find_legacy_keys(parsed)
+        if legacy_raw:
+            errors_local = list(errors_local) + [f"legacy_keys:{','.join(legacy_raw)}"]
+        hard_errors = [e for e in errors_local if is_hard_native_validate_error(e)]
+        if hard_errors:
+            return None, ";".join(hard_errors[:8])
+        editorial_local = run_editorial_quality_gate_c31(
+            normalized_local,
+            has_natal_evidence=False,
+        )
+        editorial_local = annotate_defects_with_maturity(editorial_local)
+        if should_reject_story(editorial_local):
+            return None, ";".join(str(d.get("code")) for d in editorial_local[:8])
+        if should_retry_defects(editorial_local):
+            retryable = [d for d in editorial_local if str(d.get("runtime_action")) == "retry"]
+            if retryable:
+                return None, ";".join(str(d.get("code")) for d in retryable[:8])
+        return normalized_local, None
+
+    def _llm_call_split(
+        *,
+        attempt_idx: int,
+        attempt_model: str,
+        system: str,
+        user: str,
+        allow_model_fallback: bool,
+    ) -> tuple[str | None, str | None, str | None]:
         with llm_call_context(
             feature="today.native_day_story",
             attempt=attempt_idx,
             retry_reason=pending_retry_reason,
         ):
-            content, provider_kind, used_model = chat_completion_plain_with_status(
+            return chat_completion_plain_with_status(
                 client,
                 model=attempt_model,
                 messages=[
                     {"role": "system", "content": system},
-                    {"role": "user", "content": user_sent},
+                    {"role": "user", "content": user},
                 ],
                 temperature=0.52,
                 max_tokens=resolve_max_tokens(4800),
-                # Gate/parse retries stay on Kimi — do not hop to dry DeepSeek.
-                allow_model_fallback=int(attempt_idx) == 0,
+                allow_model_fallback=allow_model_fallback,
             )
-        if used_model:
-            model_name = str(used_model)
-        attempt_ms = int((perf_counter() - attempt_t0) * 1000)
-        if not content:
-            failure_class = _map_provider_kind_to_failure_class(provider_kind)
-            reject_reason = f"empty_llm_content:{provider_kind or 'unknown'}"
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": failure_class,
-                    "reject_reason": reject_reason,
-                    "provider_kind": provider_kind,
-                    "model": model_name or None,
-                    "attempt_model": attempt_model,
-                    "user_sent_chars": len(user_sent or ""),
-                }
-            )
-            if capture is not None:
-                capture.record_attempt(
-                    attempt_index=attempt_idx,
-                    raw_response=None,
-                    parsed=None,
-                    after_normalize=None,
-                    after_gate=None,
-                    status="empty_response",
-                    reject_reason=reject_reason,
-                )
-            # Provider chain exhausted (attempt0 Kimi→DeepSeek, or Kimi-only later).
-            # Do not start another attempt without parse/gate feedback.
-            logger.warning(
-                "native_llm_c1 provider fail attempt=%s class=%s duration_ms=%s; stopping",
-                attempt_idx,
-                failure_class,
-                attempt_ms,
-            )
-            _fail(failure_class=failure_class, reject_reason=reject_reason)
-            return None
-        parsed = _parse_json_content(content)
-        il4_reject = reject_invalid_output(parsed, il4_pack) if parsed else None
-        polish_reject = reject_invalid_native(parsed, il4_pack) if parsed and not il4_reject else None
-        if il4_reject:
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": NATIVE_FAILURE_PARSE,
-                    "reject_reason": f"il4_consume:{il4_reject}",
-                    "model": model_name or None,
-                    "user_sent_chars": len(user_sent or ""),
-                    "raw_chars": len(content),
-                }
-            )
-            pending_retry_reason = "il4_consume_rejected"
-            retry_feedback = (
-                "IL4_MEANING: формулируй леммы пакета; не добавляй темы; "
-                "не озвучивай dropped; не меняй text лемм."
-            )
-            continue
-        if polish_reject:
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": NATIVE_FAILURE_PARSE,
-                    "reject_reason": f"today_polish:{polish_reject}",
-                    "model": model_name or None,
-                    "user_sent_chars": len(user_sent or ""),
-                    "raw_chars": len(content),
-                }
-            )
-            pending_retry_reason = "today_polish_rejected"
-            retry_feedback = (
-                "TODAY_IL4_CHORUS: interpretive_chorus.astrology обязан фразировать IL4_MEANING; "
-                "conflict/scenes — из DRAMATURGY_BRIEF."
-            )
-            continue
-        if not parsed:
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": NATIVE_FAILURE_PARSE,
-                    "reject_reason": "json_parse_failed",
-                    "model": model_name or None,
-                    "user_sent_chars": len(user_sent or ""),
-                    "raw_chars": len(content),
-                }
-            )
-            if capture is not None:
-                capture.record_attempt(
-                    attempt_index=attempt_idx,
-                    raw_response=content,
-                    parsed=None,
-                    after_normalize=None,
-                    after_gate=None,
-                    status="parse_fail",
-                    reject_reason="json_parse_failed",
-                )
-            pending_retry_reason = "parse_failed"
-            continue
-        normalized = normalize_native_scenario_llm_c1(parsed)
-        normalized = fill_empty_astrology_chorus(normalized, il4_pack)
-        # Align declared depth with pack if model omitted it
-        if not normalized.get("personalization_depth"):
-            normalized["personalization_depth"] = pers_pack.get("evidence_depth") or DEPTH_GENERAL
-            normalized["personalization"] = {
-                **_as_dict(normalized.get("personalization")),
-                "depth": normalized["personalization_depth"],
-                "pack_confidence": pers_pack.get("confidence"),
-            }
 
-        # Soft-heal one-field misses before hard reject (visible as healed:<rule>).
-        normalized, native_heals = apply_soft_native_heals(normalized)
-        attempt_heals: list[str] = list(native_heals)
-
-        errors = validate_native_scenario_llm_c1(normalized, allowed_evidence_ids=allowed)
-        legacy_raw = find_legacy_keys(parsed)
-        if legacy_raw:
-            errors = list(errors) + [f"legacy_keys:{','.join(legacy_raw)}"]
-        hard_errors = [e for e in errors if is_hard_native_validate_error(e)]
-        soft_native = [e for e in errors if not is_hard_native_validate_error(e)]
-        if hard_errors:
-            reason = ";".join(hard_errors[:8])
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": gate_failure_class(reason),
-                    "reject_reason": reason,
-                    "model": model_name or None,
-                    "user_sent_chars": len(user_sent or ""),
-                    "status": "native_validation_reject",
-                    "healed_rules": list(attempt_heals),
-                }
-            )
-            if capture is not None:
-                capture.record_attempt(
-                    attempt_index=attempt_idx,
-                    raw_response=content,
-                    parsed=parsed,
-                    after_normalize=normalized,
-                    after_gate=None,
-                    status="native_validation_reject",
-                    reject_reason=reason,
-                )
-            retry_feedback = "Исправь schema/validation ошибки: " + "; ".join(hard_errors[:6])
-            pending_retry_reason = "gate_retry"
-            continue
-        # Soft native findings (e.g. parallel_forecast regex) → capture only.
-        if soft_native and capture is not None:
-            try:
-                for e in soft_native[:12]:
-                    capture.add_defect(
-                        "NATIVE_SOFT_VALIDATE",
-                        f"{e}|maturity=experimental|action=score_only",
-                        cls="VALIDATION",
-                    )
-            except Exception:
-                pass
-        if attempt_heals and capture is not None:
-            try:
-                for rule in attempt_heals[:12]:
-                    capture.add_defect(
-                        "NATIVE_SOFT_HEAL",
-                        f"healed:{rule}|maturity=blocking|action=heal",
-                        cls="VALIDATION",
-                    )
-            except Exception:
-                pass
-
-        # --- Quality analysis (C3.1–C3.3b): always measure; maturity decides runtime ---
-        pers_defects = run_personalization_gate_c33(normalized, pers_pack)
-        pers_defects = list(pers_defects) + list(run_sphere_selection_gate_c33b(normalized, pers_pack))
-        pers_defects = annotate_defects_with_maturity(pers_defects)
-        last_pers_defects = pers_defects
-        pers_score = score_personalization_c33(pers_defects)
-
-        # Hard personalization: reject_story (e.g. PROFILE_FACT_LEAK) wins over retry.
-        # Leaked prose must never reach the user or a quality-rewrite retry prompt.
-        if should_reject_story(pers_defects):
-            reason = ";".join(str(d.get("code")) for d in pers_defects[:8])
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": gate_failure_class(reason),
-                    "reject_reason": reason,
-                    "model": model_name or None,
-                    "status": "personalization_reject_story",
-                }
-            )
-            if capture is not None:
-                capture.record_attempt(
-                    attempt_index=attempt_idx,
-                    raw_response=content,
-                    parsed=parsed,
-                    after_normalize={
-                        **normalized,
-                        "personalization_score": pers_score,
-                        "personalization_defects": pers_defects,
-                        "gate_maturity": maturity_summary(pers_defects),
-                    },
-                    after_gate=None,
-                    status="personalization_reject_story",
-                    reject_reason=reason,
-                )
-                try:
-                    for d in pers_defects:
-                        capture.add_defect(
-                            str(d.get("code") or "PERSONALIZATION"),
-                            f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
-                            f"|action={d.get('runtime_action')}",
-                            cls="PERSONALIZATION",
-                        )
-                except Exception:
-                    pass
-            _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
-            return None
-        if should_retry_defects(pers_defects):
-            # Hard orphan/refs only — never include PROFILE_FACT_LEAK in retry feedback.
-            retryable = [
-                d
-                for d in pers_defects
-                if str(d.get("runtime_action")) == "retry"
-                and str(d.get("code")) != DEFECT_PROFILE_FACT_LEAK
-            ]
-            if attempt_idx + 1 < attempts and retryable:
-                feedback = format_personalization_retry_feedback(retryable, pack=pers_pack)
-                reason = ";".join(str(d.get("code")) for d in retryable[:8])
-                attempt_rows.append(
-                    {
-                        "attempt_index": attempt_idx,
-                        "attempt_duration_ms": attempt_ms,
-                        "failure_class": gate_failure_class(reason),
-                        "reject_reason": reason,
-                        "model": model_name or None,
-                        "status": "personalization_hard_retry",
-                    }
-                )
-                if capture is not None:
-                    capture.record_attempt(
-                        attempt_index=attempt_idx,
-                        raw_response=content,
-                        parsed=parsed,
-                        after_normalize={
-                            **normalized,
-                            "personalization_score": pers_score,
-                            "personalization_defects": pers_defects,
-                            "gate_maturity": maturity_summary(pers_defects),
-                        },
-                        after_gate=None,
-                        status="personalization_hard_retry",
-                        reject_reason=reason,
-                    )
-                    try:
-                        for d in pers_defects:
-                            capture.add_defect(
-                                str(d.get("code") or "PERSONALIZATION"),
-                                f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}",
-                                cls="PERSONALIZATION",
-                            )
-                    except Exception:
-                        pass
-                retry_feedback = feedback
-                pending_retry_reason = "gate_retry"
-                continue
-            reason = ";".join(str(d.get("code")) for d in pers_defects[:8])
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": gate_failure_class(reason),
-                    "reject_reason": reason,
-                    "model": model_name or None,
-                    "status": "personalization_reject_story",
-                }
-            )
-            if capture is not None:
-                capture.record_attempt(
-                    attempt_index=attempt_idx,
-                    raw_response=content,
-                    parsed=parsed,
-                    after_normalize=normalized,
-                    after_gate=None,
-                    status="personalization_reject_story",
-                    reject_reason=reason,
-                )
-            _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
-            return None
-        # Quality personalization defects (non-blocking maturity): keep first valid story.
-
-        editorial = run_editorial_quality_gate_c31(
-            normalized,
-            has_natal_evidence=has_natal_evidence if has_natal_evidence else False,
+    global_system = augment_global_system(system)
+    personal_system = augment_personal_system(
+        with_practitioner_persona(
+            "Ты формулируешь только Personal overlay для зафиксированного Global сценария дня.",
+            locale="ru",
         )
-        natal_rows = _as_list(_as_dict(normalized.get("interpretive_chorus")).get("natal"))
-        if natal_rows and not has_natal_evidence:
-            editorial = run_editorial_quality_gate_c31(normalized, has_natal_evidence=False)
-        editorial = annotate_defects_with_maturity(editorial)
-        ed_score = score_editorial_quality_c31(editorial)
-
-        # C3.6.3: promoted quality codes may retry / reject via maturity registry.
-        if should_reject_story(editorial):
-            reason = ";".join(str(d.get("code")) for d in editorial[:8])
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": gate_failure_class(reason),
-                    "reject_reason": reason,
-                    "model": model_name or None,
-                    "status": "editorial_reject_story",
-                }
-            )
-            if capture is not None:
-                capture.record_attempt(
-                    attempt_index=attempt_idx,
-                    raw_response=content,
-                    parsed=parsed,
-                    after_normalize={
-                        **normalized,
-                        "editorial_score": ed_score,
-                        "editorial_defects": editorial,
-                        "gate_maturity": maturity_summary(editorial),
-                    },
-                    after_gate=None,
-                    status="editorial_reject_story",
-                    reject_reason=reason,
-                )
-                try:
-                    for d in editorial:
-                        capture.add_defect(
-                            str(d.get("code") or "EDITORIAL"),
-                            f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
-                            f"|action={d.get('runtime_action')}",
-                            cls=str(d.get("capture_class") or "VALIDATION"),
-                        )
-                except Exception:
-                    pass
-            _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
-            return None
-        if should_retry_defects(editorial):
-            retryable = [d for d in editorial if str(d.get("runtime_action")) == "retry"]
-            if attempt_idx + 1 < attempts and retryable:
-                feedback = format_editorial_retry_feedback(retryable)
-                reason = ";".join(str(d.get("code")) for d in retryable[:8])
-                attempt_rows.append(
-                    {
-                        "attempt_index": attempt_idx,
-                        "attempt_duration_ms": attempt_ms,
-                        "failure_class": gate_failure_class(reason),
-                        "reject_reason": reason,
-                        "model": model_name or None,
-                        "status": "editorial_quality_retry",
-                    }
-                )
-                if capture is not None:
-                    capture.record_attempt(
-                        attempt_index=attempt_idx,
-                        raw_response=content,
-                        parsed=parsed,
-                        after_normalize={
-                            **normalized,
-                            "editorial_score": ed_score,
-                            "editorial_defects": editorial,
-                            "gate_maturity": maturity_summary(editorial),
-                        },
-                        after_gate=None,
-                        status="editorial_quality_retry",
-                        reject_reason=reason,
-                    )
-                    try:
-                        for d in editorial:
-                            capture.add_defect(
-                                str(d.get("code") or "EDITORIAL"),
-                                f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
-                                f"|action={d.get('runtime_action')}",
-                                cls=str(d.get("capture_class") or "VALIDATION"),
-                            )
-                    except Exception:
-                        pass
-                retry_feedback = feedback
-                pending_retry_reason = "gate_retry"
-                continue
-            reason = ";".join(str(d.get("code")) for d in editorial[:8])
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": gate_failure_class(reason),
-                    "reject_reason": reason,
-                    "model": model_name or None,
-                    "status": "editorial_reject_story",
-                }
-            )
-            if capture is not None:
-                capture.record_attempt(
-                    attempt_index=attempt_idx,
-                    raw_response=content,
-                    parsed=parsed,
-                    after_normalize={
-                        **normalized,
-                        "editorial_score": ed_score,
-                        "editorial_defects": editorial,
-                        "gate_maturity": maturity_summary(editorial),
-                    },
-                    after_gate=None,
-                    status="editorial_reject_story",
-                    reject_reason=reason,
-                )
-            _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
-            return None
-
-        # Remaining editorial defects: observe only (score + capture).
-        if editorial and capture is not None:
-            try:
-                for d in editorial:
-                    if str(d.get("runtime_action") or "score_only") != "score_only":
-                        continue
-                    capture.add_defect(
-                        str(d.get("code") or "EDITORIAL"),
-                        f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
-                        f"|action=score_only",
-                        cls=str(d.get("capture_class") or "VALIDATION"),
-                    )
-            except Exception:
-                pass
-        if pers_defects and capture is not None:
-            try:
-                for d in pers_defects:
-                    if str(d.get("runtime_action") or "score_only") != "score_only":
-                        continue
-                    capture.add_defect(
-                        str(d.get("code") or "PERSONALIZATION"),
-                        f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
-                        f"|action=score_only",
-                        cls="PERSONALIZATION",
-                    )
-            except Exception:
-                pass
-
-        scenario = native_llm_to_day_scenario_v1(
-            normalized,
-            interpretation=interp,
-            ritual_context=ritual_context,
-            celestial_events=celestial_events,
-            day_thesis=_as_dict(interp.get("day_thesis")),
-        )
-        scenario, scenario_heals = apply_soft_scenario_heals(scenario)
-        attempt_heals.extend(scenario_heals)
-        if scenario_heals and capture is not None:
-            try:
-                for rule in scenario_heals[:12]:
-                    capture.add_defect(
-                        "SCENARIO_SOFT_HEAL",
-                        f"healed:{rule}|maturity=blocking|action=heal",
-                        cls="VALIDATION",
-                    )
-            except Exception:
-                pass
-        scen_errors = validate_day_scenario_v1(scenario)
-        hard = [e for e in scen_errors if is_hard_scenario_validate_error(e)]
-        if hard:
-            reason = ";".join(hard)
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": gate_failure_class(reason),
-                    "reject_reason": reason,
-                    "model": model_name or None,
-                    "status": "scenario_validate_reject",
-                    "healed_rules": list(attempt_heals),
-                }
-            )
-            if capture is not None:
-                capture.record_attempt(
-                    attempt_index=attempt_idx,
-                    raw_response=content,
-                    parsed=parsed,
-                    after_normalize=normalized,
-                    after_gate=scenario,
-                    status="scenario_validate_reject",
-                    reject_reason=reason,
-                )
-            retry_feedback = "Исправь structural/SoT ошибки: " + "; ".join(hard[:6])
-            pending_retry_reason = "gate_retry"
-            continue
-        heal_fc = healed_failure_class(attempt_heals)
-        attempt_rows.append(
-            {
-                "attempt_index": attempt_idx,
-                "attempt_duration_ms": attempt_ms,
-                "failure_class": heal_fc,
-                "reject_reason": (";".join(attempt_heals) if attempt_heals else None),
-                "model": model_name or None,
-                "status": "accepted_native_c36",
-                "user_sent_chars": len(user_sent or ""),
-                "healed_rules": list(attempt_heals),
-            }
-        )
-        if capture is not None:
-            capture.record_attempt(
-                attempt_index=attempt_idx,
-                raw_response=content,
-                parsed=parsed,
-                after_normalize={
-                    **normalized,
-                    "editorial_score": ed_score,
-                    "editorial_defects": editorial,
-                    "personalization_score": pers_score,
-                    "personalization_defects": pers_defects,
-                    "gate_maturity": {
-                        "editorial": maturity_summary(editorial),
-                        "personalization": maturity_summary(pers_defects),
-                        "policy": "hard_plus_promoted_quality_blocking_c363",
-                    },
-                },
-                after_gate=scenario,
-                status="accepted_native_c36",
-            )
-        scenario["personalization_depth"] = normalized.get("personalization_depth") or DEPTH_GENERAL
-        scenario["personalization_evidence"] = {
-            "evidence_depth": pers_pack.get("evidence_depth"),
-            "confidence": pers_pack.get("confidence"),
-            "evidence_refs": list(pers_pack.get("evidence_refs") or [])[:12],
-            "tendency_ids": [
-                t.get("id")
-                for t in _as_list(pers_pack.get("behavioral_tendencies"))
-                if isinstance(t, dict)
-            ][:6],
-            "sphere_selection": _as_dict(pers_pack.get("sphere_selection")),
-        }
-        # Public editorial_meta keeps pre-C3.6 analyzer shape only.
-        # gate_maturity / runtime_action / policy live in capture metadata (not API).
-        scenario["editorial_meta"] = {
-            "prompt_version": NATIVE_PROMPT_VERSION,
-            "model_version": model_name,
-            "native_schema_version": NATIVE_LLM_SCHEMA_VERSION,
-            "editorial_score": ed_score,
-            "editorial_defects": public_defect_view(editorial),
-            "personalization_score": pers_score,
-            "personalization_defects": public_defect_view(last_pers_defects),
-            "personalization_depth": scenario["personalization_depth"],
-            "healed_rules": list(attempt_heals),
-        }
-        _write_native_call_meta(
-            meta_out,
-            success=True,
-            model=model_name or None,
-            system_chars=system_chars,
-            user_sent_chars=user_sent_chars,
-            attempts=attempt_rows,
-            healed_rules=attempt_heals,
-        )
-        return scenario
-    _fail(
-        failure_class=(attempt_rows[-1].get("failure_class") if attempt_rows else NATIVE_FAILURE_OTHER)
-        or NATIVE_FAILURE_OTHER,
-        reject_reason=(attempt_rows[-1].get("reject_reason") if attempt_rows else "exhausted_attempts"),
     )
-    return None
+
+    normalized, split_attempt_rows, split_meta = orchestrate_i0_split_generation(
+        global_system=global_system,
+        personal_system=personal_system,
+        user_base=user_base,
+        pers_pack=pers_pack,
+        il4_pack=il4_pack,
+        allowed_evidence_ids=allowed,
+        max_attempts=attempts,
+        llm_call=_llm_call_split,
+        resolve_attempt_model=resolve_native_attempt_model,
+        process_global_normalized=_process_global_stage_parsed,
+        meta_out=meta_out,
+    )
+    attempt_rows.extend(split_attempt_rows)
+    for row in split_attempt_rows:
+        if row.get("model"):
+            model_name = str(row["model"])
+    if split_meta.get("personal_degraded") and capture is not None:
+        try:
+            capture.add_defect(
+                "I0_PERSONAL_DEGRADED",
+                "personal_stage_failed;global_only",
+                cls="VALIDATION",
+            )
+        except Exception:
+            pass
+
+    if normalized is None:
+        _fail(
+            failure_class=(attempt_rows[-1].get("failure_class") if attempt_rows else NATIVE_FAILURE_OTHER)
+            or NATIVE_FAILURE_OTHER,
+            reject_reason=(attempt_rows[-1].get("reject_reason") if attempt_rows else "global_stage_failed"),
+        )
+        return None
+
+    if not normalized.get("personalization_depth"):
+        normalized["personalization_depth"] = pers_pack.get("evidence_depth") or DEPTH_GENERAL
+        normalized["personalization"] = {
+            **_as_dict(normalized.get("personalization")),
+            "depth": normalized["personalization_depth"],
+            "pack_confidence": pers_pack.get("confidence"),
+        }
+
+    # --- merged payload: personalization + editorial gates (single pass) ---
+    pers_defects = run_personalization_gate_c33(normalized, pers_pack)
+    pers_defects = list(pers_defects) + list(run_sphere_selection_gate_c33b(normalized, pers_pack))
+    pers_defects = annotate_defects_with_maturity(pers_defects)
+    last_pers_defects = pers_defects
+    pers_score = score_personalization_c33(pers_defects)
+    if should_reject_story(pers_defects):
+        reason = ";".join(str(d.get("code")) for d in pers_defects[:8])
+        _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
+        return None
+
+    natal_rows = _as_list(_as_dict(normalized.get("interpretive_chorus")).get("natal"))
+    editorial = run_editorial_quality_gate_c31(
+        normalized,
+        has_natal_evidence=bool(natal_rows and has_natal_evidence),
+    )
+    if natal_rows and not has_natal_evidence:
+        editorial = run_editorial_quality_gate_c31(normalized, has_natal_evidence=False)
+    editorial = annotate_defects_with_maturity(editorial)
+    ed_score = score_editorial_quality_c31(editorial)
+    if should_reject_story(editorial):
+        reason = ";".join(str(d.get("code")) for d in editorial[:8])
+        _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
+        return None
+
+    attempt_heals: list[str] = []
+    scenario = native_llm_to_day_scenario_v1(
+        normalized,
+        interpretation=interp,
+        ritual_context=ritual_context,
+        celestial_events=celestial_events,
+        day_thesis=_as_dict(interp.get("day_thesis")),
+    )
+    scenario, scenario_heals = apply_soft_scenario_heals(scenario)
+    attempt_heals.extend(scenario_heals)
+    scen_errors = validate_day_scenario_v1(scenario)
+    hard = [e for e in scen_errors if is_hard_scenario_validate_error(e)]
+    if hard:
+        reason = ";".join(hard)
+        _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
+        return None
+
+    attempt_rows.append(
+        {
+            "attempt_index": len(attempt_rows),
+            "stage": "merged",
+            "status": "accepted_native_i0_split",
+            "i0_split": split_meta,
+        }
+    )
+    if capture is not None:
+        capture.record_attempt(
+            attempt_index=len(attempt_rows) - 1,
+            raw_response=None,
+            parsed=None,
+            after_normalize={
+                **normalized,
+                "editorial_score": ed_score,
+                "editorial_defects": editorial,
+                "personalization_score": pers_score,
+                "personalization_defects": pers_defects,
+                "gate_maturity": {
+                    "editorial": maturity_summary(editorial),
+                    "personalization": maturity_summary(pers_defects),
+                    "policy": "i0_split_c5",
+                },
+                "i0_split": split_meta,
+            },
+            after_gate=scenario,
+            status="accepted_native_i0_split",
+        )
+    scenario["personalization_depth"] = normalized.get("personalization_depth") or DEPTH_GENERAL
+    scenario["personalization_evidence"] = {
+        "evidence_depth": pers_pack.get("evidence_depth"),
+        "confidence": pers_pack.get("confidence"),
+        "evidence_refs": list(pers_pack.get("evidence_refs") or [])[:12],
+        "tendency_ids": [
+            t.get("id")
+            for t in _as_list(pers_pack.get("behavioral_tendencies"))
+            if isinstance(t, dict)
+        ][:6],
+        "sphere_selection": _as_dict(pers_pack.get("sphere_selection")),
+        "i0_split": split_meta,
+    }
+    scenario["editorial_meta"] = {
+        "prompt_version": NATIVE_PROMPT_VERSION,
+        "model_version": model_name,
+        "native_schema_version": NATIVE_LLM_SCHEMA_VERSION,
+        "editorial_score": ed_score,
+        "editorial_defects": public_defect_view(editorial),
+        "personalization_score": pers_score,
+        "personalization_defects": public_defect_view(last_pers_defects),
+        "personalization_depth": scenario["personalization_depth"],
+        "healed_rules": list(attempt_heals),
+        "i0_split": split_meta,
+    }
+    _write_native_call_meta(
+        meta_out,
+        success=True,
+        model=model_name or None,
+        system_chars=system_chars,
+        user_sent_chars=user_sent_chars,
+        attempts=attempt_rows,
+        healed_rules=attempt_heals,
+    )
+    return scenario
+

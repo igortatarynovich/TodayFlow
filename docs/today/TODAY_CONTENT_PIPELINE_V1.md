@@ -338,7 +338,7 @@ manifest:
 | `visual_mode` от native LLM | **удалить как decision** | `primary_energy` из scoring; visual_mode = map |
 | `day_flow_windows_kimi_v1` | **удалить** | Окна считает Engine; LLM #1 только labels |
 | `today_glance_timeline_v1` clocks | **оставить** как geometry | Расширить до Global windows (`supports[]`/`cautions[]`) |
-| `day_scenario_native_llm_c1` (один вызов chorus+conflict+scenes+natal+card+number) | **упростить / разрезать** | Два вызова: Global Narrative, Personal Narrative. Не цементировать как универсальный контейнер |
+| `day_scenario_native_llm_c1` (один вызов chorus+conflict+scenes+natal+card+number) | **split landed 1.3.116** | Global stage + Personal overlay stage ([NATIVE_C1_I0_GENERATION_SPLIT_V1](./NATIVE_C1_I0_GENERATION_SPLIT_V1.md)); prompt `day-scenario-native-c5.0` |
 | Dramaturgy brief C4 | **упростить** | DTO **Global Profile** → LLM #1. Не planner сюжета, не personal |
 | `day_scenario` / conflict / scenes | **упростить** | Не Meaning SoT. Максимум внутренний literary scaffold **над** уже зафиксированным Global/Personal Profile. Не выбирает energy/windows |
 | Projector B5 | **упростить** | Structure-only mapping Profile+narratives → `today_contract`. Не primary-pick, не concat meaning |
