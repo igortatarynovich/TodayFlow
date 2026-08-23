@@ -210,7 +210,7 @@ Examples against the current tree:
 | Pulse Part Two / Hand Ch.10 / Cell C fourth book | KC-S-LINT is `DEFERRED_V1` + `ACCESS_BLOCKED`. **Out of queue.** |
 | Fourth Mars psych book | KC-P-MAR psych is `ACCESS_BLOCKED`. **Out of queue.** |
 | Any ASC cookbook | KC-ANG-ASC type is locked. **Out of queue** — Mainstream panel is not a cookbook; grammar/fill not started. |
-| Layer 5 transit cookbook | KC-C-\* is `CANDIDATE`; IL-2 not started. **Out of queue.** |
+| Layer 5 transit cookbook | KC-C-* remainder is `CANDIDATE` (missing outer atoms). Compose-default locked 1.3.107. **Out of queue.** |
 | Named NEED_OWNER page (p.138, Costello, Hand Ch.4 Sun) that **opens** | Access extract against an existing row. Not discovery. Allowed under 1.3.59 even during freeze. |
 
 ---

@@ -104,7 +104,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** **1.3.107 IL-2 composition rules.** Role weights, conflict, merge. Layer 5 gold with stored atoms = composed (0 objects). Outer gold rows remain candidates. Catalog 38 draft / 0 `active`. Freeze **1.3.106** stands. Five stored families = V1 atoms. Uranus/Neptune/Pluto remain claims. DSC/IC out of V1. CORE unscored (not a gate). **STOP Angles.** **1.3.105 final atomic smoke stands.** Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle smoke stands.** **STOP Aspects.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = IL-3 engine (sky → astrological themes; **IL-3 rank ≠ user relevance**). Not pair catalog, not expression, not Relevance/Prioritization engines. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-23):** **1.3.107 IL-2 composition rules.** Role weights, conflict, merge. Layer 5 gold with stored atoms = composed (0 objects). Outer gold rows remain candidates. Catalog 38 draft / 0 `active`. FREEZE **1.3.106** stands. Five stored families = V1 atoms. Uranus/Neptune/Pluto remain claims. DSC/IC out of V1. CORE unscored (not a gate). **STOP Angles.** **1.3.105 final atomic smoke stands.** Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle smoke stands.** **STOP Aspects.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = IL-3 engine (sky → astrological themes; **IL-3 rank ≠ user relevance**). Not pair catalog, not expression, not Relevance/Prioritization engines. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -286,6 +286,15 @@ Status: Active working document
 - **Public contract changed?** no
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.107 IL-2 composition rules (2026-08-23)
+
+- **SoT before:** atoms frozen (1.3.106); ACM §3 was a machine-vector sketch; KC-C-RULES deferred; Layer 5 gold = candidates. Compose could still become a pair catalog, collapse House 1 into ASC, or wait on CORE / gold-set 41.
+- **SoT after:** IL-2 **rules** (role weights, conflict, merge) are the lemma-compose SoT. Five jobs stay five jobs. Layer 5 gold rows with stored atoms are **composed** (0 objects). Outer-planet gold rows stay candidates (missing atom). Next named = **IL-3** engine. Freeze stands. Not a canonical v2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/IL2_COMPOSITION_RULES_V1.md` · inventory step 35 / KC-C-RULES · IL 1.3.107 §6.61
 - **Backward compatible?** yes (`draft`)
 
 ## Architecture impact — IL-1 1.3.101 Angle Canon grammar (2026-08-22)

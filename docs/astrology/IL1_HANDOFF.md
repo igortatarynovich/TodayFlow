@@ -537,19 +537,6 @@ IL-2    composition rules       1.3.107  LOCKED
 fill 1.3.102 → storage 1.3.103 → Planet×Angle smoke 1.3.104 → STOP Angles → final atomic smoke 1.3.105 PASS → Knowledge Core V1 FREEZE 1.3.106 FROZEN → IL-2 composition rules 1.3.107 LOCKED → ЭТОТ ПРОХОД: IL-3 engine.
 
 NEXT NAMED = IL-3 (один проход). Interpretation Engine (sky → themes). Не pair catalog. Не Layer 5 essays. Не pack rewrite. Не `active`. Не IL-4 expression.
-- Catalog: 38 draft / 0 active. Schema/objects не менять без named Architecture impact.
-- Runtime игнорирует draft. Не deploy. Не set active. Не CORE scoring.
-- Prior: [Knowledge Core V1 FREEZE](0c589057-9823-4af2-8990-114e10a93556)
-  Prior smoke: [IL-1 atomic smoke](437da7a7-3241-4548-b080-dd5882e9e034)
-
-ЧТО УЖЕ ЗАКРЫТО (не трогать packs / lemmas)
-Planet  core_function  what     1.3.82
-Sign    manner         how      1.3.88
-House   arena          where    1.3.93
-Aspect  relation       relation 1.3.98   (не interaction; Trine≠Sextile при interaction=flow)
-Angle   orientation    locus    1.3.104  STOP Angles
-Joint   five families           1.3.105  PASS
-FREEZE  V1 atoms                1.3.106  FROZEN
 
 Locked packs (verbatim):
 - mars   act · pursue · assert
