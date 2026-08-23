@@ -400,7 +400,7 @@ Astronomy → IL atoms → IL-2 frames → IL-3 astrological themes
 
 Downstream may enrich / filter / express. It may not change an upstream semantic decision. Tarot / numerology keep their own cores; they do not join at IL-3.
 
-**Next (one task):** **IL-3 Interpretation Engine** (sky → themes). Not expression. Not `active`. Not pair catalog. **1.3.107 IL-2 composition rules stand** (weights, conflict, merge; Layer 5 gold with atoms = composed). **1.3.106 Knowledge Core V1 FREEZE stands.** Five stored families = V1 atoms. Catalog 38 draft / 0 `active`. **STOP Angles.** Sequence: IL-3 → IL-4. **1.3.105 final atomic smoke stands.** Five stored families. Operators discriminate. Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle composition smoke stands.** Four gates. `canon.orientation` is the operator. Mars AT ASC ≠ Mars AT MC ≠ House 1/10. Occupancy ≠ conjunction. **1.3.103 Angle Canon storage/materialization stands.** Two `type=angle` drafts. `canon.orientation` copied verbatim from 1.3.102. Catalog 38 draft / 0 `active`. **1.3.102 Angle Canon fill stands.** Two `orientation` packs. Origin `direct` from include. House 1/10 collision. Secondary unused. **1.3.101 Angle Canon grammar stands.** One slot (`orientation`). Include-first. Secondary = collision-zone, not default. **1.3.100 Mainstream Angle Semantic Map stands.** Same panel. House 1/10 vocabulary is not proof. Angular strength is not meaning. Planet-on-angle cookbooks are out. **1.3.99 Angle Canon model stands.** Orientation loci (horizon vs meridian). **1.3.98 stored Planet × Aspect composition smoke PASS.** Four gates. `canon.relation` is the operator. **STOP Aspects.** **1.3.97 Aspect Canon storage/materialization stands.** **1.3.96 Aspect Canon fill stands.** **1.3.95 Aspect Canon grammar stands.** **1.3.94 Mainstream Aspect Semantic Map stands.** **1.3.93 Planet × House composition smoke PASS.** Historical 1.3.82 / 1.3.88 house PARTIAL = snapshots. **STOP Houses.** House Canon storage stands (1.3.92). House Canon fill stands (1.3.91). House Canon grammar stands (1.3.90). Houses Mainstream map stands (1.3.89). Planet × Sign smoke-test stands (1.3.88). Sign Canon materialization stands (1.3.87). Sign Canon storage stands (1.3.86). Sign Canon fill stands (1.3.85). Sign Canon grammar stands (1.3.84). Signs Mainstream map stands (1.3.83). 1.3.82 smoke-test stands as historical PARTIAL for Venus × Capricorn. 1.3.81 packs stand. 1.3.80 storage stands. 1.3.79 packs stand. 1.3.78 grammar stands. 1.3.77 planet map stands. 1.3.76 Product Canon vs Lenses stand. 1.3.75 teardown Phase 0 stands as a recognition check. 1.3.74 three layers stand (do not mix Corpus / Consensus / Canon — now Mainstream / Canon / Lenses). 1.3.73 criteria stand for Canon *structuring*. 1.3.72 outer optional-keys stand. Do **not** ingest. Do **not** rewrite `function`. Do **not** fill Uranus/Neptune/Pluto `function`. Not a research cycle. Do **not** revise locked lemmas. **STOP Signs.** Do not improve Sign/House/Aspect packs without a named Composition Engine failure. Not QUALITY. Do **not** start ASC cookbooks. Do **not** start Layer 5. Do **not** start CORE scoring. Layer 2 Signs stays **classification-complete / interpretation-deferred**; do **not** reopen sign literature as portraits.
+**Next (one task):** **library scale** (not pair catalog, not `active`). Not meaning rewrite. **1.3.109 IL-4 Expression stands** (voice ≠ meaning). **1.3.108 IL-3 Interpretation Engine stands** (sky-internal rank ≠ user relevance). **1.3.107 IL-2 composition rules stand** (weights, conflict, merge; Layer 5 gold with atoms = composed). **1.3.106 Knowledge Core V1 FREEZE stands.** Five stored families = V1 atoms. Catalog 38 draft / 0 `active`. **STOP Angles.** Sequence: library scale. **1.3.105 final atomic smoke stands.** Five stored families. Operators discriminate. Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle composition smoke stands.** Four gates. `canon.orientation` is the operator. Mars AT ASC ≠ Mars AT MC ≠ House 1/10. Occupancy ≠ conjunction. **1.3.103 Angle Canon storage/materialization stands.** Two `type=angle` drafts. `canon.orientation` copied verbatim from 1.3.102. Catalog 38 draft / 0 `active`. **1.3.102 Angle Canon fill stands.** Two `orientation` packs. Origin `direct` from include. House 1/10 collision. Secondary unused. **1.3.101 Angle Canon grammar stands.** One slot (`orientation`). Include-first. Secondary = collision-zone, not default. **1.3.100 Mainstream Angle Semantic Map stands.** Same panel. House 1/10 vocabulary is not proof. Angular strength is not meaning. Planet-on-angle cookbooks are out. **1.3.99 Angle Canon model stands.** Orientation loci (horizon vs meridian). **1.3.98 stored Planet × Aspect composition smoke PASS.** Four gates. `canon.relation` is the operator. **STOP Aspects.** **1.3.97 Aspect Canon storage/materialization stands.** **1.3.96 Aspect Canon fill stands.** **1.3.95 Aspect Canon grammar stands.** **1.3.94 Mainstream Aspect Semantic Map stands.** **1.3.93 Planet × House composition smoke PASS.** Historical 1.3.82 / 1.3.88 house PARTIAL = snapshots. **STOP Houses.** House Canon storage stands (1.3.92). House Canon fill stands (1.3.91). House Canon grammar stands (1.3.90). Houses Mainstream map stands (1.3.89). Planet × Sign smoke-test stands (1.3.88). Sign Canon materialization stands (1.3.87). Sign Canon storage stands (1.3.86). Sign Canon fill stands (1.3.85). Sign Canon grammar stands (1.3.84). Signs Mainstream map stands (1.3.83). 1.3.82 smoke-test stands as historical PARTIAL for Venus × Capricorn. 1.3.81 packs stand. 1.3.80 storage stands. 1.3.79 packs stand. 1.3.78 grammar stands. 1.3.77 planet map stands. 1.3.76 Product Canon vs Lenses stand. 1.3.75 teardown Phase 0 stands as a recognition check. 1.3.74 three layers stand (do not mix Corpus / Consensus / Canon — now Mainstream / Canon / Lenses). 1.3.73 criteria stand for Canon *structuring*. 1.3.72 outer optional-keys stand. Do **not** ingest. Do **not** rewrite `function`. Do **not** fill Uranus/Neptune/Pluto `function`. Not a research cycle. Do **not** revise locked lemmas. **STOP Signs.** Do not improve Sign/House/Aspect packs without a named Composition Engine failure. Not QUALITY. Do **not** start ASC cookbooks. Do **not** start Layer 5. Do **not** start CORE scoring. Layer 2 Signs stays **classification-complete / interpretation-deferred**; do **not** reopen sign literature as portraits.
 
 For any **new** semantic core: stop and follow [`KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) from step 1. Do not start that core by opening a convenient book.
 
@@ -517,11 +517,11 @@ TodayFlow. Продукт: Personal Model → Profile + Today. SoT = docs/, не
 
 СОСТОЯНИЕ
 - Branch: il/il-1-ingest (tracks origin/il/il-1-ingest). Не merge в main. Draft PR #17 vs main — stale; не merge.
-- Tip: 7f2f7e9f — 1.3.106 Knowledge Core V1 FREEZE, committed + pushed. **This pass: 1.3.107 IL-2 composition rules (uncommitted until owner asks).**
+- Tip: e8e6937d — 1.3.107 IL-2 close-out pins, committed + pushed. **This pass: 1.3.109 IL-4 Expression (uncommitted until owner asks).**
 - Catalog: 38 draft / 0 active. Schema/objects не менять без named Architecture impact.
 - Runtime игнорирует draft. Не deploy. Не set active. Не CORE scoring.
 - Prior: [Knowledge Core V1 FREEZE](0c589057-9823-4af2-8990-114e10a93556)
-  Prior smoke: [IL-1 atomic smoke](437da7a7-3241-4548-b080-dd5882e9e034)
+  Prior IL-2: [IL-2 composition rules](c19a9614)
 
 ЧТО УЖЕ ЗАКРЫТО (не трогать packs / lemmas)
 Planet  core_function  what     1.3.82
@@ -532,11 +532,13 @@ Angle   orientation    locus    1.3.104  STOP Angles
 Joint   five families           1.3.105  PASS
 FREEZE  V1 atoms                1.3.106  FROZEN
 IL-2    composition rules       1.3.107  LOCKED
+IL-3    interpretation engine   1.3.108  LOCKED
+IL-4    expression              1.3.109  LOCKED
 
 ОЧЕРЕДЬ (locked)
-fill 1.3.102 → storage 1.3.103 → Planet×Angle smoke 1.3.104 → STOP Angles → final atomic smoke 1.3.105 PASS → Knowledge Core V1 FREEZE 1.3.106 FROZEN → IL-2 composition rules 1.3.107 LOCKED → ЭТОТ ПРОХОД: IL-3 engine.
+fill 1.3.102 → storage 1.3.103 → Planet×Angle smoke 1.3.104 → STOP Angles → final atomic smoke 1.3.105 PASS → Knowledge Core V1 FREEZE 1.3.106 FROZEN → IL-2 composition rules 1.3.107 LOCKED → IL-3 engine 1.3.108 LOCKED → IL-4 expression 1.3.109 LOCKED → ЭТОТ ПРОХОД: library scale.
 
-NEXT NAMED = IL-3 (один проход). Interpretation Engine (sky → themes). Не pair catalog. Не Layer 5 essays. Не pack rewrite. Не `active`. Не IL-4 expression.
+NEXT NAMED = library scale (один проход). Не pair catalog. Не Layer 5 essays. Не pack rewrite. Не `active`. Не IL-3 rank rewrite. Не IL-4 meaning rewrite. Не user relevance.
 
 Locked packs (verbatim):
 - mars   act · pursue · assert
@@ -557,47 +559,43 @@ Locked packs (verbatim):
 OUT of V1 atoms: Uranus/Neptune/Pluto = claims, no objects; DSC/IC out of V1; CORE unscored (not a gate); Layer 5 gold with atoms = composed (1.3.107); outer gold rows remain candidates; later-interpretive signs deferred; Co–Star = recognition check, not source. Gold-set 41 is not the done criterion.
 
 ОЧЕРЕДЬ (locked)
-fill 1.3.102 → storage 1.3.103 → Planet×Angle smoke 1.3.104 → STOP Angles → final atomic smoke 1.3.105 PASS → Knowledge Core V1 FREEZE 1.3.106 FROZEN → IL-2 composition rules 1.3.107 LOCKED → ЭТОТ ПРОХОД: IL-3 engine.
+fill 1.3.102 → storage 1.3.103 → Planet×Angle smoke 1.3.104 → STOP Angles → final atomic smoke 1.3.105 PASS → Knowledge Core V1 FREEZE 1.3.106 FROZEN → IL-2 composition rules 1.3.107 LOCKED → IL-3 engine 1.3.108 LOCKED → IL-4 expression 1.3.109 LOCKED → ЭТОТ ПРОХОД: library scale.
 
-NEXT NAMED = IL-3 (один проход). Interpretation Engine (sky → themes). Не pair catalog. Не Layer 5 essays. Не pack rewrite. Не `active`. Не IL-4 expression.
+NEXT NAMED = library scale (один проход). Не pair catalog. Не Layer 5 essays. Не pack rewrite. Не `active`. Не IL-3 rank rewrite. Не IL-4 meaning rewrite.
 
-IL-3 — ЧТО ЭТО
-Не литература. Не freeze reopen. Не pair catalog. Не LLM copy. Не новый SoT-файл. Не repo tree.
-Это Interpretation Engine: sky facts → IL-2 frames → ranked **astrological** themes.
-IL-3 rank ≠ user relevance rank. «Что важно Игорю сегодня» — Relevance/Prioritization, вне Astrology.
-Цепочка: Astronomy → IL atoms → IL-2 frames → IL-3 themes → Global Day → Personal overlay (Natal × CE) → Relevance → Priority → Narrative → Expression → Experience.
+IL-4 — ЗАКРЫТ 1.3.109
+Voice packs for already ranked themes. Meaning already chosen. LLM does not decide Saturn □ Venus.
+
+LIBRARY SCALE — ЧТО ЭТО
+Не freeze reopen. Не pair catalog. Не `active`. Не CORE scoring.
+Расширение библиотеки после IL-4 sequence, не новый канон v2.
 
 Читай ПЕРВЫМ (назвать paths+sections в Architecture impact):
-1. docs/astrology/IL2_COMPOSITION_RULES_V1.md
-2. docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md
-3. docs/astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md — KC-C-RULES, step 36
-4. docs/ASTROLOGY_COMPOSITION_MODEL.md
-5. docs/astrology/INTERPRETATION_LIBRARY_V1.md — Sequence · §6.61 · §7 IL-3 row
+1. docs/astrology/IL4_EXPRESSION_V1.md
+2. docs/astrology/IL3_INTERPRETATION_ENGINE_V1.md
+3. docs/astrology/IL2_COMPOSITION_RULES_V1.md
+4. docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md
+5. docs/astrology/INTERPRETATION_LIBRARY_V1.md — Sequence · §6.63 · §7
 6. docs/astrology/IL1_HANDOFF.md §3
 7. docs/PRODUCT_EXECUTION_TRACKER.md NOW
 8. AGENTS.md Architecture impact
 
-IL-3 ДОЛЖЕН
-- Читать IL-2 frames, не писать pair essays.
-- Ранжировать темы внутри текущего sky state (person-blind).
+IL-4 ДОЛЖЕН был (done 1.3.109)
+- Выражать IL-3 themes, не выбирать смысл.
 - Держать пять jobs.
 - Occupancy ≠ conjunction; House 1 ≠ ASC; MC ≠ career; interaction ≠ relation.
-- Architecture impact. Не новый «canonical v2».
 
-IL-3 НЕ ДОЛЖЕН
-- знать человека (CE / goals / prefs) или решать user relevance
+LIBRARY SCALE НЕ ДОЛЖЕН
 - lemma rewrite / pack enrich / schema без named impact
-- set active / LLM copy / Today prompts
+- set active / Today prompts as meaning SoT
 - books / CORE scoring / Co–Star ingest
 - ASC cookbooks; outer objects
 - occupancy = conjunction; House 1 = ASC; MC = career
-- стартовать Relevance / Prioritization / Continuity / Trust / Expression engines
+- стартовать Relevance / Prioritization / Continuity / Trust as meaning engines
 - merge to main mid-pass; deploy
-- reopen FREEZE / IL-2 / Angles / Aspects / Houses / Signs
+- reopen FREEZE / IL-2 / IL-3 / IL-4 / Angles / Aspects / Houses / Signs
 
-Тест на PR: какой слой принимает новое смысловое решение? Если экран / LLM / кеш / mapper / iOS view / serializer — ownership сломан.
-
-STOP Angles. STOP Aspects. STOP Houses. STOP Signs. STOP IL-2 rules rewrite.
+STOP Angles. STOP Aspects. STOP Houses. STOP Signs. STOP IL-2 rules rewrite. STOP IL-3 rank rewrite. STOP IL-4 meaning rewrite.
 Do not start CORE scoring. Do not start ASC cookbooks.
 Layer 2 Signs = classification-complete / interpretation-deferred.
 
@@ -605,6 +603,8 @@ Git: only il/il-1-ingest. Commit/push только если owner попроси
 
 Тесты (host python3 часто без pytest → backend/.venv/bin/python; pytest.ini --cov → -o addopts=):
 cd /opt/TodayFlow/backend && .venv/bin/python -m pytest \
+  tests/test_il4_expression_engine_v1.py \
+  tests/test_il3_interpretation_engine_v1.py \
   tests/test_il2_composition_rules_v1.py \
   tests/test_knowledge_core_v1_freeze.py \
   tests/test_atomic_canon_composition_smoke_v1.py \
@@ -619,7 +619,7 @@ cd /opt/TodayFlow/backend && .venv/bin/python -m pytest \
   tests/test_sign_canon_composition_smoke_v1.py \
   tests/test_planet_canon_composition_smoke_v1.py \
   -q --tb=short --noconftest -o addopts=
-(1.3.107 IL-2 + 1.3.106 freeze baseline. Не claim CI green unless GitHub checks on the SHA.)
+(1.3.109 IL-4 + 1.3.108 IL-3 + 1.3.107 IL-2 + 1.3.106 freeze baseline. Не claim CI green unless GitHub checks on the SHA.)
 
-Сделай IL-3 engine. Не pair catalog. Не книги. Не active. Не reopen freeze / IL-2.
+Сделай library scale. Не pair catalog. Не книги. Не active. Не reopen freeze / IL-2 / IL-3 / IL-4.
 ```

@@ -104,9 +104,9 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** **1.3.107 IL-2 composition rules.** Role weights, conflict, merge. Layer 5 gold with stored atoms = composed (0 objects). Outer gold rows remain candidates. Catalog 38 draft / 0 `active`. FREEZE **1.3.106** stands. Five stored families = V1 atoms. Uranus/Neptune/Pluto remain claims. DSC/IC out of V1. CORE unscored (not a gate). **STOP Angles.** **1.3.105 final atomic smoke stands.** Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle smoke stands.** **STOP Aspects.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = IL-3 engine (sky → astrological themes; **IL-3 rank ≠ user relevance**). Not pair catalog, not expression, not Relevance/Prioritization engines. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-23):** **1.3.109 IL-4 Expression.** IL-3 themes → surface voice packs (today / profile / compatibility). **Voice ≠ meaning.** IL-3 rank ≠ user relevance. Catalog 38 draft / 0 `active`. IL-3 **1.3.108** stands. IL-2 **1.3.107** stands. FREEZE **1.3.106** stands. Five stored families = V1 atoms. Uranus/Neptune/Pluto remain claims. DSC/IC out of V1. CORE unscored (not a gate). **STOP Angles.** **1.3.105 final atomic smoke stands.** Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle smoke stands.** **STOP Aspects.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = library scale (not pair catalog, not `active`, not Relevance/Prioritization). Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3. Co–Star = recognition check.
 
-**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
+**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until library-scale meaning is wired through IL-4 packs. IL-4 (1.3.109) voices themes; it does not choose meaning. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
 ## Architecture impact — IL sequence lock (2026-08-17)
 
@@ -286,6 +286,24 @@ Status: Active working document
 - **Public contract changed?** no
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.109 IL-4 Expression (2026-08-23)
+
+- **SoT before:** IL-3 ranked frames; Expression named but unimplemented. LLM / Today prompts could still choose meaning.
+- **SoT after:** IL-4 **engine** voices ranked themes by surface (tone / length / focus). Lemmas verbatim. Person-blind. Next named = **library scale**. Freeze, IL-2, and IL-3 stand. Not a canonical v2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/IL4_EXPRESSION_V1.md` · inventory step 37 / KC-C-EXPR · IL 1.3.109 §6.63
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.108 IL-3 Interpretation Engine (2026-08-23)
+
+- **SoT before:** IL-2 bag of frames; IL-3 named as sky-internal rank but unimplemented. A next pass could still read CE, start Relevance, or write pair essays as themes.
+- **SoT after:** IL-3 **engine** ranks composed frames by sky band (transit before natal; input order inside a band). Person-blind. Missing atoms dropped. Five jobs stay partitioned. Next named = **IL-4** expression. Freeze and IL-2 stand. Not a canonical v2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/IL3_INTERPRETATION_ENGINE_V1.md` · inventory step 36 / KC-C-ENGINE · IL 1.3.108 §6.62
 - **Backward compatible?** yes (`draft`)
 
 ## Architecture impact — IL-1 1.3.107 IL-2 composition rules (2026-08-23)

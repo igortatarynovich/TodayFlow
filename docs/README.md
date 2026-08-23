@@ -39,7 +39,7 @@
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — JSON / Machine Contract build order (не порядок исследования смысла)
-- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.107):** IL-2 composition rules. Freeze 1.3.106 stands. Five stored families = V1 atoms. STOP Angles. Next = IL-3 engine. Исторический корпус = lenses
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.109):** IL-4 Expression. IL-3 1.3.108, IL-2 1.3.107 and freeze 1.3.106 stand. Five stored families = V1 atoms. STOP Angles. Next = library scale. Исторический корпус = lenses
 - [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) — **IL V1 freeze map (APPROVED):** что библиотека должна знать. **1.3.106 FROZEN** on stored primitives. Books только против named `KC-*` row. IL-1 done = минимальные primitives
 - [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) — **Product Canon vs Lenses (1.3.76):** Mainstream → Canon → runtime. Corpus → education / SEO / deep dives
 - [astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) — **Mainstream planet map (1.3.77):** concept families. Not Canon, not JSON
@@ -60,8 +60,10 @@
 - [astrology/ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md](./astrology/ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md) — **Angle Canon storage (1.3.103):** `angle_canon_pack`; two drafts. Smoke **done 1.3.104**
 - [astrology/ANGLE_CANON_COMPOSITION_SMOKE_V1.md](./astrology/ANGLE_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.104):** stored Planet × Angle PASS. Occupancy ≠ conjunction. STOP Angles
 - [astrology/ATOMIC_CANON_COMPOSITION_SMOKE_V1.md](./astrology/ATOMIC_CANON_COMPOSITION_SMOKE_V1.md) — **final atomic smoke (1.3.105):** five stored families. Operators discriminate. FREEZE **done 1.3.106**
-- [astrology/KNOWLEDGE_CORE_V1_FREEZE.md](./astrology/KNOWLEDGE_CORE_V1_FREEZE.md) — **Knowledge Core V1 FREEZE (1.3.106):** five stored families = V1 atoms. Catalog 38 draft / 0 active. IL-2 **done 1.3.107**. Next = IL-3
-- [astrology/IL2_COMPOSITION_RULES_V1.md](./astrology/IL2_COMPOSITION_RULES_V1.md) — **IL-2 composition rules (1.3.107):** role weights, conflict, merge. Not a pair catalog. Next = IL-3
+- [astrology/KNOWLEDGE_CORE_V1_FREEZE.md](./astrology/KNOWLEDGE_CORE_V1_FREEZE.md) — **Knowledge Core V1 FREEZE (1.3.106):** five stored families = V1 atoms. Catalog 38 draft / 0 active. IL-2 **done 1.3.107**. IL-3 **done 1.3.108**. IL-4 **done 1.3.109**. Next = library scale
+- [astrology/IL2_COMPOSITION_RULES_V1.md](./astrology/IL2_COMPOSITION_RULES_V1.md) — **IL-2 composition rules (1.3.107):** role weights, conflict, merge. Not a pair catalog. IL-3 **done 1.3.108**. IL-4 **done 1.3.109**. Next = library scale
+- [astrology/IL3_INTERPRETATION_ENGINE_V1.md](./astrology/IL3_INTERPRETATION_ENGINE_V1.md) — **IL-3 Interpretation Engine (1.3.108):** sky-internal theme rank. Not user relevance. IL-4 **done 1.3.109**. Next = library scale
+- [astrology/IL4_EXPRESSION_V1.md](./astrology/IL4_EXPRESSION_V1.md) — **IL-4 Expression (1.3.109):** voice for already chosen themes. Not meaning. Next = library scale
 - [astrology/ANGLE_CANON_V1.md](./astrology/ANGLE_CANON_V1.md) — **Angle Canon V1 (1.3.102):** two packs + origin. Collision vs House 1/10. Stored 1.3.103
 - [astrology/SIGN_CANON_GRAMMAR_V1.md](./astrology/SIGN_CANON_GRAMMAR_V1.md) — **Sign Canon grammar (1.3.84):** manner · excess. Dry-run ≠ fill
 - [astrology/SIGN_CANON_V1.md](./astrology/SIGN_CANON_V1.md) — **Sign Canon V1 (1.3.85):** twelve packs + provenance. Storage = 1.3.86

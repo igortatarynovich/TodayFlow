@@ -144,11 +144,13 @@ No Layer 5 JSON. ACM freeze on composite **machine** files stands.
 - Reopen FREEZE / Angles / Aspects / Houses / Signs
 - A parallel “canonical v2”
 
-**Next named:** IL-3 Interpretation Engine (sky → astrological themes). **IL-3 rank ≠ user relevance rank** ([IL1_HANDOFF.md](./IL1_HANDOFF.md) §3). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
+**Next named:** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Next = library scale. **IL-3 rank ≠ user relevance rank.** **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
 
 ---
 
 ## Changelog
 
-- **1.1 (2026-08-23)** — IL-3 next named: sky-internal theme rank ≠ user relevance. Pointer: [IL1_HANDOFF.md](./IL1_HANDOFF.md) §3. No rules change.
-- **1.0 (2026-08-23)** — 1.3.107. IL-2 composition rules. Role weights · conflict · merge. Layer 5 gold demoted to composed where atoms exist. Catalog unchanged. Next named = IL-3.
+- **1.3 (2026-08-23)** — IL-4 Expression done 1.3.109. These rules stand. Next named = library scale.
+- **1.2 (2026-08-23)** — IL-3 engine done 1.3.108. These rules stand. Next named = IL-4. **Done 1.3.109.**
+- **1.1 (2026-08-23)** — IL-3 next named: sky-internal theme rank ≠ user relevance. Pointer: [IL1_HANDOFF.md](./IL1_HANDOFF.md) §3. No rules change. **Done 1.3.108.**
+- **1.0 (2026-08-23)** — 1.3.107. IL-2 composition rules. Role weights · conflict · merge. Layer 5 gold demoted to composed where atoms exist. Catalog unchanged. Next named = IL-3. **Done 1.3.108.**
