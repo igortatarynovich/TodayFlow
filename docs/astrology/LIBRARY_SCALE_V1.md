@@ -84,7 +84,7 @@ Composed gold ⊂ the 616 cartesian. Candidate gold ⊂ §2. Do not ingest the l
 
 ---
 
-## 4. Wire contract (live at library layer; product surfaces not attached)
+## 4. Wire contract (live at library layer; product attach + consume later)
 
 ```text
 calc SkyFact {construction, astro.* ids}
@@ -97,7 +97,7 @@ calc SkyFact {construction, astro.* ids}
 
 Surfaces differ in tone / length / focus. Lemmas stay verbatim. Rank unchanged. LLM does not choose Saturn □ Venus.
 
-Product Today / Profile / Compatibility still do **not** read IL-4 packs. Runtime product surfaces still ignore `draft`. Today meaning polish stays **PAUSED** until those surfaces **read** IL-4 packs. Not Swiss as meaning SoT. Not Today prompts as meaning SoT. Not `active`. Not public JSON.
+**Attach 1.3.112** / **consume 1.3.113** are product-layer locks, not this coverage contract. Runtime product surfaces still ignore `draft`. Today prompts are not meaning SoT. Not Swiss as meaning SoT. Not `active`. Not public JSON.
 
 ---
 
@@ -120,7 +120,7 @@ Occupancy ≠ conjunction. House 1 ≠ ASC. House 10 ≠ MC. MC ≠ career. `int
 - Reopen FREEZE / IL-2 / IL-3 / IL-4 / Angles / Aspects / Houses / Signs
 - A parallel “canonical v2”
 
-**Next named:** **wire calc → IL** — **done 1.3.111** (library layer). Next = **attach IL-4 packs to product surfaces** (not `active`; not Today prompts as meaning SoT; not Relevance). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
+**Next named:** **wire calc → IL** — **done 1.3.111** (library layer). Next = **attach IL-4 packs to product surfaces** — **done 1.3.112.** Consume — **done 1.3.113.** (not `active`; not Today prompts as meaning SoT; not Relevance). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
 
 ---
 

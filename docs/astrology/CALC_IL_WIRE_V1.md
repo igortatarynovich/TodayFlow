@@ -91,7 +91,7 @@ If the model does not hold a calc emit — fix ontology (named Architecture impa
 - Reopen FREEZE / IL-2 / IL-3 / IL-4 / SCALE / Angles / Aspects / Houses / Signs
 - A parallel “canonical v2”
 
-**Next named:** **attach IL-4 packs to product surfaces** (Today / Profile / Compatibility). Not `active`. Not Today prompts as meaning SoT. Not Relevance. Today meaning polish stays **PAUSED** until those surfaces **read** IL-4 packs. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
+**Next named:** **attach IL-4 packs to product surfaces** — **done 1.3.112.** Consume in editorial generation — **done 1.3.113.** Not `active`. Not Today prompts as meaning SoT. Not Relevance. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
 
 ---
 

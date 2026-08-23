@@ -191,7 +191,7 @@ def test_il2_composition_rules_v1():
     assert "KC-C-RULES" in inventory
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.112" in canon
+    assert "**Версия:** 1.3.113" in canon
     assert "### 6.61 IL-2 composition rules" in canon or "### 6.61 IL-2 composition rules" in canon
     assert canon.count("**Версия:**") == 1
 

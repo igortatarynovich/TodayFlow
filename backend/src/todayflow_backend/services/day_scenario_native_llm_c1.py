@@ -1168,10 +1168,19 @@ def call_day_scenario_native_llm_c1(
         llm_payload["interpretation"] = slim_interpretation_for_native_llm(interp, brief=brief)
 
     attempts = max(1, min(int(max_attempts or 1), 3))
+    from todayflow_backend.services.il4_editorial_consume_v1 import (
+        augment_system_prompt,
+        pack_present,
+        protected_block,
+        reject_invalid_output,
+    )
+
+    il4_pack = user_json.get("il4_expression_pack") if isinstance(user_json.get("il4_expression_pack"), dict) else None
     user_full, user_base = format_native_user_message_c4(
         brief=brief,
         context=llm_payload,
         max_chars=16000,
+        meaning_block=protected_block(il4_pack) if pack_present(il4_pack) else None,
     )
     user_sent = user_base
     retry_feedback = ""
@@ -1184,6 +1193,7 @@ def call_day_scenario_native_llm_c1(
     from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
 
     system = with_practitioner_persona(_NATIVE_SYS_RU, locale="ru")
+    system = augment_system_prompt(system, il4_pack, locale="ru")
     system_chars = len(system or "")
     user_sent_chars = len(user_sent or "")
     if capture is not None:
@@ -1266,6 +1276,25 @@ def call_day_scenario_native_llm_c1(
             _fail(failure_class=failure_class, reject_reason=reject_reason)
             return None
         parsed = _parse_json_content(content)
+        il4_reject = reject_invalid_output(parsed, il4_pack) if parsed else None
+        if il4_reject:
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": NATIVE_FAILURE_PARSE,
+                    "reject_reason": f"il4_consume:{il4_reject}",
+                    "model": model_name or None,
+                    "user_sent_chars": len(user_sent or ""),
+                    "raw_chars": len(content),
+                }
+            )
+            pending_retry_reason = "il4_consume_rejected"
+            retry_feedback = (
+                "IL4_MEANING: формулируй леммы пакета; не добавляй темы; "
+                "не озвучивай dropped; не меняй text лемм."
+            )
+            continue
         if not parsed:
             attempt_rows.append(
                 {

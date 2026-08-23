@@ -200,22 +200,30 @@ def runtime_is_not_wired(src_root: Path) -> bool:
     )
     knowledge = (src_root / "knowledge").resolve()
     attach_gateway = (src_root / "services" / "il4_surface_attach_v1.py").resolve()
+    consume_module = (src_root / "services" / "il4_editorial_consume_v1.py").resolve()
     attach_consumers = {
         (src_root / "services" / "day_story_wire_v1.py").resolve(),
         (src_root / "services" / "profile_contract_v1.py").resolve(),
         (src_root / "services" / "compatibility_llm.py").resolve(),
         (src_root / "services" / "generation_orchestrator.py").resolve(),
     }
+    consume_consumers = {
+        (src_root / "services" / "day_scenario_native_llm_c1.py").resolve(),
+        (src_root / "services" / "profile_contract_v1.py").resolve(),
+        (src_root / "services" / "compatibility_llm.py").resolve(),
+    }
     for path in src_root.rglob("*.py"):
         resolved = path.resolve()
         if knowledge in resolved.parents or resolved == knowledge:
             continue
-        if resolved == attach_gateway:
+        if resolved == attach_gateway or resolved == consume_module:
             continue
         text = path.read_text(encoding="utf-8")
         if "calc_il_wire_v1" in text:
             return False
         if "il4_surface_attach_v1" in text and resolved not in attach_consumers:
+            return False
+        if "il4_editorial_consume_v1" in text and resolved not in consume_consumers:
             return False
         if any(name in text for name in banned):
             return False

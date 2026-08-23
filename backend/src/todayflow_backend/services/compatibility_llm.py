@@ -589,6 +589,13 @@ def generate_llm_product_surface(
         il4_pack = attach_from_chart_pair(chart1, chart2, surface="compatibility")
         if il4_pack is not None:
             payload["il4_expression_pack"] = il4_pack
+    from todayflow_backend.services.il4_editorial_consume_v1 import augment_system_prompt
+
+    sys_prompt = augment_system_prompt(
+        sys_prompt,
+        payload.get("il4_expression_pack"),
+        locale=loc,
+    )
     user_prompt = json.dumps(payload, ensure_ascii=False)
 
     is_playful = scenario_tone is not None and scenario_tone.tone_mode == "playful"

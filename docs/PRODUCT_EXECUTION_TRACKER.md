@@ -104,9 +104,9 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** **IL-4 surface attach 1.3.112 LOCKED** (Today / Profile / Compatibility LLM inputs read `il4_expression_pack`; public JSON unchanged). **calc → IL wire 1.3.111 LOCKED**. **library scale 1.3.110 LOCKED**. IL-4 **1.3.109** voice packs, not meaning. IL-3 **1.3.108** sky-internal rank ≠ user relevance. IL-2 **1.3.107** stands. FREEZE **1.3.106** stands. Catalog 38 draft / 0 `active`. Five stored families = V1 atoms. **STOP Angles.** Not pair catalog. Not `active`. Not Relevance/Prioritization. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-23):** **IL-4 editorial consume 1.3.113 LOCKED** (Today / Profile / Compatibility generation phrases `il4_expression_pack`; fill-empty / reject-invalid; public JSON unchanged). **IL-4 surface attach 1.3.112 LOCKED**. **calc → IL wire 1.3.111 LOCKED**. **library scale 1.3.110 LOCKED**. IL-4 **1.3.109** voice packs, not meaning. IL-3 **1.3.108** sky-internal rank ≠ user relevance. IL-2 **1.3.107** stands. FREEZE **1.3.106** stands. Catalog 38 draft / 0 `active`. Five stored families = V1 atoms. **STOP Angles.** Not pair catalog. Not `active`. Not Relevance/Prioritization. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste. Co–Star = recognition check.
 
-**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until generation **consumes** IL-4 packs in editorial paths (attach 1.3.112 puts packs on LLM input only). I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
+**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish is owner-directed. Editorial paths **consume** IL-4 packs (1.3.113). I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
 ## Architecture impact — IL sequence lock (2026-08-17)
 
@@ -287,6 +287,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.113 IL-4 editorial consume (2026-08-23)
+
+- **SoT before:** Attach 1.3.112 put `il4_expression_pack` on LLM inputs. Prompts could still treat the model as meaning chooser. Today polish PAUSED until consume.
+- **SoT after:** IL-4 Editorial Consume V1. Generation phrases packs (prompt + protected prefix). Fill-empty / reject-invalid. Public JSON unchanged. Day plot SoT remains TODAY_CONTENT_PIPELINE I0. Attach / wire / scale / IL engines stand.
+- **Public contract changed?** no — internal LLM input / editorial gate
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/IL4_EDITORIAL_CONSUME_V1.md` · inventory step 41 / KC-C-CONSUME · IL §6.67
+- **Backward compatible?** yes — missing pack omits consume instruction
 
 ## Architecture impact — IL-1 1.3.112 IL-4 surface attach (2026-08-23)
 

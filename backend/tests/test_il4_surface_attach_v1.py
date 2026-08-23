@@ -143,7 +143,7 @@ def test_il4_surface_attach_v1():
     assert "Today prompts" in rules or "meaning SoT" in rules
 
     assert "1.3.111" in WIRE.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.112" in IL.read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.113" in IL.read_text(encoding="utf-8")
     assert "### 6.66" in IL.read_text(encoding="utf-8")
 
     inventory = INVENTORY.read_text(encoding="utf-8")

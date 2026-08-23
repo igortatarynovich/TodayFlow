@@ -74,9 +74,9 @@ Do not reopen packs without a named Composition Engine failure.
 
 ## 3. Next named
 
-**IL-2** composition **rules** — **done 1.3.107**. **IL-3** Interpretation Engine — **done 1.3.108** (sky-internal theme rank). **IL-4** Expression — **done 1.3.109** (voice, not meaning). **Library scale** — **done 1.3.110** (coverage contract). **Wire calc → IL** — **done 1.3.111** (library layer; product surfaces not attached). Not `active`. Not freeze reopen.
+**IL-2** composition **rules** — **done 1.3.107**. **IL-3** Interpretation Engine — **done 1.3.108** (sky-internal theme rank). **IL-4** Expression — **done 1.3.109** (voice, not meaning). **Library scale** — **done 1.3.110** (coverage contract). **Wire calc → IL** — **done 1.3.111** (library layer; product surfaces not attached). **Attach IL-4** — **done 1.3.112**. **Consume IL-4** — **done 1.3.113**. Not `active`. Not freeze reopen.
 
-**Next named: attach IL-4 packs to product surfaces.** Do **not** start that attach in the same pass as this freeze. That freeze pass is closed.
+**Next named: owner-directed Today meaning polish.** Do **not** start polish in the same pass as this freeze. That freeze pass is closed.
 
 ---
 
@@ -94,7 +94,8 @@ Do not reopen packs without a named Composition Engine failure.
 
 ## Changelog
 
-- **1.5 (2026-08-23)** — Calc → IL wire done 1.3.111. This freeze stands. Next named = attach IL-4 packs to product surfaces.
+- **1.6 (2026-08-23)** — IL-4 editorial consume done 1.3.113. This freeze stands. Next named = owner-directed Today meaning polish.
+- **1.5 (2026-08-23)** — Calc → IL wire done 1.3.111. This freeze stands. Next named = attach IL-4 packs to product surfaces. **Done 1.3.112.** Consume **done 1.3.113.**
 - **1.4 (2026-08-23)** — Library scale done 1.3.110. This freeze stands. Next named = wire calc → IL. **Done 1.3.111.**
 - **1.3 (2026-08-23)** — IL-4 Expression done 1.3.109. This freeze stands. Next named = library scale. **Done 1.3.110.**
 - **1.2 (2026-08-23)** — IL-3 engine done 1.3.108. This freeze stands. Next named = IL-4. **Done 1.3.109.**

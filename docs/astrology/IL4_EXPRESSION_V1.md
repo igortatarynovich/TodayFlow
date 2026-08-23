@@ -87,7 +87,7 @@ Five jobs stay partitioned on every voiced line.
 - Reopen FREEZE / IL-2 / IL-3 / Angles / Aspects / Houses / Signs
 - A parallel “canonical v2”
 
-**Next named:** library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Next = attach IL-4 packs to product surfaces (not a pair catalog, not `active`). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
+**Next named:** library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach IL-4 packs — **done 1.3.112.** Consume — **done 1.3.113.** (not a pair catalog, not `active`). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
 
 ---
 

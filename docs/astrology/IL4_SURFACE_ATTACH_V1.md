@@ -52,10 +52,11 @@ Compatibility maps partner chart → transit geometry for `transit_to_natal` / `
 - Swiss inside attach gateway (charts resolved upstream)
 - Deploy / merge to `main` without owner
 
-Today *meaning polish* may resume only after surfaces **consume** packs in generation (this pass attaches on LLM input; editorial formulas still fill-empty / reject-invalid per AGENTS.md).
+Today *meaning polish* may resume as an **owner-directed** pass after consume 1.3.113. This attach file does not reopen.
 
 ---
 
 ## Changelog
 
+- **1.1 (2026-08-23)** — Editorial consume done 1.3.113. This attach stands.
 - **1.0 (2026-08-23)** — 1.3.112. Product surfaces read IL-4 packs on LLM input. Public contracts unchanged.

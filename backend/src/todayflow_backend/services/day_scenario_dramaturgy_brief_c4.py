@@ -217,6 +217,7 @@ def format_native_user_message_c4(
     brief: dict[str, Any],
     context: dict[str, Any],
     max_chars: int = 16000,
+    meaning_block: str | None = None,
 ) -> tuple[str, str]:
     """Build user message with brief protected from truncation.
 
@@ -224,7 +225,9 @@ def format_native_user_message_c4(
     """
     brief_s = json_dumps(brief)
     context_s = json_dumps(context)
+    meaning = (str(meaning_block).rstrip() + "\n") if meaning_block else ""
     header = (
+        f"{meaning}"
         "=== DRAMATURGY_BRIEF (SoT: что драматизировать сегодня) ===\n"
         f"{brief_s}\n"
         "=== CONTEXT ===\n"

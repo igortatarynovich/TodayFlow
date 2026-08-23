@@ -144,7 +144,7 @@ No Layer 5 JSON. ACM freeze on composite **machine** files stands.
 - Reopen FREEZE / Angles / Aspects / Houses / Signs
 - A parallel “canonical v2”
 
-**Next named:** library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Next = attach IL-4 packs to product surfaces. **IL-3 rank ≠ user relevance rank.** **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
+**Next named:** library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach — **done 1.3.112.** Consume — **done 1.3.113.** **IL-3 rank ≠ user relevance rank.** **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
 
 ---
 

@@ -178,7 +178,7 @@ Do not edit 1.3.82 / 1.3.88 / 1.3.93 / 1.3.98 / 1.3.104 files to absorb this pas
 - Layer 5 pair catalog
 - Sign / House / Aspect / Planet / Angle pack edits
 
-**Next named:** IL-2 (composition rules, not pair catalog) — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Next = attach IL-4 packs to product surfaces. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
+**Next named:** IL-2 (composition rules, not pair catalog) — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach — **done 1.3.112.** Consume — **done 1.3.113.** **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
 
 ---
 
