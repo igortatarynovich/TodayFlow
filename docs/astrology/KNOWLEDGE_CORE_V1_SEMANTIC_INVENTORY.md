@@ -41,7 +41,7 @@ Five stored families = V1 atoms: Planet `core_function` · Sign `manner` · Hous
 
 **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Layer 2 Signs = classification-complete / interpretation-deferred.
 
-**Next named:** IL-2 composition rules (not pair catalog). Not a new “canonical v2.”
+**Next named:** IL-2 composition rules — **done 1.3.107.** Next = IL-3 engine. Not a new “canonical v2.”
 
 ---
 
@@ -78,7 +78,9 @@ Nodes · Chiron · Lilith: identity in Foundation §2.2; **not** IL-1 gold. Mino
 | `ACCESS_BLOCKED` | ≥3 dedicated loci, 0 readable bodies. Discovery stopped. Not a book hunt. |
 | `DEFERRED_V1` | In the V1 *model*; not this execution slice. No literature until the row is reopened by owner. |
 | `UNTYPED` | Product uses the **fact**; IL has no object type. Decide: Foundation / new type / OUT_OF_V1. |
-| `CANDIDATE` | Layer 5 gold list. No objects. Compose-default until IL-2. |
+| `CANDIDATE` | Layer 5 gold remaining after IL-2: missing-atom rows only (outers). No objects. |
+| `COMPOSED` | IL-2 produces the frame from stored atoms. No catalog object. |
+| `LOCKED` | Named pass closed. Do not reopen without a Composition Engine failure. |
 | `OUT_OF_V1` | Explicitly excluded from Interpretation Library V1. |
 | `NEED_MODEL` | Constituents not defined. Literature forbidden until parent steps 1–4. |
 
@@ -166,14 +168,14 @@ Default: IL-2 Composition Engine from atoms ([ACM](../ASTROLOGY_COMPOSITION_MODE
 
 | ID | Product need | Semantic layer | Object | Required constituents | Evidence requirement | Current coverage | Runtime consumer | Status |
 |----|--------------|----------------|--------|----------------------|----------------------|------------------|------------------|--------|
-| KC-C-P×S | How a function expresses in a sign | Compositions | `planet_in_sign` | IL-2 rules; curated only if `non_compositional` | IL-2 after atoms; IL-1 list is suspicion, not proof | 10 gold candidates, **0 objects** | natal placements · Moon-in-sign Today | `CANDIDATE` |
-| KC-C-P×H | How a function lands in a house | Compositions | `planet_in_house` | same | same | 11 gold candidates, 0 objects | Overlay · Profile houses | `CANDIDATE` |
-| KC-C-NASP | How two natal functions interact | Compositions | `natal_aspect` | same | same | 14 gold candidates, 0 objects | Profile tension · Compat | `CANDIDATE` |
-| KC-C-TRN | How sky now meets natal | Compositions | `transit_to_natal` | same | same | 15 gold candidates, 0 objects | Natal Overlay (pipeline §5) · Personal Day | `CANDIDATE` |
-| KC-C-TH | How a transiting body occupies a natal house | Compositions | `transit_through_house` | same | same | 5 gold candidates, 0 objects | Overlay slow background | `CANDIDATE` |
-| KC-C-RULES | Compose without a catalog | Compositions | IL-2 rules | weights, conflict, merge | after IL-1 atoms (declared 1.3.106); may demote candidates | not started | IL-3 | `DEFERRED_V1` (sequence lock) |
+| KC-C-P×S | How a function expresses in a sign | Compositions | `planet_in_sign` | IL-2 rules; curated only if `non_compositional` | IL-2 1.3.107; IL-1 list was suspicion | 10 gold, **0 objects**, all composed | natal placements · Moon-in-sign Today | `COMPOSED` |
+| KC-C-P×H | How a function lands in a house | Compositions | `planet_in_house` | same | same | 11 gold, 0 objects, all composed | Overlay · Profile houses | `COMPOSED` |
+| KC-C-NASP | How two natal functions interact | Compositions | `natal_aspect` | same | same | Sun–Saturn composed; Pluto/Neptune/Uranus pairs remain candidates (missing atom); 0 objects | Profile tension · Compat | `COMPOSED` + `CANDIDATE` remainder |
+| KC-C-TRN | How sky now meets natal | Compositions | `transit_to_natal` | same | same | Sun–Saturn transits composed; outer transits remain candidates; 0 objects | Natal Overlay (pipeline §5) · Personal Day | `COMPOSED` + `CANDIDATE` remainder |
+| KC-C-TH | How a transiting body occupies a natal house | Compositions | `transit_through_house` | same | same | Saturn/Jupiter composed; Uranus/Pluto remain candidates; 0 objects | Overlay slow background | `COMPOSED` + `CANDIDATE` remainder |
+| KC-C-RULES | Compose without a catalog | Compositions | IL-2 rules | weights, conflict, merge | after IL-1 atoms (declared 1.3.106) | **locked 1.3.107** — [IL2_COMPOSITION_RULES_V1.md](./IL2_COMPOSITION_RULES_V1.md) | IL-3 | `LOCKED` |
 
-Gold lists stay in IL §8. Do not ingest Layer 5 to look busy. Atoms are the declared SoT for compose inputs (1.3.106). **Next named = IL-2 rules** (not a pair catalog).
+Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Next named = IL-3 engine.**
 
 ### 3.8 Time — natal vs transit vs later
 
@@ -221,7 +223,7 @@ Examples against the current tree:
 4. **Houses and Aspects stay `DRAFT_CLASSICAL` — APPROVED.** Do not “catch up” school counts to Planets/Signs. Structural atoms are enough for the next stage. New research only if IL-2 hits a specific semantic insufficiency. **Coverage symmetry between layers is not a goal.**
 5. **Next named pass after approval = outer schema (done 1.3.72), not ASC/MC and not literature.** **1.3.73** inserts TodayFlow Canon *before* filling meaning keys. Then: Sun–Pluto claim audit → materialize outer drafts under Canon (not CORE) → ASC/MC definition → ASC/MC decision → IL-1 V1 close-out → IL-2 Composition.
 
-ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle map locked 1.3.100. Angle Canon grammar locked 1.3.101 (`orientation`). Angle Canon fill locked 1.3.102. Angle Canon storage/materialization locked 1.3.103. Stored Planet×Angle smoke PASS 1.3.104. Final atomic smoke PASS 1.3.105. Knowledge Core V1 FREEZE **done 1.3.106.** **STOP Angles.** Do not start from a book. Next named = IL-2 composition rules (not pair catalog).
+ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle map locked 1.3.100. Angle Canon grammar locked 1.3.101 (`orientation`). Angle Canon fill locked 1.3.102. Angle Canon storage/materialization locked 1.3.103. Stored Planet×Angle smoke PASS 1.3.104. Final atomic smoke PASS 1.3.105. Knowledge Core V1 FREEZE **done 1.3.106.** IL-2 composition rules **done 1.3.107.** **STOP Angles.** Do not start from a book. Next named = IL-3 engine.
 
 ---
 
@@ -262,7 +264,8 @@ ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle m
 32. Stored Planet × Angle smoke → STOP Angles  ✅ 1.3.104 stored source; Mars AT ASC ≠ Mars AT MC ≠ House 1/10
 33. Final atomic smoke                         ✅ 1.3.105 five stored families; operators discriminate
 34. Knowledge Core V1 FREEZE                   ✅ 1.3.106 five stored families = V1 atoms; catalog unchanged
-35. IL-2 composition rules                     NEXT     rules, not pair catalog; not CORE; not `active`
+35. IL-2 composition rules                     ✅ 1.3.107 role weights, conflict, merge; Layer 5 demoted where atoms exist
+36. IL-3 Interpretation Engine                 NEXT     sky → astrological themes; not user relevance; not expression; not `active`
 ```
 
 Historical literature does not appear in this order. Lenses stay in the existing corpus. Co–Star is a check on Mainstream rows, not a source.
@@ -271,7 +274,9 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
-- **1.35 (2026-08-23)** — Knowledge Core V1 FREEZE (1.3.106). Five stored families = V1 atoms. Catalog unchanged. Next named = IL-2.
+- **1.37 (2026-08-23)** — IL-3 boundary: sky → astrological themes; not user relevance. Not a new SoT file. Handoff §3.
+- **1.36 (2026-08-23)** — IL-2 composition rules (1.3.107). Role weights, conflict, merge. KC-C-RULES locked. Layer 5 gold composed where atoms exist. Next named = IL-3.
+- **1.35 (2026-08-23)** — Knowledge Core V1 FREEZE (1.3.106). Five stored families = V1 atoms. Catalog unchanged. Next named = IL-2. **Done 1.3.107.**
 - **1.34 (2026-08-23)** — Final atomic smoke (1.3.105). Five stored families. Operators discriminate. Occupancy ≠ conjunction. Next = Knowledge Core V1 FREEZE. **Done 1.3.106.**
 - **1.33 (2026-08-23)** — Stored Planet × Angle smoke (1.3.104). Four gates PASS. Occupancy ≠ conjunction. STOP Angles. Final atomic smoke — **done 1.3.105.**
 - **1.32 (2026-08-22)** — Angle Canon storage/materialization (1.3.103). Two drafts carry `canon.orientation`. Stored Planet×Angle smoke — **done 1.3.104.**

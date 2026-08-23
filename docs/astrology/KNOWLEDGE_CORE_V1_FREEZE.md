@@ -74,9 +74,11 @@ Do not reopen packs without a named Composition Engine failure.
 
 ## 3. Next named
 
-**IL-2** — composition **rules** (weights, conflict, merge). Not a pair catalog. Not Layer 5 essays. IL-2 may demote gold candidates to composed.
+**IL-2** composition **rules** — **done 1.3.107** (weights, conflict, merge). Not a pair catalog. Layer 5 gold with stored atoms demoted to composed.
 
-Do **not** start IL-2 in the same pass as this freeze. That pass is closed.
+**Next named: IL-3** Interpretation Engine (sky → themes). Not expression. Not `active`. Not freeze reopen.
+
+Do **not** start IL-3 in the same pass as this freeze. That pass is closed.
 
 ---
 
@@ -94,4 +96,5 @@ Do **not** start IL-2 in the same pass as this freeze. That pass is closed.
 
 ## Changelog
 
-- **1.0 (2026-08-23)** — 1.3.106. Knowledge Core V1 FROZEN on five stored families. Catalog unchanged. Next named = IL-2.
+- **1.1 (2026-08-23)** — IL-2 composition rules done 1.3.107. This freeze stands. Next named = IL-3.
+- **1.0 (2026-08-23)** — 1.3.106. Knowledge Core V1 FROZEN on five stored families. Catalog unchanged. Next named = IL-2. **Done 1.3.107.**

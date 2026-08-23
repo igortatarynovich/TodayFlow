@@ -79,7 +79,9 @@ risk_modifier = clamp(planet.risk_modifier + 0.5 * sign.risk_modifier)
 confidence = min(planet.confidence, sign.confidence) * composition_discount
 ```
 
-Exact weights — **Rules doc** + calibration in **P0.9** (anchor: Chariot / Year 8 / **mars + aries atoms**, not a composite file).
+Exact weights for **machine vectors** — **Rules doc** + calibration in **P0.9** (anchor: Chariot / Year 8 / **mars + aries atoms**, not a composite file).
+
+Lemma composition (what/how/where/relation/orientation) is a **different layer**: [IL2_COMPOSITION_RULES_V1.md](astrology/IL2_COMPOSITION_RULES_V1.md) (1.3.107). Role weights 0.55/0.45 are **not** lemma-string averaging. ACM composite **machine** JSON freeze stands.
 
 ### 3.2 Sketch: AspectPair
 
@@ -134,15 +136,16 @@ Allowed prefix roots only: `astrology.sign.`, `astrology.planet.`, `astrology.ho
 - [x] Primary vs derived taxonomy (this doc)  
 - [x] P0.8 — 39 atomic drafts + loader + validator  
 - [ ] P0.9 — cross-domain with atomic compose  
-- [ ] Composition Engine spec (expand §3) — фаза 2 ticket  
-- [ ] Interpretation Library atoms (IL-1) then curated Layer 5 — [INTERPRETATION_LIBRARY_V1](astrology/INTERPRETATION_LIBRARY_V1.md)  
+- [x] Composition Engine **lemma** rules (IL-2 / 1.3.107) — [IL2_COMPOSITION_RULES_V1.md](astrology/IL2_COMPOSITION_RULES_V1.md). Machine-vector calibration still P0.9.  
+- [x] Interpretation Library atoms (IL-1) then curated Layer 5 — [INTERPRETATION_LIBRARY_V1.md](astrology/INTERPRETATION_LIBRARY_V1.md); IL-2 demoted gold-with-atoms to composed  
 - [ ] P1.0 — DayModel astro slice from composed daily signals  
 
 ---
 
 ## 8. Changelog
 
-- **1.0.2 (2026-08-17)** — IL-1 Layer 5 gold list = curated candidates; IL-2 may demote to composed (IL activation gate; no ACM freeze change).
+- **1.0.3 (2026-08-23)** — IL-2 lemma composition rules (1.3.107). Pointer to IL2_COMPOSITION_RULES_V1. Machine composite freeze unchanged.
+- **1.0.2 (2026-08-17)** — IL-1 Layer 5 gold list = curated candidates; IL-2 may demote to composed (IL activation gate; no ACM freeze change). **Done 1.3.107.**
 - **1.0.1 (2026-08-17)** — Layer 5 interpretation objects ≠ machine composites; pointer to Interpretation Library.
 - **1.0 (2026-05-31)** — atomic-only P0.8 freeze; composite → Composition Engine; CDMV anchor via mars+aries atoms.
 
