@@ -144,13 +144,14 @@ No Layer 5 JSON. ACM freeze on composite **machine** files stands.
 - Reopen FREEZE / Angles / Aspects / Houses / Signs
 - A parallel “canonical v2”
 
-**Next named:** library scale — **done 1.3.110.** Next = wire calc → IL. **IL-3 rank ≠ user relevance rank.** **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
+**Next named:** library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Next = attach IL-4 packs to product surfaces. **IL-3 rank ≠ user relevance rank.** **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
 
 ---
 
 ## Changelog
 
-- **1.4 (2026-08-23)** — Library scale done 1.3.110. These rules stand. Next named = wire calc → IL.
+- **1.5 (2026-08-23)** — Calc → IL wire done 1.3.111. These rules stand. Next named = attach IL-4 packs to product surfaces.
+- **1.4 (2026-08-23)** — Library scale done 1.3.110. These rules stand. Next named = wire calc → IL. **Done 1.3.111.**
 - **1.3 (2026-08-23)** — IL-4 Expression done 1.3.109. These rules stand. Next named = library scale. **Done 1.3.110.**
 - **1.2 (2026-08-23)** — IL-3 engine done 1.3.108. These rules stand. Next named = IL-4. **Done 1.3.109.**
 - **1.1 (2026-08-23)** — IL-3 next named: sky-internal theme rank ≠ user relevance. Pointer: [IL1_HANDOFF.md](./IL1_HANDOFF.md) §3. No rules change. **Done 1.3.108.**

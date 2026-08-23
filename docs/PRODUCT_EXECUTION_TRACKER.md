@@ -104,9 +104,9 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** **library scale 1.3.110 LOCKED**. Coverage contract: 616 composed cells; gold 43/12; wire named, not live. IL-4 **1.3.109** voice packs, not meaning. IL-3 **1.3.108** sky-internal rank ≠ user relevance. IL-2 **1.3.107** stands. FREEZE **1.3.106** stands. Catalog 38 draft / 0 `active`. Five stored families = V1 atoms. Uranus/Neptune/Pluto remain claims. DSC/IC out of V1. CORE unscored (not a gate). **STOP Angles.** **1.3.105 final atomic smoke stands.** Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle smoke stands.** **STOP Aspects.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Not pair catalog. Not `active`. Not Relevance/Prioritization. Next named = **wire calc → IL**. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-23):** **calc → IL wire 1.3.111 LOCKED** (library layer; product surfaces not attached). **library scale 1.3.110 LOCKED**. Coverage contract: 616 composed cells; gold 43/12. IL-4 **1.3.109** voice packs, not meaning. IL-3 **1.3.108** sky-internal rank ≠ user relevance. IL-2 **1.3.107** stands. FREEZE **1.3.106** stands. Catalog 38 draft / 0 `active`. Five stored families = V1 atoms. Uranus/Neptune/Pluto remain claims. DSC/IC out of V1. CORE unscored (not a gate). **STOP Angles.** **1.3.105 final atomic smoke stands.** Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle smoke stands.** **STOP Aspects.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Not pair catalog. Not `active`. Not Relevance/Prioritization. Next named = **attach IL-4 packs to product surfaces**. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste. Co–Star = recognition check.
 
-**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until library-scale meaning is wired through IL-4 packs. Library scale (1.3.110) named the wire; it is not live. IL-4 (1.3.109) voices themes; it does not choose meaning. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
+**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until product surfaces **read** IL-4 packs. Wire calc → IL (1.3.111) is live at the library layer; Today / Profile / Compatibility do not consume it yet. Library scale (1.3.110) coverage stands. IL-4 (1.3.109) voices themes; it does not choose meaning. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
 ## Architecture impact — IL sequence lock (2026-08-17)
 
@@ -286,6 +286,15 @@ Status: Active working document
 - **Public contract changed?** no
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.111 Calc → IL wire (2026-08-23)
+
+- **SoT before:** Library Scale V1 named the wire (1.3.110) and left it not live. Calc charts and IL engines sat side by side. A pass could still treat Today prompts as meaning SoT or set `active`.
+- **SoT after:** Calc → IL Wire V1 is live at the **library layer**. Duck-typed calc snapshot → SkyFact → IL-2 → IL-3 → IL-4. Product surfaces are not attached. Occupancy ≠ conjunction. House 1 ≠ ASC. MC ≠ career. Next named = **attach IL-4 packs to product surfaces** (not `active`). Freeze, IL-2, IL-3, IL-4, and scale stand. Not a canonical v2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/CALC_IL_WIRE_V1.md` · inventory step 39 / KC-C-WIRE · IL 1.3.111 §6.65
 - **Backward compatible?** yes (`draft`)
 
 ## Architecture impact — IL-1 1.3.110 Library scale (2026-08-23)

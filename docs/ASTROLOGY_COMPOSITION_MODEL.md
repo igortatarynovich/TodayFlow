@@ -139,7 +139,8 @@ Allowed prefix roots only: `astrology.sign.`, `astrology.planet.`, `astrology.ho
 - [x] Composition Engine **lemma** rules (IL-2 / 1.3.107) — [IL2_COMPOSITION_RULES_V1.md](astrology/IL2_COMPOSITION_RULES_V1.md). Machine-vector calibration still P0.9.  
 - [x] Interpretation Engine **theme rank** (IL-3 / 1.3.108) — [IL3_INTERPRETATION_ENGINE_V1.md](astrology/IL3_INTERPRETATION_ENGINE_V1.md). Sky-internal. Not user relevance.  
 - [x] Expression **voice packs** (IL-4 / 1.3.109) — [IL4_EXPRESSION_V1.md](astrology/IL4_EXPRESSION_V1.md). Not meaning. Not LLM choosing Saturn □ Venus.  
-- [x] Library **scale** (1.3.110) — [LIBRARY_SCALE_V1.md](astrology/LIBRARY_SCALE_V1.md). Coverage contract; not a pair catalog. Wire named, not live.  
+- [x] Library **scale** (1.3.110) — [LIBRARY_SCALE_V1.md](astrology/LIBRARY_SCALE_V1.md). Coverage contract; not a pair catalog. Wire named, then live at library layer 1.3.111.
+- [x] Calc → IL **wire** (1.3.111) — [CALC_IL_WIRE_V1.md](astrology/CALC_IL_WIRE_V1.md). Library layer. Product surfaces not attached.  
 - [x] Interpretation Library atoms (IL-1) then curated Layer 5 — [INTERPRETATION_LIBRARY_V1.md](astrology/INTERPRETATION_LIBRARY_V1.md); IL-2 demoted gold-with-atoms to composed  
 - [ ] P1.0 — DayModel astro slice from composed daily signals  
 
@@ -147,6 +148,7 @@ Allowed prefix roots only: `astrology.sign.`, `astrology.planet.`, `astrology.ho
 
 ## 8. Changelog
 
+- **1.0.7 (2026-08-23)** — Calc → IL wire (1.3.111). Pointer to CALC_IL_WIRE_V1. Library layer, not product surfaces. Machine composite freeze unchanged.
 - **1.0.6 (2026-08-23)** — Library scale (1.3.110). Pointer to LIBRARY_SCALE_V1. Coverage contract, not pair catalog. Machine composite freeze unchanged.
 - **1.0.5 (2026-08-23)** — IL-4 Expression (1.3.109). Pointer to IL4_EXPRESSION_V1. Voice, not meaning. Machine composite freeze unchanged.
 - **1.0.4 (2026-08-23)** — IL-3 Interpretation Engine (1.3.108). Pointer to IL3_INTERPRETATION_ENGINE_V1. Sky-internal theme rank. Machine composite freeze unchanged.

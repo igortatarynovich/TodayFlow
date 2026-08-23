@@ -196,6 +196,7 @@ def runtime_is_not_wired(src_root: Path) -> bool:
         "il3_interpretation_v1",
         "il4_expression_v1",
         "library_scale_v1",
+        "calc_il_wire_v1",
     )
     knowledge = (src_root / "knowledge").resolve()
     for path in src_root.rglob("*.py"):

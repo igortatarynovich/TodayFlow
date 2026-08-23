@@ -178,13 +178,14 @@ Do not edit 1.3.82 / 1.3.88 / 1.3.93 / 1.3.98 / 1.3.104 files to absorb this pas
 - Layer 5 pair catalog
 - Sign / House / Aspect / Planet / Angle pack edits
 
-**Next named:** IL-2 (composition rules, not pair catalog) — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Next = wire calc → IL. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
+**Next named:** IL-2 (composition rules, not pair catalog) — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Next = attach IL-4 packs to product surfaces. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.5 (2026-08-23)** — Library scale 1.3.110. This diagnostic stands. Next = wire calc → IL.
+- **1.6 (2026-08-23)** — Calc → IL wire 1.3.111. This diagnostic stands. Next = attach IL-4 packs to product surfaces.
+- **1.5 (2026-08-23)** — Library scale 1.3.110. This diagnostic stands. Next = wire calc → IL. **Done 1.3.111.**
 - **1.4 (2026-08-23)** — IL-4 Expression 1.3.109. This diagnostic stands. Next = library scale. **Done 1.3.110.**
 - **1.3 (2026-08-23)** — IL-3 Interpretation Engine 1.3.108. This diagnostic stands. Next = IL-4. **Done 1.3.109.**
 - **1.2 (2026-08-23)** — IL-2 composition rules 1.3.107. This diagnostic stands. Next = IL-3. **Done 1.3.108.**

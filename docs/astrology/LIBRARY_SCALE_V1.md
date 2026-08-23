@@ -84,7 +84,7 @@ Composed gold ⊂ the 616 cartesian. Candidate gold ⊂ §2. Do not ingest the l
 
 ---
 
-## 4. Wire contract (named; not live)
+## 4. Wire contract (live at library layer; product surfaces not attached)
 
 ```text
 calc SkyFact {construction, astro.* ids}
@@ -93,9 +93,11 @@ calc SkyFact {construction, astro.* ids}
   → IL-4 express(surface ∈ {today, profile, compatibility})
 ```
 
+**Live 1.3.111** at the **library layer**: [CALC_IL_WIRE_V1.md](./CALC_IL_WIRE_V1.md). Duck-typed natal / transit snapshots. No Swiss import in the wire. Draft catalog is consumed. Occupancy ≠ conjunction. House 1 ≠ ASC. House 10 ≠ MC. MC ≠ career.
+
 Surfaces differ in tone / length / focus. Lemmas stay verbatim. Rank unchanged. LLM does not choose Saturn □ Venus.
 
-**Not this pass:** Swiss attach · Today prompt rewrite · set `active` · public JSON. Runtime still ignores `draft`. Today meaning polish stays **PAUSED** until this wire is implemented as a later named pass.
+Product Today / Profile / Compatibility still do **not** read IL-4 packs. Runtime product surfaces still ignore `draft`. Today meaning polish stays **PAUSED** until those surfaces **read** IL-4 packs. Not Swiss as meaning SoT. Not Today prompts as meaning SoT. Not `active`. Not public JSON.
 
 ---
 
@@ -118,10 +120,11 @@ Occupancy ≠ conjunction. House 1 ≠ ASC. House 10 ≠ MC. MC ≠ career. `int
 - Reopen FREEZE / IL-2 / IL-3 / IL-4 / Angles / Aspects / Houses / Signs
 - A parallel “canonical v2”
 
-**Next named:** **wire calc → IL** (implement §4; not `active`; not Relevance). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
+**Next named:** **wire calc → IL** — **done 1.3.111** (library layer). Next = **attach IL-4 packs to product surfaces** (not `active`; not Today prompts as meaning SoT; not Relevance). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Do **not** start Relevance / Prioritization engines. Layer 2 Signs stays classification-complete / interpretation-deferred.
 
 ---
 
 ## Changelog
 
-- **1.0 (2026-08-23)** — 1.3.110. Library Scale V1. Coverage contract: 616 covered · 12 gold candidates. Wire named, not live. Catalog unchanged.
+- **1.1 (2026-08-23)** — Wire calc → IL done 1.3.111 at the library layer. Product surfaces not attached. This coverage contract stands.
+- **1.0 (2026-08-23)** — 1.3.110. Library Scale V1. Coverage contract: 616 covered · 12 gold candidates. Wire named, not live. **Done 1.3.111** at library layer. Catalog unchanged.

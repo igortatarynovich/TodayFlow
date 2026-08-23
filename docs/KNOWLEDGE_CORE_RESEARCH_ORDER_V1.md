@@ -173,7 +173,8 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 - **1.2 (2026-08-21)** — IL-1.3.73: TodayFlow Canon. Astrology product meaning is no longer school-intersection. §4 split: Canon vs research `core`.
 - **1.2 note (2026-08-21)** — IL-1.3.74: Evidence Corpus / Semantic Consensus / TodayFlow Canon. 491 claims stay. Next = short corpus pass, not a research cycle.
 - **1.3 (2026-08-21)** — IL-1.3.75: reverse-engineer Co–Star before another IL architecture or Canon-scoring pass. Phase 0 teardown in. IL frozen.
-- **1.38 (2026-08-23)** — IL-1.3.110: library scale. Coverage contract. Catalog unchanged. Next = wire calc → IL.
+- **1.39 (2026-08-23)** — IL-1.3.111: calc → IL wire. Library layer. Catalog unchanged. Next = attach IL-4 packs to product surfaces.
+- **1.38 (2026-08-23)** — IL-1.3.110: library scale. Coverage contract. Catalog unchanged. Next = wire calc → IL. **Done 1.3.111.**
 - **1.37 (2026-08-23)** — IL-1.3.109: IL-4 Expression. Voice packs for ranked themes. Catalog unchanged. Next = library scale. **Done 1.3.110.**
 - **1.36 (2026-08-23)** — IL-1.3.108: IL-3 Interpretation Engine. Sky-internal theme rank. Catalog unchanged. Next = IL-4. **Done 1.3.109.**
 - **1.35 (2026-08-23)** — IL-1.3.107: IL-2 composition rules. Role weights, conflict, merge. Catalog unchanged. Next = IL-3. **Done 1.3.108.**
