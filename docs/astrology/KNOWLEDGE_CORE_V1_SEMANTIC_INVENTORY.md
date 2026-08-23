@@ -180,9 +180,10 @@ Default: IL-2 Composition Engine from atoms ([ACM](../ASTROLOGY_COMPOSITION_MODE
 | KC-C-WIRE | Calc snapshot → IL-4 pack | Wire | duck-typed chart → SkyFact → IL-2/3/4 | library layer live; product surfaces not attached | after library scale (1.3.110) | **locked 1.3.111** — [CALC_IL_WIRE_V1.md](./CALC_IL_WIRE_V1.md) | attach IL-4 to product surfaces — done 1.3.112 | `LOCKED` |
 | KC-C-ATTACH | Product surfaces read IL-4 packs | Attach | LLM input `il4_expression_pack`; gateway only | Today / Profile / Compatibility; public JSON unchanged | after wire (1.3.111) | **locked 1.3.112** — [IL4_SURFACE_ATTACH_V1.md](./IL4_SURFACE_ATTACH_V1.md) | consume in editorial generation — done 1.3.113 | `LOCKED` |
 | KC-C-CONSUME | Editorial generation phrases IL-4 packs | Consume | prompt + protected prefix; fill-empty / reject-invalid | Today native · Profile LLM · Compatibility when pack present | after attach (1.3.112) | **locked 1.3.113** — [IL4_EDITORIAL_CONSUME_V1.md](./IL4_EDITORIAL_CONSUME_V1.md) | Today meaning polish — done 1.3.114 | `LOCKED` |
-| KC-C-TODAY-POLISH | Today native chorus binds to IL-4 | Polish | astrology voice phrases pack; conflict/scenes stay brief | Today native only | after consume (1.3.113) | **locked 1.3.114** — [TODAY_MEANING_POLISH_V1.md](../today/TODAY_MEANING_POLISH_V1.md) | owner-directed post-polish | `LOCKED` |
+| KC-C-TODAY-POLISH | Today native chorus binds to IL-4 | Polish | astrology voice phrases pack; conflict/scenes stay brief | Today native only | after consume (1.3.113) | **locked 1.3.114** — [TODAY_MEANING_POLISH_V1.md](../today/TODAY_MEANING_POLISH_V1.md) | synastry editorial IL-4 — done 1.3.115 | `LOCKED` |
+| KC-C-COMPAT-EDITORIAL | Synastry editorial phrases IL-4 | Compat editorial | attach + consume when charts supplied | synastry endpoint | after polish (1.3.114) | **locked 1.3.115** — [COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md](./COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md) | owner-directed post-IL polish | `LOCKED` |
 
-Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Consume 1.3.113 stands.** **Polish 1.3.114 stands.**
+Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Consume 1.3.113 stands.** **Polish 1.3.114 stands.** **Compat editorial 1.3.115 stands.**
 
 ### 3.8 Time — natal vs transit vs later
 
@@ -279,6 +280,7 @@ ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle m
 40. Attach IL-4 to product surfaces           ✅ 1.3.112 LLM input; public JSON unchanged
 41. Consume IL-4 in editorial generation      ✅ 1.3.113 phrase packs; fill-empty / reject-invalid
 42. Today meaning polish                      ✅ 1.3.114 native astrology chorus binds to IL-4
+43. Compatibility synastry editorial IL-4     ✅ 1.3.115 attach+consume when charts supplied
 ```
 
 Historical literature does not appear in this order. Lenses stay in the existing corpus. Co–Star is a check on Mainstream rows, not a source.
@@ -287,6 +289,7 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
+- **1.45 (2026-08-23)** — Compatibility synastry editorial IL-4 (1.3.115). KC-C-COMPAT-EDITORIAL locked.
 - **1.44 (2026-08-23)** — Today meaning polish (1.3.114). Native astrology chorus binds to IL-4. KC-C-TODAY-POLISH locked.
 - **1.43 (2026-08-23)** — IL-4 editorial consume (1.3.113). Generation phrases packs. KC-C-CONSUME locked.
 - **1.42 (2026-08-23)** — IL-4 surface attach (1.3.112). Product LLM inputs read IL-4 packs. KC-C-ATTACH locked. Next named = consume. **Done 1.3.113.**

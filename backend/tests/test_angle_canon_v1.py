@@ -96,7 +96,7 @@ def test_angle_canon_v1_fill():
     assert "`orientation`" in grammar
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.114" in canon
+    assert "**Версия:** 1.3.115" in canon
     assert "### 6.56 Angle Canon fill" in canon
     assert canon.count("**Версия:**") == 1
 

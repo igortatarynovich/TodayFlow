@@ -27,7 +27,7 @@ from todayflow_backend.services.learning import get_learning_service
 
 logger = logging.getLogger(__name__)
 
-PROMPT_VERSION = "compatibility-editorial-v1"
+PROMPT_VERSION = "compatibility-editorial-v1.1"
 
 SYSTEM_PROMPT = """Ты пишешь короткий редакторский слой для результата совместимости TodayFlow.
 
@@ -165,6 +165,8 @@ def generate_compatibility_editorial(
     payload: dict[str, Any],
     prior_memory: dict[str, Any] | None = None,
     locale: str = "ru",
+    chart1: Any | None = None,
+    chart2: Any | None = None,
 ) -> models.CompatibilityEditorial:
     learning_service = get_learning_service()
     prompt_version = learning_service.get_or_create_prompt_version(
@@ -179,12 +181,27 @@ def generate_compatibility_editorial(
 
     fallback = _editorial_fallback(payload)
     learning_context = learning_service.build_user_learning_context(db, user_id=user.id)
+    il4_pack: dict[str, Any] | None = None
+    if chart1 is not None:
+        from todayflow_backend.services.il4_surface_attach_v1 import attach_from_chart_pair
+
+        il4_pack = attach_from_chart_pair(chart1, chart2, surface="compatibility")
     user_prompt = _build_prompt(
         relation_mode=relation_mode,
         payload=payload,
         prior_memory=prior_memory,
         learning_context=learning_context,
     )
+    from todayflow_backend.services.il4_editorial_consume_v1 import (
+        augment_system_prompt,
+        pack_present,
+        protected_block,
+        reject_invalid_output,
+    )
+
+    system_prompt = augment_system_prompt(SYSTEM_PROMPT, il4_pack, locale=locale)
+    meaning_prefix = protected_block(il4_pack, locale=locale) if pack_present(il4_pack) else ""
+    user_content = f"{meaning_prefix}{user_prompt}" if meaning_prefix else user_prompt
 
     if not is_llm_chat_configured():
         return fallback
@@ -207,14 +224,16 @@ def generate_compatibility_editorial(
             client,
             model=model_id,
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user_prompt},
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_content},
             ],
             temperature=0.5,
             max_tokens=500,
             json_object=True,
         )
         parsed = _parse_editorial_json(content) if content else None
+        if parsed and reject_invalid_output(parsed, il4_pack):
+            parsed = None
         if parsed:
             editorial = models.CompatibilityEditorial(
                 mode_focus=str(parsed.get("mode_focus") or "").strip() or None,
@@ -237,8 +256,8 @@ def generate_compatibility_editorial(
                     "overall_score": payload.get("overall_score"),
                     "prior_memory": prior_memory,
                 },
-                system_prompt=SYSTEM_PROMPT,
-                user_prompt=user_prompt,
+                system_prompt=system_prompt,
+                user_prompt=user_content,
                 raw_response=content,
                 normalized_response=editorial.model_dump(),
                 status="success",
@@ -257,8 +276,8 @@ def generate_compatibility_editorial(
             model=model_id,
             locale=locale,
             input_payload={"relation_mode": relation_mode, "overall_score": payload.get("overall_score"), "prior_memory": prior_memory},
-            system_prompt=SYSTEM_PROMPT,
-            user_prompt=user_prompt,
+            system_prompt=system_prompt,
+            user_prompt=user_content,
             raw_response=content,
             normalized_response=fallback.model_dump(),
             status="fallback",
@@ -280,8 +299,8 @@ def generate_compatibility_editorial(
                 model=model_id,
                 locale=locale,
                 input_payload={"relation_mode": relation_mode, "overall_score": payload.get("overall_score"), "prior_memory": prior_memory},
-                system_prompt=SYSTEM_PROMPT,
-                user_prompt=user_prompt,
+                system_prompt=system_prompt,
+                user_prompt=user_content,
                 normalized_response=fallback.model_dump(),
                 status="error",
                 used_fallback=True,

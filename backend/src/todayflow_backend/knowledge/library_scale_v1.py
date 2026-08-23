@@ -206,12 +206,14 @@ def runtime_is_not_wired(src_root: Path) -> bool:
         (src_root / "services" / "day_story_wire_v1.py").resolve(),
         (src_root / "services" / "profile_contract_v1.py").resolve(),
         (src_root / "services" / "compatibility_llm.py").resolve(),
+        (src_root / "services" / "compatibility_editorial.py").resolve(),
         (src_root / "services" / "generation_orchestrator.py").resolve(),
     }
     consume_consumers = {
         (src_root / "services" / "day_scenario_native_llm_c1.py").resolve(),
         (src_root / "services" / "profile_contract_v1.py").resolve(),
         (src_root / "services" / "compatibility_llm.py").resolve(),
+        (src_root / "services" / "compatibility_editorial.py").resolve(),
     }
     polish_consumers = {
         (src_root / "services" / "day_scenario_native_llm_c1.py").resolve(),

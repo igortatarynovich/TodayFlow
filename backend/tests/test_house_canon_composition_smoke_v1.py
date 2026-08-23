@@ -115,7 +115,7 @@ def test_house_canon_composition_smoke_v1():
     assert "Moon × 4th house — **PARTIAL**" in prior_planet
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.114" in canon
+    assert "**Версия:** 1.3.115" in canon
     assert "### 6.47 Planet × House composition smoke" in canon
 
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]

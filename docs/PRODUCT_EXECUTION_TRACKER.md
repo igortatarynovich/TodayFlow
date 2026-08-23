@@ -104,7 +104,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** **Today meaning polish 1.3.114 LOCKED** (native astrology chorus binds to IL-4 packs; prompt c4.2; public JSON unchanged). **IL-4 editorial consume 1.3.113 LOCKED**. **IL-4 surface attach 1.3.112 LOCKED**. **calc → IL wire 1.3.111 LOCKED**. **library scale 1.3.110 LOCKED**. IL-4 **1.3.109** voice packs, not meaning. IL-3 **1.3.108** sky-internal rank ≠ user relevance. IL-2 **1.3.107** stands. FREEZE **1.3.106** stands. Catalog 38 draft / 0 `active`. Five stored families = V1 atoms. **STOP Angles.** Not pair catalog. Not `active`. Not Relevance/Prioritization. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-23):** **Compatibility synastry editorial IL-4 1.3.115 LOCKED** (editorial phrases packs when charts supplied; prompt v1.1). **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. **Knowledge Core V1 FREEZE 1.3.106 stands**. **IL-2 1.3.107 stands**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
@@ -287,6 +287,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — Compatibility 1.3.115 synastry editorial IL-4 (2026-08-23)
+
+- **SoT before:** `compatibility_llm` consumed IL-4 when `chart1` was passed (attach 1.3.112 + consume 1.3.113). Synastry `generate_compatibility_editorial` ignored IL-4 even when charts existed upstream.
+- **SoT after:** Synastry editorial accepts optional `chart1` / `chart2`, attaches IL-4 via existing gateway, consumes pack (system augment + protected `IL4_MEANING` prefix + reject-invalid). Prompt `compatibility-editorial-v1.1`. Public `CompatibilityEditorial` contract unchanged. Polish 1.3.114, consume, attach stand.
+- **Public contract changed?** no — internal LLM input / editorial gate only
+- **Migration required?** no — synastry refresh regenerates editorial
+- **Canon updated?** yes — `docs/astrology/COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md` · inventory step 43 / KC-C-COMPAT-EDITORIAL · IL §6.69
+- **Backward compatible?** yes — missing charts → previous editorial path
 
 ## Architecture impact — Today 1.3.114 meaning polish (2026-08-23)
 

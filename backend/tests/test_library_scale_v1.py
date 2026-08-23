@@ -181,7 +181,7 @@ def test_library_scale_v1():
     assert "KC-C-SCALE" in inventory
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.114" in canon
+    assert "**Версия:** 1.3.115" in canon
     assert "### 6.64 Library scale" in canon
     assert canon.count("**Версия:**") == 1
 

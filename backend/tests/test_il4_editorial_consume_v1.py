@@ -121,14 +121,14 @@ def test_il4_editorial_consume_v1():
     assert "Today prompts" in rules or "meaning SoT" in rules
     assert "1.3.112" in ATTACH.read_text(encoding="utf-8")
 
-    assert "**Версия:** 1.3.114" in IL.read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.115" in IL.read_text(encoding="utf-8")
     assert "### 6.67" in IL.read_text(encoding="utf-8")
 
     inventory = INVENTORY.read_text(encoding="utf-8")
     assert "41. Consume IL-4 in editorial generation" in inventory
     assert "✅ 1.3.113" in inventory
     assert "42. Today meaning polish" in inventory
-    assert "✅ 1.3.114" in inventory
+    assert "✅ 1.3.115" in inventory
     assert "KC-C-CONSUME" in inventory
 
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]
@@ -137,5 +137,5 @@ def test_il4_editorial_consume_v1():
 
     tracker = TRACKER.read_text(encoding="utf-8")
     now = tracker.split("**NOW (FOUNDATION")[1].split("**PAUSED")[0]
-    assert "1.3.114" in now or "meaning polish" in now.lower()
+    assert "1.3.115" in now or "meaning polish" in now.lower()
     assert "1.3.113" in now or "consume" in now.lower()

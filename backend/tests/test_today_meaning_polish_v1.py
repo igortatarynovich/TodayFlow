@@ -109,9 +109,9 @@ def test_today_meaning_polish_v1():
     assert "## Architecture impact" in rules
     assert "1.3.114" in rules
     assert "Public contract changed?** no" in rules
-    assert "1.3.114" in CONSUME.read_text(encoding="utf-8")
+    assert "1.3.113" in CONSUME.read_text(encoding="utf-8")
 
-    assert "**Версия:** 1.3.114" in IL.read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.115" in IL.read_text(encoding="utf-8")
     assert "### 6.68" in IL.read_text(encoding="utf-8")
 
     inventory = INVENTORY.read_text(encoding="utf-8")

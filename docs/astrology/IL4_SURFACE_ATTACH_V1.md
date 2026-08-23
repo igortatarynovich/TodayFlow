@@ -38,7 +38,7 @@ Catalog **38 draft / 0 `active`**. Unchanged. Draft catalog consumed through the
 |---------|------|--------------|--------------|
 | Today | `day_story_wire_v1` → `llm_input["il4_expression_pack"]` | `celestial_events.ephemeris` natal + transit_noon | `today` (primary theme only) |
 | Profile | `profile_contract_v1` → `llm_pack["il4_expression_pack"]` | `profile_input.natal` positions/houses | `profile` (full rank) |
-| Compatibility | `compatibility_llm` → `payload["il4_expression_pack"]` when `chart1` passed | chart1 natal · chart2 as transit band | `compatibility` (full rank) |
+| Compatibility | `compatibility_llm` + synastry `generate_compatibility_editorial` when charts passed | chart1 natal · chart2 as transit band | `compatibility` (full rank) |
 
 Compatibility maps partner chart → transit geometry for `transit_to_natal` / `transit_through_house` (wire 1.3.111). Not synastry cookbook prose.
 

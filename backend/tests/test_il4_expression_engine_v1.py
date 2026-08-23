@@ -153,7 +153,7 @@ def test_il4_expression_engine_v1():
     assert "KC-C-EXPR" in inventory
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.114" in canon
+    assert "**Версия:** 1.3.115" in canon
     assert "### 6.63 IL-4 Expression" in canon
     assert canon.count("**Версия:**") == 1
 

@@ -40,7 +40,9 @@
 | [LIBRARY_SCALE_V1.md](./LIBRARY_SCALE_V1.md) | **1.3.110 library scale:** V1 coverage contract. 616 composed cells. Wire live at library layer 1.3.111. Attach **done 1.3.112**. Consume **done 1.3.113** |
 | [CALC_IL_WIRE_V1.md](./CALC_IL_WIRE_V1.md) | **1.3.111 calc → IL wire:** library layer. Attach **done 1.3.112**. Consume **done 1.3.113** |
 | [IL4_SURFACE_ATTACH_V1.md](./IL4_SURFACE_ATTACH_V1.md) | **1.3.112 IL-4 surface attach:** LLM input `il4_expression_pack`. Public JSON unchanged. Consume **done 1.3.113** |
-| [IL4_EDITORIAL_CONSUME_V1.md](./IL4_EDITORIAL_CONSUME_V1.md) | **1.3.113 IL-4 editorial consume:** generation phrases packs. Fill-empty / reject-invalid. Public JSON unchanged |
+| [IL4_EDITORIAL_CONSUME_V1.md](./IL4_EDITORIAL_CONSUME_V1.md) | **1.3.113 IL-4 editorial consume:** generation phrases packs. Fill-empty / reject-invalid. Public JSON unchanged. Polish **done 1.3.114**. Compat editorial **done 1.3.115** |
+| [../today/TODAY_MEANING_POLISH_V1.md](../today/TODAY_MEANING_POLISH_V1.md) | **1.3.114 Today meaning polish:** native astrology chorus binds to IL-4. Prompt c4.2. Public JSON unchanged |
+| [COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md](./COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md) | **1.3.115 Compatibility synastry editorial IL-4:** editorial phrases packs when charts supplied. Prompt v1.1. Public JSON unchanged |
 | [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) | TodayFlow Canon structuring. Mainstream V1 / Canon / Lenses. Runtime: atoms → composition → LLM formulates |
 | [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) | Co–Star teardown Phase 0. **Recognition check** on Mainstream rows. Not IL ingest. Not the product-meaning source |
 | [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md) | Outer Planet Draft Representation (1.3.72). Meaning keys optional on IL-1 draft outers. Fill waits for Canon. Not ingest, not objects |

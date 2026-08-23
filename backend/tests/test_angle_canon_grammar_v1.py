@@ -66,7 +66,7 @@ def test_angle_canon_grammar_v1():
     assert "House 10 collision" in angle_map
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.114" in canon
+    assert "**Версия:** 1.3.115" in canon
     assert "### 6.55 Angle Canon grammar" in canon
     assert canon.count("**Версия:**") == 1
 
