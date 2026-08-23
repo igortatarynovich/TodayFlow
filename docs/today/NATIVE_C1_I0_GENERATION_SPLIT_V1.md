@@ -13,7 +13,7 @@ Catalog **38 draft / 0 `active`**. Unchanged.
 ## Architecture impact
 
 - **SoT before:** `day_scenario_native_llm_c1` used one LLM call for astrology chorus, card/number voices, conflict, scenes, natal, and personalization traces. I0 required Global then Personal authorities; monolith let the model choose cross-layer meaning in one shot.
-- **SoT after:** **Native C1 I0 Generation Split V1** runs **Global stage** (chorus sky/card/number + conflict + scenes + prop_material; no natal / no personal traces) then optional **Personal stage** (natal voices, `why_personal`, personalization traces only). Personal consumes `GLOBAL_LOCKED` snapshot; merge applies overlay fields only. Personal failure degrades to Global-only. IL-4 attach/consume/polish stay downstream on Global astrology voice. Prompt `day-scenario-native-c5.0`. Public JSON unchanged.
+- **SoT after:** **Native C1 I0 Generation Split V1** runs **Global stage** (chorus sky/card/number + conflict + scenes + prop_material; no natal / no personal traces) then optional **Personal stage** (natal voices, `why_personal`, personalization traces only). Personal consumes `GLOBAL_LOCKED` snapshot; merge applies overlay fields only. Personal failure degrades to Global-only. IL-4 attach/consume/polish stay downstream on Global astrology voice. Prompt `day-scenario-native-c5.1` (see [NATIVE_C1_EDITORIAL_GATE_CALIBRATION_V1](./NATIVE_C1_EDITORIAL_GATE_CALIBRATION_V1.md)). Public JSON unchanged.
 - **Public contract changed?** no — internal generation order / LLM stages only
 - **Migration required?** no — refresh/force_rebuild picks up c5.0
 - **Canon updated?** yes — this file · IL §6.70 · inventory KC-C-I0-SPLIT + step 44 · handoff · tracker · TODAY_MEANING_POLISH (split done)

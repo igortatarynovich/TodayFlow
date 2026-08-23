@@ -155,14 +155,14 @@ def _personal_overlay() -> dict[str, Any]:
 def test_native_c1_i0_generation_split_v1():
     assert CANON.is_file()
     assert "1.3.116" in CANON.read_text(encoding="utf-8")
-    assert "c5.0" in NATIVE.read_text(encoding="utf-8")
+    assert "c5.1" in NATIVE.read_text(encoding="utf-8")
     assert "6.70" in IL.read_text(encoding="utf-8")
     assert "KC-C-I0-SPLIT" in INVENTORY.read_text(encoding="utf-8")
     assert "1.3.116" in HANDOFF.read_text(encoding="utf-8")
     assert "1.3.116" in TRACKER.read_text(encoding="utf-8")
     assert MODULE.is_file()
 
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.0"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.1"
     assert GLOBAL_STAGE_INSTRUCTION_RU
     assert PERSONAL_STAGE_INSTRUCTION_RU
 
@@ -310,5 +310,5 @@ def test_call_native_uses_i0_split_orchestrator():
         assert orch.called
         assert result is not None
         assert result.get("generation_source") == "native_llm_c1"
-        assert result["editorial_meta"]["prompt_version"] == "day-scenario-native-c5.0"
+        assert result["editorial_meta"]["prompt_version"] == "day-scenario-native-c5.1"
         assert result["editorial_meta"]["i0_split"]["i0_split"]

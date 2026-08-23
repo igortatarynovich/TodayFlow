@@ -507,7 +507,7 @@ def orchestrate_i0_split_generation(
                     "reject_reason": reject or "global_stage_reject",
                 }
             )
-            retry_feedback = f"I0 global stage: {reject or 'reject'}"
+            retry_feedback = (reject or "").strip() or "I0 global stage: reject"
             pending_retry_reason = "gate_retry"
             continue
 

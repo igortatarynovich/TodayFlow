@@ -156,7 +156,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c5.0"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c5.1"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -335,6 +335,11 @@ why_today — lived «почему тон сегодня такой» (как р
 
 Плохо: «В отношениях возможна напряжённость. Сохраняйте границы.»
 Хорошо: «Человек может спросить, всё ли в порядке, именно когда хочется закрыться и ответить «нормально». Ловушка — согласиться ради тишины, а затем злиться, что вас не поняли.»
+
+КАЛИБРАЦИЯ c5.1 (editorial gate — не ослаблять, переводить смысл в быт):
+- everyday_example: «Рабочий чат, 11:15: «ок?» под длинным письмом» — время + канал + реплика.
+- astrology human_meaning: «В разговорах сегодня легче сорваться на резкость, чем замолчать» —
+  не «Луна в Рыбах подталкивает день к сюжету…».
 
 Запрещены универсальные конструкции без сцены:
 «не торопитесь», «сохраняйте баланс», «слушайте себя», «избегайте конфликтов», «сделайте паузу» —
@@ -1253,7 +1258,7 @@ def call_day_scenario_native_llm_c1(
         if should_retry_defects(editorial_local):
             retryable = [d for d in editorial_local if str(d.get("runtime_action")) == "retry"]
             if retryable:
-                return None, ";".join(str(d.get("code")) for d in retryable[:8])
+                return None, format_editorial_retry_feedback(retryable)
         return normalized_local, None
 
     def _llm_call_split(

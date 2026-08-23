@@ -104,7 +104,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** **Native C1 I0 generation split 1.3.116 LOCKED** (Global stage + Personal overlay; prompt c5.0). **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
+**NOW (FOUNDATION, 2026-08-23):** **Native C1 editorial gate calibration 1.3.117 IN PROGRESS** (prompt c5.1 · gate retry feedback). **Native C1 I0 generation split 1.3.116 LOCKED** (Global + Personal overlay). **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
@@ -287,6 +287,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — Today 1.3.117 Native C1 editorial gate calibration (2026-08-23)
+
+- **SoT before:** Native C1 I0 split c5.0; Global gate retries passed code-only strings; production LLM outputs failed `SCENE_MISSING_EVERYDAY` / `SCENE_ABSTRACT` / `ASTRO_JARGON_BARE` without actionable retry coaching.
+- **SoT after:** **Native C1 Editorial Gate Calibration V1** — prompt `day-scenario-native-c5.1`; Global retry injects `format_editorial_retry_feedback` (defect messages + targeted hints). C3.1 gate codes unchanged (no semantic weakening). Public JSON unchanged.
+- **Public contract changed?** no — fewer `interpretation_status: unavailable` when gates pass after retry
+- **Migration required?** no — refresh / force rebuild picks up c5.1
+- **Canon updated?** yes — `docs/today/NATIVE_C1_EDITORIAL_GATE_CALIBRATION_V1.md` · `NATIVE_C1_I0_GENERATION_SPLIT_V1.md` (c5.1 ref) · tracker 1.3.117
+- **Backward compatible?** yes — same gate semantics; cached unavailable days until regenerate
 
 ## Architecture impact — Today 1.3.116 Native C1 I0 split (2026-08-23)
 

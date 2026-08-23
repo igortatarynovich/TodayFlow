@@ -940,6 +940,21 @@ def format_editorial_retry_feedback(defects: list[dict[str, str]], *, limit: int
             "«подталкивает день к сюжету» / «окрашивает прохождение» / «какой ролью пройти»; "
             "не ставь bank-binary («тащить старое или…») в title.",
         )
+    codes = {str(d.get("code") or "") for d in defects}
+    if DEFECT_SCENE_MISSING_EVERYDAY in codes or DEFECT_SCENE_ABSTRACT in codes:
+        lines.insert(
+            len(lines) - 1,
+            "everyday_example (каждая сцена): время/место + кто + что сказано/написано "
+            "(пример: «Рабочий чат, 11:15: «ок?» под длинным письмом»). "
+            "setup — тот же момент, не абстрактная «напряжённость в отношениях».",
+        )
+    if DEFECT_ASTRO_JARGON_BARE in codes or DEFECT_CHORUS_UNTRANSLATED_JARGON in codes:
+        lines.insert(
+            len(lines) - 1,
+            "astrology voice: named_factor может держать факт неба; human_meaning + link_to_conflict "
+            "ОБЯЗАНЫ перевести в среду дня (давление, темп, разговор, импульс) — "
+            "не «это подталкивает день к сюжету» и не копия named_factor.",
+        )
     for d in defects[:limit]:
         lines.append(f"- [{d.get('code')}] {d.get('field')}: {d.get('message')}")
     return "\n".join(lines)
