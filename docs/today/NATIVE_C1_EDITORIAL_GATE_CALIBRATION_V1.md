@@ -1,7 +1,7 @@
 # Native C1 Editorial Gate Calibration V1
 
 **Date:** 2026-08-23  
-**Status:** **IN PROGRESS** — quality/calibration pass on existing native C1 + C3.1 gates. **Not** IL-4 rewrite. **Not** I0 split reopen. **Not** consume/polish reopen. **Not** `active`.  
+**Status:** **LOCKED** (2026-08-23) — quality/calibration pass on existing native C1 + C3.1 gates. **Not** IL-4 rewrite. **Not** I0 split reopen. **Not** consume/polish reopen. **Not** `active`.  
 **Canon:** [DAY_SCENARIO_EVERYDAY_QUALITY_C31](../audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md) · [DAY_SCENARIO_GATE_MATURITY_C36](../audits/DAY_SCENARIO_GATE_MATURITY_C36.md) · [NATIVE_C1_I0_GENERATION_SPLIT_V1](./NATIVE_C1_I0_GENERATION_SPLIT_V1.md)
 
 ---
@@ -42,6 +42,20 @@ Generation reaches LLM; failure is **editorial gate** on Global stage:
    - forced Personal stage failure → `personal_degraded`, Global preserved
 
 **Success criterion:** IL-2/3 meaning preserved → Global in everyday language → Personal overlay does not mutate Global → gates PASS → `interpretation_status: ok` + non-empty `story` in Today.
+
+### Production regression matrix (2026-08-23, force rebuild, c5.1)
+
+| user | label | result | gen_id | notes |
+|------|-------|--------|--------|-------|
+| 26 | prior_astro_jargon_gate | **PASS** | 1085 | global→personal→merged |
+| 2 | prior_force_ok | **PASS** | 1086 | global×2 retry |
+| 5 | prior_scene_everyday | **PASS** | 1087 | global×2 retry |
+| 11 | p0_today (light) | **PASS** | 1090 | `light_personalized` |
+| 6 | p0_v2 | **PASS** | 1091 | global×2, personal×2 |
+| 1 | owner account | **PASS** | 1096 | global×2 retry (chorus+scene) |
+| 4 | p0 compat (no profile) | **FAIL** | 1092 | `unknown_evidence` — evidence binding, not scene/astro focus |
+
+`personal_degraded`: covered by unit test `test_personal_degraded_keeps_global` (forced Personal timeout fixture).
 
 ---
 
