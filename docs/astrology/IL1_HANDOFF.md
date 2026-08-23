@@ -517,7 +517,7 @@ TodayFlow. Продукт: Personal Model → Profile + Today. SoT = docs/, не
 
 СОСТОЯНИЕ
 - Branch: il/il-1-ingest (tracks origin/il/il-1-ingest). Не merge в main. Draft PR #17 vs main — stale; не merge.
-- Tip: (after 1.3.113 commit) — 1.3.113 consume + 1.3.112 attach + 1.3.111 wire + 1.3.110 scale + 1.3.109 IL-4. **Next named: owner-directed Today meaning polish.**
+- Tip: `a44958d7` — 1.3.113 consume + 1.3.112 attach + 1.3.111 wire + 1.3.110 scale + 1.3.109 IL-4. **Next named: owner-directed Today meaning polish.**
 - Catalog: 38 draft / 0 active. Schema/objects не менять без named Architecture impact.
 - Runtime игнорирует draft. Не deploy. Не set active. Не CORE scoring.
 - Prior IL-4: [IL-4 Expression 1.3.109](b8dc63d9-b6cb-4f4e-8a85-82318c23a1d8)

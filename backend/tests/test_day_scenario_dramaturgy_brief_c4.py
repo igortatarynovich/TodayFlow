@@ -108,4 +108,20 @@ def test_format_protects_brief_under_truncation():
 
 
 def test_native_prompt_version_c4():
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c4.0"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c4.1"
+
+
+def test_format_prepends_il4_meaning_block():
+    brief = {
+        "contract_version": CONTRACT_VERSION,
+        "must_dramatize": [{"id": "moon-pisces", "fact_ru": "Луна вошла в Рыбы."}],
+    }
+    meaning = "=== IL4_MEANING (protected) ===\nlemma: attract · value\n"
+    _full, sent = format_native_user_message_c4(
+        brief=brief,
+        context={"x": 1},
+        max_chars=8000,
+        meaning_block=meaning,
+    )
+    assert sent.startswith("=== IL4_MEANING")
+    assert sent.index("IL4_MEANING") < sent.index("DRAMATURGY_BRIEF")
