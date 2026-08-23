@@ -386,7 +386,7 @@ out:       7th partnership · 4th home · square as the opposition · one pole d
 - Sign / House pack edits · books · CORE · Co–Star ingest
 - IL-2 composition rules · surface-specific aspect grammars
 
-**Next named:** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** Angle Canon model — **done 1.3.99.** Mainstream Angle map — **done 1.3.100.** Angle Canon grammar — **done 1.3.101.** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** stored Planet×Angle smoke — **done 1.3.104.** **STOP Aspects.** **STOP Angles.** Next = final atomic smoke → Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Houses.** **STOP Signs.** Do not reopen 1.3.94 research.
+**Next named:** Aspect Canon fill — **done 1.3.96.** Aspect Canon storage/materialization — **done 1.3.97.** Stored Planet × Aspect smoke — **done 1.3.98.** Angle Canon model — **done 1.3.99.** Mainstream Angle map — **done 1.3.100.** Angle Canon grammar — **done 1.3.101.** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** stored Planet×Angle smoke — **done 1.3.104.** **STOP Aspects.** **STOP Angles.** Final atomic smoke — **done 1.3.105.** Next = Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Houses.** **STOP Signs.** Do not reopen 1.3.94 research.
 
 ---
 

@@ -3074,7 +3074,7 @@ def test_mainstream_house_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.43 Mainstream House Semantic Map" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     house_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -3133,7 +3133,7 @@ def test_house_canon_grammar_v1():
         encoding="utf-8"
     )
     assert "### 6.44 House Canon grammar" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     grammar = (ROOT / "docs" / "astrology" / "HOUSE_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3174,7 +3174,7 @@ def test_house_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.45 House Canon V1 fill" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     packs = (ROOT / "docs" / "astrology" / "HOUSE_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "Destination noun" in packs or "destination noun" in packs.lower()
@@ -3248,7 +3248,7 @@ def test_sign_canon_grammar_v1():
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3286,7 +3286,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs
@@ -3719,7 +3719,7 @@ def test_house_canon_storage_materialization_v1():
         encoding="utf-8"
     )
     assert "### 6.46 House Canon storage and materialization" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     storage = (
         ROOT / "docs" / "astrology" / "HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md"
     ).read_text(encoding="utf-8")
@@ -3762,7 +3762,7 @@ def test_mainstream_aspect_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.48 Mainstream Aspect Semantic Map" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     aspect_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -3811,7 +3811,7 @@ def test_aspect_canon_grammar_v1():
         encoding="utf-8"
     )
     assert "### 6.49 Aspect Canon grammar" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     grammar = (ROOT / "docs" / "astrology" / "ASPECT_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3861,7 +3861,7 @@ def test_aspect_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.50 Aspect Canon V1 fill" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     packs = (ROOT / "docs" / "astrology" / "ASPECT_CANON_V1.md").read_text(
         encoding="utf-8"
     )
@@ -4099,7 +4099,7 @@ def test_aspect_canon_storage_materialization_v1():
         encoding="utf-8"
     )
     assert "### 6.51 Aspect Canon storage and materialization" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     storage = (
         ROOT / "docs" / "astrology" / "ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md"
     ).read_text(encoding="utf-8")
@@ -4282,7 +4282,7 @@ def test_angle_canon_storage_materialization_v1():
         encoding="utf-8"
     )
     assert "### 6.57 Angle Canon storage and materialization" in canon
-    assert "**Версия:** 1.3.104" in canon
+    assert "**Версия:** 1.3.105" in canon
     storage = (
         ROOT / "docs" / "astrology" / "ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md"
     ).read_text(encoding="utf-8")

@@ -192,12 +192,12 @@ Do not edit 1.3.93 verdicts to collapse 1st into ASC. Do not treat House PASS as
 - DSC / IC objects
 - Rising-sign portraits · MC-in-sign careers
 - Sign / House / Aspect / Planet pack edits
-- Final atomic smoke (next named after STOP Angles)
+- Final atomic smoke — **done 1.3.105**
 
-**Next named:** final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored). Then Knowledge Core V1 FREEZE → IL-2. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
+**Next named:** Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.0 (2026-08-23)** — 1.3.104. Stored Planet × Angle smoke PASS. Four gates. Mars AT ASC ≠ Mars AT MC ≠ Mars IN 1st ≠ Mars IN 10th. Occupancy ≠ conjunction. Catalog unchanged. STOP Angles.
+- **1.0 (2026-08-23)** — 1.3.104. Stored Planet × Angle smoke PASS. Four gates. Mars AT ASC ≠ Mars AT MC ≠ Mars IN 1st ≠ Mars IN 10th. Occupancy ≠ conjunction. Catalog unchanged. STOP Angles. Final atomic smoke — **done 1.3.105.**

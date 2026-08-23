@@ -39,7 +39,7 @@
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — JSON / Machine Contract build order (не порядок исследования смысла)
-- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.104):** stored Planet×Angle smoke PASS. STOP Angles. 1.3.103 storage. 1.3.102 fill. 1.3.101 grammar (`orientation`). 1.3.100 Mainstream Angle map. 1.3.99 orientation loci. 1.3.98 stored Planet × Aspect smoke PASS. STOP Aspects. Houses closed (1.3.93). Next = final atomic smoke. Исторический корпус = lenses
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](./KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — **порядок семантического ядра.** **Астрология IL (1.3.105):** final atomic smoke PASS. STOP Angles. 1.3.104 Planet×Angle smoke. 1.3.103 storage. 1.3.102 fill. 1.3.101 grammar (`orientation`). 1.3.100 Mainstream Angle map. 1.3.99 orientation loci. 1.3.98 stored Planet × Aspect smoke PASS. STOP Aspects. Houses closed (1.3.93). Next = Knowledge Core V1 FREEZE. Исторический корпус = lenses
 - [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) — **IL V1 freeze map (APPROVED):** что библиотека должна знать. Books только против named `KC-*` row. IL-1 done = минимальные primitives
 - [KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md](./astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md) — **Product Canon vs Lenses (1.3.76):** Mainstream → Canon → runtime. Corpus → education / SEO / deep dives
 - [astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md](./astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md) — **Mainstream planet map (1.3.77):** concept families. Not Canon, not JSON
@@ -59,6 +59,7 @@
 - [astrology/ANGLE_CANON_GRAMMAR_V1.md](./astrology/ANGLE_CANON_GRAMMAR_V1.md) — **Angle Canon grammar (1.3.101):** one slot (`orientation`). Include-first. Secondary = collision-zone. Not fill
 - [astrology/ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md](./astrology/ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md) — **Angle Canon storage (1.3.103):** `angle_canon_pack`; two drafts. Smoke **done 1.3.104**
 - [astrology/ANGLE_CANON_COMPOSITION_SMOKE_V1.md](./astrology/ANGLE_CANON_COMPOSITION_SMOKE_V1.md) — **composition smoke (1.3.104):** stored Planet × Angle PASS. Occupancy ≠ conjunction. STOP Angles
+- [astrology/ATOMIC_CANON_COMPOSITION_SMOKE_V1.md](./astrology/ATOMIC_CANON_COMPOSITION_SMOKE_V1.md) — **final atomic smoke (1.3.105):** five stored families. Operators discriminate. Next = Knowledge Core V1 FREEZE
 - [astrology/ANGLE_CANON_V1.md](./astrology/ANGLE_CANON_V1.md) — **Angle Canon V1 (1.3.102):** two packs + origin. Collision vs House 1/10. Stored 1.3.103
 - [astrology/SIGN_CANON_GRAMMAR_V1.md](./astrology/SIGN_CANON_GRAMMAR_V1.md) — **Sign Canon grammar (1.3.84):** manner · excess. Dry-run ≠ fill
 - [astrology/SIGN_CANON_V1.md](./astrology/SIGN_CANON_V1.md) — **Sign Canon V1 (1.3.85):** twelve packs + provenance. Storage = 1.3.86

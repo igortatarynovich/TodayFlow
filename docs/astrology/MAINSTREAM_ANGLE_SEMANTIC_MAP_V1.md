@@ -231,15 +231,15 @@ Do not write `Mars conjunct ASC` essays. Do not materialize `astro.object.asc` i
 - Object rewrite · schema · CORE · books · Forrest / Greene monographs
 - Angle Canon grammar · lemma assignment · slot count
 - Fill · storage · `astro.object.asc` / `astro.object.mc`
-- Planet×Angle smoke · final atomic smoke
+- Planet×Angle smoke — **done 1.3.104** · final atomic smoke — **done 1.3.105**
 - DSC / IC objects
 - Sign / House / Aspect pack edits
 - Dumping §3 into JSON
 - A 2/3 word spreadsheet
 
-**Sequence (locked, not skipped):** Angle map (this file) → grammar → fill → storage/materialization → stored Planet×Angle smoke — **done 1.3.104** → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2.
+**Sequence (locked, not skipped):** Angle map (this file) → grammar → fill → storage/materialization → stored Planet×Angle smoke — **done 1.3.104** → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) — **done 1.3.105** → Knowledge Core V1 FREEZE → IL-2.
 
-**Next named:** Angle Canon grammar — **done 1.3.101.** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** stored Planet×Angle smoke — **done 1.3.104.** **STOP Angles.** Next = final atomic smoke → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
+**Next named:** Angle Canon grammar — **done 1.3.101.** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** stored Planet×Angle smoke — **done 1.3.104.** **STOP Angles.** Final atomic smoke — **done 1.3.105.** Next = Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
 
 ---
 

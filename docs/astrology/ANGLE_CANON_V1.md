@@ -211,21 +211,21 @@ If ASC and MC packs had used House 1 / House 10 vocabulary to become distinct, f
 - Promote secondary collision-zone
 - Copy House 1 / House 10 packs
 - Storage / materialization — **done 1.3.103**
-- Stored Planet×Angle smoke · final atomic smoke
+- Stored Planet×Angle smoke — **done 1.3.104** · final atomic smoke — **done 1.3.105**
 - DSC / IC objects
 - Rising-sign portraits · MC-in-sign careers
 - Sign / House / Aspect pack edits · books · CORE · Co–Star ingest
 - Fill leftover include (`personal-facing` / `public-facing`) for symmetry
 - A second angle slot
 
-**Sequence (locked, not skipped):** fill (this file) → storage/materialization — **done 1.3.103** → stored Planet×Angle smoke — **done 1.3.104** → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2.
+**Sequence (locked, not skipped):** fill (this file) → storage/materialization — **done 1.3.103** → stored Planet×Angle smoke — **done 1.3.104** → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) — **done 1.3.105** → Knowledge Core V1 FREEZE → IL-2.
 
-**Next named:** stored Planet×Angle composition smoke — **done 1.3.104.** **STOP Angles.** Next = final atomic smoke. Not lemma rewrite. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve these packs without a named Composition Engine failure.
+**Next named:** stored Planet×Angle composition smoke — **done 1.3.104.** **STOP Angles.** Final atomic smoke — **done 1.3.105.** Next = Knowledge Core V1 FREEZE. Not lemma rewrite. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve these packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.2 (2026-08-23)** — 1.3.104 stored Planet×Angle smoke PASS. Packs unchanged. STOP Angles. Next = final atomic smoke.
+- **1.2 (2026-08-23)** — 1.3.104 stored Planet×Angle smoke PASS. Packs unchanged. STOP Angles. Final atomic smoke — **done 1.3.105.** Next = Knowledge Core V1 FREEZE.
 - **1.1 (2026-08-22)** — 1.3.103 storage/materialization. Two drafts carry `canon.orientation`. Packs unchanged. Stored Planet×Angle smoke — **done 1.3.104.**
 - **1.0 (2026-08-22)** — 1.3.102. Two packs. Origin `direct` from 1.3.100 include. Five gates. Collision vs House 1/10. Secondary unused. personal-facing / public-facing leftover. Dry-run 1.3.101 not inherited. Storage/materialization — **done 1.3.103.**

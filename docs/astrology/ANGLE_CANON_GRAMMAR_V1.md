@@ -318,21 +318,21 @@ If ASC and MC frames had used House 1 / House 10 vocabulary to become distinct, 
 - Fill ASC / MC · schema · `astro.object.asc` / `astro.object.mc` · `active`
 - Promote secondary collision-zone into the stem
 - Copy House 1 / House 10 packs
-- Planet×Angle smoke · final atomic smoke
+- Planet×Angle smoke — **done 1.3.104** · final atomic smoke — **done 1.3.105**
 - DSC / IC objects
 - Rising-sign portraits · MC-in-sign careers
 - Sign / House / Aspect pack edits · books · CORE · Co–Star ingest
 - IL-2 composition rules · surface-specific angle grammars
 
-**Sequence (locked, not skipped):** grammar (this file) → fill → storage/materialization → stored Planet×Angle smoke — **done 1.3.104** → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2.
+**Sequence (locked, not skipped):** grammar (this file) → fill → storage/materialization → stored Planet×Angle smoke — **done 1.3.104** → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) — **done 1.3.105** → Knowledge Core V1 FREEZE → IL-2.
 
-**Next named:** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** stored Planet×Angle smoke — **done 1.3.104.** **STOP Angles.** Next = final atomic smoke → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
+**Next named:** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** stored Planet×Angle smoke — **done 1.3.104.** **STOP Angles.** Final atomic smoke — **done 1.3.105.** Next = Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.3 (2026-08-23)** — stored Planet×Angle smoke PASS 1.3.104. Grammar unchanged. STOP Angles. Next = final atomic smoke.
+- **1.3 (2026-08-23)** — stored Planet×Angle smoke PASS 1.3.104. Grammar unchanged. STOP Angles. Final atomic smoke — **done 1.3.105.** Next = Knowledge Core V1 FREEZE.
 - **1.2 (2026-08-22)** — Angle Canon storage/materialization locked 1.3.103. Two drafts. Grammar unchanged. stored Planet×Angle smoke — **done 1.3.104.**
 - **1.1 (2026-08-22)** — Angle Canon fill locked 1.3.102. Two packs. Grammar unchanged. Storage/materialization — **done 1.3.103.**
 - **1.0 (2026-08-22)** — 1.3.101. One slot (`orientation`). Include-first. Secondary = collision-zone, not default. Facing / public–private as own slot surplus. Arena copy forbidden. Dry-run: same planet function on ASC vs MC without House 1/10; planet in 1st ≠ planet conjunct ASC. Angle Canon fill — **done 1.3.102.**

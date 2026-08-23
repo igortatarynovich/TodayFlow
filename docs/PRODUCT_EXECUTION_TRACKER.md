@@ -104,7 +104,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** IL-1 **1.3.104 stored Planet×Angle smoke PASS.** Four gates. `canon.orientation` is the operator. Mars AT ASC ≠ Mars AT MC ≠ House 1/10. Occupancy ≠ conjunction. **STOP Angles.** **1.3.103 Angle Canon storage/materialization stands.** Two `type=angle` drafts. `canon.orientation` copied verbatim. Catalog 38 draft / 0 `active`. **1.3.102 Angle Canon fill stands.** Two `orientation` packs. Origin `direct` from include. House 1/10 collision. Secondary unused. **1.3.101 Angle Canon grammar stands.** One slot (`orientation`). Include-first. Secondary = collision-zone. **1.3.100 Mainstream Angle Semantic Map stands.** Same panel. House 1/10 not proof. Angular strength not meaning. Planet-on-angle cookbooks out. **1.3.99 Angle Canon model stands.** Orientation loci. **1.3.98 stored Planet × Aspect smoke PASS.** Four gates. `canon.relation` is the operator. **STOP Aspects.** **1.3.97 storage stands.** **1.3.96 fill stands.** **1.3.95 grammar stands.** **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = final atomic smoke. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-23):** IL-1 **1.3.105 final atomic smoke PASS.** Five stored families. Operators discriminate. Occupancy ≠ conjunction. **STOP Angles.** **1.3.104 stored Planet×Angle smoke stands.** Four gates. `canon.orientation` is the operator. Mars AT ASC ≠ Mars AT MC ≠ House 1/10. Occupancy ≠ conjunction. **1.3.103 Angle Canon storage/materialization stands.** Two `type=angle` drafts. `canon.orientation` copied verbatim. Catalog 38 draft / 0 `active`. **1.3.102 Angle Canon fill stands.** Two `orientation` packs. Origin `direct` from include. House 1/10 collision. Secondary unused. **1.3.101 Angle Canon grammar stands.** One slot (`orientation`). Include-first. Secondary = collision-zone. **1.3.100 Mainstream Angle Semantic Map stands.** Same panel. House 1/10 not proof. Angular strength not meaning. Planet-on-angle cookbooks out. **1.3.99 Angle Canon model stands.** Orientation loci. **1.3.98 stored Planet × Aspect smoke PASS.** Four gates. `canon.relation` is the operator. **STOP Aspects.** **1.3.97 storage stands.** **1.3.96 fill stands.** **1.3.95 grammar stands.** **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = Knowledge Core V1 FREEZE. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -264,10 +264,19 @@ Status: Active working document
 ## Architecture impact — IL-1 1.3.104 stored Planet × Angle composition smoke (2026-08-23)
 
 - **SoT before:** two angle drafts carry locked `orientation`. Risk: House 1/10 as the angle; occupancy = conjunction; planet-on-angle essays.
-- **SoT after:** PlanetAtAngle frames read stored `canon.orientation`. Four gates PASS. Mars AT ASC ≠ Mars AT MC ≠ House 1/10. Occupancy ≠ conjunction. Catalog unchanged. **STOP Angles.** Next = final atomic smoke.
+- **SoT after:** PlanetAtAngle frames read stored `canon.orientation`. Four gates PASS. Mars AT ASC ≠ Mars AT MC ≠ House 1/10. Occupancy ≠ conjunction. Catalog unchanged. **STOP Angles.** Final atomic smoke — **done 1.3.105.** Next = Knowledge Core V1 FREEZE.
 - **Public contract changed?** no
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/ANGLE_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.104 §6.58
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.105 final atomic smoke (2026-08-23)
+
+- **SoT before:** five family smokes PASS in isolation. Risk: collapse operators into one essay; skip freeze; open IL-2 cookbooks.
+- **SoT after:** one diagnostic reads Planet + Sign + House + Aspect + Angle from stored `canon`. Four gates PASS. Operators discriminate. Occupancy ≠ conjunction. Catalog unchanged. Next = Knowledge Core V1 FREEZE.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ATOMIC_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.105 §6.59
 - **Backward compatible?** yes (`draft`)
 
 ## Architecture impact — IL-1 1.3.101 Angle Canon grammar (2026-08-22)
