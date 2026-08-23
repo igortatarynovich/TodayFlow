@@ -793,6 +793,7 @@ def _build_day_story_record(
                 "attempt2_policy": native_meta.get("attempt2_policy"),
                 "kept_prior_native": kept_prior_native,
                 "healed_rules": list(native_meta.get("healed_rules") or []),
+                "i0_split": native_meta.get("i0_split"),
             },
             **slice_log_fields(user_core),
         }
