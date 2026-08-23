@@ -80,6 +80,7 @@ import {
   fetchTodayContractV1,
   isDayAssembling,
   isDayNotReady,
+  isTodayInterpretationUnavailable,
   readDayLifecycle,
   localCalendarDateISO,
   type TodayContractV1,
@@ -783,7 +784,9 @@ export default function TodayPage() {
 
   useEffect(() => {
     if (!isAuthenticated || !todayData?.date) return;
-    if (dayStorySingleVoice && todayContract) {
+    const interpretationUnavailable =
+      todayContract != null && isTodayInterpretationUnavailable(todayContract);
+    if ((dayStorySingleVoice || interpretationUnavailable) && todayContract) {
       setGuideGenerationId(parseContractGenerationId(todayContract));
       setGuideNarrativePayload(null);
       setGuideNarrativeRequestFailed(false);

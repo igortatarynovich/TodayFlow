@@ -1250,7 +1250,12 @@ export function TodayCompositionSurface(props: Props) {
   const dayClosed = isDayContinuityClosed(continuityRecord);
   const todayHeroSymbol = useMemo(() => buildTodayHeroSymbol(props.coreProfile), [props.coreProfile]);
   const todayHeroPillars = useMemo(() => buildTodayHeroPillars(props.coreProfile), [props.coreProfile]);
-  const themeLoading = !singleVoice && props.guideNarrativeLoading && !props.guideNarrativePayload;
+  const interpretationUnavailable = isTodayInterpretationUnavailable(props.contract);
+  const themeLoading =
+    !singleVoice &&
+    !interpretationUnavailable &&
+    props.guideNarrativeLoading &&
+    !props.guideNarrativePayload;
 
   const dayTexture = useMemo(() => buildGlanceDayTexture(props.contract), [props.contract]);
   const glanceDailyFocus = useMemo(
