@@ -161,8 +161,8 @@ def test_aspect_canon_composition_smoke_v1():
         assert frame["relation"] == list(obj["canon"]["relation"])
         assert frame["relation"] != [obj["interaction"]]
 
-    assert "astro.object.asc" not in by_id
-    assert "astro.object.mc" not in by_id
+    assert by_id["astro.object.asc"]["type"] == "angle"
+    assert by_id["astro.object.mc"]["type"] == "angle"
 
     smoke = SMOKE.read_text(encoding="utf-8")
     assert "Mars □ Saturn — **PASS**" in smoke
@@ -182,7 +182,7 @@ def test_aspect_canon_composition_smoke_v1():
     assert "square `interaction`: `friction`" in prior
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     assert "### 6.52 Planet × Aspect composition smoke" in canon
 
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]

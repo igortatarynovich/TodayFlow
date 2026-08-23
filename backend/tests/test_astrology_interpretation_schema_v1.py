@@ -88,7 +88,7 @@ QUALITY_PERSONALITY = (
 
 
 def _assert_il1_catalog_counts(objects: dict) -> None:
-    assert len(objects["objects"]) == 36
+    assert len(objects["objects"]) == 38
     by_type: dict[str, list] = {}
     for obj in objects["objects"]:
         by_type.setdefault(obj["type"], []).append(obj)
@@ -96,6 +96,7 @@ def _assert_il1_catalog_counts(objects: dict) -> None:
     assert len(by_type["sign"]) == 12
     assert len(by_type["house"]) == 12
     assert len(by_type["aspect"]) == 5
+    assert len(by_type["angle"]) == 2
     assert all(obj["status"] != "active" for obj in objects["objects"])
     for sign in by_type["sign"]:
         assert sign["status"] == "draft"
@@ -265,8 +266,8 @@ def test_houses_and_aspects_from_opened_loci_only():
         "astro.aspect.opposition",
     }
     _assert_il1_catalog_counts(objects)
-    assert "astro.object.asc" not in by_id
-    assert "astro.object.mc" not in by_id
+    assert by_id["astro.object.asc"]["type"] == "angle"
+    assert by_id["astro.object.mc"]["type"] == "angle"
     for obj in houses:
         used = {row["source_id"] for row in obj["provenance"]}
         notes = json.loads((CLAIMS_DIR / f"{obj['object_id']}.json").read_text(encoding="utf-8"))["gap_notes"]
@@ -2562,6 +2563,44 @@ def _minimal_aspect_draft(object_id: str = "astro.aspect.square") -> dict:
     }
 
 
+def _minimal_angle_draft(object_id: str = "astro.object.asc") -> dict:
+    code = object_id.rsplit(".", 1)[-1]
+    phenomenon = "Ascendant" if code == "asc" else "Midheaven"
+    return {
+        "object_id": object_id,
+        "layer": 1,
+        "type": "angle",
+        "status": "draft",
+        "version": "0.1.0",
+        "phenomenon": phenomenon,
+        "machine_entity_code": f"astrology.angle.{code}",
+        "theme_clusters": ["identity"],
+        "polarity": ["neutral"],
+        "temporal_class": "natal",
+        "confidence": None,
+        "composed_from": [],
+        "curation_reason": None,
+        "provenance": [
+            {
+                "concept_id": f"claim.angle.{code}.orientation",
+                "source_id": "src.internal.angle_canon_v1",
+                "source_class": "internal_normalization",
+                "author": "TodayFlow Canon",
+                "edition": "ANGLE_CANON_V1.md",
+                "school": "todayflow_canon",
+                "reviewer": None,
+                "reviewed_at": None,
+                "locus": "docs/astrology/ANGLE_CANON_V1.md",
+                "original_claim": "Classification-only illustration — not a Canon pack",
+                "normalized_claim": "Stored orientation remains a lemma list",
+                "evidence_tier": "editorial",
+                "review_status": "extracted",
+                "field": "canon",
+            }
+        ],
+    }
+
+
 def test_outer_planet_draft_representation_optional_on_draft():
     """1.3.72: outer meaning keys optional on draft. Sun–Saturn still required. No objects yet."""
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
@@ -2807,7 +2846,7 @@ def test_planet_canon_storage_v1():
     assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
 
     for obj in objects["objects"]:
-        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect", "angle"):
             assert "canon" not in obj
 
     saturn_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.object.saturn")
@@ -2956,7 +2995,7 @@ def test_planet_canon_sun_saturn_fill():
     assert "affection" in by_id["astro.object.venus"]["canon"]["constructive"]
 
     for obj in objects["objects"]:
-        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect", "angle"):
             assert "canon" not in obj
     for object_id in ("astro.object.uranus", "astro.object.neptune", "astro.object.pluto"):
         assert object_id not in by_id
@@ -3035,7 +3074,7 @@ def test_mainstream_house_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.43 Mainstream House Semantic Map" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     house_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -3094,7 +3133,7 @@ def test_house_canon_grammar_v1():
         encoding="utf-8"
     )
     assert "### 6.44 House Canon grammar" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     grammar = (ROOT / "docs" / "astrology" / "HOUSE_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3135,7 +3174,7 @@ def test_house_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.45 House Canon V1 fill" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     packs = (ROOT / "docs" / "astrology" / "HOUSE_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "Destination noun" in packs or "destination noun" in packs.lower()
@@ -3209,7 +3248,7 @@ def test_sign_canon_grammar_v1():
     _assert_il1_catalog_counts(objects)
     canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(encoding="utf-8")
     assert "### 6.38 Sign Canon grammar" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     grammar = (ROOT / "docs" / "astrology" / "SIGN_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3247,7 +3286,7 @@ def test_sign_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.39 Sign Canon V1 fill" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     packs = (ROOT / "docs" / "astrology" / "SIGN_CANON_V1.md").read_text(encoding="utf-8")
     assert "direct" in packs
     assert "derived" in packs
@@ -3475,7 +3514,7 @@ def test_sign_canon_materialization_v1():
     assert cap["canon"]["excess"] == ["withholding", "hardening"]
 
     for obj in objects["objects"]:
-        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect", "angle"):
             assert "canon" not in obj
     for object_id, pack in SUN_SATURN_CANON_PACKS.items():
         assert by_id[object_id]["canon"] == pack
@@ -3531,6 +3570,16 @@ ASPECT_INTERACTION = {
     "astro.aspect.sextile": "flow",
 }
 
+ANGLE_CANON_PACKS = {
+    "astro.object.asc": {
+        "orientation": ["doorway-meeting", "how-met", "automatic-response"]
+    },
+    "astro.object.mc": {"orientation": ["culmination", "outer-mark", "aiming"]},
+}
+
+ASC_COLLISION = ("self-presentation", "appearance", "first-impression", "mask")
+MC_COLLISION = ("career", "public-role", "reputation", "calling", "profession")
+
 
 def test_house_canon_storage_materialization_v1():
     """1.3.92: house_canon_pack + copy locked 1.3.91 packs. Lilly fields unchanged. Next = 1.3.93 smoke."""
@@ -3571,11 +3620,13 @@ def test_house_canon_storage_materialization_v1():
     assert by_id["astro.house.01"]["domain"] == "life, stature, and the querent's person"
     assert "home" not in by_id["astro.house.10"]["canon"]["arena"]
     assert "career" not in by_id["astro.house.04"]["canon"]["arena"]
-    assert "astro.object.asc" not in by_id
-    assert "astro.object.mc" not in by_id
+    assert by_id["astro.object.asc"]["type"] == "angle"
+    assert by_id["astro.object.mc"]["type"] == "angle"
+    assert by_id["astro.house.01"]["canon"] == HOUSE_CANON_PACKS["astro.house.01"]
+    assert by_id["astro.house.10"]["canon"] == HOUSE_CANON_PACKS["astro.house.10"]
 
     for obj in objects["objects"]:
-        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect", "angle"):
             assert "canon" not in obj
     for object_id, planet_pack in SUN_SATURN_CANON_PACKS.items():
         assert by_id[object_id]["canon"] == planet_pack
@@ -3668,7 +3719,7 @@ def test_house_canon_storage_materialization_v1():
         encoding="utf-8"
     )
     assert "### 6.46 House Canon storage and materialization" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     storage = (
         ROOT / "docs" / "astrology" / "HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md"
     ).read_text(encoding="utf-8")
@@ -3711,7 +3762,7 @@ def test_mainstream_aspect_semantic_map_v1():
         encoding="utf-8"
     )
     assert "### 6.48 Mainstream Aspect Semantic Map" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     aspect_map = (
         ROOT / "docs" / "astrology" / "MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md"
     ).read_text(encoding="utf-8")
@@ -3760,7 +3811,7 @@ def test_aspect_canon_grammar_v1():
         encoding="utf-8"
     )
     assert "### 6.49 Aspect Canon grammar" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     grammar = (ROOT / "docs" / "astrology" / "ASPECT_CANON_GRAMMAR_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3810,7 +3861,7 @@ def test_aspect_canon_v1_fill_with_provenance():
         encoding="utf-8"
     )
     assert "### 6.50 Aspect Canon V1 fill" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     packs = (ROOT / "docs" / "astrology" / "ASPECT_CANON_V1.md").read_text(
         encoding="utf-8"
     )
@@ -3930,11 +3981,13 @@ def test_aspect_canon_storage_materialization_v1():
     assert "difficult" not in lemmas
     assert "growth" not in " ".join(square["canon"]["relation"])
     assert "luck" not in " ".join(trine["canon"]["relation"])
-    assert "astro.object.asc" not in by_id
-    assert "astro.object.mc" not in by_id
+    assert by_id["astro.object.asc"]["type"] == "angle"
+    assert by_id["astro.object.mc"]["type"] == "angle"
+    assert by_id["astro.house.01"]["canon"] == HOUSE_CANON_PACKS["astro.house.01"]
+    assert by_id["astro.house.10"]["canon"] == HOUSE_CANON_PACKS["astro.house.10"]
 
     for obj in objects["objects"]:
-        if obj["type"] not in ("celestial_object", "sign", "house", "aspect"):
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect", "angle"):
             assert "canon" not in obj
     for object_id, planet_pack in SUN_SATURN_CANON_PACKS.items():
         assert by_id[object_id]["canon"] == planet_pack
@@ -4046,7 +4099,7 @@ def test_aspect_canon_storage_materialization_v1():
         encoding="utf-8"
     )
     assert "### 6.51 Aspect Canon storage and materialization" in canon
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     storage = (
         ROOT / "docs" / "astrology" / "ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md"
     ).read_text(encoding="utf-8")
@@ -4072,6 +4125,187 @@ def test_aspect_canon_storage_materialization_v1():
     assert "classification-complete" in next_block
     assert "STOP Houses" in next_block
     assert "STOP Signs" in next_block
+
+
+def test_angle_canon_storage_materialization_v1():
+    """1.3.103: angle_canon_pack + copy locked 1.3.102 packs. Next = stored Planet×Angle smoke."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    objects = json.loads(OBJECTS.read_text(encoding="utf-8"))
+    example = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+    jsonschema.validate(objects, schema)
+    jsonschema.validate(example, schema)
+    _assert_il1_catalog_counts(objects)
+
+    pack = schema["$defs"]["angle_canon_pack"]
+    assert pack["required"] == ["orientation"]
+    assert set(pack["properties"]) == {"orientation"}
+    assert pack.get("additionalProperties") is False
+    assert "arena" not in pack["properties"]
+    assert "manner" not in pack["properties"]
+    assert "relation" not in pack["properties"]
+    assert "canon" in schema["$defs"]["knowledge_object"]["properties"]
+    assert "canon" not in schema["$defs"]["knowledge_object"]["required"]
+    assert "angle" in schema["$defs"]["knowledge_object"]["properties"]["type"]["enum"]
+
+    by_id = {obj["object_id"]: obj for obj in objects["objects"]}
+    for object_id, locked in ANGLE_CANON_PACKS.items():
+        obj = by_id[object_id]
+        assert obj["status"] == "draft"
+        assert obj["type"] == "angle"
+        assert obj["layer"] == 1
+        assert obj["canon"] == locked
+        assert "function" not in obj
+        assert "domain" not in obj
+        assert "angle" not in obj
+        assert "orientation" not in obj
+        assert "arena" not in obj["canon"]
+        assert "relation" not in obj["canon"]
+
+    asc = by_id["astro.object.asc"]
+    mc = by_id["astro.object.mc"]
+    assert asc["canon"]["orientation"] == [
+        "doorway-meeting",
+        "how-met",
+        "automatic-response",
+    ]
+    assert mc["canon"]["orientation"] == ["culmination", "outer-mark", "aiming"]
+    assert asc["canon"] != mc["canon"]
+    asc_blob = " ".join(asc["canon"]["orientation"])
+    mc_blob = " ".join(mc["canon"]["orientation"])
+    for token in ASC_COLLISION:
+        assert token not in asc_blob
+        assert token not in mc_blob
+    for token in MC_COLLISION:
+        assert token not in mc_blob
+        assert token not in asc_blob
+    assert "personal-facing" not in asc_blob
+    assert "public-facing" not in mc_blob
+
+    assert by_id["astro.house.01"]["canon"] == HOUSE_CANON_PACKS["astro.house.01"]
+    assert by_id["astro.house.10"]["canon"] == HOUSE_CANON_PACKS["astro.house.10"]
+    assert set(asc["canon"]["orientation"]).isdisjoint(
+        by_id["astro.house.01"]["canon"]["arena"]
+    )
+    assert set(mc["canon"]["orientation"]).isdisjoint(
+        by_id["astro.house.10"]["canon"]["arena"]
+    )
+
+    for obj in objects["objects"]:
+        if obj["type"] not in ("celestial_object", "sign", "house", "aspect", "angle"):
+            assert "canon" not in obj
+    for object_id, planet_pack in SUN_SATURN_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == planet_pack
+    for object_id, sign_pack in SIGN_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == sign_pack
+    for object_id, house_pack in HOUSE_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == house_pack
+    for object_id, aspect_pack in ASPECT_CANON_PACKS.items():
+        assert by_id[object_id]["canon"] == aspect_pack
+
+    asc_ex = next(obj for obj in example["objects"] if obj["object_id"] == "astro.object.asc")
+    assert asc_ex["type"] == "angle"
+    assert asc_ex["canon"] == ANGLE_CANON_PACKS["astro.object.asc"]
+    assert "arena" not in asc_ex["canon"]
+
+    angle = _minimal_angle_draft("astro.object.asc")
+    jsonschema.validate(
+        {"contract_version": "astrology_interpretation_v1", "objects": [angle]},
+        schema,
+    )
+
+    filled = dict(angle)
+    filled["canon"] = dict(ANGLE_CANON_PACKS["astro.object.asc"])
+    jsonschema.validate(
+        {"contract_version": "astrology_interpretation_v1", "objects": [filled]},
+        schema,
+    )
+
+    partial = dict(angle)
+    partial["canon"] = {}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [partial]},
+            schema,
+        )
+
+    house_pack_on_angle = dict(angle)
+    house_pack_on_angle["canon"] = {"arena": ["self-presentation"]}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [house_pack_on_angle]},
+            schema,
+        )
+
+    aspect_pack_on_angle = dict(angle)
+    aspect_pack_on_angle["canon"] = {"relation": ["friction"]}
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [aspect_pack_on_angle]},
+            schema,
+        )
+
+    root_orientation = dict(filled)
+    root_orientation["orientation"] = "positive"
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [root_orientation]},
+            schema,
+        )
+
+    as_planet = dict(filled)
+    as_planet["function"] = "cooling quality operating by distance from heat"
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [as_planet]},
+            schema,
+        )
+
+    geometry = dict(filled)
+    geometry["angle"] = 0
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [geometry]},
+            schema,
+        )
+
+    angle_pack_on_house = _minimal_house_draft("astro.house.01")
+    angle_pack_on_house["canon"] = {
+        "orientation": ["doorway-meeting", "how-met", "automatic-response"]
+    }
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            {"contract_version": "astrology_interpretation_v1", "objects": [angle_pack_on_house]},
+            schema,
+        )
+
+    canon = (ROOT / "docs" / "astrology" / "INTERPRETATION_LIBRARY_V1.md").read_text(
+        encoding="utf-8"
+    )
+    assert "### 6.57 Angle Canon storage and materialization" in canon
+    assert "**Версия:** 1.3.103" in canon
+    storage = (
+        ROOT / "docs" / "astrology" / "ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md"
+    ).read_text(encoding="utf-8")
+    assert "canon.orientation" in storage
+    assert "verbatim" in storage.lower() or "1.3.102 packs" in storage
+    assert "stored Planet×Angle" in storage or "stored Planet×Angle smoke" in storage
+    assert "STOP Angles" in storage
+    handoff = (ROOT / "docs" / "astrology" / "IL1_HANDOFF.md").read_text(encoding="utf-8")
+    next_block = handoff.split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.103" in next_block
+    assert "1.3.102" in next_block
+    assert "1.3.101" in next_block
+    assert "1.3.100" in next_block
+    assert "1.3.99" in next_block
+    assert "1.3.98" in next_block
+    assert "Planet × Aspect" in next_block
+    assert "storage" in next_block.lower() or "materialization" in next_block.lower()
+    assert "Do **not** start CORE scoring" in next_block
+    assert "classification-complete" in next_block
+    assert "STOP Aspects" in next_block
+    assert "STOP Houses" in next_block
+    assert "STOP Signs" in next_block
+    assert "Do **not** start ASC cookbooks" in next_block
 
 
 

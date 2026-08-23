@@ -1493,6 +1493,94 @@
       ]
     },
     {
+      "object_id": "astro.object.asc",
+      "layer": 1,
+      "type": "angle",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Ascendant",
+      "machine_entity_code": "astrology.angle.asc",
+      "theme_clusters": [
+        "identity"
+      ],
+      "polarity": [
+        "neutral"
+      ],
+      "temporal_class": "natal",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "canon": {
+        "orientation": [
+          "doorway-meeting",
+          "how-met",
+          "automatic-response"
+        ]
+      },
+      "provenance": [
+        {
+          "concept_id": "claim.angle.asc.orientation",
+          "source_id": "src.internal.angle_canon_v1",
+          "source_class": "internal_normalization",
+          "author": "TodayFlow Canon",
+          "edition": "ANGLE_CANON_V1.md 1.3.102 packs; storage 1.3.103",
+          "school": "todayflow_canon",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "docs/astrology/ANGLE_CANON_V1.md §2 ASC",
+          "original_claim": "ASC orientation is doorway-meeting, how-met, automatic-response: chart-edge meeting, not House 1 arena",
+          "normalized_claim": "Copied 1.3.102 ASC pack onto object.canon.orientation; origin tables stay in ANGLE_CANON_V1.md",
+          "evidence_tier": "editorial",
+          "review_status": "reviewed",
+          "field": "canon"
+        }
+      ]
+    },
+    {
+      "object_id": "astro.object.mc",
+      "layer": 1,
+      "type": "angle",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Midheaven",
+      "machine_entity_code": "astrology.angle.mc",
+      "theme_clusters": [
+        "meaning"
+      ],
+      "polarity": [
+        "neutral"
+      ],
+      "temporal_class": "natal",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "canon": {
+        "orientation": [
+          "culmination",
+          "outer-mark",
+          "aiming"
+        ]
+      },
+      "provenance": [
+        {
+          "concept_id": "claim.angle.mc.orientation",
+          "source_id": "src.internal.angle_canon_v1",
+          "source_class": "internal_normalization",
+          "author": "TodayFlow Canon",
+          "edition": "ANGLE_CANON_V1.md 1.3.102 packs; storage 1.3.103",
+          "school": "todayflow_canon",
+          "reviewer": null,
+          "reviewed_at": null,
+          "locus": "docs/astrology/ANGLE_CANON_V1.md §2 MC",
+          "original_claim": "MC orientation is culmination, outer-mark, aiming: chart-edge height, not House 10 arena",
+          "normalized_claim": "Copied 1.3.102 MC pack onto object.canon.orientation; origin tables stay in ANGLE_CANON_V1.md",
+          "evidence_tier": "editorial",
+          "review_status": "reviewed",
+          "field": "canon"
+        }
+      ]
+    },
+    {
       "object_id": "astro.sign.aries",
       "layer": 2,
       "type": "sign",

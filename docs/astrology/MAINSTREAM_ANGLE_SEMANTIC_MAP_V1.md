@@ -239,7 +239,7 @@ Do not write `Mars conjunct ASC` essays. Do not materialize `astro.object.asc` i
 
 **Sequence (locked, not skipped):** Angle map (this file) → grammar → fill → storage/materialization → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2.
 
-**Next named:** Angle Canon grammar — **done 1.3.101.** Angle Canon fill — **done 1.3.102.** Next = storage/materialization. Sequence: storage → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
+**Next named:** Angle Canon grammar — **done 1.3.101.** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** Next = stored Planet×Angle smoke. Sequence: stored Planet×Angle smoke → **STOP Angles** → final atomic smoke → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
 
 ---
 

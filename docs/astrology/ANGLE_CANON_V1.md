@@ -210,7 +210,7 @@ If ASC and MC packs had used House 1 / House 10 vocabulary to become distinct, f
 - Pretty lemmas after lock
 - Promote secondary collision-zone
 - Copy House 1 / House 10 packs
-- Storage / materialization (next named)
+- Storage / materialization — **done 1.3.103**
 - Stored Planet×Angle smoke · final atomic smoke
 - DSC / IC objects
 - Rising-sign portraits · MC-in-sign careers
@@ -218,12 +218,13 @@ If ASC and MC packs had used House 1 / House 10 vocabulary to become distinct, f
 - Fill leftover include (`personal-facing` / `public-facing`) for symmetry
 - A second angle slot
 
-**Sequence (locked, not skipped):** fill (this file) → storage/materialization → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2.
+**Sequence (locked, not skipped):** fill (this file) → storage/materialization — **done 1.3.103** → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2.
 
-**Next named:** Angle Canon storage / materialization. Not smoke. Not objects as a free rewrite. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve these packs without a named Composition Engine failure.
+**Next named:** stored Planet×Angle composition smoke. Not lemma rewrite. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve these packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.0 (2026-08-22)** — 1.3.102. Two packs. Origin `direct` from 1.3.100 include. Five gates. Collision vs House 1/10. Secondary unused. personal-facing / public-facing leftover. Dry-run 1.3.101 not inherited. Next = storage/materialization.
+- **1.1 (2026-08-22)** — 1.3.103 storage/materialization. Two drafts carry `canon.orientation`. Packs unchanged. Next = stored Planet×Angle smoke.
+- **1.0 (2026-08-22)** — 1.3.102. Two packs. Origin `direct` from 1.3.100 include. Five gates. Collision vs House 1/10. Secondary unused. personal-facing / public-facing leftover. Dry-run 1.3.101 not inherited. Storage/materialization — **done 1.3.103.**

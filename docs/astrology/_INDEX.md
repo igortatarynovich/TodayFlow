@@ -29,7 +29,8 @@
 | [ANGLE_CANON_MODEL_V1.md](./ANGLE_CANON_MODEL_V1.md) | **1.3.99 model:** ASC/MC = orientation loci. Parent 1–4. Not fill |
 | [MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md](./MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md) | **1.3.100 angle map:** territory + include/secondary/exclude. House 1/10 not proof. Not Canon |
 | [ANGLE_CANON_GRAMMAR_V1.md](./ANGLE_CANON_GRAMMAR_V1.md) | **1.3.101 angle grammar:** one slot (`orientation`). Include-first. Secondary = collision-zone. Not fill |
-| [ANGLE_CANON_V1.md](./ANGLE_CANON_V1.md) | **1.3.102 Angle Canon:** two packs + origin. Collision vs House 1/10. Storage next |
+| [ANGLE_CANON_V1.md](./ANGLE_CANON_V1.md) | **1.3.102 Angle Canon:** two packs + origin. Collision vs House 1/10. Stored 1.3.103 |
+| [ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md](./ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md) | **1.3.103 storage:** `angle_canon_pack` (`orientation`); two drafts; not smoke |
 | [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) | TodayFlow Canon structuring. Mainstream V1 / Canon / Lenses. Runtime: atoms → composition → LLM formulates |
 | [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) | Co–Star teardown Phase 0. **Recognition check** on Mainstream rows. Not IL ingest. Not the product-meaning source |
 | [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md) | Outer Planet Draft Representation (1.3.72). Meaning keys optional on IL-1 draft outers. Fill waits for Canon. Not ingest, not objects |

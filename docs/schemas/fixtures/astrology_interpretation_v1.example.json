@@ -224,6 +224,42 @@
           "reviewed_at": null
         }
       ]
+    },
+    {
+      "object_id": "astro.object.asc",
+      "layer": 1,
+      "type": "angle",
+      "status": "schema_example",
+      "version": "0.0.0",
+      "phenomenon": "Ascendant",
+      "machine_entity_code": "astrology.angle.asc",
+      "theme_clusters": ["identity"],
+      "polarity": ["neutral"],
+      "temporal_class": "natal",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "canon": {
+        "orientation": ["doorway-meeting", "how-met", "automatic-response"]
+      },
+      "provenance": [
+        {
+          "concept_id": "claim.schema.angle.asc.orientation",
+          "source_id": "schema_example",
+          "source_class": "schema_example",
+          "author": null,
+          "edition": null,
+          "locus": null,
+          "school": null,
+          "original_claim": "Form illustration only — not a reviewed meaning claim",
+          "normalized_claim": "ASC orientation is doorway-meeting, how-met, automatic-response",
+          "evidence_tier": "editorial",
+          "review_status": "schema_example",
+          "field": "canon",
+          "reviewer": null,
+          "reviewed_at": null
+        }
+      ]
     }
   ]
 }

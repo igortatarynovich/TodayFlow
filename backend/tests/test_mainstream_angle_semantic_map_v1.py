@@ -21,9 +21,7 @@ def test_mainstream_angle_semantic_map_v1():
     payload = json.loads(OBJECTS.read_text(encoding="utf-8"))
     jsonschema.validate(payload, schema)
     ids = {obj["object_id"] for obj in payload["objects"]}
-    assert len(payload["objects"]) == 36
-    assert "astro.object.asc" not in ids
-    assert "astro.object.mc" not in ids
+    assert len(payload["objects"]) == 38
     assert all(obj["status"] != "active" for obj in payload["objects"])
 
     angle_map = ANGLE_MAP.read_text(encoding="utf-8")
@@ -58,7 +56,7 @@ def test_mainstream_angle_semantic_map_v1():
     assert "stored Planet×Angle smoke" in model or "STOP Angles" in model
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     assert "### 6.54 Mainstream Angle Semantic Map" in canon
     assert canon.count("**Версия:**") == 1
 

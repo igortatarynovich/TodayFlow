@@ -104,7 +104,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.102 Angle Canon fill locked.** Two `orientation` packs. Origin `direct` from include. House 1/10 collision. Secondary unused. **1.3.101 Angle Canon grammar stands.** One slot (`orientation`). Include-first. Secondary = collision-zone. **1.3.100 Mainstream Angle Semantic Map stands.** Same panel. House 1/10 not proof. Angular strength not meaning. Planet-on-angle cookbooks out. **1.3.99 Angle Canon model stands.** Orientation loci. **1.3.98 stored Planet × Aspect smoke PASS.** Four gates. `canon.relation` is the operator. **STOP Aspects.** **1.3.97 storage stands.** **1.3.96 fill stands.** **1.3.95 grammar stands.** **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = Angle Canon storage/materialization. Co–Star = recognition check.
+**NOW (FOUNDATION, 2026-08-22):** IL-1 **1.3.103 Angle Canon storage/materialization locked.** Two `type=angle` drafts. `canon.orientation` copied verbatim. Catalog 38 draft / 0 `active`. **1.3.102 Angle Canon fill stands.** Two `orientation` packs. Origin `direct` from include. House 1/10 collision. Secondary unused. **1.3.101 Angle Canon grammar stands.** One slot (`orientation`). Include-first. Secondary = collision-zone. **1.3.100 Mainstream Angle Semantic Map stands.** Same panel. House 1/10 not proof. Angular strength not meaning. Planet-on-angle cookbooks out. **1.3.99 Angle Canon model stands.** Orientation loci. **1.3.98 stored Planet × Aspect smoke PASS.** Four gates. `canon.relation` is the operator. **STOP Aspects.** **1.3.97 storage stands.** **1.3.96 fill stands.** **1.3.95 grammar stands.** **1.3.94 map stands.** **1.3.93 House PASS.** STOP Houses. STOP Signs. Next = stored Planet×Angle smoke. Co–Star = recognition check.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* polish until IL-3 Engine exists. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry.
 
@@ -246,11 +246,20 @@ Status: Active working document
 ## Architecture impact — IL-1 1.3.102 Angle Canon fill (2026-08-22)
 
 - **SoT before:** grammar locked one slot; dry-run lemmas were illustrative. Risk: inherit 1.3.101 wording; promote secondary collision-zone; treat personal-facing / public-facing as the pack.
-- **SoT after:** two packs locked. Origin `direct` from 1.3.100 include. Five gates. Collision vs House 1/10. Secondary unused. Catalog untouched. Next = storage/materialization, not objects, not smoke. Sequence: storage → stored Planet×Angle smoke → STOP Angles → final atomic smoke.
-- **Public contract changed?** no
+- **SoT after:** two packs locked. Origin `direct` from 1.3.100 include. Five gates. Collision vs House 1/10. Secondary unused. Angle Canon storage/materialization — **done 1.3.103.** Sequence: stored Planet×Angle smoke → STOP Angles → final atomic smoke.
+- **Public contract changed?** no (fill)
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/ANGLE_CANON_V1.md` · IL 1.3.102 §6.56
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.103 Angle Canon storage/materialization (2026-08-22)
+
+- **SoT before:** two packs locked in a doc. Catalog 36 drafts. No `type=angle`. Layer 1 forced `celestial_object`.
+- **SoT after:** `$defs.angle_canon_pack` (`orientation`). Two `type=angle` drafts carry locked 1.3.102 packs. Catalog 38 draft / 0 `active`. House 1/10 packs unchanged. Runtime ignores `draft`. Next = stored Planet×Angle smoke.
+- **Public contract changed?** yes — `type=angle`; optional angle `canon` nest; two draft objects
+- **Migration required?** no — nothing `active`
+- **Canon updated?** yes — `docs/astrology/ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md` · IL 1.3.103 §6.57 · schema `$defs.angle_canon_pack` · `objects_v1.json`
+- **Backward compatible?** yes for runtime (`draft`)
 
 ## Architecture impact — IL-1 1.3.101 Angle Canon grammar (2026-08-22)
 

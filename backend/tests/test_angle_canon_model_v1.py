@@ -22,9 +22,7 @@ def test_angle_canon_model_v1():
     payload = json.loads(OBJECTS.read_text(encoding="utf-8"))
     jsonschema.validate(payload, schema)
     ids = {obj["object_id"] for obj in payload["objects"]}
-    assert len(payload["objects"]) == 36
-    assert "astro.object.asc" not in ids
-    assert "astro.object.mc" not in ids
+    assert len(payload["objects"]) == 38
     assert all(obj["status"] != "active" for obj in payload["objects"])
 
     model = MODEL.read_text(encoding="utf-8")
@@ -45,7 +43,7 @@ def test_angle_canon_model_v1():
     assert "Not fill" in model or "not fill" in model.lower()
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     assert "### 6.53 Angle Canon model" in canon
     assert "### Architecture impact — 1.3.99 Angle Canon model" in canon
     assert canon.count("**Версия:**") == 1

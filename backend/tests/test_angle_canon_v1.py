@@ -26,9 +26,9 @@ def test_angle_canon_v1_fill():
     payload = json.loads(OBJECTS.read_text(encoding="utf-8"))
     jsonschema.validate(payload, schema)
     ids = {obj["object_id"] for obj in payload["objects"]}
-    assert len(payload["objects"]) == 36
-    assert "astro.object.asc" not in ids
-    assert "astro.object.mc" not in ids
+    assert len(payload["objects"]) == 38
+    assert "astro.object.asc" in ids
+    assert "astro.object.mc" in ids
     assert all(obj["status"] != "active" for obj in payload["objects"])
 
     packs = FILL.read_text(encoding="utf-8")
@@ -88,7 +88,7 @@ def test_angle_canon_v1_fill():
     assert "Mars IN House 1" in packs
     assert "Mars IN House 10" in packs
     assert "planet can occupy House 1 without conjuncting ASC" in packs
-    assert "Angle Canon storage" in packs or "storage / materialization" in packs
+    assert "storage/materialization" in packs or "Storage / materialization" in packs
     assert "STOP Angles" in packs
 
     grammar = GRAMMAR.read_text(encoding="utf-8")
@@ -96,16 +96,18 @@ def test_angle_canon_v1_fill():
     assert "`orientation`" in grammar
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.102" in canon
+    assert "**Версия:** 1.3.103" in canon
     assert "### 6.56 Angle Canon fill" in canon
     assert canon.count("**Версия:**") == 1
 
     inventory = INVENTORY.read_text(encoding="utf-8")
     assert "30. Angle Canon fill" in inventory
     assert "✅ 1.3.102" in inventory.split("30. Angle Canon fill")[1].split("31.")[0]
-    assert "NEXT" in inventory.split("31. Angle Canon storage")[1].split("```")[0]
+    assert "✅ 1.3.103" in inventory.split("31. Angle Canon storage")[1].split("32.")[0]
+    assert "NEXT" in inventory.split("32.")[1].split("```")[0]
 
     next_block = HANDOFF.read_text(encoding="utf-8").split("## 3. What to do next")[1].split("## 4.")[0]
+    assert "1.3.103" in next_block
     assert "1.3.102" in next_block
     assert "1.3.101" in next_block
     assert "1.3.100" in next_block

@@ -326,11 +326,12 @@ If ASC and MC frames had used House 1 / House 10 vocabulary to become distinct, 
 
 **Sequence (locked, not skipped):** grammar (this file) → fill → storage/materialization → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke (Planet + Sign + House + Aspect + Angle, all stored) → Knowledge Core V1 FREEZE → IL-2.
 
-**Next named:** Angle Canon fill — **done 1.3.102.** Next = storage/materialization. Sequence: storage → stored Planet×Angle smoke → **STOP Angles** → final atomic smoke → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
+**Next named:** Angle Canon fill — **done 1.3.102.** Angle Canon storage/materialization — **done 1.3.103.** Next = stored Planet×Angle smoke. Sequence: stored Planet×Angle smoke → **STOP Angles** → final atomic smoke → Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not improve planet/sign/house/aspect packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.1 (2026-08-22)** — Angle Canon fill locked 1.3.102. Two packs. Grammar unchanged. Next = storage/materialization.
+- **1.2 (2026-08-22)** — Angle Canon storage/materialization locked 1.3.103. Two drafts. Grammar unchanged. Next = stored Planet×Angle smoke.
+- **1.1 (2026-08-22)** — Angle Canon fill locked 1.3.102. Two packs. Grammar unchanged. Storage/materialization — **done 1.3.103.**
 - **1.0 (2026-08-22)** — 1.3.101. One slot (`orientation`). Include-first. Secondary = collision-zone, not default. Facing / public–private as own slot surplus. Arena copy forbidden. Dry-run: same planet function on ASC vs MC without House 1/10; planet in 1st ≠ planet conjunct ASC. Angle Canon fill — **done 1.3.102.**

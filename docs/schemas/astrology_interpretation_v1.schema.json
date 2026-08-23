@@ -141,6 +141,18 @@
         }
       }
     },
+    "angle_canon_pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Angle Canon V1 storage (1.3.103). One slot: orientation. Optional on type=angle; if present, orientation required. Not House 1/10 arena. Not root orientation (Lilly sign polarity). Not appearance / career. Origin tables stay in ANGLE_CANON_V1.md.",
+      "required": ["orientation"],
+      "properties": {
+        "orientation": {
+          "$ref": "#/$defs/canon_lemma_list",
+          "description": "Chart-edge orientation a planet function hangs on. Not a house destination. Not a planet function. Not Lilly positive/negative."
+        }
+      }
+    },
     "canon_pack": {
       "type": "object",
       "additionalProperties": false,
@@ -236,6 +248,7 @@
             "sign",
             "house",
             "aspect",
+            "angle",
             "planet_in_sign",
             "planet_in_house",
             "natal_aspect",
@@ -246,7 +259,7 @@
         "status": { "$ref": "#/$defs/object_status" },
         "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
         "phenomenon": { "$ref": "#/$defs/lemma" },
-        "machine_entity_code": { "type": "string", "pattern": "^astrology\\.(planet|sign|house|aspect)\\.[a-z0-9]+$" },
+        "machine_entity_code": { "type": "string", "pattern": "^astrology\\.(planet|sign|house|aspect|angle)\\.[a-z0-9]+$" },
         "theme_clusters": {
           "type": "array",
           "minItems": 1,
@@ -294,12 +307,13 @@
           "description": "Required on Sun–Saturn. Optional on IL-1 draft outers (1.3.72); not automatically structural (Swiss period is astronomy facts_only). Not Planet Canon (1.3.78); pace metadata is temporal_class."
         },
         "canon": {
-          "description": "Product meaning for composition. Planets: six-slot canon_pack (1.3.80). Signs: two-slot sign_canon_pack (1.3.86). Houses: one-slot house_canon_pack (1.3.92). Aspects: one-slot aspect_canon_pack (1.3.97). Optional until a named fill. Do not copy into function, Lilly domain, interaction, or later-interpretive excess.",
+          "description": "Product meaning for composition. Planets: six-slot canon_pack (1.3.80). Signs: two-slot sign_canon_pack (1.3.86). Houses: one-slot house_canon_pack (1.3.92). Aspects: one-slot aspect_canon_pack (1.3.97). Angles: one-slot angle_canon_pack (1.3.103). Optional until a named fill. Do not copy into function, Lilly domain, interaction, or later-interpretive excess.",
           "oneOf": [
             { "$ref": "#/$defs/canon_pack" },
             { "$ref": "#/$defs/sign_canon_pack" },
             { "$ref": "#/$defs/house_canon_pack" },
-            { "$ref": "#/$defs/aspect_canon_pack" }
+            { "$ref": "#/$defs/aspect_canon_pack" },
+            { "$ref": "#/$defs/angle_canon_pack" }
           ]
         },
         "mode": { "type": "string", "enum": ["cardinal", "fixed", "mutable"] },
@@ -350,13 +364,13 @@
           "if": { "properties": { "layer": { "const": 1 } }, "required": ["layer"] },
           "then": {
             "required": ["type"],
-            "properties": { "type": { "const": "celestial_object" } }
+            "properties": { "type": { "enum": ["celestial_object", "angle"] } }
           }
         },
         {
           "if": {
             "allOf": [
-              { "properties": { "layer": { "const": 1 } }, "required": ["layer"] },
+              { "properties": { "type": { "const": "celestial_object" } }, "required": ["type"] },
               {
                 "not": {
                   "properties": {
@@ -382,6 +396,30 @@
               "domains",
               "tempo"
             ]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "angle" } },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "type": { "const": "angle" },
+              "layer": { "const": 1 }
+            },
+            "not": {
+              "anyOf": [
+                { "required": ["orientation"] },
+                { "required": ["function"] },
+                { "required": ["themes"] },
+                { "required": ["angle"] },
+                { "required": ["domain"] },
+                { "required": ["interaction"] },
+                { "required": ["mode"] },
+                { "required": ["element"] }
+              ]
+            }
           }
         },
         {
@@ -481,6 +519,17 @@
           "then": {
             "properties": {
               "canon": { "$ref": "#/$defs/aspect_canon_pack" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "angle" } },
+            "required": ["type", "canon"]
+          },
+          "then": {
+            "properties": {
+              "canon": { "$ref": "#/$defs/angle_canon_pack" }
             }
           }
         },
