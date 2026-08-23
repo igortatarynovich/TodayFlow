@@ -43,7 +43,7 @@ def test_angle_canon_model_v1():
     assert "Not fill" in model or "not fill" in model.lower()
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.111" in canon
+    assert "**Версия:** 1.3.112" in canon
     assert "### 6.53 Angle Canon model" in canon
     assert "### Architecture impact — 1.3.99 Angle Canon model" in canon
     assert canon.count("**Версия:**") == 1

@@ -532,6 +532,11 @@ def _build_day_story_record(
         llm_input["insight_depth_tier"] = insight_tier
         llm_input["daily_foundation"] = foundation
         llm_input["day_story_fingerprint"] = expected_fingerprint
+        from todayflow_backend.services.il4_surface_attach_v1 import attach_from_celestial_ephemeris
+
+        il4_pack = attach_from_celestial_ephemeris(ce, surface="today")
+        if il4_pack is not None:
+            llm_input["il4_expression_pack"] = il4_pack
         if birth_name:
             first = str(birth_name).strip().split()[0]
             llm_input["person"] = {

@@ -278,7 +278,7 @@ def test_calc_il_wire_v1():
     assert "KC-C-WIRE" in inventory
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.111" in canon
+    assert "**Версия:** 1.3.112" in canon
     assert "### 6.65" in canon
     assert canon.count("**Версия:**") == 1
 
@@ -297,7 +297,7 @@ def test_calc_il_wire_v1():
     assert "STOP Angles" in next_block
     assert "classification-complete" in next_block
     assert "user relevance" in next_block.lower() or "user Relevance" in next_block
-    assert "product surfaces" in next_block.lower() or "attach IL-4" in next_block.lower()
+    assert "1.3.112" in next_block or "surface attach" in next_block.lower()
 
     tracker = TRACKER.read_text(encoding="utf-8")
     now = tracker.split("**NOW (FOUNDATION")[1].split("**PAUSED")[0]

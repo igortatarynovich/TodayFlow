@@ -190,7 +190,7 @@ def sample_pack(catalog: Mapping[str, dict], surface: str = "profile") -> Expres
 
 
 def runtime_is_not_wired(src_root: Path) -> bool:
-    """Production code outside knowledge/ must not import IL-2/3/4 or scale."""
+    """Production code outside knowledge/ must not import IL engines except the attach gateway."""
     banned = (
         "il2_composition_v1",
         "il3_interpretation_v1",
@@ -199,10 +199,24 @@ def runtime_is_not_wired(src_root: Path) -> bool:
         "calc_il_wire_v1",
     )
     knowledge = (src_root / "knowledge").resolve()
+    attach_gateway = (src_root / "services" / "il4_surface_attach_v1.py").resolve()
+    attach_consumers = {
+        (src_root / "services" / "day_story_wire_v1.py").resolve(),
+        (src_root / "services" / "profile_contract_v1.py").resolve(),
+        (src_root / "services" / "compatibility_llm.py").resolve(),
+        (src_root / "services" / "generation_orchestrator.py").resolve(),
+    }
     for path in src_root.rglob("*.py"):
-        if knowledge in path.resolve().parents or path.resolve() == knowledge:
+        resolved = path.resolve()
+        if knowledge in resolved.parents or resolved == knowledge:
+            continue
+        if resolved == attach_gateway:
             continue
         text = path.read_text(encoding="utf-8")
+        if "calc_il_wire_v1" in text:
+            return False
+        if "il4_surface_attach_v1" in text and resolved not in attach_consumers:
+            return False
         if any(name in text for name in banned):
             return False
     return True

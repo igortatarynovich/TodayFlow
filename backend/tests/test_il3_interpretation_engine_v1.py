@@ -132,7 +132,7 @@ def test_il3_interpretation_engine_v1():
     assert "KC-C-ENGINE" in inventory
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.111" in canon
+    assert "**Версия:** 1.3.112" in canon
     assert "### 6.62 IL-3 Interpretation Engine" in canon
     assert canon.count("**Версия:**") == 1
 

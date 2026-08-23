@@ -484,6 +484,8 @@ def run_compatibility_dynamics_pipeline(
     scenario_tone: Any | None = None,
     scenario_context: dict[str, Any] | None = None,
     compatibility_learning: dict[str, Any] | None = None,
+    chart1: Any | None = None,
+    chart2: Any | None = None,
 ) -> tuple[Any, str, dict[str, Any] | None]:
     """GE-1 v0.4: единая точка Compatibility dynamics LLM + orchestration log."""
     from todayflow_backend.services.compatibility_llm import generate_llm_product_surface
@@ -506,6 +508,8 @@ def run_compatibility_dynamics_pipeline(
         scenario_tone=scenario_tone,
         scenario_context=scenario_context,
         compatibility_learning=compatibility_learning,
+        chart1=chart1,
+        chart2=chart2,
     )
 
 

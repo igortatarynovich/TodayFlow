@@ -41,7 +41,7 @@ Five stored families = V1 atoms: Planet `core_function` · Sign `manner` · Hous
 
 **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Layer 2 Signs = classification-complete / interpretation-deferred.
 
-**Next named:** IL-2 composition rules — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Next = attach IL-4 packs to product surfaces. Not a new “canonical v2.”
+**Next named:** IL-2 composition rules — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach IL-4 to product surfaces — **done 1.3.112.** Not a new “canonical v2.”
 
 ---
 
@@ -177,9 +177,10 @@ Default: IL-2 Composition Engine from atoms ([ACM](../ASTROLOGY_COMPOSITION_MODE
 | KC-C-ENGINE | Rank sky themes without a person | Compositions | IL-3 engine | IL-2 frames; transit band before natal; no user fields | after IL-2 rules (1.3.107) | **locked 1.3.108** — [IL3_INTERPRETATION_ENGINE_V1.md](./IL3_INTERPRETATION_ENGINE_V1.md) | IL-4 | `LOCKED` |
 | KC-C-EXPR | Voice already chosen themes | Expression | IL-4 packs | IL-3 themes; surface tone/length/focus; lemmas verbatim; no user fields | after IL-3 engine (1.3.108) | **locked 1.3.109** — [IL4_EXPRESSION_V1.md](./IL4_EXPRESSION_V1.md) | named wire | `LOCKED` |
 | KC-C-SCALE | Which constructions locked engines cover | Scale | 6 types × stored atoms; not a catalog | cartesian counts; gold composed vs candidate; wire named not live | after IL-4 expression (1.3.109) | **locked 1.3.110** — [LIBRARY_SCALE_V1.md](./LIBRARY_SCALE_V1.md) | wire calc → IL — done 1.3.111 | `LOCKED` |
-| KC-C-WIRE | Calc snapshot → IL-4 pack | Wire | duck-typed chart → SkyFact → IL-2/3/4 | library layer live; product surfaces not attached | after library scale (1.3.110) | **locked 1.3.111** — [CALC_IL_WIRE_V1.md](./CALC_IL_WIRE_V1.md) | attach IL-4 to product surfaces | `LOCKED` |
+| KC-C-WIRE | Calc snapshot → IL-4 pack | Wire | duck-typed chart → SkyFact → IL-2/3/4 | library layer live; product surfaces not attached | after library scale (1.3.110) | **locked 1.3.111** — [CALC_IL_WIRE_V1.md](./CALC_IL_WIRE_V1.md) | attach IL-4 to product surfaces — done 1.3.112 | `LOCKED` |
+| KC-C-ATTACH | Product surfaces read IL-4 packs | Attach | LLM input `il4_expression_pack`; gateway only | Today / Profile / Compatibility; public JSON unchanged | after wire (1.3.111) | **locked 1.3.112** — [IL4_SURFACE_ATTACH_V1.md](./IL4_SURFACE_ATTACH_V1.md) | — | `LOCKED` |
 
-Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Next named = attach IL-4 packs to product surfaces.**
+Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Attach 1.3.112 stands.**
 
 ### 3.8 Time — natal vs transit vs later
 
@@ -273,6 +274,7 @@ ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle m
 37. IL-4 Expression                            ✅ 1.3.109 voice for already chosen themes; not meaning; not `active`
 38. Library scale                              ✅ 1.3.110 616 composed cells; gold 43/12; wire named, not live
 39. Wire calc → IL                             ✅ 1.3.111 library layer; product surfaces not attached
+40. Attach IL-4 to product surfaces           ✅ 1.3.112 LLM input; public JSON unchanged
 ```
 
 Historical literature does not appear in this order. Lenses stay in the existing corpus. Co–Star is a check on Mainstream rows, not a source.
@@ -281,7 +283,8 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
-- **1.41 (2026-08-23)** — Calc → IL wire (1.3.111). Library layer live. KC-C-WIRE locked. Next named = attach IL-4 packs to product surfaces.
+- **1.42 (2026-08-23)** — IL-4 surface attach (1.3.112). Product LLM inputs read IL-4 packs. KC-C-ATTACH locked.
+- **1.41 (2026-08-23)** — Calc → IL wire (1.3.111). Library layer live. KC-C-WIRE locked. Next named = attach IL-4 packs to product surfaces. **Done 1.3.112.**
 - **1.40 (2026-08-23)** — Library scale (1.3.110). Coverage contract. KC-C-SCALE locked. Next named = wire calc → IL. **Done 1.3.111.**
 - **1.39 (2026-08-23)** — IL-4 Expression (1.3.109). Voice packs. KC-C-EXPR locked. Next named = library scale. **Done 1.3.110.**
 - **1.38 (2026-08-23)** — IL-3 Interpretation Engine (1.3.108). Sky-internal theme rank. KC-C-ENGINE locked. Next named = IL-4. **Done 1.3.109.**

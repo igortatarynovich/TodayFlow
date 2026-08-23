@@ -542,6 +542,8 @@ def generate_llm_product_surface(
     scenario_tone: ScenarioToneSpec | None = None,
     scenario_context: dict[str, Any] | None = None,
     compatibility_learning: dict[str, Any] | None = None,
+    chart1: Any | None = None,
+    chart2: Any | None = None,
 ) -> tuple[SignCompatibilityProductSurface, str, dict[str, Any] | None]:
     """Возвращает (surface, source, raw_llm_or_none). source — llm | template."""
 
@@ -581,6 +583,12 @@ def generate_llm_product_surface(
         payload["structured_base_model"] = base_model_layer
     if compatibility_learning:
         payload["compatibility_learning"] = compatibility_learning
+    if chart1 is not None:
+        from todayflow_backend.services.il4_surface_attach_v1 import attach_from_chart_pair
+
+        il4_pack = attach_from_chart_pair(chart1, chart2, surface="compatibility")
+        if il4_pack is not None:
+            payload["il4_expression_pack"] = il4_pack
     user_prompt = json.dumps(payload, ensure_ascii=False)
 
     is_playful = scenario_tone is not None and scenario_tone.tone_mode == "playful"
