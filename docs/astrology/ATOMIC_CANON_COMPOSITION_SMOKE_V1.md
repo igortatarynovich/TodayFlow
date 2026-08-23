@@ -171,17 +171,18 @@ Do not edit 1.3.82 / 1.3.88 / 1.3.93 / 1.3.98 / 1.3.104 files to absorb this pas
 
 ## 6. This pass does not do
 
-- Knowledge Core V1 FREEZE (next named)
+- Knowledge Core V1 FREEZE — **done 1.3.106**
 - IL-2 engine · runtime wiring · LLM copy
 - New lemmas · pack revision · `function` rewrite · `active`
 - Outer planet objects · DSC / IC
 - Layer 5 pair catalog
 - Sign / House / Aspect / Planet / Angle pack edits
 
-**Next named:** Knowledge Core V1 FREEZE. After freeze: IL-2. **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
+**Next named:** Knowledge Core V1 FREEZE — **done 1.3.106.** Next = IL-2 (composition rules, not pair catalog). **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs without a named Composition Engine failure.
 
 ---
 
 ## Changelog
 
-- **1.0 (2026-08-23)** — 1.3.105. Final atomic smoke PASS. Five stored families. Operators discriminate. Occupancy ≠ conjunction. Catalog unchanged. Next = Knowledge Core V1 FREEZE.
+- **1.1 (2026-08-23)** — 1.3.106 Knowledge Core V1 FREEZE. This diagnostic stands. Next = IL-2.
+- **1.0 (2026-08-23)** — 1.3.105. Final atomic smoke PASS. Five stored families. Operators discriminate. Occupancy ≠ conjunction. Catalog unchanged. Next = Knowledge Core V1 FREEZE. **Done 1.3.106.**

@@ -114,7 +114,7 @@ IL-4 still formulates. It must not be given House 1 `arena` and asked to invent 
 - Sign / House / Aspect / Planet pack edits
 - Fill leftover include for symmetry
 
-**Next named:** stored Planet×Angle composition smoke — **done 1.3.104.** Discrimination: Mars AT ASC ≠ Mars AT MC ≠ Mars IN 1st ≠ Mars IN 10th, from **stored** `canon.orientation` vs `house.canon.arena`. **STOP Angles.** Final atomic smoke — **done 1.3.105.** Next = Knowledge Core V1 FREEZE → IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs.
+**Next named:** stored Planet×Angle composition smoke — **done 1.3.104.** Discrimination: Mars AT ASC ≠ Mars AT MC ≠ Mars IN 1st ≠ Mars IN 10th, from **stored** `canon.orientation` vs `house.canon.arena`. **STOP Angles.** Final atomic smoke — **done 1.3.105.** Knowledge Core V1 FREEZE — **done 1.3.106.** Next = IL-2. **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do not enrich packs.
 
 ---
 

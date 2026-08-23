@@ -160,7 +160,7 @@ def test_angle_canon_composition_smoke_v1():
     assert "STOP Houses" in prior_house
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.105" in canon
+    assert "**Версия:** 1.3.106" in canon
     assert "### 6.58 Planet × Angle composition smoke" in canon
     assert canon.count("**Версия:**") == 1
 
