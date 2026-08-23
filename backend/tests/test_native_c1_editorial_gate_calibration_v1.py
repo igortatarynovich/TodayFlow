@@ -48,6 +48,19 @@ def test_prompt_version_c5_1():
     assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.1"
 
 
+def test_retry_feedback_targets_chorus_parallel():
+    defects = [
+        {
+            "code": "CHORUS_PARALLEL_FORECAST",
+            "field": "chorus.card[0]",
+            "message": "parallel forecast pattern",
+        },
+    ]
+    fb = format_editorial_retry_feedback(defects)
+    assert "CHORUS_PARALLEL" in fb
+    assert "conflict_id" in fb
+
+
 def test_retry_feedback_targets_everyday_and_astro_codes():
     defects = [
         {

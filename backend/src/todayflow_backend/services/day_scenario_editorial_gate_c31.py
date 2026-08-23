@@ -948,6 +948,13 @@ def format_editorial_retry_feedback(defects: list[dict[str, str]], *, limit: int
             "(пример: «Рабочий чат, 11:15: «ок?» под длинным письмом»). "
             "setup — тот же момент, не абстрактная «напряжённость в отношениях».",
         )
+    if DEFECT_CHORUS_PARALLEL_FORECAST in codes or DEFECT_CHORUS_ROLE_DRIFT in codes:
+        lines.insert(
+            len(lines) - 1,
+            "CHORUS_PARALLEL: каждый голос — одна роль в ОДНОМ конфликте (conflict_id + link_to_conflict), "
+            "не четыре отдельные «сегодня в работе… в отношениях…». "
+            "astrology=среда; card=архетип реакции; number=темп; natal=личная уязвимость — без копипаста сфер.",
+        )
     if DEFECT_ASTRO_JARGON_BARE in codes or DEFECT_CHORUS_UNTRANSLATED_JARGON in codes:
         lines.insert(
             len(lines) - 1,
