@@ -124,7 +124,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-24):** **Native C1 astro jargon retry 1.3.121 LOCKED** (prompt c5.4 · jargon↔seed-kill cross-hint · detectors unchanged). **Native C1 seed leak retry 1.3.120 LOCKED**. **Native C1 everyday scene retry 1.3.119 LOCKED**. **Native C1 evidence pack binding 1.3.118 LOCKED**. **Native C1 editorial gate calibration 1.3.117 LOCKED**. **Native C1 I0 generation split 1.3.116 LOCKED**. **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
+**NOW (FOUNDATION, 2026-08-24):** **Native C1 conflict→scene seed retry 1.3.122 LOCKED** (prompt c5.5 · why_today must not paste into scene.why · detectors unchanged). **Native C1 astro jargon retry 1.3.121 LOCKED**. **Native C1 seed leak retry 1.3.120 LOCKED**. **Native C1 everyday scene retry 1.3.119 LOCKED**. **Native C1 evidence pack binding 1.3.118 LOCKED**. **Native C1 editorial gate calibration 1.3.117 LOCKED**. **Native C1 I0 generation split 1.3.116 LOCKED**. **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
@@ -307,6 +307,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — Today 1.3.122 Native C1 conflict→scene seed retry (2026-08-24)
+
+- **SoT before:** Seed-kill retry named setup clones and why_today→`human_meaning`. Prod gen **1119** (user 2, c5.4) leaked `conflict.why_arose` into `scenes[0].why` / `what_happens`, then `ASTRO_JARGON_BARE` on `astrology[2]`. Detectors unchanged; rebuild kept prior native.
+- **SoT after:** **Native C1 Conflict→Scene Seed Retry V1** — prompt `day-scenario-native-c5.5`; retry names `why_today`/`why_arose` → scene why/setup; jargon retry forbids fixing that leak by jargon rollback. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — force rebuild / refresh picks up c5.5
+- **Canon updated?** yes — `docs/today/NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1.md` · tracker 1.3.122
+- **Backward compatible?** yes — same blocking codes
 
 ## Architecture impact — Today 1.3.121 Native C1 astro jargon retry (2026-08-24)
 
@@ -2398,6 +2407,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-24 | Today / Native C1 | **1.3.122 conflict→scene seed retry** | **LOCKED** | Name `why_today`/`why_arose` paste into `scenes[].why` so retry does not trade it for `ASTRO_JARGON_BARE` on `astrology[2]`. Prompt c5.5. Detectors unchanged. Live user **2** gen **1122** PASS (Global first try). [NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1](./today/NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.121 astro jargon retry** | **LOCKED** | Cross-gate retry: don't trade `ASTRO_JARGON_BARE` on `astrology[i]` for why_today paste (`verbatim_seed_leak`). Prompt c5.4. Detectors unchanged. Live user **15** gen **1118** PASS (3 Global). [NATIVE_C1_ASTRO_JARGON_RETRY_V1](./today/NATIVE_C1_ASTRO_JARGON_RETRY_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.120 seed leak retry** | **LOCKED** | Catch `verbatim_seed_leak` + `conflict_short_name_is_sky_fact` on Global native validate (same detectors); retry coaching; prompt c5.3. Live: gen 1101/1116 were post-I0 hard fails; gen **1117** retries seed-kill then terminal `ASTRO_JARGON_BARE` (user 15 still unavailable). [NATIVE_C1_SEED_LEAK_RETRY_V1](./today/NATIVE_C1_SEED_LEAK_RETRY_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.119 everyday scene retry** | **LOCKED** | Prompt c5.2 + all-scene lived-marker retry; Global max_attempts 3. SCENE_* detectors unchanged. Live 2026-08-24: user **13** gen **1106** PASS; **17** gen **1107** PASS (3 Global, ASTRO_JARGON then accept); **8** gen **1108** PASS; **11** gen **1109** PASS. User **15** still `verbatim_seed_leak` (out of scope). [NATIVE_C1_EVERYDAY_SCENE_RETRY_V1](./today/NATIVE_C1_EVERYDAY_SCENE_RETRY_V1.md).

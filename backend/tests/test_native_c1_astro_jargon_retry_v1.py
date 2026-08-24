@@ -30,7 +30,7 @@ def test_astro_jargon_retry_canon_exists():
 
 
 def test_prompt_version_c5_4():
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.4"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.5"
     src = (
         ROOT
         / "backend"

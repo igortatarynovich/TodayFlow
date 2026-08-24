@@ -40,7 +40,7 @@ def test_everyday_retry_canon_exists():
 
 
 def test_prompt_version_c5_2():
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.4"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.5"
     assert inspect.signature(call_day_scenario_native_llm_c1).parameters["max_attempts"].default == 3
     assert "ЧЧ:ММ" in _NATIVE_SYS_RU
     assert "Не чини одну сцену" in _NATIVE_SYS_RU

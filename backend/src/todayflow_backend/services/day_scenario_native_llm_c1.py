@@ -158,7 +158,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c5.4"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c5.5"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -331,6 +331,9 @@ conflict.title / force_a / force_b — если заданы — называю�
 - копировать одну фразу ≥6 слов в setup двух сцен (иначе verbatim_seed_leak):
   плохо: оба setup «вчерашний квадрат луны к сатурну оставил…»;
   хорошо: в отношениях — реплика в чате; в работе — письмо; факт неба только в why_today / astrology.
+- копировать why_today / why_arose (≥6 слов) в why_sphere / setup (иначе verbatim_seed_leak / prod gen 1119):
+  плохо: why_today и scenes[0].why_sphere оба «утром луна уходит в водолей эмоции становятся…»;
+  хорошо: why_today — фактор неба; why_sphere — почему ИМЕННО эта сфера (чат, письмо, тело).
 conflict.title — человеческий сюжет (выбор/напряжение), не ярлык неба
 (плохо: «Вчерашний квадрат Луны к Сатурну»; хорошо: «Назвать точно или сгладить»).
 Если у дня нет двух разнонаправленных сил — оставь force_a и force_b пустыми
@@ -354,6 +357,7 @@ why_today — lived «почему тон сегодня такой» (как р
 ГЕЙТ ASTRO (каждый interpretive_chorus.astrology[i], иначе ASTRO_JARGON_BARE):
 human_meaning + link_to_conflict переводят named_factor в среду дня.
 Не копируй why_today / title в human_meaning (verbatim_seed_leak / prod gen 1117).
+Не копируй why_today в why_sphere / setup (verbatim_seed_leak / prod gen 1119).
 
 Запрещены универсальные конструкции без сцены:
 «не торопитесь», «сохраняйте баланс», «слушайте себя», «избегайте конфликтов», «сделайте паузу» —
@@ -619,8 +623,9 @@ def format_seed_leak_retry_feedback(errors: list[str]) -> str:
     return (
         f"{codes}\n"
         "SEED-KILL: не копируй одну фразу из ≥6 слов в setup двух сцен "
+        "и не копируй why_today/why_arose в scenes[].why / why_sphere / setup / what_happens "
         "и не вставляй why_today/title в chorus.astrology[].human_meaning. "
-        "Каждый setup — свой бытовой момент; факт неба не вставляй дословно в каждую сферу. "
+        "Каждый setup и why_sphere — быт ЭТОЙ сферы; факт неба только в why_today / named_factor. "
         "conflict.title — сюжет дня своими словами, не «квадрат Луны к Сатурну» / не «Меркурий директ». "
         f"{SEED_JARGON_CROSS_HINT_RU} "
         "Гейт find_verbatim_seed_leaks_v1 / conflict_short_name_is_sky_fact не ослабляется."
