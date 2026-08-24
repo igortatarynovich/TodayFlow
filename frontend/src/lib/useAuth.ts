@@ -50,36 +50,52 @@ function clearAuthCache() {
 
 function clearAuthStorageArtifacts() {
   if (typeof window === "undefined") return;
-  localStorage.removeItem(AUTH_SNAPSHOT_KEY);
-  localStorage.removeItem(AUTH_LAST_VALIDATED_AT_KEY);
-  localStorage.removeItem(AUTH_LAST_SNAPSHOT_SAVED_AT_KEY);
+  try {
+    localStorage.removeItem(AUTH_SNAPSHOT_KEY);
+    localStorage.removeItem(AUTH_LAST_VALIDATED_AT_KEY);
+    localStorage.removeItem(AUTH_LAST_SNAPSHOT_SAVED_AT_KEY);
+  } catch {
+    /* private mode */
+  }
 }
 
 function readTimestamp(key: string): number | null {
   if (typeof window === "undefined") return null;
-  const raw = localStorage.getItem(key);
-  if (!raw) return null;
-  const value = Number(raw);
-  return Number.isFinite(value) && value > 0 ? value : null;
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const value = Number(raw);
+    return Number.isFinite(value) && value > 0 ? value : null;
+  } catch {
+    return null;
+  }
 }
 
 function persistValidatedAt(timestamp: number) {
   if (typeof window === "undefined") return;
-  localStorage.setItem(AUTH_LAST_VALIDATED_AT_KEY, String(timestamp));
+  try {
+    localStorage.setItem(AUTH_LAST_VALIDATED_AT_KEY, String(timestamp));
+  } catch {
+    /* private mode */
+  }
 }
 
 function persistSnapshot(token: string, profile: AccountProfile | null, savedAt: number) {
   if (typeof window === "undefined") return;
-  const payload: StoredAuthSnapshot = { token, profile, savedAt };
-  localStorage.setItem(AUTH_SNAPSHOT_KEY, JSON.stringify(payload));
-  localStorage.setItem(AUTH_LAST_SNAPSHOT_SAVED_AT_KEY, String(savedAt));
+  try {
+    const payload: StoredAuthSnapshot = { token, profile, savedAt };
+    localStorage.setItem(AUTH_SNAPSHOT_KEY, JSON.stringify(payload));
+    localStorage.setItem(AUTH_LAST_SNAPSHOT_SAVED_AT_KEY, String(savedAt));
+  } catch {
+    /* private mode */
+  }
 }
 
 function loadStoredSnapshot(token: string): StoredAuthSnapshot | null {
   if (typeof window === "undefined") return null;
-  const raw = localStorage.getItem(AUTH_SNAPSHOT_KEY);
-  if (!raw) return null;
   try {
+    const raw = localStorage.getItem(AUTH_SNAPSHOT_KEY);
+    if (!raw) return null;
     const parsed = JSON.parse(raw) as StoredAuthSnapshot;
     if (!parsed || typeof parsed !== "object") return null;
     if (parsed.token !== token) return null;
@@ -119,7 +135,11 @@ async function resolveAuthSnapshot(token: string): Promise<AuthSnapshot> {
     .catch((error) => {
       if (error instanceof ApiError && error.status === 401) {
         if (typeof window !== "undefined") {
-          localStorage.removeItem(AUTH_TOKEN_KEY);
+          try {
+            localStorage.removeItem(AUTH_TOKEN_KEY);
+          } catch {
+            /* private mode */
+          }
         }
         clearAuthStorageArtifacts();
         const snapshot: AuthSnapshot = { isAuthenticated: false, profile: null };
@@ -153,36 +173,13 @@ export function useAuth() {
   });
 
   const checkAuth = useCallback(async () => {
-    const token = getStoredAccessToken();
-    
-    if (!token) {
-      clearAuthCache();
-      clearAuthStorageArtifacts();
-      clearCoreProfileCache();
-      setIsAuthenticated(false);
-      setProfile(null);
-      setStatus({
-        networkDegraded: false,
-        warningMessage: null,
-        lastValidatedAt: null,
-        lastSnapshotSavedAt: null,
-      });
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const snapshot = await resolveAuthSnapshot(token);
-      setIsAuthenticated(snapshot.isAuthenticated);
-      setProfile(snapshot.profile);
-      setStatus({
-        networkDegraded: false,
-        warningMessage: null,
-        lastValidatedAt: readTimestamp(AUTH_LAST_VALIDATED_AT_KEY),
-        lastSnapshotSavedAt: readTimestamp(AUTH_LAST_SNAPSHOT_SAVED_AT_KEY),
-      });
-    } catch (error) {
-      if (error instanceof ApiError && error.status === 401) {
+      const token = getStoredAccessToken();
+
+      if (!token) {
+        clearAuthCache();
+        clearAuthStorageArtifacts();
+        clearCoreProfileCache();
         setIsAuthenticated(false);
         setProfile(null);
         setStatus({
@@ -191,34 +188,64 @@ export function useAuth() {
           lastValidatedAt: null,
           lastSnapshotSavedAt: null,
         });
-        setIsLoading(false);
         return;
       }
-      const fallback = loadStoredSnapshot(token);
-      if (fallback) {
-        setIsAuthenticated(true);
-        setProfile(fallback.profile);
+
+      try {
+        const snapshot = await resolveAuthSnapshot(token);
+        setIsAuthenticated(snapshot.isAuthenticated);
+        setProfile(snapshot.profile);
         setStatus({
-          networkDegraded: true,
-          warningMessage:
-            "Сеть нестабильна: работаем с сохраненной сессией и локальными данными.",
-          lastValidatedAt: readTimestamp(AUTH_LAST_VALIDATED_AT_KEY),
-          lastSnapshotSavedAt: fallback.savedAt,
-        });
-      } else {
-        setStatus({
-          networkDegraded: true,
-          warningMessage:
-            "Сеть нестабильна: не удалось подтвердить сессию, попробуй обновить позже.",
+          networkDegraded: false,
+          warningMessage: null,
           lastValidatedAt: readTimestamp(AUTH_LAST_VALIDATED_AT_KEY),
           lastSnapshotSavedAt: readTimestamp(AUTH_LAST_SNAPSHOT_SAVED_AT_KEY),
         });
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 401) {
+          setIsAuthenticated(false);
+          setProfile(null);
+          setStatus({
+            networkDegraded: false,
+            warningMessage: null,
+            lastValidatedAt: null,
+            lastSnapshotSavedAt: null,
+          });
+          return;
+        }
+        const fallback = loadStoredSnapshot(token);
+        if (fallback) {
+          setIsAuthenticated(true);
+          setProfile(fallback.profile);
+          setStatus({
+            networkDegraded: true,
+            warningMessage:
+              "Сеть нестабильна: работаем с сохраненной сессией и локальными данными.",
+            lastValidatedAt: readTimestamp(AUTH_LAST_VALIDATED_AT_KEY),
+            lastSnapshotSavedAt: fallback.savedAt,
+          });
+        } else {
+          // Token is still present — do not dump the user back to guest on a hung probe.
+          setIsAuthenticated(true);
+          setStatus({
+            networkDegraded: true,
+            warningMessage:
+              "Сеть нестабильна: не удалось подтвердить сессию, попробуй обновить позже.",
+            lastValidatedAt: readTimestamp(AUTH_LAST_VALIDATED_AT_KEY),
+            lastSnapshotSavedAt: readTimestamp(AUTH_LAST_SNAPSHOT_SAVED_AT_KEY),
+          });
+        }
+        if (!isRequestAborted(error)) {
+          console.error("Failed to resolve auth snapshot", error);
+        }
       }
+    } catch (error) {
       if (!isRequestAborted(error)) {
         console.error("Failed to resolve auth snapshot", error);
       }
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {

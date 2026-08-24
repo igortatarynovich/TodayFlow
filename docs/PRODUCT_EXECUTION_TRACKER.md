@@ -13,6 +13,17 @@ Status: Active working document
 - **Canon updated?** no — FOUNDATION_UI §16.5 already names `appMain` as the shell scroller
 - **Backward compatible?** yes; hub still ranks by need on the client
 
+## Architecture impact — Mobile login infinite spinner (2026-08-24)
+
+- **SoT before:** Post-auth left `/auth` via Next.js `router.replace`. Full-page spinner while `isAuthenticated`. `/auth/login` and `/today/opening|bundle` had no client timeout. `beginAuthSession` wiped the auth snapshot, so a hung `/auth/me` left the user unauthenticated.
+- **SoT after:** Post-auth uses `window.location.assign` (`assignAfterAuthSession`). Login form is not replaced by a spinner for a live session. `/auth/login` 15s timeout; `/today/opening|bundle` 15s. Login writes a bootstrap snapshot so Today can optimistic-auth.
+- **Public contract changed?** no
+- **Migration required?** no — client navigation + timeouts
+- **Canon updated?** no — still `docs/FIRST_DAY_EXPERIENCE.md` §2 login home = `/today`; `docs/TODAYFLOW_FOUNDATION_UI.md` transport failure copy unchanged
+- **Backward compatible?** yes; desktop login path unchanged aside from hard navigation
+
+**NOW (FE, 2026-08-24):** **Mobile login hang** — iOS Safari / PWA `router.replace` after login could sit on the auth spinner forever; Google One Tap never reset loading on dismiss. Hard assign + timeouts + One Tap → redirect on coarse/narrow viewports.
+
 ## Architecture impact — One product shell chrome on every in-app page (2026-08-17)
 
 - **SoT before:** Pages could pass `theme`/`mood` into `ProductWebAppShell`; Tarot section atmosphere still painted ritual void (`#07080c`); `data-product-web-shell` also fired on `/` and `/auth`.

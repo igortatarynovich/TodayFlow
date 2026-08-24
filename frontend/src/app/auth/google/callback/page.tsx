@@ -2,10 +2,10 @@
 
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { postJson } from "@/lib/api";
 import { t } from "@/lib/i18n";
-import { resolveTargetAfterAuthSession } from "@/lib/authRedirect";
+import { resolveTargetAfterAuthSession, assignAfterAuthSession } from "@/lib/authRedirect";
 import { beginAuthSession } from "@/lib/authSession";
 import { LoadingSpinner } from "@/components/orbit";
 
@@ -29,7 +29,6 @@ function parseOAuthState(raw: string | null): OAuthState {
 }
 
 function GoogleOAuthCallbackContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
 
@@ -63,7 +62,7 @@ function GoogleOAuthCallbackContent() {
         if (cancelled) return;
         beginAuthSession(result.token);
         const target = await resolveTargetAfterAuthSession(nextRaw);
-        router.replace(target);
+        assignAfterAuthSession(target);
       } catch (e) {
         if (cancelled) return;
         setError(e instanceof Error ? e.message : t("auth.oauth.callback.exchangeFailed", "Не удалось завершить вход через Google"));
@@ -74,7 +73,7 @@ function GoogleOAuthCallbackContent() {
     return () => {
       cancelled = true;
     };
-  }, [router, searchParams]);
+  }, [searchParams]);
 
   if (error) {
     return (

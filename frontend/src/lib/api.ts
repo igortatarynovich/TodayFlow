@@ -169,26 +169,48 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 /** Читает JWT из localStorage, подчищает пробелы и при необходимости перезаписывает хранилище. */
 export function getStoredAccessToken(): string | null {
   if (typeof window === "undefined") return null;
-  const raw = localStorage.getItem("todayflow_token");
-  if (raw == null) return null;
-  const trimmed = raw.trim();
-  if (!trimmed) {
-    localStorage.removeItem("todayflow_token");
+  try {
+    const raw = localStorage.getItem("todayflow_token");
+    if (raw == null) return null;
+    const trimmed = raw.trim();
+    if (!trimmed) {
+      localStorage.removeItem("todayflow_token");
+      return null;
+    }
+    if (trimmed !== raw) {
+      localStorage.setItem("todayflow_token", trimmed);
+    }
+    return trimmed;
+  } catch {
+    // iOS private mode / blocked storage must not freeze authLoading.
     return null;
   }
-  if (trimmed !== raw) {
-    localStorage.setItem("todayflow_token", trimmed);
+}
+
+export function requestTimeoutMs(path: string, hasCallerSignal: boolean): number | null {
+  if (hasCallerSignal) return null;
+  const bare = path.split("?")[0];
+  if (bare === "/auth/me") return 5_000;
+  if (
+    bare === "/auth/login" ||
+    bare === "/auth/magic-login" ||
+    bare === "/auth/email-signup" ||
+    bare.startsWith("/oauth/")
+  ) {
+    return 15_000;
   }
-  return trimmed;
+  if (bare === "/today" || bare === "/today/opening" || bare === "/today/bundle") {
+    return 15_000;
+  }
+  return null;
 }
 
 async function performRequest<T>(path: string, options: RequestInit | undefined, headers: Headers): Promise<T> {
-  const AUTH_ME_TIMEOUT_MS = 5_000;
-  const needsAuthMeTimeout = path === "/auth/me" || path.startsWith("/auth/me?");
-  const timeoutController = needsAuthMeTimeout && !options?.signal ? new AbortController() : null;
+  const timeoutMs = requestTimeoutMs(path, Boolean(options?.signal));
+  const timeoutController = timeoutMs != null ? new AbortController() : null;
   const timeoutId =
-    timeoutController != null
-      ? setTimeout(() => abortWithTimeout(timeoutController), AUTH_ME_TIMEOUT_MS)
+    timeoutController != null && timeoutMs != null
+      ? setTimeout(() => abortWithTimeout(timeoutController), timeoutMs)
       : null;
   const requestBearer = bearerTokenFromAuthorization(headers.get("Authorization"));
 
