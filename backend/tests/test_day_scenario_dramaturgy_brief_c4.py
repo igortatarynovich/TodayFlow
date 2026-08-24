@@ -108,7 +108,7 @@ def test_format_protects_brief_under_truncation():
 
 
 def test_native_prompt_version_c4():
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.2"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.3"
 
 
 def test_format_prepends_il4_meaning_block():

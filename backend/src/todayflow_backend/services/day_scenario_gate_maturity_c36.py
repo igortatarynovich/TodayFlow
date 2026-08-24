@@ -245,6 +245,10 @@ HARD_NATIVE_VALIDATE_MARKERS = (
     "primary_scene_id_missing",
     "primary_scene_id_unknown",
     "unknown_evidence:",
+    "verbatim_seed_leak:",
+    "chorus:seed_paste_bridge",
+    "conflict.short_name:invented_bank_binary",
+    "conflict_short_name_is_sky_fact",
     "orphan_prop_",
 )
 

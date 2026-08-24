@@ -137,9 +137,11 @@ from todayflow_backend.services.day_scenario_v1 import (
     DAY_SCENARIO_V1_VERSION,
     PRODUCT_SPHERE_IDS,
     _day_tone_anchor,
+    _looks_like_sky_fact_label,
     _month_from_ritual_or_today,
     build_scenario_foundation_v1,
     build_scenario_props_v1,
+    find_verbatim_seed_leaks_v1,
     resolve_primary_scene_id_v1,
     validate_day_scenario_v1,
 )
@@ -156,7 +158,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c5.2"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c5.3"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -326,6 +328,11 @@ conflict.title / force_a / force_b — если заданы — называю�
 - копировать «тот же выбор — «force_a» или «force_b»»;
 - шаблоны «Шанс выбрать «force_b»…» / «Ловушка — скатиться в «force_a»…»;
 - вставлять short_name / title в каждую сферу или голос хора.
+- копировать одну фразу ≥6 слов в setup двух сцен (иначе verbatim_seed_leak):
+  плохо: оба setup «вчерашний квадрат луны к сатурну оставил…»;
+  хорошо: в отношениях — реплика в чате; в работе — письмо; факт неба только в why_today / astrology.
+conflict.title — человеческий сюжет (выбор/напряжение), не ярлык неба
+(плохо: «Вчерашний квадрат Луны к Сатурну»; хорошо: «Назвать точно или сгладить»).
 Если у дня нет двух разнонаправленных сил — оставь force_a и force_b пустыми
 (не выдумывай «автопилот» vs «выбор», не пиши why_today как «натяжение между A и B»).
 why_today — lived «почему тон сегодня такой» (как ровный абзац про фактор неба), не опенер «X против Y».
@@ -552,6 +559,62 @@ def format_unknown_evidence_retry_feedback(
         f"{codes}\n"
         "evidence_refs / driver_refs только из DRAMATURGY_BRIEF.allowed_evidence_ids "
         f"(или ids во входе). Разрешено: {sample}"
+    )
+
+
+def project_native_for_seed_leak(payload: dict[str, Any] | None) -> dict[str, Any]:
+    """Map native Global fields onto day_scenario leak surfaces (same detector)."""
+    src = payload if isinstance(payload, dict) else {}
+    conflict = _as_dict(src.get("conflict"))
+    chorus_n = _as_dict(src.get("interpretive_chorus"))
+    scenes_out: list[dict[str, Any]] = []
+    for sc in _as_list(src.get("scenes")):
+        if not isinstance(sc, dict):
+            continue
+        scenes_out.append(
+            {
+                "what_happens": sc.get("setup") or "",
+                "recommended_action": sc.get("recommended_action") or "",
+                "why": sc.get("why_sphere") or sc.get("why") or "",
+                "serves_conflict": "тон дня",
+            }
+        )
+    astrology = []
+    for row in _as_list(chorus_n.get("astrology")):
+        if isinstance(row, dict):
+            astrology.append({"human_meaning": row.get("human_meaning") or ""})
+    return {
+        "conflict": {
+            "short_name": conflict.get("title") or "",
+            "why_arose": conflict.get("why_today") or "",
+        },
+        "chorus": {
+            "astrology": astrology,
+            "day_card": _as_dict(chorus_n.get("day_card")),
+            "day_number": _as_dict(chorus_n.get("day_number")),
+        },
+        "scenes": scenes_out,
+        "props": {},
+    }
+
+
+def format_seed_leak_retry_feedback(errors: list[str]) -> str:
+    """Retry coaching for seed-kill — do not weaken find_verbatim_seed_leaks_v1."""
+    seed = [
+        e
+        for e in errors
+        if str(e).startswith("verbatim_seed_leak:")
+        or str(e).startswith("chorus:seed_paste")
+        or "invented_bank_binary" in str(e)
+        or str(e) == "conflict_short_name_is_sky_fact"
+    ]
+    codes = ";".join(seed[:8] or errors[:8])
+    return (
+        f"{codes}\n"
+        "SEED-KILL: не копируй одну фразу из ≥6 слов в setup двух сцен. "
+        "Каждый setup — свой бытовой момент; факт неба не вставляй дословно в каждую сферу. "
+        "conflict.title — сюжет дня своими словами, не «квадрат Луны к Сатурну» / не «Меркурий директ». "
+        "Гейт find_verbatim_seed_leaks_v1 / conflict_short_name_is_sky_fact не ослабляется."
     )
 
 
@@ -832,6 +895,8 @@ def validate_native_scenario_llm_c1(
     conflict = _as_dict(payload.get("conflict"))
     if not conflict.get("title"):
         errors.append("conflict_missing_title")
+    elif _looks_like_sky_fact_label(conflict.get("title")):
+        errors.append("conflict_short_name_is_sky_fact")
     # v3.1: force_a/force_b optional — even day must not invent a pair
     force_a = str(conflict.get("force_a") or "").strip()
     force_b = str(conflict.get("force_b") or "").strip()
@@ -939,6 +1004,7 @@ def validate_native_scenario_llm_c1(
     if humor.get("scene_id") and str(humor["scene_id"]) not in scene_ids:
         errors.append("orphan_prop_humor_scene")
 
+    errors.extend(find_verbatim_seed_leaks_v1(project_native_for_seed_leak(payload)))
     return errors
 
 
@@ -1410,6 +1476,14 @@ def call_day_scenario_native_llm_c1(
                 return None, format_unknown_evidence_retry_feedback(
                     hard_errors, allowed_evidence_ids=allowed
                 )
+            if any(
+                str(e).startswith("verbatim_seed_leak:")
+                or str(e).startswith("chorus:seed_paste")
+                or "invented_bank_binary" in str(e)
+                or str(e) == "conflict_short_name_is_sky_fact"
+                for e in hard_errors
+            ):
+                return None, format_seed_leak_retry_feedback(hard_errors)
             return None, ";".join(hard_errors[:8])
         editorial_local = run_editorial_quality_gate_c31(
             normalized_local,

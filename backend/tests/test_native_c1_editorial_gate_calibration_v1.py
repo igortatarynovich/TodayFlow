@@ -45,7 +45,7 @@ def test_calibration_canon_exists():
 
 
 def test_prompt_version_c5_1():
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.2"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.3"
 
 
 def test_retry_feedback_targets_chorus_parallel():

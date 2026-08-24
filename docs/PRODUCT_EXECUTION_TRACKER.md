@@ -104,7 +104,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-24):** **Native C1 everyday scene retry 1.3.119 LOCKED** (prompt c5.2 · all-scene lived markers · Global max_attempts 3 · gates unchanged). **Native C1 evidence pack binding 1.3.118 LOCKED**. **Native C1 editorial gate calibration 1.3.117 LOCKED**. **Native C1 I0 generation split 1.3.116 LOCKED**. **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
+**NOW (FOUNDATION, 2026-08-24):** **Native C1 seed leak retry 1.3.120 LOCKED** (prompt c5.3 · Global `verbatim_seed_leak` retry · detector unchanged). **Native C1 everyday scene retry 1.3.119 LOCKED**. **Native C1 evidence pack binding 1.3.118 LOCKED**. **Native C1 editorial gate calibration 1.3.117 LOCKED**. **Native C1 I0 generation split 1.3.116 LOCKED**. **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
@@ -287,6 +287,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — Today 1.3.120 Native C1 seed leak retry (2026-08-24)
+
+- **SoT before:** Seed-kill ran only after I0 merge. Prod gen **1101** cloned sky-fact setup (`verbatim_seed_leak`); gen **1116** mapped sky-fact `conflict.title` (`conflict_short_name_is_sky_fact`). Detectors unchanged; no Global retry.
+- **SoT after:** **Native C1 Seed Leak Retry V1** — same detectors on native Global; hard native markers + retry coaching; prompt `day-scenario-native-c5.3`. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — force rebuild / refresh picks up c5.3
+- **Canon updated?** yes — `docs/today/NATIVE_C1_SEED_LEAK_RETRY_V1.md` · tracker 1.3.120
+- **Backward compatible?** yes — same leak codes; earlier Global reject only
 
 ## Architecture impact — Today 1.3.119 Native C1 everyday scene retry (2026-08-24)
 
@@ -2360,6 +2369,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-24 | Today / Native C1 | **1.3.120 seed leak retry** | **LOCKED** | Catch `verbatim_seed_leak` + `conflict_short_name_is_sky_fact` on Global native validate (same detectors); retry coaching; prompt c5.3. Live: gen 1101/1116 were post-I0 hard fails; gen **1117** retries seed-kill then terminal `ASTRO_JARGON_BARE` (user 15 still unavailable). [NATIVE_C1_SEED_LEAK_RETRY_V1](./today/NATIVE_C1_SEED_LEAK_RETRY_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.119 everyday scene retry** | **LOCKED** | Prompt c5.2 + all-scene lived-marker retry; Global max_attempts 3. SCENE_* detectors unchanged. Live 2026-08-24: user **13** gen **1106** PASS; **17** gen **1107** PASS (3 Global, ASTRO_JARGON then accept); **8** gen **1108** PASS; **11** gen **1109** PASS. User **15** still `verbatim_seed_leak` (out of scope). [NATIVE_C1_EVERYDAY_SCENE_RETRY_V1](./today/NATIVE_C1_EVERYDAY_SCENE_RETRY_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.118 evidence pack binding** | **LOCKED** | `unknown_evidence` allowlist = events pack (string ranked_drivers) + foundation cite aliases (`ev.foundation.lunar.*` gen 1092) + interp evidence + pers pack. Gate not weakened. Prompt c5.1. [NATIVE_C1_EVIDENCE_PACK_BINDING_V1](./today/NATIVE_C1_EVIDENCE_PACK_BINDING_V1.md).
 - 2026-08-18 | Ops / LLM | **AI COGS llm_usage_v1** | **CODE** | Per-request feature/model/tokens/cost + operation_id/trigger/retry. Billed output does not double-count reasoning. Report: feature×trigger×model×retry_reason + top-20 ops. Do not switch model until that report. Canon: LLM_QUALITY AI COGS · AMLL token fields 🟡.
