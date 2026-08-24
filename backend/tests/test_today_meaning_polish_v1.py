@@ -103,7 +103,7 @@ def test_today_meaning_polish_v1():
     assert runtime_is_not_wired(src_root)
     native_src = NATIVE.read_text(encoding="utf-8")
     assert "today_meaning_polish_v1" in native_src
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.3"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.4"
 
     rules = POLISH.read_text(encoding="utf-8")
     assert "## Architecture impact" in rules

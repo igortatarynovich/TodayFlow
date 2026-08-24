@@ -44,6 +44,14 @@ DEFECT_CHORUS_NATAL_WITHOUT_EVIDENCE = "CHORUS_NATAL_WITHOUT_EVIDENCE"
 DEFECT_SEED_BANK_BINARY_SHORT_NAME = "SEED_BANK_BINARY_SHORT_NAME"
 DEFECT_SEED_CHORUS_PASTE = "SEED_CHORUS_PASTE"
 
+# Prod gen 1117: jargon retry pasted why_today into astrology[1]; seed-kill retry reverted to jargon.
+SEED_JARGON_CROSS_HINT_RU = (
+    "Не чини ASTRO_JARGON_BARE копипастом why_today и не чини seed-leak откатом в жаргон: "
+    "human_meaning КАЖДОГО interpretive_chorus.astrology[i] (включая [1]/[2]) — "
+    "среда дня своими словами; не копия named_factor и не копия conflict.why_today/title "
+    "(≥6 слов = verbatim_seed_leak)."
+)
+
 CRITICAL_DEFECTS = frozenset(
     {
         # Severity labels for eval/scoring — NOT runtime blockers (see C3.6 maturity).
@@ -961,8 +969,10 @@ def format_editorial_retry_feedback(defects: list[dict[str, str]], *, limit: int
         lines.insert(
             len(lines) - 1,
             "astrology voice: named_factor может держать факт неба; human_meaning + link_to_conflict "
-            "ОБЯЗАНЫ перевести в среду дня (давление, темп, разговор, импульс) — "
-            "не «это подталкивает день к сюжету» и не копия named_factor.",
+            "КАЖДОГО astrology[i] (не только [0]) ОБЯЗАНЫ перевести в среду дня "
+            "(давление, темп, разговор, импульс) — "
+            "не «это подталкивает день к сюжету» и не копия named_factor. "
+            + SEED_JARGON_CROSS_HINT_RU,
         )
     for d in defects[:limit]:
         lines.append(f"- [{d.get('code')}] {d.get('field')}: {d.get('message')}")

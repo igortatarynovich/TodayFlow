@@ -45,7 +45,7 @@ def test_calibration_canon_exists():
 
 
 def test_prompt_version_c5_1():
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.3"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.4"
 
 
 def test_retry_feedback_targets_chorus_parallel():
@@ -79,6 +79,7 @@ def test_retry_feedback_targets_everyday_and_astro_codes():
     assert "не укорачивай" in fb
     assert "КАЖДОЙ сцене" in fb
     assert "astrology voice" in fb
+    assert "why_today" in fb
     assert DEFECT_SCENE_MISSING_EVERYDAY in fb
 
 

@@ -158,7 +158,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c5.3"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c5.4"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -351,6 +351,9 @@ why_today — lived «почему тон сегодня такой» (как р
 - everyday_example: «Рабочий чат, 11:15: «ок?» под длинным письмом» — время + канал + реплика.
 - astrology human_meaning: «В разговорах сегодня легче сорваться на резкость, чем замолчать» —
   не «Луна в Рыбах подталкивает день к сюжету…».
+ГЕЙТ ASTRO (каждый interpretive_chorus.astrology[i], иначе ASTRO_JARGON_BARE):
+human_meaning + link_to_conflict переводят named_factor в среду дня.
+Не копируй why_today / title в human_meaning (verbatim_seed_leak / prod gen 1117).
 
 Запрещены универсальные конструкции без сцены:
 «не торопитесь», «сохраняйте баланс», «слушайте себя», «избегайте конфликтов», «сделайте паузу» —
@@ -608,12 +611,18 @@ def format_seed_leak_retry_feedback(errors: list[str]) -> str:
         or "invented_bank_binary" in str(e)
         or str(e) == "conflict_short_name_is_sky_fact"
     ]
+    from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
+        SEED_JARGON_CROSS_HINT_RU,
+    )
+
     codes = ";".join(seed[:8] or errors[:8])
     return (
         f"{codes}\n"
-        "SEED-KILL: не копируй одну фразу из ≥6 слов в setup двух сцен. "
+        "SEED-KILL: не копируй одну фразу из ≥6 слов в setup двух сцен "
+        "и не вставляй why_today/title в chorus.astrology[].human_meaning. "
         "Каждый setup — свой бытовой момент; факт неба не вставляй дословно в каждую сферу. "
         "conflict.title — сюжет дня своими словами, не «квадрат Луны к Сатурну» / не «Меркурий директ». "
+        f"{SEED_JARGON_CROSS_HINT_RU} "
         "Гейт find_verbatim_seed_leaks_v1 / conflict_short_name_is_sky_fact не ослабляется."
     )
 

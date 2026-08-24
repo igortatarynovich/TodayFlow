@@ -46,7 +46,7 @@ def test_seed_leak_canon_exists():
 
 
 def test_prompt_version_c5_3():
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.3"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.4"
     assert "verbatim_seed_leak" in Path(
         ROOT / "backend" / "src" / "todayflow_backend" / "services" / "day_scenario_native_llm_c1.py"
     ).read_text(encoding="utf-8")
