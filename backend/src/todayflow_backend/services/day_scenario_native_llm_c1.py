@@ -156,7 +156,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c5.1"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c5.2"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -315,6 +315,10 @@ BYTOVAЯ КОНКРЕТИКА СЦЕН (C3.1) — обязательно:
 6) наблюдаемое последствие;
 7) действие, которое реально выполнить сегодня (recommended_action).
 everyday_example обязателен и конкретен (сообщение, вопрос, письмо, пауза перед ответом, счёт, созвон…).
+ГЕЙТ (каждая сцена, иначе SCENE_MISSING_EVERYDAY / SCENE_ABSTRACT): в everyday_example
+нужен хотя бы один маркер — часы ЧЧ:ММ («12:58»), цитата ≥12 знаков в «ёлочках»,
+человек (коллега/партнёр/друг/мама) + пишет/спрашивает/говорит, или канал («в чате», telegram).
+Не чини одну сцену, укорачивая другие: все 2–4 everyday_example должны пройти этот бар.
 
 ЗАПРЕТ ПОВТОРОВ ОСИ / SEED-KILL (v3.1):
 conflict.title / force_a / force_b — если заданы — называются ОДИН раз в conflict.
@@ -1179,7 +1183,7 @@ def call_day_scenario_native_llm_c1(
     interpretation: dict[str, Any] | None = None,
     ritual_context: dict[str, Any] | None = None,
     celestial_events: dict[str, Any] | None = None,
-    max_attempts: int = 2,
+    max_attempts: int = 3,
     meta_out: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     """Generate native scenario via LLM. Returns day_scenario_v1 or None after hard fails.

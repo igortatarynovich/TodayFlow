@@ -162,7 +162,7 @@ def test_native_c1_i0_generation_split_v1():
     assert "1.3.116" in TRACKER.read_text(encoding="utf-8")
     assert MODULE.is_file()
 
-    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.1"
+    assert NATIVE_PROMPT_VERSION == "day-scenario-native-c5.2"
     assert GLOBAL_STAGE_INSTRUCTION_RU
     assert PERSONAL_STAGE_INSTRUCTION_RU
 
@@ -310,5 +310,5 @@ def test_call_native_uses_i0_split_orchestrator():
         assert orch.called
         assert result is not None
         assert result.get("generation_source") == "native_llm_c1"
-        assert result["editorial_meta"]["prompt_version"] == "day-scenario-native-c5.1"
+        assert result["editorial_meta"]["prompt_version"] == "day-scenario-native-c5.2"
         assert result["editorial_meta"]["i0_split"]["i0_split"]

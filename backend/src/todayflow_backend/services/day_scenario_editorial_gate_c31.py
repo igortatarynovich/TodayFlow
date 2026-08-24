@@ -944,8 +944,10 @@ def format_editorial_retry_feedback(defects: list[dict[str, str]], *, limit: int
     if DEFECT_SCENE_MISSING_EVERYDAY in codes or DEFECT_SCENE_ABSTRACT in codes:
         lines.insert(
             len(lines) - 1,
-            "everyday_example (каждая сцена): время/место + кто + что сказано/написано "
-            "(пример: «Рабочий чат, 11:15: «ок?» под длинным письмом»). "
+            "everyday_example на КАЖДОЙ сцене (не только listed field): часы ЧЧ:ММ, "
+            "или цитата ≥12 знаков в «ёлочках», или человек+пишет/спрашивает, или «в чате». "
+            "Сцены без дефекта не укорачивай — retry не должен ломать уже валидный момент. "
+            "Пример: «Рабочий чат, 11:15: коллега пишет «нам это нужно сегодня до совещания?»». "
             "setup — тот же момент, не абстрактная «напряжённость в отношениях».",
         )
     if DEFECT_CHORUS_PARALLEL_FORECAST in codes or DEFECT_CHORUS_ROLE_DRIFT in codes:
