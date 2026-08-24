@@ -1,8 +1,17 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-22
+Last updated: 2026-08-24
 Owner: Product + Engineering
 Status: Active working document
+
+## Architecture impact — Today pane scroll + practices hub first paint (2026-08-24)
+
+- **SoT before:** Today story frames used nested `overflow: hidden` + `height: 100%`, so the wheel moved the whole shell (sidebar included). Practices hub awaited SSR catalog + lite-report `/current` behind a full-page spinner.
+- **SoT after:** Product `appMain` is the only vertical scroller on Today (same as Profile / FOUNDATION_UI §16.5). Practices hub chrome paints immediately; `GET /practices` is the in-memory GENERAL catalog (personalization stays on `GET /practices/current`).
+- **Public contract changed?** no JSON fields. `GET /practices` for auth users is no longer lite-report ranked.
+- **Migration required?** no
+- **Canon updated?** no — FOUNDATION_UI §16.5 already names `appMain` as the shell scroller
+- **Backward compatible?** yes; hub still ranks by need on the client
 
 ## Architecture impact — One product shell chrome on every in-app page (2026-08-17)
 

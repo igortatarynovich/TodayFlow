@@ -372,16 +372,16 @@
   min-width: 0;
 }
 
-/** Story-frame Today: ScreenFlow fills the column; no dashboard gap/header. */
+/** Story-frame Today: grow with content; product appMain is the scroller (same as Profile). */
 .pageRootStory {
   gap: 0;
-  min-height: 0;
+  min-height: 100%;
+  height: auto;
   flex: 1 1 auto;
-  height: 100%;
   display: flex;
   flex-direction: column;
   border-radius: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .compositionSlotStory {
@@ -391,9 +391,9 @@
   width: 100%;
   min-width: 0;
   flex: 1 1 auto;
-  min-height: 0;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
+  height: auto;
+  overflow: visible;
   border-radius: 0;
 }
 

@@ -58,7 +58,8 @@
   flex: 1 1 auto;
   min-height: 0;
   height: auto;
-  overflow: visible;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .storyBleed .track {
@@ -77,8 +78,8 @@
 
 .storyBleed .stepBody {
   position: relative;
-  /* Grow with the pane; the step is the only scroller. flex:1 + min-height:100%
-     made this a nested 100%-tall box (and sometimes a second overflow:auto). */
+  /* Grow with content; product appMain scrolls (same as Profile). flex:1 +
+     min-height:100% made this a nested 100%-tall box that could not grow. */
   flex: 0 0 auto;
   min-height: 100%;
   height: auto;
@@ -325,8 +326,8 @@
   text-align: center;
   box-sizing: border-box;
   padding: 0;
-  /* ScreenFlow step is the only vertical scroller — nested overflow + y-mandatory
-     snap locked the first Today pane on phones. */
+  /* Product appMain is the vertical scroller (FOUNDATION_UI §16.5). Nested overflow
+     + y-mandatory snap locked the first Today pane and moved the sidebar. */
   overflow: visible;
 }
 

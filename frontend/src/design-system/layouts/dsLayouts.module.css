@@ -584,6 +584,8 @@
   flex: 1 1 auto;
   min-height: 100%;
   height: auto;
+  /* Grow with Today so appMain can scroll; overflow:hidden here clipped the day
+     and sent the wheel to the document (sidebar moved with content). */
   overflow: visible;
   border-radius: 0;
 }

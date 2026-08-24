@@ -1953,29 +1953,14 @@ async def get_practices(
     db: Session = Depends(get_session),
 ):
     """
-    Получить список практик (для архива/категорий / state-cycle hub).
-    Для гостей - общие практики.
-    Для зарегистрированных - персонализированные рекомендации с учетом текущего периода и карты дня.
+    In-memory GENERAL catalog for the hub / archive.
 
-    Optional filters (state-cycle):
-      need — calm|focus|recover|body|understand|sleep (ranked primary-first)
-      format_id — meditation|breath|yoga|stretch|visualization|affirmation|reflection|music|sleep
+    Do not run lite-report / lunar / tarot personalization here — that path
+    belongs to GET /practices/current. The hub ranks locally by need/format.
     """
-    practices = []
-    
-    if user:
-        # Проверяем лимиты для персонализированных практик
-        limits = get_practice_limits(user, db)
-        
-        # Если лимит исчерпан, возвращаем только бесплатные практики
-        if limits["remaining_this_week"] <= 0 and limits["subscription_level"] != "pro":
-            practices = [p for p in GENERAL_PRACTICES.copy() if p.get("is_free", True)]
-        else:
-            # Персонализированные практики для зарегистрированных пользователей
-            practices = get_personalized_practices(user, db, category, None, limits)
-    else:
-        # Общие практики для гостей
-        practices = GENERAL_PRACTICES.copy()
+    _ = user
+    _ = db
+    practices = GENERAL_PRACTICES.copy()
 
     if category:
         practices = [p for p in practices if p.get("category") == category]

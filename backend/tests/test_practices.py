@@ -146,12 +146,14 @@ class TestGetPractices:
             assert practice.get("is_free", True)
     
     def test_get_practices_authenticated(self, client: TestClient, auth_headers: dict):
-        """Test getting practices as authenticated user."""
+        """Authenticated list is the in-memory catalog, not a lite-report pass."""
         response = client.get("/practices", headers=auth_headers)
         assert response.status_code == 200
         data = response.json()
         assert isinstance(data, list)
         assert len(data) > 0
+        guest = client.get("/practices")
+        assert {row["id"] for row in data} == {row["id"] for row in guest.json()}
     
     def test_get_practices_with_category(self, client: TestClient):
         """Test filtering practices by category."""
