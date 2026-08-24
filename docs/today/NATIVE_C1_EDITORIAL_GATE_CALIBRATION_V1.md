@@ -53,7 +53,7 @@ Generation reaches LLM; failure is **editorial gate** on Global stage:
 | 11 | p0_today (light) | **PASS** | 1090 | `light_personalized` |
 | 6 | p0_v2 | **PASS** | 1091 | global×2, personal×2 |
 | 1 | owner account | **PASS** | 1096 | global×2 retry (chorus+scene) |
-| 4 | p0 compat (no profile) | **FAIL** | 1092 | `unknown_evidence` — evidence binding, not scene/astro focus |
+| 4 | p0 compat (no profile) | **FAIL** | 1092 | `unknown_evidence` — evidence binding, not scene/astro focus. Closed by **1.3.118** [NATIVE_C1_EVIDENCE_PACK_BINDING_V1](./NATIVE_C1_EVIDENCE_PACK_BINDING_V1.md) |
 
 `personal_degraded`: covered by unit test `test_personal_degraded_keeps_global` (forced Personal timeout fixture).
 

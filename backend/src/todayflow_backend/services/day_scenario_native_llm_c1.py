@@ -426,33 +426,166 @@ def _slug_scene_id(raw: Any, sphere: str, idx: int) -> str:
     return f"scene.{idx}"
 
 
+def _add_evidence_token(allowed: set[str], raw: Any) -> None:
+    rid = str(raw or "").strip()
+    if rid:
+        allowed.add(rid)
+
+
+def _add_pack_item(allowed: set[str], item: Any) -> None:
+    """ranked_drivers / ambient may be strings; events are dicts with id."""
+    if isinstance(item, str):
+        _add_evidence_token(allowed, item)
+        return
+    if not isinstance(item, dict):
+        return
+    _add_evidence_token(allowed, item.get("id"))
+    _add_evidence_token(allowed, item.get("evidence_ref"))
+    for key in ("evidence_ids", "evidence_refs", "source_refs"):
+        for e in _as_list(item.get(key)):
+            _add_evidence_token(allowed, e)
+
+
+def foundation_cite_aliases(
+    *,
+    layer: str,
+    beat_id: str,
+    evidence_ref: str | None = None,
+) -> set[str]:
+    """Closed aliases the LLM reconstructs from daily_foundation nest paths.
+
+    Beat id ``aspect.sky-moon-opposition-mars`` under lunar is cited in prod as
+    ``ev.foundation.lunar.aspect.sky-moon-opposition-mars`` (gen 1092), while
+    interpretation evidence uses ``ev.claim.foundation.lunar.{beat_id}``.
+    """
+    bid = str(beat_id or "").strip()
+    layer_s = str(layer or "").strip()
+    out: set[str] = set()
+    if not bid:
+        return out
+    out.add(bid)
+    ref = str(evidence_ref or "").strip()
+    if ref:
+        out.add(ref)
+    if layer_s:
+        claim = f"claim.foundation.{layer_s}.{bid}"
+        out.update(
+            {
+                claim,
+                f"ev.{claim}",
+                f"ev.foundation.{layer_s}.{bid}",
+                f"foundation.{layer_s}.{bid}",
+            }
+        )
+    return {a for a in out if a}
+
+
+def collect_foundation_cite_ids(foundation: dict[str, Any] | None) -> set[str]:
+    allowed: set[str] = set()
+    found = _as_dict(foundation)
+    if not found:
+        return allowed
+    for layer in ("astro", "lunar"):
+        block = _as_dict(found.get(layer))
+        for beat in _as_list(block.get("beats")):
+            if not isinstance(beat, dict):
+                continue
+            allowed.update(
+                foundation_cite_aliases(
+                    layer=layer,
+                    beat_id=str(beat.get("id") or ""),
+                    evidence_ref=str(beat.get("evidence_ref") or "") or None,
+                )
+            )
+    essence = _as_dict(found.get("essence"))
+    for e in _as_list(essence.get("evidence_ids")):
+        _add_evidence_token(allowed, e)
+    _add_evidence_token(allowed, "ev.foundation.essence")
+    return allowed
+
+
+def brief_cite_list(
+    allowed: set[str],
+    *,
+    prefer: list[str] | None = None,
+    limit: int = 40,
+) -> list[str]:
+    """Canonical ids for DRAMATURGY_BRIEF — not the full alias set."""
+    out: list[str] = []
+    seen: set[str] = set()
+    skip_prefix = ("ev.foundation.", "ev.claim.", "claim.foundation.", "foundation.")
+    for raw in list(prefer or []):
+        s = str(raw or "").strip()
+        if s and s not in seen:
+            out.append(s)
+            seen.add(s)
+        if len(out) >= limit:
+            return out
+    for token in sorted(allowed):
+        if token in seen:
+            continue
+        if token.startswith(skip_prefix):
+            continue
+        out.append(token)
+        seen.add(token)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def format_unknown_evidence_retry_feedback(
+    errors: list[str],
+    *,
+    allowed_evidence_ids: set[str],
+) -> str:
+    """Retry coaching for unknown_evidence — cite the closed pack, do not weaken the gate."""
+    unknown = [e for e in errors if str(e).startswith("unknown_evidence:")]
+    codes = ";".join(unknown[:8] or errors[:8])
+    sample = ",".join(brief_cite_list(set(allowed_evidence_ids), limit=24))
+    if not sample:
+        return codes
+    return (
+        f"{codes}\n"
+        "evidence_refs / driver_refs только из DRAMATURGY_BRIEF.allowed_evidence_ids "
+        f"(или ids во входе). Разрешено: {sample}"
+    )
+
+
 def collect_allowed_evidence_ids(
     *,
     interpretation: dict[str, Any] | None,
     ritual_context: dict[str, Any] | None = None,
     celestial_events: dict[str, Any] | None = None,
+    personalization_pack: dict[str, Any] | None = None,
+    day_foundation: dict[str, Any] | None = None,
 ) -> set[str]:
-    """Known evidence / driver / ritual ids — LLM may only cite these."""
+    """Known evidence / driver / ritual ids — LLM may only cite these.
+
+    Pack binding: events pack (string ranked_drivers + dict events), foundation
+    beat aliases, interpretation evidence, personalization pack refs.
+    """
     allowed: set[str] = set()
     interp = _as_dict(interpretation)
     for key in ("evidence", "derived_claims"):
         for row in _as_list(interp.get(key)):
-            if isinstance(row, dict) and row.get("id"):
-                allowed.add(str(row["id"]))
-            if isinstance(row, dict):
-                for e in _as_list(row.get("evidence_ids")):
-                    allowed.add(str(e))
+            _add_pack_item(allowed, row)
     pack = interp.get("day_events_pack") if isinstance(interp.get("day_events_pack"), dict) else None
     if pack is None and isinstance(celestial_events, dict):
-        pack = celestial_events.get("day_events_pack")
+        nested = celestial_events.get("day_events_pack")
+        pack = nested if isinstance(nested, dict) else None
+        if pack is None and (celestial_events.get("events") or celestial_events.get("ranked_drivers")):
+            pack = celestial_events
     if isinstance(pack, dict):
         for bucket in ("ranked_drivers", "primary", "supporting", "ambient", "events"):
             for row in _as_list(pack.get(bucket)):
-                if isinstance(row, dict) and row.get("id"):
-                    allowed.add(str(row["id"]))
+                _add_pack_item(allowed, row)
+                if isinstance(row, str) and row.strip():
+                    allowed.add(f"ev.driver.{row.strip()}")
     thesis = _as_dict(interp.get("day_thesis"))
     for d in _as_list(thesis.get("driver_ids")):
-        allowed.add(str(d))
+        _add_evidence_token(allowed, d)
+        if str(d).strip():
+            allowed.add(f"ev.driver.{str(d).strip()}")
     ritual = _as_dict(ritual_context)
     if ritual.get("tarot_main_id") is not None:
         allowed.add(f"tarot:{ritual.get('tarot_main_id')}")
@@ -462,6 +595,16 @@ def collect_allowed_evidence_ids(
     if ritual.get("numerology_value") is not None:
         allowed.add("day_number")
         allowed.add(f"number:{ritual.get('numerology_value')}")
+    foundation = _as_dict(day_foundation) or _as_dict(interp.get("day_foundation"))
+    allowed.update(collect_foundation_cite_ids(foundation))
+    pers = _as_dict(personalization_pack)
+    if pers:
+        from todayflow_backend.services.day_scenario_personalization_c33 import pack_allowed_refs
+
+        allowed.update(pack_allowed_refs(pers))
+        selection = _as_dict(pers.get("sphere_selection"))
+        for row in _as_list(selection.get("ranked_spheres")):
+            _add_pack_item(allowed, row)
     # Soft allow common chorus tokens
     allowed.update({"astrology", "natal", "conflict", "day_card", "day_number"})
     return {a for a in allowed if a}
@@ -1119,12 +1262,6 @@ def call_day_scenario_native_llm_c1(
     if not isinstance(interp, dict):
         interp = {}
 
-    allowed = collect_allowed_evidence_ids(
-        interpretation=interp,
-        ritual_context=ritual_context,
-        celestial_events=celestial_events,
-    )
-
     pers_pack = build_personalization_evidence_pack_c33(interp)
     from todayflow_backend.services.day_scenario_sphere_selection_c33b import (
         attach_sphere_selection_to_pack,
@@ -1147,6 +1284,19 @@ def call_day_scenario_native_llm_c1(
     )
     has_natal_evidence = str(pers_pack.get("evidence_depth") or "") == DEPTH_DEEP
 
+    foundation = (
+        _as_dict(interp.get("day_foundation"))
+        or _as_dict(user_json.get("daily_foundation"))
+        or _as_dict(user_json.get("day_foundation"))
+    )
+    allowed = collect_allowed_evidence_ids(
+        interpretation=interp,
+        ritual_context=ritual_context,
+        celestial_events=celestial_events,
+        personalization_pack=pers_pack,
+        day_foundation=foundation,
+    )
+
     from todayflow_backend.services.day_scenario_dramaturgy_brief_c4 import (
         build_day_dramaturgy_brief_c4,
         format_native_user_message_c4,
@@ -1158,6 +1308,11 @@ def call_day_scenario_native_llm_c1(
         ritual_context=ritual,
         personalization_pack=pers_pack,
     )
+    prefer_ids = [str(r.get("id") or "") for r in _as_list(brief.get("must_dramatize")) if isinstance(r, dict)]
+    prefer_ids.extend(
+        str(r.get("id") or "") for r in _as_list(brief.get("supporting_facts")) if isinstance(r, dict)
+    )
+    brief["allowed_evidence_ids"] = brief_cite_list(allowed, prefer=prefer_ids)
 
     # Bounded LLM input: brief first (protected); slim interpretation; no raw day_personal
     llm_payload = dict(user_json) if isinstance(user_json, dict) else {}
@@ -1247,6 +1402,10 @@ def call_day_scenario_native_llm_c1(
             errors_local = list(errors_local) + [f"legacy_keys:{','.join(legacy_raw)}"]
         hard_errors = [e for e in errors_local if is_hard_native_validate_error(e)]
         if hard_errors:
+            if any(str(e).startswith("unknown_evidence:") for e in hard_errors):
+                return None, format_unknown_evidence_retry_feedback(
+                    hard_errors, allowed_evidence_ids=allowed
+                )
             return None, ";".join(hard_errors[:8])
         editorial_local = run_editorial_quality_gate_c31(
             normalized_local,

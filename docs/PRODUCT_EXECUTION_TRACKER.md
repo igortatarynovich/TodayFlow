@@ -104,7 +104,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-23):** **Native C1 editorial gate calibration 1.3.117 LOCKED** (prompt c5.1 · gate retry feedback · prod matrix 2026-08-23). **Native C1 I0 generation split 1.3.116 LOCKED** (Global + Personal overlay). **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
+**NOW (FOUNDATION, 2026-08-24):** **Native C1 evidence pack binding 1.3.118 LOCKED** (`unknown_evidence` aliases for foundation/events pack; gates unchanged). **Native C1 editorial gate calibration 1.3.117 LOCKED** (prompt c5.1 · gate retry feedback · prod matrix 2026-08-23). **Native C1 I0 generation split 1.3.116 LOCKED** (Global + Personal overlay). **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
@@ -287,6 +287,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — Today 1.3.118 Native C1 evidence pack binding (2026-08-24)
+
+- **SoT before:** `collect_allowed_evidence_ids` missed string `ranked_drivers`/`ambient` and foundation nest-path cites (`ev.foundation.lunar.{beat_id}`). Thin-profile Global (user 4 / gen 1092) failed hard `unknown_evidence` after LLM. Editorial calibration 1.3.117 left this out of scope.
+- **SoT after:** **Native C1 Evidence Pack Binding V1** — allowlist binds events pack + foundation beat aliases + interpretation evidence + personalization pack refs. Brief lists canonical ids. `unknown_evidence` still rejects invented ids. Prompt `day-scenario-native-c5.1` unchanged. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — force rebuild / refresh picks up binding
+- **Canon updated?** yes — `docs/today/NATIVE_C1_EVIDENCE_PACK_BINDING_V1.md` · tracker 1.3.118
+- **Backward compatible?** yes — same hard marker; closed set larger
 
 ## Architecture impact — Today 1.3.117 Native C1 editorial gate calibration (2026-08-23)
 
@@ -2342,6 +2351,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-24 | Today / Native C1 | **1.3.118 evidence pack binding** | **LOCKED** | `unknown_evidence` allowlist = events pack (string ranked_drivers) + foundation cite aliases (`ev.foundation.lunar.*` gen 1092) + interp evidence + pers pack. Gate not weakened. Prompt c5.1. [NATIVE_C1_EVIDENCE_PACK_BINDING_V1](./today/NATIVE_C1_EVIDENCE_PACK_BINDING_V1.md).
 - 2026-08-18 | Ops / LLM | **AI COGS llm_usage_v1** | **CODE** | Per-request feature/model/tokens/cost + operation_id/trigger/retry. Billed output does not double-count reasoning. Report: feature×trigger×model×retry_reason + top-20 ops. Do not switch model until that report. Canon: LLM_QUALITY AI COGS · AMLL token fields 🟡.
 - 2026-08-17 | Brand / Copy | **Landing copy: three trust levels** | **CODE** | Точность / глубина / человечность as pillar kickers. Locked H1 unchanged. Rejected: «наука», «не алгоритм», «построить карту» as primary. [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.3.
 - 2026-08-17 | Brand / Copy | **Trust Layer on landing + ads brief** | **CODE** | Hero `trustLine` · `#trust` three pillars · footer · [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.1 §6 ads. No Horizons / no NASA endorsement / no finished IL catalog. Next = about/press if needed.
