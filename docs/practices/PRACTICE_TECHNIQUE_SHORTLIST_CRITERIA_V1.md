@@ -12,8 +12,7 @@
 **Это не:** список книг · выбранные loci · canonical technique · аттестация Content Item · открытие `shortlist_status`.
 
 `technique_canon_v1.json` остаётся **пустым**.  
-`technique_landscape_v1.json`: все `shortlist_status = not_opened`, `shortlist_opened = false`.  
-Принятие этого файла **не** открывает shortlist. Открытие — отдельный named pass, который уже обязан применять эти гейты.
+`technique_landscape_v1.json`: `shortlist_opened = false`. Criteria **не** открывает shortlist. Opening = [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) (vertical slice).
 
 ---
 
@@ -44,7 +43,7 @@ Parent: quality × independence × relevance к составляющей × lega
 
 ## 1. Порядок после этого файла
 
-Shortlist **ещё закрыт**. Когда отдельный pass его откроет:
+Criteria **не** открывает корпус. Shortlist V1 открыл **одну** семью:
 
 ```text
 candidate_family
@@ -176,7 +175,7 @@ SEO, viral tactical, manifestation deck, LLM — вне предпочтения
 
 ## 6. Запрещено
 
-- Менять `shortlist_status` на что-либо кроме `not_opened` в этом pass.
+- Менять `shortlist_status` на всех семьях сразу. Slice — один family_id.
 - Писать `technique_canon_v1.json`.
 - Ставить `technique_id` на Content Item.
 - Подбирать критерии под уже найденный удобный источник.
@@ -188,9 +187,9 @@ SEO, viral tactical, manifestation deck, LLM — вне предпочтения
 
 ## 7. Что дальше
 
-1. Criteria V1 стоит. Shortlist **закрыт**.
-2. Следующий named pass: **shortlist by family** — кандидаты loci под гейты C1–C9. Приоритет: семьи с probes, особенно четыре различия landscape §4, без схлопывания.
-3. Потом selected loci → ingest paraphrase → extracted → … → canonical/rejected.
+1. Criteria V1 стоит. Full shortlist **закрыт**.
+2. Vertical slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md).
+3. Потом selected loci → ingest paraphrase **или** следующая семья. Не hunt ISBN под type.
 4. `technique_id` — на canonical.
 
 ---
@@ -199,4 +198,5 @@ SEO, viral tactical, manifestation deck, LLM — вне предпочтения
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Shortlist V1 vertical slice opened one family; this file still does not open the corpus |
 | 2026-08-25 | v1.0 ACCEPTED — family eligibility gates C1–C9; shortlist remains closed; technique_id only at canonical |

@@ -16,8 +16,9 @@
 | Документ | Роль |
 |----------|------|
 | [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) | **SoT происхождения техники.** Source → canonical technique → item. LLM не источник метода. |
-| [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) | **Research landscape** (parent 5–7): семьи методов по class; shortlist закрыт; canon пуст. |
-| [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) | **Допуск к shortlist** (parent 8): гейты C1–C9. Shortlist не открыт. |
+| [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) | **Research landscape** (parent 5–7): семьи методов по class; full shortlist закрыт; canon пуст. |
+| [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) | **Допуск к shortlist** (parent 8): гейты C1–C9. Corpus не открыт. |
+| [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) | **Shortlist** (parent 9): vertical slice одной семьи; selected ≠ canon. |
 | [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | Coverage-first fill. **Frozen** pending technique canon. Meaning не знает item_id / technique_id. |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | Need/format чипы и цикл сессии. Need ≠ type. Format ≠ type. |
 | [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md) §2.5 · §2.8 | Куда кладётся Machine + Content. P2 fill ещё впереди. |
@@ -68,7 +69,7 @@ candidate_family → shortlist candidates → selected loci
   → canonical | rejected → Content Item (technique_id only if canonical)
 ```
 
-Shortlist сейчас закрыт. Criteria V1 задаёт допуск семьи, не корпус.
+Shortlist: одна семья открыта как slice ([PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md)); Criteria V1 задаёт допуск, не корпус.
 
 **Продуктовая выдача:**
 
@@ -486,7 +487,7 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 ## 14. Что дальше
 
-1. **Criteria** — [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md). Затем shortlist by family. Не новые LLM items. `technique_canon_v1.json` пуст. `technique_id` только после canonical.
+1. **Shortlist V1** — [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Дальше: следующая семья или ingest selected loci `equal_count_breath`. Не новые LLM items. `technique_canon_v1.json` пуст. `technique_id` только после canonical.
 2. Coverage-first архитектура (26 cells, type spine) стоит; fill **frozen**. Audio vs text отменён как next step.
 3. Retrieval runtime **после** canonical techniques + P0 coverage. Meaning по-прежнему без `item_id` / `technique_id`.
 4. Density (P1) и remap legacy `CONTENT/practices/*.json` — только как expressions канона, не вместо provenance.

@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.2 (2026-08-25).  
+**Версия:** 1.3 (2026-08-25).  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (шаги 1–9 до ingest).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -9,7 +9,8 @@
 **Fill freeze:** [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md).  
 **Machine:** [`technique_canon_contract_v1.json`](../../DATA/reference/practice/technique_canon_contract_v1.json) · [`technique_canon_v1.json`](../../DATA/reference/practice/technique_canon_v1.json) (empty).  
 **Landscape (parent 5–7):** [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) · [`technique_landscape_v1.json`](../../DATA/reference/practice/technique_landscape_v1.json).  
-**Shortlist criteria (parent 8):** [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) · [`technique_shortlist_criteria_v1.json`](../../DATA/reference/practice/technique_shortlist_criteria_v1.json). Shortlist **not opened**.
+**Shortlist criteria (parent 8):** [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) · [`technique_shortlist_criteria_v1.json`](../../DATA/reference/practice/technique_shortlist_criteria_v1.json).  
+**Shortlist (parent 9, vertical slice):** [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) · [`technique_shortlist_v1.json`](../../DATA/reference/practice/technique_shortlist_v1.json). Full corpus **not opened**.
 
 **Это:** откуда берётся *техника*; как она становится канонической; чем Content Item отличается от канона.  
 **Это не:** экран `/practices` · Meaning дня · медицинский протокол · разрешение копировать чужой текст · разрешение заявлять efficacy.
@@ -272,9 +273,9 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 ## 11. Что дальше
 
-1. Landscape + Criteria V1 приняты. Shortlist **не открыт**.
-2. Следующий named pass: shortlist **по семье** под C1–C9. Не hunt ISBN под type.
-3. Потом selected loci → ingest paraphrase → extracted → normalization → safety review → canonical/rejected.
+1. Landscape + Criteria V1 приняты. Shortlist V1 = **один** family-slice (`equal_count_breath`). Canon пуст.
+2. Следующий named pass: следующая семья тем же процессом **или** ingest paraphrase selected loci этой семьи. Не hunt ISBN под type.
+3. Потом extracted → normalization → safety review → canonical/rejected.
 4. `technique_id` на probe — только после canonical.
 5. Затем expressions (5 min / audio) от канона, не от LLM-seed.
 
@@ -286,6 +287,7 @@ Registry сейчас **пуст**. Это правильно.
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | v1.3 — Shortlist V1 vertical slice; selected ≠ canonical; technique_id still only at canonical |
 | 2026-08-25 | v1.2 — Criteria V1; pipeline family→loci→canonical; shortlist still closed; technique_id only at canonical |
 | 2026-08-25 | v1.1 — next named pass = landscape ([PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md)); shortlist still closed |
 | 2026-08-25 | v1.0 ACCEPTED — Canonical Technique слой; existence ≠ efficacy; LLM = formulation; fill frozen; 11 probes gap-reviewed, not ingested |

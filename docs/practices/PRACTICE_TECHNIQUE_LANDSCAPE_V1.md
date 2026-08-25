@@ -1,7 +1,7 @@
 # Practice Technique Landscape v1
 
-**Статус:** `ACCEPTED` — research ledger поля техник. **Не** technique canon. **Не** shortlist.  
-**Версия:** 1.0 (2026-08-25).  
+**Статус:** `ACCEPTED` — research ledger поля техник. **Не** technique canon. Full shortlist **не** открыт.  
+**Версия:** 1.1 (2026-08-25) — vertical slice pointer.  
 **Владелец:** Product + Research.  
 **Parent order:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) шаги 5–7.  
 **Provenance:** [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md).  
@@ -11,7 +11,7 @@
 **Это:** какие устойчивые *семейства методов* существуют в поле; какими **типами источников** они описываются; какие kernel / bounds / variants надо различать до shortlist.  
 **Это не:** корпус авторов · ingest · `technique_canon_v1.json` · efficacy · разрешение писать Content Items.
 
-`technique_canon_v1.json` остаётся **пустым**. Shortlist **не открыт**.
+`technique_canon_v1.json` остаётся **пустым**. Full shortlist **не открыт**. Один family-slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md).
 
 ---
 
@@ -30,10 +30,10 @@
 
 1. **Семейство ≠ type ≠ item.** Type — код taxonomy. Family — устойчивый метод в поле. Item — наша формулировка. Один type может не иметь семьи; одна семья может покрывать несколько types.
 2. **Тип источника, не фамилия.** `source_families[]` из provenance §4. Запрещено lock авторов / обязательных томов.
-3. **Карта поля, не корпус.** Ledger не делает семью канонической. `shortlist_status = not_opened` на каждой строке.
+3. **Карта поля, не корпус.** Ledger не делает семью канонической. По умолчанию `shortlist_status = not_opened`. Shortlist V1 может пометить **ровно одну** семью `sliced`.
 4. **Не схлопывать соседние методы.** PMR ≠ informal somatic release. Values self-affirmation ≠ coping statement. Sleep window rule ≠ CBT-I. Forceful pranayama ≠ «короткий выдох».
 5. **Существование семьи ≠ efficacy.** `claim_risk` помечает, *где продукт обычно врёт*, не разрешает claims.
-6. **Выход не в technique canon.** Criteria V1 ([PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md), parent шаг 8) задаёт допуск семьи. Shortlist в этом файле **остаётся закрыт**.
+6. **Выход не в technique canon.** Criteria V1 ([PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md), parent шаг 8) задаёт допуск. Shortlist корпуса в этом файле **не** открывается; slice живёт в [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md).
 
 Parent mapping: шаги 1–4 (предмет, границы, составляющие) уже в taxonomy + provenance §3. Этот файл = шаги 5–7.
 
@@ -54,7 +54,7 @@ Parent mapping: шаги 1–4 (предмет, границы, составля
 | `source_families[]` | классы текстов, не авторы |
 | `claim_risk` | где продукт чаще всего подменяет construct или обещает исход |
 | `probe_links[]` | architecture-probe `item_id`, если payload попал в эту семью |
-| `shortlist_status` | этот pass: всегда `not_opened` |
+| `shortlist_status` | `not_opened` \| `sliced` (не более одной семьи) |
 
 `claim_risk`: `none_until_ingest` · `product_only` · `likely_invention` · `construct_mismatch` · `family_collapse` · `medical_protocol_bleed` · `manifestation` · `efficacy_bleed`
 
@@ -214,7 +214,7 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 ## 6. Запрещено
 
 - Писать строки в `technique_canon_v1.json`.
-- Открывать shortlist или фиксировать авторов / ISBN.
+- Открывать **все** семьи сразу или фиксировать авторов / ISBN как SoT семьи.
 - Считать семью каноном, потому что type так называется.
 - Мапить `energizing_breath` → forceful pranayama.
 - Мапить `capability` → values self-affirmation.
@@ -226,9 +226,9 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 
 ## 7. Что дальше
 
-1. Landscape стоит. Criteria V1 принят. Shortlist **закрыт** (`shortlist_status = not_opened`).
-2. Следующий named pass: **shortlist by family** под гейты C1–C9. Не «источник для type». Приоритет — семьи с probes, четыре различия §4.
-3. Потом selected loci → ingest paraphrase → extracted → … → canonical/rejected.
+1. Landscape стоит. Criteria V1 принят. Full shortlist **закрыт** (`shortlist_opened = false`).
+2. Vertical slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) — только `equal_count_breath`.
+3. Следующий named pass: **следующая семья тем же процессом** или ingest paraphrase **только** selected loci этой семьи. Не «источник для type».
 4. `technique_id` — только на canonical.
 
 ---
@@ -237,5 +237,6 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | v1.1 — vertical slice pointer; `equal_count_breath` may be `sliced`; `official_health` added to that family's source_families; canon still empty |
 | 2026-08-25 | Criteria V1 accepted; shortlist still closed; next = shortlist by family |
 | 2026-08-25 | v1.0 ACCEPTED — four class maps; ledger families; shortlist closed; four probe distinctions locked as research splits, not canon |

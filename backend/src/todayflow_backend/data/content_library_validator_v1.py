@@ -411,7 +411,7 @@ def validate_technique_landscape_v1(
     if landscape.get("contract_version") != "technique_landscape_v1":
         errors.append("invalid technique landscape contract_version")
     if landscape.get("shortlist_opened") is not False:
-        errors.append("shortlist_opened must be false")
+        errors.append("shortlist_opened must be false (full corpus still closed)")
     if landscape.get("writes_technique_canon") is not False:
         errors.append("writes_technique_canon must be false")
     if landscape.get("criteria_canon") not in (
@@ -419,6 +419,20 @@ def validate_technique_landscape_v1(
         "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1",
     ):
         errors.append("landscape.criteria_canon must point at Criteria V1 or be absent")
+    shortlist_mode = landscape.get("shortlist_mode")
+    if shortlist_mode not in (None, "closed", "vertical_slice"):
+        errors.append("shortlist_mode must be closed or vertical_slice")
+    slice_family = landscape.get("shortlist_slice_family")
+    if shortlist_mode == "vertical_slice":
+        if not isinstance(slice_family, str) or not slice_family.startswith("family."):
+            errors.append("vertical_slice requires shortlist_slice_family")
+        if landscape.get("shortlist_canon") not in (
+            None,
+            "PRACTICE_TECHNIQUE_SHORTLIST_V1",
+        ):
+            errors.append("landscape.shortlist_canon must point at Shortlist V1 or be absent")
+    elif slice_family not in (None, ""):
+        errors.append("shortlist_slice_family only allowed with vertical_slice")
     families = landscape.get("families")
     if not isinstance(families, list) or not families:
         errors.append("families must be non-empty list")
@@ -435,6 +449,7 @@ def validate_technique_landscape_v1(
 
     seen_ids: set[str] = set()
     classes_seen: set[str] = set()
+    sliced_ids: list[str] = []
     types_by_family: dict[str, set[str]] = {}
     for i, row in enumerate(families):
         prefix = f"family[{i}]"
@@ -456,8 +471,11 @@ def validate_technique_landscape_v1(
             errors.append(f"{prefix}: invalid content_class")
         else:
             classes_seen.add(str(content_class))
-        if row.get("shortlist_status") != "not_opened":
-            errors.append(f"{prefix}: shortlist_status must be not_opened")
+        status = row.get("shortlist_status")
+        if status not in ("not_opened", "sliced"):
+            errors.append(f"{prefix}: shortlist_status must be not_opened or sliced")
+        elif status == "sliced":
+            sliced_ids.append(str(family_id))
         if row.get("claim_risk") not in ALLOWED_CLAIM_RISK:
             errors.append(f"{prefix}: invalid claim_risk")
         if not isinstance(row.get("candidate_family"), str) or not str(
@@ -517,6 +535,14 @@ def validate_technique_landscape_v1(
     if _types("family.affirmation.values_self_affirmation"):
         errors.append("values_self_affirmation candidate_types must stay empty until a type exists")
 
+    if shortlist_mode == "vertical_slice":
+        if len(sliced_ids) != 1:
+            errors.append("vertical_slice requires exactly one sliced family")
+        elif sliced_ids[0] != slice_family:
+            errors.append("sliced family must equal shortlist_slice_family")
+    elif sliced_ids:
+        errors.append("sliced families require shortlist_mode=vertical_slice")
+
     return errors
 
 
@@ -559,6 +585,145 @@ def validate_technique_shortlist_criteria_v1(criteria: dict[str, Any]) -> list[s
     ids = [g.get("id") for g in gates if isinstance(g, dict)]
     if tuple(ids) != CRITERIA_GATE_IDS:
         errors.append(f"gates must be {CRITERIA_GATE_IDS} in order, got {tuple(ids)}")
+    return errors
+
+
+SHORTLIST_DECISIONS = frozenset({"selected", "supporting", "rejected"})
+SHORTLIST_GATE_RESULTS = frozenset(
+    {"pass", "fail", "n_a", "unknown", "preference_match", "preference_weak"}
+)
+SHORTLIST_HARD_GATES = ("C1", "C2", "C3", "C4", "C5", "C6", "C8")
+SHORTLIST_SOURCE_REQUIRED = (
+    "source_id",
+    "source_family",
+    "bibliographic_identity",
+    "authority_provenance",
+    "locus",
+    "gates",
+    "extractable",
+    "conflicts_unknowns",
+    "research_function",
+    "selection_decision",
+    "rejection_reason",
+)
+SLICE_FAMILY_V1 = "family.practice.equal_count_breath"
+
+
+def validate_technique_shortlist_v1(shortlist: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if shortlist.get("contract_version") != "technique_shortlist_v1":
+        errors.append("invalid technique shortlist contract_version")
+    if shortlist.get("writes_technique_canon") is not False:
+        errors.append("shortlist must not write technique canon")
+    if shortlist.get("technique_id_allowed") is not False:
+        errors.append("shortlist must not allow technique_id")
+    if shortlist.get("unit_of_shortlist") != "candidate_family":
+        errors.append("unit_of_shortlist must be candidate_family")
+    if shortlist.get("selected_means") != "allowed_for_next_ingest_pass":
+        errors.append("selected_means must be allowed_for_next_ingest_pass")
+    if shortlist.get("boundary_held") != (
+        "landscape_candidate_family_to_selected_loci_not_canonical"
+    ):
+        errors.append("boundary_held must record family→loci, not canonical")
+    families = shortlist.get("families")
+    if not isinstance(families, list) or len(families) != 1:
+        errors.append("V1 shortlist must contain exactly one family slice")
+        return errors
+    row = families[0]
+    if not isinstance(row, dict):
+        errors.append("family slice must be object")
+        return errors
+    if row.get("family_id") != SLICE_FAMILY_V1:
+        errors.append(f"V1 slice family must be {SLICE_FAMILY_V1}")
+    if row.get("candidate_family") in (None, ""):
+        errors.append("candidate_family empty")
+    hypothesis = row.get("expression_hypothesis")
+    if not isinstance(hypothesis, dict):
+        errors.append("expression_hypothesis must be object")
+    else:
+        if hypothesis.get("type") != "box_breathing":
+            errors.append("equal_count expression hypothesis type must be box_breathing")
+        if hypothesis.get("status") != "not_attested":
+            errors.append("expression hypothesis must stay not_attested")
+        if hypothesis.get("probe_item_id") != "practice.box_breathing.001":
+            errors.append("expression hypothesis must name the box_breathing probe")
+    conflicts = row.get("conflicts")
+    if not isinstance(conflicts, list) or len(conflicts) < 2:
+        errors.append("family must record unresolved conflicts (not averaged)")
+    else:
+        conflict_ids = [c.get("id") for c in conflicts if isinstance(c, dict)]
+        if "conflict.phase_count" not in conflict_ids:
+            errors.append("must record three-phase vs four-phase conflict")
+    sources = row.get("candidate_sources")
+    if not isinstance(sources, list) or not sources:
+        errors.append("candidate_sources must be non-empty list")
+        return errors
+    seen_sources: set[str] = set()
+    selected_ids: list[str] = []
+    for i, src in enumerate(sources):
+        prefix = f"source[{i}]"
+        if not isinstance(src, dict):
+            errors.append(f"{prefix}: must be object")
+            continue
+        for key in SHORTLIST_SOURCE_REQUIRED:
+            if key not in src:
+                errors.append(f"{prefix}: missing {key}")
+        source_id = src.get("source_id")
+        if not isinstance(source_id, str) or not source_id.startswith("src."):
+            errors.append(f"{prefix}: source_id must start with src.")
+        elif source_id in seen_sources:
+            errors.append(f"{prefix}: duplicate source_id")
+        else:
+            seen_sources.add(source_id)
+        decision = src.get("selection_decision")
+        if decision not in SHORTLIST_DECISIONS:
+            errors.append(f"{prefix}: invalid selection_decision")
+        reason = src.get("rejection_reason")
+        if decision == "selected":
+            if reason is not None:
+                errors.append(f"{prefix}: selected must have rejection_reason null")
+            selected_ids.append(str(source_id))
+        elif decision == "rejected":
+            if not isinstance(reason, str) or not reason.strip():
+                errors.append(f"{prefix}: rejected must have rejection_reason")
+        source_family = src.get("source_family")
+        if decision in {"selected", "supporting"}:
+            if source_family not in ALLOWED_SOURCE_FAMILY:
+                errors.append(f"{prefix}: source_family must be a provenance class")
+        elif not isinstance(source_family, str) or not source_family.strip():
+            errors.append(f"{prefix}: source_family empty")
+        if not isinstance(src.get("bibliographic_identity"), dict):
+            errors.append(f"{prefix}: bibliographic_identity must be object")
+        if not isinstance(src.get("locus"), str) or not str(src.get("locus") or "").strip():
+            errors.append(f"{prefix}: locus empty")
+        gates = src.get("gates")
+        if not isinstance(gates, dict):
+            errors.append(f"{prefix}: gates must be object")
+        else:
+            if tuple(gates.keys()) != CRITERIA_GATE_IDS:
+                errors.append(f"{prefix}: gates must be C1–C9")
+            for gid, body in gates.items():
+                if not isinstance(body, dict) or body.get("result") not in SHORTLIST_GATE_RESULTS:
+                    errors.append(f"{prefix}.{gid}: invalid gate result")
+            if decision == "selected":
+                for gid in SHORTLIST_HARD_GATES:
+                    result = (gates.get(gid) or {}).get("result")
+                    if result != "pass":
+                        errors.append(f"{prefix}: selected requires {gid}=pass")
+        extractable = src.get("extractable")
+        if not isinstance(extractable, dict):
+            errors.append(f"{prefix}: extractable must be object")
+        else:
+            for key in ("mechanism", "kernel", "bounds", "safety", "variants"):
+                if key not in extractable:
+                    errors.append(f"{prefix}: extractable missing {key}")
+    listed = row.get("selected_loci")
+    if not isinstance(listed, list) or [x for x in listed if not isinstance(x, str)]:
+        errors.append("selected_loci must be string list")
+    elif listed != selected_ids:
+        errors.append("selected_loci must match sources with selection_decision=selected")
+    if len(selected_ids) < 2:
+        errors.append("slice must select more than one locus (kernel vs conflict/safety)")
     return errors
 
 

@@ -15,6 +15,7 @@ from todayflow_backend.data.content_library_validator_v1 import (
     validate_technique_canon_v1,
     validate_technique_landscape_v1,
     validate_technique_shortlist_criteria_v1,
+    validate_technique_shortlist_v1,
 )
 from todayflow_backend.data.reference_machine_loader import DATA_ROOT
 
@@ -39,11 +40,19 @@ LANDSCAPE_CANON = (
     / "PRACTICE_TECHNIQUE_LANDSCAPE_V1.md"
 )
 CRITERIA_PATH = PRACTICE_REF / "technique_shortlist_criteria_v1.json"
+SHORTLIST_PATH = PRACTICE_REF / "technique_shortlist_v1.json"
+SHORTLIST_CONTRACT_PATH = PRACTICE_REF / "technique_shortlist_contract_v1.json"
 CRITERIA_CANON = (
     Path(__file__).resolve().parents[2]
     / "docs"
     / "practices"
     / "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md"
+)
+SHORTLIST_CANON = (
+    Path(__file__).resolve().parents[2]
+    / "docs"
+    / "practices"
+    / "PRACTICE_TECHNIQUE_SHORTLIST_V1.md"
 )
 
 SEED_1_ID = "practice.sensory_grounding.001"
@@ -158,7 +167,7 @@ def test_fill_frozen_provisional_probes() -> None:
     assert library["fill_frozen"] is True
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is True
-    assert coverage["next_pass"] == "technique_shortlist_criteria"
+    assert coverage["next_pass"] == "technique_shortlist_next_family_or_ingest"
     probes = library["architecture_probe_item_ids"]
     assert probes == [
         SEED_1_ID,
@@ -196,11 +205,14 @@ def test_provenance_paths_exist() -> None:
     assert PROVENANCE_CANON.is_file()
     assert LANDSCAPE_CANON.is_file()
     assert CRITERIA_CANON.is_file()
+    assert SHORTLIST_CANON.is_file()
     assert TECHNIQUE_PATH.is_file()
     assert TECHNIQUE_CONTRACT_PATH.is_file()
     assert LANDSCAPE_PATH.is_file()
     assert LANDSCAPE_CONTRACT_PATH.is_file()
     assert CRITERIA_PATH.is_file()
+    assert SHORTLIST_PATH.is_file()
+    assert SHORTLIST_CONTRACT_PATH.is_file()
 
 
 def test_technique_landscape_v1_splits_probe_families() -> None:
@@ -209,13 +221,21 @@ def test_technique_landscape_v1_splits_probe_families() -> None:
     assert validate_technique_landscape_v1(landscape, vocab=vocab) == []
     assert landscape["shortlist_opened"] is False
     assert landscape["writes_technique_canon"] is False
+    assert landscape["shortlist_mode"] == "vertical_slice"
+    assert landscape["shortlist_slice_family"] == "family.practice.equal_count_breath"
     assert _techniques()["techniques"] == []
     classes = {row["content_class"] for row in landscape["families"]}
     assert classes == {"practice", "meditation", "affirmation", "discipline"}
-    assert all(row["shortlist_status"] == "not_opened" for row in landscape["families"])
-    assert landscape["criteria_canon"] == "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1"
-    assert landscape["next_named_pass"] == "shortlist_by_family"
     by_id = {row["family_id"]: row for row in landscape["families"]}
+    assert by_id["family.practice.equal_count_breath"]["shortlist_status"] == "sliced"
+    assert all(
+        row["shortlist_status"] == "not_opened"
+        for row in landscape["families"]
+        if row["family_id"] != "family.practice.equal_count_breath"
+    )
+    assert landscape["criteria_canon"] == "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1"
+    assert landscape["shortlist_canon"] == "PRACTICE_TECHNIQUE_SHORTLIST_V1"
+    assert landscape["next_named_pass"] == "next_family_slice_or_equal_count_ingest"
     assert "energizing_breath" in by_id["family.practice.unattested_short_exhale"]["candidate_types"]
     assert by_id["family.practice.activating_forceful_breath"]["candidate_types"] == []
     assert by_id["family.practice.unattested_short_exhale"]["likely_disposition"] == "reject_or_remap"
@@ -239,7 +259,44 @@ def test_shortlist_criteria_v1_does_not_open_shortlist() -> None:
     assert _techniques()["techniques"] == []
     landscape = load_json(LANDSCAPE_PATH)
     assert landscape["shortlist_opened"] is False
-    assert all(row["shortlist_status"] == "not_opened" for row in landscape["families"])
+    assert criteria["shortlist_opened"] is False
+
+
+def test_technique_shortlist_v1_equal_count_slice_not_canon() -> None:
+    shortlist = load_json(SHORTLIST_PATH)
+    landscape = load_json(LANDSCAPE_PATH)
+    assert validate_technique_shortlist_v1(shortlist) == []
+    assert shortlist["writes_technique_canon"] is False
+    assert shortlist["technique_id_allowed"] is False
+    assert shortlist["selected_means"] == "allowed_for_next_ingest_pass"
+    assert (
+        shortlist["boundary_held"]
+        == "landscape_candidate_family_to_selected_loci_not_canonical"
+    )
+    family = shortlist["families"][0]
+    assert family["family_id"] == "family.practice.equal_count_breath"
+    assert family["expression_hypothesis"]["status"] == "not_attested"
+    assert family["expression_hypothesis"]["type"] == "box_breathing"
+    decisions = {src["source_id"]: src["selection_decision"] for src in family["candidate_sources"]}
+    assert decisions["src.bhf.heart_matters.box"] == "selected"
+    assert decisions["src.nhs.sfh.box_leaflet"] == "selected"
+    assert decisions["src.nhs.newcastle.square"] == "selected"
+    assert decisions["src.clevelandclinic.box"] == "supporting"
+    assert decisions["src.iyengar.light_on_pranayama.ch18"] == "supporting"
+    assert decisions["src.harvard.tactical_breather"] == "rejected"
+    assert family["selected_loci"] == [
+        "src.bhf.heart_matters.box",
+        "src.nhs.sfh.box_leaflet",
+        "src.nhs.newcastle.square",
+    ]
+    conflict_ids = {c["id"] for c in family["conflicts"]}
+    assert "conflict.phase_count" in conflict_ids
+    assert "conflict.holds_as_kernel_vs_later_ratio" in conflict_ids
+    assert landscape["shortlist_slice_family"] == family["family_id"]
+    assert _techniques()["techniques"] == []
+    _vocab, library, _coverage = _load()
+    for item in library["items"]:
+        assert "technique_id" not in item["identity"]
 
 
 def test_seed_pass_closes_exactly_one_cell_per_item() -> None:
@@ -1009,5 +1066,6 @@ def test_repo_paths_exist() -> None:
         TECHNIQUE_PATH,
         LANDSCAPE_PATH,
         CRITERIA_PATH,
+        SHORTLIST_PATH,
     ):
         assert Path(path).is_file()

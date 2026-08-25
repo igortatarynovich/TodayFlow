@@ -1,14 +1,17 @@
 {
   "contract_version": "technique_landscape_v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "landscape",
-  "semantic_version": "practice-technique-landscape-v1.0",
-  "description": "Research landscape of technique families. Not canon. Shortlist closed. Canon: docs/practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md",
+  "semantic_version": "practice-technique-landscape-v1.1",
+  "description": "Research landscape of technique families. Not canon. Full shortlist not opened. One vertical slice may be sliced. Canon: docs/practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md",
   "shortlist_opened": false,
+  "shortlist_mode": "vertical_slice",
+  "shortlist_slice_family": "family.practice.equal_count_breath",
   "writes_technique_canon": false,
   "parent_steps": "5-7",
   "criteria_canon": "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1",
-  "next_named_pass": "shortlist_by_family",
+  "shortlist_canon": "PRACTICE_TECHNIQUE_SHORTLIST_V1",
+  "next_named_pass": "next_family_slice_or_equal_count_ingest",
   "families": [
     {
       "family_id": "family.practice.slow_paced_breath",
@@ -31,10 +34,10 @@
       "mechanism_shape": "four equal phases including pauses; ratio identity is the kernel",
       "bounds_to_research": ["pause length vs no-pause equal inhale/exhale", "who must not hold breath", "popular tactical packaging is not a source"],
       "variant_axes": ["count length", "cycles", "seated vs standing"],
-      "source_families": ["academic_description", "clinical_psychology", "recognized_school", "tradition_primary"],
+      "source_families": ["academic_description", "clinical_psychology", "recognized_school", "tradition_primary", "official_health"],
       "claim_risk": "efficacy_bleed",
       "probe_links": ["practice.box_breathing.001"],
-      "shortlist_status": "not_opened"
+      "shortlist_status": "sliced"
     },
     {
       "family_id": "family.practice.physiological_sigh",

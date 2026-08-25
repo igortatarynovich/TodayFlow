@@ -1,9 +1,9 @@
 {
   "contract_version": "technique_landscape_contract_v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "accepted",
-  "semantic_version": "practice-technique-landscape-v1.0",
-  "description": "Research landscape of technique families by content_class. Not technique canon. Not shortlist. Canon: docs/practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md",
+  "semantic_version": "practice-technique-landscape-v1.1",
+  "description": "Research landscape of technique families by content_class. Not technique canon. Full shortlist not opened; one family may be sliced. Canon: docs/practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md",
   "parent_steps": "KNOWLEDGE_CORE_RESEARCH_ORDER_V1 steps 5–7",
   "required": [
     "family_id",
@@ -29,11 +29,11 @@
     "source_families": "provenance source_family enum; types of text, not authors",
     "claim_risk": "none_until_ingest | product_only | likely_invention | construct_mismatch | family_collapse | medical_protocol_bleed | manifestation | efficacy_bleed",
     "probe_links": "architecture-probe item_ids whose payload currently sits in this family",
-    "shortlist_status": "this pass: not_opened",
+    "shortlist_status": "not_opened | sliced (at most one family, only when shortlist_mode = vertical_slice)",
     "likely_disposition": "optional research hint: keep_research | reject_or_remap | split_construct | do_not_collapse"
   },
   "invariants": [
-    "shortlist_status is not_opened on every row",
+    "shortlist_opened remains false until a full-corpus shortlist; vertical_slice allows exactly one sliced family",
     "does not write technique_canon_v1",
     "authors are not fields",
     "energizing_breath must not sit on activating_forceful_breath",

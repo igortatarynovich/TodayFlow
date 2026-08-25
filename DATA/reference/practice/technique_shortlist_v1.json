@@ -1,0 +1,386 @@
+{
+  "contract_version": "technique_shortlist_v1",
+  "version": "1.0.0",
+  "status": "vertical_slice",
+  "semantic_version": "practice-technique-shortlist-v1.0",
+  "description": "Parent step 9 vertical slice: equal_count_breath only. Selected = ingest-pass permission. Not technique canon. Canon: docs/practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md",
+  "parent_step": 9,
+  "unit_of_shortlist": "candidate_family",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "selected_means": "allowed_for_next_ingest_pass",
+  "boundary_held": "landscape_candidate_family_to_selected_loci_not_canonical",
+  "accessed": "2026-08-25",
+  "next_named_pass": "next_family_slice_or_equal_count_ingest",
+  "families": [
+    {
+      "family_id": "family.practice.equal_count_breath",
+      "candidate_family": "equal-count / square breathing",
+      "content_class": "practice",
+      "landscape_kernel_unchanged": "four equal phases including pauses; ratio identity is the kernel",
+      "landscape_kernel_note": "This slice does not rewrite the landscape kernel. Tradition locus (NEED_OWNER) may treat holds as later additions. That conflict is recorded, not averaged into a new kernel.",
+      "expression_hypothesis": {
+        "type": "box_breathing",
+        "probe_item_id": "practice.box_breathing.001",
+        "status": "not_attested",
+        "note": "Probe payload (four equal counts including both holds) matches the four-phase patient-education operationalization (BHF, NHS SFH). It does not match Newcastle three-phase square. It is not attested as Iyengar beginner samavrtti. Shortlist does not prove the type."
+      },
+      "candidate_sources": [
+        {
+          "source_id": "src.bhf.heart_matters.box",
+          "source_family": "official_health",
+          "bibliographic_identity": {
+            "publisher": "British Heart Foundation",
+            "series": "Heart Matters",
+            "title": "3 breathing exercises to relieve stress",
+            "url": "https://www.bhf.org.uk/informationsupport/heart-matters-magazine/wellbeing/breathing-exercises",
+            "anchor": "#box",
+            "section": "1. Box breathing"
+          },
+          "authority_provenance": "UK heart-charity patient education. Not a clinical trial. Not a military protocol.",
+          "locus": "Heart Matters wellbeing page, section '1. Box breathing' (public URL, 2026-08-25).",
+          "access": "body_read",
+          "gates": {
+            "C1": {"result": "pass", "note": "Describes four timed phases, not only an outcome."},
+            "C2": {"result": "pass", "note": "Named public URL and section heading."},
+            "C3": {"result": "pass", "note": "'Box' is a four-step shape name. Steps are separable from Navy/tactical branding."},
+            "C4": {"result": "pass", "note": "Hold contraindications are not in this section; marked bounds_unknown. Do not import 4-7-8 notes from a sibling section as box bounds."},
+            "C5": {"result": "pass", "note": "Short public how-to; paraphrase kernel, do not copy page prose."},
+            "C6": {"result": "pass", "note": "Page frames breathing as stress/sleep help. Extract method only; do not ingest benefit claims."},
+            "C7": {"result": "preference_match", "note": "official_health patient education; landscape source_families updated to include this class after the slice."},
+            "C8": {"result": "pass", "note": "Four phases with two holds. Conflict with Newcastle three-phase is family-level, not averaged here."},
+            "C9": {"result": "n_a", "note": "Family is not product_only / likely_invention."}
+          },
+          "extractable": {
+            "mechanism": "equal-count cycle of inhale, hold, exhale, hold",
+            "kernel": "four phases of the same count, including a hold after inhale and a hold after exhale",
+            "bounds": "count commonly illustrated as 4; duration of practice unbounded ('as long as you want'); posture sit/stand/lie",
+            "safety": "bounds_unknown for who must not hold; not stated in this locus",
+            "variants": "count length and posture; mouth used on the illustrated exhale"
+          },
+          "conflicts_unknowns": "Does not decide whether a no-hold equal inhale/exhale is the same family. Does not equate the method with samavrtti or tactical breathing.",
+          "research_function": "kernel_four_phase",
+          "selection_decision": "selected",
+          "rejection_reason": null
+        },
+        {
+          "source_id": "src.nhs.sfh.box_leaflet",
+          "source_family": "clinical_psychology",
+          "bibliographic_identity": {
+            "publisher": "Sherwood Forest Hospitals NHS Foundation Trust",
+            "unit": "Clinical Psychology",
+            "title": "Breathing Exercises",
+            "url": "https://www.sfh-tr.nhs.uk/media/o3fpizwx/breathing-exercises-leaflet.pdf",
+            "section": "BOX BREATHING"
+          },
+          "authority_provenance": "NHS trust clinical-psychology staff leaflet. Chosen because it is easy on a shift, not because an RCT proved it.",
+          "locus": "PDF leaflet, heading BOX BREATHING, plus 'WHAT IF BREATHING EXERCISES DON'T WORK FOR ME?' (2026-08-25).",
+          "access": "body_read",
+          "gates": {
+            "C1": {"result": "pass", "note": "Four equal counts around a box/square visualization."},
+            "C2": {"result": "pass", "note": "Named NHS PDF URL and heading."},
+            "C3": {"result": "pass", "note": "Box visualization is a timing aid, not a brand protocol."},
+            "C4": {"result": "pass", "note": "Dizziness; sit or lie until accustomed; breath-focus may be uncomfortable if breathing-related issues — then grounding instead. Repeat up to four times if comfortable."},
+            "C5": {"result": "pass", "note": "Short staff leaflet; paraphrase, do not copy."},
+            "C6": {"result": "pass", "note": "Overview mentions heart rate / oxygen / anxiety. Extract method and stop-rules only."},
+            "C7": {"result": "preference_match", "note": "clinical_psychology educational text."},
+            "C8": {"result": "pass", "note": "Same four-phase kernel as BHF; does not resolve the three-phase NHS square."},
+            "C9": {"result": "n_a", "note": "Family is not product_only."}
+          },
+          "extractable": {
+            "mechanism": "equal-count four-phase breath timed around a square",
+            "kernel": "inhale 4, hold 4, exhale 4, hold 4",
+            "bounds": "repeat up to four times if comfortable",
+            "safety": "possible dizziness from deeper breathing; sit/lie; if focusing on breath is uncomfortable because of breathing-related issues, another technique may be better",
+            "variants": "trace a phone or notepad as the square"
+          },
+          "conflicts_unknowns": "Does not state medical contraindications of breath-hold beyond dizziness and respiratory discomfort. Not a treatment protocol.",
+          "research_function": "kernel_plus_safety",
+          "selection_decision": "selected",
+          "rejection_reason": null
+        },
+        {
+          "source_id": "src.nhs.newcastle.square",
+          "source_family": "clinical_psychology",
+          "bibliographic_identity": {
+            "publisher": "Newcastle Hospitals NHS Foundation Trust",
+            "unit": "Great North Children's Hospital, Children's Health Psychology",
+            "title": "Coping with panic attacks: Information for children and young people",
+            "url": "https://www.newcastle-hospitals.nhs.uk/services/great-north-childrens-hospital/childrens-health-psychology/resources/panic-attacks-children-young-people/",
+            "section": "Square breathing"
+          },
+          "authority_provenance": "NHS children's health-psychology psychoeducation. Official trust page. Not a product blog.",
+          "locus": "Section 'Square breathing', numbered steps 1–4 (2026-08-25). Same three-phase pattern also appears on the Trust's PICU-coping and brain-fog pages.",
+          "access": "body_read",
+          "gates": {
+            "C1": {"result": "pass", "note": "Inhale 4, hold 4, exhale 4, then repeat. No second hold."},
+            "C2": {"result": "pass", "note": "Named NHS URL and heading."},
+            "C3": {"result": "pass", "note": "'Square' is a slowing aid. Not a tactical brand."},
+            "C4": {"result": "pass", "note": "Hold-breath who-must-not is not stated; marked bounds_unknown. Context is panic psychoeducation for children/young people, not a hold protocol."},
+            "C5": {"result": "pass", "note": "Short public leaflet; paraphrase."},
+            "C6": {"result": "pass", "note": "Page is coping-with-panic education. Do not ingest as treatment of panic disorder."},
+            "C7": {"result": "preference_match", "note": "clinical_psychology official health-system text."},
+            "C8": {"result": "pass", "note": "This locus is the three-phase side of the family conflict. Keep it; do not average with BHF/SFH."},
+            "C9": {"result": "n_a", "note": "Family is not product_only."}
+          },
+          "extractable": {
+            "mechanism": "equal-count inhale, hold, exhale, then repeat",
+            "kernel": "three timed phases; no post-exhale hold in the written steps",
+            "bounds": "repeat until breathing is slower; posture sit/lie/stand",
+            "safety": "bounds_unknown for holds; panic-leaflet context is not a medical contraindication list",
+            "variants": "label 'square breathing' used without the fourth side as a hold"
+          },
+          "conflicts_unknowns": "UK NHS 'square' ≠ always 4-4-4-4. Must not be merged with BHF/SFH into one kernel.",
+          "research_function": "variant_conflict",
+          "selection_decision": "selected",
+          "rejection_reason": null
+        },
+        {
+          "source_id": "src.clevelandclinic.box",
+          "source_family": "official_health",
+          "bibliographic_identity": {
+            "publisher": "Cleveland Clinic",
+            "title": "How Box Breathing Can Help You Destress",
+            "url": "https://health.clevelandclinic.org/box-breathing-benefits",
+            "author_attribution": "Melissa Young, MD",
+            "date": "2021-08-17",
+            "section": "How to do box breathing"
+          },
+          "authority_provenance": "US academic medical-center patient education. Mixes method steps with Navy SEAL packaging and the name sama vritti.",
+          "locus": "Health Essentials article, 'How to do box breathing' numbered steps (2026-08-25).",
+          "access": "body_read",
+          "gates": {
+            "C1": {"result": "pass", "note": "Four equal counts including both holds; 3–4 rounds; do not strain."},
+            "C2": {"result": "pass", "note": "Named public URL and section."},
+            "C3": {"result": "fail", "note": "Page identifies the method as employed by US Navy SEALs and as sama vritti pranayama. Kernel exists but is not separable from that packaging at this locus."},
+            "C4": {"result": "pass", "note": "Stay at comfort, breathe gently, not straining. Who-must-not-hold still bounds_unknown."},
+            "C5": {"result": "pass", "note": "Public how-to; paraphrase if ever used."},
+            "C6": {"result": "pass", "note": "Benefits framing (cortisol, blood pressure, physiology). Do not ingest claims. Decision is supporting, not selected."},
+            "C7": {"result": "preference_weak", "note": "official_health, but identity is packaged as SEAL + yogic name."},
+            "C8": {"result": "pass", "note": "Four-phase same as BHF; naming collapse is a C3 issue, not a phase-count conflict."},
+            "C9": {"result": "n_a", "note": "Family is not product_only."}
+          },
+          "extractable": {
+            "mechanism": "four equal counts with both holds",
+            "kernel": "not used as family identity because of C3 packaging collapse",
+            "bounds": "three to four rounds; comfort, no strain",
+            "safety": "not straining; hold contraindications unknown",
+            "variants": "also names 4x4 / four-square / equal breathing"
+          },
+          "conflicts_unknowns": "Do not take this page as proof that box breathing = sama vritti = Navy SEAL protocol.",
+          "research_function": "supporting_four_phase_with_packaging_flag",
+          "selection_decision": "supporting",
+          "rejection_reason": "C3 packaging collapse (Navy SEAL + sama vritti as identity of the method). Same four-phase pattern is already selected from BHF/SFH."
+        },
+        {
+          "source_id": "src.iyengar.light_on_pranayama.ch18",
+          "source_family": "recognized_school",
+          "bibliographic_identity": {
+            "author": "B.K.S. Iyengar",
+            "title": "Light on Pranayama: The Yogic Art of Breathing",
+            "publisher": "Crossroad",
+            "year": 1981,
+            "isbn": "0-8264-0048-5",
+            "isbn13": "9780826400482",
+            "chapter": "18 Vrtti Pranayama",
+            "locus_hint": "commonly cited around p.118; unread in a licensed copy this pass"
+          },
+          "authority_provenance": "Recognized modern yoga school textbook. Candidate tradition/school locus for equal-ratio breathing. Not product SoT. Not locked as author of the family.",
+          "locus": "Named edition + chapter. Body not legally ingested this pass (NEED_OWNER). Archive.org dumps and wiki quotes are not a legal paraphrase body.",
+          "access": "NEED_OWNER",
+          "gates": {
+            "C1": {"result": "unknown", "note": "Method is expected in the named chapter; this pass did not ingest the licensed body."},
+            "C2": {"result": "fail", "note": "Named but not legally readable for paraphrase until a licensed copy is used. NEED_OWNER."},
+            "C3": {"result": "unknown", "note": "School textbook, not an app brand; kernel vs school packaging unread."},
+            "C4": {"result": "unknown", "note": "Secondary reports of visamavrtti caution are not ingested from wiki."},
+            "C5": {"result": "fail", "note": "Cannot ingest from unauthorized full-text dumps or wiki extracts of the book."},
+            "C6": {"result": "n_a", "note": "Not used as efficacy evidence."},
+            "C7": {"result": "preference_match", "note": "recognized_school / tradition_primary class is on the family's list; still not selected without a legal body."},
+            "C8": {"result": "pass", "note": "Secondary reports (not ingested) that beginner equal in/out precedes 1:1:1:1 are recorded as unresolved conflict with the landscape kernel, not averaged."},
+            "C9": {"result": "n_a", "note": "Family is not product_only."}
+          },
+          "extractable": {
+            "mechanism": "not extracted this pass",
+            "kernel": "not extracted this pass",
+            "bounds": "not extracted this pass",
+            "safety": "not extracted this pass",
+            "variants": "bibliographic existence of a vrtti / equal-ratio chapter"
+          },
+          "conflicts_unknowns": "Unresolved until legal read: whether equal-count family kernel includes holds from the start, or holds are a later ratio. Do not treat Iyengar as proof of type box_breathing.",
+          "research_function": "tradition_existence_NEED_OWNER",
+          "selection_decision": "supporting",
+          "rejection_reason": "C2/C5 NEED_OWNER — named school locus, not selected for ingest until a licensed body is paraphrased."
+        },
+        {
+          "source_id": "src.ijcmph.dalvi.2023.samavritti",
+          "source_family": "academic_description",
+          "bibliographic_identity": {
+            "authors": "Dalvi, M. A.; Afle, G. M.",
+            "year": 2023,
+            "title": "Effect of sama vritti pranayama on intradialytic hypertension in patients with chronic kidney disease: a pilot study",
+            "journal": "International Journal of Community Medicine and Public Health",
+            "volume": "10",
+            "issue": "11",
+            "pages": "4431-4434",
+            "doi": "10.18203/2394-6040.ijcmph20233490",
+            "url": "https://www.ijcmph.com/index.php/ijcmph/article/view/11689"
+          },
+          "authority_provenance": "Small clinical pilot (n=10, dialysis / IDH). Academic methods description, not a product source and not efficacy for the library.",
+          "locus": "Methods: four phases of 4 seconds named samavritti; 6 cycles/session (abstract/PDF record, 2026-08-25).",
+          "access": "abstract_and_methods_record",
+          "gates": {
+            "C1": {"result": "pass", "note": "Methods describe inhale / inner hold / exhale / outer hold of equal duration."},
+            "C2": {"result": "pass", "note": "DOI and journal article."},
+            "C3": {"result": "pass", "note": "Names samavritti as equal four processes; do not collapse this into Navy box branding."},
+            "C4": {"result": "pass", "note": "Population is CKD/IDH in-session; not transferable product bounds. Marked not-for-product."},
+            "C5": {"result": "pass", "note": "Methods paraphrase possible; do not copy the paper."},
+            "C6": {"result": "pass", "note": "BP results are out of scope. Existence of a 4s four-phase operationalization ≠ allowed_claims."},
+            "C7": {"result": "preference_weak", "note": "academic_description class matches; medical-trial context is not a first ingest locus for a consumer library."},
+            "C8": {"result": "pass", "note": "Four-phase 4s operationalization; does not resolve beginner no-hold samavrtti reports."},
+            "C9": {"result": "n_a", "note": "Family is not product_only."}
+          },
+          "extractable": {
+            "mechanism": "equal duration of four breathing processes, operationalized as 4 seconds each in this trial",
+            "kernel": "supporting only — medical-population protocol, not product kernel",
+            "bounds": "6 cycles; not a consumer session recipe",
+            "safety": "dialysis/IDH context is not a product safety list",
+            "variants": "label samavritti used for 4-4-4-4 in this paper"
+          },
+          "conflicts_unknowns": "Do not ingest blood-pressure findings. Do not treat this paper as Iyengar. Do not treat it as proof of type box_breathing.",
+          "research_function": "academic_operationalization_not_product",
+          "selection_decision": "supporting",
+          "rejection_reason": "C6/C7 — methods confirm a 4s four-phase label; trial efficacy and dialysis context are not ingest material for the library."
+        },
+        {
+          "source_id": "src.harvard.tactical_breather",
+          "source_family": "official_health",
+          "bibliographic_identity": {
+            "publisher": "Harvard Health Publishing",
+            "title": "Try this: Take a tactical breather",
+            "url": "https://www.health.harvard.edu/mind-and-mood/try-this-take-a-tactical-breather"
+          },
+          "authority_provenance": "Harvard Health consumer page. Method is identified as tactical breathing used by military and law enforcement.",
+          "locus": "Page body, numbered four-count cycle (search/snippet confirmed 2026-08-25).",
+          "access": "snippet_confirmed",
+          "gates": {
+            "C1": {"result": "pass", "note": "Four-count inhale, hold, exhale, hold is described."},
+            "C2": {"result": "pass", "note": "Named URL."},
+            "C3": {"result": "fail", "note": "Identity of the locus is tactical/military packaging. Landscape bound: popular tactical packaging is not a family source."},
+            "C4": {"result": "n_a", "note": "Not assessed for ingest."},
+            "C5": {"result": "n_a", "note": "Not selected."},
+            "C6": {"result": "fail", "note": "Page sells calm/sleep/pain effects as what tactical breathing does."},
+            "C7": {"result": "fail", "note": "Tactical packaging is outside family preference."},
+            "C8": {"result": "n_a", "note": "Not used to average a kernel."},
+            "C9": {"result": "n_a", "note": "Family is not product_only."}
+          },
+          "extractable": {
+            "mechanism": "four-count cycle exists on the page",
+            "kernel": "not extracted — packaging identity",
+            "bounds": "not extracted",
+            "safety": "not extracted",
+            "variants": "none for this family source"
+          },
+          "conflicts_unknowns": "Confirms the popular tactical name of a four-phase count. Not a source of the family.",
+          "research_function": "packaging_counterexample",
+          "selection_decision": "rejected",
+          "rejection_reason": "C3/C7 — tactical/military packaging is the identity of the locus; landscape already forbids using that packaging as the family source."
+        },
+        {
+          "source_id": "src.healthline.box",
+          "source_family": "academic_description",
+          "bibliographic_identity": {
+            "publisher": "Healthline",
+            "title": "Box Breathing: How to, Benefits, and Tips",
+            "url": "https://www.healthline.com/health/copd/box-breathing"
+          },
+          "authority_provenance": "SEO consumer health explainer. Not official_health, not a recognized school, not a protocol edition.",
+          "locus": "Article body (search/snippet 2026-08-25). Not used as evidence.",
+          "access": "snippet_confirmed",
+          "gates": {
+            "C1": {"result": "pass", "note": "How-to exists, but the page is not the preferred class."},
+            "C2": {"result": "pass", "note": "Named URL."},
+            "C3": {"result": "fail", "note": "Method is sold together with COPD/anxiety/depression/PTSD/insomnia claims and medical-condition caveats as the article identity."},
+            "C4": {"result": "n_a", "note": "Not ingested."},
+            "C5": {"result": "n_a", "note": "Not selected."},
+            "C6": {"result": "fail", "note": "Efficacy and disease-management framing is the point of the page."},
+            "C7": {"result": "fail", "note": "SEO explainer, outside family preference."},
+            "C8": {"result": "n_a", "note": "Not used."},
+            "C9": {"result": "n_a", "note": "Family is not product_only."}
+          },
+          "extractable": {
+            "mechanism": "not used",
+            "kernel": "not used",
+            "bounds": "not used",
+            "safety": "not used",
+            "variants": "not used"
+          },
+          "conflicts_unknowns": "Typical consumer-SEO bleed of method + medical claims. Rejected, not averaged.",
+          "research_function": "c7_counterexample",
+          "selection_decision": "rejected",
+          "rejection_reason": "C6/C7 — SEO consumer explainer; efficacy/disease framing; not a family source."
+        },
+        {
+          "source_id": "src.ayurwiki.vritti",
+          "source_family": "recognized_school",
+          "bibliographic_identity": {
+            "title": "Ayurwiki Vritti Pranayama page (Iyengar quotation derivative)",
+            "note": "Wiki quoting Light on Pranayama is not the edition locus"
+          },
+          "authority_provenance": "Derivative wiki. Not the book, not a licensed extract.",
+          "locus": "Not used. Chapter/page identity belongs to the Iyengar edition row.",
+          "access": "rejected_derivative",
+          "gates": {
+            "C1": {"result": "n_a", "note": "Not assessed as a source."},
+            "C2": {"result": "fail", "note": "Wiki is not the named edition."},
+            "C3": {"result": "n_a", "note": "Not used."},
+            "C4": {"result": "n_a", "note": "Not used."},
+            "C5": {"result": "fail", "note": "Risk of copying the book via wiki."},
+            "C6": {"result": "n_a", "note": "Not used."},
+            "C7": {"result": "fail", "note": "Derivative, not recognized_school text."},
+            "C8": {"result": "n_a", "note": "Not used to invent Iyengar claims."},
+            "C9": {"result": "n_a", "note": "Family is not product_only."}
+          },
+          "extractable": {
+            "mechanism": "not used",
+            "kernel": "not used",
+            "bounds": "not used",
+            "safety": "not used",
+            "variants": "not used"
+          },
+          "conflicts_unknowns": "Any Iyengar wording on a wiki is not an ingest body.",
+          "research_function": "derivative_counterexample",
+          "selection_decision": "rejected",
+          "rejection_reason": "C2/C5 — wiki derivative of a copyrighted textbook; not a legally readable edition locus."
+        }
+      ],
+      "conflicts": [
+        {
+          "id": "conflict.phase_count",
+          "status": "open",
+          "description": "Four equal phases with two holds (BHF, NHS SFH, Cleveland) vs three-phase 'square' inhale-hold-exhale with no post-exhale hold (Newcastle Hospitals NHS). Labels box/square are not a reliable kernel."
+        },
+        {
+          "id": "conflict.holds_as_kernel_vs_later_ratio",
+          "status": "unresolved_NEED_OWNER",
+          "description": "Landscape mechanism_shape treats pauses as family identity. Named Iyengar chapter is unread; secondary reports that beginner equal inhale/exhale omits holds must not be ingested from wiki. Do not rewrite landscape kernel in this pass."
+        },
+        {
+          "id": "conflict.count_four_is_not_kernel",
+          "status": "open",
+          "description": "Count of 4 is a common health-education default, not shown to be the family kernel. Iyengar (unread) is reported to use other counts. Product probe uses 4; that is an expression hypothesis."
+        },
+        {
+          "id": "conflict.naming_collapse",
+          "status": "open",
+          "description": "Consumer pages equate box breathing with Navy SEAL tactical breathing and with sama vritti. Shortlist keeps those identities separate. Packaging is not a source."
+        }
+      ],
+      "selected_loci": [
+        "src.bhf.heart_matters.box",
+        "src.nhs.sfh.box_leaflet",
+        "src.nhs.newcastle.square"
+      ],
+      "selection_summary": "Three selected loci, different jobs: BHF = four-phase kernel; NHS SFH = four-phase kernel plus stop-rules; Newcastle = three-phase conflict locus. Supporting loci must not be averaged into that kernel. Type box_breathing remains unattested. Technique canon stays empty."
+    }
+  ]
+}
