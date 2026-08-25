@@ -80,6 +80,44 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.box_breathing.001",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "box_breathing",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.focus.focus"
+      },
+      "retrieval": {
+        "purpose": ["focus"],
+        "domain": [],
+        "input_state": ["scattered"],
+        "direction": ["focus"],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": ["work", "anytime"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Четыре фазы",
+            "body": "Вдох на четыре. Пауза на четыре. Выдох на четыре. Пауза на четыре. Один цикл. Повтори ещё три."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Собраться"
+          }
+        }
+      }
     }
   ]
 }

@@ -136,7 +136,7 @@ Seed-pass не закрывает несколько cells одним item, да
 - другие empty cells не получили этот `item_id`
 - Meaning / public Today JSON **не** менялись
 
-Семена: `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.calm.downregulate` → `practice.extended_exhale.001`.
+Семена: `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`.
 
 Запрещено: генерировать payload без пустой P0 cell; закрывать cell только title без retrieval-полей; ставить `item_id` в meaning/prompt; автозакрывать соседние cells по пересечению tags.
 
@@ -157,9 +157,9 @@ Seed-pass не закрывает несколько cells одним item, да
 Ledger JSON:
 
 - `need_cells[].status`: `empty` · `seed` · `covered`
-- `need_cells[].item_ids`: `need.calm.downregulate` → `practice.extended_exhale.001`; `need.grounding.stabilize` → `practice.sensory_grounding.001`; остальные `[]`
+- `need_cells[].item_ids`: `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`; `need.grounding.stabilize` → `practice.sensory_grounding.001`; остальные `[]`
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
-- `gaps`: 24 P0 cells still `empty`
+- `gaps`: 23 P0 cells still `empty`
 
 Следующий рабочий шаг: **первая empty P0 cell в порядке ledger**, тем же процессом. Не batch-fill.
 
@@ -169,6 +169,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | P0 seed #3 (ledger order): `need.focus.focus` → `practice.box_breathing.001`. Overlapping `scattered` does not close grounding. Next empty = `need.energy.activate`. |
 | 2026-08-25 | P0 seed #2 (ledger order): `need.calm.downregulate` → `practice.extended_exhale.001`. Seed closes exactly one cell; retrieval tags do not auto-close others. |
 | 2026-08-25 | First P0 seed: `need.grounding.stabilize` → `practice.sensory_grounding.001` (draft). 25 cells remain empty. No batch-fill. |
 | 2026-08-25 | v1.0 ACCEPTED — 26 P0 need cells, type spine, coverage-first law, empty ledger |

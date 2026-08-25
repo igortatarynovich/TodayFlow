@@ -14,13 +14,13 @@
   },
   "counts": {
     "need_cells": 26,
-    "need_cells_empty": 24,
-    "need_cells_seed": 2,
+    "need_cells_empty": 23,
+    "need_cells_seed": 3,
     "need_cells_covered": 0,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
-    "library_items": 2
+    "library_items": 3
   },
   "screen_need_map": {
     "calm": "need.calm.downregulate",
@@ -79,8 +79,10 @@
         "today",
         "practices_screen"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.box_breathing.001"
+      ]
     },
     {
       "id": "need.energy.activate",
@@ -667,7 +669,9 @@
       "content_class": "practice",
       "type": "box_breathing",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.box_breathing.001"
+      ],
       "family": "breathwork"
     },
     {

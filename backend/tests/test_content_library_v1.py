@@ -20,6 +20,8 @@ SEED_1_ID = "practice.sensory_grounding.001"
 SEED_1_CELL = "need.grounding.stabilize"
 SEED_2_ID = "practice.extended_exhale.001"
 SEED_2_CELL = "need.calm.downregulate"
+SEED_3_ID = "practice.box_breathing.001"
+SEED_3_CELL = "need.focus.focus"
 
 
 def _load() -> tuple[dict, dict, dict]:
@@ -72,24 +74,44 @@ def test_p0_seed_2_is_first_ledger_empty_cell_calm() -> None:
     assert cell["item_ids"] == [SEED_2_ID]
     assert coverage["need_cells"][0]["id"] == SEED_2_CELL
 
+
+def test_p0_seed_3_is_first_ledger_empty_cell_focus() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
+    assert item["identity"]["content_class"] == "practice"
+    assert item["identity"]["family"] == "breathwork"
+    assert item["identity"]["type"] == "box_breathing"
+    assert item["identity"]["seed_cell"] == SEED_3_CELL
+    assert item["retrieval"]["purpose"] == ["focus"]
+    assert item["retrieval"]["direction"] == ["focus"]
+    assert item["retrieval"]["input_state"] == ["scattered"]
+
+    cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_3_CELL)
+    assert cell["status"] == "seed"
+    assert cell["item_ids"] == [SEED_3_ID]
+    assert coverage["need_cells"][1]["id"] == SEED_3_CELL
+
     next_empty = first_empty_p0_cell(coverage)
     assert next_empty is not None
-    assert next_empty["id"] == "need.focus.focus"
+    assert next_empty["id"] == "need.energy.activate"
 
 
 def test_overlapping_state_does_not_close_other_cells() -> None:
     _vocab, _library, coverage = _load()
     calm = next(c for c in coverage["need_cells"] if c["id"] == SEED_2_CELL)
     grounding = next(c for c in coverage["need_cells"] if c["id"] == SEED_1_CELL)
+    focus = next(c for c in coverage["need_cells"] if c["id"] == SEED_3_CELL)
     assert SEED_1_ID not in (calm.get("item_ids") or [])
     assert SEED_2_ID not in (grounding.get("item_ids") or [])
+    assert SEED_1_ID not in (focus.get("item_ids") or [])
+    assert SEED_3_ID not in (grounding.get("item_ids") or [])
 
 
 def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
-    assert coverage["counts"]["library_items"] == 2
-    assert coverage["counts"]["need_cells_empty"] == 24
-    assert coverage["counts"]["need_cells_seed"] == 2
+    assert coverage["counts"]["library_items"] == 3
+    assert coverage["counts"]["need_cells_empty"] == 23
+    assert coverage["counts"]["need_cells_seed"] == 3
     assert library["status"] == "seed"
 
 
