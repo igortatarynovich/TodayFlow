@@ -353,7 +353,7 @@ Library (пока пустая): [`content_library_v1.json`](../../DATA/referenc
 
 ### 10.1 identity
 
-`item_id` · `content_class` · `family` (только practice, иначе null) · `type` · `status` (`draft` \| `active` \| `retired`) · `semantic_version`
+`item_id` · `content_class` · `family` (только practice, иначе null) · `type` · `status` (`draft` \| `active` \| `retired`) · `semantic_version` · `seed_cell` (P0 seed-pass: ровно одна need cell; не Meaning, не payload)
 
 `item_id` стабилен. Meaning его не эмитит.
 

@@ -1,8 +1,85 @@
 {
   "contract_version": "content_library_v1",
   "version": "1.0.0",
-  "status": "empty",
+  "status": "seed",
   "semantic_version": "content-taxonomy-v1.1",
-  "description": "Content Items for Practice Content Taxonomy. Empty until coverage-first P0 seed. Item shape: content_item_contract_v1. Cells: content_coverage_matrix_v1.",
-  "items": []
+  "description": "Content Items for Practice Content Taxonomy. Coverage-first P0 seed. Item shape: content_item_contract_v1. Cells: content_coverage_matrix_v1.",
+  "items": [
+    {
+      "identity": {
+        "item_id": "practice.sensory_grounding.001",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "sensory_grounding",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.grounding.stabilize"
+      },
+      "retrieval": {
+        "purpose": ["grounding"],
+        "domain": [],
+        "input_state": ["scattered", "disconnected", "tense"],
+        "direction": ["stabilize"],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": ["work", "anytime"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Три вещи вокруг",
+            "body": "Остановись. Назови три вещи, которые видишь. Затем две, которые слышишь. Затем одну, которой касаешься. Не объясняй."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Опора здесь"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.extended_exhale.001",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "extended_exhale",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.calm.downregulate"
+      },
+      "retrieval": {
+        "purpose": ["calm"],
+        "domain": [],
+        "input_state": ["overstimulated", "tense"],
+        "direction": ["downregulate"],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": ["work", "anytime"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Длинный выдох",
+            "body": "Вдох через нос. Выдох длиннее вдоха. Повтори четыре раза. Не ускоряй."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Тише"
+          }
+        }
+      }
+    }
+  ]
 }

@@ -7,14 +7,15 @@
   "groups": {
     "identity": {
       "required": ["item_id", "content_class", "type", "status", "semantic_version"],
-      "optional": ["family"],
+      "optional": ["family", "seed_cell"],
       "fields": {
         "item_id": "stable id; never emitted by Meaning",
         "content_class": "practice | meditation | affirmation | discipline",
         "family": "practice only; else null",
         "type": "technique code unique within content_class",
         "status": "draft | active | retired",
-        "semantic_version": "content-taxonomy-v1.x"
+        "semantic_version": "content-taxonomy-v1.x",
+        "seed_cell": "P0 seed-pass only: the one need cell this item was created for. Retrieval tags do not close other cells."
       }
     },
     "retrieval": {

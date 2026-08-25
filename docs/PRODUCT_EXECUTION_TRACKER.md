@@ -15,7 +15,7 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-25):** **Coverage-first fill locked.** Taxonomy v1.1: Meaning → Need → Retrieval → Library → Item. Item = identity / retrieval / payload. Next = seed empty P0 need cells (26), not mass content. Do not encode purpose in type. Do not wire meaning to `item_id`. Screen need/format unchanged. Library `items: []`.
+**NOW (PRACTICES / CANON, 2026-08-25):** **P0 seed #2 landed (ledger order).** `need.calm.downregulate` → `practice.extended_exhale.001`. Next = first remaining empty cell (`need.focus.focus`). One item closes one cell; overlapping retrieval tags do not auto-close. No batch-fill. Meaning still does not emit `item_id`.
 
 ## Architecture impact — Practice Content Coverage V1 (2026-08-25)
 
@@ -2485,6 +2485,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Practices / Canon | **P0 seed #2 (ledger order)** | **SEEDED** | First empty cell was `need.calm.downregulate` → `practice.extended_exhale.001`. One item / one cell. Overlapping `tense` does not close grounding. Next empty = `need.focus.focus`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **First P0 content seed** | **SEEDED** | One item: `practice.sensory_grounding.001` closes `need.grounding.stabilize` (draft/seed). Validator `content_library_validator_v1`. Meaning/public JSON unchanged. Next empty P0 cell, not batch. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
 - 2026-08-25 | Practices / Canon | **Practice Content Coverage V1** | **LOCKED** | Coverage-first fill: 26 P0 need cells empty · 44 P0 / 42 P1 types · item = identity/retrieval/payload · library `items: []`. Meaning still no `item_id`. Next = seed empty cells, not mass copy. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
 - 2026-08-25 | Practices / Canon | **Practice Content Taxonomy V1** | **LOCKED** | Four classes (practice/meditation/affirmation/discipline) · 86 types · purpose/domain/state/direction as attributes, not types. Vocab `DATA/reference/practice/content_taxonomy_v1.json`. Items not filled. Screen need/format unchanged. [PRACTICE_CONTENT_TAXONOMY_V1](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md).
 - 2026-08-25 | Profile / ops | **1.3.124 Natal Decode cache refresh** | **LOCKED (ops) · sample BLOCKED** | Machinery live: `ops_force`, inventory script, GET persisted version, `load_objects()` → `TODAYFLOW_DATA_DIR`. Inventory: users **1** (gen 595) and **2** (gen 1076) still `v0.2` / prompt 1.0.1. `--apply` hit Nebius K3 **402 budget exhausted**; no new success log; GET still `offer`. Retry apply when K3 has budget. [PROFILE_NATAL_DECODE_CACHE_REFRESH_V1](./profile/PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md).

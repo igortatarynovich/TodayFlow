@@ -1,23 +1,26 @@
 {
   "contract_version": "content_coverage_matrix_v1",
   "version": "1.0.0",
-  "status": "empty",
+  "status": "seed",
   "semantic_version": "content-taxonomy-v1.1",
   "description": "Coverage-first ledger. Need cells before mass fill. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,
     "p0_before_density": true,
-    "meaning_does_not_emit_item_id": true
+    "meaning_does_not_emit_item_id": true,
+    "next_cell_is_first_empty_in_ledger_order": true,
+    "seed_closes_exactly_one_cell": true
   },
   "counts": {
     "need_cells": 26,
-    "need_cells_empty": 26,
+    "need_cells_empty": 24,
+    "need_cells_seed": 2,
     "need_cells_covered": 0,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
-    "library_items": 0
+    "library_items": 2
   },
   "screen_need_map": {
     "calm": "need.calm.downregulate",
@@ -50,8 +53,10 @@
         "today",
         "practices_screen"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.extended_exhale.001"
+      ]
     },
     {
       "id": "need.focus.focus",
@@ -125,8 +130,10 @@
         "today",
         "practices_screen"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.sensory_grounding.001"
+      ]
     },
     {
       "id": "need.clarity.reflect",
@@ -651,7 +658,9 @@
       "content_class": "practice",
       "type": "extended_exhale",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.extended_exhale.001"
+      ],
       "family": "breathwork"
     },
     {
@@ -707,7 +716,9 @@
       "content_class": "practice",
       "type": "sensory_grounding",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.sensory_grounding.001"
+      ],
       "family": "somatic"
     },
     {

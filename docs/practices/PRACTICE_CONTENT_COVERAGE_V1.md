@@ -29,6 +29,8 @@
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
 4. **Preferred type — fill target.** Meaning по-прежнему эмитит только state → direction → purpose. Retrieval может выбрать alt form (другой class/type), если constraints так говорят.
 5. **Один purpose — два job'а допустимы**, если class разный: «сейчас» (`practice`/`meditation`/`affirmation`) vs «на период» (`discipline`). Это не дубль grounding.
+6. **Порядок seed детерминированный.** Следующий pass = первая `empty` P0 cell в порядке `need_cells[]` ledger. Не выбирать ячейку по удобству темы.
+7. **Один seed item закрывает одну need cell.** Несколько retrieval tags (states, context) допустимы. Ledger `item_ids` пишется только в `seed_cell`. Совпадение tags с другой ячейкой **не** закрывает её.
 
 ---
 
@@ -103,13 +105,13 @@ P0 **не** требует item на каждый из 86 types.
 
 Порядок seed:
 
-1. 26 need cells — primary form, одна ячейка за раз.
+1. Первая `empty` P0 cell в порядке ledger — primary form, одна ячейка за раз.
 2. Оставшиеся P0 types, у которых ещё `item_ids = []` (обычно alt, не взятые как primary).
 3. Только потом P1 density.
 
 Канон кодов: `type_spine[].phase` в ledger (сейчас **44 P0 / 42 P1**). Сводка в markdown не дублирует список — при расхождении ведёт JSON.
 
-Один item может закрыть несколько cells, если retrieval-массивы это честно отражают. Не клеить extra purpose в title, чтобы «закрыть» две ячейки ложью.
+Seed-pass не закрывает несколько cells одним item, даже если retrieval tags пересекаются. Плотность/reuse — не этот pass.
 
 ---
 
@@ -117,14 +119,26 @@ P0 **не** требует item на каждый из 86 types.
 
 На один seed item:
 
-1. Выбрать **пустую** P0 cell (не самую привычную технику).
-2. Заполнить три группы ([taxonomy §10](./PRACTICE_CONTENT_TAXONOMY_V1.md#10-content-item--три-группы)).
-3. `purpose` / `direction` / `input_state` / `content_class` / `type` совпадают с cell (или с alt form).
+1. Взять **первую empty** P0 cell в порядке ledger (не выбирать вручную).
+2. Заполнить три группы ([taxonomy §10](./PRACTICE_CONTENT_TAXONOMY_V1.md#10-content-item--три-группы)). `identity.seed_cell` = id этой ячейки.
+3. `purpose` / `direction` / `input_state` / `content_class` / `type` совпадают с cell (primary form).
 4. Duration: Today now-job ≤ 5 min, если cell не sleep/evening; discipline — `duration_days`, не минуты сессии.
 5. Payload: `ru` обязателен. Без medical claims. Ritual = последовательность, не магия.
-6. Записать `item_id` в `item_ids[]` ячейки ledger. Status cell → `seed` пока draft, `covered` когда item `active`.
+6. Записать `item_id` **только** в `item_ids[]` этой ячейки (+ type_spine этого type). Status cell → `seed` пока draft, `covered` когда item `active`.
 
-Запрещено: генерировать payload без пустой P0 cell; закрывать cell только title без retrieval-полей; ставить `item_id` в meaning/prompt.
+**DoD одной ячейки** (не «текст хороший»):
+
+- ячейка больше не `empty`
+- item валиден против taxonomy + item contract
+- retrieval-полей достаточно, чтобы попасть в cell
+- payload без semantic/retrieval logic (коды, purpose, item_id, «почему сегодня»)
+- coverage ledger ссылается на `item_id` (ровно эта cell + type_spine)
+- другие empty cells не получили этот `item_id`
+- Meaning / public Today JSON **не** менялись
+
+Семена: `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.calm.downregulate` → `practice.extended_exhale.001`.
+
+Запрещено: генерировать payload без пустой P0 cell; закрывать cell только title без retrieval-полей; ставить `item_id` в meaning/prompt; автозакрывать соседние cells по пересечению tags.
 
 ---
 
@@ -143,11 +157,11 @@ P0 **не** требует item на каждый из 86 types.
 Ledger JSON:
 
 - `need_cells[].status`: `empty` · `seed` · `covered`
-- `need_cells[].item_ids`: сейчас `[]`
+- `need_cells[].item_ids`: `need.calm.downregulate` → `practice.extended_exhale.001`; `need.grounding.stabilize` → `practice.sensory_grounding.001`; остальные `[]`
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
-- `gaps`: считается из status; до fill все P0 need cells = `empty`
+- `gaps`: 24 P0 cells still `empty`
 
-Следующий рабочий шаг после этого документа: **seed items в empty P0 cells**, по одной ячейке, не пакетом «все grounding».
+Следующий рабочий шаг: **первая empty P0 cell в порядке ledger**, тем же процессом. Не batch-fill.
 
 ---
 
@@ -155,4 +169,6 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | P0 seed #2 (ledger order): `need.calm.downregulate` → `practice.extended_exhale.001`. Seed closes exactly one cell; retrieval tags do not auto-close others. |
+| 2026-08-25 | First P0 seed: `need.grounding.stabilize` → `practice.sensory_grounding.001` (draft). 25 cells remain empty. No batch-fill. |
 | 2026-08-25 | v1.0 ACCEPTED — 26 P0 need cells, type spine, coverage-first law, empty ledger |
