@@ -7,6 +7,8 @@
   "shortlist_opened": false,
   "writes_technique_canon": false,
   "parent_steps": "5-7",
+  "criteria_canon": "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1",
+  "next_named_pass": "shortlist_by_family",
   "families": [
     {
       "family_id": "family.practice.slow_paced_breath",

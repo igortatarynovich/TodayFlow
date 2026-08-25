@@ -414,6 +414,11 @@ def validate_technique_landscape_v1(
         errors.append("shortlist_opened must be false")
     if landscape.get("writes_technique_canon") is not False:
         errors.append("writes_technique_canon must be false")
+    if landscape.get("criteria_canon") not in (
+        None,
+        "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1",
+    ):
+        errors.append("landscape.criteria_canon must point at Criteria V1 or be absent")
     families = landscape.get("families")
     if not isinstance(families, list) or not families:
         errors.append("families must be non-empty list")
@@ -512,6 +517,48 @@ def validate_technique_landscape_v1(
     if _types("family.affirmation.values_self_affirmation"):
         errors.append("values_self_affirmation candidate_types must stay empty until a type exists")
 
+    return errors
+
+
+CRITERIA_GATE_IDS = tuple(f"C{i}" for i in range(1, 10))
+CRITERIA_REQUIRED = (
+    "contract_version",
+    "unit_of_shortlist",
+    "shortlist_opened",
+    "writes_technique_canon",
+    "technique_id_allowed_at",
+    "pipeline_after_open",
+    "gates",
+)
+
+
+def validate_technique_shortlist_criteria_v1(criteria: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    for key in CRITERIA_REQUIRED:
+        if key not in criteria:
+            errors.append(f"criteria missing {key}")
+    if criteria.get("contract_version") != "technique_shortlist_criteria_v1":
+        errors.append("invalid shortlist criteria contract_version")
+    if criteria.get("shortlist_opened") is not False:
+        errors.append("criteria must not open shortlist")
+    if criteria.get("writes_technique_canon") is not False:
+        errors.append("criteria must not write technique canon")
+    if criteria.get("unit_of_shortlist") != "candidate_family":
+        errors.append("unit_of_shortlist must be candidate_family")
+    if criteria.get("technique_id_allowed_at") != "canonical":
+        errors.append("technique_id_allowed_at must be canonical")
+    pipeline = criteria.get("pipeline_after_open")
+    if not isinstance(pipeline, list) or "canonical_or_rejected" not in pipeline:
+        errors.append("pipeline_after_open must include canonical_or_rejected")
+    if isinstance(pipeline, list) and pipeline and pipeline[0] != "candidate_family":
+        errors.append("pipeline_after_open must start at candidate_family")
+    gates = criteria.get("gates")
+    if not isinstance(gates, list):
+        errors.append("gates must be list")
+        return errors
+    ids = [g.get("id") for g in gates if isinstance(g, dict)]
+    if tuple(ids) != CRITERIA_GATE_IDS:
+        errors.append(f"gates must be {CRITERIA_GATE_IDS} in order, got {tuple(ids)}")
     return errors
 
 

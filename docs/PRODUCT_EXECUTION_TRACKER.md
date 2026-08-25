@@ -24,7 +24,16 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-25):** **Technique landscape V1.** Four class maps; families not authors. Shortlist **closed**. Technique canon still empty. Fill frozen. Next = selection criteria (parent step 8), not ingest. [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-25):** **Shortlist Criteria V1.** Gates C1–C9 lock family eligibility before any corpus. Shortlist **still closed**. Technique canon empty. `technique_id` only at canonical. Next = shortlist by family, not ISBN-for-type. [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+
+## Architecture impact — Practice Technique Shortlist Criteria V1 (2026-08-25)
+
+- **SoT before:** landscape named families; next step could hunt a source for `box_breathing` and retrofit criteria to the first convenient PDF.
+- **SoT after:** criteria exist before corpus. Unit of shortlist = `candidate_family`. Type is an expression hypothesis. Product-only / likely-invention stay explicit. Conflicts are recorded, not LLM-averaged. Shortlist status remains `not_opened`. Content Library is not attested by a future shortlist until `canonical`.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) · criteria JSON · provenance 1.2 · landscape next-pointer · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with opening shortlist in this pass.
 
 ## Architecture impact — Practice Technique Landscape V1 (2026-08-25)
 
@@ -2512,6 +2521,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Practices / Canon | **Shortlist Criteria V1** | **ACCEPTED** | Gates C1–C9. Unit = candidate_family. Shortlist still closed. technique_id only at canonical. Next = shortlist by family. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md).
 - 2026-08-25 | Practices / Canon | **Technique landscape V1** | **ACCEPTED** | Four class maps. Families ≠ authors. Shortlist closed. Technique canon empty. Four probe splits: energizing_breath reject/remap; capability = coping not values self-affirmation; body_release ≠ PMR; sleep_discipline ≠ CBT-I. Next = selection criteria, not ingest. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md).
 - 2026-08-25 | Practices / Canon | **Technique provenance + fill freeze** | **ACCEPTED** | LLM is not the technique source. Canonical Technique contract + empty registry. First 11 items gap-reviewed, not ingested. 133 drafts = llm_provisional. Audio vs text cancelled. Next = landscape/shortlist/ingest, not more seeds. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_PROVENANCE_V1](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md).
 - 2026-08-25 | Practices / Canon | **P1 density context (work vs evening)** | **SEEDED** | 44 siblings. First = `practice.extended_exhale.003` (`evening`). Sleep/evening seeds flip to `work`. Same duration as seed. Next = audio vs text. 42 P1 types still blocked. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).

@@ -119,6 +119,7 @@
 - [practices/PRACTICE_CONTENT_TAXONOMY_V1.md](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md) — **библиотека практик** SoT: class → type → purpose/state/domain; Canonical Technique → Item
 - [practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md) — **происхождение техники**: Source → canon → item; LLM не источник метода
 - [practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) — **ландшафт техник**: семьи и типы источников по class; shortlist закрыт
+- [practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) — **критерии shortlist**: допуск семьи (C1–C9); shortlist не открыт
 - [practices/PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md) — **coverage-first fill**: 26 P0 need cells; **frozen** pending technique canon
 - [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — **Практики** SoT экрана: цикл состояния · locked need/format · сессия · music layer ([index](./practices/_INDEX.md))
 - [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md)

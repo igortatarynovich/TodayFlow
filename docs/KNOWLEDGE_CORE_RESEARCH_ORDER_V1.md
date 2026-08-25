@@ -141,6 +141,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 ## 7. Changelog
 
+- **1.12 note (2026-08-25)** — Practice Technique Shortlist Criteria V1: [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md). Parent step 8. Shortlist not opened.
 - **1.12 note (2026-08-25)** — Practice Technique Landscape V1: [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md). Parent steps 5–7. Shortlist not opened. Не IL CORE.
 - **1.12 note (2026-08-25)** — практики как система техник: [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md). Parent sequence 1–9 stands. Не IL CORE. Не author-lock.
 - **1.0 (2026-08-17)** — locked sequence для семантических ядер. Урок IL-1: provenance раньше author-lock. Parent для IL §6.9. Обязателен для следующего ядра и для нумерологии / психологии / практик / медицины как систем знаний.

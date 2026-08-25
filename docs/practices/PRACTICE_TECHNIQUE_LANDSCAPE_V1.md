@@ -33,7 +33,7 @@
 3. **Карта поля, не корпус.** Ledger не делает семью канонической. `shortlist_status = not_opened` на каждой строке.
 4. **Не схлопывать соседние методы.** PMR ≠ informal somatic release. Values self-affirmation ≠ coping statement. Sleep window rule ≠ CBT-I. Forceful pranayama ≠ «короткий выдох».
 5. **Существование семьи ≠ efficacy.** `claim_risk` помечает, *где продукт обычно врёт*, не разрешает claims.
-6. **Выход не в technique canon.** Следующий named pass после этого — **критерии отбора** (parent шаг 8), затем shortlist (шаг 9). Не ingest.
+6. **Выход не в technique canon.** Criteria V1 ([PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md), parent шаг 8) задаёт допуск семьи. Shortlist в этом файле **остаётся закрыт**.
 
 Parent mapping: шаги 1–4 (предмет, границы, составляющие) уже в taxonomy + provenance §3. Этот файл = шаги 5–7.
 
@@ -226,10 +226,10 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 
 ## 7. Что дальше
 
-1. Этот landscape стоит. Shortlist **закрыт**.
-2. Named pass **после**: Practice Technique Selection Criteria (parent шаг 8) — quality × independence × relevance к составляющей × legal access. Критерии от **модели семей**, не от первой открытой главы.
-3. Затем shortlist (шаг 9) по семьям, не по 86 types сразу. Приоритет — семьи с probes, особенно четыре различия §4.
-4. Только потом ingest → empty technique canon заполняется `extracted`, не `canonical`.
+1. Landscape стоит. Criteria V1 принят. Shortlist **закрыт** (`shortlist_status = not_opened`).
+2. Следующий named pass: **shortlist by family** под гейты C1–C9. Не «источник для type». Приоритет — семьи с probes, четыре различия §4.
+3. Потом selected loci → ingest paraphrase → extracted → … → canonical/rejected.
+4. `technique_id` — только на canonical.
 
 ---
 
@@ -237,4 +237,5 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | Criteria V1 accepted; shortlist still closed; next = shortlist by family |
 | 2026-08-25 | v1.0 ACCEPTED — four class maps; ledger families; shortlist closed; four probe distinctions locked as research splits, not canon |

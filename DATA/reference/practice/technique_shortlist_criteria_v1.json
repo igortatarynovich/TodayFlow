@@ -1,0 +1,106 @@
+{
+  "contract_version": "technique_shortlist_criteria_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-shortlist-criteria-v1.0",
+  "description": "Gates for admitting a candidate_family to shortlist. Not a shortlist. Not ingest. Canon: docs/practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md",
+  "parent_step": 8,
+  "unit_of_shortlist": "candidate_family",
+  "shortlist_opened": false,
+  "writes_technique_canon": false,
+  "technique_id_allowed_at": "canonical",
+  "pipeline_after_open": [
+    "candidate_family",
+    "shortlist_candidates",
+    "source_locus_assessment",
+    "selected_loci",
+    "ingest_paraphrase",
+    "extracted",
+    "normalization",
+    "safety_review",
+    "canonical_or_rejected"
+  ],
+  "gates": [
+    {
+      "id": "C1",
+      "code": "method_not_effect_only",
+      "severity": "hard",
+      "question": "Does the source describe the method (mechanism/steps), not only an outcome?"
+    },
+    {
+      "id": "C2",
+      "code": "paraphrase_locus_available",
+      "severity": "hard",
+      "question": "Is there a named legally readable locus to paraphrase?"
+    },
+    {
+      "id": "C3",
+      "code": "kernel_separable_from_packaging",
+      "severity": "hard",
+      "question": "Can the stable kernel be separated from author/brand/app packaging?"
+    },
+    {
+      "id": "C4",
+      "code": "bounds_extractable_or_unknown",
+      "severity": "hard",
+      "question": "Are safety bounds extractable, or explicitly marked unknown?"
+    },
+    {
+      "id": "C5",
+      "code": "no_protected_script_copy",
+      "severity": "hard",
+      "question": "Can the kernel be paraphrased without copying a protected script/protocol?"
+    },
+    {
+      "id": "C6",
+      "code": "existence_not_efficacy",
+      "severity": "hard",
+      "question": "Is existence evidence kept separate from efficacy claims?"
+    },
+    {
+      "id": "C7",
+      "code": "source_family_preference",
+      "severity": "preference",
+      "question": "Prefer primary/academic/official/recognized descriptions matching the family's source_families?"
+    },
+    {
+      "id": "C8",
+      "code": "conflict_recorded_not_averaged",
+      "severity": "hard",
+      "question": "Are incompatible kernels recorded as conflict rather than LLM-averaged?"
+    },
+    {
+      "id": "C9",
+      "code": "product_only_explicit",
+      "severity": "hard",
+      "question": "Is a product-only or likely-invention family labeled as such, never disguised as established?"
+    }
+  ],
+  "not_eligible_as_established_hunt": [
+    "family.affirmation.manifestation_outcome",
+    "family.discipline.clinical_insomnia_protocol",
+    "family.practice.unattested_short_exhale"
+  ],
+  "expression_not_attestation": [
+    {
+      "family_id": "family.practice.equal_count_breath",
+      "type_is_hypothesis": "box_breathing"
+    },
+    {
+      "family_id": "family.practice.activating_forceful_breath",
+      "must_not_attest_type": "energizing_breath"
+    },
+    {
+      "family_id": "family.affirmation.values_self_affirmation",
+      "must_not_attest_type": "capability"
+    },
+    {
+      "family_id": "family.practice.progressive_muscle_relaxation",
+      "must_not_attest_type": "body_release"
+    },
+    {
+      "family_id": "family.discipline.clinical_insomnia_protocol",
+      "must_not_attest_type": "sleep_discipline"
+    }
+  ]
+}

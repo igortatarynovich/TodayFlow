@@ -4,8 +4,8 @@
   "status": "provisional",
   "semantic_version": "content-taxonomy-v1.1",
   "fill_frozen": true,
-  "next_pass": "technique_landscape",
-  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen. Next = technique landscape, not shortlist. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · landscape: docs/practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md",
+  "next_pass": "technique_shortlist_criteria",
+  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen. Criteria V1 accepted; shortlist not opened. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · criteria: docs/practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,

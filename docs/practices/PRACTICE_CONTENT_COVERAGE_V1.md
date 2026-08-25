@@ -183,8 +183,10 @@ Seed-pass не закрывает несколько cells одним item, да
 | P1 density (audio vs text) | `delivery` audio+guided на seed, который ещё text+unguided | **cancelled** — fill frozen; LLM is not technique source |
 | P1 types семейства | 42 types не primary/alt ни одной P0 cell | **blocked**: `form_ok` не пускает на текущие cells. Нужны P1 variant cells или смена SoT |
 | P1 variants | тот же purpose, другой direction (`need.focus.stabilize` и т. п.) | не этот pass — расширение ledger |
-| **Technique landscape** | семейства методов + типы источников по class; shortlist закрыт | **current** — [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) |
-| **Technique provenance / canon** | Canonical Technique rows, затем item → `technique_id` | after selection criteria + shortlist + ingest |
+| **Technique landscape** | семейства методов + типы источников по class | **done** — [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md); shortlist still closed |
+| **Shortlist criteria** | допуск семьи к shortlist (C1–C9); не корпус | **current** — [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) |
+| **Shortlist by family** | loci под критерии; type = expression hypothesis | **next** — not opened |
+| **Technique provenance / canon** | extracted → canonical; item → `technique_id` | after selected loci + ingest + safety review |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после provenance, не вместо |
 
 ---
@@ -198,7 +200,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **technique landscape** ([PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md)). Shortlist и ingest закрыты. Не вешать 42 P1 types на P0 cells. Не писать новые items.
+Следующий рабочий шаг: **shortlist by family** под [Criteria V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md). `shortlist_status` ещё `not_opened`. Не вешать 42 P1 types на P0 cells. Не писать новые items. Не ставить `technique_id`.
 
 ---
 
@@ -206,6 +208,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | **Shortlist Criteria V1.** Gates C1–C9. Shortlist still closed. technique_id only at canonical. [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md). |
 | 2026-08-25 | **Landscape V1.** Four class maps; shortlist closed; technique canon still empty. Next = selection criteria, not ingest. [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md). |
 | 2026-08-25 | **Fill frozen.** Audio vs text cancelled. 133 items = llm_provisional. First 11 = architecture probes. Next = [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md). |
 | 2026-08-25 | P1 density context: 44 siblings, `work` ↔ `evening`. First = `practice.extended_exhale.003`. Sleep/evening seeds flip to `work`. Next = audio vs text. |
