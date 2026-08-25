@@ -186,9 +186,10 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Technique landscape** | семейства методов + типы источников по class | **done** — [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md); full shortlist still closed |
 | **Shortlist criteria** | допуск семьи к shortlist (C1–C9); не корпус | **done** — [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) |
 | **Shortlist by family** | loci под критерии; type = expression hypothesis | **done** — one slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) |
-| **Ingest** | paraphrase selected loci → evidence records | **current** — [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md) |
-| **Normalization** | один kernel или split семьи | **next** |
-| **Technique provenance / canon** | safety review → canonical; item → `technique_id` | after normalization |
+| **Ingest** | paraphrase selected loci → evidence records | **done** — [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md) |
+| **Normalization** | один kernel / split / insufficient_evidence | **done** — [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`) |
+| **Targeted shortlist** | identity post-exhale hold | **next** |
+| **Technique provenance / canon** | safety review → canonical; item → `technique_id` | after a future `normalize_one` |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после provenance, не вместо |
 
 ---
@@ -202,7 +203,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **Normalization V1** по трём ingested evidence records `equal_count_breath`. Не следующая семья. Не писать новые items. Не ставить `technique_id`. Canon пуст.
+Следующий рабочий шаг: **targeted shortlist** на identity post-exhale hold. Не следующая семья. Не Safety Review. Не писать новые items. Не ставить `technique_id`. Canon пуст.
 
 ---
 
@@ -210,6 +211,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | **Normalization V1.** Decision `insufficient_evidence`. Research question: post-exhale hold identity. [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md). |
 | 2026-08-25 | **Ingest V1.** Three evidence records for equal_count selected loci. Not kernel, not canon. [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md). |
 | 2026-08-25 | **Shortlist V1.** Vertical slice `equal_count_breath`. Selected = ingest permission, not canon. [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). |
 | 2026-08-25 | **Shortlist Criteria V1.** Gates C1–C9. Shortlist still closed. technique_id only at canonical. [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md). |

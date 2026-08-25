@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.4 (2026-08-25).  
+**Версия:** 1.5 (2026-08-25).  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (шаги 1–9 до ingest).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -11,7 +11,8 @@
 **Landscape (parent 5–7):** [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) · [`technique_landscape_v1.json`](../../DATA/reference/practice/technique_landscape_v1.json).  
 **Shortlist criteria (parent 8):** [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) · [`technique_shortlist_criteria_v1.json`](../../DATA/reference/practice/technique_shortlist_criteria_v1.json).  
 **Shortlist (parent 9, vertical slice):** [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) · [`technique_shortlist_v1.json`](../../DATA/reference/practice/technique_shortlist_v1.json). Full corpus **not opened**.  
-**Ingest (parent 10, equal_count_breath):** [PRACTICE_TECHNIQUE_INGEST_V1.md](./PRACTICE_TECHNIQUE_INGEST_V1.md) · [`technique_ingest_v1.json`](../../DATA/reference/practice/technique_ingest_v1.json). Evidence records, not canon.
+**Ingest (parent 10, equal_count_breath):** [PRACTICE_TECHNIQUE_INGEST_V1.md](./PRACTICE_TECHNIQUE_INGEST_V1.md) · [`technique_ingest_v1.json`](../../DATA/reference/practice/technique_ingest_v1.json). Evidence records, not canon.  
+**Normalization (equal_count_breath):** [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) · [`technique_normalization_v1.json`](../../DATA/reference/practice/technique_normalization_v1.json). Decision `insufficient_evidence`.
 
 **Это:** откуда берётся *техника*; как она становится канонической; чем Content Item отличается от канона.  
 **Это не:** экран `/practices` · Meaning дня · медицинский протокол · разрешение копировать чужой текст · разрешение заявлять efficacy.
@@ -70,12 +71,13 @@ Retrieval по-прежнему выбирает **item**. Канон не уч�
 ```text
 candidate_family
   → shortlist candidates → source/locus assessment → selected loci
-  → ingest paraphrase (evidence records; this pass for equal_count_breath)
-  → normalization → safety review
+  → ingest paraphrase (evidence records)
+  → normalization (normalize_one | split_family | insufficient_evidence)
+  → safety review (only after normalize_one)
   → canonical | rejected → Content Item expression (technique_id only if canonical)
 ```
 
-Shortlist: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest evidence: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md). Normalization ещё не открыт.
+Shortlist: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md). Normalization: [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Safety review не открыт.
 
 **Продуктовая выдача** (без изменения)
 
@@ -275,9 +277,9 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 ## 11. Что дальше
 
-1. Landscape + Criteria + Shortlist slice приняты. Ingest V1 записал три evidence records для `equal_count_breath`. Canon пуст.
-2. Следующий named pass: **Normalization V1** — один kernel или split семьи. Не следующая shortlist-семья.
-3. Потом safety review → canonical/rejected.
+1. Landscape → Shortlist → Ingest → Normalize приняты для `equal_count_breath`. Решение: `insufficient_evidence`. Canon пуст.
+2. Следующий named pass: **targeted shortlist** на вопрос, identity-bearing ли post-exhale hold. Не следующая семья. Не Safety Review.
+3. Safety Review → Canonical — только после будущего `normalize_one`.
 4. `technique_id` на probe — только после canonical.
 5. Затем expressions (5 min / audio) от канона, не от LLM-seed.
 
@@ -289,6 +291,7 @@ Registry сейчас **пуст**. Это правильно.
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | v1.5 — Normalization V1: insufficient_evidence; pipeline strict; technique_id still only at canonical |
 | 2026-08-25 | v1.4 — Ingest V1: selected loci → evidence records; not kernel; not canon |
 | 2026-08-25 | v1.3 — Shortlist V1 vertical slice; selected ≠ canonical; technique_id still only at canonical |
 | 2026-08-25 | v1.2 — Criteria V1; pipeline family→loci→canonical; shortlist still closed; technique_id only at canonical |

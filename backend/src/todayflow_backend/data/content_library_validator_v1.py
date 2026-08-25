@@ -917,6 +917,111 @@ def validate_technique_ingest_v1(
     return errors
 
 
+NORMALIZATION_DECISIONS = frozenset(
+    {"normalize_one", "split_family", "insufficient_evidence"}
+)
+NORMALIZATION_LEVELS = (
+    "mechanism",
+    "identity_bearing_steps",
+    "bounds",
+    "variants_vs_conflicts",
+)
+NORMALIZATION_EVIDENCE_V1 = (
+    "ev.equal_count.bhf.heart_matters.box",
+    "ev.equal_count.nhs_sfh.box_leaflet",
+    "ev.equal_count.nhs_newcastle.square",
+)
+
+
+def validate_technique_normalization_v1(
+    normalization: dict[str, Any],
+    *,
+    ingest: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if normalization.get("contract_version") != "technique_normalization_v1":
+        errors.append("invalid technique normalization contract_version")
+    if normalization.get("writes_technique_canon") is not False:
+        errors.append("normalization must not write technique canon")
+    if normalization.get("technique_id_allowed") is not False:
+        errors.append("normalization must not allow technique_id")
+    if normalization.get("normalize_one_is_not_canonical") is not True:
+        errors.append("normalize_one must remain not-canonical")
+    if normalization.get("does_not_rewrite_landscape_kernel") is not True:
+        errors.append("normalization must not rewrite landscape kernel this pass")
+    if normalization.get("family_id") != SLICE_FAMILY_V1:
+        errors.append(f"V1 normalization family must be {SLICE_FAMILY_V1}")
+    if normalization.get("boundary_held") != (
+        "ingested_evidence_to_normalization_decision_not_canonical"
+    ):
+        errors.append("boundary_held must record evidence→decision, not canon")
+    decision = normalization.get("decision")
+    if decision not in NORMALIZATION_DECISIONS:
+        errors.append("decision must be normalize_one, split_family, or insufficient_evidence")
+    if decision != "insufficient_evidence":
+        errors.append("equal_count_breath V1 must close as insufficient_evidence")
+    comparison = normalization.get("comparison")
+    if not isinstance(comparison, dict):
+        errors.append("comparison must be object")
+    else:
+        if tuple(comparison.keys()) != NORMALIZATION_LEVELS:
+            errors.append("comparison must be the four levels in order")
+        for level in NORMALIZATION_LEVELS:
+            body = comparison.get(level)
+            if not isinstance(body, dict):
+                errors.append(f"comparison.{level} must be object")
+                continue
+            if not str(body.get("question") or "").strip():
+                errors.append(f"comparison.{level}: question empty")
+            if body.get("status") in (None, ""):
+                errors.append(f"comparison.{level}: status empty")
+        identity = comparison.get("identity_bearing_steps") or {}
+        if identity.get("status") != "unresolved":
+            errors.append("identity_bearing_steps must stay unresolved this pass")
+        variants = comparison.get("variants_vs_conflicts") or {}
+        if variants.get("status") != "unresolved":
+            errors.append("variants_vs_conflicts must stay unresolved this pass")
+    evidence_ids = normalization.get("evidence_ids")
+    expected = list(NORMALIZATION_EVIDENCE_V1)
+    if ingest:
+        rows = ingest.get("evidence")
+        if isinstance(rows, list):
+            expected = [
+                str(row.get("evidence_id"))
+                for row in rows
+                if isinstance(row, dict) and row.get("evidence_id")
+            ]
+    if evidence_ids != expected:
+        errors.append("evidence_ids must match ingest records in order")
+    if not str(normalization.get("research_question") or "").strip():
+        errors.append("insufficient_evidence requires a research_question")
+    question = str(normalization.get("research_question") or "").lower()
+    if "post-exhale hold" not in question and "post-exhale" not in question:
+        errors.append("research_question must name post-exhale hold identity")
+    if normalization.get("next_named_pass") != (
+        "targeted_shortlist_post_exhale_hold_identity"
+    ):
+        errors.append("next_named_pass must be targeted shortlist, not safety review")
+    blob = " ".join(
+        [
+            str(normalization.get("research_question") or ""),
+            " ".join(str(x) for x in (normalization.get("why_not_normalize_one") or [])),
+            " ".join(str(x) for x in (normalization.get("why_not_split_family") or [])),
+        ]
+    ).lower()
+    if "optional hold" in blob or "second hold is optional" in blob:
+        errors.append("must not declare an optional hold")
+    if not isinstance(normalization.get("why_not_normalize_one"), list) or len(
+        normalization.get("why_not_normalize_one") or []
+    ) < 2:
+        errors.append("must record why_not_normalize_one")
+    if not isinstance(normalization.get("why_not_split_family"), list) or len(
+        normalization.get("why_not_split_family") or []
+    ) < 2:
+        errors.append("must record why_not_split_family")
+    return errors
+
+
 def validate_content_library_v1(
     library: dict[str, Any],
     *,

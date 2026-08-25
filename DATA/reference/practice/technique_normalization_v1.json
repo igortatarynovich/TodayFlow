@@ -1,0 +1,66 @@
+{
+  "contract_version": "technique_normalization_v1",
+  "version": "1.0.0",
+  "status": "normalized_decision",
+  "semantic_version": "practice-technique-normalization-v1.0",
+  "description": "Analytical compare of equal_count_breath ingested evidence. Not a kernel. Not canon. Canon: docs/practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md",
+  "family_id": "family.practice.equal_count_breath",
+  "candidate_family": "equal-count / square breathing",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "normalize_one_is_not_canonical": true,
+  "does_not_rewrite_landscape_kernel": true,
+  "boundary_held": "ingested_evidence_to_normalization_decision_not_canonical",
+  "accessed": "2026-08-25",
+  "evidence_ids": [
+    "ev.equal_count.bhf.heart_matters.box",
+    "ev.equal_count.nhs_sfh.box_leaflet",
+    "ev.equal_count.nhs_newcastle.square"
+  ],
+  "decision": "insufficient_evidence",
+  "comparison": {
+    "mechanism": {
+      "question": "Do the records describe the same kind of action: regulated cyclic breathing with timed phases?",
+      "shared": "All three write a repeating timed breath cycle with an equal count on the phases they include.",
+      "divergence": "They do not agree how many timed phases the cycle contains.",
+      "status": "compatible_at_coarse_grain_only"
+    },
+    "identity_bearing_steps": {
+      "question": "Which phases are required for the method to be this method?",
+      "landscape_prior": "Landscape mechanism_shape treated four equal phases including pauses as family identity.",
+      "bhf_sfh": "Both write inhale, pause, exhale, pause.",
+      "newcastle": "Writes inhale, pause, exhale, then repeat. Does not write a pause after the exhale.",
+      "status": "unresolved",
+      "not_used": "Two-against-one count of loci does not decide which phase set is identity-bearing."
+    },
+    "bounds": {
+      "question": "Is equal count / count-of-four part of the method, or an expression parameter?",
+      "observed": "All three illustrate a count of four. None argues that four is the method rather than a convenient default. Session length and cycle count differ by locus.",
+      "status": "unresolved"
+    },
+    "variants_vs_conflicts": {
+      "question": "Does absence of the post-exhale hold change the technique, or remain an allowed variation?",
+      "locus_offered_options": "Posture, tracing a square, hands on the belly, and how long to continue are options the four-phase pages themselves offer.",
+      "phase_mismatch": "Ingest recorded the missing post-exhale hold as a conflicting description, not as a variant. This pass does not reverse that.",
+      "status": "unresolved"
+    }
+  },
+  "why_not_normalize_one": [
+    "Declaring the post-exhale hold optional would add a claim ingest did not make.",
+    "Landscape already treated pauses as identity-bearing; this pass cannot silently demote that.",
+    "Shared names (box / square) are not a kernel."
+  ],
+  "why_not_split_family": [
+    "No selected locus says the three-phase page is a different method from the four-phase pages.",
+    "The same labels appear on structurally different sequences. That may be a naming collision, not two families.",
+    "Splitting now would freeze landscape before the identity question is researched."
+  ],
+  "research_question": "Is post-exhale hold identity-bearing for the box/square/equal-count breathing family, or do sources use one name for structurally different methods?",
+  "next_named_pass": "targeted_shortlist_post_exhale_hold_identity",
+  "not_next": [
+    "safety_review",
+    "canonical",
+    "next_family_slice",
+    "technique_id_on_probe"
+  ]
+}

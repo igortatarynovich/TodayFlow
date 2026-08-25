@@ -17,6 +17,7 @@ from todayflow_backend.data.content_library_validator_v1 import (
     validate_technique_shortlist_criteria_v1,
     validate_technique_shortlist_v1,
     validate_technique_ingest_v1,
+    validate_technique_normalization_v1,
 )
 from todayflow_backend.data.reference_machine_loader import DATA_ROOT
 
@@ -62,6 +63,14 @@ INGEST_CANON = (
     / "docs"
     / "practices"
     / "PRACTICE_TECHNIQUE_INGEST_V1.md"
+)
+NORMALIZATION_PATH = PRACTICE_REF / "technique_normalization_v1.json"
+NORMALIZATION_CONTRACT_PATH = PRACTICE_REF / "technique_normalization_contract_v1.json"
+NORMALIZATION_CANON = (
+    Path(__file__).resolve().parents[2]
+    / "docs"
+    / "practices"
+    / "PRACTICE_TECHNIQUE_NORMALIZATION_V1.md"
 )
 
 SEED_1_ID = "practice.sensory_grounding.001"
@@ -176,7 +185,7 @@ def test_fill_frozen_provisional_probes() -> None:
     assert library["fill_frozen"] is True
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is True
-    assert coverage["next_pass"] == "technique_normalization_v1"
+    assert coverage["next_pass"] == "targeted_shortlist_post_exhale_hold_identity"
     probes = library["architecture_probe_item_ids"]
     assert probes == [
         SEED_1_ID,
@@ -216,6 +225,7 @@ def test_provenance_paths_exist() -> None:
     assert CRITERIA_CANON.is_file()
     assert SHORTLIST_CANON.is_file()
     assert INGEST_CANON.is_file()
+    assert NORMALIZATION_CANON.is_file()
     assert TECHNIQUE_PATH.is_file()
     assert TECHNIQUE_CONTRACT_PATH.is_file()
     assert LANDSCAPE_PATH.is_file()
@@ -225,6 +235,8 @@ def test_provenance_paths_exist() -> None:
     assert SHORTLIST_CONTRACT_PATH.is_file()
     assert INGEST_PATH.is_file()
     assert INGEST_CONTRACT_PATH.is_file()
+    assert NORMALIZATION_PATH.is_file()
+    assert NORMALIZATION_CONTRACT_PATH.is_file()
 
 
 def test_technique_landscape_v1_splits_probe_families() -> None:
@@ -248,7 +260,11 @@ def test_technique_landscape_v1_splits_probe_families() -> None:
     assert landscape["criteria_canon"] == "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1"
     assert landscape["shortlist_canon"] == "PRACTICE_TECHNIQUE_SHORTLIST_V1"
     assert landscape["ingest_canon"] == "PRACTICE_TECHNIQUE_INGEST_V1"
-    assert landscape["next_named_pass"] == "technique_normalization_v1"
+    assert landscape["normalization_canon"] == "PRACTICE_TECHNIQUE_NORMALIZATION_V1"
+    assert landscape["next_named_pass"] == "targeted_shortlist_post_exhale_hold_identity"
+    assert by_id["family.practice.equal_count_breath"]["normalization_status"] == (
+        "insufficient_evidence"
+    )
     assert "energizing_breath" in by_id["family.practice.unattested_short_exhale"]["candidate_types"]
     assert by_id["family.practice.activating_forceful_breath"]["candidate_types"] == []
     assert by_id["family.practice.unattested_short_exhale"]["likely_disposition"] == "reject_or_remap"
@@ -342,6 +358,41 @@ def test_technique_ingest_v1_equal_count_evidence_not_kernel() -> None:
     assert library["status"] == "provisional"
     assert "technique_id" not in probe["identity"]
     assert probe["identity"]["type"] == "box_breathing"
+
+
+def test_technique_normalization_v1_insufficient_evidence_not_canon() -> None:
+    ingest = load_json(INGEST_PATH)
+    normalization = load_json(NORMALIZATION_PATH)
+    assert validate_technique_normalization_v1(normalization, ingest=ingest) == []
+    assert normalization["decision"] == "insufficient_evidence"
+    assert normalization["writes_technique_canon"] is False
+    assert normalization["technique_id_allowed"] is False
+    assert normalization["normalize_one_is_not_canonical"] is True
+    assert list(normalization["comparison"]) == [
+        "mechanism",
+        "identity_bearing_steps",
+        "bounds",
+        "variants_vs_conflicts",
+    ]
+    assert normalization["comparison"]["identity_bearing_steps"]["status"] == "unresolved"
+    assert "post-exhale hold" in normalization["research_question"].lower()
+    assert (
+        normalization["next_named_pass"]
+        == "targeted_shortlist_post_exhale_hold_identity"
+    )
+    assert "safety_review" in normalization["not_next"]
+    assert _techniques()["techniques"] == []
+    _vocab, library, _coverage = _load()
+    probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
+    assert "technique_id" not in probe["identity"]
+    landscape = load_json(LANDSCAPE_PATH)
+    eq = next(
+        r
+        for r in landscape["families"]
+        if r["family_id"] == "family.practice.equal_count_breath"
+    )
+    assert eq["mechanism_shape"].startswith("four equal phases")
+    assert eq["shortlist_status"] == "sliced"
 
 
 def test_seed_pass_closes_exactly_one_cell_per_item() -> None:
@@ -1113,5 +1164,6 @@ def test_repo_paths_exist() -> None:
         CRITERIA_PATH,
         SHORTLIST_PATH,
         INGEST_PATH,
+        NORMALIZATION_PATH,
     ):
         assert Path(path).is_file()

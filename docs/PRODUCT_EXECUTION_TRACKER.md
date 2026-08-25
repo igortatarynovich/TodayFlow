@@ -24,7 +24,16 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-25):** **Ingest V1** — `equal_count_breath` selected loci paraphrased as three independent evidence records. Not a kernel. Technique canon empty. `practice.box_breathing.001` still provisional, no `technique_id`. Next = **Normalization V1** (one kernel vs split family). [PRACTICE_TECHNIQUE_INGEST_V1](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-25):** **Normalization V1** — `equal_count_breath` decision = `insufficient_evidence`. Four-level compare; not 2-vs-1; post-exhale hold identity unresolved. Technique canon empty. Probe still without `technique_id`. Next = **targeted shortlist** on that question, not Safety Review. [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+
+## Architecture impact — Practice Technique Normalization V1 (2026-08-25)
+
+- **SoT before:** three ingested observations. Next step could declare a four-phase kernel with an optional second hold, or split the landscape family on a 2-vs-1 count.
+- **SoT after:** Normalization has three outcomes only. This slice closes as `insufficient_evidence` (a successful result). Landscape kernel unchanged. Family not split. Research question: is post-exhale hold identity-bearing, or do sources use one name for different structures? `normalize_one` would still not be canonical. Library unattested.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) · normalization JSON · provenance 1.5 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with `technique_id`, canon rows, optional-hold synthesis, or Safety Review from this pass.
 
 ## Architecture impact — Practice Technique Ingest V1 (2026-08-25)
 
@@ -2539,6 +2548,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Practices / Canon | **Normalization V1 (equal_count_breath)** | **ACCEPTED** | Four-level compare. Decision `insufficient_evidence` (success). Not 2-vs-1. Not optional hold. Next = targeted shortlist on post-exhale hold identity. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md).
 - 2026-08-25 | Practices / Canon | **Ingest V1 (equal_count_breath)** | **ACCEPTED** | Three independent evidence records. observed_* = source observation, not canonical fields. Newcastle recorded as conflict, not variant. Canon empty. Next = Normalization V1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_INGEST_V1](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md).
 - 2026-08-25 | Practices / Canon | **Shortlist V1 (equal_count_breath slice)** | **ACCEPTED** | Vertical research slice. Selected = ingest permission, not canon/efficacy. Conflicts (3-phase vs 4-phase; holds-as-kernel vs NEED_OWNER) recorded, not averaged. Other families closed. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md).
 - 2026-08-25 | Practices / Canon | **Shortlist Criteria V1** | **ACCEPTED** | Gates C1–C9. Unit = candidate_family. Shortlist still closed. technique_id only at canonical. Next = shortlist by family. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md).

@@ -12,7 +12,7 @@
   "does_not_normalize": true,
   "boundary_held": "selected_loci_to_ingested_evidence_not_canonical_kernel",
   "accessed": "2026-08-25",
-  "next_named_pass": "technique_normalization_v1",
+  "next_named_pass": "technique_normalization_v1_done",
   "evidence": [
     {
       "evidence_id": "ev.equal_count.bhf.heart_matters.box",

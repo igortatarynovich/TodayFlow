@@ -12,7 +12,8 @@
   "criteria_canon": "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1",
   "shortlist_canon": "PRACTICE_TECHNIQUE_SHORTLIST_V1",
   "ingest_canon": "PRACTICE_TECHNIQUE_INGEST_V1",
-  "next_named_pass": "technique_normalization_v1",
+  "normalization_canon": "PRACTICE_TECHNIQUE_NORMALIZATION_V1",
+  "next_named_pass": "targeted_shortlist_post_exhale_hold_identity",
   "families": [
     {
       "family_id": "family.practice.slow_paced_breath",
@@ -38,7 +39,8 @@
       "source_families": ["academic_description", "clinical_psychology", "recognized_school", "tradition_primary", "official_health"],
       "claim_risk": "efficacy_bleed",
       "probe_links": ["practice.box_breathing.001"],
-      "shortlist_status": "sliced"
+      "shortlist_status": "sliced",
+      "normalization_status": "insufficient_evidence"
     },
     {
       "family_id": "family.practice.physiological_sigh",
