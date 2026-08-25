@@ -4,7 +4,16 @@ Last updated: 2026-08-25
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (ARCH / LLM, 2026-08-25):** **Shared Global Day** — landed (`GlobalDayKey`; deploy/live check this pass). **Next named = Personal Day lifecycle** — key = `user_identity + local_date + semantic_version`. Do not add `behavior_version` until overlay is a real Today input. Locked invariants: re-open = 0 LLM; GET must not enqueue regeneration; `expression_version` must not auto-invalidate; force rebuild = same artifact / engineering ledger. Profile selection waits for K3 usage audit (not a 5–8 cut). Cost guard stands. Do not degrade K3 on Profile. Do not mix Personal into the Shared Global deploy.
+**NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — landed (`PersonalDayKey = user_identity + local_date + semantic_version`). Re-open = 0 Personal LLM. GET miss does not enqueue. `expression_version` is a stamp. Force rebuild = same key / engineering when a ready artifact existed. 402/fallback is not a cache hit. **Do not top up Token Factory until owner starts the controlled COGS run.** Next named = Profile Selection **after** that live check (user 1 Global+Personal → reopen → user 2 same locale → force Personal user 1). Do not add `behavior_version` until overlay is a real Today input. Do not mechanical-cut Profile to 5–8. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — Personal Day lifecycle (2026-08-25)
+
+- **SoT before:** GET `/today/contract` did not LLM, but miss enqueued `day_prewarm`. Day-story fingerprint hashed mood/goals/prompt/model/sky — identity churn. Failed/402 could be persisted as `kept_prior_native` with `used_fallback=False` (false cache hit).
+- **SoT after:** `PersonalDayKey = user_identity + local_date + semantic_version`. Accepted `native_llm_c1` rows reuse. GET reopen = 0 Personal LLM. GET miss = assembling shell, no enqueue. `expression_version` / mood / prompt are stamps. Force rebuild of a **ready** artifact = same key, ledger `engineering`. Failed/402/kept-prior are not reusable. Native retries stay in one `log_generation`. Shared Global persist unchanged. Public JSON / I0 meaning / IL atoms unchanged.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Legacy same-user+date native rows reuse via identity fallback (no `personal_day_key` stamp required).
+- **Canon updated?** yes — compute lifecycle 1.3 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 1.2 · DAY_LIFECYCLE GET miss · this tracker
+- **Backward compatible?** yes for clients. Live Shared Global + Personal acceptance still waits for Token Factory top-up + one COGS run.
 
 ## Architecture impact — Shared Global Day (2026-08-25)
 
@@ -53,7 +62,7 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle · IL-3 payload audit · this tracker · LLM quality · freeze “do not expand” · README
 - **Backward compatible?** yes for clients. Force rebuild stays for pre-release testing (engineering ledger).
 
-**NOW (OPS / LLM, 2026-08-25):** **Cost Containment / LLM Usage Observability** — router SoT: request → policy → budget → provider → accounting. K3 allowlist (natal/CE only). Today output 1400 / retry 600. Tenant `LLM_DAILY_USD_CEILING=$5`. Over budget = downgrade (Qwen) or deny. `@example.com` out of prewarm. `$5/100 users` retired. I0 Global is now shared by `GlobalDayKey` (no longer per-user narrative). Next: Personal Day lifecycle, then 24–48h 1-profile COGS measurement.
+**NOW (OPS / LLM, 2026-08-25):** **Cost Containment / LLM Usage Observability** — router SoT: request → policy → budget → provider → accounting. K3 allowlist (natal/CE only). Today output 1400 / retry 600. Tenant `LLM_DAILY_USD_CEILING=$5`. Over budget = downgrade (Qwen) or deny. `@example.com` out of prewarm. `$5/100 users` retired. I0 Global is shared by `GlobalDayKey`; Personal by `PersonalDayKey`. Next: one controlled Token Factory COGS run (Shared Global + Personal live path), then Profile Selection.
 
 ## Architecture impact — Cost Containment llm_cost_guard_v1 (2026-08-25)
 

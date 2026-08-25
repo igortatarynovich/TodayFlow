@@ -63,7 +63,7 @@
 | System evening close | **да** |
 | `day_not_ready` gate | **да** |
 | Reveal ≠ rebuild | **да** (`symbol_overlay_only`) |
-| GET assembling → background catch-up | **да** — enqueue `day_prewarm` job (daemon); **no LLM on GET** |
+| GET assembling → background catch-up | **нет** — GET miss = assembling shell only; **no enqueue**. Cron assemble-window still prewarms |
 
 ## C5.1–C5.3 jobs
 
@@ -109,4 +109,4 @@ Engine: `day_lifecycle_clock_c5.py`, `day_lifecycle_jobs_c5.py`
 - **Backward compatible?** yes
 ```
 
-Ops: crontab every 10 min → `scripts/run_day_lifecycle_cron.sh` → `POST /internal/push/run-due` (needs `PUSH_DISPATCH_SECRET`, `--max-time 600`). Cover **03–06** and 22–00 local bands for active TZs. Missed openers: GET assembling enqueues background `day_prewarm` job.
+Ops: crontab every 10 min → `scripts/run_day_lifecycle_cron.sh` → `POST /internal/push/run-due` (needs `PUSH_DISPATCH_SECRET`, `--max-time 600`). Cover **03–06** and 22–00 local bands for active TZs. GET assembling does **not** enqueue `day_prewarm` (Personal Day lifecycle; [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](../COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md)).

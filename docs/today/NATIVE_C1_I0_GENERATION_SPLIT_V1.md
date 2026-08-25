@@ -18,7 +18,7 @@ Catalog **38 draft / 0 `active`**. Unchanged.
 - **Migration required?** no — refresh/force_rebuild picks up c5.0
 - **Canon updated?** yes — this file · IL §6.70 · inventory KC-C-I0-SPLIT + step 44 · handoff · tracker · TODAY_MEANING_POLISH (split done)
 - **Backward compatible?** yes — same `day_scenario_v1` projection; cached c4.x days until regenerate
-- **2026-08-25 persist:** Shared Global Day (`GlobalDayKey = local_date + locale + semantic_version`). Cache hit skips Global LLM. Force rebuild keeps the key. Public JSON unchanged.
+- **2026-08-25 persist:** Shared Global Day (`GlobalDayKey`) **and** Personal Day (`PersonalDayKey = user_identity + local_date + semantic_version`). Global cache hit skips Global LLM. Personal reopen skips Personal LLM. Force rebuild keeps the key (engineering when a ready artifact existed). GET miss does not enqueue. Public JSON unchanged.
 
 ---
 
@@ -34,7 +34,7 @@ Catalog **38 draft / 0 `active`**. Unchanged.
 | IL-4 | Consume/polish on Global astrology (unchanged) | Reopen attach/consume/polish lemmas |
 | Surfaces | Today native C1 only | Profile · Compatibility |
 
-`services/native_c1_i0_generation_split_v1.py` orchestrates stages; `day_scenario_native_llm_c1` calls it. Shared Global persist: `services/shared_global_day_v1.py` (`GlobalDayKey = local_date + locale + semantic_version`; `user_id` NULL). Product rebuild does not change that key.
+`services/native_c1_i0_generation_split_v1.py` orchestrates stages; `day_scenario_native_llm_c1` calls it. Shared Global persist: `services/shared_global_day_v1.py` (`GlobalDayKey = local_date + locale + semantic_version`; `user_id` NULL). Personal persist: `services/personal_day_v1.py` (`PersonalDayKey = user_identity + local_date + semantic_version`). Product rebuild does not change those keys.
 
 ---
 
@@ -66,5 +66,6 @@ Profile meaning polish — **done 1.3.123.** This I0 file does not reopen.
 
 ## Changelog
 
+- **1.2 (2026-08-25)** — Personal Day persist/reuse. Same `PersonalDayKey`. GET miss does not enqueue. 402 is not a cache hit.
 - **1.1 (2026-08-25)** — Shared Global Day persist. Cache hit skips Global LLM. Force rebuild keeps `GlobalDayKey`. Personal identity not this pass.
 - **1.0 (2026-08-23)** — 1.3.116. Native C1 I0 split Global/Personal LLM stages. Prompt c5.0. Public contracts unchanged.

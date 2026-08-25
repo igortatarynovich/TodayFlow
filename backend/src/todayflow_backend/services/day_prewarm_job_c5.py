@@ -1,6 +1,7 @@
 """Day Lifecycle C5 — background prewarm job (no LLM on GET).
 
-Enqueued when GET /today/contract returns assembling, or by cron catch-up.
+Enqueued by cron assemble-window catch-up (`run_day_lifecycle_due`).
+GET /today/contract miss must not enqueue this job (Personal Day lifecycle).
 Uses generation_jobs_v0 daemon threads; request path only schedules.
 
 Concurrency: at most MAX_CONCURRENT_PREWARMS LLM assemblies hold a DB session.

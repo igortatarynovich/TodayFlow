@@ -56,7 +56,7 @@ PersonalDayKey = user_identity + local_date + semantic_version
 
 В Global identity **не** входят `user_id`, profile hash, expression/prompt конкретного пользователя. Force rebuild пересоздаёт **тот же** ключ (engineering ledger), не новую semantic version. Persist: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](../COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md). This file remains Today **meaning** SoT.
 
-**Persist / economics (subordinate):** Personal = `1 × user × local_date × semantic_version` (next pass). Global = `GlobalDayKey`, not × user. Re-open Global after first success = 0 LLM.
+**Persist / economics (subordinate):** Personal = `1 × user × local_date × semantic_version` (landed: `personal_day_v1`). Global = `GlobalDayKey`, not × user. Re-open after first accepted artifact = 0 LLM on that layer. GET miss does not enqueue regeneration.
 
 ### Who knows what (LOCKED)
 

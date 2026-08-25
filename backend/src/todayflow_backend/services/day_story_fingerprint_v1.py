@@ -1,4 +1,8 @@
-"""Stable day_story fingerprint — only inputs that actually change the text."""
+"""Personal Day identity fingerprint — user × local_date × semantic_version.
+
+Expression/prompt, mood, goals, model, and sky digest are stamps, not invalidation keys.
+Canon: docs/COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md Personal Day lifecycle.
+"""
 
 from __future__ import annotations
 
@@ -20,6 +24,10 @@ from todayflow_backend.services.day_symbol_state_v1 import (
     is_card_revealed,
     is_number_revealed,
     owner_key_for_user,
+)
+from todayflow_backend.services.personal_day_v1 import (
+    PERSONAL_DAY_SEMANTIC_VERSION,
+    personal_day_key,
 )
 from todayflow_backend.services.today_narrative import _latest_snapshot_id
 
@@ -115,23 +123,31 @@ def build_fingerprint_payload(
     sky_digest: str | None = None,
     color_name: str | None = None,
     stone_name: str | None = None,
+    user_id: int | None = None,
+    owner_key: str | None = None,
+    semantic_version: str = PERSONAL_DAY_SEMANTIC_VERSION,
+    expression_version: str | None = None,
 ) -> dict[str, Any]:
-    """Fingerprint for day_story identity.
+    """Identity payload for PersonalDayKey.
 
     Card/number are an interpretive overlay (DAY_LIFECYCLE_V1 / DAY_SYMBOL_REVEAL_CANON):
     they must **not** change this fingerprint or trigger day reassemble.
-    ``revealed_card_id`` / ``revealed_number`` are accepted for call-site compat but ignored.
+    Mood, goals, prompt, model, sky, color, snapshot are **stamps only**.
     """
     _ = revealed_card_id, revealed_number
     model_id = model if model is not None else resolve_story_model_id()
     payload: dict[str, Any] = {
+        "user_id": int(user_id) if user_id is not None else None,
+        "owner_key": (owner_key or "").strip() or None,
         "local_date": local_date.isoformat(),
+        "semantic_version": str(semantic_version or PERSONAL_DAY_SEMANTIC_VERSION).strip(),
         "timezone": (timezone_name or "UTC").strip() or "UTC",
         "locale": (locale or "ru").strip()[:32] or "ru",
         "mood": mood,
         "goals": list(goals or []),
         "profile_snapshot_id": profile_snapshot_id,
         "prompt_version": prompt_version,
+        "expression_version": expression_version or prompt_version,
         "contract_version": contract_version,
     }
     if sky_digest:
@@ -169,7 +185,13 @@ def _sky_digest_from_celestial(celestial_events: dict[str, Any] | None) -> str |
 
 
 def compute_day_story_fingerprint(payload: dict[str, Any]) -> str:
-    return _stable_hash(payload)
+    """Hash only PersonalDayKey fields. Stamps in payload are not identity."""
+    return personal_day_key(
+        user_id=payload.get("user_id"),
+        local_date=payload.get("local_date") or "",
+        semantic_version=str(payload.get("semantic_version") or PERSONAL_DAY_SEMANTIC_VERSION),
+        owner_key=payload.get("owner_key"),
+    )
 
 
 def compute_expected_day_story_fingerprint(
@@ -202,5 +224,7 @@ def compute_expected_day_story_fingerprint(
         sky_digest=_sky_digest_from_celestial(celestial_events),
         color_name=color_name,
         stone_name=stone_name,
+        user_id=user_id,
+        owner_key=key,
     )
     return compute_day_story_fingerprint(payload), payload

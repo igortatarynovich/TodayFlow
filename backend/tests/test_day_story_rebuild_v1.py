@@ -310,8 +310,8 @@ def test_4_parallel_reveal_keeps_base_story_without_rebuild() -> None:
     assert view["number"]["reduced_value"] is not None
 
 
-def test_5_mood_change_still_can_require_rebuild() -> None:
-    """Non-symbol inputs (mood) may still invalidate fingerprint — symbols must not."""
+def test_5_mood_change_does_not_invalidate_personal_day() -> None:
+    """Mood is a stamp. PersonalDayKey does not include it — no rebuild."""
     db = _session()
     user = _user(db)
     day = date(2026, 7, 22)
@@ -357,11 +357,11 @@ def test_5_mood_change_still_can_require_rebuild() -> None:
         db, user_id=user.id, owner_key=owner, local_date=day
     )
     assert mood_payload.get("mood") == 4
-    assert mood_fp != base_fp
+    assert mood_fp == base_fp
     meta = refresh.mark_day_story_stale_after_input_change(
         db, owner_key=owner, local_date=day, user_id=user.id
     )
-    assert meta["story_refresh_required"] is True
+    assert meta["story_refresh_required"] is False
 
 
 def test_6_matching_fingerprint_skips_llm() -> None:

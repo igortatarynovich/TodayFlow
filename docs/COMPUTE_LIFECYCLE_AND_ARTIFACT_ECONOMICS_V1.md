@@ -13,10 +13,10 @@ Catalog **38 draft / 0 `active`**. Unchanged. Knowledge Core V1 stays frozen.
 ## Architecture impact
 
 - **SoT before:** Cost Containment capped tokens/models. Natal Decode GET never rebuilds. I0 already named one Global Day per timezone + persist text. Runtime still mixed product compute with prompt-version hashes, per-user Global LLM, production prewarm, Tarot LLM on every draw.
-- **SoT after:** **This file is lifecycle + economics SoT.** Layers have different cadences. Four version axes (`calc` / `semantic` / `expression` / `behavior`). Four Profile rebuild triggers only. `expression_version` (prompt) is **not** an invalidation key. `GlobalDayKey = local_date + locale + semantic_version` (no user). Personal Day key is next (behavior_version only if overlay is actually used). LLM is last expression/synthesis. Three compute ledgers. Knowledge Core V1 is not expanded. **Work order:** Profile invalidation → **shared Global Day (this pass)** → Personal Day lifecycle → Profile selection (after usage audit) → behavioral overlay → Tarot economics → Compatibility economics. Do **not** mechanically cut Profile to 5–8 themes.
+- **SoT after:** **This file is lifecycle + economics SoT.** Layers have different cadences. Four version axes (`calc` / `semantic` / `expression` / `behavior`). Four Profile rebuild triggers only. `expression_version` (prompt) is **not** an invalidation key. `GlobalDayKey = local_date + locale + semantic_version` (no user). `PersonalDayKey = user_identity + local_date + semantic_version` (no expression, no mood, no `behavior_version` until overlay is used). LLM is last expression/synthesis. Three compute ledgers. Knowledge Core V1 is not expanded. **Work order:** Profile invalidation → shared Global Day → **Personal Day lifecycle (this pass)** → Profile selection (after usage audit + COGS) → behavioral overlay → Tarot economics → Compatibility economics. Do **not** mechanically cut Profile to 5–8 themes.
 - **Public contract changed?** no
 - **Migration required?** no JSON. Existing snapshots reuse via identity fallback. Decode logs via legacy polish fingerprints.
-- **Canon updated?** yes — this file · tracker · TODAY_CONTENT_PIPELINE I0 persist key · NATIVE_C1_I0 1.1 · README
+- **Canon updated?** yes — this file 1.3 · tracker · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 1.2 · DAY_LIFECYCLE GET miss · README
 - **Backward compatible?** yes for clients. Pre-release testing may still force-rebuild (ledger = engineering).
 
 ---
@@ -138,20 +138,22 @@ Forbidden in **GlobalDayKey:** `user_id`, profile hash, per-user expression/prom
 
 Do **not** put `behavior_version` in PersonalDayKey until Today actually consumes behavioral overlay **and** a meaningful-delta rule exists. Until then every small user action would bust the day artifact.
 
-Re-open 20 times → **0 LLM** on Global after the first success; Personal still one overlay per user until Personal lifecycle lands.
+Re-open 20 times → **0 LLM** on Global after the first success; **0 Personal LLM** after the first accepted Personal artifact for that user × local_date × semantic_version.
 
-### Personal Day lifecycle — locked invariants (next named pass)
+### Personal Day lifecycle — landed (this pass)
 
-Not this implementation. Contract for the Personal pass:
+`PersonalDayKey = user_identity + local_date + semantic_version`. Runtime: `services/personal_day_v1.py`; persist stamps on `generation_logs` (`module=day_story_v1`, `surface=day_story`).
 
-1. Ordinary re-open of Today = **0 LLM calls** (same persisted Personal artifact).
-2. GET / cache read **must not** enqueue a regeneration job.
-3. `expression_version` **must not** auto-invalidate an existing Personal Day.
-4. Force rebuild recreates the **same** `PersonalDayKey` and is ledger **engineering**, not product usage.
+1. Ordinary re-open of Today = **0 Personal LLM** (same persisted Personal artifact).
+2. GET / cache read **must not** enqueue a regeneration/prewarm job. Miss → assembling shell. Product first-build remains cron assemble-window.
+3. `expression_version` **must not** auto-invalidate an existing Personal Day (stamp only).
+4. Force rebuild recreates the **same** `PersonalDayKey` and is ledger **engineering** only when a ready artifact already existed. First product/prewarm generate is ledger **product**.
+5. Failed / 402 / kept-prior / facts-only is **not** a ready artifact and must not create a false cache hit.
+6. Native retries stay inside one `call_day_scenario_native_llm_c1` / one `log_generation` — not a new lifecycle identity.
 
-COGS measurement after Shared Global still mixes Personal-stage repeats. First controlled Token Factory run is **after** Personal lifecycle.
+COGS live check (Shared Global + Personal together) waits for Token Factory top-up. Do not fold engineering force rebuilds into $/MAU.
 
-I0 already: identical inputs + identical rule versions → identical day meaning; GET does not call LLM ([TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) I0). Runtime now persists Global under `GlobalDayKey` (`generation_logs.surface=shared_global_day`, `user_id=NULL`).
+I0 already: identical inputs + identical rule versions → identical day meaning; GET does not call LLM ([TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) I0). Runtime now persists Global under `GlobalDayKey` (`generation_logs.surface=shared_global_day`, `user_id=NULL`) and Personal under `PersonalDayKey`.
 
 LLM formulates **after** calc → IL-2 cells → IL-3 rank → **system Selection** → expression. It does not parse raw transits and does not choose the day's themes. Library coverage `transit_to_natal` 245 + `transit_through_house` 84 is cartesian math, not a prompt dump ([LIBRARY_SCALE_V1.md](./astrology/LIBRARY_SCALE_V1.md)).
 
@@ -206,8 +208,8 @@ Practices are an **intervention/action catalog** (goal, duration, intensity, con
 |---------|----------------------|
 | Prompt not a Profile rebuild | **Landed:** `profile_hash` is identity+calc+semantic; snapshot fallback across old prompt-keyed rows; Natal Decode GET matches semantic + legacy polish fingerprints |
 | Global Day 1× date × locale × semantic_version | **This pass:** `shared_global_day_v1` persist; I0 Global LLM skipped on cache hit. Product rebuild does not change the key. Ops `force_global_rebuild` regenerates the same key (engineering ledger) |
-| Personal key = semantic_version | fat day-story fingerprint (mood, goals, sky_digest, prompt_version, …) |
-| GET miss → 0 LLM | GET does not LLM, but miss **enqueues prewarm** |
+| Personal key = semantic_version | **This pass:** `PersonalDayKey`; fingerprint hash is identity only; mood/prompt/expression are stamps |
+| GET miss → 0 LLM | GET does not LLM and **does not enqueue** prewarm. Assembling shell only. Cron assemble-window remains product first-build |
 | Production prewarm off until release | cron still prewarms real testers (budgeted; `@example.com` excluded) |
 | Behavioral-delta gate | `living` refreshes on GET; no “enough new signal → LLM” gate |
 | Profile selection | full IL-3 bag until **usage audit**; not a 5–8 cut |
@@ -222,9 +224,9 @@ Router cost guard stays. It does not replace this lifecycle.
 Main savings **without** touching Kimi 3 quality on Profile:
 
 1. **Profile invalidation** (landed: prompt ≠ snapshot key)
-2. **Shared Global Day** (this pass: `GlobalDayKey`; one Global LLM per locale/date)
-3. **Personal Day lifecycle** (`user × local_date × semantic_version`; four invariants above; `behavior_version` deferred)
-4. **Profile selection** (after “which of 24 does Kimi use” audit — selected / mentioned / merged / ignored / contradicted; not a 5–8 cut)
+2. **Shared Global Day** (landed: `GlobalDayKey`; one Global LLM per locale/date)
+3. **Personal Day lifecycle** (this pass: `user × local_date × semantic_version`; six invariants above; `behavior_version` deferred)
+4. **Profile selection** (after live COGS + “which of 24 does Kimi use” audit — selected / mentioned / merged / ignored / contradicted; not a 5–8 cut)
 5. Behavioral overlay
 6. Tarot economics
 7. Compatibility economics
@@ -232,7 +234,8 @@ Main savings **without** touching Kimi 3 quality on Profile:
 ## 9. This pass does not do
 
 - Public JSON · IL lemma / `active` · pair catalog
-- Personal Day identity key · Tarot/Compat paywall code
+- Token Factory top-up · live Shared Global + Personal COGS run
+- Profile selection · behavioral overlay · prompt/quality polish
 - Mechanical 5–8 theme cut · K3 quality cut · Knowledge Core expand
 - Relevance engine as a new meaning SoT
 
@@ -240,6 +243,7 @@ Main savings **without** touching Kimi 3 quality on Profile:
 
 ## Changelog
 
+- **1.3 (2026-08-25)** — Personal Day lifecycle. `PersonalDayKey = user_identity + local_date + semantic_version`. Accepted artifact reused; GET reopen = 0 Personal LLM; GET miss does not enqueue; expression_version is a stamp; force rebuild = same key / engineering when ready existed; 402/fallback is not a cache hit; native retries stay in one generation attempt. Live COGS after Token Factory top-up.
 - **1.2.1 (2026-08-25)** — Personal Day next-pass invariants locked (0 LLM on re-open; GET does not enqueue; expression_version does not invalidate; force rebuild = same key / engineering). `behavior_version` stays out of PersonalDayKey until overlay is a real Today input.
 - **1.2 (2026-08-25)** — Shared Global Day. `GlobalDayKey = local_date + locale + semantic_version`. Force rebuild = same key. PersonalDayKey documented, not implemented. Profile selection still waits for K3 usage audit.
 - **1.1 (2026-08-25)** — Version axes. Prompt is not an invalidation key. Layered Profile store. Work order locked. Profile hash + Natal Decode lookup implemented to that rule.
