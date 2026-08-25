@@ -132,7 +132,7 @@ def test_compat_synastry_editorial_il4_v1(monkeypatch):
 
     rules = CANON.read_text(encoding="utf-8")
     assert "1.3.115" in rules
-    assert "**Версия:** 1.3.115" in IL.read_text(encoding="utf-8")
+    assert "**Версия:** 1.3.116" in IL.read_text(encoding="utf-8")
     assert "### 6.69" in IL.read_text(encoding="utf-8")
     inventory = INVENTORY.read_text(encoding="utf-8")
     assert "43. Compatibility synastry editorial IL-4" in inventory

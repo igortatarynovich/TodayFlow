@@ -41,7 +41,7 @@ Five stored families = V1 atoms: Planet `core_function` · Sign `manner` · Hous
 
 **STOP Angles.** **STOP Aspects.** **STOP Houses.** **STOP Signs.** Do **not** start CORE scoring. Do **not** start ASC cookbooks. Layer 2 Signs = classification-complete / interpretation-deferred.
 
-**Next named:** IL-2 composition rules — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach IL-4 to product surfaces — **done 1.3.112.** Consume IL-4 in editorial generation — **done 1.3.113.** Today meaning polish — **done 1.3.114.** Not a new “canonical v2.”
+**Next named:** IL-2 composition rules — **done 1.3.107.** IL-3 Interpretation Engine — **done 1.3.108.** IL-4 Expression — **done 1.3.109.** Library scale — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach IL-4 to product surfaces — **done 1.3.112.** Consume IL-4 in editorial generation — **done 1.3.113.** Today meaning polish — **done 1.3.114.** Profile meaning polish — **done 1.3.123.** Not a new “canonical v2.”
 
 ---
 
@@ -182,7 +182,8 @@ Default: IL-2 Composition Engine from atoms ([ACM](../ASTROLOGY_COMPOSITION_MODE
 | KC-C-CONSUME | Editorial generation phrases IL-4 packs | Consume | prompt + protected prefix; fill-empty / reject-invalid | Today native · Profile LLM · Compatibility when pack present | after attach (1.3.112) | **locked 1.3.113** — [IL4_EDITORIAL_CONSUME_V1.md](./IL4_EDITORIAL_CONSUME_V1.md) | Today meaning polish — done 1.3.114 | `LOCKED` |
 | KC-C-TODAY-POLISH | Today native chorus binds to IL-4 | Polish | astrology voice phrases pack; conflict/scenes stay brief | Today native only | after consume (1.3.113) | **locked 1.3.114** — [TODAY_MEANING_POLISH_V1.md](../today/TODAY_MEANING_POLISH_V1.md) | synastry editorial IL-4 — done 1.3.115 | `LOCKED` |
 | KC-C-COMPAT-EDITORIAL | Synastry editorial phrases IL-4 | Compat editorial | attach + consume when charts supplied | synastry endpoint | after polish (1.3.114) | **locked 1.3.115** — [COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md](./COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md) | owner-directed post-IL polish | `LOCKED` |
-| KC-C-I0-SPLIT | Native C1 I0 generation split | I0 split | Global stage + Personal overlay; personal consumes GLOBAL_LOCKED | Today native C1 only | after compat editorial (1.3.115) | **locked 1.3.116** — [NATIVE_C1_I0_GENERATION_SPLIT_V1.md](../today/NATIVE_C1_I0_GENERATION_SPLIT_V1.md) | Profile polish or deploy | `LOCKED` |
+| KC-C-I0-SPLIT | Native C1 I0 generation split | I0 split | Global stage + Personal overlay; personal consumes GLOBAL_LOCKED | Today native C1 only | after compat editorial (1.3.115) | **locked 1.3.116** — [NATIVE_C1_I0_GENERATION_SPLIT_V1.md](../today/NATIVE_C1_I0_GENERATION_SPLIT_V1.md) | Profile polish — done 1.3.123 | `LOCKED` |
+| KC-C-PROFILE-POLISH | Profile natal decode binds to IL-4 | Polish | sky theses phrase pack; Identity Core stays CE | Natal Decode Depth only | after I0 split (1.3.116) | **locked 1.3.123** — [PROFILE_MEANING_POLISH_V1.md](../profile/PROFILE_MEANING_POLISH_V1.md) | owner-directed (deploy or new C1 reject) | `LOCKED` |
 
 Gold lists stay in IL §8. Do not ingest Layer 5. Atoms remain compose inputs. **Consume 1.3.113 stands.** **Polish 1.3.114 stands.** **Compat editorial 1.3.115 stands.**
 
@@ -232,7 +233,7 @@ Examples against the current tree:
 4. **Houses and Aspects stay `DRAFT_CLASSICAL` — APPROVED.** Do not “catch up” school counts to Planets/Signs. Structural atoms are enough for the next stage. New research only if IL-2 hits a specific semantic insufficiency. **Coverage symmetry between layers is not a goal.**
 5. **Next named pass after approval = outer schema (done 1.3.72), not ASC/MC and not literature.** **1.3.73** inserts TodayFlow Canon *before* filling meaning keys. Then: Sun–Pluto claim audit → materialize outer drafts under Canon (not CORE) → ASC/MC definition → ASC/MC decision → IL-1 V1 close-out → IL-2 Composition.
 
-ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle map locked 1.3.100. Angle Canon grammar locked 1.3.101 (`orientation`). Angle Canon fill locked 1.3.102. Angle Canon storage/materialization locked 1.3.103. Stored Planet×Angle smoke PASS 1.3.104. Final atomic smoke PASS 1.3.105. Knowledge Core V1 FREEZE **done 1.3.106.** IL-2 composition rules **done 1.3.107.** IL-3 Interpretation Engine **done 1.3.108.** IL-4 Expression **done 1.3.109.** Library scale **done 1.3.110.** Wire calc → IL **done 1.3.111.** Attach IL-4 **done 1.3.112.** Consume IL-4 **done 1.3.113.** Today meaning polish **done 1.3.114.** **STOP Angles.** Do not start from a book. Next named = owner-directed post-polish.
+ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle map locked 1.3.100. Angle Canon grammar locked 1.3.101 (`orientation`). Angle Canon fill locked 1.3.102. Angle Canon storage/materialization locked 1.3.103. Stored Planet×Angle smoke PASS 1.3.104. Final atomic smoke PASS 1.3.105. Knowledge Core V1 FREEZE **done 1.3.106.** IL-2 composition rules **done 1.3.107.** IL-3 Interpretation Engine **done 1.3.108.** IL-4 Expression **done 1.3.109.** Library scale **done 1.3.110.** Wire calc → IL **done 1.3.111.** Attach IL-4 **done 1.3.112.** Consume IL-4 **done 1.3.113.** Today meaning polish **done 1.3.114.** Profile meaning polish **done 1.3.123.** **STOP Angles.** Do not start from a book. Next named = owner-directed (deploy or new C1 reject).
 
 ---
 
@@ -282,6 +283,8 @@ ASC/MC parent 1–4 closed 1.3.99: they are orientation loci. Mainstream Angle m
 41. Consume IL-4 in editorial generation      ✅ 1.3.113 phrase packs; fill-empty / reject-invalid
 42. Today meaning polish                      ✅ 1.3.114 native astrology chorus binds to IL-4
 43. Compatibility synastry editorial IL-4     ✅ 1.3.115 attach+consume when charts supplied
+44. Native C1 I0 generation split              ✅ 1.3.116 Global then Personal overlay
+45. Profile meaning polish                     ✅ 1.3.123 natal decode sky theses bind to IL-4
 ```
 
 Historical literature does not appear in this order. Lenses stay in the existing corpus. Co–Star is a check on Mainstream rows, not a source.
@@ -290,6 +293,7 @@ Historical literature does not appear in this order. Lenses stay in the existing
 
 ## Changelog
 
+- **1.47 (2026-08-25)** — Profile meaning polish (1.3.123). Natal Decode binds sky theses to IL-4. KC-C-PROFILE-POLISH locked.
 - **1.46 (2026-08-23)** — Native C1 I0 generation split (1.3.116). Global + Personal LLM stages. KC-C-I0-SPLIT locked.
 - **1.45 (2026-08-23)** — Compatibility synastry editorial IL-4 (1.3.115). KC-C-COMPAT-EDITORIAL locked.
 - **1.44 (2026-08-23)** — Today meaning polish (1.3.114). Native astrology chorus binds to IL-4. KC-C-TODAY-POLISH locked.

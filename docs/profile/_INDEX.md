@@ -9,6 +9,7 @@
 | [../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md) | **D1–D4 ACCEPTED** — Snapshot home · Evidence Graph · staged pipeline · adapters |
 | [../audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md](../audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md) | Schema DRAFT — identity/provenance · envelope · Evidence · Compass · adapters · shadow |
 | [PROFILE_NATAL_DECODE_DEPTH_V1.md](./PROFILE_NATAL_DECODE_DEPTH_V1.md) | **Natal Decode** — opt-in depth поверх CE · explicit request only · не personality root |
+| [PROFILE_MEANING_POLISH_V1.md](./PROFILE_MEANING_POLISH_V1.md) | **Profile meaning polish (1.3.123)** — decode sky theses bind to IL-4; CE identity untouched |
 | [PROFILE_PRODUCT_SURFACE_CANON.md](./PROFILE_PRODUCT_SURFACE_CANON.md) | Surface journey (Шаги 1–5) — *как* раскрывается |
 | [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) | Content pipeline · Snapshot · eval |
 | [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) | Visual/layout master (legacy v0) |

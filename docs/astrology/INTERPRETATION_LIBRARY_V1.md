@@ -1975,7 +1975,17 @@ Native C1 runs Global LLM stage (chorus sky/card/number + conflict + scenes; no 
 
 **Not this pass:** public JSON · set `active` · full pipeline redesign · deploy.
 
-**Next named:** owner-directed post-I0 (Profile polish or deploy). Not `active`. Not Relevance.
+**Next named:** owner-directed Profile meaning polish — **done 1.3.123.** Not `active`. Not Relevance.
+
+### 6.71 Profile meaning polish (1.3.123)
+
+Full lock: [PROFILE_MEANING_POLISH_V1.md](../profile/PROFILE_MEANING_POLISH_V1.md). Inventory step 45 · KC-C-PROFILE-POLISH.
+
+Natal Decode Depth binds `pattern_thesis` / `section.thesis` to IL-4 packs when cached natal geometry exists. `PROFILE_IL4_DECODE` + consume `IL4_MEANING`; reject empty theses; fill-empty theses only. Identity Core stays Character Engine. Prompt `profile.natal_decode_depth.v1` **1.1.0**. Public JSON unchanged. I0 1.3.116, Today polish 1.3.114, consume, attach stand.
+
+**Not this pass:** public JSON · set `active` · CE / personality_v1 inject · Today polish reopen · deploy.
+
+**Next named:** owner-directed (deploy frontend or new prod Native C1 reject). Not `active`. Not Relevance.
 
 ---
 
@@ -2002,6 +2012,7 @@ Native C1 runs Global LLM stage (chorus sky/card/number + conflict + scenes; no 
 | **consume** | editorial generation phrases IL-4 packs | **done 1.3.113**; fill-empty / reject-invalid; public JSON unchanged |
 | **polish** | Today native chorus binds to IL-4 | **done 1.3.114**; astrology voice only; prompt c4.2 |
 | **compat editorial** | Synastry editorial phrases IL-4 | **done 1.3.115**; charts supplied; prompt v1.1 |
+| **profile polish** | Natal Decode sky theses bind to IL-4 | **done 1.3.123**; Identity Core stays CE; prompt 1.1.0 |
 
 Масштаб библиотеки — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach IL-4 to surfaces — **done 1.3.112.** Consume in editorial generation — **done 1.3.113.** Если модель не выдерживает источники — чинить ontology, не плодить объекты и не трогать Today-прозу.
 
@@ -2052,6 +2063,7 @@ Native C1 runs Global LLM stage (chorus sky/card/number + conflict + scenes; no 
 
 ## 10. Changelog
 
+- **1.3.123 (2026-08-25)** — Profile meaning polish: Natal Decode sky theses bind to IL-4 packs. Identity Core stays CE. Prompt 1.1.0. Public JSON unchanged. Today polish 1.3.114 / consume / attach stand. Catalog 38 draft / 0 `active`. STOP Angles. STOP Aspects. STOP Houses. STOP Signs.
 - **1.3.115 (2026-08-23)** — Compatibility synastry editorial IL-4 when charts supplied. Public JSON unchanged. Polish / consume / attach stand.
 - **1.3.114 (2026-08-23)** — Today meaning polish: native astrology chorus binds to IL-4 packs. Prompt c4.2. Public JSON unchanged. Consume 1.3.113 stands. Catalog 38 draft / 0 `active`. STOP Angles. STOP Aspects. STOP Houses. STOP Signs.
 - **1.3.113 (2026-08-23)** — IL-4 editorial consume: Today / Profile / Compatibility generation phrases IL-4 packs. Fill-empty / reject-invalid. Public JSON unchanged. Attach / wire / scale / IL-4 / IL-3 / IL-2 / freeze stand. Catalog 38 draft / 0 `active`. STOP Angles. STOP Aspects. STOP Houses. STOP Signs.

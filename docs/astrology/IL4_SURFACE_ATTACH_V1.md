@@ -58,5 +58,6 @@ Today *meaning polish* may resume as an **owner-directed** pass after consume 1.
 
 ## Changelog
 
+- **1.2 (2026-08-25)** — Profile meaning polish 1.3.123: natal decode is an attach consumer. This attach stands.
 - **1.1 (2026-08-23)** — Editorial consume done 1.3.113. This attach stands.
 - **1.0 (2026-08-23)** — 1.3.112. Product surfaces read IL-4 packs on LLM input. Public contracts unchanged.

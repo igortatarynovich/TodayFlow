@@ -124,7 +124,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-24):** **Native C1 conflict→scene seed retry 1.3.122 LOCKED** (prompt c5.5 · why_today must not paste into scene.why · detectors unchanged). **Native C1 astro jargon retry 1.3.121 LOCKED**. **Native C1 seed leak retry 1.3.120 LOCKED**. **Native C1 everyday scene retry 1.3.119 LOCKED**. **Native C1 evidence pack binding 1.3.118 LOCKED**. **Native C1 editorial gate calibration 1.3.117 LOCKED**. **Native C1 I0 generation split 1.3.116 LOCKED**. **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
+**NOW (FOUNDATION, 2026-08-25):** **Profile meaning polish 1.3.123 LOCKED** (Natal Decode sky theses bind to IL-4 · Identity Core stays CE · prompt 1.1.0). **Native C1 conflict→scene seed retry 1.3.122 LOCKED** (prompt c5.5 · why_today must not paste into scene.why · detectors unchanged). **Native C1 astro jargon retry 1.3.121 LOCKED**. **Native C1 seed leak retry 1.3.120 LOCKED**. **Native C1 everyday scene retry 1.3.119 LOCKED**. **Native C1 evidence pack binding 1.3.118 LOCKED**. **Native C1 editorial gate calibration 1.3.117 LOCKED**. **Native C1 I0 generation split 1.3.116 LOCKED**. **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. **IL-4 surface attach 1.3.112 LOCKED**. **Wire calc → IL 1.3.111 LOCKED**. **Library scale 1.3.110 LOCKED**. **IL-4 1.3.109 LOCKED**. **IL-3 1.3.108 LOCKED**. **IL-2 1.3.107 LOCKED**. **FREEZE 1.3.106 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
@@ -307,6 +307,15 @@ Status: Active working document
 - **Migration required?** no
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
+
+## Architecture impact — Profile 1.3.123 meaning polish (2026-08-25)
+
+- **SoT before:** Today polish 1.3.114 bound native astrology chorus to IL-4. Live Profile is Character Engine; Natal Decode invented sky meaning from compact natal_pack facts.
+- **SoT after:** **Profile Meaning Polish V1** — Natal Decode `pattern_thesis` / `section.thesis` phrase IL-4 when a pack is present. Identity Core stays CE. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — next explicit POST after decode v0.3 fingerprint
+- **Canon updated?** yes — `docs/profile/PROFILE_MEANING_POLISH_V1.md` · tracker 1.3.123
+- **Backward compatible?** yes — missing geometry → previous decode path
 
 ## Architecture impact — Today 1.3.122 Native C1 conflict→scene seed retry (2026-08-24)
 
@@ -2407,6 +2416,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Profile / IL-4 | **1.3.123 Profile meaning polish** | **LOCKED** | Natal Decode sky theses bind to IL-4. Identity Core stays CE. Prompt 1.1.0. Public JSON unchanged. [PROFILE_MEANING_POLISH_V1](./profile/PROFILE_MEANING_POLISH_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.122 conflict→scene seed retry** | **LOCKED** | Name `why_today`/`why_arose` paste into `scenes[].why` so retry does not trade it for `ASTRO_JARGON_BARE` on `astrology[2]`. Prompt c5.5. Detectors unchanged. Live user **2** gen **1122** PASS (Global first try). [NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1](./today/NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.121 astro jargon retry** | **LOCKED** | Cross-gate retry: don't trade `ASTRO_JARGON_BARE` on `astrology[i]` for why_today paste (`verbatim_seed_leak`). Prompt c5.4. Detectors unchanged. Live user **15** gen **1118** PASS (3 Global). [NATIVE_C1_ASTRO_JARGON_RETRY_V1](./today/NATIVE_C1_ASTRO_JARGON_RETRY_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.120 seed leak retry** | **LOCKED** | Catch `verbatim_seed_leak` + `conflict_short_name_is_sky_fact` on Global native validate (same detectors); retry coaching; prompt c5.3. Live: gen 1101/1116 were post-I0 hard fails; gen **1117** retries seed-kill then terminal `ASTRO_JARGON_BARE` (user 15 still unavailable). [NATIVE_C1_SEED_LEAK_RETRY_V1](./today/NATIVE_C1_SEED_LEAK_RETRY_V1.md).

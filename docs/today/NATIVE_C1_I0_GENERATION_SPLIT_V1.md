@@ -55,9 +55,11 @@ Tests: `backend/tests/test_native_c1_i0_generation_split_v1.py`.
 ## 2. This pass does not do
 
 - Public JSON fields · set `active` · full pipeline redesign (Global Day Engine nests)
-- Profile polish · deploy · merge to `main` without owner
+- Deploy · merge to `main` without owner
 - Third LLM for card/number split (minimal I0 only)
 - Reopen IL-2/3/4 · wire/attach/consume/polish/compat editorial
+
+Profile meaning polish — **done 1.3.123.** This I0 file does not reopen.
 
 ---
 

@@ -3,7 +3,7 @@
 **Status:** ACCEPTED — opt-in depth layer (не personality root)  
 **Date:** 2026-07-27  
 **Parents:** [PROFILE_EXPERIENCE_SCENARIO_V1.md](./PROFILE_EXPERIENCE_SCENARIO_V1.md) · [PROFILE_PRODUCT_SURFACE_CANON.md](./PROFILE_PRODUCT_SURFACE_CANON.md) · [TODAY_DEPTH_LAYER_V1.md](../TODAY_DEPTH_LAYER_V1.md) (аналог паттерна)  
-**Code:** `natal_decode_depth_v0.py` · `POST /account/profile/natal-decode`
+**Code:** `natal_decode_depth_v0.py` · `POST /account/profile/natal-decode` · IL-4 bind: [PROFILE_MEANING_POLISH_V1.md](./PROFILE_MEANING_POLISH_V1.md) (1.3.123)
 
 ## Architecture impact
 

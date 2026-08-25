@@ -59,4 +59,5 @@ Prompt version: `day-scenario-native-c4.2`.
 
 ## Changelog
 
+- **1.1 (2026-08-25)** — Profile meaning polish done 1.3.123 (Natal Decode). This Today polish stands.
 - **1.0 (2026-08-23)** — 1.3.114. Today native binds astrology chorus to IL-4 packs. Public contracts unchanged.
