@@ -44,6 +44,18 @@ DEFECT_CHORUS_NATAL_WITHOUT_EVIDENCE = "CHORUS_NATAL_WITHOUT_EVIDENCE"
 DEFECT_SEED_BANK_BINARY_SHORT_NAME = "SEED_BANK_BINARY_SHORT_NAME"
 DEFECT_SEED_CHORUS_PASTE = "SEED_CHORUS_PASTE"
 
+# Prod gen 1117: jargon retry pasted why_today into astrology[1]; seed-kill retry reverted to jargon.
+# Prod gen 1119: seed-kill missed why_arose→scene.why; attempt 2 reverted astrology[2] to jargon.
+SEED_JARGON_CROSS_HINT_RU = (
+    "Не чини ASTRO_JARGON_BARE копипастом why_today и не чини seed-leak откатом в жаргон: "
+    "human_meaning КАЖДОГО interpretive_chorus.astrology[i] (включая [1]/[2]) — "
+    "среда дня своими словами; не копия named_factor и не копия conflict.why_today/title "
+    "(≥6 слов = verbatim_seed_leak). "
+    "Не копируй why_today/why_arose (≥6 слов) в scenes[].why / why_sphere / setup "
+    "(prod gen 1119: conflict.why_arose+scenes[0].why). "
+    "Не чини этот leak откатом astrology[i] в жаргон."
+)
+
 CRITICAL_DEFECTS = frozenset(
     {
         # Severity labels for eval/scoring — NOT runtime blockers (see C3.6 maturity).
@@ -939,6 +951,32 @@ def format_editorial_retry_feedback(defects: list[dict[str, str]], *, limit: int
             "SEED-KILL: не цитируй short_name/A|B в chorus; не используй шаблоны "
             "«подталкивает день к сюжету» / «окрашивает прохождение» / «какой ролью пройти»; "
             "не ставь bank-binary («тащить старое или…») в title.",
+        )
+    codes = {str(d.get("code") or "") for d in defects}
+    if DEFECT_SCENE_MISSING_EVERYDAY in codes or DEFECT_SCENE_ABSTRACT in codes:
+        lines.insert(
+            len(lines) - 1,
+            "everyday_example на КАЖДОЙ сцене (не только listed field): часы ЧЧ:ММ, "
+            "или цитата ≥12 знаков в «ёлочках», или человек+пишет/спрашивает, или «в чате». "
+            "Сцены без дефекта не укорачивай — retry не должен ломать уже валидный момент. "
+            "Пример: «Рабочий чат, 11:15: коллега пишет «нам это нужно сегодня до совещания?»». "
+            "setup — тот же момент, не абстрактная «напряжённость в отношениях».",
+        )
+    if DEFECT_CHORUS_PARALLEL_FORECAST in codes or DEFECT_CHORUS_ROLE_DRIFT in codes:
+        lines.insert(
+            len(lines) - 1,
+            "CHORUS_PARALLEL: каждый голос — одна роль в ОДНОМ конфликте (conflict_id + link_to_conflict), "
+            "не четыре отдельные «сегодня в работе… в отношениях…». "
+            "astrology=среда; card=архетип реакции; number=темп; natal=личная уязвимость — без копипаста сфер.",
+        )
+    if DEFECT_ASTRO_JARGON_BARE in codes or DEFECT_CHORUS_UNTRANSLATED_JARGON in codes:
+        lines.insert(
+            len(lines) - 1,
+            "astrology voice: named_factor может держать факт неба; human_meaning + link_to_conflict "
+            "КАЖДОГО astrology[i] (не только [0]) ОБЯЗАНЫ перевести в среду дня "
+            "(давление, темп, разговор, импульс) — "
+            "не «это подталкивает день к сюжету» и не копия named_factor. "
+            + SEED_JARGON_CROSS_HINT_RU,
         )
     for d in defects[:limit]:
         lines.append(f"- [{d.get('code')}] {d.get('field')}: {d.get('message')}")

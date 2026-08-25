@@ -49,8 +49,8 @@ Forbidden legacy keys: expect, trap, do, avoid, domains, talisman, story, theme,
 
 ## Prompt version
 
-`day-scenario-native-c4.0` — dramaturgy brief SoT + protected user message (facts before slogan).  
-Prior: `c3.3b` · `c3.3a` · `c3.2` · `c3.1` · `c1.0`.  
+`day-scenario-native-c4.2` — Today meaning polish: astrology chorus binds to IL4_MEANING; consume + protected prefix.  
+Prior: `c4.1` (IL-4 consume) · `c4.0` (dramaturgy brief + protected user message) · `c3.3b` · `c3.3a` · `c3.2` · `c3.1` · `c1.0`.  
 Legacy `day-story-v1.10-no-formula-runtime` remains eval/compare only — **not** runtime SoT.
 
 See [DAY_SCENARIO_DRAMATURGY_BRIEF_C4.md](./DAY_SCENARIO_DRAMATURGY_BRIEF_C4.md) ·

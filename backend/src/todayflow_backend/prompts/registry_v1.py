@@ -177,7 +177,7 @@ _REGISTRY: dict[str, dict[str, Any]] = {
     },
     # Natal Decode Depth — opt-in; not personality SoT
     "profile.natal_decode_depth.v1": {
-        "version": "1.0.1",
+        "version": "1.1.0",
         "surface": "profile_depth",
         "step": "natal_decode",
         "builder": natal_decode_depth_v1.natal_decode_depth_system,

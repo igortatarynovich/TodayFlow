@@ -1,6 +1,8 @@
-# Today — продуктовая модель
+# Today — продуктовая модель (историческая воронка)
 
-**Статус:** принято (воронка / Theme→Action→Progress). **Дневной ScreenFlow** — не здесь: [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY · RITUAL · MY DAY · EVENING).  
+> **SUBORDINATE / не SoT · 2026-08-21.** ScreenFlow = [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md). Смысл = [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) I0 — Global Day **без** натала / карты / числа. Формула ниже «Today = транзиты + карта + число + Profile» — **не** runtime-authority; это смешение слоёв, запрещённое I0. Theme→Action→Progress — гипотеза цикла, не карта экрана.
+
+**Статус:** `SUBORDINATE` — историческая воронка / Package notes. **Дневной ScreenFlow** — только PRODUCT_FLOW.  
 **Версия:** 1.1 (2026-06-01).  
 **Владелец:** Product + Engineering.
 

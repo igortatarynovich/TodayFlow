@@ -1,0 +1,1061 @@
+{
+  "contract_version": "astrology_source_corpus_v1",
+  "notes": "IL-0.5 candidate corpus. No source is approved for ingest until legal_status is reviewed and status=approved. Ancient originals may be public domain; modern translations and websites are not. Do not copy prose into the library.",
+  "sources": [
+    {
+      "source_id": "src.classical.ptolemy_tetrabiblos",
+      "source_class": "classical",
+      "title": "Tetrabiblos",
+      "author": "Claudius Ptolemy",
+      "role": "primary",
+      "use": [
+        "objects",
+        "signs",
+        "houses",
+        "aspects",
+        "rulerships"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Greek original PD. Any modern English/Russian translation is copyrighted — paraphrase only."
+    },
+    {
+      "source_id": "src.classical.valens_anthologies",
+      "source_class": "classical",
+      "title": "Anthologies",
+      "author": "Vettius Valens",
+      "role": "primary",
+      "use": [
+        "objects",
+        "houses",
+        "aspects",
+        "natal"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Greek original PD. Riley English is copyrighted — paraphrase only. Opened: Book I ch.1 stars, I.2 Aries, IX XII Places. I.3 terms = dignity, not Layer 2."
+    },
+    {
+      "source_id": "src.classical.dorotheus_carmen",
+      "source_class": "classical",
+      "title": "Carmen Astrologicum",
+      "author": "Dorotheus of Sidon",
+      "role": "primary",
+      "use": [
+        "houses",
+        "aspects",
+        "natal",
+        "transits"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.classical.firmicus_matheseos",
+      "source_class": "classical",
+      "title": "Matheseos Libri VIII",
+      "author": "Julius Firmicus Maternus",
+      "role": "primary",
+      "use": [
+        "objects",
+        "houses",
+        "natal"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.classical.lilly_christian_astrology",
+      "source_class": "classical",
+      "title": "Christian Astrology",
+      "author": "William Lilly",
+      "role": "primary",
+      "use": [
+        "objects",
+        "houses",
+        "aspects",
+        "orbs",
+        "natal"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "1647 text PD. Facsimile/reset modern editions may still carry new copyright on apparatus. Opened I.19 (p.105): planetary moiety orbs, two tables, partile/platick."
+    },
+    {
+      "source_id": "src.classical.paulus_introductory",
+      "source_class": "classical",
+      "title": "Introductory Matters",
+      "author": "Paulus Alexandrinus",
+      "role": "primary",
+      "use": [
+        "objects",
+        "houses",
+        "aspects"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.classical.rhetorius",
+      "source_class": "classical",
+      "title": "Compendium",
+      "author": "Rhetorius of Egypt",
+      "role": "primary",
+      "use": [
+        "houses",
+        "natal",
+        "history"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.classical.bonatti_liber_astronomiae",
+      "source_class": "classical",
+      "title": "Liber Astronomiae",
+      "author": "Guido Bonatti",
+      "role": "primary",
+      "use": [
+        "houses",
+        "aspects",
+        "natal"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.classical.ibn_ezra_beginning",
+      "source_class": "classical",
+      "title": "The Beginning of Wisdom",
+      "author": "Abraham Ibn Ezra",
+      "role": "primary",
+      "use": [
+        "objects",
+        "signs",
+        "houses"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.classical.project_hindsight",
+      "source_class": "classical",
+      "title": "Project Hindsight translations (1993–)",
+      "author": "Project Hindsight / Robert Schmidt et al.",
+      "role": "translation_program",
+      "use": [
+        "objects",
+        "houses",
+        "aspects",
+        "natal",
+        "history"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Use to reach Greek/Latin tradition. Do not copy Hindsight English into the library."
+    },
+    {
+      "source_id": "src.classical.brennan_hellenistic",
+      "source_class": "classical",
+      "title": "Hellenistic Astrology: The Study of Fate and Fortune",
+      "author": "Chris Brennan",
+      "role": "history",
+      "use": [
+        "history",
+        "houses",
+        "aspects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.classical.holden_history",
+      "source_class": "classical",
+      "title": "A History of Horoscopic Astrology",
+      "author": "James Herschel Holden",
+      "role": "history",
+      "use": [
+        "history"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.traditional.skyscript",
+      "source_class": "traditional",
+      "title": "Skyscript (library)",
+      "author": "Deborah Houlding / Skyscript contributors",
+      "role": "traditional_living",
+      "use": [
+        "objects",
+        "houses",
+        "aspects",
+        "natal",
+        "transits",
+        "stars",
+        "rulerships",
+        "orbs"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Structured traditional ontology. Extract concepts; never scrape articles into objects. House extracts 1/6/7/12 opened via Houlding *Houses* source_id, not this row."
+    },
+    {
+      "source_id": "src.traditional.houlding_houses",
+      "source_class": "traditional",
+      "title": "The Houses: Temples of the Sky",
+      "author": "Deborah Houlding",
+      "role": "traditional_living",
+      "use": [
+        "houses",
+        "history"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened Skyscript extracts of houses 1/6/7/12 (1996/2003). Paraphrase only. Personality overlay and turned-house lists not copied into domain."
+    },
+    {
+      "source_id": "src.traditional.houlding_aspects",
+      "source_class": "traditional",
+      "title": "The Traditional Use of Aspects / planetary vs aspect orbs",
+      "author": "Deborah Houlding",
+      "role": "traditional_living",
+      "use": [
+        "aspects",
+        "orbs",
+        "history"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Needed so square ≠ simply 'bad'; aspect is a relation with a history. Opened: Classical Origin and Traditional Use of Aspects (Skyscript 2004; Mag. 8, 1995). Paraphrase only."
+    },
+    {
+      "source_id": "src.traditional.houlding_saturn",
+      "source_class": "traditional",
+      "title": "Saturn: The Great Teacher",
+      "author": "Deborah Houlding",
+      "role": "traditional_living",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened Skyscript article, December 2003. Paraphrase only. Boundary/constraint lemmas stay school_specific; Mundane Signification catalog not copied; Greene membrane quote not ingested as Greene."
+    },
+    {
+      "source_id": "src.traditional.houlding_triplicities",
+      "source_class": "traditional",
+      "title": "The Classical Use of Triplicities",
+      "author": "Deborah Houlding",
+      "role": "traditional_living",
+      "use": [
+        "signs",
+        "history"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened Skyscript reprint of Traditional Astrologer 6 (Autumn 1994). Ontology paragraphs only. Rulers, Dorotheus fortune, dignity not ingested. Paraphrase only."
+    },
+    {
+      "source_id": "src.traditional.abu_mashar_great_introduction",
+      "source_class": "traditional",
+      "title": "The Great Introduction",
+      "author": "Abu Ma'shar",
+      "role": "primary",
+      "use": [
+        "objects",
+        "signs",
+        "houses"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.psychological.greene_saturn",
+      "source_class": "psychological",
+      "title": "Saturn: A New Look at an Old Devil",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened Weiser Classics 2021 Introduction via Red Wheel/Weiser Calaméo preview (ISBN 978-1-57863-735-5; Intro p.1-8). Paraphrase only. Watery ch.1 not ingested. 1.3.53: remaining chapters unread same-author densification."
+    },
+    {
+      "source_id": "src.psychological.greene_relating",
+      "source_class": "psychological",
+      "title": "Relating",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal",
+        "houses"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "No longer the Venus psych blocker (Inner Planets p.69). Relating 'Jupiter and Saturn' p.39 is an unread candidate, not evidence. Venus/7th preview still unopened. Do not backfill."
+    },
+    {
+      "source_id": "src.psychological.greene_luminaries",
+      "source_class": "psychological",
+      "title": "The Luminaries",
+      "author": "Liz Greene / Howard Sasportas",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened publisher preview: Pt.1 Mothers and Matriarchy (Moon); Pt.2 Hero with a Thousand Faces (Sun). Paraphrase only. Relating Venus chapter still closed."
+    },
+    {
+      "source_id": "src.psychological.costello_astrological_moon",
+      "source_class": "psychological",
+      "title": "The Astrological Moon",
+      "author": "Darby Costello",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal",
+        "transits"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Unread. CPA Press 1996 ISBN 1900869241; Raven Dreams 2017 ISBN 9780984047499. Official CPA page = jacket + 1997 Harvey review, not chapter body. 1.3.51: author-site reprint blurb not chapter. Jacket/review not ingested. NEED_OWNER. Pirate dumps unused."
+    },
+    {
+      "source_id": "src.psychological.greene_apollos_chariot",
+      "source_class": "psychological",
+      "title": "Apollo's Chariot: The Meaning of the Astrological Sun",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Unread. CPA Press 2001 ISBN 1900869179 (seminars 1 and 8 Nov 1998). Jacket/review only. Jacket claims not ingested. NEED_OWNER. 1.3.50: Apollon Issue 1 ingested separately; still not a substitute for this book."
+    },
+    {
+      "source_id": "src.psychological.greene_apollon_sun",
+      "source_class": "psychological",
+      "title": "The Sun-god and the Astrological Sun (Apollon Issue 1)",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "1.3.50: official CPA Apollon Issue 1 PDF + authorized astro.com in_sungod ingested as psychological school_specific. Carrier / inner-light / cosmocrator / vocation / healer / aloneness. Not Apollo's Chariot. Not Luminaries re-ingest. House/aspect natal recipes excluded. Paraphrase only."
+    },
+    {
+      "source_id": "src.psychological.greene_inner_planets",
+      "source_class": "psychological",
+      "title": "The Inner Planets: Building Blocks of Personal Reality",
+      "author": "Liz Greene / Howard Sasportas",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Mercury Hermes opened. Venus p.69 / Mars p.138 NEED_OWNER (Google Books empty; Archive printdisabled; pirate dumps unused). Weiser 1993 ISBN 0-87728-741-4. Sasportas Mars p.184 reserve. 1.3.52: remaining Mercury chapters unread same-author densification. 1.3.54: p.138 still NEED_OWNER. 1.3.57: Mars p.138 remains NEED_OWNER inside ACCESS_BLOCKED psych slot; extraction-only when readable."
+    },
+    {
+      "source_id": "src.psychological.sullivan_venus_jupiter",
+      "source_class": "psychological",
+      "title": "Venus and Jupiter: Bridging the Ideal and the Real",
+      "author": "Erin Sullivan",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA 1998 / Wessex 2021 ISBN 1910531618. CPA page + reviews opened 1.3.41, not ingested. 1.3.48: official-site Apollon excerpt ingested (channel-for-Eros / Urania-Pandemos / same-impulse-for-relating-and-creating). Dual Goddess seminar body still unread. Inner Planets p.69 NEED_OWNER. Not a hunt for Hand bonding."
+    },
+    {
+      "source_id": "src.psychological.greene_mythic_astrology",
+      "source_class": "psychological",
+      "title": "Mythic Astrology",
+      "author": "Liz Greene / Juliet Sharman-Burke",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "1.3.41/1.3.48 Venus, 1.3.42/1.3.49/1.3.54 Mars, 1.3.43/1.3.46 Uranus, 1.3.44/1.3.47 Neptune, 1.3.45 Pluto, 1.3.51 Moon (advent237yqs), 1.3.52 Mercury (advent235ikc), 1.3.53 Saturn (advent2319spz): authorized astro.com Mythic extracts opened. Not ingested: same-author densification. Not a substitute for NEED_OWNER loci."
+    },
+    {
+      "source_id": "src.psychological.greene_jupiter_cpa",
+      "source_class": "psychological",
+      "title": "Jupiter webinars / By Jove! The Meaning of the Astrological Jupiter",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Opened CPA webinar page and By Jove! blurb only, not the 7h transcript. Claims only from those pages. 1.3.38: astro.com Psychology of Jupiter extract ingested as greene_by_jove. Relating p.39 unread. Do not reconstruct from reviews or the seminar title."
+    },
+    {
+      "source_id": "src.psychological.greene_by_jove",
+      "source_class": "psychological",
+      "title": "By Jove! The Meaning of the Astrological Jupiter",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "1.3.38: authorized astro.com extract in_lgbyjove2_e.htm (Psychology of Jupiter) ingested. Full Wessex 2025 book and CPA transcript unread. Mick Jagger extract in_lgbyjove1_e.htm opened-not-ingested (natal densification / Layer 5). Paraphrase only. Do not ingest reviews."
+    },
+    {
+      "source_id": "src.psychological.greene_mars_cpa",
+      "source_class": "psychological",
+      "title": "Mars webinars: The Astrology and Psychology of The Red One",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/MISPA 2024 webinar page opened 1.3.31; re-checked 1.3.42/1.3.49/1.3.54. Series description only, not the 7h11m transcript. Do not reconstruct Mars psychology from the page. Inner Planets p.138 remains NEED_OWNER."
+    },
+    {
+      "source_id": "src.psychological.greene_saturn_cpa",
+      "source_class": "psychological",
+      "title": "Saturn webinars",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/MISPA 2015 webinar page opened 1.3.39; re-checked 1.3.53. Series description only, not the 7h9m transcript. Do not reconstruct Saturn psychology from the page. Greene Introduction already ingested; same-author densification."
+    },
+    {
+      "source_id": "src.psychological.greene_uranus_cpa",
+      "source_class": "psychological",
+      "title": "Uranus webinars: Stranger in a Strange Land",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/MISPA 2019 webinar page opened 1.3.32; re-checked 1.3.43/1.3.46. Series description only, not the 7h07m transcript. Do not reconstruct Uranus psychology from the page. Outer Planets volume remains NEED_OWNER."
+    },
+    {
+      "source_id": "src.psychological.greene_neptune_cpa",
+      "source_class": "psychological",
+      "title": "Neptune webinars: The Hill of Dreams",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/MISPA 2018 webinar page opened 1.3.33; re-checked 1.3.44/1.3.47. Series description only, not the 7h11m transcript. Do not reconstruct Neptune psychology from the page. The Astrological Neptune remains NEED_OWNER."
+    },
+    {
+      "source_id": "src.psychological.greene_pluto_cpa",
+      "source_class": "psychological",
+      "title": "Pluto webinars",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/MISPA 2016 webinar page opened 1.3.34; re-checked 1.3.45. Series description only, not the 6h53m transcript. Do not reconstruct Pluto psychology from the page. Outer Planets volume remains NEED_OWNER."
+    },
+    {
+      "source_id": "src.psychological.greene_outer_planets",
+      "source_class": "psychological",
+      "title": "The Outer Planets and Their Cycles",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Unread. 1.3.26/1.3.43: physical access closed (CPA Press 2005 ISBN 1900869314 Google Books no preview; CRCS 1983/1996 ISBN 0916360172 / 0916360601 Archive printdisabled). Jacket/TOC/reviews not claims. Do not substitute Art of Stealing Fire. Uranus/Neptune/Pluto lectures are one volume NEED_OWNER."
+    },
+    {
+      "source_id": "src.psychological.greene_art_of_stealing_fire",
+      "source_class": "psychological",
+      "title": "The Art of Stealing Fire: Uranus in the Horoscope",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA Press 1996/2004 ISBN 1900869064 / 1900869292; Wessex 2023 ISBN 1910531898. 1.3.43/1.3.46: CPA page + reviews opened. Chapter body not opened. Not a substitute for Outer Planets NEED_OWNER. Jacket/reviews/pirate unused."
+    },
+    {
+      "source_id": "src.psychological.greene_astrological_neptune",
+      "source_class": "psychological",
+      "title": "The Astrological Neptune and the Quest for Redemption",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Unread. 1.3.33/1.3.44/1.3.47: Weiser 1996/2000 ISBN 0877288577 / 1578631971. Archive printdisabled; Google Books Zo77spK78yoC / iSvjS7TnU34C title+TOC only. Jacket/secondary paraphrase and forum/Goodreads intro quotes not claims. Dedicated psych Neptune NEED_OWNER. Do not substitute Outer Planets."
+    },
+    {
+      "source_id": "src.psychological.sasportas_twelve_houses",
+      "source_class": "psychological",
+      "title": "The Twelve Houses",
+      "author": "Howard Sasportas",
+      "role": "psychological",
+      "use": [
+        "houses",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.psychological.sasportas_gods_of_change",
+      "source_class": "psychological",
+      "title": "The Gods of Change",
+      "author": "Howard Sasportas",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Psych-pool Uranus/Neptune/Pluto candidate. 1.3.32/1.3.43/1.3.45: Archive printdisabled; Google Books lzMkDwAAQBAJ this host cover only. Chapter body not opened. Forum quotes of p.188 not ingested. Do not substitute for Outer Planets."
+    },
+    {
+      "source_id": "src.psychological.sasportas_dynamics_unconscious",
+      "source_class": "psychological",
+      "title": "Dynamics of the Unconscious: Seminars in Psychological Astrology Vol. 2",
+      "author": "Liz Greene / Howard Sasportas",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Weiser 1988 ISBN 0877286744. 1.3.55: Part 1 Sasportas The Astrology and Psychology of Aggression. Google Books empty; Archive printdisabled. Pirate dumps unused. Forum/AbeBooks p.18 unused. Not Inner Planets p.138. 1.3.57: NEED_OWNER inside ACCESS_BLOCKED; extract only when readable."
+    },
+    {
+      "source_id": "src.psychological.huber_planets",
+      "source_class": "psychological",
+      "title": "The Planets and Their Psychological Meaning",
+      "author": "Bruno Huber / Louise Huber",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "HopeWell 2006 ISBN 9780954768027. 1.3.56: official API TOC ch. Mars: The Masculine p.59 unread. Parked psychological (no Huber enum). Do not ingest masculine/tool-planet from TOC, garden lecture, or review. Not p.138, not Dynamics. Pirate dumps unused. 1.3.57: NEED_OWNER inside ACCESS_BLOCKED; extract only when readable."
+    },
+    {
+      "source_id": "src.psychological.tarnas_prometheus",
+      "source_class": "psychological",
+      "title": "Prometheus the Awakener",
+      "author": "Richard Tarnas",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Spring 1995/2018 ISBN 0882142216 / 9780882140681. Dedicated Uranus monograph still unread. Parked psychological (no archetypal enum). 1987 client-brief not ingested. 1.3.46 ingested a different official PDF (tarnas_archetypal_intro), not this book. Pirate dumps unused."
+    },
+    {
+      "source_id": "src.psychological.tarnas_archetypal_intro",
+      "source_class": "psychological",
+      "title": "An Introduction to Archetypal Astrology",
+      "author": "Richard Tarnas",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Official cosmosandpsyche.com PDF. 1.3.46 Uranus, 1.3.47 Neptune, 1.3.53 Saturn/senex ingested as psychological school_specific after field check. 1.3.54 Mars paragraph still thin survey, not ingested. Not Prometheus the Awakener. Not 1987 client-brief. Parked psychological (no archetypal enum). Karma/Yahweh dump excluded. Paraphrase only."
+    },
+    {
+      "source_id": "src.psychological.greene_living_with_pluto",
+      "source_class": "psychological",
+      "title": "Living with Pluto (Campion interview)",
+      "author": "Liz Greene",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Mountain Astrologer Dec/Jan 2002; astro.com in_plutint1_e.htm / in_plutint2_e.htm. 1.3.45: Parts 1–2 ingested as psychological school_specific (author speech). Not Outer Planets. Parts 3–4 and natal Moon-Pluto/Sun-Pluto densification not this locus. Paraphrase only."
+    },
+    {
+      "source_id": "src.psychological.reinhart_pluto_lord",
+      "source_class": "psychological",
+      "title": "Pluto, Lord of Transformation",
+      "author": "Melanie Reinhart",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Official-site 1991 Global Link Up essay opened 1.3.45. Independent CPA psychological. Not this locus: Pluto-in-Scorpio transit-period/collective; quotes Rudhyar. AIDS/nuclear dump not claims. Not a substitute for Outer Planets."
+    },
+    {
+      "source_id": "src.psychological.reinhart_moon_talk",
+      "source_class": "psychological",
+      "title": "Moon Talk I–II",
+      "author": "Melanie Reinhart",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Official-site Caduceus 2003 articles opened 1.3.51 (moontalk1/2.php). Cycle attunement/meditation, not natal Moon principle. Not a substitute for Costello Astrological Moon. Body/fluid dump not claims."
+    },
+    {
+      "source_id": "src.psychological.clark_hermes_guide",
+      "source_class": "psychological",
+      "title": "Crossing the Threshold: Hermes as Guide and Leader of Souls",
+      "author": "Brian Clark",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Official-site PDF opened 1.3.52 (astrosynthesis.com.au). Mythic katabasis/psychopomp, not natal Mercury principle. Not Inner Planets Hermes re-ingest. Timelines of Mercury is cycle densification, not this locus."
+    },
+    {
+      "source_id": "src.psychological.cunningham_healing_pluto",
+      "source_class": "psychological",
+      "title": "Healing Pluto Problems",
+      "author": "Donna Cunningham",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Weiser 1986 ISBN 0877283982. Independent counseling/healing Pluto book; parked psychological (no healing enum). 1.3.45: Google Books 5JR3Mm82pfwC this host cover only. Jacket/Z-library not ingested. Not CPA Jungian depth."
+    },
+    {
+      "source_id": "src.psychological.hamaker_psychological",
+      "source_class": "psychological",
+      "title": "Psychological Astrology",
+      "author": "Karen Hamaker-Zondag",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Weiser 1990 ISBN 087728718X; ch. Planets as Symbols of Archetypal Psychic Drives. Independent Jungian. 1.3.45: Google Books kVyLUPflpd8C body unread here. Dutch Pluto book unread. Pirate dumps unused. 1.3.56: still unread; ebin unused; not the Huber Mars chapter."
+    },
+    {
+      "source_id": "src.professional.watters_today",
+      "source_class": "professional",
+      "title": "Astrology For Today (Skyscript planet introductions)",
+      "author": "Joanna Watters",
+      "role": "bridge",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Classification gap: 2003 modern general practical synthesis on Skyscript, not Houlding traditional and not Hand. Parked in professional. Do not CORE-score. primary_read = page was read; not extra evidence weight."
+    },
+    {
+      "source_id": "src.professional.hand_planets_in_transit",
+      "source_class": "professional",
+      "title": "Planets in Transit",
+      "author": "Robert Hand",
+      "role": "transit",
+      "use": [
+        "transits",
+        "objects",
+        "aspects"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Primary practical source for Today transit-to-natal gold set. Claims, not copied paragraphs."
+    },
+    {
+      "source_id": "src.professional.hand_horoscope_symbols",
+      "source_class": "professional",
+      "title": "Horoscope Symbols",
+      "author": "Robert Hand",
+      "role": "transit",
+      "use": [
+        "objects",
+        "signs",
+        "houses",
+        "aspects"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Ch.4 = Horoscope Symbols (not Planets in Transit). Venus–Pluto Ch.4 extracted (professional school_specific). Sun/Moon/Mercury Ch.4 unread here (Google Books jacket only). Hand 1981 dated; not later Hand, not CORE. 1.3.27 NEED_OWNER: ISBN 9780914918165 Ch.4 Sun then Moon/Mercury, same direct_read path."
+    },
+    {
+      "source_id": "src.psychological.arroyo_four_elements",
+      "source_class": "psychological",
+      "title": "Astrology, Psychology, and the Four Elements",
+      "author": "Stephen Arroyo",
+      "role": "psychological",
+      "use": [
+        "signs",
+        "objects"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Google Books preview: front matter/index only; planet-section unread. Cataloged as psychological. 1.3.29 professional/synthesis pool: classify from the opened locus, not this unused row. 1.3.55: still unread; not this Mars psych fill."
+    },
+    {
+      "source_id": "src.psychological.arroyo_chart_handbook",
+      "source_class": "psychological",
+      "title": "Chart Interpretation Handbook",
+      "author": "Stephen Arroyo",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "signs",
+        "houses",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.psychological.arroyo_relationships",
+      "source_class": "psychological",
+      "title": "Relationships and Life Cycles",
+      "author": "Stephen Arroyo",
+      "role": "psychological",
+      "use": [
+        "natal",
+        "transits"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.psychological.rudhyar_personality",
+      "source_class": "psychological",
+      "title": "The Astrology of Personality",
+      "author": "Dane Rudhyar",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "signs",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Cataloged as psychological before 1.3.29. New Rudhyar planet ingest uses source_class=humanistic. Do not treat this row as a second psychological school class. Dedicated reclass later; do not mass-rewrite unused sign pending ids this pass."
+    },
+    {
+      "source_id": "src.psychological.rudhyar_lunation",
+      "source_class": "psychological",
+      "title": "The Lunation Cycle",
+      "author": "Dane Rudhyar",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.humanistic.rudhyar_new_mansions",
+      "source_class": "humanistic",
+      "title": "New Mansions for New Men",
+      "author": "Dane Rudhyar",
+      "role": "humanistic",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Authorized Khaldea archive (Meyer). 1938 Lucis Press. Venus 1.3.29, Mars 1.3.31, Uranus 1.3.32, Neptune 1.3.33, Pluto 1.3.34, Sun 1.3.35, Moon 1.3.36, Mercury 1.3.37, Saturn 1.3.39, Jupiter 1.3.40 opened. Paraphrase only. Humanistic, not psychological."
+    },
+    {
+      "source_id": "src.humanistic.rudhyar_pulse_of_life",
+      "source_class": "humanistic",
+      "title": "The Pulse of Life: New Dynamics in Astrology",
+      "author": "Dane Rudhyar",
+      "role": "humanistic",
+      "use": [
+        "signs"
+      ],
+      "legal_status": "copyrighted_site",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "David McKay 1943; Khaldea archival HTML, Leyla Rudhyar Hill permission on page. 1.3.66 Part One only (p.1 process; p.10 Day/Night turning points and more-or-less). Part Two twelve phases not extracted. Not psychological. Paraphrase only."
+    },
+    {
+      "source_id": "src.humanistic.ruperti_cycles",
+      "source_class": "humanistic",
+      "title": "Cycles of Becoming: The Planetary Pattern of Growth",
+      "author": "Alexander Ruperti",
+      "role": "humanistic",
+      "use": [
+        "objects",
+        "transits"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Cycles of Becoming (Earthwalk 2005 ISBN 9780966897845). Ch.V The Jupiter Cycle identified by TOC (mindfire.ca contents) 1.3.40. Chapter body unread. Do not ingest from TOC/jacket. Humanistic cycle book, not this NMNM planet-function locus."
+    },
+    {
+      "source_id": "src.psychological.martin_mapping_psyche",
+      "source_class": "psychological",
+      "title": "Mapping the Psyche Vol. 1: The Planets and the Zodiac Signs",
+      "author": "Clare Martin",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "signs",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA/Wessex course transcript. Lesson 2 The Sun/Moon unread; Mercury unread; Lesson 3 Venus-Mars identified; Lesson 4 Jupiter-Saturn identified; Lesson 5 Outer Planets identified; bodies unread. Perlego/WeLib unused. 1.3.50/1.3.52/1.3.53/1.3.54/1.3.55: Lesson 2, Mercury, Lesson 4, and Lesson 3 still unread."
+    },
+    {
+      "source_id": "src.psychological.bell_mars_quartet",
+      "source_class": "psychological",
+      "title": "The Mars Quartet: Four Seminars on the Astrology of the Red Planet",
+      "author": "Lynn Bell / Darby Costello / Liz Greene / Melanie Reinhart",
+      "role": "psychological",
+      "use": [
+        "objects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "CPA Press 2001 ISBN 1900869187. 1.3.31/1.3.42/1.3.49/1.3.54/1.3.55: CPA/Bell/Reinhart/lynnbellastrology.com pages jacket only; chapter body not opened. Out of print. Do not ingest jacket (withheld Mars, Iliad, Capricorn exaltation). Pirate dumps unused."
+    },
+    {
+      "source_id": "src.psychological.george_authentic_self",
+      "source_class": "psychological",
+      "title": "Astrology and the Authentic Self",
+      "author": "Demetra George",
+      "role": "bridge",
+      "use": [
+        "natal",
+        "objects",
+        "houses"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.psychological.george_ancient_practice",
+      "source_class": "psychological",
+      "title": "Ancient Astrology in Theory and Practice",
+      "author": "Demetra George",
+      "role": "bridge",
+      "use": [
+        "houses",
+        "aspects",
+        "natal",
+        "history"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate",
+      "notes": "Bridge Hellenistic technique ↔ modern practice. 1.3.55: not a psychological natal-Mars principle locus; do not fill the empty psych slot from this row."
+    },
+    {
+      "source_id": "src.professional.tierney_aspect_analysis",
+      "source_class": "professional",
+      "title": "Dynamics of Aspect Analysis",
+      "author": "Bil Tierney",
+      "role": "transit",
+      "use": [
+        "aspects",
+        "natal"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.professional.sullivan_retrograde",
+      "source_class": "professional",
+      "title": "Retrograde Planets",
+      "author": "Erin Sullivan",
+      "role": "transit",
+      "use": [
+        "transits",
+        "objects"
+      ],
+      "legal_status": "copyrighted_edition",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.professional.morin_astrologia_gallica",
+      "source_class": "professional",
+      "title": "Astrologia Gallica (selected books)",
+      "author": "Jean-Baptiste Morin",
+      "role": "primary",
+      "use": [
+        "houses",
+        "natal",
+        "objects"
+      ],
+      "legal_status": "public_domain_original",
+      "ingest_rule": "research_paraphrase",
+      "status": "candidate"
+    },
+    {
+      "source_id": "src.astronomy.swiss_ephemeris",
+      "source_class": "astronomy",
+      "title": "Swiss Ephemeris",
+      "author": "Astrodienst AG / Dieter Koch / Alois Treindl",
+      "role": "astronomy",
+      "use": [
+        "ephemeris"
+      ],
+      "legal_status": "dual_license_astronomy",
+      "ingest_rule": "facts_only",
+      "status": "candidate",
+      "notes": "LIVE runtime input to IL (todayflow-astro, pyswisseph, se1). Dual AGPL or Professional License — licensing is a parallel gate, not a meaning source. Verify license before treating public SaaS as commercially settled."
+    },
+    {
+      "source_id": "src.astronomy.jpl_horizons",
+      "source_class": "astronomy",
+      "title": "JPL Horizons",
+      "author": "NASA / JPL",
+      "role": "astronomy",
+      "use": [
+        "ephemeris"
+      ],
+      "legal_status": "needs_legal_review",
+      "ingest_rule": "facts_only",
+      "status": "candidate",
+      "notes": "Independent check / alternative for positions. Not an interpretation source. Not wired."
+    }
+  ]
+}

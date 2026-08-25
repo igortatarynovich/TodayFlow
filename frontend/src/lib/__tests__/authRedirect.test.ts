@@ -19,6 +19,7 @@ jest.mock("@/lib/claimGuestProfile", () => ({
 }));
 
 import {
+  assignAfterAuthSession,
   getSafeRedirectTarget,
   hasUsableCoreProfileBase,
   POST_AUTH_HOME_PATH,
@@ -107,5 +108,36 @@ describe("resolvePostAuthTarget", () => {
   it("sends truly empty accounts to core onboarding", async () => {
     mockFetchCoreProfileCached.mockResolvedValue({ is_ready: false, astro: {} });
     await expect(resolvePostAuthTarget("/profile")).resolves.toBe("/onboarding/core");
+  });
+});
+
+describe("assignAfterAuthSession", () => {
+  const originalLocation = window.location;
+
+  afterEach(() => {
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: originalLocation,
+    });
+  });
+
+  it("hard-navigates to a safe post-auth path", () => {
+    const assign = jest.fn();
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: { ...originalLocation, assign },
+    });
+    assignAfterAuthSession("/today");
+    expect(assign).toHaveBeenCalledWith("/today");
+  });
+
+  it("rejects protocol-relative targets", () => {
+    const assign = jest.fn();
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: { ...originalLocation, assign },
+    });
+    assignAfterAuthSession("//evil.example");
+    expect(assign).toHaveBeenCalledWith("/today");
   });
 });

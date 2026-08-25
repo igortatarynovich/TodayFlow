@@ -63,6 +63,9 @@ HARD RULES:
 6. If natal_pack too thin → status insufficient_input; empty sections.
 7. Voice: second person «you» OR third about the person — never formal plural you.
 8. Numerology joins the same story when present — never a separate passport block.
+9. When IL4_MEANING is present: phrase those lemmas; do not invent sky meaning
+   from natal_pack beside the pack; do not voice dropped constructions.
+   Identity Core stays Character Engine.
 """
     else:
         body = """
@@ -117,5 +120,8 @@ HARD RULES:
 6. Если natal_pack тонкий → status insufficient_input; sections=[].
 7. Голос: «ты» или третье лицо о человеке — не формальное «вы».
 8. Нумерология входит в ту же историю, когда есть — не отдельный паспорт.
+9. Если есть IL4_MEANING: формулируй эти леммы; не изобретай астрологию
+   из natal_pack рядом с пакетом; не озвучивай dropped.
+   Identity Core остаётся Character Engine.
 """
     return f"{voice}\n{body}".strip()

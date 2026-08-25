@@ -2105,6 +2105,8 @@ async def calculate_synastry(
                 compatibility_type="synastry",
                 locale=locale,
             )
+            chart1_ed = await _compute_chart_for_profile(profile_1, astro_service, locale, db)
+            chart2_ed = await _compute_chart_for_profile(profile_2, astro_service, locale, db)
             cached["editorial"] = generate_compatibility_editorial(
                 db,
                 user=user,
@@ -2112,6 +2114,8 @@ async def calculate_synastry(
                 payload=cached,
                 prior_memory=prior_memory,
                 locale=locale,
+                chart1=chart1_ed,
+                chart2=chart2_ed,
             ).model_dump()
             _store_cached_compatibility(
                 db=db,
@@ -2219,6 +2223,8 @@ async def calculate_synastry(
         payload=response_payload.model_dump(),
         prior_memory=prior_memory,
         locale=locale,
+        chart1=chart1,
+        chart2=chart2,
     )
     syn_funnel, scenario_ctx = _build_synastry_funnel(
         profile_1=profile_1,

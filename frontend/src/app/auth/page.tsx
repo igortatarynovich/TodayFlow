@@ -9,7 +9,7 @@ import { LoadingSpinner } from "@/components/orbit";
 import { AuthWebScreen } from "@/components/product-ui/AuthWebScreen";
 import s from "@/components/product-ui/productWebScreens.module.css";
 import { useAuth } from "@/lib/useAuth";
-import { buildAuthHref, getSafeRedirectTarget, resolveTargetAfterAuthSession } from "@/lib/authRedirect";
+import { buildAuthHref, getSafeRedirectTarget, resolveTargetAfterAuthSession, assignAfterAuthSession } from "@/lib/authRedirect";
 import { beginAuthSession } from "@/lib/authSession";
 import { guestSignupHref } from "@/lib/guestAccessStore";
 import { t } from "@/lib/i18n";
@@ -44,6 +44,8 @@ function AuthPageContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [redirectTarget, setRedirectTarget] = useState("/today");
   const [postAuthTarget, setPostAuthTarget] = useState("/today");
+  const [redirectReady, setRedirectReady] = useState(false);
+  const leavingAfterAuthRef = useRef(false);
   const softSignupHref = guestSignupHref();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -54,22 +56,31 @@ function AuthPageContent() {
     const safeRedirect = getSafeRedirectTarget(redirectParam);
     setRedirectTarget(safeRedirect);
     setPostAuthTarget(safeRedirect);
+    setRedirectReady(true);
     if (modeParam === "signup") {
       router.replace(buildAuthHref("signup", redirectParam));
     }
   }, [searchParams, router]);
 
   useEffect(() => {
-    if (!authLoading && isAuthenticated) {
-      router.replace(postAuthTarget);
-    }
-  }, [isAuthenticated, authLoading, postAuthTarget, router]);
+    // Do not steal a live submit — handleSubmit resolves onboarding vs Today first.
+    if (!redirectReady || authLoading || loading || !isAuthenticated || leavingAfterAuthRef.current) return;
+    leavingAfterAuthRef.current = true;
+    assignAfterAuthSession(postAuthTarget);
+  }, [redirectReady, isAuthenticated, authLoading, loading, postAuthTarget]);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
       setShowContent(true);
     }
   }, [authLoading, isAuthenticated]);
+
+  // iOS / flaky /auth/me must not leave the login form behind a spinner.
+  useEffect(() => {
+    if (!authLoading) return;
+    const id = window.setTimeout(() => setShowContent(true), 2_000);
+    return () => window.clearTimeout(id);
+  }, [authLoading]);
 
   const clearFieldError = (field: keyof FieldErrors) => {
     setErrors((prev) => {
@@ -127,9 +138,9 @@ function AuthPageContent() {
       const target = await resolveTargetAfterAuthSession(fallbackTarget);
       setPostAuthTarget(target);
       setSuccessMessage(t("auth.toast.loginNext", "Вход выполнен. Открываем следующий шаг."));
-      // Navigate immediately — do not wait for useAuth /auth/me to flip isAuthenticated
-      // (that path can show a full-page spinner for the whole probe timeout).
-      router.replace(target);
+      leavingAfterAuthRef.current = true;
+      // Full document load — App Router replace can hang on iOS Safari / PWA.
+      assignAfterAuthSession(target);
     } catch (err) {
       const mapped = mapLoginFailure(err);
       setErrors(mapped);
@@ -143,7 +154,7 @@ function AuthPageContent() {
     }
   };
 
-  if (authLoading) {
+  if (authLoading && !showContent && !isAuthenticated) {
     return (
       <AuthWebScreen
         mode={mode}
@@ -159,7 +170,7 @@ function AuthPageContent() {
     );
   }
 
-  if (isAuthenticated) {
+  if (isAuthenticated && leavingAfterAuthRef.current) {
     return (
       <AuthWebScreen
         mode={mode}

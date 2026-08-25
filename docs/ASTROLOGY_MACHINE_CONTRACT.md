@@ -101,8 +101,8 @@ DATA/reference/astrology/machine/
 
 ### 2.2 Что **не** в базовой записи
 
-- `keywords`, `psychology`, `description` → **Content Contract** (legacy JSON или future content files)  
-- `angle`, `orb` → **calc reference** в legacy `aspects.json`, не machine vector  
+- `keywords`, `psychology`, `description` → **Content Contract** = [Interpretation Library](astrology/INTERPRETATION_LIBRARY_V1.md) (семантические объекты). Legacy `DATA/astrology_reference/*.json` — не SoT смысла после `active` атомов IL.  
+- `angle`, `orb` → **calc reference** в legacy `aspects.json` / Foundation §2.4, не machine vector  
 - `energy_0_100` → только **composite signals** (§3)
 
 ---
@@ -248,6 +248,7 @@ Loader: `load_astrology_machine_contracts()` in `reference_machine_loader.py` �
 
 ## 10. Changelog
 
+- **1.0.1 (2026-08-17)** — Content Contract pointer → Interpretation Library (not legacy psychology one-liners as SoT).
 - **1.0 (2026-05-31)** — AMC v1; defer P0.6 → P1.0; four base entities; composition rules sketch; extension proposal gated at P0.9.
 
 ---

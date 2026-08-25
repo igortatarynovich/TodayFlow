@@ -48,7 +48,7 @@ def test_prompt_registered() -> None:
     system, version = get_prompt("profile.natal_decode_depth.v1", locale="ru")
     assert "Identity Core" in system or "ядро" in system.lower()
     assert "честн" in system.lower() or "day_hooks" in system.lower() or "сейчас" in system.lower()
-    assert version == "1.0.1"
+    assert version == "1.1.0"
 
 
 def test_extract_identity_requires_grounded() -> None:

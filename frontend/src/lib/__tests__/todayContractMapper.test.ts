@@ -31,6 +31,17 @@ describe("todayContractMapper single voice", () => {
         day_story: { contract_version: "day_story_v1", story: "Один связный текст дня." },
       }),
     ).toBe(true);
+    expect(
+      hasAuthoritativeDayStory({
+        ...base,
+        day_story: {
+          contract_version: "day_story_v1",
+          interpretation_status: "unavailable",
+          theme: "Ровный продуктивный ритм.",
+          story: "",
+        },
+      }),
+    ).toBe(false);
   });
 
   it("parses numeric generation_id for learning feedback", () => {

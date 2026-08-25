@@ -120,7 +120,7 @@ def _enrich_with_content_v1(
     from todayflow_backend.services.compatibility_content_v1.surface_adapter import (
         registered_to_product_surface,
     )
-    from todayflow_backend.core.llm_openai_compatible import llm_operation
+    from todayflow_backend.core.llm_openai_compatible import llm_call_context, llm_operation
 
     input_payload = build_generation_input(
         from_sign=str(from_meta.get("id") or payload.get("from_sign") or ""),
@@ -136,7 +136,13 @@ def _enrich_with_content_v1(
     )
 
     with llm_operation("background"):
-        gen = generate_content_v1(tier="registered", input_payload=input_payload)
+        with llm_call_context(
+            trigger="background",
+            ensure_operation=True,
+            operation="compatibility.generate",
+            feature="compatibility.llm",
+        ):
+            gen = generate_content_v1(tier="registered", input_payload=input_payload)
 
     content = gen.get("content") if isinstance(gen.get("content"), dict) else None
     known: set[str] = set()
@@ -317,10 +323,16 @@ def run_compatibility_enrichment_job(job_id: int) -> None:
                 subscores=template_surface.subscores.model_dump(),
                 score=int(static_payload["score"]),
             )
-            from todayflow_backend.core.llm_openai_compatible import llm_operation
+            from todayflow_backend.core.llm_openai_compatible import llm_call_context, llm_operation
 
             with llm_operation("background"):
-                product_surface, gen_src, _ = run_compatibility_dynamics_pipeline(
+                with llm_call_context(
+                    trigger="background",
+                    ensure_operation=True,
+                    operation="compatibility.generate",
+                    feature="compatibility.editorial",
+                ):
+                    product_surface, gen_src, _ = run_compatibility_dynamics_pipeline(
                     db,
                     template_surface=template_surface,
                     pair_display=f"{from_display} × {to_display}",

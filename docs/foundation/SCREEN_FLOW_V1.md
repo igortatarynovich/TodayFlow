@@ -278,7 +278,7 @@ Guest must never see empty personal slots pretending to be “your day”.
 ### 2026-08-03 — Today mapping → SCENARIO v3.1
 
 - **§4 rows** replaced to match locked content jobs (no seed leakage · color house = Move · Reading ≤2 no action).
-- Meaning SoT = [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md); presentation map = [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md); this file = pager mechanics + index map.
+- Meaning SoT = [TODAY_CONTENT_PIPELINE_V1](../today/TODAY_CONTENT_PIPELINE_V1.md); product cycle = [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md); this file = pager mechanics + index map. *(2026-08-21: V3 is not presentation SoT.)*
 
 ### 2026-07-30 — v1.2 (axis lock)
 
@@ -291,11 +291,14 @@ Guest must never see empty personal slots pretending to be “your day”.
 - **Nav:** ActNav chips for Чтение · Действие · Отклик when personalized ready
 - **Impl:** `actFilter` on `TodayPersonalizedProductSection` inside direct `ScreenFlowStep` children
 
-### 2026-08-10 — Today six blocks (v3.4)
+### 2026-08-10 — Today six blocks (v3.4) — **HISTORICAL**
 
-- **Presentation SoT:** День → Ритуалы → Инструкция → Цвет → Задания → Петля
-- **Deprecated:** v3.3 12-step handoff as product frame
-- **Detail:** [TODAY_SCREEN_SCENARIO_V3.md](../today/TODAY_SCREEN_SCENARIO_V3.md)
+- Was a presentation map. **Superseded 2026-08-15** by [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md). Do not restore as SoT.
+- Detail (historical only): [TODAY_SCREEN_SCENARIO_V3.md](../today/TODAY_SCREEN_SCENARIO_V3.md)
+
+### 2026-08-21 — Product cycle lock (hygiene)
+
+- Presentation / screen jobs = PRODUCT_FLOW four ids. This file remains pager mechanics. V3 changelog rows above are history.
 
 ### 2026-07-30 — v1.0 (init)
 
@@ -313,6 +316,8 @@ Guest must never see empty personal slots pretending to be “your day”.
 
 **Связанные каноны:**
 
+- [TODAY_PRODUCT_FLOW_V1.md](../today/TODAY_PRODUCT_FLOW_V1.md) — product cycle (screen jobs)
+- [TODAY_CONTENT_PIPELINE_V1.md](../today/TODAY_CONTENT_PIPELINE_V1.md) — Meaning SoT
 - [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) — visual SoT (surfaces/motion/mood/day-phase)
 - [TODAY_WAVE2_CONTRACT_V1.md](../today/TODAY_WAVE2_CONTRACT_V1.md) — contract lock (day_facts_v1 + day_story)
 - [TODAY_WAVE2_EXECUTION_PLAN.md](../today/TODAY_WAVE2_EXECUTION_PLAN.md) — Today Wave 2 execution plan

@@ -36,7 +36,7 @@ import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel }
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
 import { anchorTarotTags, RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
-import { isDayNotReady, type TodayContractV1, type TodayDepthTopicId } from "@/lib/todayContract";
+import { isDayNotReady, isTodayInterpretationUnavailable, type TodayContractV1, type TodayDepthTopicId } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
 import { tarotCardFacePicture, tarotCardFaceSrc, resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import {
@@ -1250,7 +1250,12 @@ export function TodayCompositionSurface(props: Props) {
   const dayClosed = isDayContinuityClosed(continuityRecord);
   const todayHeroSymbol = useMemo(() => buildTodayHeroSymbol(props.coreProfile), [props.coreProfile]);
   const todayHeroPillars = useMemo(() => buildTodayHeroPillars(props.coreProfile), [props.coreProfile]);
-  const themeLoading = !singleVoice && props.guideNarrativeLoading && !props.guideNarrativePayload;
+  const interpretationUnavailable = isTodayInterpretationUnavailable(props.contract);
+  const themeLoading =
+    !singleVoice &&
+    !interpretationUnavailable &&
+    props.guideNarrativeLoading &&
+    !props.guideNarrativePayload;
 
   const dayTexture = useMemo(() => buildGlanceDayTexture(props.contract), [props.contract]);
   const glanceDailyFocus = useMemo(
@@ -1863,7 +1868,9 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const handoffColorGuide =
-    (() => {
+    isTodayInterpretationUnavailable(props.contract)
+      ? null
+      : (() => {
       const nest = props.contract.color_guide;
       if (nest?.name) {
         return resolveTodayDayColorGuide({
@@ -2158,14 +2165,19 @@ export function TodayCompositionSurface(props: Props) {
     />
   );
 
-  const myDayPriorities = (
+  const myDayMeaningUnavailable = isTodayInterpretationUnavailable(props.contract);
+  const myDayPriorities = myDayMeaningUnavailable
+    ? []
+    : (
     dayBriefModel.doItems.length
       ? dayBriefModel.doItems
       : glanceDailyFocus?.prioritize
         ? [glanceDailyFocus.prioritize]
         : []
   ).slice(0, 3);
-  const myDayCautions = (
+  const myDayCautions = myDayMeaningUnavailable
+    ? []
+    : (
     dayBriefModel.avoidItems.length
       ? dayBriefModel.avoidItems
       : glanceDailyFocus?.avoid
@@ -2177,13 +2189,14 @@ export function TodayCompositionSurface(props: Props) {
 
   const myDayBody = (
     <TodayMyDayPane
-      headline={dayBriefModel.personalLine}
-      focusTitle={glanceDailyFocus?.title || null}
-      focusBody={instructionBridge.lead || null}
+      meaningUnavailable={myDayMeaningUnavailable}
+      headline={myDayMeaningUnavailable ? null : dayBriefModel.personalLine}
+      focusTitle={myDayMeaningUnavailable ? null : glanceDailyFocus?.title || null}
+      focusBody={myDayMeaningUnavailable ? null : instructionBridge.lead || null}
       priorities={myDayPriorities}
       cautions={myDayCautions}
       timeline={
-        showMyDayAct ? (
+        showMyDayAct && !myDayMeaningUnavailable ? (
           <TodayMyDayRhythm
             dateISO={dateISO}
             windows={props.contract.global_day?.windows ?? null}
@@ -2192,10 +2205,10 @@ export function TodayCompositionSurface(props: Props) {
           />
         ) : null
       }
-      colorCard={handoffColorBody}
+      colorCard={myDayMeaningUnavailable ? null : handoffColorBody}
       extraCards={handoffTasksBody}
       depthLayer={
-        todayDepthLayerForFocus ? (
+        !myDayMeaningUnavailable && todayDepthLayerForFocus ? (
           <TodayDepthLayerSection
             dateISO={dateISO}
             depthLayer={todayDepthLayerForFocus}

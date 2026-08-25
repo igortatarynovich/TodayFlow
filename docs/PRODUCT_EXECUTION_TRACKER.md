@@ -1,8 +1,28 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-17
+Last updated: 2026-08-24
 Owner: Product + Engineering
 Status: Active working document
+
+## Architecture impact — Today pane scroll + practices hub first paint (2026-08-24)
+
+- **SoT before:** Today story frames used nested `overflow: hidden` + `height: 100%`, so the wheel moved the whole shell (sidebar included). Practices hub awaited SSR catalog + lite-report `/current` behind a full-page spinner.
+- **SoT after:** Product `appMain` is the only vertical scroller on Today (same as Profile / FOUNDATION_UI §16.5). Practices hub chrome paints immediately; `GET /practices` is the in-memory GENERAL catalog (personalization stays on `GET /practices/current`).
+- **Public contract changed?** no JSON fields. `GET /practices` for auth users is no longer lite-report ranked.
+- **Migration required?** no
+- **Canon updated?** no — FOUNDATION_UI §16.5 already names `appMain` as the shell scroller
+- **Backward compatible?** yes; hub still ranks by need on the client
+
+## Architecture impact — Mobile login infinite spinner (2026-08-24)
+
+- **SoT before:** Post-auth left `/auth` via Next.js `router.replace`. Full-page spinner while `isAuthenticated`. `/auth/login` and `/today/opening|bundle` had no client timeout. `beginAuthSession` wiped the auth snapshot, so a hung `/auth/me` left the user unauthenticated.
+- **SoT after:** Post-auth uses `window.location.assign` (`assignAfterAuthSession`). Login form is not replaced by a spinner for a live session. `/auth/login` 15s timeout; `/today/opening|bundle` 15s. Login writes a bootstrap snapshot so Today can optimistic-auth.
+- **Public contract changed?** no
+- **Migration required?** no — client navigation + timeouts
+- **Canon updated?** no — still `docs/FIRST_DAY_EXPERIENCE.md` §2 login home = `/today`; `docs/TODAYFLOW_FOUNDATION_UI.md` transport failure copy unchanged
+- **Backward compatible?** yes; desktop login path unchanged aside from hard navigation
+
+**NOW (FE, 2026-08-24):** **Mobile login hang** — iOS Safari / PWA `router.replace` after login could sit on the auth spinner forever; Google One Tap never reset loading on dismiss. Hard assign + timeouts + One Tap → redirect on coarse/narrow viewports.
 
 ## Architecture impact — One product shell chrome on every in-app page (2026-08-17)
 
@@ -21,6 +41,740 @@ Status: Active working document
 - **Migration required?** no — client routing + paint only
 - **Canon updated?** yes — `docs/FIRST_DAY_EXPERIENCE.md` §2 post-auth
 - **Backward compatible?** yes; onboarding still `router.replace(FIRST_TODAY_PATH)`
+
+**NOW (OPS / LLM, 2026-08-18):** **AI COGS instrumentation** — K2.6 stays. `llm_usage_v1` now has `operation_id`, `trigger` (user|prewarm|eval|script|background), retry metadata, billed output ≠ reasoning double-count. Report: feature×trigger×model×retry_reason + top-20 operation_id. Next: 24h data, then hard budgets.
+
+## Architecture impact — AI COGS llm_usage_v1 (2026-08-18)
+
+- **SoT before:** Nebius invoice only; no per-request tokens/cost. Streaming Kimi discarded usage + `reasoning_content`. AMLL token/cost fields were backlog.
+- **SoT after:** Each `chat.completions.create` emits `llm_usage_v1` with `operation_id`, `trigger`, retry metadata. Cost uses billed `completion_tokens` only (`reasoning_tokens` is breakdown). Prices = observed Token Factory rates (K2.6 $0.95/$4 per 1M). Optional `LLM_USAGE_LOG_PATH`. Generation text SoT unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — additive logs
+- **Canon updated?** yes — [LLM_QUALITY_AND_PROMPT_EVOLUTION.md](./LLM_QUALITY_AND_PROMPT_EVOLUTION.md) AI COGS · [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md) §3/§14 (token/cost 🟡)
+- **Backward compatible?** yes. `include_usage` on streams; retry without `stream_options` if the provider rejects it.
+
+**DONE (CODE, 2026-08-18):** **Today unavailable honesty** — MY DAY no longer mixes «Не удалось загрузить.» with leftover focus title, catalog/morning color, or independent natal timeline. `color_guide` null when interpretation unavailable; Global Day Engine stays on the contract (I0). Canon: TODAY_PRODUCT_FLOW_V1 §3.
+
+## Architecture impact — Today unavailable MY DAY (2026-08-18)
+
+- **SoT before:** unavailable shell copy in period/growth/action; leftover scenario color + morning catalog still became «цвет дня»; MY DAY fetched `day_facts` clocks independently; leftover `conflict.short_name` counted as authoritative story.
+- **SoT after:** `color_guide=null` on unavailable; MY DAY = one honest status, omit color/natal timeline/leftover focus; `global_day` still attached (Engine, not Personal interpretation).
+- **Public contract changed?** yes — `color_guide` null on unavailable; `global_day` present on unavailable.
+- **Migration required?** no version bump; next GET + FE rebuild.
+- **Canon updated?** yes — `docs/today/TODAY_PRODUCT_FLOW_V1.md` §3.
+- **Backward compatible?** failure copy still used for navigational slots; clients expecting a color swatch on a failed Personal Day lose that invent.
+
+**NOW (MOTION / MOON, 2026-08-17):** FOUNDATION_UI v0.7 — animation explains state or day mood; else delete. Surface budget: landing 7/10 · app 2–3/10 · share 5/10. No stars / particles / flying zodiac. Moon = live astronomical object (`DsCelestialMoon`, real phase). Today moon is static (no idle spin). Stack: CSS + Framer; WebGL only for the moon. SoT: FOUNDATION_UI §2.7 · §18.
+
+## Architecture impact — Motion budget + live Moon (2026-08-17)
+
+- **SoT before:** Day Atmosphere allowed particles; Today moon idly spun; no product-wide motion budget; starfield still in natal/profile CSS (transitional).
+- **SoT after:** Motion must explain UI state or amplify day mood. Astrology-site décor forbidden. Moon is information (phase/terminator), not décor. App nearly still; landing may have slow pointer/scroll on the same sphere. Natal starfield remains debt until §2.6 package — do not add more.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Today moon `animated=false` / `spin=0`. Idle `MotionDrift` in Profile/HeroLarge is over-budget; do not add new instances.
+- **Canon updated?** yes — FOUNDATION_UI v0.7 §2.7 · §18 · §11.4 · TODAY_MOTION_PILOT pointer · README
+- **Backward compatible?** yes — visuals quieter on Today moon
+- **Next:** do not pull Three.js; do not split planet restyle from §2.6. Landing moon signature is CODE.
+
+**NOW (BRAND / LANDING, 2026-08-17):** Landing rebuilt as Trust Layer brand surface (Co-Star principle: manifesto first). H1 = locked three beats. Moon = hero signature (real phase). Thesis `#trust` before Today / Compatibility / Tarot. Dual hero CTA and `#why` retired. Guest path demo→invite unchanged. SoT: [TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) §5. **Next:** about/press if needed; do not put NASA/Canon into Today/Profile body. Do not overclaim IL-1. Do not say Horizons is live.
+
+## Architecture impact — Trust Layer landing as brand (2026-08-17)
+
+- **SoT before:** Guest Story P0 landing = continuity slogan + dual primary CTAs; Trust Layer was a `#trust` kicker after tools.
+- **SoT after:** Landing **is** the brand. Locked line is H1. Order: hero → trust thesis → today → compatibility → tarot/practices → cta. Moon is the signature object (FOUNDATION_UI §2.7). Compatibility stays a full chapter, not hero co-CTA.
+- **Public contract changed?** no JSON/generation. Marketing H1 / meta description / landing section order yes.
+- **Migration required?** no runtime. Dual hero CTA retired. `#why` removed (no invented testimonials).
+- **Canon updated?** yes — Trust Layer v1.2 §5 · Guest Story P0 landing-narrative supersession · WEB_LAUNCH pointer · FOUNDATION_UI §2.7 landing CODE.
+- **Backward compatible?** old bookmarks `#why` 404-in-page. Guest in-app nav unchanged.
+- **Next:** about/press if needed. Do not overclaim IL-1. Do not say Horizons is live.
+
+**NOW (BRAND / COPY, 2026-08-17):** **Trust Layer locked.** Ads brief in Trust Layer §6. SoT: `docs/content/TODAYFLOW_TRUST_LAYER.md`. Landing copy lives in `productWebLandingContent.ts`.
+
+## Architecture impact — Trust Layer / brand language (2026-08-17)
+
+- **SoT before:** provenance and “not one averaged astrology” lived only in Interpretation Library §6. NASA/JPL was a runtime footnote; Horizons unwired. Landing copy did not carry the two trust pillars.
+- **SoT after:** [TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) is public brand/copy SoT. Astronomy claims bounded to live Swiss/DE431 (Foundation §1.4.1). IL remains meaning lookup; Voice Canon §0 still bans self-reference *inside* product UI.
+- **Public contract changed?** no JSON/generation. Marketing language yes.
+- **Migration required?** no runtime. Copy slice: landing · ads · about.
+- **Canon updated?** yes — Trust Layer v1.0 · Voice Canon §0.08 v1.9 · Unified §0 v1.11 · Foundation §1.4.1 · IL pointer 1.3.7 · README · explainability indexes.
+- **Backward compatible?** yes
+- **Next:** about/press if needed. Landing copy is in `productWebLandingContent`. Do not overclaim IL-1 drafts as a finished public catalog. Do not say Horizons is live.
+
+**NOW (VISUAL LANGUAGE, 2026-08-17):** FOUNDATION_UI §2 v0.5 — ten-layer language + two registers (information glyphs vs identity planet images) + natal as branded composition of the same primitives (not a traditional wheel). Cross-surface literacy: `♀ → ♉︎ → VII → △ → ♄` in Profile / Today / Compat / chart. Next DS (not this commit): planet restyle · glyph set · natal rebuild from atoms. Profile viewport 1 unchanged.
+
+## Architecture impact — Natal visual language v0.5 (2026-08-17)
+
+- **SoT before:** §2 v0.4 = two glyph tiers + families; natal wheel still a separate decorated object (starfield, jewels, photo discs, zodiac orbs). Planet photos used as icons.
+- **SoT after:** Ten layers. Information vs identity registers must not share a slot. Natal chart = thin geometry assembled from layers 1–7; no constellations/ornament. Planet images = XL/share only, unified style (not NASA crop). Extra points (Chiron/Lilith/PoF) stay out until product canon lock. Screens stop inventing per-page illustrations once the set exists.
+- **Public contract changed?** no
+- **Migration required?** no runtime; DS later. Transitional: `DsPlanet` photo-as-icon, `DsAngle` badges, `ElementIcon` decorative, `NatalChartWheel` decor.
+- **Canon updated?** yes — FOUNDATION_UI v0.5 §2. No new docs file.
+- **Backward compatible?** yes — UI unchanged until DS pass
+- **Next:** owner asks → primitives + planet restyle + natal rebuild together (chart must not get a third art language). Do not open Profile viewport 2 for this.
+
+**NOW (PROFILE VIEWPORT 1, 2026-08-17):** First `/profile` frame @390 = portrait → name → `recognition_line` → one signal. `identity_core` is disclosure, not the line. Not Today, not environment, not assets.
+
+## Architecture impact — Profile first viewport (2026-08-17)
+
+- **SoT before:** Act 1 preferred `identity_core` as the visible body; step badge «Твоя суть»; name via `clamp()` to 52px. Journey still a document below.
+- **SoT after:** First viewport slots = portrait · Hero name · Body `recognition_line` (≤120) · one signal («Почему именно ты»). `identity_core` opens on that signal. Why+ still on scroll, not in the first frame. Locked form Step 1 in PROFILE_PRODUCT_JOURNEY_FORMS_V1.
+- **Public contract changed?** no
+- **Migration required?** no — FE composition only
+- **Canon updated?** no new file — live aligned to existing locked form
+- **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
+- **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
+
+**NOW (FOUNDATION, 2026-08-25):** **Profile meaning polish 1.3.123 LOCKED** (Natal Decode sky theses bind to IL-4 · Identity Core stays CE · prompt 1.1.0). **Native C1 conflict→scene seed retry 1.3.122 LOCKED** (prompt c5.5 · why_today must not paste into scene.why · detectors unchanged). **Native C1 astro jargon retry 1.3.121 LOCKED**. **Native C1 seed leak retry 1.3.120 LOCKED**. **Native C1 everyday scene retry 1.3.119 LOCKED**. **Native C1 evidence pack binding 1.3.118 LOCKED**. **Native C1 editorial gate calibration 1.3.117 LOCKED**. **Native C1 I0 generation split 1.3.116 LOCKED**. **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. **IL-4 surface attach 1.3.112 LOCKED**. **Wire calc → IL 1.3.111 LOCKED**. **Library scale 1.3.110 LOCKED**. **IL-4 1.3.109 LOCKED**. **IL-3 1.3.108 LOCKED**. **IL-2 1.3.107 LOCKED**. **FREEZE 1.3.106 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
+
+**PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
+
+## Architecture impact — IL sequence lock (2026-08-17)
+
+- **SoT before:** IL-0.5 / IL-0.6 / IL-5 / IL-6 numbering; gold combos framed as Today drivers; Swiss phrased as outside IL.
+- **SoT after:** IL-0 ✅ · IL-1 ~100 surface-neutral objects · IL-2 composition rules · IL-3 engine · IL-4 expression. Runtime: Swiss/JPL → calc → IL meaning → engine → expression. Only **licensing** is a parallel gate. IL-1 objects map to calc-layer entities. Methodology frozen until IL-1 closes.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL v1.3 Runtime stack · Foundation §1.4
+- **Backward compatible?** yes
+
+## Architecture impact — Interpretation Library corpus (2026-08-17)
+
+- **SoT before:** IL-0 named source *classes*; no corpus, no evidence tiers, provenance was thin.
+- **SoT after:** claims extracted from a multi-school corpus (classical / traditional / psychological / humanistic / professional); consensus → `core|supported|school_specific|editorial`; no copyrighted dump; astronomy separate (Swiss facts-only). Today Meaning SoT remains the pipeline.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL v1.1 §6 · source_corpus_v1.json · Foundation §1.4 (Swiss license OPEN)
+- **Backward compatible?** yes
+
+## Architecture impact — IL-1 1.3.29 source discovery (2026-08-17)
+
+- **SoT before:** author-first Greene+Hand queue; NEED_OWNER(locus) treated as blocking the semantic slot; Rudhyar listed as psychological.
+- **SoT after:** school → coverage → best accessible primary. NEED_OWNER ≠ NEED_EVIDENCE. `source_class=humanistic`. New authors allowed until semantic saturation. Rudhyar Venus ingested independently.
+- **Public contract changed?** no
+- **Migration required?** no — unused `rudhyar_personality`/`lunation` rows stay psychological until dedicated reclass
+- **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.1 · §6.9 · schemas `source_class` enum
+- **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.67 later-interpretive optional (2026-08-21)
+
+- **SoT before:** Layer 2 schema required later-interpretive slots on every `type=sign`, which blocked classification-only drafts.
+- **SoT after:** those slots stay in the model and stay unattested; they are optional on IL-1 draft `type=sign`. Classification `mode` / `element` / `orientation` stay required. No 12 objects this pass. Do not fill from Pulse / Lilly QUALITY / Cell C.
+- **Public contract changed?** yes — JSON Schema Layer 2 `required` list
+- **Migration required?** no — zero live sign objects
+- **Canon updated?** yes — IL 1.3.67 §6.21 · `astrology_interpretation_v1.schema.json`
+- **Backward compatible?** yes for runtime (nothing `active`); old sign validators that required psych keys will fail a future classification-only draft
+
+## Architecture impact — IL-1 1.3.68 Lilly classification drafts (2026-08-21)
+
+- **SoT before:** later-interpretive optional; 0 `type=sign` objects; classification only in claims.
+- **SoT after:** twelve `draft` `type=sign` objects. Object `mode`/`element`/`orientation` = Lilly CA I.16 school_specific (masculine→`positive`, feminine→`negative`). Later-interpretive omitted. QUALITY personality adjectives not copied. Collisions remain claims. `theme_clusters=["timing"]` is year-span clustering, not Pulse. Nothing `active`. CORE not scored.
+- **Public contract changed?** yes — catalog now has 12 sign records (`draft` only)
+- **Migration required?** no — runtime must keep ignoring `draft`
+- **Canon updated?** yes — IL 1.3.68 §6.22 · `objects_v1.json`
+- **Backward compatible?** yes for runtime if it only reads `status=active`
+
+## Architecture impact — IL-1 1.3.69 Layer 2 close-out (2026-08-21)
+
+- **SoT before:** twelve Lilly drafts existed; Layer 2 could still be read as an open ingest track (Cell C / Pulse Part Two / Hand Ch.10 next).
+- **SoT after:** Layer 2 Signs is classification-complete / interpretation-deferred. Audit passed. No ingest. Catalog unchanged. Cell C remains ACCESS_BLOCKED as future evidence, not a Layer 2 blocker. Next Knowledge Core slice is not more sign literature.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.69 §6.23 · `docs/astrology/IL1_LAYER2_SIGNS_CLOSEOUT.md`
+- **Backward compatible?** yes
+
+## Architecture impact — IL-1 1.3.70 Layer 1 outers definition (2026-08-21)
+
+- **SoT before:** outers withheld because required Layer 1 slots would fake consensus; next hole could be misread as another outer book.
+- **SoT after:** definition/readiness (parent steps 1–4). Outer `function` is later-interpretive, not classical elemental quality. Sufficiency: omit meaning keys after named scoped schema impact, or keep withheld. No ingest. No objects. Do not pick Hand. ASC/MC not this pass.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.70 §6.24 · `docs/astrology/IL1_LAYER1_OUTERS_DEFINITION.md`
+- **Backward compatible?** yes — catalog unchanged; Sun–Saturn `function` untouched
+
+## Architecture impact — IL-1 1.3.71 Knowledge Core V1 Semantic Inventory (2026-08-21)
+
+- **SoT before:** next named IL pass was still a layer slice (outers schema or ASC). Literature could restart from any gap.
+- **SoT after:** V1-wide inventory is the **owner-approved** freeze map. New literature only if row X → consumer Y → missing Z. IL-1 done criterion = minimum controlled primitives, not bibliography.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.71 §6.25 · `docs/astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md`
+- **Backward compatible?** yes — no catalog/schema change
+
+## Architecture impact — IL-1 1.3.72 Outer Planet Draft Representation (2026-08-21)
+
+- **SoT before:** Layer 1 required meaning keys on every celestial_object, so outers stayed withheld.
+- **SoT after:** those keys optional on IL-1 draft Uranus/Neptune/Pluto only. Sun–Saturn unchanged. School packages stay in claims. No objects this pass. Fill waits for TodayFlow Canon (1.3.73).
+- **Public contract changed?** yes — JSON Schema Layer 1 requiredness scoped
+- **Migration required?** no — 0 outer objects
+- **Canon updated?** yes — IL 1.3.72 §6.26 · `docs/astrology/IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md` · `astrology_interpretation_v1.schema.json`
+- **Backward compatible?** yes for runtime (`draft` ignored)
+
+## Architecture impact — IL-1 1.3.73 TodayFlow Canon (2026-08-21)
+
+- **SoT before:** product meaning waited on CORE = school-intersection. Next named was outer materialize.
+- **SoT after:** TodayFlow Canon is the product-meaning gate. CORE is research metadata, not permission. Criteria: prevalence · recognition · distinctiveness · utility · composability. Next = Sun–Pluto claim audit on the existing ledger. Outer schema 1.3.72 stands; `function` fill waits.
+- **Public contract changed?** no JSON this pass. Future IL-3 reads Canon slots, not `evidence_tier=core`.
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.73 §6.27 · `docs/astrology/TODAYFLOW_CANON_V1.md` · parent §4
+- **Backward compatible?** yes for runtime. Deprecated as product gate: wait-for-CORE.
+
+## Architecture impact — IL-1 1.3.74 Corpus / Consensus / Canon (2026-08-21)
+
+- **SoT before:** Canon criteria existed; Corpus, Consensus, and Canon could still collapse into one pile; next could look like a long research cycle.
+- **SoT after:** three layers distinct. 491 claims = Evidence Corpus (keep). Runtime = Canon → composition → LLM formulates. Next = short corpus pass. Not Outer / ASC / books.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.74 §6.28 · TODAYFLOW_CANON_V1.md §0
+- **Backward compatible?** yes
+
+## Architecture impact — IL-1 1.3.75 Co–Star teardown freeze (2026-08-21)
+
+- **SoT before:** next named IL pass was a short Evidence Corpus → Semantic Consensus → Canon proposal. Co–Star was landing layout + forbidden IL source.
+- **SoT after:** IL architecture frozen. Empirical base = `docs/audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md` (Phase 0). Calc must be correct; meaning must be consistent, recognizable, useful. Quality criteria = feels-like-me / specific / noticing / share / return. Do not copy Co–Star. Next = Phase 1 in-app corpus, not Canon scoring.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.75 §6.29 · teardown file · inventory execution order · parent 1.3
+- **Backward compatible?** yes. Deprecated as next pass: short corpus scoring.
+
+## Architecture impact — IL-1 1.3.91 House Canon fill (2026-08-22)
+
+- **SoT before:** grammar locked one slot; dry-run lemmas were illustrative. Risk: dump 1.3.89 families or write pair interpretations.
+- **SoT after:** twelve packs locked with origin tags. Five gates. Destination-noun test. Catalog untouched. Next = storage/materialization.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/HOUSE_CANON_V1.md` · IL 1.3.91 §6.45
+- **Backward compatible?** yes. House objects stay `DRAFT_CLASSICAL`.
+
+## Architecture impact — IL-1 1.3.96 Aspect Canon fill (2026-08-22)
+
+- **SoT before:** grammar locked one slot; dry-run lemmas were illustrative. Risk: dump 1.3.94 families, stamp conjunction good/bad, write growth into square, or pretty lemmas for Today copy.
+- **SoT after:** five packs locked. Origin `direct` from 1.3.94 include. Five gates. Conjunction mixed-valence is a pack guard, not a lemma. Catalog untouched at fill. Storage — **done 1.3.97.**
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ASPECT_CANON_V1.md` · IL 1.3.96 §6.50
+- **Backward compatible?** yes (`draft`). Deprecated: treating 1.3.95 dry-run wording as locked values.
+
+## Architecture impact — IL-1 1.3.97 Aspect Canon storage/materialization (2026-08-22)
+
+- **SoT before:** Aspect Canon lived in a doc. Five aspect drafts were `angle` / `interaction` / `requires_action` only. Schema forbade `canon` on `type=aspect`.
+- **SoT after:** `type=aspect` may carry optional `canon` as `$defs.aspect_canon_pack` (`relation` only). Five drafts carry locked 1.3.96 packs. Stored `interaction` unchanged. Combos still omit `canon`. Status `draft`. Runtime unchanged. Stored Planet × Aspect smoke — **done 1.3.98.** **STOP Aspects.** Next = ASC/MC.
+- **Public contract changed?** yes — optional aspect `canon` nest; five draft aspects now include `canon`
+- **Migration required?** no — nothing `active`
+- **Canon updated?** yes — `docs/astrology/ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md` · IL 1.3.97 §6.51 · schema `$defs.aspect_canon_pack` · `objects_v1.json`
+- **Backward compatible?** yes for runtime (`draft`)
+
+## Architecture impact — IL-1 1.3.102 Angle Canon fill (2026-08-22)
+
+- **SoT before:** grammar locked one slot; dry-run lemmas were illustrative. Risk: inherit 1.3.101 wording; promote secondary collision-zone; treat personal-facing / public-facing as the pack.
+- **SoT after:** two packs locked. Origin `direct` from 1.3.100 include. Five gates. Collision vs House 1/10. Secondary unused. Angle Canon storage/materialization — **done 1.3.103.** Sequence: stored Planet×Angle smoke → STOP Angles → final atomic smoke.
+- **Public contract changed?** no (fill)
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ANGLE_CANON_V1.md` · IL 1.3.102 §6.56
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.103 Angle Canon storage/materialization (2026-08-22)
+
+- **SoT before:** two packs locked in a doc. Catalog 36 drafts. No `type=angle`. Layer 1 forced `celestial_object`.
+- **SoT after:** `$defs.angle_canon_pack` (`orientation`). Two `type=angle` drafts carry locked 1.3.102 packs. Catalog 38 draft / 0 `active`. House 1/10 packs unchanged. Runtime ignores `draft`. Stored Planet×Angle smoke — **done 1.3.104.**
+- **Public contract changed?** yes — `type=angle`; optional angle `canon` nest; two draft objects
+- **Migration required?** no — nothing `active`
+- **Canon updated?** yes — `docs/astrology/ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md` · IL 1.3.103 §6.57 · schema `$defs.angle_canon_pack` · `objects_v1.json`
+- **Backward compatible?** yes for runtime (`draft`)
+
+## Architecture impact — IL-1 1.3.104 stored Planet × Angle composition smoke (2026-08-23)
+
+- **SoT before:** two angle drafts carry locked `orientation`. Risk: House 1/10 as the angle; occupancy = conjunction; planet-on-angle essays.
+- **SoT after:** PlanetAtAngle frames read stored `canon.orientation`. Four gates PASS. Mars AT ASC ≠ Mars AT MC ≠ House 1/10. Occupancy ≠ conjunction. Catalog unchanged. **STOP Angles.** Final atomic smoke — **done 1.3.105.** Knowledge Core V1 FREEZE — **done 1.3.106.** Next = IL-2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ANGLE_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.104 §6.58
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.105 final atomic smoke (2026-08-23)
+
+- **SoT before:** five family smokes PASS in isolation. Risk: collapse operators into one essay; skip freeze; open IL-2 cookbooks.
+- **SoT after:** one diagnostic reads Planet + Sign + House + Aspect + Angle from stored `canon`. Four gates PASS. Operators discriminate. Occupancy ≠ conjunction. Catalog unchanged. Knowledge Core V1 FREEZE — **done 1.3.106.**
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ATOMIC_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.105 §6.59
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.106 Knowledge Core V1 FREEZE (2026-08-23)
+
+- **SoT before:** inventory was the literature freeze map; five stored families smoke-PASS; next named was still “declare V1 frozen,” so IL-2 could start as if 41 gold-set / CORE / outers were gates.
+- **SoT after:** Knowledge Core V1 is **frozen on stored primitives**. Five `canon` operators are the V1 atoms. Catalog 38 draft / 0 `active`. Uranus/Neptune/Pluto remain claims. DSC/IC out of V1. CORE unscored (not a gate). Layer 5 = candidates. Later-interpretive signs deferred. Co–Star = recognition check, not source. Next named = **IL-2 composition rules** (not pair catalog).
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — Profile 1.3.123 meaning polish (2026-08-25)
+
+- **SoT before:** Today polish 1.3.114 bound native astrology chorus to IL-4. Live Profile is Character Engine; Natal Decode invented sky meaning from compact natal_pack facts.
+- **SoT after:** **Profile Meaning Polish V1** — Natal Decode `pattern_thesis` / `section.thesis` phrase IL-4 when a pack is present. Identity Core stays CE. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — next explicit POST after decode v0.3 fingerprint
+- **Canon updated?** yes — `docs/profile/PROFILE_MEANING_POLISH_V1.md` · tracker 1.3.123
+- **Backward compatible?** yes — missing geometry → previous decode path
+
+## Architecture impact — Today 1.3.122 Native C1 conflict→scene seed retry (2026-08-24)
+
+- **SoT before:** Seed-kill retry named setup clones and why_today→`human_meaning`. Prod gen **1119** (user 2, c5.4) leaked `conflict.why_arose` into `scenes[0].why` / `what_happens`, then `ASTRO_JARGON_BARE` on `astrology[2]`. Detectors unchanged; rebuild kept prior native.
+- **SoT after:** **Native C1 Conflict→Scene Seed Retry V1** — prompt `day-scenario-native-c5.5`; retry names `why_today`/`why_arose` → scene why/setup; jargon retry forbids fixing that leak by jargon rollback. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — force rebuild / refresh picks up c5.5
+- **Canon updated?** yes — `docs/today/NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1.md` · tracker 1.3.122
+- **Backward compatible?** yes — same blocking codes
+
+## Architecture impact — Today 1.3.121 Native C1 astro jargon retry (2026-08-24)
+
+- **SoT before:** Jargon and seed-kill retries were separate essays. Prod gen **1117** (user 15) oscillated `ASTRO_JARGON_BARE` on `astrology[1]` ↔ `verbatim_seed_leak` (why_today pasted into `human_meaning`). Detectors unchanged.
+- **SoT after:** **Native C1 Astro Jargon Retry V1** — prompt `day-scenario-native-c5.4`; both retries carry `SEED_JARGON_CROSS_HINT_RU` (every `astrology[i]`; no why_today paste; no jargon rollback). Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — force rebuild / refresh picks up c5.4
+- **Canon updated?** yes — `docs/today/NATIVE_C1_ASTRO_JARGON_RETRY_V1.md` · tracker 1.3.121
+- **Backward compatible?** yes — same blocking codes
+
+## Architecture impact — Today 1.3.120 Native C1 seed leak retry (2026-08-24)
+
+- **SoT before:** Seed-kill ran only after I0 merge. Prod gen **1101** cloned sky-fact setup (`verbatim_seed_leak`); gen **1116** mapped sky-fact `conflict.title` (`conflict_short_name_is_sky_fact`). Detectors unchanged; no Global retry.
+- **SoT after:** **Native C1 Seed Leak Retry V1** — same detectors on native Global; hard native markers + retry coaching; prompt `day-scenario-native-c5.3`. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — force rebuild / refresh picks up c5.3
+- **Canon updated?** yes — `docs/today/NATIVE_C1_SEED_LEAK_RETRY_V1.md` · tracker 1.3.120
+- **Backward compatible?** yes — same leak codes; earlier Global reject only
+
+## Architecture impact — Today 1.3.119 Native C1 everyday scene retry (2026-08-24)
+
+- **SoT before:** c5.1 retry named one failing scene; gen 1104 (user 13) traded `SCENE_MISSING_EVERYDAY` from `work_decisions` to `energy_body` across two Global attempts → unavailable. Detectors unchanged.
+- **SoT after:** **Native C1 Everyday Scene Retry V1** — prompt `day-scenario-native-c5.2`; retry forbids shortening passing scenes; Global `max_attempts` default 3. C3.1 lived-marker detectors unchanged. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — force rebuild / refresh picks up c5.2
+- **Canon updated?** yes — `docs/today/NATIVE_C1_EVERYDAY_SCENE_RETRY_V1.md` · tracker 1.3.119
+- **Backward compatible?** yes — same blocking codes
+
+## Architecture impact — Today 1.3.118 Native C1 evidence pack binding (2026-08-24)
+
+- **SoT before:** `collect_allowed_evidence_ids` missed string `ranked_drivers`/`ambient` and foundation nest-path cites (`ev.foundation.lunar.{beat_id}`). Thin-profile Global (user 4 / gen 1092) failed hard `unknown_evidence` after LLM. Editorial calibration 1.3.117 left this out of scope.
+- **SoT after:** **Native C1 Evidence Pack Binding V1** — allowlist binds events pack + foundation beat aliases + interpretation evidence + personalization pack refs. Brief lists canonical ids. `unknown_evidence` still rejects invented ids. Prompt `day-scenario-native-c5.1` unchanged. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — force rebuild / refresh picks up binding
+- **Canon updated?** yes — `docs/today/NATIVE_C1_EVIDENCE_PACK_BINDING_V1.md` · tracker 1.3.118
+- **Backward compatible?** yes — same hard marker; closed set larger
+
+## Architecture impact — Today 1.3.117 Native C1 editorial gate calibration (2026-08-23)
+
+- **SoT before:** Native C1 I0 split c5.0; Global gate retries passed code-only strings; production LLM outputs failed `SCENE_MISSING_EVERYDAY` / `SCENE_ABSTRACT` / `ASTRO_JARGON_BARE` without actionable retry coaching.
+- **SoT after:** **Native C1 Editorial Gate Calibration V1** — prompt `day-scenario-native-c5.1`; Global retry injects `format_editorial_retry_feedback` (defect messages + targeted hints). C3.1 gate codes unchanged (no semantic weakening). Public JSON unchanged.
+- **Public contract changed?** no — fewer `interpretation_status: unavailable` when gates pass after retry
+- **Migration required?** no — refresh / force rebuild picks up c5.1
+- **Canon updated?** yes — `docs/today/NATIVE_C1_EDITORIAL_GATE_CALIBRATION_V1.md` · `NATIVE_C1_I0_GENERATION_SPLIT_V1.md` (c5.1 ref) · tracker 1.3.117
+- **Backward compatible?** yes — same gate semantics; cached unavailable days until regenerate
+
+## Architecture impact — Today 1.3.116 Native C1 I0 split (2026-08-23)
+
+- **SoT before:** One native C1 LLM call produced chorus + conflict + scenes + natal + personalization together — I0 Global/Personal boundary violated in generation.
+- **SoT after:** Native C1 I0 Generation Split V1. Global stage (sky/card/number + conflict + scenes); optional Personal overlay stage from `GLOBAL_LOCKED`. Merge overlay-only; personal degrade → Global-only. Prompt `day-scenario-native-c5.0`. IL-4 attach/consume/polish unchanged. Public JSON unchanged.
+- **Public contract changed?** no — generation order / internal LLM stages only
+- **Migration required?** no — refresh picks up c5.0
+- **Canon updated?** yes — `docs/today/NATIVE_C1_I0_GENERATION_SPLIT_V1.md` · inventory step 44 / KC-C-I0-SPLIT · IL §6.70 · TODAY_CONTENT_PIPELINE table · TODAY_MEANING_POLISH
+- **Backward compatible?** yes — same day_scenario projection; cached days until regenerate
+
+## Architecture impact — Compatibility 1.3.115 synastry editorial IL-4 (2026-08-23)
+
+- **SoT before:** `compatibility_llm` consumed IL-4 when `chart1` was passed (attach 1.3.112 + consume 1.3.113). Synastry `generate_compatibility_editorial` ignored IL-4 even when charts existed upstream.
+- **SoT after:** Synastry editorial accepts optional `chart1` / `chart2`, attaches IL-4 via existing gateway, consumes pack (system augment + protected `IL4_MEANING` prefix + reject-invalid). Prompt `compatibility-editorial-v1.1`. Public `CompatibilityEditorial` contract unchanged. Polish 1.3.114, consume, attach stand.
+- **Public contract changed?** no — internal LLM input / editorial gate only
+- **Migration required?** no — synastry refresh regenerates editorial
+- **Canon updated?** yes — `docs/astrology/COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md` · inventory step 43 / KC-C-COMPAT-EDITORIAL · IL §6.69
+- **Backward compatible?** yes — missing charts → previous editorial path
+
+## Architecture impact — Today 1.3.114 meaning polish (2026-08-23)
+
+- **SoT before:** Consume 1.3.113 put IL4_MEANING on LLM input. Native prompt still let `interpretive_chorus.astrology` invent parallel sky meaning from flat facts.
+- **SoT after:** Today Meaning Polish V1 binds the astrology chorus voice to IL-4 lemmas when a pack is present. `TODAY_IL4_CHORUS` instruction; reject empty astrology chorus; fill-empty `human_meaning` only. Conflict/scenes stay DRAMATURGY_BRIEF + I0. Prompt `day-scenario-native-c4.2`. Public JSON unchanged. Consume 1.3.113 stands.
+- **Public contract changed?** no — internal LLM input / editorial gate
+- **Migration required?** no — refresh/force_rebuild picks up c4.2
+- **Canon updated?** yes — `docs/today/TODAY_MEANING_POLISH_V1.md` · inventory step 42 / KC-C-TODAY-POLISH · IL §6.68
+- **Backward compatible?** yes — missing pack omits polish instruction
+
+## Architecture impact — IL-1 1.3.113 IL-4 editorial consume (2026-08-23)
+
+- **SoT before:** Attach 1.3.112 put `il4_expression_pack` on LLM inputs. Prompts could still treat the model as meaning chooser. Today polish PAUSED until consume.
+- **SoT after:** IL-4 Editorial Consume V1. Generation phrases packs (prompt + protected prefix). Fill-empty / reject-invalid. Public JSON unchanged. Day plot SoT remains TODAY_CONTENT_PIPELINE I0. Attach / wire / scale / IL engines stand.
+- **Public contract changed?** no — internal LLM input / editorial gate
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/IL4_EDITORIAL_CONSUME_V1.md` · inventory step 41 / KC-C-CONSUME · IL §6.67
+- **Backward compatible?** yes — missing pack omits consume instruction
+
+## Architecture impact — IL-1 1.3.112 IL-4 surface attach (2026-08-23)
+
+- **SoT before:** Wire 1.3.111 live at library layer only. Product LLM paths ignored IL-4. Today meaning polish PAUSED until surfaces read packs.
+- **SoT after:** IL-4 Surface Attach V1 locks the product gateway. `il4_expression_pack` on Today / Profile / Compatibility LLM inputs. Meaning still IL-2/3; voice IL-4; prompts not SoT. Public contracts unchanged. Wire / scale / IL engines stand.
+- **Public contract changed?** no — internal LLM input only
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/IL4_SURFACE_ATTACH_V1.md` · inventory step 40 / KC-C-ATTACH · IL §6.66
+- **Backward compatible?** yes — missing geometry omits pack
+
+## Architecture impact — IL-1 1.3.111 Calc → IL wire (2026-08-23)
+
+- **SoT before:** Library Scale V1 named the wire (1.3.110) and left it not live. Calc charts and IL engines sat side by side. A pass could still treat Today prompts as meaning SoT or set `active`.
+- **SoT after:** Calc → IL Wire V1 is live at the **library layer**. Duck-typed calc snapshot → SkyFact → IL-2 → IL-3 → IL-4. Product surfaces are not attached. Occupancy ≠ conjunction. House 1 ≠ ASC. MC ≠ career. Next named = **attach IL-4 packs to product surfaces** (not `active`). Freeze, IL-2, IL-3, IL-4, and scale stand. Not a canonical v2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/CALC_IL_WIRE_V1.md` · inventory step 39 / KC-C-WIRE · IL 1.3.111 §6.65
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.110 Library scale (2026-08-23)
+
+- **SoT before:** IL-4 locked (1.3.109); §7 named finite foundation, but coverage was still “next.” A pass could open a pair catalog or make Today prompts meaning SoT.
+- **SoT after:** Library Scale V1 is the coverage SoT. 616 composed cells from stored atoms (0 objects). Outer gold remains candidate. Wire named, not live. Next named = **wire calc → IL** (not `active`). Freeze, IL-2, IL-3, and IL-4 stand. Not a canonical v2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/LIBRARY_SCALE_V1.md` · inventory step 38 / KC-C-SCALE · IL 1.3.110 §6.64
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.109 IL-4 Expression (2026-08-23)
+
+- **SoT before:** IL-3 ranked frames; Expression named but unimplemented. LLM / Today prompts could still choose meaning.
+- **SoT after:** IL-4 **engine** voices ranked themes by surface (tone / length / focus). Lemmas verbatim. Person-blind. Next named = **library scale**. Freeze, IL-2, and IL-3 stand. Not a canonical v2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/IL4_EXPRESSION_V1.md` · inventory step 37 / KC-C-EXPR · IL 1.3.109 §6.63
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.108 IL-3 Interpretation Engine (2026-08-23)
+
+- **SoT before:** IL-2 bag of frames; IL-3 named as sky-internal rank but unimplemented. A next pass could still read CE, start Relevance, or write pair essays as themes.
+- **SoT after:** IL-3 **engine** ranks composed frames by sky band (transit before natal; input order inside a band). Person-blind. Missing atoms dropped. Five jobs stay partitioned. Next named = **IL-4** expression. Freeze and IL-2 stand. Not a canonical v2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/IL3_INTERPRETATION_ENGINE_V1.md` · inventory step 36 / KC-C-ENGINE · IL 1.3.108 §6.62
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.107 IL-2 composition rules (2026-08-23)
+
+- **SoT before:** atoms frozen (1.3.106); ACM §3 was a machine-vector sketch; KC-C-RULES deferred; Layer 5 gold = candidates. Compose could still become a pair catalog, collapse House 1 into ASC, or wait on CORE / gold-set 41.
+- **SoT after:** IL-2 **rules** (role weights, conflict, merge) are the lemma-compose SoT. Five jobs stay five jobs. Layer 5 gold rows with stored atoms are **composed** (0 objects). Outer-planet gold rows stay candidates (missing atom). Next named = **IL-3** engine. Freeze stands. Not a canonical v2.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/IL2_COMPOSITION_RULES_V1.md` · inventory step 35 / KC-C-RULES · IL 1.3.107 §6.61
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.101 Angle Canon grammar (2026-08-22)
+
+- **SoT before:** 1.3.100 locked include/secondary/exclude. Slot count unnamed. Risk: copy `arena`; promote appearance / career from the collision-zone; treat personal vs public as a second atom; write planet-on-angle essays.
+- **SoT after:** one required slot (`orientation`). Include-first. Secondary stays collision-zone. Facing as own slot surplus. Arena copy forbidden. Catalog untouched. Angle Canon fill — **done 1.3.102.** Sequence: storage → stored Planet×Angle smoke → STOP Angles → final atomic smoke.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ANGLE_CANON_GRAMMAR_V1.md` · IL 1.3.101 §6.55
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.100 Mainstream Angle Semantic Map (2026-08-22)
+
+- **SoT before:** 1.3.99 locked orientation loci. Risk: skip the map and invent an operator; paste House 1 / House 10; treat angular = louder as meaning; ingest planet-conjunct-ASC/MC recipes.
+- **SoT after:** same panel. ASC + MC territories + include/secondary/exclude. House 1/10 vocabulary is not proof. Angular prominence is not meaning. Planet-on-angle cookbooks are out. Catalog untouched. Angle Canon grammar — **done 1.3.101.** Sequence: fill → storage → stored Planet×Angle smoke → STOP Angles → final atomic smoke.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md` · IL 1.3.100 §6.54
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.99 Angle Canon model (2026-08-22)
+
+- **SoT before:** KC-ANG-ASC / KC-ANG-MC were `NEED_MODEL`. House Canon forbids `1st = ASC` / `10th = MC`. Risk: copy `arena`, treat angles as routing anchors, or paste mask/career cookbooks.
+- **SoT after:** ASC and MC are orientation loci (horizon vs meridian). Routing stays House. Projection-strength stays Foundation. Named Canon slots unspecified. Catalog unchanged. Mainstream Angle map — **done 1.3.100.**
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ANGLE_CANON_MODEL_V1.md` · IL 1.3.99 §6.53
+- **Backward compatible?** yes (`draft`). Deprecated as the angle job: House 1 / House 10 substitution; slots by analogy.
+
+## Architecture impact — IL-1 1.3.98 Stored Planet × Aspect composition smoke (2026-08-22)
+
+- **SoT before:** 1.3.82 scored AspectPair PASS from `interaction`. 1.3.97 stored `canon.relation`. Trine and sextile still share `interaction=flow`.
+- **SoT after:** live AspectPair frames read `astro.aspect.*.canon.relation`. Four gates PASS. Historical 1.3.82 AspectPair = snapshot. Catalog unchanged. **STOP Aspects.** Angle model — **done 1.3.99.**
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ASPECT_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.98 §6.52
+- **Backward compatible?** yes (`draft`)
+
+## Architecture impact — IL-1 1.3.95 Aspect Canon grammar (2026-08-22)
+
+- **SoT before:** 1.3.94 locked aspect territory. One-slot vs two-atom Canon undecided. Risk: two atoms because Signs had two or because `requires_action` exists; copy `interaction` as Canon; write pair essays.
+- **SoT after:** Aspect = topology/quality of the link, not its meaning. One required slot (`relation`). Effort / participation / `requires_action` surplus. Conjunction stays mixed-valence. Extra slots for a pretty sentence are IL-2, not Canon. Stored `interaction` is classical grain, not this slot. Dry-run only. Catalog untouched. Next = Aspect Canon fill.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/ASPECT_CANON_GRAMMAR_V1.md` · IL 1.3.95 §6.49
+- **Backward compatible?** yes (`draft`). Deprecated as grammar source: Foundation §2.4; `requires_action` as a second atom.
+
+## Architecture impact — IL-1 1.3.94 Mainstream Aspect Semantic Map (2026-08-22)
+
+- **SoT before:** Houses closed (1.3.93 PASS). Risk: skip the map because `friction` / `flow` already compose; paste Foundation §2.4; treat square as “challenge causes growth.”
+- **SoT after:** same panel as planets/signs/houses. Five major-aspect territories + include/secondary/exclude. Aspect = relation between functions, not a theme. One-slot vs two-atom Canon undecided. Catalog untouched. Next = Aspect Canon grammar.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md` · IL 1.3.94 §6.48
+- **Backward compatible?** yes. Aspect objects stay `DRAFT_CLASSICAL`.
+
+## Architecture impact — IL-1 1.3.93 Planet × House composition smoke (2026-08-22)
+
+- **SoT before:** 1.3.92 stored `canon.arena`. 1.3.82 / 1.3.88 Moon × 4th PARTIAL. Risk: Lilly `domain` as operator, or pair essays to force PASS.
+- **SoT after:** PlanetInHouse reads stored `house.canon.arena`. Moon × 4th ≠ Moon × 10th. Same 4th pack on Moon / Mars / Venus. Historical PARTIAL = snapshot. Catalog unchanged. **STOP Houses.**
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/HOUSE_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.93 §6.47
+- **Backward compatible?** yes (`draft`). Deprecated as next step: improving House packs without a named Composition Engine failure.
+
+## Architecture impact — IL-1 1.3.92 House Canon storage + materialization (2026-08-22)
+
+- **SoT before:** House Canon lived in a doc. Twelve house drafts were Lilly `domain` / `people` / `activities` only. Schema forbade `canon` on `type=house`.
+- **SoT after:** `type=house` may carry optional `canon` as `$defs.house_canon_pack` (`arena` only). Twelve drafts carry locked 1.3.91 packs. Lilly fields unchanged. Status `draft`. Aspects omit `canon`. ASC/MC not materialized. Runtime still ignores `draft`.
+- **Public contract changed?** yes — optional house `canon` nest; twelve draft houses now include `canon`
+- **Migration required?** no — nothing `active`
+- **Canon updated?** yes — `docs/astrology/HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md` · IL 1.3.92 §6.46 · schema `$defs.house_canon_pack` · `objects_v1.json`
+- **Backward compatible?** yes for runtime (`draft`). Clients that only read Lilly `domain` still see CA I.7.
+
+## Architecture impact — IL-1 1.3.90 House Canon grammar (2026-08-22)
+
+- **SoT before:** 1.3.89 locked house territory. Risk: two slots because Signs had two; copy planet.domains; equate House 1 with ASC.
+- **SoT after:** House = arena (where). One required slot. planet.domains ≠ house.arena. Dry-run only. Catalog untouched. Next = House Canon fill.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/HOUSE_CANON_GRAMMAR_V1.md` · IL 1.3.90 §6.44
+- **Backward compatible?** yes. House objects stay `DRAFT_CLASSICAL`.
+
+## Architecture impact — IL-1 1.3.89 Mainstream House Semantic Map (2026-08-22)
+
+- **SoT before:** 1.3.88 PlanetInSign PASS. Moon × 4th PARTIAL. Risk: paste Lilly, paste Foundation §2.3, equate House 1 with ASC, or derive arenas from natural signs.
+- **SoT after:** same panel as planets/signs. Twelve house territories + include/secondary/exclude. House ≠ angle. House ≠ natural sign. Catalog untouched. Next = House Canon grammar.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md` · IL 1.3.89 §6.43
+- **Backward compatible?** yes. House objects stay `DRAFT_CLASSICAL`.
+
+## Architecture impact — IL-1 1.3.88 Planet × Sign composition smoke (2026-08-22)
+
+- **SoT before:** 1.3.82 Venus × Capricorn PARTIAL. Packs on drafts (1.3.87). Risk: classification as operator, or pair essays.
+- **SoT after:** PlanetInSign PASS from `sign.canon.manner`. Discrimination / operator / classification-independence PASS. Moon × 4th PARTIAL. Catalog unchanged. STOP Signs. Next = Houses Mainstream.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/SIGN_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.88 §6.42
+- **Backward compatible?** yes. Runtime still ignores `draft`. 1.3.82 remains historical PARTIAL.
+
+## Architecture impact — IL-1 1.3.87 Sign Canon materialization (2026-08-21)
+
+- **SoT before:** schema nest existed; twelve sign drafts were classification-only.
+- **SoT after:** twelve drafts carry locked `canon`. Classification unchanged. Later-interpretive `excess` omitted. Next = 1.3.88 smoke-test (separate gate). **Done 1.3.88.**
+- **Public contract changed?** yes — twelve draft signs now include `canon`
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/SIGN_CANON_MATERIALIZATION_V1.md` · IL 1.3.87 §6.41
+- **Backward compatible?** yes. Runtime still ignores `draft`.
+
+## Architecture impact — IL-1 1.3.86 Sign Canon storage (2026-08-21)
+
+- **SoT before:** twelve packs locked in a doc; `canon` on signs had no legal shape.
+- **SoT after:** optional `canon` on `type=sign` = `manner` · `excess`. Catalog unchanged. Next = write packs onto sign drafts.
+- **Public contract changed?** yes — optional sign `canon` nest
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/SIGN_CANON_STORAGE_V1.md` · IL 1.3.86 §6.40
+- **Backward compatible?** yes. Sign objects stay classification-only until fill.
+
+## Architecture impact — IL-1 1.3.85 Sign Canon fill (2026-08-21)
+
+- **SoT before:** grammar locked two slots; dry-run lemmas were illustrative. Risk: dump all 1.3.83 families, or copy ruler function into sign manner.
+- **SoT after:** twelve packs locked with origin tags. Four gates pass. Unused families stay in territory. Next = Sign Canon storage.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/SIGN_CANON_V1.md` · IL 1.3.85 §6.39
+- **Backward compatible?** yes. Sign objects stay classification-only.
+
+## Architecture impact — IL-1 1.3.84 Sign Canon grammar (2026-08-21)
+
+- **SoT before:** sign territory locked; next risk was copying planet six slots or dumping all families into Sign Canon.
+- **SoT after:** Sign = manner (how). Two slots: `manner` · `excess`. Canon narrower than territory is expected. Next = Sign Canon fill. **Done 1.3.85.**
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/SIGN_CANON_GRAMMAR_V1.md` · IL 1.3.84 §6.38
+- **Backward compatible?** yes. Sign objects stay classification-only.
+
+## Architecture impact — IL-1 1.3.83 Mainstream Sign Semantic Map (2026-08-21)
+
+- **SoT before:** 1.3.82 named a missing Sign Canon manner operator. Next risk: personality dumps or `earth` → practical.
+- **SoT after:** same panel as planets. Include/secondary/exclude locked for 12 signs. Classification is not proof. Trait ≠ manner named, not split. Next = Sign Canon grammar.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md` · IL 1.3.83 §6.37
+- **Backward compatible?** yes. Sign objects stay classification-only.
+
+## Architecture impact — IL-1 1.3.82 composition smoke-test (2026-08-21)
+
+- **SoT before:** planet `canon` on seven drafts; next could have been Signs as content.
+- **SoT after:** four constructions scored. Aspect PASS. Sign/house PARTIAL. Next = Signs Mainstream as Sign Canon territory.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_COMPOSITION_SMOKE_V1.md` · IL 1.3.82 §6.36
+- **Backward compatible?** yes
+
+## Architecture impact — IL-1 1.3.81 Sun–Saturn canon fill (2026-08-21)
+
+- **SoT before:** `canon` nest existed; packs lived in a doc.
+- **SoT after:** seven planet drafts have product `canon` separate from classical `function`. Next = 1.3.82 smoke-test, not Signs.
+- **Public contract changed?** yes — seven drafts include `canon`
+- **Migration required?** no — still `draft`
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_SUN_SATURN_FILL_V1.md` · IL 1.3.81 §6.35 · `objects_v1.json`
+- **Backward compatible?** yes for runtime (`draft`)
+
+## Architecture impact — IL-1 1.3.80 Planet Canon storage (2026-08-21)
+
+- **SoT before:** Canon packs lived only in a doc. Risk of stuffing them into `function` / four-key `domains`.
+- **SoT after:** optional `canon` nest with six grammar names. Legacy keys not product meaning. Catalog unchanged.
+- **Public contract changed?** yes — optional `canon`
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_STORAGE_V1.md` · IL 1.3.80 §6.34 · schema
+- **Backward compatible?** yes for current catalog
+
+## Architecture impact — IL-1 1.3.79 Planet Canon V1 (2026-08-21)
+
+- **SoT before:** grammar locked; dry-run could be promoted without origin control.
+- **SoT after:** ten packs locked. Each atom is direct or derived. Four audits. Next = schema pass.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_V1.md` · IL 1.3.79 §6.33
+- **Backward compatible?** yes. Catalog unchanged.
+
+## Architecture impact — IL-1 1.3.78 Planet Canon grammar (2026-08-21)
+
+- **SoT before:** next was Canon shape; risk of starting from old JSON keys including `tempo`.
+- **SoT after:** six engine slots. `tempo` = Foundation. `needs` ≠ `drive`. Dry-run ≠ fill. Next = 1.3.79 fill from 1.3.77. No schema.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/PLANET_CANON_GRAMMAR_V1.md` · IL 1.3.78 §6.32
+- **Backward compatible?** yes. Catalog unchanged.
+
+## Architecture impact — IL-1 1.3.77 Mainstream Planet Semantic Map (2026-08-21)
+
+- **SoT before:** panel #3 unnamed; mainstream could be misread as 2/3 word vote; planet table was a draft.
+- **SoT after:** panel = Astrodienst · Cafe Astrology · Astrology.com. Concept families locked. Territory is not Canon and not JSON. Next = Planet Canon shape.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md` · IL 1.3.77 §6.31
+- **Backward compatible?** yes. Catalog unchanged.
+
+## Architecture impact — IL-1 1.3.76 Product Canon vs Lenses (2026-08-21)
+
+- **SoT before:** product meaning from school-convergence or the 491-claim ledger; IL unlock waited on Co–Star in-app Phase 1.
+- **SoT after:** Mainstream conventions → TodayFlow Canon → runtime. Research corpus → Lenses. CORE not a gate. Co–Star = recognition check. Next = Mainstream planet map. No books. No object rewrite.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md` · IL 1.3.76 §6.30
+- **Backward compatible?** yes. 491 claims kept as lenses.
+
+## Architecture impact — IL-1 1.3.66 Pulse Part One extract (2026-08-18)
+
+- **SoT before:** Pulse Part One shortlisted as humanistic; later-interpretive humanistic cell empty.
+- **SoT after:** three humanistic school_specific claims on `astro.sign.classifications`. Part Two out. Required psych slots not filled. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.66 §6.20 · claims ledger · corpus `src.humanistic.rudhyar_pulse_of_life`
+- **Backward compatible?** yes — Cell C still ACCESS_BLOCKED; planet ledgers untouched
+
+## Architecture impact — IL-1 1.3.65 Cell C ACCESS_BLOCKED (2026-08-18)
+
+- **SoT before:** Cell C was an open discovery cell; map said dedicated readable hunts had not been tried.
+- **SoT after:** Layer 2 psychological later-interpretive is `ACCESS_BLOCKED`. Three named loci NEED_OWNER. Discovery for the slot stops. Pulse is not a substitute. No sign objects. No claims this pass.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.65 §6.11 · §6.19 · map §3 · shortlist Cell C
+- **Backward compatible?** yes — Houlding claims untouched; required psych slots still unattested
+
+## Architecture impact — IL-1 1.3.64 Houlding ontology extract (2026-08-18)
+
+- **SoT before:** shortlist admitted Houlding ontology; classification ledger had Ptolemy/Lilly/Valens only.
+- **SoT after:** three traditional school_specific claims on `astro.sign.classifications`. Rulers out. No sign objects. Later-interpretive slots still unattested.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.64 §6.18 · claims ledger · corpus `src.traditional.houlding_triplicities`
+- **Backward compatible?** yes — planet ledgers untouched; pending Arroyo/Rudhyar unchanged
+
+## Architecture impact — IL-1 1.3.63 Layer 2 shortlist (2026-08-18)
+
+- **SoT before:** criteria locked; map forecast could still be treated as corpus; Cell C could be won by TOC/access.
+- **SoT after:** shortlist locked (IL §6.17). Houlding ontology IN; Cell C remains a cell; Pulse Part One IN; Hand Ch.10 later. No ingest. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.63 §6.17 · `docs/astrology/IL1_LAYER2_SIGNS_SHORTLIST.md`
+- **Backward compatible?** yes — planet ledgers untouched; Houlding/Pulse not extracted
+
+## Architecture impact — IL-1 1.3.62 Layer 2 selection criteria (2026-08-18)
+
+- **SoT before:** literature map existed; next agent could treat map forecast as shortlist, or pick the psychological textbook by readability.
+- **SoT after:** selection criteria locked separately from shortlist (IL §6.16). Epistemic ≠ access. Cell C unscored. No ingest. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.62 §6.16 · `docs/astrology/IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md`
+- **Backward compatible?** yes — planet ledgers untouched; 1.3.61 map remains landscape
+
+## Architecture impact — IL-1 1.3.61 Layer 2 literature map (2026-08-18)
+
+- **SoT before:** schools/source types existed; bibliography could still start from Arroyo/Rudhyar pending IDs.
+- **SoT after:** literature map from the school × constituent matrix. Minimal corpus named. No ingest. No shortlist yet. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.61 §6.15 · `docs/astrology/IL1_LAYER2_SIGNS_LITERATURE_MAP.md`
+- **Backward compatible?** yes — planet ledgers untouched
+
+## Architecture impact — IL-1 1.3.60 Layer 2 schools + source types (2026-08-18)
+
+- **SoT before:** Layer 2 definition existed; school list did not. Sign pending IDs still named Arroyo/Rudhyar as if they were the next authors.
+- **SoT after:** IL §6.14 maps existing `source_class` onto classification vs later-interpretive bands. No new enum. Literature map still waits. No ingest. No sign objects.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.60 §6.14
+- **Backward compatible?** yes — pending Arroyo/Rudhyar rows not promoted
+
+## Architecture impact — IL-1 1.3.59 planet research-stable + Layer 2 definition (2026-08-18)
+
+- **SoT before:** after 1.3.58 the named next task was still an access queue that could reopen planet research; Layer 2 fill-rule waited on Arroyo/Rudhyar (author-first). CORE scoring still tempting as the next planet KPI.
+- **SoT after:** planet fill research-stable. No coverage-KPI hunts. Opportunistic named-locus extract only. CORE scoring blocked. Next large step = Layer 2 Signs definition before bibliography (IL §6.13). “Wait for Arroyo/Rudhyar” withdrawn.
+- **Public contract changed?** no
+- **Migration required?** no — no schema change; 0 sign objects
+- **Canon updated?** yes — IL 1.3.59 §6.12 · §6.13
+- **Backward compatible?** yes — no runtime wiring; catalog 24 draft unchanged
+
+## Architecture impact — IL-1 1.3.58 live recount (2026-08-18)
+
+- **SoT before:** 1.3.44 dashboard could still be read as live (next = Pluto psychological; Mars empty; CORE=0 as lead).
+- **SoT after:** `docs/astrology/IL1_SUN_PLUTO_GAP_AUDIT.md` recomputed from ledgers. Slot statuses COVERED/THIN/DISCOVERED/ACCESS_BLOCKED/EMPTY. Semantic ≠ access. Queue rebuilt. No ingest. No CORE scoring.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — IL 1.3.58 · gap audit rewrite
+- **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — IL-1 1.3.57 ACCESS_BLOCKED (2026-08-18)
+
+- **SoT before:** empty psych slot stayed open for discovery while NEED_OWNER loci existed; Mars could still trigger a 4th-book hunt after three dedicated unread chapters.
+- **SoT after:** `ACCESS_BLOCKED(slot)` — ≥3 quality independent dedicated loci, all access-closed → stop discovery for that slot. NEED_OWNER remains locus-level. Psychological Mars ACCESS_BLOCKED. §6.10 budget closed. Recount allowed. No ingest. No CORE.
+- **Public contract changed?** no
+- **Migration required?** no — not a schema enum
+- **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` §6.11
+- **Backward compatible?** yes — no runtime wiring
+
+## Architecture impact — Knowledge-core research order (2026-08-17)
+
+- **SoT before:** meaning libraries could start from the first strong accessible author (IL-1: Greene/Hand became obligatory).
+- **SoT after:** `docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md` — предмет → границы → составляющие → определения → школы → типы источников → карта литературы → критерии → shortlist → ingest. Applies to the next semantic core in any domain. IL-1 planet fill may continue; CORE is not scored from availability. Psychology/medicine evidence hierarchy is a separate axis from IL school-convergence.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — new doc · IL 1.3.30 · README · AGENTS related canons
+- **Backward compatible?** yes
+
+## Architecture impact — Interpretation Library (2026-08-17)
+
+- **SoT before:** TODAY_CONTENT_PIPELINE_V1 step 2 lookup named as a hole; LLM still invents primitive meanings.
+- **SoT after:** Interpretation Library = that lookup (atoms first, curated combos only if non-compositional). Cluster + profile relevance change **priority**, not astrological meaning. LLM expresses packs. Today Meaning SoT remains the pipeline (not a second day-canon).
+- **Public contract changed?** no (no runtime wiring yet)
+- **Migration required?** no until IL-4
+- **Canon updated?** yes — `docs/astrology/INTERPRETATION_LIBRARY_V1.md` · pipeline §2 · AMC §2.2 · ACM · Foundation §2 · DAY_SOURCES chain · REFERENCE §2.1/§6
+- **Backward compatible?** yes — generators unchanged until Engine consumes packs
 
 **CANON LOCKED (2026-08-15):** **Один Today Meaning SoT** = [TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md). **Один product cycle** = [TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) (TODAY → RITUAL → MY DAY → EVENING). SCENARIO_V3 six-block **superseded** as product map. DAY_SCENARIO_V1 / B5 demoted (не канон смысла). DAY_SOURCES = facts only.
 
@@ -1662,6 +2416,16 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Profile / IL-4 | **1.3.123 Profile meaning polish** | **LOCKED** | Natal Decode sky theses bind to IL-4. Identity Core stays CE. Prompt 1.1.0. Public JSON unchanged. [PROFILE_MEANING_POLISH_V1](./profile/PROFILE_MEANING_POLISH_V1.md).
+- 2026-08-24 | Today / Native C1 | **1.3.122 conflict→scene seed retry** | **LOCKED** | Name `why_today`/`why_arose` paste into `scenes[].why` so retry does not trade it for `ASTRO_JARGON_BARE` on `astrology[2]`. Prompt c5.5. Detectors unchanged. Live user **2** gen **1122** PASS (Global first try). [NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1](./today/NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1.md).
+- 2026-08-24 | Today / Native C1 | **1.3.121 astro jargon retry** | **LOCKED** | Cross-gate retry: don't trade `ASTRO_JARGON_BARE` on `astrology[i]` for why_today paste (`verbatim_seed_leak`). Prompt c5.4. Detectors unchanged. Live user **15** gen **1118** PASS (3 Global). [NATIVE_C1_ASTRO_JARGON_RETRY_V1](./today/NATIVE_C1_ASTRO_JARGON_RETRY_V1.md).
+- 2026-08-24 | Today / Native C1 | **1.3.120 seed leak retry** | **LOCKED** | Catch `verbatim_seed_leak` + `conflict_short_name_is_sky_fact` on Global native validate (same detectors); retry coaching; prompt c5.3. Live: gen 1101/1116 were post-I0 hard fails; gen **1117** retries seed-kill then terminal `ASTRO_JARGON_BARE` (user 15 still unavailable). [NATIVE_C1_SEED_LEAK_RETRY_V1](./today/NATIVE_C1_SEED_LEAK_RETRY_V1.md).
+- 2026-08-24 | Today / Native C1 | **1.3.119 everyday scene retry** | **LOCKED** | Prompt c5.2 + all-scene lived-marker retry; Global max_attempts 3. SCENE_* detectors unchanged. Live 2026-08-24: user **13** gen **1106** PASS; **17** gen **1107** PASS (3 Global, ASTRO_JARGON then accept); **8** gen **1108** PASS; **11** gen **1109** PASS. User **15** still `verbatim_seed_leak` (out of scope). [NATIVE_C1_EVERYDAY_SCENE_RETRY_V1](./today/NATIVE_C1_EVERYDAY_SCENE_RETRY_V1.md).
+- 2026-08-24 | Today / Native C1 | **1.3.118 evidence pack binding** | **LOCKED** | `unknown_evidence` allowlist = events pack (string ranked_drivers) + foundation cite aliases (`ev.foundation.lunar.*` gen 1092) + interp evidence + pers pack. Gate not weakened. Prompt c5.1. [NATIVE_C1_EVIDENCE_PACK_BINDING_V1](./today/NATIVE_C1_EVIDENCE_PACK_BINDING_V1.md).
+- 2026-08-18 | Ops / LLM | **AI COGS llm_usage_v1** | **CODE** | Per-request feature/model/tokens/cost + operation_id/trigger/retry. Billed output does not double-count reasoning. Report: feature×trigger×model×retry_reason + top-20 ops. Do not switch model until that report. Canon: LLM_QUALITY AI COGS · AMLL token fields 🟡.
+- 2026-08-17 | Brand / Copy | **Landing copy: three trust levels** | **CODE** | Точность / глубина / человечность as pillar kickers. Locked H1 unchanged. Rejected: «наука», «не алгоритм», «построить карту» as primary. [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.3.
+- 2026-08-17 | Brand / Copy | **Trust Layer on landing + ads brief** | **CODE** | Hero `trustLine` · `#trust` three pillars · footer · [Trust Layer](./content/TODAYFLOW_TRUST_LAYER.md) v1.1 §6 ads. No Horizons / no NASA endorsement / no finished IL catalog. Next = about/press if needed.
+- 2026-08-17 | Brand / Copy | **Trust Layer locked — two pillars + NASA/JPL bounds** | **CANON** | [TODAYFLOW_TRUST_LAYER.md](./content/TODAYFLOW_TRUST_LAYER.md) v1.0. Canon ≠ averaged astrology; provenance is brand language. Astronomy copy = Swiss/DE431 live, not Horizons. Next = landing + ads. Voice Canon v1.9 acquisition exception.
 - 2026-08-15 | Today / Canon | **I2/I3 hygiene** | **CODE** | `primary_scene_id` on native+scenario; gate reject missing/unknown; projector no first-scene pick / no expect concat / do from primary only. Next: I0 contract → Global Engine.
 - 2026-08-15 | Today / Canon | **Pipeline ownership + non-mutation** | **LOCKED** | [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md): один decision owner на поле; downstream enrich/verbalize only; цепочка Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation; UX reveal ≠ authority. Next: I2/I3 hygiene → I0 contract → Global Engine.
 - 2026-08-14 | Design System | **Form Kit full-sheet SoT** | **LIVE (FE)** | Chips statusTone=`--tf-semantic-*` only; `DsLinearProgress` + semantic `DsWaveMeter`; button `lg`; `DsSectionHeader` composition; quote highlight; `/design-system` 100% sheet specimen; DayBrief data-backed only + `DsCelestialMoon`. Next = Practices zone migration.

@@ -1,4 +1,5 @@
 import type { TodayContractV1 } from "@/lib/todayContract";
+import { isTodayInterpretationUnavailable } from "@/lib/todayContract";
 import {
   dayStoryHeadline,
   dayStoryParagraphs,
@@ -15,6 +16,7 @@ import {
   isDailyFocusKitchenLeak,
   isDailyFocusReject,
 } from "@/lib/todayDailyFocusBoundary";
+import { isHonestUnavailableCopy } from "@/lib/todaySlotAvailability";
 
 export type DailyFocusModel = {
   dailyFocusId: string;
@@ -149,6 +151,9 @@ export function buildDailyFocusModel(
   contract: TodayContractV1,
   guidePayload: Record<string, unknown> | null,
 ): DailyFocusModel {
+  if (isTodayInterpretationUnavailable(contract)) {
+    return { dailyFocusId: "day_focus", title: "", lines: [] };
+  }
   if (hasAuthoritativeDayStory(contract)) {
     return buildDailyFocusFromDayStory(contract);
   }
@@ -220,6 +225,7 @@ export type GlanceDailyFocusModel = {
 function cleanDirectionLine(raw: string | null | undefined, title: string): string | null {
   const text = (raw ?? "").replace(/\s+/g, " ").trim();
   if (!text || text.length < 8) return null;
+  if (isHonestUnavailableCopy(text)) return null;
   if (isDailyFocusKitchenLeak(text)) return null;
   // day_story do/avoid/trap are intentional direction — not guide do_hint / avoid_hint.
   // Kitchen/meta only here; keep intentional do/avoid even if imperative.
@@ -238,6 +244,9 @@ export function buildGlanceDailyFocus(
   contract: TodayContractV1,
   guidePayload: Record<string, unknown> | null,
 ): GlanceDailyFocusModel {
+  if (isTodayInterpretationUnavailable(contract)) {
+    return { dailyFocusId: "day_focus", title: "", prioritize: null, avoid: null };
+  }
   const base = buildDailyFocusModel(contract, guidePayload);
   const ds = contract.day_story;
   const prioritize =

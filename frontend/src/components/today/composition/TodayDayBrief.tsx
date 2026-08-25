@@ -198,9 +198,9 @@ function TodayDayDashboard({
           <DsCelestialMoon
             phase={moonPhase}
             size={440}
-            spin={0.035}
+            spin={0}
             glow={0.55}
-            animated
+            animated={false}
             textureSrc="/images/celestial/moon_lro_2k.jpg"
             testId="today-day-brief-moon"
           />

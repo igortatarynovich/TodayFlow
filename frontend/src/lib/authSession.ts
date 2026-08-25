@@ -4,6 +4,8 @@ import { clearAuthMeCache } from "@/lib/api";
 import { flushMeaningOutbox } from "@/lib/meaningRuntime";
 import {
   AUTH_TOKEN_KEY,
+  AUTH_SNAPSHOT_KEY,
+  AUTH_LAST_SNAPSHOT_SAVED_AT_KEY,
   clearAuthCredentialStorage,
   clearAuthenticatedUserCaches,
   clearAuthSessionEnded,
@@ -25,6 +27,19 @@ export function notifyAuthSessionChanged(): void {
   window.dispatchEvent(new Event("auth:update"));
 }
 
+function writeBootstrapAuthSnapshot(token: string): void {
+  try {
+    const savedAt = Date.now();
+    localStorage.setItem(
+      AUTH_SNAPSHOT_KEY,
+      JSON.stringify({ token, profile: null, savedAt }),
+    );
+    localStorage.setItem(AUTH_LAST_SNAPSHOT_SAVED_AT_KEY, String(savedAt));
+  } catch {
+    /* private mode / quota */
+  }
+}
+
 /** After signup/login/OAuth — drop stale user caches, persist token, notify subscribers. */
 export function beginAuthSession(token: string): void {
   if (typeof window === "undefined") return;
@@ -34,7 +49,12 @@ export function beginAuthSession(token: string): void {
   clearAuthCredentialStorage();
   clearAuthSessionEnded();
   clearAuthMeCache();
-  localStorage.setItem(AUTH_TOKEN_KEY, trimmed);
+  try {
+    localStorage.setItem(AUTH_TOKEN_KEY, trimmed);
+    writeBootstrapAuthSnapshot(trimmed);
+  } catch {
+    /* private mode — session will not survive reload, but this tab can still navigate */
+  }
   notifyAuthSessionChanged();
   void import("@/lib/warmTodayDayBundle")
     .then(({ warmTodayDayBundle }) => {

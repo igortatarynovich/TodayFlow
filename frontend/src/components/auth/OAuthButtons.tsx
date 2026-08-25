@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { getJson, postJson } from "@/lib/api";
 import { useToast } from "@/components/ToastProvider";
 import { LoadingSpinner } from "@/components/orbit";
-import { useRouter, useSearchParams } from "next/navigation";
-import { getSafeRedirectTarget, resolveTargetAfterAuthSession } from "@/lib/authRedirect";
+import { useSearchParams } from "next/navigation";
+import { getSafeRedirectTarget, resolveTargetAfterAuthSession, assignAfterAuthSession } from "@/lib/authRedirect";
 import { beginAuthSession } from "@/lib/authSession";
 import { t } from "@/lib/i18n";
 
@@ -20,11 +20,19 @@ type OAuthProvidersPayload = {
 
 export function OAuthButtons({ onSuccess }: OAuthButtonsProps) {
   const toast = useToast();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState<"google" | "apple" | null>(null);
   const [providers, setProviders] = useState<OAuthProvidersPayload>({});
   const redirectTarget = getSafeRedirectTarget(searchParams?.get("redirect"));
+
+  const googleRedirectUrl = () => {
+    const clientId = providers.google?.client_id;
+    if (!clientId) return null;
+    const redirectUri = encodeURIComponent(`${window.location.origin}/auth/google/callback`);
+    const scope = encodeURIComponent("openid email profile");
+    const state = encodeURIComponent(JSON.stringify({ redirect: redirectTarget }));
+    return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
+  };
 
   useEffect(() => {
     getJson<{ providers?: OAuthProvidersPayload }>("/oauth/providers")
@@ -40,22 +48,49 @@ export function OAuthButtons({ onSuccess }: OAuthButtonsProps) {
 
     setLoading("google");
     try {
-      // Initialize Google Sign-In
-      // In production, use @react-oauth/google or similar
-      if (typeof window !== "undefined" && (window as any).google && providers.google?.client_id) {
+      const preferRedirect =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(pointer: coarse), (max-width: 48rem)").matches;
+      const redirectUrl = googleRedirectUrl();
+      const canRedirect = Boolean(redirectUrl && providers.google?.code_exchange_enabled);
+
+      // One Tap often never calls back on mobile — prefer the redirect flow there.
+      if (
+        !preferRedirect &&
+        typeof window !== "undefined" &&
+        (window as any).google &&
+        providers.google?.client_id
+      ) {
         const google = (window as any).google;
         google.accounts.id.initialize({
           client_id: providers.google.client_id,
           callback: handleGoogleCallback,
         });
-        google.accounts.id.prompt();
-      } else if (providers.google?.client_id && providers.google?.code_exchange_enabled) {
-        const clientId = providers.google.client_id;
-        const redirectUri = encodeURIComponent(`${window.location.origin}/auth/google/callback`);
-        const scope = encodeURIComponent("openid email profile");
-        const state = encodeURIComponent(JSON.stringify({ redirect: redirectTarget }));
-        window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
-      } else if (providers.google?.client_id) {
+        google.accounts.id.prompt((notification: {
+          isNotDisplayed?: () => boolean;
+          isSkippedMoment?: () => boolean;
+          isDismissedMoment?: () => boolean;
+        }) => {
+          const skipped =
+            Boolean(notification?.isNotDisplayed?.()) ||
+            Boolean(notification?.isSkippedMoment?.()) ||
+            Boolean(notification?.isDismissedMoment?.());
+          if (!skipped) return;
+          if (canRedirect && redirectUrl) {
+            window.location.href = redirectUrl;
+            return;
+          }
+          setLoading(null);
+        });
+        return;
+      }
+
+      if (canRedirect && redirectUrl) {
+        window.location.href = redirectUrl;
+        return;
+      }
+
+      if (providers.google?.client_id) {
         toast.error(
           t(
             "auth.oauth.googleRedirectNotConfigured",
@@ -82,7 +117,7 @@ export function OAuthButtons({ onSuccess }: OAuthButtonsProps) {
       const target = await resolveTargetAfterAuthSession(redirectTarget);
       toast.success(t("auth.oauth.success", "Вход выполнен"));
       onSuccess?.();
-      router.replace(target);
+      assignAfterAuthSession(target);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("auth.oauth.googleError", "Не удалось войти через Google"));
     } finally {
@@ -98,8 +133,6 @@ export function OAuthButtons({ onSuccess }: OAuthButtonsProps) {
 
     setLoading("apple");
     try {
-      // Initialize Apple Sign-In
-      // In production, use @invertase/react-native-apple-authentication or similar
       if (typeof window !== "undefined" && (window as any).AppleID && providers.apple?.client_id) {
         const AppleID = (window as any).AppleID;
         AppleID.auth.init({
@@ -109,9 +142,14 @@ export function OAuthButtons({ onSuccess }: OAuthButtonsProps) {
           state: JSON.stringify({ redirect: redirectTarget }),
           usePopup: true,
         });
-        AppleID.auth.signIn().then((response: any) => {
-          handleAppleCallback(response);
-        });
+        AppleID.auth
+          .signIn()
+          .then((response: any) => {
+            handleAppleCallback(response);
+          })
+          .catch(() => {
+            setLoading(null);
+          });
       } else {
         toast.error(t("auth.oauth.appleUnavailable", "Вход через Apple недоступен в этом браузере или не настроен"));
         setLoading(null);
@@ -133,7 +171,7 @@ export function OAuthButtons({ onSuccess }: OAuthButtonsProps) {
       const target = await resolveTargetAfterAuthSession(redirectTarget);
       toast.success(t("auth.oauth.success", "Вход выполнен"));
       onSuccess?.();
-      router.replace(target);
+      assignAfterAuthSession(target);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("auth.oauth.appleError", "Не удалось войти через Apple"));
     } finally {

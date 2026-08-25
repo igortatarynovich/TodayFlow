@@ -1,6 +1,8 @@
-# Core User Loop — Theme → Action → Progress
+# Core User Loop — Theme → Action → Progress (гипотеза)
 
-**Статус:** принято (гипотеза **главного объекта продукта** — проверяется, не wire).  
+> **SUBORDINATE / не SoT · 2026-08-21.** Не карта экрана Today и не ядро продукта. Ядро = Personal Model / Character Engine ([TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md)). Нарезка Today = [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md). Theme→Action→Progress остаётся гипотезой цикла, не действующим product map.
+
+**Статус:** `SUBORDINATE` — гипотеза цикла (проверяется, не wire).  
 **Версия:** 1.0 (2026-06-01).  
 **Владелец:** Product + Engineering.
 

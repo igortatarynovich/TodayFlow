@@ -1,9 +1,9 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { postJson } from "@/lib/api";
-import { resolveTargetAfterAuthSession } from "@/lib/authRedirect";
+import { resolveTargetAfterAuthSession, assignAfterAuthSession } from "@/lib/authRedirect";
 import { beginAuthSession } from "@/lib/authSession";
 import { LoadingSpinner } from "@/components/orbit";
 
@@ -13,7 +13,6 @@ type MagicLoginResponse = {
 };
 
 function MagicLoginInner() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
 
@@ -29,12 +28,12 @@ function MagicLoginInner() {
         const response = await postJson<MagicLoginResponse>("/auth/magic-login", { token });
         beginAuthSession(response.token);
         const target = await resolveTargetAfterAuthSession();
-        router.replace(target);
+        assignAfterAuthSession(target);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Не удалось войти по ссылке.");
       }
     })();
-  }, [router, searchParams]);
+  }, [searchParams]);
 
   if (error) {
     return (

@@ -484,6 +484,8 @@ def run_compatibility_dynamics_pipeline(
     scenario_tone: Any | None = None,
     scenario_context: dict[str, Any] | None = None,
     compatibility_learning: dict[str, Any] | None = None,
+    chart1: Any | None = None,
+    chart2: Any | None = None,
 ) -> tuple[Any, str, dict[str, Any] | None]:
     """GE-1 v0.4: единая точка Compatibility dynamics LLM + orchestration log."""
     from todayflow_backend.services.compatibility_llm import generate_llm_product_surface
@@ -506,6 +508,8 @@ def run_compatibility_dynamics_pipeline(
         scenario_tone=scenario_tone,
         scenario_context=scenario_context,
         compatibility_learning=compatibility_learning,
+        chart1=chart1,
+        chart2=chart2,
     )
 
 
@@ -636,22 +640,29 @@ def run_today_narrative_pipeline(
 ) -> tuple[dict[str, Any], int, bool, dict[str, Any] | None]:
     """Единая точка входа API для Today narrative; внутри — существующий `build_today_narrative`."""
 
+    from todayflow_backend.core.llm_openai_compatible import llm_call_context
     from todayflow_backend.services.today_narrative import build_today_narrative
 
-    return build_today_narrative(
-        db,
+    with llm_call_context(
+        ensure_operation=True,
+        operation="today.narrative",
+        feature="today.narrative",
         user_id=user_id,
-        insight_depth_tier=insight_depth_tier,
-        target_date=target_date,
-        locale=locale,
-        surface=surface,
-        core_profile=core_profile,
-        fusion_dump=fusion_dump,
-        parent_generation_id=parent_generation_id,
-        deepen_topic=deepen_topic,
-        policy_version=policy_version,
-        voice_profile=voice_profile,
-        ritual_context=ritual_context,
-        depth_level=depth_level,
-        celestial_events=celestial_events,
-    )
+    ):
+        return build_today_narrative(
+            db,
+            user_id=user_id,
+            insight_depth_tier=insight_depth_tier,
+            target_date=target_date,
+            locale=locale,
+            surface=surface,
+            core_profile=core_profile,
+            fusion_dump=fusion_dump,
+            parent_generation_id=parent_generation_id,
+            deepen_topic=deepen_topic,
+            policy_version=policy_version,
+            voice_profile=voice_profile,
+            ritual_context=ritual_context,
+            depth_level=depth_level,
+            celestial_events=celestial_events,
+        )

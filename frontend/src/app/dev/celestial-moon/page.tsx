@@ -28,14 +28,11 @@ export default function CelestialMoonPreviewPage() {
         padding: "1.5rem clamp(0.75rem, 3vw, 2.5rem) 3rem",
         fontFamily: "ui-sans-serif, system-ui, sans-serif",
         backgroundColor: "#04060c",
-        backgroundImage: [
-          "radial-gradient(ellipse at 50% 36%, rgba(4,8,18,0.15) 0%, rgba(2,4,10,0.72) 48%, rgba(0,0,0,0.88) 100%)",
-          "image-set(url('/images/celestial/nasa_starfield.jpg') 1x, url('/images/celestial/nasa_starfield.jpg') 2x)",
-        ].join(", "),
-        backgroundSize: "cover, cover",
-        backgroundPosition: "center, center",
-        backgroundRepeat: "no-repeat, no-repeat",
-        backgroundAttachment: "fixed, fixed",
+        backgroundImage:
+          "radial-gradient(ellipse at 50% 36%, rgba(18,24,40,0.55) 0%, rgba(4,8,18,0.92) 52%, #02040a 100%)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <header style={{ maxWidth: 720, margin: "0 auto 1.75rem" }}>
@@ -59,7 +56,7 @@ export default function CelestialMoonPreviewPage() {
           marginBottom: "1.75rem",
         }}
       >
-        <CelestialMoon phase={phase} glow={glow} spin={spin} size={size} longitude={longitude} />
+        <CelestialMoon phase={phase} glow={glow} spin={spin} size={size} longitude={longitude} animated />
       </div>
 
       <section
@@ -182,8 +179,7 @@ export default function CelestialMoonPreviewPage() {
           lineHeight: 1.45,
         }}
       >
-        Moon: <code>moon_lro_2k.jpg</code> (sphere · axial Y-spin) · Sky: <code>nasa_starfield.jpg</code>{" "}
-        (NASA WISE PIA15417) · see ATTRIBUTION.md.
+        Moon: <code>moon_lro_2k.jpg</code> (sphere · real phase). No starfield — FOUNDATION_UI §2.7.
       </p>
     </main>
   );

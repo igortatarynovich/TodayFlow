@@ -1,0 +1,617 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.today/schemas/astrology_interpretation_v1.schema.json",
+  "title": "Astrology Interpretation Library v1",
+  "description": "Semantic knowledge objects (not user-facing prose, not surface copy). Forbidden: today_message, profile_blurb, compatibility_line, and any screen-specific field. Catalog may be empty of active records.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "objects"],
+  "properties": {
+    "contract_version": { "const": "astrology_interpretation_v1" },
+    "locale_lemmas": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 2, "maxLength": 8 }
+    },
+    "objects": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/knowledge_object" }
+    }
+  },
+  "$defs": {
+    "lemma": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 240
+    },
+    "lemma_list": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/lemma" }
+    },
+    "theme_cluster": {
+      "type": "string",
+      "enum": [
+        "identity",
+        "emotions",
+        "relationships",
+        "boundaries",
+        "values",
+        "money",
+        "work",
+        "communication",
+        "body",
+        "home",
+        "growth",
+        "meaning",
+        "power",
+        "change",
+        "timing"
+      ]
+    },
+    "polarity": {
+      "type": "string",
+      "enum": ["challenging", "constructive", "supportive", "amplifying", "polarizing", "neutral"]
+    },
+    "temporal_class": {
+      "type": "string",
+      "enum": ["fast", "medium", "slow", "natal"]
+    },
+    "object_status": {
+      "type": "string",
+      "enum": ["schema_example", "draft", "review", "active", "deprecated"]
+    },
+    "source_class": {
+      "type": "string",
+      "enum": [
+        "astronomy",
+        "classical",
+        "traditional",
+        "psychological",
+        "humanistic",
+        "professional",
+        "schema_example",
+        "internal_normalization"
+      ]
+    },
+    "evidence_tier": {
+      "type": "string",
+      "enum": ["core", "supported", "school_specific", "editorial"]
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["extracted", "compared", "reviewed", "rejected", "schema_example"]
+    },
+    "domains": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relationships", "money", "work", "self"],
+      "properties": {
+        "relationships": { "$ref": "#/$defs/lemma" },
+        "money": { "$ref": "#/$defs/lemma" },
+        "work": { "$ref": "#/$defs/lemma" },
+        "self": { "$ref": "#/$defs/lemma" }
+      }
+    },
+    "canon_lemma_list": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/lemma" }
+    },
+    "sign_canon_pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Sign Canon V1 storage (1.3.86). Grammar names unchanged. Optional on type=sign; if present, both slots required. Not later-interpretive excess/motivation. Origin tables stay in SIGN_CANON_V1.md.",
+      "required": ["manner", "excess"],
+      "properties": {
+        "manner": {
+          "$ref": "#/$defs/canon_lemma_list",
+          "description": "How a planet function is carried. Not classification. Not the ruling planet's core_function."
+        },
+        "excess": {
+          "$ref": "#/$defs/canon_lemma_list",
+          "description": "That same manner overdone. Not object.excess (later-interpretive)."
+        }
+      }
+    },
+    "house_canon_pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "House Canon V1 storage (1.3.92). One slot: arena. Optional on type=house; if present, arena required. Not planet.domains. Not Lilly domain. Origin tables stay in HOUSE_CANON_V1.md.",
+      "required": ["arena"],
+      "properties": {
+        "arena": {
+          "$ref": "#/$defs/canon_lemma_list",
+          "description": "Chart sphere a planet function is routed into. Destination nouns. Not sign manner. Not an angle."
+        }
+      }
+    },
+    "aspect_canon_pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Aspect Canon V1 storage (1.3.97). One slot: relation. Optional on type=aspect; if present, relation required. Not object.interaction. Not requires_action. Not valence, orb, or pair fields. Origin tables stay in ASPECT_CANON_V1.md.",
+      "required": ["relation"],
+      "properties": {
+        "relation": {
+          "$ref": "#/$defs/canon_lemma_list",
+          "description": "Topology/quality of the link between two functions. Not what the link means. Not the stored interaction enum."
+        }
+      }
+    },
+    "angle_canon_pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Angle Canon V1 storage (1.3.103). One slot: orientation. Optional on type=angle; if present, orientation required. Not House 1/10 arena. Not root orientation (Lilly sign polarity). Not appearance / career. Origin tables stay in ANGLE_CANON_V1.md.",
+      "required": ["orientation"],
+      "properties": {
+        "orientation": {
+          "$ref": "#/$defs/canon_lemma_list",
+          "description": "Chart-edge orientation a planet function hangs on. Not a house destination. Not a planet function. Not Lilly positive/negative."
+        }
+      }
+    },
+    "canon_pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Planet Canon V1 storage (1.3.80). Grammar names unchanged. Optional on the object; if present, all six slots required. Not function/themes/tempo. Origin tables stay in PLANET_CANON_V1.md.",
+      "required": [
+        "core_function",
+        "drive",
+        "needs",
+        "constructive",
+        "distorted",
+        "domains"
+      ],
+      "properties": {
+        "core_function": { "$ref": "#/$defs/canon_lemma_list" },
+        "drive": { "$ref": "#/$defs/canon_lemma_list" },
+        "needs": { "$ref": "#/$defs/canon_lemma_list" },
+        "constructive": { "$ref": "#/$defs/canon_lemma_list" },
+        "distorted": { "$ref": "#/$defs/canon_lemma_list" },
+        "domains": {
+          "$ref": "#/$defs/canon_lemma_list",
+          "description": "Canon routing arenas (lemma list). Not the four natal keys on object.domains."
+        }
+      }
+    },
+    "provenance_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "concept_id",
+        "source_id",
+        "source_class",
+        "original_claim",
+        "normalized_claim",
+        "evidence_tier",
+        "review_status",
+        "field"
+      ],
+      "properties": {
+        "concept_id": {
+          "type": "string",
+          "pattern": "^claim\\.[a-z0-9_.]+$",
+          "maxLength": 120
+        },
+        "source_id": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "source_class": { "$ref": "#/$defs/source_class" },
+        "author": { "type": ["string", "null"], "maxLength": 120 },
+        "edition": { "type": ["string", "null"], "maxLength": 160 },
+        "locus": {
+          "type": ["string", "null"],
+          "description": "Chapter/page/section pointer for a researcher to re-find the passage. Not a copyrighted dump.",
+          "maxLength": 160
+        },
+        "school": { "type": ["string", "null"], "maxLength": 80 },
+        "original_claim": {
+          "$ref": "#/$defs/lemma",
+          "description": "Our paraphrase of the assertion. Never a pasted modern translation."
+        },
+        "normalized_claim": { "$ref": "#/$defs/lemma" },
+        "evidence_tier": { "$ref": "#/$defs/evidence_tier" },
+        "review_status": { "$ref": "#/$defs/review_status" },
+        "field": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "passage_or_concept": { "type": "string", "minLength": 3, "maxLength": 400 },
+        "reviewer": { "type": ["string", "null"] },
+        "reviewed_at": { "type": ["string", "null"], "format": "date" }
+      }
+    },
+    "knowledge_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "object_id",
+        "layer",
+        "type",
+        "status",
+        "version",
+        "phenomenon",
+        "theme_clusters",
+        "polarity",
+        "temporal_class",
+        "composed_from",
+        "provenance"
+      ],
+      "properties": {
+        "object_id": {
+          "type": "string",
+          "pattern": "^astro\\.(object|sign|house|aspect|combo)\\.[a-z0-9_.]+$"
+        },
+        "layer": { "type": "integer", "enum": [1, 2, 3, 4, 5] },
+        "type": {
+          "type": "string",
+          "enum": [
+            "celestial_object",
+            "sign",
+            "house",
+            "aspect",
+            "angle",
+            "planet_in_sign",
+            "planet_in_house",
+            "natal_aspect",
+            "transit_to_natal",
+            "transit_through_house"
+          ]
+        },
+        "status": { "$ref": "#/$defs/object_status" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "phenomenon": { "$ref": "#/$defs/lemma" },
+        "machine_entity_code": { "type": "string", "pattern": "^astrology\\.(planet|sign|house|aspect|angle)\\.[a-z0-9]+$" },
+        "theme_clusters": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/theme_cluster" }
+        },
+        "polarity": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/polarity" }
+        },
+        "temporal_class": { "$ref": "#/$defs/temporal_class" },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "evidence_tier": { "$ref": "#/$defs/evidence_tier" },
+        "composed_from": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^astro\\.(object|sign|house|aspect)\\.[a-z0-9_]+$" }
+        },
+        "curation_reason": {
+          "type": ["string", "null"],
+          "enum": [null, "non_compositional", "gold_replay", "school_conflict"],
+          "description": "IL-1 Layer 5 gold list marks curated candidates, not proven IL-2 exceptions. IL-2 may demote non_compositional to composed."
+        },
+        "intensity_rule": {
+          "type": "string",
+          "enum": ["orb", "angularity", "natal_weight", "composed", "fixed"]
+        },
+        "function": {
+          "$ref": "#/$defs/lemma",
+          "description": "On Sun–Saturn: elemental quality (required). On IL-1 draft Uranus/Neptune/Pluto: later-interpretive school package; optional (1.3.72). Do not fill from Hand to satisfy schema. Do not collapse to change/intuition/transformation."
+        },
+        "themes": { "$ref": "#/$defs/lemma_list" },
+        "positive_expression": { "$ref": "#/$defs/lemma" },
+        "shadow": { "$ref": "#/$defs/lemma" },
+        "domains": {
+          "$ref": "#/$defs/domains",
+          "description": "Four natal keys. Unattested on outers. Optional on IL-1 draft Uranus/Neptune/Pluto (1.3.72); omit on a structural outer draft."
+        },
+        "tempo": {
+          "type": "string",
+          "enum": ["fast", "medium", "slow", "very_slow"],
+          "description": "Required on Sun–Saturn. Optional on IL-1 draft outers (1.3.72); not automatically structural (Swiss period is astronomy facts_only). Not Planet Canon (1.3.78); pace metadata is temporal_class."
+        },
+        "canon": {
+          "description": "Product meaning for composition. Planets: six-slot canon_pack (1.3.80). Signs: two-slot sign_canon_pack (1.3.86). Houses: one-slot house_canon_pack (1.3.92). Aspects: one-slot aspect_canon_pack (1.3.97). Angles: one-slot angle_canon_pack (1.3.103). Optional until a named fill. Do not copy into function, Lilly domain, interaction, or later-interpretive excess.",
+          "oneOf": [
+            { "$ref": "#/$defs/canon_pack" },
+            { "$ref": "#/$defs/sign_canon_pack" },
+            { "$ref": "#/$defs/house_canon_pack" },
+            { "$ref": "#/$defs/aspect_canon_pack" },
+            { "$ref": "#/$defs/angle_canon_pack" }
+          ]
+        },
+        "mode": { "type": "string", "enum": ["cardinal", "fixed", "mutable"] },
+        "element": { "type": "string", "enum": ["fire", "earth", "air", "water"] },
+        "orientation": { "type": "string", "enum": ["positive", "negative"] },
+        "motivation": {
+          "$ref": "#/$defs/lemma",
+          "description": "Later-interpretive. Optional on IL-1 draft type=sign (1.3.67). Do not fill from Pulse, Lilly QUALITY, or an unread Cell C chapter."
+        },
+        "expression": { "$ref": "#/$defs/lemma" },
+        "strengths": { "$ref": "#/$defs/lemma_list" },
+        "excess": { "$ref": "#/$defs/lemma_list" },
+        "deficiency": { "$ref": "#/$defs/lemma_list" },
+        "behavioral_tendencies": {
+          "$ref": "#/$defs/lemma_list",
+          "description": "Later-interpretive. Optional on IL-1 draft type=sign (1.3.67). Do not fill from Pulse, Lilly QUALITY, or an unread Cell C chapter."
+        },
+        "domain": { "$ref": "#/$defs/lemma" },
+        "internal_meaning": { "$ref": "#/$defs/lemma" },
+        "external_manifestations": { "$ref": "#/$defs/lemma_list" },
+        "people": { "$ref": "#/$defs/lemma_list" },
+        "activities": { "$ref": "#/$defs/lemma_list" },
+        "resources": { "$ref": "#/$defs/lemma_list" },
+        "risks": { "$ref": "#/$defs/lemma_list" },
+        "angle": { "type": "number", "minimum": 0, "maximum": 180 },
+        "interaction": {
+          "type": "string",
+          "enum": ["merging", "friction", "flow", "opportunity", "polarization"]
+        },
+        "requires_action": {
+          "type": "boolean",
+          "description": "Attested property only. On draft, false may mean the opened locus does not establish the property — not 'this aspect does not require action'. Activation gate: status=active is forbidden while this boolean is unevidenced. Schema type stays boolean for IL-1."
+        },
+        "base_meaning": { "$ref": "#/$defs/lemma" },
+        "psychological": { "$ref": "#/$defs/lemma" },
+        "opportunity": { "$ref": "#/$defs/lemma" },
+        "risk": { "$ref": "#/$defs/lemma" },
+        "action": { "$ref": "#/$defs/lemma_list" },
+        "avoid": { "$ref": "#/$defs/lemma" },
+        "provenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/provenance_entry" }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "layer": { "const": 1 } }, "required": ["layer"] },
+          "then": {
+            "required": ["type"],
+            "properties": { "type": { "enum": ["celestial_object", "angle"] } }
+          }
+        },
+        {
+          "if": {
+            "allOf": [
+              { "properties": { "type": { "const": "celestial_object" } }, "required": ["type"] },
+              {
+                "not": {
+                  "properties": {
+                    "object_id": {
+                      "enum": [
+                        "astro.object.uranus",
+                        "astro.object.neptune",
+                        "astro.object.pluto"
+                      ]
+                    }
+                  },
+                  "required": ["object_id"]
+                }
+              }
+            ]
+          },
+          "then": {
+            "required": [
+              "function",
+              "themes",
+              "positive_expression",
+              "shadow",
+              "domains",
+              "tempo"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "angle" } },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "type": { "const": "angle" },
+              "layer": { "const": 1 }
+            },
+            "not": {
+              "anyOf": [
+                { "required": ["orientation"] },
+                { "required": ["function"] },
+                { "required": ["themes"] },
+                { "required": ["angle"] },
+                { "required": ["domain"] },
+                { "required": ["interaction"] },
+                { "required": ["mode"] },
+                { "required": ["element"] }
+              ]
+            }
+          }
+        },
+        {
+          "if": { "properties": { "layer": { "const": 2 } }, "required": ["layer"] },
+          "then": {
+            "required": [
+              "type",
+              "mode",
+              "element",
+              "orientation"
+            ],
+            "properties": { "type": { "const": "sign" } }
+          }
+        },
+        {
+          "if": { "properties": { "layer": { "const": 3 } }, "required": ["layer"] },
+          "then": {
+            "required": [
+              "type",
+              "domain",
+              "internal_meaning",
+              "external_manifestations",
+              "people",
+              "activities",
+              "resources",
+              "risks"
+            ],
+            "properties": { "type": { "const": "house" } }
+          }
+        },
+        {
+          "if": { "properties": { "layer": { "const": 4 } }, "required": ["layer"] },
+          "then": {
+            "required": ["type", "angle", "interaction", "requires_action"],
+            "properties": { "type": { "const": "aspect" } }
+          }
+        },
+        {
+          "if": { "properties": { "layer": { "const": 5 } }, "required": ["layer"] },
+          "then": {
+            "required": [
+              "type",
+              "base_meaning",
+              "psychological",
+              "domains",
+              "opportunity",
+              "risk",
+              "action",
+              "avoid",
+              "intensity_rule",
+              "curation_reason",
+              "composed_from"
+            ],
+            "properties": {
+              "composed_from": { "minItems": 2 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "sign" } },
+            "required": ["type", "canon"]
+          },
+          "then": {
+            "properties": {
+              "canon": { "$ref": "#/$defs/sign_canon_pack" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "celestial_object" } },
+            "required": ["type", "canon"]
+          },
+          "then": {
+            "properties": {
+              "canon": { "$ref": "#/$defs/canon_pack" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "house" } },
+            "required": ["type", "canon"]
+          },
+          "then": {
+            "properties": {
+              "canon": { "$ref": "#/$defs/house_canon_pack" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "aspect" } },
+            "required": ["type", "canon"]
+          },
+          "then": {
+            "properties": {
+              "canon": { "$ref": "#/$defs/aspect_canon_pack" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "angle" } },
+            "required": ["type", "canon"]
+          },
+          "then": {
+            "properties": {
+              "canon": { "$ref": "#/$defs/angle_canon_pack" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "planet_in_sign",
+                  "planet_in_house",
+                  "natal_aspect",
+                  "transit_to_natal",
+                  "transit_through_house"
+                ]
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "not": { "required": ["canon"] }
+          }
+        }
+      ]
+    },
+    "expression_pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_theme",
+        "theme_clusters",
+        "supporting_signals",
+        "opportunity",
+        "risk",
+        "tone",
+        "length_words",
+        "locale",
+        "surface"
+      ],
+      "properties": {
+        "primary_theme": { "$ref": "#/$defs/lemma" },
+        "theme_clusters": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/theme_cluster" }
+        },
+        "supporting_signals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "type": "string", "pattern": "^astro\\." }
+        },
+        "opportunity": { "$ref": "#/$defs/lemma" },
+        "risk": { "$ref": "#/$defs/lemma" },
+        "profile_relevance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["boost"],
+          "properties": {
+            "goal_id": { "type": ["string", "null"] },
+            "boost": { "type": "number", "minimum": 0, "maximum": 1 },
+            "note": { "$ref": "#/$defs/lemma" }
+          }
+        },
+        "tone": {
+          "type": "string",
+          "enum": ["direct_grounded", "soft_clear", "precise_cool"]
+        },
+        "length_words": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "type": "integer", "minimum": 8, "maximum": 80 }
+        },
+        "locale": { "type": "string", "minLength": 2, "maxLength": 8 },
+        "surface": {
+          "type": "string",
+          "enum": ["profile", "today", "compatibility", "tarot_context"],
+          "description": "IL-4 Expression only. Never a field on the knowledge object."
+        }
+      }
+    }
+  }
+}

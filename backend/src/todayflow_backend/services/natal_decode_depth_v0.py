@@ -23,6 +23,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_call_context,
     resolve_complex_chat_model,
 )
 from todayflow_backend.db import models
@@ -31,7 +32,7 @@ from todayflow_backend.services.prose_clip_v1 import clip_prose
 
 logger = logging.getLogger(__name__)
 
-DECODE_VERSION = "natal_decode_depth_v0.2"
+DECODE_VERSION = "natal_decode_depth_v0.3"
 PROMPT_ID = "profile.natal_decode_depth.v1"
 LAYER_KIND = "natal_decode_depth"
 _ALLOWED_SECTION_IDS = frozenset({"mind", "feelings", "will", "growth", "presence", "structure"})
@@ -415,6 +416,50 @@ def resolve_natal_decode_get(
     )
 
 
+def _astro_profile_id_from_payload(payload: dict[str, Any] | None) -> int | None:
+    if not isinstance(payload, dict):
+        return None
+    profiles = payload.get("profiles") if isinstance(payload.get("profiles"), dict) else {}
+    raw = profiles.get("selected_profile_id") or profiles.get("primary_profile_id")
+    if raw is None:
+        return None
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        return None
+
+
+def _attach_profile_il4_pack(
+    db: Session,
+    *,
+    core_profile_payload: dict[str, Any] | None,
+    natal_chart: Any | None = None,
+) -> dict[str, Any] | None:
+    """Attach IL-4 via gateway only. Missing geometry → None (previous decode path)."""
+    from todayflow_backend.services.il4_surface_attach_v1 import (
+        attach_from_profile_input,
+        attach_il4_expression_pack,
+    )
+
+    if natal_chart is not None:
+        pack = attach_il4_expression_pack(surface="profile", natal=natal_chart)
+        if pack is not None:
+            return pack
+        if isinstance(natal_chart, dict):
+            pack = attach_from_profile_input(natal_chart, surface="profile")
+            if pack is not None:
+                return pack
+    aid = _astro_profile_id_from_payload(core_profile_payload)
+    if aid is None:
+        return None
+    from todayflow_backend.services.natal_chart_cache import get_natal_chart_cache_service
+
+    cached = get_natal_chart_cache_service(db).get_cached_natal_chart(aid)
+    if cached is None:
+        return None
+    return attach_il4_expression_pack(surface="profile", natal=cached)
+
+
 def generate_natal_decode_depth_v0(
     db: Session,
     *,
@@ -423,6 +468,7 @@ def generate_natal_decode_depth_v0(
     natal_summary: dict[str, Any] | None = None,
     locale: str = "ru",
     force_refresh: bool = False,
+    natal_chart: Any | None = None,
 ) -> dict[str, Any]:
     """Generate once per fingerprint. Client force_refresh is ignored (ops-only path uses ops_force)."""
     # Product rule: not a spam button. Client cannot force re-LLM.
@@ -487,28 +533,58 @@ def generate_natal_decode_depth_v0(
 
     system, prompt_version = get_prompt(PROMPT_ID, locale=locale)
     from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+    from todayflow_backend.services.il4_editorial_consume_v1 import (
+        augment_system_prompt,
+        pack_present,
+        protected_block,
+        reject_invalid_output,
+    )
+    from todayflow_backend.services.profile_meaning_polish_v1 import (
+        augment_decode_system,
+        fill_empty_decode_theses,
+        reject_invalid_decode,
+    )
 
+    il4_pack = _attach_profile_il4_pack(
+        db, core_profile_payload=core_profile_payload, natal_chart=natal_chart
+    )
     system = with_practitioner_persona(system, locale=locale)
+    system = augment_system_prompt(system, il4_pack, locale=locale)
+    system = augment_decode_system(system, il4_pack, locale=locale)
+    meaning_prefix = protected_block(il4_pack, locale=locale) if pack_present(il4_pack) else ""
+    user_payload = {
+        "identity_core": identity,
+        "primary_tension_surface": tension,
+        "natal_pack": natal_pack,
+        "numerology_pack": numerology_pack,
+    }
     user_msg = (
+        f"{meaning_prefix}"
         "Собери Natal Decode Depth — целостную историю человека. "
         "Identity Core фиксирован — не переписывай.\n"
-        f"Данные:\n{json.dumps({'identity_core': identity, 'primary_tension_surface': tension, 'natal_pack': natal_pack, 'numerology_pack': numerology_pack}, ensure_ascii=False)}"
+        f"Данные:\n{json.dumps(user_payload, ensure_ascii=False)}"
     )
 
     try:
         model = resolve_complex_chat_model()
         client = get_openai_compatible_client(model=model)
-        raw = chat_completion_text(
-            client,
-            model=model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_msg},
-            ],
-            temperature=0.45,
-            max_tokens=2800,
-            json_object=True,
-        )
+        with llm_call_context(
+            feature="natal.decode",
+            user_id=user_id,
+            ensure_operation=True,
+            operation="natal.decode",
+        ):
+            raw = chat_completion_text(
+                client,
+                model=model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user_msg},
+                ],
+                temperature=0.45,
+                max_tokens=2800,
+                json_object=True,
+            )
     except Exception:
         logger.exception("natal_decode_depth LLM failed user_id=%s", user_id)
         return {
@@ -533,6 +609,40 @@ def generate_natal_decode_depth_v0(
             "version": DECODE_VERSION,
             "status": "unavailable",
             "reason": "parse_failed",
+            "identity_core": {
+                "thesis_key": identity["thesis_key"],
+                "surface_text": identity["surface_text"],
+            },
+            "fingerprint": fingerprint,
+            "sot_role": "depth_projection",
+            "writes_character_engine": False,
+            "can_generate": True,
+        }
+
+    consume_reject = reject_invalid_output(parsed, il4_pack)
+    if consume_reject:
+        return {
+            "layer": LAYER_KIND,
+            "version": DECODE_VERSION,
+            "status": "unavailable",
+            "reason": f"il4_consume:{consume_reject}",
+            "identity_core": {
+                "thesis_key": identity["thesis_key"],
+                "surface_text": identity["surface_text"],
+            },
+            "fingerprint": fingerprint,
+            "sot_role": "depth_projection",
+            "writes_character_engine": False,
+            "can_generate": True,
+        }
+    parsed = fill_empty_decode_theses(parsed, il4_pack)
+    polish_reject = reject_invalid_decode(parsed, il4_pack)
+    if polish_reject:
+        return {
+            "layer": LAYER_KIND,
+            "version": DECODE_VERSION,
+            "status": "unavailable",
+            "reason": f"profile_polish:{polish_reject}",
             "identity_core": {
                 "thesis_key": identity["thesis_key"],
                 "surface_text": identity["surface_text"],

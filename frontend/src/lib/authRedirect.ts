@@ -124,6 +124,16 @@ export async function resolvePostAuthTarget(explicitRedirect?: string | null): P
   }
 }
 
+/**
+ * Leave the auth screen with a full document load.
+ * Next.js `router.replace` can hang on iOS Safari / PWA after login (RSC payload
+ * never commits) and leave the full-page spinner up forever.
+ */
+export function assignAfterAuthSession(target: string): void {
+  if (typeof window === "undefined") return;
+  window.location.assign(getSafeRedirectTarget(target));
+}
+
 /** After token is set: route immediately; guest claim is best-effort and must not block login. */
 export async function resolveTargetAfterAuthSession(explicitRedirect?: string | null): Promise<string> {
   // Sync refine gate — no network. Returning users without a draft skip this.

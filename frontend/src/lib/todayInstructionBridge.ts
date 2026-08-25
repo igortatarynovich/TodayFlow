@@ -5,6 +5,7 @@
  */
 
 import type { TodayContractV1 } from "@/lib/todayContract";
+import { isTodayInterpretationUnavailable } from "@/lib/todayContract";
 import { cleanAmbassadorWhy, clipCompassProse } from "@/lib/todayDayBrief";
 
 export type TodayInstructionBridgeModel = {
@@ -33,6 +34,7 @@ export function pickInstructionPersonalBridge(
   contract: TodayContractV1 | null | undefined,
 ): string | null {
   if (!contract?.day_story) return null;
+  if (isTodayInterpretationUnavailable(contract)) return null;
   const story = contract.day_story;
   const conflict = story.day_scenario?.conflict;
 

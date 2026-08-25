@@ -34,7 +34,7 @@ describe("auth session storage", () => {
     expect(window.sessionStorage.getItem("todayflow.compact_user_model.v0.2026-07-03")).toBeNull();
   });
 
-  it("beginAuthSession replaces token and clears snapshot", () => {
+  it("beginAuthSession replaces token and writes a bootstrap snapshot", () => {
     window.localStorage.setItem(AUTH_TOKEN_KEY, "old-token");
     window.localStorage.setItem(AUTH_SNAPSHOT_KEY, "{}");
     window.sessionStorage.setItem("todayflow_core_profile:v1:default", "{}");
@@ -42,7 +42,10 @@ describe("auth session storage", () => {
     beginAuthSession("  new-token  ");
 
     expect(window.localStorage.getItem(AUTH_TOKEN_KEY)).toBe("new-token");
-    expect(window.localStorage.getItem(AUTH_SNAPSHOT_KEY)).toBeNull();
+    const snap = JSON.parse(String(window.localStorage.getItem(AUTH_SNAPSHOT_KEY)));
+    expect(snap.token).toBe("new-token");
+    expect(snap.profile).toBeNull();
+    expect(typeof snap.savedAt).toBe("number");
     expect(window.sessionStorage.getItem("todayflow_core_profile:v1:default")).toBeNull();
   });
 

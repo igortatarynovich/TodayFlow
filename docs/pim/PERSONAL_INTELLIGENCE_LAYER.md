@@ -44,7 +44,7 @@ TodayFlow — **обучающаяся персональная система**
 
 **Decision Relevance (C17):** что из знания **важно для решений** — ranking для DRE, LRE, Gate.
 
-**PR gate:** три контура — Experience · Architecture · **Learning Δ** — [PIM_PR_GATE_V1.md](./PIM_PR_GATE_V1.md). **North star:** [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md).
+**PR gate:** три контура — Experience · Architecture · **Learning Δ** — [PIM_PR_GATE_V1.md](./PIM_PR_GATE_V1.md). **North star:** [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](../TODAYFLOW_PRODUCT_CANON_UNIFIED.md) §6.
 
 Собственный интеллект живёт в архитектуре:
 

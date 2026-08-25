@@ -1,10 +1,11 @@
 html[data-product-web-shell] .tf-content {
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  min-height: 100%;
   width: 100%;
   min-width: 0;
+  overflow: visible;
   /* The product shell paints its own background (appShell / appMain). The legacy
      `.tf-content` "section atmosphere" gradient (section-atmosphere.css) is a
      marketing-only layer; inside the shell it sits narrower than the surrounding
@@ -28,6 +29,13 @@ html[data-product-web-shell] .tf-shell {
  * One chrome language on every product route (FOUNDATION_UI §7 / §11.1).
  * Pages must not inherit route-void ink, marketing body color, or per-screen fonts.
  */
+html[data-product-web-shell],
+html[data-product-web-shell] body {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
 html[data-product-web-shell] body {
   color: var(--tf-ink, #2a2520);
   font-family: var(--tf-font-body);

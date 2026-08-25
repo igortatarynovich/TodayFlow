@@ -1,7 +1,9 @@
 # Today — Motion as attention hierarchy
 
 **Status:** **Today-only canon** (D.3 closed 2026-07-30). Not app-wide.  
-**Pairs with:** [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) · [TODAY_WAVE2_EXECUTION_PLAN.md](./TODAY_WAVE2_EXECUTION_PLAN.md)
+**Pairs with:** [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) · [TODAY_WAVE2_EXECUTION_PLAN.md](./TODAY_WAVE2_EXECUTION_PLAN.md) · product-wide motion budget [FOUNDATION_UI §18](../TODAYFLOW_FOUNDATION_UI.md) · Moon [§2.7](../TODAYFLOW_FOUNDATION_UI.md)
+
+This file = **attention hierarchy** (Tap / live-now). It does **not** authorize decorative cosmos, starfields, or idle spinning objects. Those are forbidden in §18.
 
 ## Principles
 

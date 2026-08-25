@@ -500,6 +500,13 @@ def call_profile_contract_llm_v1(
     from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
 
     system = with_practitioner_persona(_PROFILE_SYS_RU, locale="ru")
+    from todayflow_backend.services.il4_editorial_consume_v1 import augment_system_prompt
+
+    system = augment_system_prompt(
+        system,
+        user_json.get("il4_expression_pack") if isinstance(user_json, dict) else None,
+        locale="ru",
+    )
     content = chat_completion_plain(
         client,
         model=resolve_default_chat_model(),
@@ -660,6 +667,16 @@ def build_profile_portrait_v1(
         "locale": locale,
         "profile_hash": profile_input.get("profile_hash"),
     }
+    from todayflow_backend.services.il4_surface_attach_v1 import attach_from_profile_input
+
+    il4_pack = attach_from_profile_input(profile_input, surface="profile")
+    if il4_pack is None and isinstance(profile_input.get("natal"), dict):
+        il4_pack = attach_from_profile_input(
+            {"natal": profile_input.get("natal")},
+            surface="profile",
+        )
+    if il4_pack is not None:
+        llm_pack["il4_expression_pack"] = il4_pack
     contract, gen_meta = call_profile_contract_llm_v1(llm_pack, locale=locale)
     before_quality = dict(contract) if isinstance(contract, dict) else None
     quality_report: dict[str, Any] | None = (

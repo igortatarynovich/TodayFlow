@@ -46,6 +46,15 @@ export function celestialPhaseFromCycleDay(cycleDay: number): number {
   return normalizeUnit(cycleDay / SYNODIC_PERIOD_DAYS);
 }
 
+/** Mean synodic phase from UTC civil date (noon). For landing / display, not Horizons. */
+const KNOWN_NEW_MOON_MS = Date.UTC(2000, 0, 6, 18, 14, 0);
+
+export function celestialPhaseFromUtcDate(date: Date): number {
+  const noon = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 12, 0, 0);
+  const days = (noon - KNOWN_NEW_MOON_MS) / 86_400_000;
+  return normalizeUnit(days / SYNODIC_PERIOD_DAYS);
+}
+
 export function celestialPhaseFromPhaseId(id: string | null | undefined): number | null {
   const key = String(id || "")
     .trim()

@@ -12,6 +12,7 @@
 |--------|-------------------|--------------|
 | Почему пользователю показали *это*? | **этот файл** | — |
 | Как считаются сырые факты неба/числа? | → [DAY_SOURCES_CANON](../DAY_SOURCES_CANON.md) | подчинён: только facts, не сюжет |
+| Что означает астрологический факт системы (Saturn, square, 7th…)? | → [INTERPRETATION_LIBRARY_V1](../astrology/INTERPRETATION_LIBRARY_V1.md) | step 2 lookup; не канон дня |
 | Как нарезан экран (какие шаги видит человек)? | → [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) | product cycle; не смысл |
 | Как выглядят токены/атмосфера? | → [TODAYFLOW_FOUNDATION_UI](../TODAYFLOW_FOUNDATION_UI.md) | visual only |
 | Старый движок conflict/scenes (код сегодня) | → [DAY_SCENARIO_V1](../DAY_SCENARIO_V1.md) | **миграция / hygiene**, не Meaning SoT |
@@ -20,7 +21,7 @@
 
 При конфликте формулировок: **побеждает этот файл**. Не заводить второй «канон дня», «Meaning SoT», «Day Story SoT».
 
-**Связь (подчинённые):** DAY_SOURCES · DAY_ENGINE (указатель сюда) · DAY_SCENARIO_V1 (I0–I8 hygiene) · [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) (экраны) · SCENARIO_V3 (historical six-block map) · AMC (machine tags).
+**Связь (подчинённые):** DAY_SOURCES · [INTERPRETATION_LIBRARY_V1](../astrology/INTERPRETATION_LIBRARY_V1.md) (step 2 lookup) · DAY_ENGINE (указатель сюда) · DAY_SCENARIO_V1 (I0–I8 hygiene) · [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) (экраны) · SCENARIO_V3 (historical six-block map) · AMC (machine tags).
 
 ---
 
@@ -45,6 +46,27 @@ LLM не выбирает mood/energy, главных drivers, окна врем
 Текст можно генерировать **один раз** и сохранить. GET не вызывает LLM.
 
 Два человека в одной **day-location / timezone** + одна версия правил → **один и тот же Global Day**.
+
+### Who knows what (LOCKED)
+
+IL / Canon — atomic astrology. Character Engine — the person. Neither layer owns the other.
+
+```text
+Interpretation Library  знает астрологию.  Не знает человека.
+Character Engine        знает человека.    Не знает астрологию.
+Personal Meaning        = композиция atomic sky meaning × natal/CE context.
+```
+
+Planet = what · Sign = how · House = where · Aspect = relation — это **только** астрологический atomic layer. Он **не** кодирует Global vs Personal. Персонализацию **не** заталкивать в Canon.
+
+| Профиль дня | Цепочка | Не содержит |
+|-------------|---------|-------------|
+| **Global Day** | astronomical facts → IL atoms → composition → global semantic frame | натал, Character Engine, карта, число, цели |
+| **Personal Day** | global/natal astrological frame + Character Engine → personal relevance | переписывание Global energy/drivers/windows |
+
+LLM формулирует каждый слой **после** этих решений, в пределах structured payload. Текущий Personal = wrapper over `day_story` — другой продукт, не этот канон.
+
+Personal Model — единственный authority **о человеке**, не единственный владелец всей семантики продукта. Иначе астрология снова въедет в person-модель и получится монолит.
 
 ### Downstream non-mutation (LOCKED)
 
@@ -72,7 +94,7 @@ but may never mutate an upstream semantic decision.
 | Результат | Authority |
 |-----------|-----------|
 | Sky facts | Day Sources |
-| Canonical meaning факта | Astrology Canon |
+| Canonical meaning факта | [Interpretation Library](../astrology/INTERPRETATION_LIBRARY_V1.md) |
 | Driver ranking | Global Day Engine |
 | Primary energy | Global Day Engine |
 | Strength / risk | Global Day Engine |
@@ -149,13 +171,17 @@ LLM **не** получает raw longitudes и **не** считает аспе
 Справочник системы (планета, знак, аспект, фаза, дом, тип транзита).  
 Не Day Content. Не отправлять весь справочник в каждый prompt.
 
-Engine подставляет **уже выбранным** drivers короткие canonical lines + сам факт (LLM не может заменить факт).
+**SoT lookup:** [Interpretation Library v1](../astrology/INTERPRETATION_LIBRARY_V1.md) — семантические объекты (не гороскопы). AMC даёт веса/теги для scoring, не смысл.
+
+Engine подставляет **уже выбранным** drivers короткие canonical lines из IL + сам факт (LLM не может заменить факт).
 
 ```text
-ASTRONOMY → ASTRO FACT → CANONICAL MEANING → (позже) LLM STORY
+ASTRONOMY → ASTRO FACT → CANONICAL MEANING (IL) → (позже) LLM STORY
 ```
 
-Machine layer ([AMC](../ASTROLOGY_MACHINE_CONTRACT.md)) даёт веса/теги для scoring. User-facing канон смысла — отдельный lookup (planet×sign, aspect class, moon phase). Пока lookup тонкий или отсутствует — **не** отдавать это на откуп Kimi; лучше бедный канон, чем ежедневное «вспоминание».
+Default: атомы (layers 1–4) + composition. **Не** каталог всех planet×sign. Curated Layer 5 — только non-compositional исключения; IL-1 gold list = candidates until IL-2.
+
+Пока нет `active` объектов (IL-1 drafts не runtime SoT) — **не** отдавать значение на откуп Kimi; лучше бедный канон / omit, чем ежедневное «вспоминание». Наполнение = research (IL-1…IL-3), не генерация.
 
 ---
 
@@ -308,11 +334,11 @@ manifest:
 | `day_events_ranker_v1` / Foundation | **упростить** → Global Day Engine | Ranking без натала / карты / числа. Natal activations — только overlay |
 | `headline_sky` / `sky_today` | **оставить** как view Global Facts | Не Meaning SoT |
 | AMC / reference machine JSON | **оставить** как scoring tags | Не user prose |
-| Astrology Interpretation Canon (lookup) | **нужен** (сейчас дыра) | Не заменять ежедневным LLM |
+| Astrology Interpretation Canon (lookup) | **IL-0 schema** · IL-1 drafts, not `active` | [INTERPRETATION_LIBRARY_V1](../astrology/INTERPRETATION_LIBRARY_V1.md); не ежедневный LLM |
 | `visual_mode` от native LLM | **удалить как decision** | `primary_energy` из scoring; visual_mode = map |
 | `day_flow_windows_kimi_v1` | **удалить** | Окна считает Engine; LLM #1 только labels |
 | `today_glance_timeline_v1` clocks | **оставить** как geometry | Расширить до Global windows (`supports[]`/`cautions[]`) |
-| `day_scenario_native_llm_c1` (один вызов chorus+conflict+scenes+natal+card+number) | **упростить / разрезать** | Два вызова: Global Narrative, Personal Narrative. Не цементировать как универсальный контейнер |
+| `day_scenario_native_llm_c1` (один вызов chorus+conflict+scenes+natal+card+number) | **split landed 1.3.116** | Global stage + Personal overlay stage ([NATIVE_C1_I0_GENERATION_SPLIT_V1](./NATIVE_C1_I0_GENERATION_SPLIT_V1.md)); prompt `day-scenario-native-c5.0` |
 | Dramaturgy brief C4 | **упростить** | DTO **Global Profile** → LLM #1. Не planner сюжета, не personal |
 | `day_scenario` / conflict / scenes | **упростить** | Не Meaning SoT. Максимум внутренний literary scaffold **над** уже зафиксированным Global/Personal Profile. Не выбирает energy/windows |
 | Projector B5 | **упростить** | Structure-only mapping Profile+narratives → `today_contract`. Не primary-pick, не concat meaning |
@@ -347,6 +373,7 @@ manifest:
 9. poorer fallback. **landed 2026-08-15** (`omit_narrative` on B5 convenience path)
 10. capability matrix в ScreenFlow. **landed 2026-08-15**
 11. D−1 lifecycle. **landed 2026-08-15** (additive evening enqueue; clock details in DAY_LIFECYCLE_V1)
+12. **Interpretation Library** — Sequence LOCKED IL-0…IL-4. **IL-0 done.** Next: IL-1 ~100 surface-neutral objects keyed to calc output. Swiss is the runtime ephemeris input; **license** is a parallel legal gate (not a research blocker). Scale library only after IL-4.
 
 ---
 
@@ -357,4 +384,5 @@ manifest:
 - **Public contract changed?** target yes (phased): `global_day` / `personal_day` nests; `primary_energy`; windows with supports/cautions. Нет wire bump в lock-only.
 - **Migration required?** yes — native C1 monolith, Kimi windows, LLM visual_mode, ritual number, guide. Cached days keep old shape until regenerate/admin.
 - **Canon updated?** yes — this file · DAY_SCENARIO_V1 I0/I1 · DAY_SOURCES §0 · DAY_ENGINE banner · [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) (экраны) · SCENARIO_V3 superseded as product map · README · tracker.
+- **2026-08-17:** step 2 lookup = Interpretation Library (schema only; not a second Meaning SoT). User-facing planet×sign catalog **rejected** (ACM + IL layers). IL-1 Layer 5 gold list = curated candidates until IL-2.
 - **Backward compatible?** yes API until nests land; old clients ignore.

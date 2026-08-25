@@ -1,5 +1,6 @@
 import {
   celestialPhaseFromCycleDay,
+  celestialPhaseFromUtcDate,
   resolveCelestialMoonPhase,
   SYNODIC_PERIOD_DAYS,
 } from "@/lib/celestialMoonPhase";
@@ -27,5 +28,15 @@ describe("celestialMoonPhase", () => {
     expect(resolveCelestialMoonPhase({ phaseName: "Убывающая луна" })).toBe(0.625);
     expect(resolveCelestialMoonPhase({ phaseName: "Новолуние" })).toBe(0);
     expect(resolveCelestialMoonPhase({})).toBeNull();
+  });
+
+  it("maps UTC date through the synodic month (known new moon ≈ 0)", () => {
+    const nearNew = new Date("2000-01-07T12:00:00Z");
+    const waxing = new Date("2000-01-14T12:00:00Z");
+    const nearNewPhase = celestialPhaseFromUtcDate(nearNew);
+    expect(nearNewPhase).toBeGreaterThanOrEqual(0);
+    expect(nearNewPhase).toBeLessThan(1);
+    expect(celestialPhaseFromUtcDate(waxing)).toBeGreaterThan(nearNewPhase);
+    expect(celestialPhaseFromUtcDate(new Date("2000-01-21T12:00:00Z"))).toBeCloseTo(0.5, 1);
   });
 });

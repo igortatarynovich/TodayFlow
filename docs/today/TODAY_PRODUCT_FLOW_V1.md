@@ -148,9 +148,11 @@ Global Day × Natal Overlay → Personal Day
 
 Нет ни natal clocks, ни timed windows с фактами → **omit**.
 
+**Если `interpretation_status=unavailable`:** слоты смысла MY DAY (headline · фокус · приоритет · осторожнее) = одно честное «Не удалось загрузить.». **Цвет, natal timeline, практика, depth** — omit. Не мешать leftover `conflict.short_name`, catalog/morning color и независимый `day_facts` clock с этим статусом. Global Day на шаге `today` (окна, drivers, energy) может остаться — это Engine, не Personal interpretation.
+
 ### Дополнительные карточки (не шаги)
 
-- **Цвет** — один, scoring после energy + risk + personal focus. LLM не выбирает.  
+- **Цвет** — один, scoring после energy + risk + personal focus. LLM не выбирает. **Omit**, если Personal Day interpretation unavailable. Catalog / morning `daily_symbols.color` **не** подмена.
 - **Практика** — максимум одна, из Personal Focus или компенсации Personal Risk. Иначе omit.  
 - **Аффирмация** — отдельный тип, не `practice_recommendation` bucket. Из Personal Day.  
 - **Действие** — один выполнимый шаг (application Personal Day).  
@@ -260,3 +262,12 @@ USER RESPONSE           →  GRATITUDE HISTORY
 - **Migration required?** no.
 - **Canon updated?** yes — this file §3 · capability table · pipeline § экран.
 - **Backward compatible?** yes; no windows/facts → still omit.
+
+## Architecture impact (2026-08-18 · unavailable MY DAY does not leak color/timeline)
+
+- **SoT before:** `interpretation_status=unavailable` filled navigational slots with «Не удалось загрузить.» but still forwarded leftover `day_scenario.props.color` / morning catalog into `color_guide`, and MY DAY independently fetched `day_facts.glance_timeline`. FE treated leftover `theme` as authoritative focus.
+- **SoT after:** Color nest is **null** when interpretation is unavailable (PERSONAL DAY → COLOR). MY DAY paints one honest status and omits color, natal timeline, leftover focus title. Global Day Engine profile stays on the contract (I0 — not LLM meaning).
+- **Public contract changed?** yes — semantics: `color_guide` is null on unavailable; `global_day` is present even when interpretation is unavailable.
+- **Migration required?** no version bump. Next GET.
+- **Canon updated?** yes — this file §3.
+- **Backward compatible?** old clients that rendered catalog color next to failure copy stop doing so after FE deploy. Clients that assumed `global_day` absent on unavailable now see Engine facts on TODAY.

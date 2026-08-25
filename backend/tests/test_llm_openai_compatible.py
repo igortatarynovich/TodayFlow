@@ -72,6 +72,7 @@ def test_kimi_stream_collects_content_ignores_reasoning(monkeypatch):
     assert text == '{"ok":true}'
     kw = mock_client.chat.completions.create.call_args.kwargs
     assert kw.get("stream") is True
+    assert kw.get("stream_options") == {"include_usage": True}
     assert kw.get("reasoning_effort") == "low"
     assert "temperature" not in kw
     assert kw.get("max_tokens", 0) >= 16000

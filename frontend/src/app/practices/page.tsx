@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { practicesExperienceChromeBundle, type FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
+import { type FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { practicesStateCycleCopy } from "@/components/practices/stateCycle/practicesStateCycleCopy";
 import {
   PracticesStateCycleScreen,
@@ -10,7 +10,6 @@ import {
   type StateCyclePracticeCard,
   type StateCycleTodayRail,
 } from "@/components/practices/stateCycle/PracticesStateCycleScreen";
-import { LoadingSpinner } from "@/components/orbit";
 import { PracticesWebScreen } from "@/components/product-ui/PracticesWebScreen";
 import { getJson, isRequestAborted } from "@/lib/api";
 import { fetchCoreProfileCached } from "@/lib/coreProfileCache";
@@ -40,6 +39,9 @@ import styles from "@/app/practices/PracticesPage.module.css";
 const RECOMMEND_IMAGE = "/images/praktiki_banner.png";
 /** Hub only needs a few unique recent practices for «Мои». */
 const HISTORY_LIMIT = 20;
+
+/** In-memory catalog so a return visit paints without waiting on the network. */
+let catalogMemory: PracticeCatalogItem[] | null = null;
 
 function toCard(practice: PracticeCatalogItem, imageUrl?: string | null): StateCyclePracticeCard {
   const cardTitle = practiceCardTitle(practice);
@@ -86,12 +88,10 @@ function sortCatalog(pool: PracticeCatalogItem[], sortLocale: string): PracticeC
 export default function PracticesPage() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const locale: FlowPracticesChromeLocale = getLocale() === "ru" ? "ru" : "en";
-  const pc = useMemo(() => practicesExperienceChromeBundle(locale), [locale]);
   const copy = useMemo(() => practicesStateCycleCopy(locale), [locale]);
   const sortLocale = locale === "ru" ? "ru" : "en";
 
-  const [loading, setLoading] = useState(true);
-  const [catalogRaw, setCatalogRaw] = useState<PracticeCatalogItem[]>([]);
+  const [catalogRaw, setCatalogRaw] = useState<PracticeCatalogItem[]>(() => catalogMemory ?? []);
   const [currentPractice, setCurrentPractice] = useState<PracticeCatalogItem | null>(null);
   const [coreProfile, setCoreProfile] = useState<CoreProfile | null>(null);
   const [progress, setProgress] = useState<PracticeProgressResponse | null>(null);
@@ -99,7 +99,9 @@ export default function PracticesPage() {
   const [limits, setLimits] = useState<PracticeLimitsSnapshot | null>(null);
   const [shortAlternativesRaw, setShortAlternativesRaw] = useState<PracticeCatalogItem[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [catalogStatus, setCatalogStatus] = useState<"loaded" | "empty" | "failed">("loaded");
+  const [catalogStatus, setCatalogStatus] = useState<"pending" | "loaded" | "empty" | "failed">(
+    () => (catalogMemory ? (catalogMemory.length === 0 ? "empty" : "loaded") : "pending"),
+  );
   const [activeNeed, setActiveNeed] = useState<PracticeNeedId>("calm");
   const [activeFormat, setActiveFormat] = useState<PracticeFormatId | null>(null);
   const [todayRail, setTodayRail] = useState<StateCycleTodayRail | null>(null);
@@ -139,54 +141,47 @@ export default function PracticesPage() {
     syncDraft();
     window.addEventListener("focus", syncDraft);
     return () => window.removeEventListener("focus", syncDraft);
-  }, [loading]);
+  }, []);
 
-  /** Catalog shell — parallel; does not wait on authLoading (Bearer from storage if present). */
+  const loadCatalogExtras = useCallback(async () => {
+    const [currentResult, shortAltResult] = await Promise.all([
+      getJson<PracticeCatalogItem>("/practices/current")
+        .then((data) => data)
+        .catch((err) => {
+          console.error("Practices current failed", err);
+          return null as PracticeCatalogItem | null;
+        }),
+      getJson<PracticeCatalogItem[]>("/practices/short-alternatives")
+        .then((data) => data)
+        .catch((err) => {
+          console.error("Practices short-alternatives failed", err);
+          return [] as PracticeCatalogItem[];
+        }),
+    ]);
+    setCurrentPractice(currentResult);
+    setShortAlternativesRaw(shortAltResult);
+  }, []);
+
+  /** In-memory catalog only — do not wait on /current (lite report) or the spinner stays up. */
   const loadCatalogShell = useCallback(async () => {
-    setLoading(true);
     setError(null);
     try {
-      const [catalogResult, currentResult, shortAltResult] = await Promise.all([
-        getJson<PracticeCatalogItem[]>(`/practices/`)
-          .then((data) => ({ ok: true as const, data }))
-          .catch((err) => {
-            console.error("Practices catalog failed", err);
-            return { ok: false as const, data: [] as PracticeCatalogItem[] };
-          }),
-        getJson<PracticeCatalogItem>("/practices/current")
-          .then((data) => ({ ok: true as const, data }))
-          .catch((err) => {
-            console.error("Practices current failed", err);
-            return { ok: false as const, data: null as PracticeCatalogItem | null };
-          }),
-        getJson<PracticeCatalogItem[]>("/practices/short-alternatives")
-          .then((data) => ({ ok: true as const, data }))
-          .catch((err) => {
-            console.error("Practices short-alternatives failed", err);
-            return { ok: false as const, data: [] as PracticeCatalogItem[] };
-          }),
-      ]);
-
-      if (!catalogResult.ok) {
+      const data = await getJson<PracticeCatalogItem[]>(`/practices/`);
+      catalogMemory = data;
+      setCatalogRaw(data);
+      setCatalogStatus(data.length === 0 ? "empty" : "loaded");
+      setError(null);
+    } catch (err) {
+      console.error("Practices catalog failed", err);
+      if (!catalogMemory) {
         setCatalogStatus("failed");
         setCatalogRaw([]);
         setCurrentPractice(null);
         setError(copy.catalogFailed);
-      } else {
-        setCatalogRaw(catalogResult.data);
-        setCatalogStatus(catalogResult.data.length === 0 ? "empty" : "loaded");
-        setCurrentPractice(currentResult.data);
-        setError(null);
       }
-      setShortAlternativesRaw(shortAltResult.data);
-    } catch (err) {
-      console.error("Error loading practices:", err);
-      setCatalogStatus("failed");
-      setError(pc.practicesCatalogLoadError);
-    } finally {
-      setLoading(false);
     }
-  }, [pc.practicesCatalogLoadError, copy.catalogFailed]);
+    void loadCatalogExtras();
+  }, [copy.catalogFailed, loadCatalogExtras]);
 
   const loadAuthExtras = useCallback(async () => {
     const [progressResp, historyResp, limitsResp] = await Promise.all([
@@ -348,24 +343,6 @@ export default function PracticesPage() {
       if (isAuthenticated) void loadAuthExtras();
     });
   }, [loadCatalogShell, loadAuthExtras, isAuthenticated]);
-
-  // Do not gate on authLoading — that alone caused multi-second blank spinners.
-  if (loading) {
-    return (
-      <PracticesWebScreen
-        variant="v2"
-        locale={locale}
-        title={copy.pageTitle}
-        subtitle={copy.pageSubtitle}
-        coreProfile={coreProfile}
-        rail={null}
-      >
-        <div className={styles.loaderWrap}>
-          <LoadingSpinner size="lg" />
-        </div>
-      </PracticesWebScreen>
-    );
-  }
 
   return (
     <PracticesWebScreen

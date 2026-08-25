@@ -28,7 +28,7 @@
 
 **Долгосрочная цель:** обучение **собственной модели** … — не отдельный проект, а следствие архитектуры.
 
-**Критерий успеха продукта:** [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) — завершённый цикл → ценность PIM ↑.
+**Критерий успеха продукта:** [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](../TODAYFLOW_PRODUCT_CANON_UNIFIED.md) §6 — завершённый цикл → ценность PIM ↑.
 
 ---
 

@@ -89,4 +89,24 @@ describe("PracticesStateCycleScreen", () => {
     expect(screen.getByTestId("practices-continue")).toHaveTextContent("Вечернее отпускание");
     expect(screen.getByTestId("practices-my")).toHaveTextContent("Мои практики");
   });
+
+  it("paints hub chrome immediately without catalog cards", () => {
+    render(
+      <PracticesStateCycleScreen
+        locale="ru"
+        activeNeed="calm"
+        onNeedChange={() => {}}
+        activeFormat={null}
+        onFormatChange={() => {}}
+        recommended={null}
+        momentCards={[]}
+        practiceOfDay={null}
+      />,
+    );
+
+    expect(screen.getByTestId("practices-state-cycle")).toBeInTheDocument();
+    expect(screen.getByTestId("practices-need-chips")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Практики" })).toBeInTheDocument();
+    expect(screen.queryByTestId("practices-recommended")).not.toBeInTheDocument();
+  });
 });
