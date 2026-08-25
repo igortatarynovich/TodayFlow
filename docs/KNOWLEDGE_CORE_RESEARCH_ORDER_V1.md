@@ -141,6 +141,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 ## 7. Changelog
 
+- **1.12 note (2026-08-25)** — Practice Technique Ingest V1: [PRACTICE_TECHNIQUE_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md). Parent step 10. Selected loci → evidence records. Not kernel. Не IL CORE.
 - **1.12 note (2026-08-25)** — Practice Technique Shortlist V1: [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Parent step 9 vertical slice (`equal_count_breath`). Selected loci ≠ canonical. Не IL CORE.
 - **1.12 note (2026-08-25)** — Practice Technique Shortlist Criteria V1: [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md). Parent step 8. Corpus shortlist not opened.
 - **1.12 note (2026-08-25)** — Practice Technique Landscape V1: [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md). Parent steps 5–7. Shortlist not opened. Не IL CORE.

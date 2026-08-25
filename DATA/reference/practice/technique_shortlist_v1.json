@@ -11,7 +11,7 @@
   "selected_means": "allowed_for_next_ingest_pass",
   "boundary_held": "landscape_candidate_family_to_selected_loci_not_canonical",
   "accessed": "2026-08-25",
-  "next_named_pass": "next_family_slice_or_equal_count_ingest",
+  "next_named_pass": "technique_ingest_equal_count_done",
   "families": [
     {
       "family_id": "family.practice.equal_count_breath",

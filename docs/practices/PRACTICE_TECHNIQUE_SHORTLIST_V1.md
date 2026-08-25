@@ -1,6 +1,6 @@
 # Practice Technique Shortlist v1
 
-**Статус:** `ACCEPTED` — первый вертикальный shortlist-slice. **Не** technique canon. **Не** ingest.  
+**Статус:** `ACCEPTED` — первый вертикальный shortlist-slice. **Не** technique canon. Ingest этой семьи: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md).  
 **Версия:** 1.0 (2026-08-25).  
 **Владелец:** Product + Research.  
 **Parent order:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) шаг 9.  
@@ -137,10 +137,9 @@ Landscape candidate family
 
 ## 8. Что дальше
 
-1. Slice стоит. Canon пуст. Type не attested.
-2. Следующий named pass — **либо** тот же shortlist на следующей семье, **либо** ingest paraphrase **только** `selected_loci` этой семьи. Не оба скрыто в одном «cleanup».
-3. Ingest, если откроется: paraphrase kernel/bounds/conflict flags → `extracted` → normalization → safety review → `canonical | rejected`.
-4. `technique_id` — только после `canonical`.
+1. Slice стоит. Ingest V1 записал три evidence records. Canon пуст. Type не attested.
+2. Следующий named pass: **Normalization V1**. Не следующая семья.
+3. `technique_id` — только после `canonical`.
 
 ---
 
@@ -148,4 +147,5 @@ Landscape candidate family
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Ingest V1 recorded selected loci as evidence; next = Normalization V1 |
 | 2026-08-25 | v1.0 ACCEPTED — vertical slice `equal_count_breath`; three selected loci; conflicts recorded; technique canon empty |

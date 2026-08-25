@@ -727,6 +727,196 @@ def validate_technique_shortlist_v1(shortlist: dict[str, Any]) -> list[str]:
     return errors
 
 
+INGEST_REQUIRED = (
+    "evidence_id",
+    "candidate_family",
+    "source_ref",
+    "locus",
+    "source_family",
+    "paraphrase",
+    "observed_mechanism",
+    "observed_steps",
+    "observed_bounds",
+    "observed_safety",
+    "observed_variants",
+    "claim_scope",
+    "conflict_tags",
+    "ingest_status",
+)
+INGEST_CLAIM_SCOPE = frozenset(
+    {
+        "method_sequence_only",
+        "method_sequence_and_stop_rules",
+        "conflicting_method_sequence",
+    }
+)
+INGEST_FORBIDDEN_SYNTHESIS = (
+    "common kernel",
+    "общим ядром",
+    "second hold is optional",
+    "вторая задержка optional",
+    "optional hold",
+    "variant of",
+)
+SELECTED_LOCI_V1 = (
+    "src.bhf.heart_matters.box",
+    "src.nhs.sfh.box_leaflet",
+    "src.nhs.newcastle.square",
+)
+
+
+def _ingest_blob(row: dict[str, Any]) -> str:
+    parts = [
+        str(row.get("paraphrase") or ""),
+        str(row.get("observed_mechanism") or ""),
+        " ".join(_as_str_list(row.get("observed_steps"), allow_empty=True) or []),
+        " ".join(_as_str_list(row.get("observed_bounds"), allow_empty=True) or []),
+        " ".join(_as_str_list(row.get("observed_safety"), allow_empty=True) or []),
+        " ".join(_as_str_list(row.get("observed_variants"), allow_empty=True) or []),
+        " ".join(_as_str_list(row.get("conflict_tags"), allow_empty=True) or []),
+    ]
+    return " ".join(parts).lower()
+
+
+def validate_technique_ingest_v1(
+    ingest: dict[str, Any],
+    *,
+    shortlist: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if ingest.get("contract_version") != "technique_ingest_v1":
+        errors.append("invalid technique ingest contract_version")
+    if ingest.get("writes_technique_canon") is not False:
+        errors.append("ingest must not write technique canon")
+    if ingest.get("technique_id_allowed") is not False:
+        errors.append("ingest must not allow technique_id")
+    if ingest.get("does_not_normalize") is not True:
+        errors.append("ingest must declare does_not_normalize")
+    if ingest.get("family_id") != SLICE_FAMILY_V1:
+        errors.append(f"V1 ingest family must be {SLICE_FAMILY_V1}")
+    if ingest.get("boundary_held") != (
+        "selected_loci_to_ingested_evidence_not_canonical_kernel"
+    ):
+        errors.append("boundary_held must record loci→evidence, not a kernel")
+    rows = ingest.get("evidence")
+    if not isinstance(rows, list) or len(rows) != 3:
+        errors.append("V1 ingest must contain exactly three evidence records")
+        return errors
+
+    expected_sources = list(SELECTED_LOCI_V1)
+    if shortlist:
+        families = shortlist.get("families")
+        if isinstance(families, list) and families and isinstance(families[0], dict):
+            listed = families[0].get("selected_loci")
+            if isinstance(listed, list) and all(isinstance(x, str) for x in listed):
+                expected_sources = listed
+
+    seen_ids: set[str] = set()
+    source_ids: list[str] = []
+    by_source: dict[str, dict[str, Any]] = {}
+    for i, row in enumerate(rows):
+        prefix = f"evidence[{i}]"
+        if not isinstance(row, dict):
+            errors.append(f"{prefix}: must be object")
+            continue
+        for key in INGEST_REQUIRED:
+            if key not in row:
+                errors.append(f"{prefix}: missing {key}")
+        evidence_id = row.get("evidence_id")
+        if not isinstance(evidence_id, str) or not evidence_id.startswith("ev."):
+            errors.append(f"{prefix}: evidence_id must start with ev.")
+        elif evidence_id in seen_ids:
+            errors.append(f"{prefix}: duplicate evidence_id")
+        else:
+            seen_ids.add(evidence_id)
+        if row.get("candidate_family") != SLICE_FAMILY_V1:
+            errors.append(f"{prefix}: candidate_family must be the slice family")
+        if row.get("source_family") not in ALLOWED_SOURCE_FAMILY:
+            errors.append(f"{prefix}: invalid source_family")
+        if row.get("ingest_status") != "ingested":
+            errors.append(f"{prefix}: ingest_status must be ingested")
+        if row.get("claim_scope") not in INGEST_CLAIM_SCOPE:
+            errors.append(f"{prefix}: invalid claim_scope")
+        source_ref = row.get("source_ref")
+        if not isinstance(source_ref, dict):
+            errors.append(f"{prefix}: source_ref must be object")
+            continue
+        source_id = source_ref.get("source_id")
+        if not isinstance(source_id, str) or not source_id.startswith("src."):
+            errors.append(f"{prefix}: source_ref.source_id invalid")
+        else:
+            source_ids.append(source_id)
+            by_source[source_id] = row
+        if not isinstance(row.get("paraphrase"), str) or not str(
+            row.get("paraphrase") or ""
+        ).strip():
+            errors.append(f"{prefix}: paraphrase empty")
+        if not isinstance(row.get("observed_mechanism"), str) or not str(
+            row.get("observed_mechanism") or ""
+        ).strip():
+            errors.append(f"{prefix}: observed_mechanism empty")
+        if not isinstance(row.get("locus"), str) or not str(row.get("locus") or "").strip():
+            errors.append(f"{prefix}: locus empty")
+        for list_key in (
+            "observed_steps",
+            "observed_bounds",
+            "observed_safety",
+            "observed_variants",
+            "conflict_tags",
+        ):
+            if _as_str_list(row.get(list_key), allow_empty=True) is None:
+                errors.append(f"{prefix}: {list_key} must be string list")
+        steps = _as_str_list(row.get("observed_steps"), allow_empty=True) or []
+        if len(steps) < 3:
+            errors.append(f"{prefix}: observed_steps too short for a method observation")
+        blob = _ingest_blob(row)
+        for phrase in INGEST_FORBIDDEN_SYNTHESIS:
+            if phrase in blob:
+                errors.append(f"{prefix}: synthesis phrase {phrase!r} is normalization")
+
+    if source_ids != expected_sources:
+        errors.append("ingest source_ids must match selected_loci in order")
+
+    sfh = by_source.get("src.nhs.sfh.box_leaflet")
+    if sfh:
+        steps_blob = " ".join(
+            _as_str_list(sfh.get("observed_steps"), allow_empty=True) or []
+        ).lower()
+        safety = _as_str_list(sfh.get("observed_safety"), allow_empty=True) or []
+        if any(token in steps_blob for token in ("dizz", "light-head", "grounding")):
+            errors.append("SFH sequence must not carry stop/safety text")
+        if not safety:
+            errors.append("SFH must record stop/safety in observed_safety")
+        if sfh.get("claim_scope") != "method_sequence_and_stop_rules":
+            errors.append("SFH claim_scope must keep sequence and stop-rules distinct")
+
+    newcastle = by_source.get("src.nhs.newcastle.square")
+    if newcastle:
+        tags = _as_str_list(newcastle.get("conflict_tags"), allow_empty=True) or []
+        if "recorded_as_conflicting_description_not_variant" not in tags:
+            errors.append("Newcastle must be tagged as conflicting description, not variant")
+        variants = _as_str_list(newcastle.get("observed_variants"), allow_empty=True) or []
+        if variants:
+            errors.append("Newcastle must not declare observed_variants this pass")
+        if newcastle.get("claim_scope") != "conflicting_method_sequence":
+            errors.append("Newcastle claim_scope must be conflicting_method_sequence")
+        steps_blob = " ".join(
+            _as_str_list(newcastle.get("observed_steps"), allow_empty=True) or []
+        ).lower()
+        if "after the exhale" not in steps_blob and "post-exhale" not in steps_blob:
+            errors.append("Newcastle must observe that it does not write a hold after exhale")
+
+    bhf = by_source.get("src.bhf.heart_matters.box")
+    if bhf:
+        safety = _as_str_list(bhf.get("observed_safety"), allow_empty=True) or []
+        if safety:
+            errors.append("BHF box section must not invent observed_safety")
+        if bhf.get("claim_scope") != "method_sequence_only":
+            errors.append("BHF claim_scope must be method_sequence_only")
+
+    return errors
+
+
 def validate_content_library_v1(
     library: dict[str, Any],
     *,

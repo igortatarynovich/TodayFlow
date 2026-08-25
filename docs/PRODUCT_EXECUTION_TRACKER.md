@@ -24,7 +24,16 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-25):** **Shortlist V1** — vertical slice `family.practice.equal_count_breath`. Three selected loci (BHF, NHS SFH, Newcastle conflict). `selected` = ingest permission, not canon, not efficacy. Technique canon empty. Other families `not_opened`. Next = next family slice **or** ingest of this family's selected loci. [PRACTICE_TECHNIQUE_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-25):** **Ingest V1** — `equal_count_breath` selected loci paraphrased as three independent evidence records. Not a kernel. Technique canon empty. `practice.box_breathing.001` still provisional, no `technique_id`. Next = **Normalization V1** (one kernel vs split family). [PRACTICE_TECHNIQUE_INGEST_V1](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+
+## Architecture impact — Practice Technique Ingest V1 (2026-08-25)
+
+- **SoT before:** Shortlist had three selected loci. Next step could synthesize a common kernel or open another family.
+- **SoT after:** ingest = per-locus paraphrase. `observed_*` are source observations. BHF = four-phase sequence. NHS SFH = sequence and stop/safety in different fields. Newcastle = conflicting three-phase description, not a variant. Canonical Technique still empty. Library still unattested.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md) · ingest JSON · provenance 1.4 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with writing technique canon, `technique_id`, or kernel synthesis from this pass.
 
 ## Architecture impact — Practice Technique Shortlist V1 (2026-08-25)
 
@@ -2530,6 +2539,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Practices / Canon | **Ingest V1 (equal_count_breath)** | **ACCEPTED** | Three independent evidence records. observed_* = source observation, not canonical fields. Newcastle recorded as conflict, not variant. Canon empty. Next = Normalization V1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_INGEST_V1](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md).
 - 2026-08-25 | Practices / Canon | **Shortlist V1 (equal_count_breath slice)** | **ACCEPTED** | Vertical research slice. Selected = ingest permission, not canon/efficacy. Conflicts (3-phase vs 4-phase; holds-as-kernel vs NEED_OWNER) recorded, not averaged. Other families closed. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md).
 - 2026-08-25 | Practices / Canon | **Shortlist Criteria V1** | **ACCEPTED** | Gates C1–C9. Unit = candidate_family. Shortlist still closed. technique_id only at canonical. Next = shortlist by family. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md).
 - 2026-08-25 | Practices / Canon | **Technique landscape V1** | **ACCEPTED** | Four class maps. Families ≠ authors. Shortlist closed. Technique canon empty. Four probe splits: energizing_breath reject/remap; capability = coping not values self-affirmation; body_release ≠ PMR; sleep_discipline ≠ CBT-I. Next = selection criteria, not ingest. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md).

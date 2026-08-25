@@ -227,8 +227,8 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 ## 7. Что дальше
 
 1. Landscape стоит. Criteria V1 принят. Full shortlist **закрыт** (`shortlist_opened = false`).
-2. Vertical slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) — только `equal_count_breath`.
-3. Следующий named pass: **следующая семья тем же процессом** или ingest paraphrase **только** selected loci этой семьи. Не «источник для type».
+2. Vertical slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md).
+3. Следующий named pass: **Normalization V1**. Не следующая семья.
 4. `technique_id` — только на canonical.
 
 ---
@@ -237,6 +237,7 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: equal_count ingest done; next = Normalization V1 |
 | 2026-08-25 | v1.1 — vertical slice pointer; `equal_count_breath` may be `sliced`; `official_health` added to that family's source_families; canon still empty |
 | 2026-08-25 | Criteria V1 accepted; shortlist still closed; next = shortlist by family |
 | 2026-08-25 | v1.0 ACCEPTED — four class maps; ledger families; shortlist closed; four probe distinctions locked as research splits, not canon |

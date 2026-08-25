@@ -4,8 +4,8 @@
   "status": "provisional",
   "semantic_version": "content-taxonomy-v1.1",
   "fill_frozen": true,
-  "next_pass": "technique_shortlist_next_family_or_ingest",
-  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen. Shortlist V1 = one family slice; technique canon empty. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · shortlist: docs/practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md",
+  "next_pass": "technique_normalization_v1",
+  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen. Equal-count ingest recorded as evidence, not canon. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · ingest: docs/practices/PRACTICE_TECHNIQUE_INGEST_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,

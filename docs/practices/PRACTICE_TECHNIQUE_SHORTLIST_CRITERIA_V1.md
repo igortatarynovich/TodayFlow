@@ -188,8 +188,8 @@ SEO, viral tactical, manifestation deck, LLM — вне предпочтения
 ## 7. Что дальше
 
 1. Criteria V1 стоит. Full shortlist **закрыт**.
-2. Vertical slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md).
-3. Потом selected loci → ingest paraphrase **или** следующая семья. Не hunt ISBN под type.
+2. Vertical slice + ingest: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) · [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md).
+3. Следующий named pass: **Normalization V1**.
 4. `technique_id` — на canonical.
 
 ---
@@ -198,5 +198,6 @@ SEO, viral tactical, manifestation deck, LLM — вне предпочтения
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Ingest V1 recorded evidence; this file still does not open the corpus |
 | 2026-08-25 | pointer: Shortlist V1 vertical slice opened one family; this file still does not open the corpus |
 | 2026-08-25 | v1.0 ACCEPTED — family eligibility gates C1–C9; shortlist remains closed; technique_id only at canonical |

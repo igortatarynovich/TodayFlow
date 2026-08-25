@@ -11,7 +11,8 @@
   "parent_steps": "5-7",
   "criteria_canon": "PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1",
   "shortlist_canon": "PRACTICE_TECHNIQUE_SHORTLIST_V1",
-  "next_named_pass": "next_family_slice_or_equal_count_ingest",
+  "ingest_canon": "PRACTICE_TECHNIQUE_INGEST_V1",
+  "next_named_pass": "technique_normalization_v1",
   "families": [
     {
       "family_id": "family.practice.slow_paced_breath",
