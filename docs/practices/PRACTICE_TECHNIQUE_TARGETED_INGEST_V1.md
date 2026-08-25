@@ -127,9 +127,8 @@ Safety Review открывается **только** если V1.1 даст д�
 
 ## 7. Что дальше
 
-1. Targeted ingest стоит. Family ingest V1 стоит. Canon пуст. Type не attested.
-2. Следующий named pass: **Normalization V1.1** (два identity-вопроса, затем overall verdict). Не Safety Review.
-3. `technique_id` — только после `canonical`.
+1. Targeted ingest стоит. Family ingest V1 стоит. Normalization V1.1 = `normalize_one` candidate. Canon пуст. Type не attested.
+2. Следующий named pass: **Safety Review**. `technique_id` — только после `canonical`.
 
 ---
 
@@ -137,4 +136,5 @@ Safety Review открывается **только** если V1.1 даст д�
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Normalization V1.1 = normalize_one candidate; next = Safety Review |
 | 2026-08-25 | v1.0 ACCEPTED — two resolution loci; square vs 5:5 unmerged; 4-4-6-2 is label observation not variant; two axes signal-only; next = Normalization V1.1 |

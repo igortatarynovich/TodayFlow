@@ -1,0 +1,41 @@
+{
+  "contract_version": "technique_normalization_v1_1_contract_v1",
+  "version": "1.1.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-normalization-v1.1",
+  "description": "Normalization retry after targeted ingest. Axes first, then normalize_one | split_family | insufficient_evidence. Normalized candidate is not a technique_canon row. Canon: docs/practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "normalize_one_is_not_canonical": true,
+  "does_not_erase_v1": true,
+  "allowed_decisions": [
+    "normalize_one",
+    "split_family",
+    "insufficient_evidence"
+  ],
+  "axis_ids": ["post_exhale_hold", "equal_count"],
+  "post_exhale_hold_allowed": ["required", "optional", "unresolved"],
+  "equal_count_allowed": ["identity_bearing", "common_parameter", "unresolved"],
+  "criteria": {
+    "N-H1": "definition/contrast include post-exhale hold in the four-phase method; no-hold is a differently named condition; absent_but_unaddressed omission does not keep the axis unresolved",
+    "N-H2": "preferred-class source says the hold may be dropped while remaining the same method",
+    "N-H3": "neither N-H1 nor N-H2",
+    "N-E1": "sources treat equal duration as what makes the method this method",
+    "N-E2": "preferred-class source uses the same method-label with unequal counts, and no source argues equality is identity; common-but-not-necessary is allowed",
+    "N-E3": "neither N-E1 nor N-E2"
+  },
+  "overall_rules": {
+    "normalize_one": "both axes resolved",
+    "insufficient_evidence": "post_exhale_hold remains unresolved",
+    "split_family": "two identity-bearing structures as different methods, not naming inconsistency"
+  },
+  "invariants": [
+    "locus count does not decide an axis",
+    "V1 insufficient_evidence remains historical",
+    "landscape V1 hypothesis is preserved beside the remap",
+    "normalize_one writes a normalized candidate, not technique_canon_v1",
+    "does not set technique_id",
+    "does not declare an optional hold",
+    "safety review follows this normalize_one"
+  ]
+}

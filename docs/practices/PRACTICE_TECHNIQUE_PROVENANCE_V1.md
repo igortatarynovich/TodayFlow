@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.7 (2026-08-25).  
+**Версия:** 1.8 (2026-08-25).  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (шаги 1–9 до ingest).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -14,7 +14,8 @@
 **Ingest (parent 10, equal_count_breath):** [PRACTICE_TECHNIQUE_INGEST_V1.md](./PRACTICE_TECHNIQUE_INGEST_V1.md) · [`technique_ingest_v1.json`](../../DATA/reference/practice/technique_ingest_v1.json). Evidence records, not canon.  
 **Normalization (equal_count_breath):** [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) · [`technique_normalization_v1.json`](../../DATA/reference/practice/technique_normalization_v1.json). Decision `insufficient_evidence`.  
 **Targeted shortlist (post-exhale hold identity):** [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) · [`technique_targeted_shortlist_v1.json`](../../DATA/reference/practice/technique_targeted_shortlist_v1.json). Resolution loci ≠ canon.  
-**Targeted ingest (two resolution loci):** [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) · [`technique_targeted_ingest_v1.json`](../../DATA/reference/practice/technique_targeted_ingest_v1.json). Evidence records, not V1.1.
+**Targeted ingest (two resolution loci):** [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) · [`technique_targeted_ingest_v1.json`](../../DATA/reference/practice/technique_targeted_ingest_v1.json). Evidence records, not V1.1.  
+**Normalization V1.1:** [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) · [`technique_normalization_v1_1.json`](../../DATA/reference/practice/technique_normalization_v1_1.json). `normalize_one` candidate, not canon.
 
 **Это:** откуда берётся *техника*; как она становится канонической; чем Content Item отличается от канона.  
 **Это не:** экран `/practices` · Meaning дня · медицинский протокол · разрешение копировать чужой текст · разрешение заявлять efficacy.
@@ -80,7 +81,7 @@ candidate_family
   → canonical | rejected → Content Item expression (technique_id only if canonical)
 ```
 
-Shortlist: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md). Normalization: [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Targeted ingest: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Safety review не открыт.
+Shortlist: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md). Normalization: [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Targeted ingest: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Normalization V1.1: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) (`normalize_one` candidate). Safety review — следующий named pass.
 
 **Продуктовая выдача** (без изменения)
 
@@ -280,12 +281,10 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 ## 11. Что дальше
 
-1. Landscape → Shortlist → Ingest → Normalize приняты для `equal_count_breath`. Решение: `insufficient_evidence`. Canon пуст.
-2. Targeted shortlist закрыт. Targeted ingest двух resolution loci **закрыт**. Square и 5:5 не слиты; 4-4-6-2 не variant. Две оси — сигнал. Следующий named pass: **Normalization V1.1**. Не Safety Review.
-3. Если Normalization V1.1 снова `insufficient_evidence`, допустимо не канонизировать `box_breathing` и оставить type без production item.
-4. Safety Review → Canonical — только после будущего `normalize_one` с достаточно определённым kernel.
-5. `technique_id` на probe — только после canonical.
-6. Затем expressions (5 min / audio) от канона, не от LLM-seed.
+1. Landscape → Shortlist → Ingest → Normalize V1 = `insufficient_evidence`. V1.1 = `normalize_one` (candidate, не canon). `family_id` — ledger key; equal-count hypothesis ремаплена.
+2. Следующий named pass: **Safety Review** normalized candidate. Не следующая семья. Canon пуст.
+3. Safety Review → Canonical — только после этого candidate. `technique_id` на probe — только после `canonical`.
+4. Затем expressions (5 min / audio) от канона, не от LLM-seed.
 
 Registry сейчас **пуст**. Это правильно.
 
@@ -295,6 +294,7 @@ Registry сейчас **пуст**. Это правильно.
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | v1.8 — Normalization V1.1: hold required, equal_count common_parameter; normalize_one candidate; landscape remapped; next = Safety Review |
 | 2026-08-25 | v1.7 — Targeted Ingest V1: two resolution loci; axes signal-only; next = Normalization V1.1 |
 | 2026-08-25 | v1.6 — Targeted Shortlist V1: post-exhale hold identity; definition+contrast selected; next = targeted ingest → Normalization V1.1 |
 | 2026-08-25 | v1.5 — Normalization V1: insufficient_evidence; pipeline strict; technique_id still only at canonical |

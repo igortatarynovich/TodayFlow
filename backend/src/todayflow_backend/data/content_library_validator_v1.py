@@ -1518,6 +1518,189 @@ def validate_technique_targeted_ingest_v1(
     return errors
 
 
+V1_1_HOLD_DECISIONS = frozenset({"required", "optional", "unresolved"})
+V1_1_EQUAL_DECISIONS = frozenset(
+    {"identity_bearing", "common_parameter", "unresolved"}
+)
+V1_1_EVIDENCE = (
+    "ev.equal_count.bhf.heart_matters.box",
+    "ev.equal_count.nhs_sfh.box_leaflet",
+    "ev.equal_count.nhs_newcastle.square",
+    "ev.equal_count.byu.marchant.2025.square",
+    "ev.equal_count.nhs_wales.cavuhb.square",
+)
+LANDSCAPE_V1_EQUAL_COUNT_SHAPE = (
+    "four equal phases including pauses; ratio identity is the kernel"
+)
+
+
+def validate_technique_normalization_v1_1(
+    normalization: dict[str, Any],
+    *,
+    family_ingest: dict[str, Any] | None = None,
+    targeted_ingest: dict[str, Any] | None = None,
+    landscape: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if normalization.get("contract_version") != "technique_normalization_v1_1":
+        errors.append("invalid technique normalization v1.1 contract_version")
+    if normalization.get("writes_technique_canon") is not False:
+        errors.append("V1.1 must not write technique canon")
+    if normalization.get("technique_id_allowed") is not False:
+        errors.append("V1.1 must not allow technique_id")
+    if normalization.get("normalize_one_is_not_canonical") is not True:
+        errors.append("normalize_one must remain not-canonical")
+    if normalization.get("does_not_erase_v1") is not True:
+        errors.append("V1.1 must not erase the V1 insufficient_evidence record")
+    if normalization.get("family_id") != SLICE_FAMILY_V1:
+        errors.append(f"V1.1 family_id must stay {SLICE_FAMILY_V1} as ledger key")
+    if normalization.get("family_id_is_ledger_key_not_identity_claim") is not True:
+        errors.append("family_id must be declared a ledger key, not the identity claim")
+    if normalization.get("boundary_held") != (
+        "ingested_evidence_to_normalized_candidate_not_canonical"
+    ):
+        errors.append("boundary_held must record evidence→candidate, not canon")
+    prior = normalization.get("prior_decision")
+    if not isinstance(prior, dict) or prior.get("decision") != "insufficient_evidence":
+        errors.append("V1.1 must record V1 insufficient_evidence as prior_decision")
+
+    expected_ids = list(V1_1_EVIDENCE)
+    if family_ingest or targeted_ingest:
+        expected_ids = []
+        for blob in (family_ingest, targeted_ingest):
+            if not blob:
+                continue
+            rows = blob.get("evidence")
+            if isinstance(rows, list):
+                expected_ids.extend(
+                    str(row.get("evidence_id"))
+                    for row in rows
+                    if isinstance(row, dict) and row.get("evidence_id")
+                )
+    if normalization.get("evidence_ids") != expected_ids:
+        errors.append("evidence_ids must be family ingest then targeted ingest, in order")
+
+    axes = normalization.get("axes")
+    if not isinstance(axes, dict) or tuple(axes.keys()) != ("post_exhale_hold", "equal_count"):
+        errors.append("axes must be post_exhale_hold then equal_count")
+        return errors
+    hold = axes.get("post_exhale_hold") if isinstance(axes.get("post_exhale_hold"), dict) else {}
+    equal = axes.get("equal_count") if isinstance(axes.get("equal_count"), dict) else {}
+    if hold.get("decision") not in V1_1_HOLD_DECISIONS:
+        errors.append("post_exhale_hold decision invalid")
+    if equal.get("decision") not in V1_1_EQUAL_DECISIONS:
+        errors.append("equal_count decision invalid")
+    if hold.get("not_used") != "locus count":
+        errors.append("hold axis must not use locus count")
+    if equal.get("not_used") != "locus count":
+        errors.append("equal_count axis must not use locus count")
+    if hold.get("decision") != "required":
+        errors.append("this corpus must close post_exhale_hold as required under N-H1")
+    if hold.get("criterion") != "N-H1":
+        errors.append("hold criterion must be N-H1")
+    if equal.get("decision") != "common_parameter":
+        errors.append("this corpus must close equal_count as common_parameter under N-E2")
+    if equal.get("criterion") != "N-E2":
+        errors.append("equal_count criterion must be N-E2")
+
+    decision = normalization.get("decision")
+    if decision not in NORMALIZATION_DECISIONS:
+        errors.append("decision must be normalize_one, split_family, or insufficient_evidence")
+    if hold.get("decision") == "unresolved" and decision != "insufficient_evidence":
+        errors.append("unresolved hold requires overall insufficient_evidence")
+    if decision != "normalize_one":
+        errors.append("this V1.1 corpus must close as normalize_one")
+    if decision == "normalize_one" and (
+        hold.get("decision") == "unresolved" or equal.get("decision") == "unresolved"
+    ):
+        errors.append("normalize_one requires both axes resolved")
+
+    candidate = normalization.get("normalized_candidate")
+    if not isinstance(candidate, dict):
+        errors.append("normalize_one requires a normalized_candidate object")
+    else:
+        if candidate.get("status") != "normalized_candidate":
+            errors.append("candidate status must be normalized_candidate")
+        if candidate.get("not_canonical") is not True:
+            errors.append("candidate must declare not_canonical")
+        kernel = candidate.get("identity_kernel")
+        if not isinstance(kernel, dict):
+            errors.append("identity_kernel must be object")
+        else:
+            if kernel.get("post_exhale_hold") != "required":
+                errors.append("candidate kernel must keep post_exhale_hold required")
+            if kernel.get("equal_count") != "common_parameter":
+                errors.append("candidate kernel must keep equal_count as common_parameter")
+            if kernel.get("shape") != "four_timed_phases":
+                errors.append("candidate kernel shape must be four_timed_phases")
+        not_in = candidate.get("not_in_kernel")
+        if not isinstance(not_in, list) or len(not_in) < 2:
+            errors.append("candidate must record Newcastle and 5:5 as not-in-kernel")
+
+    remap = normalization.get("landscape_remap")
+    if not isinstance(remap, dict):
+        errors.append("normalize_one on this family requires landscape_remap")
+    else:
+        if remap.get("family_id_unchanged") != SLICE_FAMILY_V1:
+            errors.append("remap must keep family_id as ledger key")
+        if "ratio identity is the kernel" not in str(remap.get("from_hypothesis") or ""):
+            errors.append("remap must cite the landscape V1 equal-count hypothesis")
+        if "common parameter" not in str(remap.get("to_hypothesis") or "").lower():
+            errors.append("remap must move equal duration to a common parameter")
+
+    if normalization.get("next_named_pass") != "technique_safety_review_v1":
+        errors.append("next_named_pass after normalize_one must be safety review")
+    not_next = normalization.get("not_next")
+    if not isinstance(not_next, list) or "canonical" not in not_next:
+        errors.append("not_next must include canonical")
+
+    blob = " ".join(
+        [
+            str(hold.get("decision") or ""),
+            " ".join(str(x) for x in (normalization.get("why_normalize_one") or [])),
+            " ".join(str(x) for x in (normalization.get("why_not_split_family") or [])),
+        ]
+    ).lower()
+    if "optional hold" in blob or "second hold is optional" in blob:
+        errors.append("must not declare an optional hold")
+    if not isinstance(normalization.get("why_not_split_family"), list) or len(
+        normalization.get("why_not_split_family") or []
+    ) < 2:
+        errors.append("must record why_not_split_family")
+
+    if landscape:
+        families = landscape.get("families")
+        eq = None
+        if isinstance(families, list):
+            eq = next(
+                (
+                    row
+                    for row in families
+                    if isinstance(row, dict)
+                    and row.get("family_id") == SLICE_FAMILY_V1
+                ),
+                None,
+            )
+        if not isinstance(eq, dict):
+            errors.append("landscape missing equal_count family")
+        else:
+            if eq.get("normalization_status") != "normalize_one":
+                errors.append("landscape normalization_status must follow V1.1")
+            if eq.get("mechanism_shape_at_landscape_v1") != LANDSCAPE_V1_EQUAL_COUNT_SHAPE:
+                errors.append("landscape must preserve the V1 mechanism_shape beside the remap")
+            shape = str(eq.get("mechanism_shape") or "").lower()
+            if "four timed phases" not in shape or "common parameter" not in shape:
+                errors.append("landscape mechanism_shape must be the remapped four-phase hypothesis")
+            if str(eq.get("mechanism_shape") or "").startswith("four equal phases"):
+                errors.append("current mechanism_shape must not remain the premature equal-count kernel")
+
+    hypothesis = normalization.get("expression_hypothesis")
+    if not isinstance(hypothesis, dict) or hypothesis.get("status") != "not_attested":
+        errors.append("expression hypothesis must stay not_attested")
+
+    return errors
+
+
 def validate_content_library_v1(
     library: dict[str, Any],
     *,

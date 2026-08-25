@@ -1,7 +1,7 @@
 # Practice Technique Landscape v1
 
 **Статус:** `ACCEPTED` — research ledger поля техник. **Не** technique canon. Full shortlist **не** открыт.  
-**Версия:** 1.1 (2026-08-25) — vertical slice pointer.  
+**Версия:** 1.2 (2026-08-25) — V1.1 remap: four-phase identity; equal-count hypothesis preserved beside it.  
 **Владелец:** Product + Research.  
 **Parent order:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) шаги 5–7.  
 **Provenance:** [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md).  
@@ -228,7 +228,7 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 
 1. Landscape стоит. Criteria V1 принят. Full shortlist **закрыт** (`shortlist_opened = false`).
 2. Vertical slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md).
-3. Следующий named pass: **Normalization V1.1**. Не следующая семья. Не Safety Review.
+3. Следующий named pass: **Safety Review** (после V1.1 `normalize_one`). Не следующая семья.
 4. `technique_id` — только на canonical.
 
 ---
@@ -237,6 +237,7 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | v1.2 — remap after V1.1: four-phase identity; equal count common parameter; V1 hypothesis preserved |
 | 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |
 | 2026-08-25 | pointer: Targeted Shortlist V1 closed; next = targeted ingest → Normalization V1.1 |
 | 2026-08-25 | pointer: Normalization V1 = insufficient_evidence; landscape kernel unchanged |

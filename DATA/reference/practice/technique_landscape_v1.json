@@ -1,8 +1,8 @@
 {
   "contract_version": "technique_landscape_v1",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "status": "landscape",
-  "semantic_version": "practice-technique-landscape-v1.1",
+  "semantic_version": "practice-technique-landscape-v1.2",
   "description": "Research landscape of technique families. Not canon. Full shortlist not opened. One vertical slice may be sliced. Canon: docs/practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md",
   "shortlist_opened": false,
   "shortlist_mode": "vertical_slice",
@@ -13,9 +13,10 @@
   "shortlist_canon": "PRACTICE_TECHNIQUE_SHORTLIST_V1",
   "ingest_canon": "PRACTICE_TECHNIQUE_INGEST_V1",
   "normalization_canon": "PRACTICE_TECHNIQUE_NORMALIZATION_V1",
+  "normalization_v1_1_canon": "PRACTICE_TECHNIQUE_NORMALIZATION_V1_1",
   "targeted_shortlist_canon": "PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1",
   "targeted_ingest_canon": "PRACTICE_TECHNIQUE_TARGETED_INGEST_V1",
-  "next_named_pass": "technique_normalization_v1_1",
+  "next_named_pass": "technique_safety_review_v1",
   "families": [
     {
       "family_id": "family.practice.slow_paced_breath",
@@ -32,17 +33,20 @@
     },
     {
       "family_id": "family.practice.equal_count_breath",
-      "candidate_family": "equal-count / square breathing",
+      "candidate_family": "four-phase square / box breathing",
+      "candidate_family_at_landscape_v1": "equal-count / square breathing",
       "content_class": "practice",
       "candidate_types": ["box_breathing"],
-      "mechanism_shape": "four equal phases including pauses; ratio identity is the kernel",
-      "bounds_to_research": ["pause length vs no-pause equal inhale/exhale", "who must not hold breath", "popular tactical packaging is not a source"],
-      "variant_axes": ["count length", "cycles", "seated vs standing"],
+      "mechanism_shape": "four timed phases including a hold after inhale and after exhale; equal duration is a common parameter, not the kernel",
+      "mechanism_shape_at_landscape_v1": "four equal phases including pauses; ratio identity is the kernel",
+      "bounds_to_research": ["who must not hold breath", "popular tactical packaging is not a source"],
+      "variant_axes": ["count length", "whether side counts are equal", "cycles", "seated vs standing"],
       "source_families": ["academic_description", "clinical_psychology", "recognized_school", "tradition_primary", "official_health"],
       "claim_risk": "efficacy_bleed",
       "probe_links": ["practice.box_breathing.001"],
       "shortlist_status": "sliced",
-      "normalization_status": "insufficient_evidence"
+      "normalization_status": "normalize_one",
+      "landscape_hypothesis_remap": "equal_count_was_premature_four_phase_is_identity"
     },
     {
       "family_id": "family.practice.physiological_sigh",

@@ -10,8 +10,9 @@
 | [PRACTICE_TECHNIQUE_INGEST_V1.md](./PRACTICE_TECHNIQUE_INGEST_V1.md) | **Ingest V1** (parent 10): three evidence records; not kernel; not canon. |
 | [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) | **Normalization V1**: `insufficient_evidence`; research question on post-exhale hold. |
 | [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) | **Targeted Shortlist V1**: hold identity; definition+contrast selected. |
-| [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) | **Targeted Ingest V1**: two resolution loci; axes unglued; next = Normalization V1.1. |
-| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Fill-pass** (v1.1): 26/26 P0 cells · architecture stands · **frozen**. Next = Normalization V1.1 |
+| [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) | **Targeted Ingest V1**: two resolution loci; axes unglued. |
+| [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) | **Normalization V1.1**: `normalize_one` candidate; landscape remapped; next = Safety Review. |
+| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Fill-pass** (v1.1): 26/26 P0 cells · architecture stands · **frozen**. Next = Safety Review |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | **SoT экрана** (v1.1): цикл состояния; 6 needs (тело + рефлексия; Уснуть last); 9 formats (yoga/stretch/music + reflection/sleep); сессия; music layer |
 | [practices_screen_mockup_v1.png](./practices_screen_mockup_v1.png) | **Визуальный референс** экрана (загруженный скрин спеки) — UI-паритет + C0b need-лента |
 

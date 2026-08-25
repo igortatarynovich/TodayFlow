@@ -20,6 +20,7 @@ from todayflow_backend.data.content_library_validator_v1 import (
     validate_technique_normalization_v1,
     validate_technique_targeted_shortlist_v1,
     validate_technique_targeted_ingest_v1,
+    validate_technique_normalization_v1_1,
 )
 from todayflow_backend.data.reference_machine_loader import DATA_ROOT
 
@@ -91,6 +92,16 @@ TARGETED_INGEST_CANON = (
     / "docs"
     / "practices"
     / "PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md"
+)
+NORMALIZATION_V1_1_PATH = PRACTICE_REF / "technique_normalization_v1_1.json"
+NORMALIZATION_V1_1_CONTRACT_PATH = (
+    PRACTICE_REF / "technique_normalization_v1_1_contract_v1.json"
+)
+NORMALIZATION_V1_1_CANON = (
+    Path(__file__).resolve().parents[2]
+    / "docs"
+    / "practices"
+    / "PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md"
 )
 
 SEED_1_ID = "practice.sensory_grounding.001"
@@ -205,7 +216,7 @@ def test_fill_frozen_provisional_probes() -> None:
     assert library["fill_frozen"] is True
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is True
-    assert coverage["next_pass"] == "technique_normalization_v1_1"
+    assert coverage["next_pass"] == "technique_safety_review_v1"
     probes = library["architecture_probe_item_ids"]
     assert probes == [
         SEED_1_ID,
@@ -263,6 +274,9 @@ def test_provenance_paths_exist() -> None:
     assert TARGETED_INGEST_CANON.is_file()
     assert TARGETED_INGEST_PATH.is_file()
     assert TARGETED_INGEST_CONTRACT_PATH.is_file()
+    assert NORMALIZATION_V1_1_CANON.is_file()
+    assert NORMALIZATION_V1_1_PATH.is_file()
+    assert NORMALIZATION_V1_1_CONTRACT_PATH.is_file()
 
 
 def test_technique_landscape_v1_splits_probe_families() -> None:
@@ -291,10 +305,15 @@ def test_technique_landscape_v1_splits_probe_families() -> None:
         "PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1"
     )
     assert landscape["targeted_ingest_canon"] == "PRACTICE_TECHNIQUE_TARGETED_INGEST_V1"
-    assert landscape["next_named_pass"] == "technique_normalization_v1_1"
-    assert by_id["family.practice.equal_count_breath"]["normalization_status"] == (
-        "insufficient_evidence"
+    assert landscape["normalization_v1_1_canon"] == (
+        "PRACTICE_TECHNIQUE_NORMALIZATION_V1_1"
     )
+    assert landscape["next_named_pass"] == "technique_safety_review_v1"
+    eq = by_id["family.practice.equal_count_breath"]
+    assert eq["normalization_status"] == "normalize_one"
+    assert eq["mechanism_shape_at_landscape_v1"].startswith("four equal phases")
+    assert eq["mechanism_shape"].startswith("four timed phases")
+    assert "common parameter" in eq["mechanism_shape"]
     assert "energizing_breath" in by_id["family.practice.unattested_short_exhale"]["candidate_types"]
     assert by_id["family.practice.activating_forceful_breath"]["candidate_types"] == []
     assert by_id["family.practice.unattested_short_exhale"]["likely_disposition"] == "reject_or_remap"
@@ -421,7 +440,7 @@ def test_technique_normalization_v1_insufficient_evidence_not_canon() -> None:
         for r in landscape["families"]
         if r["family_id"] == "family.practice.equal_count_breath"
     )
-    assert eq["mechanism_shape"].startswith("four equal phases")
+    assert eq["mechanism_shape_at_landscape_v1"].startswith("four equal phases")
     assert eq["shortlist_status"] == "sliced"
 
 
@@ -462,8 +481,8 @@ def test_technique_targeted_shortlist_v1_hold_identity_not_canon() -> None:
         for r in landscape["families"]
         if r["family_id"] == "family.practice.equal_count_breath"
     )
-    assert eq["mechanism_shape"].startswith("four equal phases")
-    assert eq["normalization_status"] == "insufficient_evidence"
+    assert eq["mechanism_shape_at_landscape_v1"].startswith("four equal phases")
+    assert eq["normalization_status"] == "normalize_one"
 
 
 def test_technique_targeted_ingest_v1_two_loci_not_kernel() -> None:
@@ -515,8 +534,53 @@ def test_technique_targeted_ingest_v1_two_loci_not_kernel() -> None:
         for r in landscape["families"]
         if r["family_id"] == "family.practice.equal_count_breath"
     )
-    assert eq["mechanism_shape"].startswith("four equal phases")
-    assert eq["normalization_status"] == "insufficient_evidence"
+    assert eq["mechanism_shape_at_landscape_v1"].startswith("four equal phases")
+    assert eq["normalization_status"] == "normalize_one"
+
+
+def test_technique_normalization_v1_1_normalize_one_candidate_not_canon() -> None:
+    family_ingest = load_json(INGEST_PATH)
+    targeted_ingest = load_json(TARGETED_INGEST_PATH)
+    landscape = load_json(LANDSCAPE_PATH)
+    normalization = load_json(NORMALIZATION_V1_1_PATH)
+    assert validate_technique_normalization_v1_1(
+        normalization,
+        family_ingest=family_ingest,
+        targeted_ingest=targeted_ingest,
+        landscape=landscape,
+    ) == []
+    assert normalization["decision"] == "normalize_one"
+    assert normalization["writes_technique_canon"] is False
+    assert normalization["technique_id_allowed"] is False
+    assert normalization["normalize_one_is_not_canonical"] is True
+    assert normalization["does_not_erase_v1"] is True
+    assert normalization["prior_decision"]["decision"] == "insufficient_evidence"
+    assert normalization["axes"]["post_exhale_hold"]["decision"] == "required"
+    assert normalization["axes"]["post_exhale_hold"]["criterion"] == "N-H1"
+    assert normalization["axes"]["equal_count"]["decision"] == "common_parameter"
+    assert normalization["axes"]["equal_count"]["criterion"] == "N-E2"
+    candidate = normalization["normalized_candidate"]
+    assert candidate["status"] == "normalized_candidate"
+    assert candidate["not_canonical"] is True
+    assert candidate["identity_kernel"]["shape"] == "four_timed_phases"
+    assert candidate["identity_kernel"]["post_exhale_hold"] == "required"
+    assert candidate["identity_kernel"]["equal_count"] == "common_parameter"
+    assert normalization["next_named_pass"] == "technique_safety_review_v1"
+    assert "canonical" in normalization["not_next"]
+    assert _techniques()["techniques"] == []
+    _vocab, library, _coverage = _load()
+    probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
+    assert "technique_id" not in probe["identity"]
+    eq = next(
+        r
+        for r in landscape["families"]
+        if r["family_id"] == "family.practice.equal_count_breath"
+    )
+    assert eq["mechanism_shape_at_landscape_v1"].startswith("four equal phases")
+    assert eq["mechanism_shape"].startswith("four timed phases")
+    assert eq["normalization_status"] == "normalize_one"
+    v1 = load_json(NORMALIZATION_PATH)
+    assert v1["decision"] == "insufficient_evidence"
 
 
 def test_seed_pass_closes_exactly_one_cell_per_item() -> None:

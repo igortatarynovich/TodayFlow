@@ -4,8 +4,8 @@
   "status": "provisional",
   "semantic_version": "content-taxonomy-v1.1",
   "fill_frozen": true,
-  "next_pass": "technique_normalization_v1_1",
-  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen. Equal-count normalization = insufficient_evidence. Targeted ingest closed. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · targeted ingest: docs/practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md",
+  "next_pass": "technique_safety_review_v1",
+  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen. Equal-count thread = normalize_one candidate, not canon. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · normalization v1.1: docs/practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,
