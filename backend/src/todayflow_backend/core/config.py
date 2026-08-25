@@ -120,6 +120,11 @@ class Settings(BaseSettings):
     llm_stream_completions: bool = True  # LLM_STREAM_COMPLETIONS
     # Optional JSONL sidecar for per-request AI COGS (llm_usage_v1 also always goes to logs).
     llm_usage_log_path: str | None = None  # LLM_USAGE_LOG_PATH
+    # Cost Containment: router policy + tenant USD cap. Off only for protocol unit tests.
+    llm_cost_guard_enabled: bool = True  # LLM_COST_GUARD
+    llm_daily_usd_ceiling: float = 5.0  # LLM_DAILY_USD_CEILING — UTC day, whole tenant
+    llm_downgrade_model: str = "Qwen/Qwen3-30B-A3B-Instruct-2507"  # LLM_DOWNGRADE_MODEL
+    llm_spend_ledger_path: str | None = None  # LLM_SPEND_LEDGER_PATH
     # LLM_QUALITY_MODE:
     #   economize — legacy: tight max_tokens, cheap tiers, clipped context (AMLL cost control);
     #   rich — quality-first: full context, multi-step funnels, generous max_tokens, no cheap-tier preference.

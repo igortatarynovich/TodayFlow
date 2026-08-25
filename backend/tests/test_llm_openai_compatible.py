@@ -14,10 +14,13 @@ from todayflow_backend.core.llm_openai_compatible import (
 
 
 def _patch_settings(monkeypatch, s) -> None:
+    from todayflow_backend.core import llm_cost_guard_v1 as guard
     from todayflow_backend.core import llm_openai_compatible as llm_mod
 
     monkeypatch.setattr(config_module, "settings", s)
     monkeypatch.setattr(llm_mod, "settings", s)
+    monkeypatch.setattr(guard, "settings", s)
+    guard.reset_ledger_for_tests()
 
 
 def test_get_openai_compatible_client_background_uses_stream_read_timeout(monkeypatch):
@@ -40,12 +43,17 @@ def test_get_openai_compatible_client_background_uses_stream_read_timeout(monkey
 
 
 def test_kimi_stream_collects_content_ignores_reasoning(monkeypatch):
+    from todayflow_backend.core.llm_usage_telemetry_v1 import llm_call_context
+
     s = config_module.Settings(
         llm_provider="nebius",
         nebius_api_key="sk-test",
-        nebius_model="moonshotai/Kimi-K3",
+        nebius_model="moonshotai/Kimi-K2.6",
+        nebius_complex_model="moonshotai/Kimi-K3",
         nebius_fallback_model="",
         llm_stream_completions=True,
+        llm_cost_guard_enabled=True,
+        llm_daily_usd_ceiling=50.0,
     )
     _patch_settings(monkeypatch, s)
 
@@ -61,25 +69,32 @@ def test_kimi_stream_collects_content_ignores_reasoning(monkeypatch):
     mock_client = MagicMock()
     mock_client.chat.completions.create.return_value = iter(stream)
 
-    text = chat_completion_text(
-        mock_client,
-        model="moonshotai/Kimi-K3",
-        messages=[{"role": "user", "content": "x"}],
-        temperature=0.1,
-        max_tokens=100,
-        json_object=False,
-    )
+    with llm_call_context(feature="natal.decode"):
+        text = chat_completion_text(
+            mock_client,
+            model="moonshotai/Kimi-K3",
+            messages=[{"role": "user", "content": "x"}],
+            temperature=0.1,
+            max_tokens=100,
+            json_object=False,
+        )
     assert text == '{"ok":true}'
     kw = mock_client.chat.completions.create.call_args.kwargs
     assert kw.get("stream") is True
     assert kw.get("stream_options") == {"include_usage": True}
     assert kw.get("reasoning_effort") == "low"
     assert "temperature" not in kw
-    assert kw.get("max_tokens", 0) >= 16000
+    assert kw.get("model") == "moonshotai/Kimi-K3"
+    assert kw.get("max_tokens", 0) <= 2500
+    assert kw.get("max_tokens", 0) == 100
 
 
 def test_resolve_max_tokens_bumps_reasoning_models(monkeypatch):
-    s = config_module.Settings(openai_api_key="sk-test", llm_default_model="gpt-5.5")
+    s = config_module.Settings(
+        openai_api_key="sk-test",
+        llm_default_model="gpt-5.5",
+        llm_cost_guard_enabled=False,
+    )
     _patch_settings(monkeypatch, s)
     assert resolve_max_tokens(2800, model="gpt-5.5") >= 8192
 
@@ -149,6 +164,7 @@ def test_chat_completion_json_retries_when_json_mode_returns_empty(monkeypatch):
         llm_default_model="gpt-5.5",
         llm_provider="openai",
         nebius_fallback_model="",
+        llm_cost_guard_enabled=False,
     )
     _patch_settings(monkeypatch, s)
 
@@ -229,14 +245,17 @@ def test_nebius_model_fallback_on_404(monkeypatch):
     ok_resp = SimpleNamespace(choices=[SimpleNamespace(message=ok_msg)])
     mock_client.chat.completions.create.side_effect = [FakeNotFound(), ok_resp]
 
-    text = chat_completion_text(
-        mock_client,
-        model="moonshotai/Kimi-K3",
-        messages=[{"role": "user", "content": "x"}],
-        temperature=0.1,
-        max_tokens=100,
-        json_object=True,
-    )
+    from todayflow_backend.core.llm_usage_telemetry_v1 import llm_call_context
+
+    with llm_call_context(feature="natal.decode"):
+        text = chat_completion_text(
+            mock_client,
+            model="moonshotai/Kimi-K3",
+            messages=[{"role": "user", "content": "x"}],
+            temperature=0.1,
+            max_tokens=100,
+            json_object=True,
+        )
     assert text and "direct_answer" in text
     assert mock_client.chat.completions.create.call_count == 2
     assert mock_client.chat.completions.create.call_args_list[0].kwargs["model"] == "moonshotai/Kimi-K3"
@@ -262,14 +281,17 @@ def test_nebius_model_fallback_on_timeout_tries_deepseek(monkeypatch):
     ok_resp = SimpleNamespace(choices=[SimpleNamespace(message=ok_msg)])
     mock_client.chat.completions.create.side_effect = [FakeTimeout("Request timed out."), ok_resp]
 
-    text = chat_completion_text(
-        mock_client,
-        model="moonshotai/Kimi-K3",
-        messages=[{"role": "user", "content": "x"}],
-        temperature=0.1,
-        max_tokens=100,
-        json_object=True,
-    )
+    from todayflow_backend.core.llm_usage_telemetry_v1 import llm_call_context
+
+    with llm_call_context(feature="natal.decode"):
+        text = chat_completion_text(
+            mock_client,
+            model="moonshotai/Kimi-K3",
+            messages=[{"role": "user", "content": "x"}],
+            temperature=0.1,
+            max_tokens=100,
+            json_object=True,
+        )
     assert text and "ok" in text
     assert mock_client.chat.completions.create.call_count == 2
     assert mock_client.chat.completions.create.call_args_list[1].kwargs["model"] == (
@@ -292,14 +314,17 @@ def test_plain_allow_model_fallback_false_skips_chain(monkeypatch):
     mock_client = MagicMock()
     mock_client.chat.completions.create.side_effect = FakeTimeout("Request timed out.")
 
-    text, kind, mid = chat_completion_plain_with_status(
-        mock_client,
-        model="moonshotai/Kimi-K3",
-        messages=[{"role": "user", "content": "x"}],
-        temperature=0.1,
-        max_tokens=100,
-        allow_model_fallback=False,
-    )
+    from todayflow_backend.core.llm_usage_telemetry_v1 import llm_call_context
+
+    with llm_call_context(feature="natal.decode"):
+        text, kind, mid = chat_completion_plain_with_status(
+            mock_client,
+            model="moonshotai/Kimi-K3",
+            messages=[{"role": "user", "content": "x"}],
+            temperature=0.1,
+            max_tokens=100,
+            allow_model_fallback=False,
+        )
     assert text is None
     assert kind == "timeout"
     assert mid == "moonshotai/Kimi-K3"

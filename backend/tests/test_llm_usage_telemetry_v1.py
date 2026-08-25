@@ -122,7 +122,8 @@ def test_explicit_prewarm_overwrites_user_trigger():
     assert ev["request_id"] == "http-1"
 
 
-def test_kimi_stream_records_usage_and_reasoning_chars(monkeypatch):
+def test_kimi_stream_records_usage_and_reasoning_chars(monkeypatch, tmp_path):
+    from todayflow_backend.core import llm_cost_guard_v1 as guard
     from todayflow_backend.core import llm_openai_compatible as llm_mod
 
     s = config_module.Settings(
@@ -131,9 +132,14 @@ def test_kimi_stream_records_usage_and_reasoning_chars(monkeypatch):
         nebius_model="moonshotai/Kimi-K2.6",
         nebius_fallback_model="",
         llm_stream_completions=True,
+        llm_cost_guard_enabled=True,
+        llm_daily_usd_ceiling=50.0,
+        llm_spend_ledger_path=str(tmp_path / "spend.json"),
     )
     monkeypatch.setattr(config_module, "settings", s)
     monkeypatch.setattr(llm_mod, "settings", s)
+    monkeypatch.setattr(guard, "settings", s)
+    guard.reset_ledger_for_tests()
     clear_recent_llm_usage_events()
 
     def _chunk(*, content=None, reasoning=None, usage=None, finish=None):
@@ -183,7 +189,7 @@ def test_kimi_stream_records_usage_and_reasoning_chars(monkeypatch):
     assert ev["tokens_source"] == "provider_usage"
     assert ev["ok"] is True
     assert ev["streamed"] is True
-    assert ev["max_tokens"] >= 4000
+    assert ev["max_tokens"] == 100
     billed = estimate_cost_usd(
         model="moonshotai/Kimi-K2.6",
         input_tokens=80,

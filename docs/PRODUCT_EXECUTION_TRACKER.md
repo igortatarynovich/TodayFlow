@@ -1,8 +1,30 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-24
+Last updated: 2026-08-25
 Owner: Product + Engineering
 Status: Active working document
+
+**NOW (ARCH / LLM, 2026-08-25):** **Compute Lifecycle + Artifact Economics** — SoT: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](./COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md). Profile = layers, not monthly TTL. Four rebuild triggers only. Today persist = `user × local_date × semantic_version`; Global = `date × locale/version`. LLM last. Do not expand Knowledge Core V1. Do not degrade K3 until useless calls are gone. Payload audit: [audits/IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md](./audits/IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md) (Today IL = 1 line; Profile/Compat = full ~24–35 bag). Router cost guard stands. Next engineering: lifecycle gaps (shared Global, profile_hash, prewarm off MAU, IL selection 5–8) then 1-profile measurement.
+
+## Architecture impact — Compute Lifecycle V1 (2026-08-25)
+
+- **SoT before:** Cost guard capped tokens; Natal Decode GET never rebuilds; I0 named persist + one Global Day; no single lifecycle SoT. Prompt versions could bust Profile hash. I0 Global LLM still per-user.
+- **SoT after:** Compute lifecycle file is **when-to-calculate SoT**. Four Profile triggers. Three ledgers (core / premium / engineering). Knowledge Core not expanded. IL-3 payload audit is facts, not a rank rewrite. Public JSON / I0 meaning / IL atoms **unchanged**.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Runtime gaps listed in lifecycle §7.
+- **Canon updated?** yes — compute lifecycle · IL-3 payload audit · this tracker · LLM quality · freeze “do not expand” · README
+- **Backward compatible?** yes for clients. Force rebuild stays for pre-release testing (engineering ledger).
+
+**NOW (OPS / LLM, 2026-08-25):** **Cost Containment / LLM Usage Observability** — router SoT: request → policy → budget → provider → accounting. K3 allowlist (natal/CE only). Today output 1400 / retry 600. Tenant `LLM_DAILY_USD_CEILING=$5`. Over budget = downgrade (Qwen) or deny. `@example.com` out of prewarm. `$5/100 users` retired. Semantic architecture unchanged (I0 Global still per-user — cost-model debt). Lifecycle SoT now names that debt. Next: implement lifecycle gaps, then 24–48h 1-profile measurement.
+
+## Architecture impact — Cost Containment llm_cost_guard_v1 (2026-08-25)
+
+- **SoT before:** AI COGS logs only; `resolve_max_tokens` could raise K3 to 16k / K2.6 to 4k; K3 used wherever `resolve_complex_chat_model` was called (including profile funnel); no tenant USD cap; `@example.com` prewarmed.
+- **SoT after:** `llm_cost_guard_v1` is model/token/budget SoT at `_create_chat_collect`. K3 only `natal.decode` + CE stages 2–4. Daily USD ceiling. Deny/downgrade on cap. Usage on every call including failed/retry/deny. Generation meaning / I0 split / public JSON **unchanged**.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Ops: purge non-tester users; `LLM_USAGE_LOG_PATH` + ledger on `/DATA/ops`.
+- **Canon updated?** yes — [LLM_QUALITY_AND_PROMPT_EVOLUTION.md](./LLM_QUALITY_AND_PROMPT_EVOLUTION.md) Cost Containment · unit economics table
+- **Backward compatible?** yes for clients. Truncated natal JSON possible vs previous 16k K3 thinking budget (cost trade). 402 trips the day.
 
 ## Architecture impact — Today pane scroll + practices hub first paint (2026-08-24)
 

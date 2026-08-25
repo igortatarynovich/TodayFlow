@@ -60,7 +60,11 @@ services:
       LLM_STREAM_READ_TIMEOUT_SECONDS: ${LLM_STREAM_READ_TIMEOUT_SECONDS:-120}
       LLM_HTTP_TIMEOUT_SECONDS: ${LLM_HTTP_TIMEOUT_SECONDS:-12}
       LLM_BACKGROUND_TIMEOUT_SECONDS: ${LLM_BACKGROUND_TIMEOUT_SECONDS:-180}
-      LLM_USAGE_LOG_PATH: ${LLM_USAGE_LOG_PATH:-}
+      LLM_USAGE_LOG_PATH: ${LLM_USAGE_LOG_PATH:-/DATA/ops/llm_usage.jsonl}
+      LLM_SPEND_LEDGER_PATH: ${LLM_SPEND_LEDGER_PATH:-/DATA/ops/llm_spend.json}
+      LLM_COST_GUARD: ${LLM_COST_GUARD:-1}
+      LLM_DAILY_USD_CEILING: ${LLM_DAILY_USD_CEILING:-5}
+      LLM_DOWNGRADE_MODEL: ${LLM_DOWNGRADE_MODEL:-Qwen/Qwen3-30B-A3B-Instruct-2507}
       PUSH_DISPATCH_SECRET: ${PUSH_DISPATCH_SECRET:-}
       COMPATIBILITY_CONTENT_V1: ${COMPATIBILITY_CONTENT_V1:-1}
       # Character Engine — Stage 0–1 live shadow for diagnostics (keep Stage 2 / publish off until review).
@@ -89,6 +93,7 @@ services:
       APPLE_CLIENT_ID: ${APPLE_CLIENT_ID:-}
     volumes:
       - ./CONTENT:/CONTENT
+      - ./DATA:/DATA
     depends_on:
       postgres:
         condition: service_healthy

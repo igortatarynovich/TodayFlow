@@ -54,7 +54,11 @@ services:
       NEBIUS_FALLBACK_MODEL: ${NEBIUS_FALLBACK_MODEL:-}
       LLM_STREAM_COMPLETIONS: ${LLM_STREAM_COMPLETIONS:-1}
       LLM_STREAM_READ_TIMEOUT_SECONDS: ${LLM_STREAM_READ_TIMEOUT_SECONDS:-120}
-      LLM_USAGE_LOG_PATH: ${LLM_USAGE_LOG_PATH:-}
+      LLM_USAGE_LOG_PATH: ${LLM_USAGE_LOG_PATH:-/tmp/todayflow_llm_usage.jsonl}
+      LLM_SPEND_LEDGER_PATH: ${LLM_SPEND_LEDGER_PATH:-/tmp/todayflow_llm_spend.json}
+      LLM_COST_GUARD: ${LLM_COST_GUARD:-1}
+      LLM_DAILY_USD_CEILING: ${LLM_DAILY_USD_CEILING:-5}
+      LLM_DOWNGRADE_MODEL: ${LLM_DOWNGRADE_MODEL:-Qwen/Qwen3-30B-A3B-Instruct-2507}
       # Guest+registered content v1.1 after human review; premium still not wide-enabled.
       COMPATIBILITY_CONTENT_V1: ${COMPATIBILITY_CONTENT_V1:-1}
       # Character Engine — must be explicit here or recreate drops flags (defaults match live .env).

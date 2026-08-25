@@ -57,6 +57,8 @@ IL-2 conflict rules still hold after rank: occupancy ≠ conjunction; House 1 �
 
 Do **not** rank by Character Engine, goals, “what Igor cares about,” or screen slot.
 
+Product surfaces may **filter** this list (Today already takes `themes[:1]`). Filtering is not this engine. Facts: [IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md](../audits/IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md).
+
 ---
 
 ## 3. Output (library / tests; not a catalog record)

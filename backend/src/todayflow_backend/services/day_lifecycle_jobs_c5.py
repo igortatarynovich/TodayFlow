@@ -356,7 +356,23 @@ def _candidate_user_ids(db: Session) -> list[int]:
     ):
         if uid is not None:
             ids.add(int(uid))
-    return sorted(ids)
+    return _exclude_synthetic_prewarm_ids(db, ids)
+
+
+def _exclude_synthetic_prewarm_ids(db: Session, ids: set[int]) -> list[int]:
+    """Production prewarm must not spend on RFC 2606 example.com fixtures."""
+    if not ids:
+        return []
+    from todayflow_backend.core.llm_cost_guard_v1 import is_synthetic_production_email
+
+    rows = db.query(User.id, User.email).filter(User.id.in_(list(ids))).all()
+    keep: list[int] = []
+    for uid, email in rows:
+        if is_synthetic_production_email(str(email or "")):
+            logger.info("day_prewarm skip synthetic email user_id=%s", uid)
+            continue
+        keep.append(int(uid))
+    return sorted(keep)
 
 
 def run_day_lifecycle_due(

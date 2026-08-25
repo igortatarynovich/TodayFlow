@@ -94,6 +94,7 @@ Do not reopen packs without a named Composition Engine failure.
 
 ## Changelog
 
+- **1.7 (2026-08-25)** — Compute lifecycle lock. **Do not expand V1 atoms** for Profile / Today / Compatibility. Next meaning/cost work = selection after IL-3 ([IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md](../audits/IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md)), not new lemmas. This freeze stands.
 - **1.6 (2026-08-23)** — IL-4 editorial consume done 1.3.113. This freeze stands. Next named = owner-directed Today meaning polish.
 - **1.5 (2026-08-23)** — Calc → IL wire done 1.3.111. This freeze stands. Next named = attach IL-4 packs to product surfaces. **Done 1.3.112.** Consume **done 1.3.113.**
 - **1.4 (2026-08-23)** — Library scale done 1.3.110. This freeze stands. Next named = wire calc → IL. **Done 1.3.111.**

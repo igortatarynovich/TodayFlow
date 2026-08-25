@@ -34,6 +34,8 @@ Catalog **38 draft / 0 `active`**. Unchanged.
 
 `GET never rebuilds.` Inventory is not a rebuild signal.
 
+Parent lifecycle (all Profile layers, not only Decode): [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](../COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md) — four triggers only (birth data · incompatible semantic version · meaningful behavioral delta · ops force). Prompt bump / login / new day are not rebuilds.
+
 ---
 
 ## 1. Hook

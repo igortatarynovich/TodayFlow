@@ -47,6 +47,8 @@ LLM не выбирает mood/energy, главных drivers, окна врем
 
 Два человека в одной **day-location / timezone** + одна версия правил → **один и тот же Global Day**.
 
+**Persist / economics (subordinate):** Personal = `1 × user × local_date × semantic_version`. Global = `1 × date × locale/version`, not × user. Re-open = 0 LLM. Cost-model vs runtime gaps: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](../COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md). This file remains Today **meaning** SoT.
+
 ### Who knows what (LOCKED)
 
 IL / Canon — atomic astrology. Character Engine — the person. Neither layer owns the other.

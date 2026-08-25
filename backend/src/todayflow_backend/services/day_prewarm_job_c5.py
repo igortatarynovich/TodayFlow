@@ -139,6 +139,13 @@ def enqueue_day_prewarm(
     timezone_name: str = "UTC",
 ) -> Any:
     """Idempotent background assemble for one user/day. Safe to call from GET."""
+    from todayflow_backend.core.llm_cost_guard_v1 import is_synthetic_production_email
+    from todayflow_backend.db.models import User as UserModel
+
+    row = db.query(UserModel).filter(UserModel.id == int(user_id)).first()
+    if row is not None and is_synthetic_production_email(str(row.email or "")):
+        logger.info("enqueue_day_prewarm skipped synthetic email user_id=%s", user_id)
+        return None
     day_iso = local_date.isoformat()
     idem = f"day_prewarm:{int(user_id)}:{day_iso}"
     fingerprint = make_fingerprint("day_prewarm_c5", user_id, day_iso)

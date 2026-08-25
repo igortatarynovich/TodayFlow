@@ -37,6 +37,7 @@ local.properties
 
 # DB / local data
 pgdata/
+DATA/ops/
 docs/datasets/raw/*.jsonl
 
 # Generated packaging metadata

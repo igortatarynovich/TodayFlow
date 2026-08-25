@@ -118,17 +118,68 @@ docker compose -f docker-compose.prod.yml logs backend --since 24h \
   | PYTHONPATH=backend/src backend/.venv/bin/python backend/scripts/report_llm_cogs.py --stdin
 ```
 
-This is ops instrumentation, not a generation SoT. Do not switch models until a day of tagged traffic shows which feature owns output tokens.
+This is ops instrumentation, not a generation SoT.
 
-Engineering budgets (target, not yet gated in router):
+## Cost Containment (router SoT, 2026-08-25)
 
-| Operation | Budget |
-|-----------|--------|
-| Today opening | ≤ $0.003 |
-| Full daily generation | ≤ $0.01 |
-| Deep personal interpretation | ≤ $0.02 |
-| D1 active user | ≤ $0.03/day |
-| AI COGS | ≤ $0.50–0.90 / MAU / month |
+Every provider call is: **request → policy → budget check → provider/model → usage accounting**.
+
+A feature cannot grant itself 16k K3 output. Caps live in `llm_cost_guard_v1`, applied in `llm_openai_compatible._create_chat_collect`. Call-site `max_tokens=` is a request, not authority.
+
+| Gate | Rule |
+|------|------|
+| K3 allowlist | Only `natal.decode`, `ce.stage2`, `ce.stage3`, `ce.stage4`. Recurring daily (`today.*`, prewarm) is never K3. |
+| Today output | First attempt ≤ 1400 completion tokens; **retry** ≤ 600 (not a second full budget). |
+| Natal/CE output | ≤ 2500 first / 900 retry. |
+| Tarot | ≤ 1200 / 500. User-triggered, own cap. |
+| Tenant USD | `LLM_DAILY_USD_CEILING` (default **$5** UTC day, whole environment). |
+| Over budget | **Downgrade** to `LLM_DOWNGRADE_MODEL` (Qwen) if the cheap worst-case still fits; else **deny** (no provider call). Never retry the expensive model. |
+| 402 / billing | `billing_suspended` trips the daily ceiling. No Token Factory fallback. |
+| Prewarm | RFC 2606 `@example.com` excluded from production prewarm candidates. |
+| Usage | Every provider call emits `llm_usage_v1` (ok, empty, timeout, deny, retry, thinking). JSONL: `LLM_USAGE_LOG_PATH`. Ledger: `LLM_SPEND_LEDGER_PATH`. |
+
+```bash
+LLM_COST_GUARD=1
+LLM_DAILY_USD_CEILING=5
+LLM_DOWNGRADE_MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507
+LLM_USAGE_LOG_PATH=/DATA/ops/llm_usage.jsonl
+LLM_SPEND_LEDGER_PATH=/DATA/ops/llm_spend.json
+```
+
+`LLM_COST_GUARD=0` restores legacy thinking floors (K3 16k / K2.6 4k). Do not use in production.
+
+### Unit economics (targets — measure before scaling)
+
+Previous **$5 / 100 users / month** is **retired**. It assumed a cheap non-thinking model and one short completion/day. It is not a forecast of the current stack.
+
+`$0.50–0.90 / MAU / month` is a **product goal after measurement**, not a router guarantee.
+
+**Do not degrade Kimi** on natal / CE / paid synthesis until [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](./COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md) is implemented. First delete meaningless calls (GET/login/prompt-hash/Global×user/prewarm-as-MAU). Then measure one real lifecycle. Router caps stay as a floor, not as a quality cut.
+
+Principle: calculate once → IL compose → persist → reuse → LLM only where personalization adds value. Core subscription compute vs premium (Tarot/deep compat) vs engineering (force rebuild — not MAU).
+
+| Operation | Frequency (cost model) | Target cost | Notes |
+|-----------|------------------------|-------------|--------|
+| Natal / Character initial | 1× per user | $0.05–0.20 | K3 allowlisted; still capped |
+| Natal refresh | rare / ops | $0.05–0.20 | Ops `ops_force` only; GET never rebuilds |
+| Global Day | **1× per calendar day**, shared | amortized over DAU | Cost model. **Current I0 still generates Global per user** — that is implementation debt, not this pass. Do not treat 100 DAU as 100 Global LLM calls in the scaled model. |
+| Personal Day | ≤1× / user / day | < $0.005–0.01 | Today class cap 1400 |
+| Tarot | user-triggered | own budget | |
+| Retries | exception | ≈ 0 in healthy runtime | Retry cap, not a full budget |
+
+**24–48h measurement (next):** 1 real profile. Record `llm_usage_v1` for initialization + 30 Today opens + real retries + Tarot/on-demand. That series is 1 MAU COGS. Scale 100 / 1 000 / 10 000 from **that**, not from the retired $5 figure.
+
+Report:
+
+```bash
+docker compose -f docker-compose.prod.yml logs backend --since 24h \
+  | PYTHONPATH=backend/src backend/.venv/bin/python backend/scripts/report_llm_cogs.py --stdin
+# JSONL (survives recreate):
+PYTHONPATH=backend/src backend/.venv/bin/python backend/scripts/report_llm_cogs.py \
+  --jsonl DATA/ops/llm_usage.jsonl
+```
+
+Code: `todayflow_backend.core.llm_cost_guard_v1`.
 
 ## Rollback
 
@@ -136,4 +187,8 @@ Engineering budgets (target, not yet gated in router):
 LLM_QUALITY_MODE=economize
 ```
 
-Restores legacy token tables and disables child/profile multi-step funnels (guide funnel still available).
+Tight token tables + no child/profile multi-step funnels. **Does not** disable the cost guard. To disable the router (not recommended):
+
+```bash
+LLM_COST_GUARD=0
+```
