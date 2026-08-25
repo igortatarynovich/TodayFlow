@@ -15,6 +15,17 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
+**NOW (PRACTICES / CANON, 2026-08-25):** **Practice Content Taxonomy V1 locked.** Four `content_class`: practice · meditation · affirmation · discipline (user label «аскеза»). Type = technique; purpose / domain / input_state / direction = attributes. Next = fill Content Items against vocab. Do not encode purpose in type. Do not wire meaning engines to `item_id`. Screen need/format chips unchanged.
+
+## Architecture impact — Practice Content Taxonomy V1 (2026-08-25)
+
+- **SoT before:** screen 6 needs × 9 formats; C1.1 = 10 evolution action types; C1.4 = named ascetics; `CONTENT/practices/*.json` flat catalog. Technique, purpose, and delivery mixed.
+- **SoT after:** library vocab `content_class` → (`family`) → `type` → Content Item. Purpose/domain/state/direction/duration/context/delivery are attributes. Meaning emits need; retrieval picks the object. `meditation.sleep` is the only purpose-as-type product exception.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Legacy catalogs and C1 registries stay; remap on fill-pass.
+- **Canon updated?** yes — [PRACTICE_CONTENT_TAXONOMY_V1.md](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md) · `DATA/reference/practice/content_taxonomy_v1.json` · practices `_INDEX` · README · Reference Layer §2.5/§2.8/§6
+- **Backward compatible?** yes. Screen chips and C1 codes not deprecated.
+
 ## Architecture impact — Profile invalidation axes (2026-08-25)
 
 - **SoT before:** `profile_hash` included `PROFILE_CONTRACT_PROMPT_VER` + funnel prompt versions; Natal Decode fingerprint included `DECODE_VERSION` polish stamp. A voice polish orphaned snapshots / GET offers.
@@ -2465,6 +2476,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Practices / Canon | **Practice Content Taxonomy V1** | **LOCKED** | Four classes (practice/meditation/affirmation/discipline) · 86 types · purpose/domain/state/direction as attributes, not types. Vocab `DATA/reference/practice/content_taxonomy_v1.json`. Items not filled. Screen need/format unchanged. [PRACTICE_CONTENT_TAXONOMY_V1](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md).
 - 2026-08-25 | Profile / ops | **1.3.124 Natal Decode cache refresh** | **LOCKED (ops) · sample BLOCKED** | Machinery live: `ops_force`, inventory script, GET persisted version, `load_objects()` → `TODAYFLOW_DATA_DIR`. Inventory: users **1** (gen 595) and **2** (gen 1076) still `v0.2` / prompt 1.0.1. `--apply` hit Nebius K3 **402 budget exhausted**; no new success log; GET still `offer`. Retry apply when K3 has budget. [PROFILE_NATAL_DECODE_CACHE_REFRESH_V1](./profile/PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md).
 - 2026-08-25 | Profile / IL-4 | **1.3.123 Profile meaning polish** | **LOCKED** | Natal Decode sky theses bind to IL-4. Identity Core stays CE. Prompt 1.1.0. Public JSON unchanged. [PROFILE_MEANING_POLISH_V1](./profile/PROFILE_MEANING_POLISH_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.122 conflict→scene seed retry** | **LOCKED** | Name `why_today`/`why_arose` paste into `scenes[].why` so retry does not trade it for `ASTRO_JARGON_BARE` on `astrology[2]`. Prompt c5.5. Detectors unchanged. Live user **2** gen **1122** PASS (Global first try). [NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1](./today/NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1.md).

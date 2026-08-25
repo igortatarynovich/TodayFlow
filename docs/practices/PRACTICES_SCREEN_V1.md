@@ -4,12 +4,12 @@
 **Версия:** 1.1 (2026-07-30) — need/format resolution by axis (не «макет vs текст»)  
 **Владелец:** Product (sign-off списков) + Engineering (паритет web / iOS)
 
-**Это не:** Figma-пиксели, CSS, wireframe.  
+**Это не:** Figma-пиксели, CSS, wireframe; **не** taxonomy библиотеки (классы/типы/purpose — [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md)). Need-чип ≠ type. Format-чип ≠ type.  
 **Это:** принцип экрана, locked навигация (need / format), структура блоков, сессия + чек-ин, граница music layer.
 
 **Визуальный родитель:** загруженный макет-скрин [`practices_screen_mockup_v1.png`](./practices_screen_mockup_v1.png) (продуктовая спека v1.0). Practices **не** заводит второй visual-канон в Figma; Foundation UI — только токены ([TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md)). §6 уточняет иерархию внутри экрана.
 
-**Единый файл SoT:** этот документ (`docs/practices/PRACTICES_SCREEN_V1.md`). Не плодить `docs/practices-canon.md` или параллельные списки.
+**Единый файл SoT экрана:** этот документ. Не плодить `docs/practices-canon.md` и не дублировать need/format списки. Taxonomy контента — отдельный SoT, не второй экранный канон.
 
 **Источник решения:** продуктовая спека «Практики» v1.0 (30 июля 2026) + макет. Расхождения закрыты **по осям** (§1.1 / §2.1): состояния ← правка макета; форматы ← правка обобщений спеки.
 
@@ -207,6 +207,8 @@ Need первичен; format уточняет каталог.
 
 Под одним need — разные formats.
 
+Типы техник, purpose, domain, input_state, direction — [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md). Этот § не расширяет type-список.
+
 ---
 
 ## 8. Дорожная карта
@@ -239,6 +241,7 @@ iOS parity — после web P0+P1.
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | Pointer: content taxonomy SoT = `PRACTICE_CONTENT_TAXONOMY_V1.md` (screen need/format unchanged) |
 | 2026-07-31 | **C0b** — UI-паритет со скрином `practices_screen_mockup_v1.png`: need-иконки + канон order; recommend/moment chrome; hub music layer; formats keep reflection+sleep |
 | 2026-07-31 | **C0b** — откат Figma-обхода: визуальный SoT = загруженный скрин `practices_screen_mockup_v1.png` |
 | 2026-07-31 | **C1** — rich catalog: backend `practice_state_cycle_catalog_v1` meta + gap-fill; FE tagged match/rank + outcome card titles; P1/M0 marked DONE (FE) |
