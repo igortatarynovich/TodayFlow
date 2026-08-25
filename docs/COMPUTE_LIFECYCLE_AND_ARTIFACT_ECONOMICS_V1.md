@@ -151,7 +151,7 @@ Re-open 20 times → **0 LLM** on Global after the first success; **0 Personal L
 5. Failed / 402 / kept-prior / facts-only is **not** a ready artifact and must not create a false cache hit.
 6. Native retries stay inside one `call_day_scenario_native_llm_c1` / one `log_generation` — not a new lifecycle identity.
 
-**Live acceptance (remaining; not closed):** Token Factory chat still 402. `llm_spend.json` is a protective latch after `billing_suspended`, not actual $5 spend. Do not untrip until paid `chat/completions` = 200. Then: reset latch for the current UTC date (`tripped=false`, `spent_usd=0`) → four-step on **2026-08-26** (user 1 Global+Personal → reopen user 1 → user 2 same locale → force Personal user 1) → reconcile `llm_usage.jsonl` + `generation_logs`. Pass: Global accepted = 1; Personal product accepted = 2; reopen = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first technical `force_rebuild=True` without a ready artifact stays `ledger=product`; retries do not create a new lifecycle artifact; `generation_logs.id=1150` fallback is not reusable. On pass, **first** record the actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). Profile Selection stays closed until that ledger matches. Do not fold engineering force rebuilds into $/MAU.
+COGS live check (Shared Global + Personal together) waits for Token Factory top-up. Do not fold engineering force rebuilds into $/MAU.
 
 I0 already: identical inputs + identical rule versions → identical day meaning; GET does not call LLM ([TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) I0). Runtime now persists Global under `GlobalDayKey` (`generation_logs.surface=shared_global_day`, `user_id=NULL`) and Personal under `PersonalDayKey`.
 
@@ -225,8 +225,8 @@ Main savings **without** touching Kimi 3 quality on Profile:
 
 1. **Profile invalidation** (landed: prompt ≠ snapshot key)
 2. **Shared Global Day** (landed: `GlobalDayKey`; one Global LLM per locale/date)
-3. **Personal Day lifecycle** (code+deploy landed; **live not closed** until the four-step paid path + COGS baseline above; `behavior_version` deferred)
-4. **Profile selection** (only after live pass + four-step USD baseline + “which of 24 does Kimi use” audit — selected / mentioned / merged / ignored / contradicted; not a 5–8 cut)
+3. **Personal Day lifecycle** (this pass: `user × local_date × semantic_version`; six invariants above; `behavior_version` deferred)
+4. **Profile selection** (after live COGS + “which of 24 does Kimi use” audit — selected / mentioned / merged / ignored / contradicted; not a 5–8 cut)
 5. Behavioral overlay
 6. Tarot economics
 7. Compatibility economics
@@ -234,7 +234,7 @@ Main savings **without** touching Kimi 3 quality on Profile:
 ## 9. This pass does not do
 
 - Public JSON · IL lemma / `active` · pair catalog
-- Token Factory top-up · paid chat 200 · latch reset · live four-step on 2026-08-26 · four-step USD baseline
+- Token Factory top-up · live Shared Global + Personal COGS run
 - Profile selection · behavioral overlay · prompt/quality polish
 - Mechanical 5–8 theme cut · K3 quality cut · Knowledge Core expand
 - Relevance engine as a new meaning SoT
@@ -243,7 +243,6 @@ Main savings **without** touching Kimi 3 quality on Profile:
 
 ## Changelog
 
-- **1.3.1 (2026-08-25)** — Live acceptance protocol locked. Latch ≠ real spend. Paid chat 200 before untrip. Four-step on 2026-08-26. Pass criteria + `id=1150` non-reusable. On pass: record four-step USD as first clean COGS baseline before Profile Selection.
 - **1.3 (2026-08-25)** — Personal Day lifecycle. `PersonalDayKey = user_identity + local_date + semantic_version`. Accepted artifact reused; GET reopen = 0 Personal LLM; GET miss does not enqueue; expression_version is a stamp; force rebuild = same key / engineering when ready existed; 402/fallback is not a cache hit; native retries stay in one generation attempt. Live COGS after Token Factory top-up.
 - **1.2.1 (2026-08-25)** — Personal Day next-pass invariants locked (0 LLM on re-open; GET does not enqueue; expression_version does not invalidate; force rebuild = same key / engineering). `behavior_version` stays out of PersonalDayKey until overlay is a real Today input.
 - **1.2 (2026-08-25)** — Shared Global Day. `GlobalDayKey = local_date + locale + semantic_version`. Force rebuild = same key. PersonalDayKey documented, not implemented. Profile selection still waits for K3 usage audit.
