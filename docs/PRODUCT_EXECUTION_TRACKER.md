@@ -4,7 +4,16 @@ Last updated: 2026-08-25
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (ARCH / LLM, 2026-08-25):** **Profile invalidation** — prompt/`expression_version` is not a snapshot key. Axes: `calc` / `semantic` / `expression` / `behavior`. Layers: NatalFacts → CanonicalMeaning → SelectedThemes → ProfileExpression → BehavioralOverlay. SoT: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](./COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md) § version axes. **Work order:** invalidation (this) → shared Global Day → Personal Day lifecycle → Profile selection (after Kimi usage audit, not a 5–8 cut) → behavioral overlay → Tarot → Compatibility. Cost guard stands. Do not degrade K3 on Profile.
+**NOW (ARCH / LLM, 2026-08-25):** **Shared Global Day** — `GlobalDayKey = local_date + locale + semantic_version` (no user / profile hash / expression prompt). One Global LLM per locale×date; product rebuild regenerates the same key. Personal Day lifecycle is next (`behavior_version` only if overlay is actually used). Profile invalidation stands. Profile selection waits for K3 usage audit (not a 5–8 cut). Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — Shared Global Day (2026-08-25)
+
+- **SoT before:** I0 split ran Global narrative LLM per user even when date+locale matched. Cost model already named one Global Day; runtime did not persist it.
+- **SoT after:** Shared artifact keyed by `local_date + locale + semantic_version`. `generation_logs.surface=shared_global_day`, `user_id=NULL`. Force rebuild = same identity, ledger=engineering. PersonalDayKey documented, not implemented. Public JSON / I0 meaning / IL atoms unchanged.
+- **Public contract changed?** no
+- **Migration required?** no JSON. First miss still generates; later users of the same locale reuse.
+- **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
+- **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
 ## Architecture impact — Profile invalidation axes (2026-08-25)
 
@@ -24,7 +33,7 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle · IL-3 payload audit · this tracker · LLM quality · freeze “do not expand” · README
 - **Backward compatible?** yes for clients. Force rebuild stays for pre-release testing (engineering ledger).
 
-**NOW (OPS / LLM, 2026-08-25):** **Cost Containment / LLM Usage Observability** — router SoT: request → policy → budget → provider → accounting. K3 allowlist (natal/CE only). Today output 1400 / retry 600. Tenant `LLM_DAILY_USD_CEILING=$5`. Over budget = downgrade (Qwen) or deny. `@example.com` out of prewarm. `$5/100 users` retired. Semantic architecture unchanged (I0 Global still per-user — cost-model debt). Lifecycle SoT now names that debt. Next: implement lifecycle gaps, then 24–48h 1-profile measurement.
+**NOW (OPS / LLM, 2026-08-25):** **Cost Containment / LLM Usage Observability** — router SoT: request → policy → budget → provider → accounting. K3 allowlist (natal/CE only). Today output 1400 / retry 600. Tenant `LLM_DAILY_USD_CEILING=$5`. Over budget = downgrade (Qwen) or deny. `@example.com` out of prewarm. `$5/100 users` retired. I0 Global is now shared by `GlobalDayKey` (no longer per-user narrative). Next: Personal Day lifecycle, then 24–48h 1-profile COGS measurement.
 
 ## Architecture impact — Cost Containment llm_cost_guard_v1 (2026-08-25)
 

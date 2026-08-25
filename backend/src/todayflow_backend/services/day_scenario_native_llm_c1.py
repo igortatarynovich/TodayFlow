@@ -1265,6 +1265,10 @@ def call_day_scenario_native_llm_c1(
     celestial_events: dict[str, Any] | None = None,
     max_attempts: int = 3,
     meta_out: dict[str, Any] | None = None,
+    db: Any = None,
+    local_date: Any = None,
+    locale: str | None = None,
+    force_global_rebuild: bool = False,
 ) -> dict[str, Any] | None:
     """Generate native scenario via LLM. Returns day_scenario_v1 or None after hard fails.
 
@@ -1281,6 +1285,11 @@ def call_day_scenario_native_llm_c1(
     ``meta_out`` (optional): filled with attempt-level ops fields for generation_logs
     (failure_class, durations, char counts, model). On provider timeout, attempt 2
     is skipped (immediate deterministic fallback) — see ATTEMPT2_POLICY_TIMEOUT.
+
+    Shared Global Day (when ``db`` + date + locale are set): one Global LLM per
+    ``local_date × locale × semantic_version``. Product day-story rebuild must not
+    pass ``force_global_rebuild`` — that flag regenerates the same key (engineering
+    ledger), it does not mint a new identity.
     """
     from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
         format_editorial_retry_feedback,
@@ -1545,19 +1554,73 @@ def call_day_scenario_native_llm_c1(
         )
     )
 
-    normalized, split_attempt_rows, split_meta = orchestrate_i0_split_generation(
-        global_system=global_system,
-        personal_system=personal_system,
-        user_base=user_base,
-        pers_pack=pers_pack,
-        il4_pack=il4_pack,
-        allowed_evidence_ids=allowed,
-        max_attempts=attempts,
-        llm_call=_llm_call_split,
-        resolve_attempt_model=resolve_native_attempt_model,
-        process_global_normalized=_process_global_stage_parsed,
-        meta_out=meta_out,
-    )
+    shared_date = local_date
+    shared_locale = locale
+    if shared_date is None and isinstance(user_json, dict):
+        interp_scope = user_json.get("interpretation") if isinstance(user_json.get("interpretation"), dict) else {}
+        shared_date = interp_scope.get("target_date") or user_json.get("target_date")
+    if not shared_locale and isinstance(user_json, dict):
+        shared_locale = user_json.get("locale") or (
+            (user_json.get("interpretation") or {}).get("locale")
+            if isinstance(user_json.get("interpretation"), dict)
+            else None
+        )
+
+    orch_kwargs: dict[str, Any] = {
+        "global_system": global_system,
+        "personal_system": personal_system,
+        "user_base": user_base,
+        "pers_pack": pers_pack,
+        "il4_pack": il4_pack,
+        "allowed_evidence_ids": allowed,
+        "max_attempts": attempts,
+        "llm_call": _llm_call_split,
+        "resolve_attempt_model": resolve_native_attempt_model,
+        "process_global_normalized": _process_global_stage_parsed,
+        "meta_out": meta_out,
+    }
+
+    # Product force_rebuild still runs Personal. Only force_global_rebuild skips the shared cache.
+    if db is not None and shared_date:
+        from todayflow_backend.services.shared_global_day_v1 import (
+            _lock_for,
+            global_day_key,
+            load_shared_global_day,
+            save_shared_global_day,
+        )
+
+        key_lock = _lock_for(global_day_key(local_date=shared_date, locale=shared_locale))
+        cached_global = None
+        with key_lock:
+            if not force_global_rebuild:
+                cached_global = load_shared_global_day(
+                    db, local_date=shared_date, locale=shared_locale
+                )
+
+        def persist_global(artifact: dict[str, Any]) -> None:
+            if not isinstance(artifact, dict) or not artifact:
+                return
+            with key_lock:
+                if not force_global_rebuild:
+                    existing = load_shared_global_day(
+                        db, local_date=shared_date, locale=shared_locale
+                    )
+                    if existing:
+                        return
+                save_shared_global_day(
+                    db,
+                    local_date=shared_date,
+                    locale=shared_locale,
+                    artifact=artifact,
+                    force_rebuild=bool(force_global_rebuild),
+                )
+
+        orch_kwargs["cached_global_norm"] = None if force_global_rebuild else cached_global
+        orch_kwargs["on_global_accepted"] = (
+            persist_global if (force_global_rebuild or cached_global is None) else None
+        )
+
+    normalized, split_attempt_rows, split_meta = orchestrate_i0_split_generation(**orch_kwargs)
     attempt_rows.extend(split_attempt_rows)
     for row in split_attempt_rows:
         if row.get("model"):

@@ -579,6 +579,9 @@ def _build_day_story_record(
                     ritual_context=safe_ritual,
                     celestial_events=ce or None,
                     meta_out=native_meta,
+                    db=db,
+                    local_date=target_date,
+                    locale=locale_value,
                 )
             used_fallback = native_scenario is None
             story = None

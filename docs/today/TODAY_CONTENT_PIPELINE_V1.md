@@ -45,9 +45,17 @@
 LLM не выбирает mood/energy, главных drivers, окна времени, valence окон.  
 Текст можно генерировать **один раз** и сохранить. GET не вызывает LLM.
 
-Два человека в одной **day-location / timezone** + одна версия правил → **один и тот же Global Day**.
+Два человека в одной **locale** + одна **local_date** (timezone уже сведена на крае) + одна **semantic_version** → **один и тот же Global Day**.
 
-**Persist / economics (subordinate):** Personal = `1 × user × local_date × semantic_version`. Global = `1 × date × locale/version`, not × user. Re-open = 0 LLM. Cost-model vs runtime gaps: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](../COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md). This file remains Today **meaning** SoT.
+```text
+GlobalDayKey   = local_date + locale + semantic_version
+PersonalDayKey = user_identity + local_date + semantic_version
+                 [+ relevant_behavior_version только если Today реально читает overlay]
+```
+
+В Global identity **не** входят `user_id`, profile hash, expression/prompt конкретного пользователя. Force rebuild пересоздаёт **тот же** ключ (engineering ledger), не новую semantic version. Persist: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](../COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md). This file remains Today **meaning** SoT.
+
+**Persist / economics (subordinate):** Personal = `1 × user × local_date × semantic_version` (next pass). Global = `GlobalDayKey`, not × user. Re-open Global after first success = 0 LLM.
 
 ### Who knows what (LOCKED)
 
@@ -340,7 +348,7 @@ manifest:
 | `visual_mode` от native LLM | **удалить как decision** | `primary_energy` из scoring; visual_mode = map |
 | `day_flow_windows_kimi_v1` | **удалить** | Окна считает Engine; LLM #1 только labels |
 | `today_glance_timeline_v1` clocks | **оставить** как geometry | Расширить до Global windows (`supports[]`/`cautions[]`) |
-| `day_scenario_native_llm_c1` (один вызов chorus+conflict+scenes+natal+card+number) | **split landed 1.3.116** | Global stage + Personal overlay stage ([NATIVE_C1_I0_GENERATION_SPLIT_V1](./NATIVE_C1_I0_GENERATION_SPLIT_V1.md)); prompt `day-scenario-native-c5.0` |
+| `day_scenario_native_llm_c1` (один вызов chorus+conflict+scenes+natal+card+number) | **split landed 1.3.116 · shared Global persist 2026-08-25** | Global stage + Personal overlay; Global LLM reused via `GlobalDayKey` ([NATIVE_C1_I0_GENERATION_SPLIT_V1](./NATIVE_C1_I0_GENERATION_SPLIT_V1.md)); prompt `day-scenario-native-c5.5` |
 | Dramaturgy brief C4 | **упростить** | DTO **Global Profile** → LLM #1. Не planner сюжета, не personal |
 | `day_scenario` / conflict / scenes | **упростить** | Не Meaning SoT. Максимум внутренний literary scaffold **над** уже зафиксированным Global/Personal Profile. Не выбирает energy/windows |
 | Projector B5 | **упростить** | Structure-only mapping Profile+narratives → `today_contract`. Не primary-pick, не concat meaning |

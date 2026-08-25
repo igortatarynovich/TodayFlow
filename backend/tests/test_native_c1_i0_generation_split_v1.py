@@ -249,6 +249,43 @@ def test_native_c1_i0_generation_split_v1():
     assert merged_deep["conflict"]["title"] == "Прояснение против сглаживания"
 
 
+def test_shared_global_cache_hit_skips_global_llm():
+    calls: list[str] = []
+    persisted: list[dict[str, Any]] = []
+
+    def fake_llm(**kwargs: Any) -> tuple[str | None, str | None, str | None]:
+        stage = "global" if GLOBAL_STAGE_INSTRUCTION_RU in kwargs.get("system", "") else "personal"
+        calls.append(stage)
+        if stage == "global":
+            return json.dumps(_global_native(), ensure_ascii=False), None, "test-model"
+        return json.dumps(_personal_overlay(), ensure_ascii=False), None, "test-model"
+
+    def accept_global(parsed: dict[str, Any]) -> tuple[dict[str, Any] | None, str | None]:
+        return enforce_global_only(normalize_native_scenario_llm_c1(parsed)), None
+
+    cached = enforce_global_only(normalize_native_scenario_llm_c1(_global_native()))
+    merged, attempts, split_meta = orchestrate_i0_split_generation(
+        global_system=GLOBAL_STAGE_INSTRUCTION_RU,
+        personal_system=PERSONAL_STAGE_INSTRUCTION_RU,
+        user_base="DRAMATURGY",
+        pers_pack={"evidence_depth": DEPTH_DEEP},
+        il4_pack=None,
+        allowed_evidence_ids=set(),
+        max_attempts=2,
+        llm_call=lambda **kw: fake_llm(**kw),
+        resolve_attempt_model=lambda i: "test-model",
+        process_global_normalized=accept_global,
+        cached_global_norm=cached,
+        on_global_accepted=persisted.append,
+    )
+    assert calls == ["personal"]
+    assert split_meta["shared_global_hit"] is True
+    assert persisted == []
+    assert attempts[0]["status"] == "shared_hit"
+    assert merged is not None
+    assert merged["conflict"]["title"] == cached["conflict"]["title"]
+
+
 def test_call_native_uses_i0_split_orchestrator():
     with (
         patch(

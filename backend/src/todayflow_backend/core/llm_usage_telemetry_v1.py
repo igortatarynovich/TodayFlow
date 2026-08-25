@@ -30,7 +30,7 @@ LLM_USAGE_EVENT_V1 = "llm_usage_v1"
 DEFAULT_FEATURE = "unlabeled"
 
 # Product vs infra. Outer trigger wins once set; emit infers eval/script if still empty.
-ALLOWED_TRIGGERS = frozenset({"user", "prewarm", "eval", "script", "background"})
+ALLOWED_TRIGGERS = frozenset({"user", "prewarm", "eval", "script", "background", "engineering"})
 RETRY_REASONS = frozenset(
     {
         "empty_content",
