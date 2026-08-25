@@ -34,6 +34,8 @@ SEED_8_ID = "meditation.relaxation.001"
 SEED_8_CELL = "need.rest.downregulate"
 SEED_9_ID = "meditation.sleep.001"
 SEED_9_CELL = "need.sleep.prepare"
+SEED_10_ID = "discipline.sleep_discipline.001"
+SEED_10_CELL = "need.sleep.discipline"
 
 
 def _load() -> tuple[dict, dict, dict]:
@@ -209,14 +211,47 @@ def test_p0_seed_9_is_first_ledger_empty_cell_sleep_prepare() -> None:
     assert coverage["need_cells"][8]["id"] == SEED_9_CELL
 
     sleep_discipline = next(
-        c for c in coverage["need_cells"] if c["id"] == "need.sleep.discipline"
+        c for c in coverage["need_cells"] if c["id"] == SEED_10_CELL
     )
-    assert sleep_discipline["status"] == "empty"
     assert SEED_9_ID not in (sleep_discipline.get("item_ids") or [])
+
+
+def test_p0_seed_10_is_first_ledger_empty_cell_sleep_discipline() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_10_ID)
+    assert item["identity"]["content_class"] == "discipline"
+    assert "family" not in item["identity"]
+    assert item["identity"]["type"] == "sleep_discipline"
+    assert item["identity"]["seed_cell"] == SEED_10_CELL
+    assert item["retrieval"]["purpose"] == ["sleep"]
+    assert item["retrieval"]["direction"] == ["prepare"]
+    assert item["retrieval"]["input_state"] == ["restless"]
+    assert "duration" not in item["retrieval"]
+    assert "duration_unit" not in item["retrieval"]
+    assert item["retrieval"]["duration_days"] == 7
+    assert item["retrieval"]["frequency"] == "daily"
+    assert item["retrieval"]["difficulty"] == "low"
+    assert item["retrieval"]["failure_policy"] == "continue"
+    assert item["retrieval"]["check_in_frequency"] == "daily"
+    assert item["payload"]["body_kind"] == "commitment_rule"
+    assert item["payload"]["commitment_rule"]
+    assert item["payload"]["restriction"]
+    assert item["payload"]["start_condition"]
+    assert item["payload"]["completion_condition"]
+
+    cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_10_CELL)
+    assert cell["status"] == "seed"
+    assert cell["item_ids"] == [SEED_10_ID]
+    assert coverage["need_cells"][9]["id"] == SEED_10_CELL
+    assert cell["job"] == "period"
+
+    sleep_prepare = next(c for c in coverage["need_cells"] if c["id"] == SEED_9_CELL)
+    assert SEED_10_ID not in (sleep_prepare.get("item_ids") or [])
+    assert sleep_prepare["item_ids"] == [SEED_9_ID]
 
     next_empty = first_empty_p0_cell(coverage)
     assert next_empty is not None
-    assert next_empty["id"] == "need.sleep.discipline"
+    assert next_empty["id"] == "need.motivation.activate"
 
 
 def test_overlapping_state_does_not_close_other_cells() -> None:
@@ -233,9 +268,7 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
     awareness = next(c for c in coverage["need_cells"] if c["id"] == "need.emotional_awareness.reflect")
     reset = next(c for c in coverage["need_cells"] if c["id"] == "need.reset.release")
     sleep_prepare = next(c for c in coverage["need_cells"] if c["id"] == SEED_9_CELL)
-    sleep_discipline = next(
-        c for c in coverage["need_cells"] if c["id"] == "need.sleep.discipline"
-    )
+    sleep_discipline = next(c for c in coverage["need_cells"] if c["id"] == SEED_10_CELL)
     rest = next(c for c in coverage["need_cells"] if c["id"] == SEED_8_CELL)
     detachment = next(c for c in coverage["need_cells"] if c["id"] == "need.detachment.release")
     simplicity = next(c for c in coverage["need_cells"] if c["id"] == "need.simplicity.release")
@@ -257,25 +290,26 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
     assert SEED_8_ID not in (simplicity.get("item_ids") or [])
     assert SEED_9_ID not in (rest.get("item_ids") or [])
     assert SEED_9_ID not in (sleep_discipline.get("item_ids") or [])
+    assert SEED_10_ID not in (sleep_prepare.get("item_ids") or [])
     assert motivation["status"] == "empty"
     assert recovery["status"] == "empty"
     assert decision["status"] == "empty"
     assert awareness["status"] == "empty"
     assert reset["status"] == "empty"
-    assert sleep_discipline["status"] == "empty"
     assert detachment["status"] == "empty"
     assert simplicity["status"] == "empty"
     assert energy["item_ids"] == [SEED_4_ID]
     assert confidence["item_ids"] == [SEED_6_ID]
     assert calm["item_ids"] == [SEED_2_ID]
     assert sleep_prepare["item_ids"] == [SEED_9_ID]
+    assert sleep_discipline["item_ids"] == [SEED_10_ID]
 
 
 def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
-    assert coverage["counts"]["library_items"] == 9
-    assert coverage["counts"]["need_cells_empty"] == 17
-    assert coverage["counts"]["need_cells_seed"] == 9
+    assert coverage["counts"]["library_items"] == 10
+    assert coverage["counts"]["need_cells_empty"] == 16
+    assert coverage["counts"]["need_cells_seed"] == 10
     assert library["status"] == "seed"
 
 

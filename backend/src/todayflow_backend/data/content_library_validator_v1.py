@@ -37,6 +37,12 @@ DISCIPLINE_RETRIEVAL_EXTRA = (
     "failure_policy",
     "check_in_frequency",
 )
+DISCIPLINE_PAYLOAD_EXTRA = (
+    "commitment_rule",
+    "restriction",
+    "start_condition",
+    "completion_condition",
+)
 ALLOWED_STATUS = frozenset({"draft", "active", "retired"})
 ALLOWED_BODY_KIND = frozenset(
     {"instruction", "script", "affirmation_text", "commitment_rule"}
@@ -65,6 +71,13 @@ def _payload_text(payload: dict[str, Any]) -> str:
     presentation = payload.get("presentation")
     if isinstance(presentation, dict):
         chunks.append(json.dumps(presentation, ensure_ascii=False))
+    for key in DISCIPLINE_PAYLOAD_EXTRA:
+        value = payload.get(key)
+        if isinstance(value, str):
+            chunks.append(value)
+    exceptions = payload.get("allowed_exceptions")
+    if isinstance(exceptions, list):
+        chunks.extend(str(x) for x in exceptions if x is not None)
     return " ".join(chunks).lower()
 
 
@@ -180,6 +193,34 @@ def validate_content_item_v1(
         for key in DISCIPLINE_RETRIEVAL_EXTRA:
             if key not in retrieval:
                 errors.append(f"{prefix}: discipline retrieval missing {key}")
+        duration_days = retrieval.get("duration_days")
+        if not isinstance(duration_days, int) or duration_days < 1:
+            errors.append(f"{prefix}: duration_days must be positive int")
+        if retrieval.get("frequency") not in (vocab.get("discipline_frequency") or []):
+            errors.append(f"{prefix}: invalid frequency")
+        if retrieval.get("difficulty") not in (vocab.get("discipline_difficulty") or []):
+            errors.append(f"{prefix}: invalid difficulty")
+        if retrieval.get("failure_policy") not in (
+            vocab.get("discipline_failure_policy") or []
+        ):
+            errors.append(f"{prefix}: invalid failure_policy")
+        if retrieval.get("check_in_frequency") not in (
+            vocab.get("discipline_check_in_frequency") or []
+        ):
+            errors.append(f"{prefix}: invalid check_in_frequency")
+        if "duration" in retrieval or "duration_unit" in retrieval:
+            errors.append(f"{prefix}: discipline must not set session duration")
+        for key in DISCIPLINE_PAYLOAD_EXTRA:
+            value = payload.get(key)
+            if not isinstance(value, str) or not value.strip():
+                errors.append(f"{prefix}: discipline payload missing {key}")
+        exceptions = payload.get("allowed_exceptions", [])
+        if _as_str_list(exceptions, allow_empty=True) is None:
+            errors.append(f"{prefix}: allowed_exceptions must be string list")
+    else:
+        extra_payload = [k for k in DISCIPLINE_PAYLOAD_EXTRA if k in payload]
+        if extra_payload:
+            errors.append(f"{prefix}: non-discipline must not set {extra_payload}")
 
     for key in PAYLOAD_REQUIRED:
         if key not in payload:

@@ -343,6 +343,51 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.sleep_discipline.001",
+        "content_class": "discipline",
+        "type": "sleep_discipline",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.sleep.discipline"
+      },
+      "retrieval": {
+        "purpose": ["sleep"],
+        "domain": [],
+        "input_state": ["restless"],
+        "direction": ["prepare"],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": ["evening", "before_sleep"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Один и тот же час",
+            "body": "Семь дней ложись не позже выбранного часа. Не переноси на завтра."
+          }
+        },
+        "commitment_rule": "Ложись не позже выбранного часа каждый вечер.",
+        "restriction": "Не сдвигать час позже.",
+        "start_condition": "Сегодня вечером.",
+        "completion_condition": "Семь вечеров подряд.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Режим"
+          }
+        }
+      }
     }
   ]
 }

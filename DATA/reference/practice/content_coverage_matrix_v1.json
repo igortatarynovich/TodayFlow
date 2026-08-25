@@ -14,13 +14,13 @@
   },
   "counts": {
     "need_cells": 26,
-    "need_cells_empty": 17,
-    "need_cells_seed": 9,
+    "need_cells_empty": 16,
+    "need_cells_seed": 10,
     "need_cells_covered": 0,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
-    "library_items": 9
+    "library_items": 10
   },
   "screen_need_map": {
     "calm": "need.calm.downregulate",
@@ -286,8 +286,10 @@
         "practices_screen"
       ],
       "note": "same purpose as need.sleep.prepare; different job (rule over days, not tonight session)",
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "discipline.sleep_discipline.001"
+      ]
     },
     {
       "id": "need.motivation.activate",
@@ -1194,7 +1196,9 @@
       "content_class": "discipline",
       "type": "sleep_discipline",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "discipline.sleep_discipline.001"
+      ]
     },
     {
       "content_class": "discipline",
