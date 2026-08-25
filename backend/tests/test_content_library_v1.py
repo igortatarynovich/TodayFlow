@@ -22,6 +22,14 @@ SEED_2_ID = "practice.extended_exhale.001"
 SEED_2_CELL = "need.calm.downregulate"
 SEED_3_ID = "practice.box_breathing.001"
 SEED_3_CELL = "need.focus.focus"
+SEED_4_ID = "practice.energizing_breath.001"
+SEED_4_CELL = "need.energy.activate"
+SEED_5_ID = "practice.prompted_reflection.001"
+SEED_5_CELL = "need.clarity.reflect"
+SEED_6_ID = "affirmation.capability.001"
+SEED_6_CELL = "need.confidence.open"
+SEED_7_ID = "practice.body_release.001"
+SEED_7_CELL = "need.release.release"
 
 
 def _load() -> tuple[dict, dict, dict]:
@@ -91,9 +99,78 @@ def test_p0_seed_3_is_first_ledger_empty_cell_focus() -> None:
     assert cell["item_ids"] == [SEED_3_ID]
     assert coverage["need_cells"][1]["id"] == SEED_3_CELL
 
+
+def test_p0_seed_4_is_first_ledger_empty_cell_energy() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_4_ID)
+    assert item["identity"]["content_class"] == "practice"
+    assert item["identity"]["family"] == "breathwork"
+    assert item["identity"]["type"] == "energizing_breath"
+    assert item["identity"]["seed_cell"] == SEED_4_CELL
+    assert item["retrieval"]["purpose"] == ["energy"]
+    assert item["retrieval"]["direction"] == ["activate"]
+    assert item["retrieval"]["input_state"] == ["low_energy"]
+
+    cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_4_CELL)
+    assert cell["status"] == "seed"
+    assert cell["item_ids"] == [SEED_4_ID]
+    assert coverage["need_cells"][2]["id"] == SEED_4_CELL
+
+
+def test_p0_seed_5_is_first_ledger_empty_cell_clarity() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_5_ID)
+    assert item["identity"]["content_class"] == "practice"
+    assert item["identity"]["family"] == "reflection"
+    assert item["identity"]["type"] == "prompted_reflection"
+    assert item["identity"]["seed_cell"] == SEED_5_CELL
+    assert item["retrieval"]["purpose"] == ["clarity"]
+    assert item["retrieval"]["direction"] == ["reflect"]
+    assert item["retrieval"]["input_state"] == ["uncertain"]
+
+    cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_5_CELL)
+    assert cell["status"] == "seed"
+    assert cell["item_ids"] == [SEED_5_ID]
+    assert coverage["need_cells"][4]["id"] == SEED_5_CELL
+
+
+def test_p0_seed_6_is_first_ledger_empty_cell_confidence() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_6_ID)
+    assert item["identity"]["content_class"] == "affirmation"
+    assert "family" not in item["identity"]
+    assert item["identity"]["type"] == "capability"
+    assert item["identity"]["seed_cell"] == SEED_6_CELL
+    assert item["retrieval"]["purpose"] == ["confidence"]
+    assert item["retrieval"]["direction"] == ["open"]
+    assert item["retrieval"]["input_state"] == ["uncertain"]
+    assert item["payload"]["body_kind"] == "affirmation_text"
+
+    cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_6_CELL)
+    assert cell["status"] == "seed"
+    assert cell["item_ids"] == [SEED_6_ID]
+    assert coverage["need_cells"][5]["id"] == SEED_6_CELL
+
+
+def test_p0_seed_7_is_first_ledger_empty_cell_release() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_7_ID)
+    assert item["identity"]["content_class"] == "practice"
+    assert item["identity"]["family"] == "somatic"
+    assert item["identity"]["type"] == "body_release"
+    assert item["identity"]["seed_cell"] == SEED_7_CELL
+    assert item["retrieval"]["purpose"] == ["release"]
+    assert item["retrieval"]["direction"] == ["release"]
+    assert item["retrieval"]["input_state"] == ["emotionally_heavy", "stuck"]
+
+    cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_7_CELL)
+    assert cell["status"] == "seed"
+    assert cell["item_ids"] == [SEED_7_ID]
+    assert coverage["need_cells"][6]["id"] == SEED_7_CELL
+
     next_empty = first_empty_p0_cell(coverage)
     assert next_empty is not None
-    assert next_empty["id"] == "need.energy.activate"
+    assert next_empty["id"] == "need.rest.downregulate"
 
 
 def test_overlapping_state_does_not_close_other_cells() -> None:
@@ -101,17 +178,40 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
     calm = next(c for c in coverage["need_cells"] if c["id"] == SEED_2_CELL)
     grounding = next(c for c in coverage["need_cells"] if c["id"] == SEED_1_CELL)
     focus = next(c for c in coverage["need_cells"] if c["id"] == SEED_3_CELL)
+    energy = next(c for c in coverage["need_cells"] if c["id"] == SEED_4_CELL)
+    clarity = next(c for c in coverage["need_cells"] if c["id"] == SEED_5_CELL)
+    motivation = next(c for c in coverage["need_cells"] if c["id"] == "need.motivation.activate")
+    recovery = next(c for c in coverage["need_cells"] if c["id"] == "need.recovery.recover")
+    confidence = next(c for c in coverage["need_cells"] if c["id"] == SEED_6_CELL)
+    decision = next(c for c in coverage["need_cells"] if c["id"] == "need.decision_making.focus")
+    awareness = next(c for c in coverage["need_cells"] if c["id"] == "need.emotional_awareness.reflect")
+    reset = next(c for c in coverage["need_cells"] if c["id"] == "need.reset.release")
     assert SEED_1_ID not in (calm.get("item_ids") or [])
     assert SEED_2_ID not in (grounding.get("item_ids") or [])
     assert SEED_1_ID not in (focus.get("item_ids") or [])
     assert SEED_3_ID not in (grounding.get("item_ids") or [])
+    assert SEED_4_ID not in (motivation.get("item_ids") or [])
+    assert SEED_4_ID not in (recovery.get("item_ids") or [])
+    assert SEED_5_ID not in (confidence.get("item_ids") or [])
+    assert SEED_6_ID not in (clarity.get("item_ids") or [])
+    assert SEED_6_ID not in (decision.get("item_ids") or [])
+    assert SEED_7_ID not in (motivation.get("item_ids") or [])
+    assert SEED_7_ID not in (awareness.get("item_ids") or [])
+    assert SEED_7_ID not in (reset.get("item_ids") or [])
+    assert motivation["status"] == "empty"
+    assert recovery["status"] == "empty"
+    assert decision["status"] == "empty"
+    assert awareness["status"] == "empty"
+    assert reset["status"] == "empty"
+    assert energy["item_ids"] == [SEED_4_ID]
+    assert confidence["item_ids"] == [SEED_6_ID]
 
 
 def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
-    assert coverage["counts"]["library_items"] == 3
-    assert coverage["counts"]["need_cells_empty"] == 23
-    assert coverage["counts"]["need_cells_seed"] == 3
+    assert coverage["counts"]["library_items"] == 7
+    assert coverage["counts"]["need_cells_empty"] == 19
+    assert coverage["counts"]["need_cells_seed"] == 7
     assert library["status"] == "seed"
 
 

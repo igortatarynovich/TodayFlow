@@ -14,13 +14,13 @@
   },
   "counts": {
     "need_cells": 26,
-    "need_cells_empty": 23,
-    "need_cells_seed": 3,
+    "need_cells_empty": 19,
+    "need_cells_seed": 7,
     "need_cells_covered": 0,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
-    "library_items": 3
+    "library_items": 7
   },
   "screen_need_map": {
     "calm": "need.calm.downregulate",
@@ -106,8 +106,10 @@
         "today",
         "practices_screen"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.energizing_breath.001"
+      ]
     },
     {
       "id": "need.grounding.stabilize",
@@ -158,8 +160,10 @@
         "today",
         "practices_screen"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.prompted_reflection.001"
+      ]
     },
     {
       "id": "need.confidence.open",
@@ -180,8 +184,10 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "affirmation.capability.001"
+      ]
     },
     {
       "id": "need.release.release",
@@ -204,8 +210,10 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.body_release.001"
+      ]
     },
     {
       "id": "need.rest.downregulate",
@@ -685,14 +693,18 @@
       "content_class": "practice",
       "type": "energizing_breath",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.energizing_breath.001"
+      ],
       "family": "breathwork"
     },
     {
       "content_class": "practice",
       "type": "body_release",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.body_release.001"
+      ],
       "family": "somatic"
     },
     {
@@ -771,7 +783,9 @@
       "content_class": "practice",
       "type": "prompted_reflection",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.prompted_reflection.001"
+      ],
       "family": "reflection"
     },
     {
@@ -1038,7 +1052,9 @@
       "content_class": "affirmation",
       "type": "capability",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "affirmation.capability.001"
+      ]
     },
     {
       "content_class": "affirmation",

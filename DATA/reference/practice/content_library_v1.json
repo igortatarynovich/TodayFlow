@@ -118,6 +118,157 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.energizing_breath.001",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "energizing_breath",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.energy.activate"
+      },
+      "retrieval": {
+        "purpose": ["energy"],
+        "domain": [],
+        "input_state": ["low_energy"],
+        "direction": ["activate"],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "medium",
+        "energy_effect": "up",
+        "context": ["work", "anytime"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Короткий выдох",
+            "body": "Вдох через нос. Выдох через рот короче вдоха. Повтори шесть раз. Не задерживай."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Живее"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.prompted_reflection.001",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "prompted_reflection",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.clarity.reflect"
+      },
+      "retrieval": {
+        "purpose": ["clarity"],
+        "domain": [],
+        "input_state": ["uncertain"],
+        "direction": ["reflect"],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": ["work", "anytime"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно предложение",
+            "body": "Запиши одним предложением, что сейчас неясно. Не объясняй. Не правь."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Яснее"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.capability.001",
+        "content_class": "affirmation",
+        "type": "capability",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.confidence.open"
+      },
+      "retrieval": {
+        "purpose": ["confidence"],
+        "domain": [],
+        "input_state": ["uncertain"],
+        "direction": ["open"],
+        "duration": 1,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": ["work", "anytime"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "Следующий шаг",
+            "body": "Я справлюсь с тем, что прямо сейчас. Скажи это один раз."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Могу"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.body_release.001",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "body_release",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.release.release"
+      },
+      "retrieval": {
+        "purpose": ["release"],
+        "domain": [],
+        "input_state": ["emotionally_heavy", "stuck"],
+        "direction": ["release"],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": ["work", "anytime"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Плечи вниз",
+            "body": "Подними плечи к ушам. Удержи два счёта. Отпусти. Ещё два раза."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Сброс"
+          }
+        }
+      }
     }
   ]
 }
