@@ -4,7 +4,7 @@ Last updated: 2026-08-25
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (ARCH / LLM, 2026-08-25):** **Shared Global Day** — `GlobalDayKey = local_date + locale + semantic_version` (no user / profile hash / expression prompt). One Global LLM per locale×date; product rebuild regenerates the same key. Personal Day lifecycle is next (`behavior_version` only if overlay is actually used). Profile invalidation stands. Profile selection waits for K3 usage audit (not a 5–8 cut). Cost guard stands. Do not degrade K3 on Profile.
+**NOW (ARCH / LLM, 2026-08-25):** **Shared Global Day** — landed (`GlobalDayKey`; deploy/live check this pass). **Next named = Personal Day lifecycle** — key = `user_identity + local_date + semantic_version`. Do not add `behavior_version` until overlay is a real Today input. Locked invariants: re-open = 0 LLM; GET must not enqueue regeneration; `expression_version` must not auto-invalidate; force rebuild = same artifact / engineering ledger. Profile selection waits for K3 usage audit (not a 5–8 cut). Cost guard stands. Do not degrade K3 on Profile. Do not mix Personal into the Shared Global deploy.
 
 ## Architecture impact — Shared Global Day (2026-08-25)
 

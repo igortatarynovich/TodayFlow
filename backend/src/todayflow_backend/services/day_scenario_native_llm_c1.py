@@ -98,6 +98,7 @@ def _write_native_call_meta(
     last = attempts[-1] if attempts else {}
     heals = [str(r).strip() for r in (healed_rules or []) if str(r).strip()]
     heal_fc = healed_failure_class(heals)
+    i0_split = meta_out.get("i0_split")
     meta_out.clear()
     meta_out.update(
         {
@@ -132,6 +133,8 @@ def _write_native_call_meta(
             "attempt2_policy": ATTEMPT2_POLICY_TIMEOUT,
         }
     )
+    if i0_split is not None:
+        meta_out["i0_split"] = i0_split
 from todayflow_backend.services.day_scenario_v1 import (
     DAY_SCENARIO_V1_CONTRACT,
     DAY_SCENARIO_V1_VERSION,

@@ -349,3 +349,75 @@ def test_call_native_uses_i0_split_orchestrator():
         assert result.get("generation_source") == "native_llm_c1"
         assert result["editorial_meta"]["prompt_version"] == "day-scenario-native-c5.5"
         assert result["editorial_meta"]["i0_split"]["i0_split"]
+
+
+def test_native_meta_out_keeps_i0_split_after_write():
+    with (
+        patch(
+            "todayflow_backend.services.day_scenario_native_llm_c1.is_llm_chat_configured",
+            return_value=True,
+        ),
+        patch(
+            "todayflow_backend.services.day_scenario_native_llm_c1.get_openai_compatible_client",
+            return_value=object(),
+        ),
+        patch(
+            "todayflow_backend.services.native_c1_i0_generation_split_v1.orchestrate_i0_split_generation",
+        ) as orch,
+        patch(
+            "todayflow_backend.services.day_story_capture_session_v0.get_day_story_capture_session",
+            return_value=None,
+        ),
+    ):
+        from todayflow_backend.services.day_scenario_native_llm_c1 import call_day_scenario_native_llm_c1
+
+        global_norm = enforce_global_only(normalize_native_scenario_llm_c1(_global_native()))
+        split = {
+            "i0_split": True,
+            "stages_run": ["global"],
+            "personal_skipped": True,
+            "personal_degraded": False,
+            "shared_global_hit": True,
+        }
+
+        def fake_orch(**kwargs):
+            meta = kwargs.get("meta_out")
+            if isinstance(meta, dict):
+                meta["i0_split"] = split
+            return (
+                global_norm,
+                [{"stage": "global", "status": "shared_hit"}],
+                split,
+            )
+
+        orch.side_effect = fake_orch
+        meta_out: dict[str, Any] = {}
+        result = call_day_scenario_native_llm_c1(
+            {
+                "interpretation": {
+                    "day_thesis": {
+                        "family": "momentum",
+                        "variant": "steady",
+                        "mode": "stability",
+                        "label_ru": "Ось",
+                        "driver_ids": ["moon-pisces"],
+                    },
+                    "day_events_pack": {"ranked_drivers": [{"id": "moon-pisces"}]},
+                }
+            },
+            interpretation={
+                "day_thesis": {
+                    "family": "momentum",
+                    "variant": "steady",
+                    "mode": "stability",
+                    "label_ru": "Ось",
+                    "driver_ids": ["moon-pisces"],
+                },
+                "day_events_pack": {"ranked_drivers": [{"id": "moon-pisces"}]},
+            },
+            ritual_context={"tarot_name_ru": "Отшельник", "numerology_value": 7},
+            max_attempts=1,
+            meta_out=meta_out,
+        )
+        assert result is not None
+        assert meta_out.get("i0_split", {}).get("shared_global_hit") is True

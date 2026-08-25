@@ -50,8 +50,9 @@ LLM не выбирает mood/energy, главных drivers, окна врем
 ```text
 GlobalDayKey   = local_date + locale + semantic_version
 PersonalDayKey = user_identity + local_date + semantic_version
-                 [+ relevant_behavior_version только если Today реально читает overlay]
 ```
+
+`behavior_version` в Personal identity **не** входит, пока overlay не станет реальным входом Today и не будет правила meaningful delta.
 
 В Global identity **не** входят `user_id`, profile hash, expression/prompt конкретного пользователя. Force rebuild пересоздаёт **тот же** ключ (engineering ledger), не новую semantic version. Persist: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](../COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md). This file remains Today **meaning** SoT.
 

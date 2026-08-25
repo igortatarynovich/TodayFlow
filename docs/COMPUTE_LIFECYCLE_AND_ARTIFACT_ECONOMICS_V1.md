@@ -128,7 +128,6 @@ Payload facts: [audits/IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md](./audits/IL3_
 ```text
 GlobalDayKey    = local_date + locale + semantic_version
 PersonalDayKey  = user_identity + local_date + semantic_version
-                  [+ relevant_behavior_version iff Today uses behavioral overlay]
 ```
 
 Forbidden in **GlobalDayKey:** `user_id`, profile hash, per-user expression/prompt. One successful Global Day serves every user of that locale for that local_date + semantic_version.
@@ -137,9 +136,20 @@ Forbidden in **GlobalDayKey:** `user_id`, profile hash, per-user expression/prom
 
 **Force rebuild** regenerates the **same** key (engineering ledger). It does not mint a new `semantic_version`.
 
-Include `behavior_version` in PersonalDayKey **only if** Today actually consumes behavioral overlay. Otherwise every small user action would bust the day artifact. (Personal key is the next pass; this pass persists shared Global only.)
+Do **not** put `behavior_version` in PersonalDayKey until Today actually consumes behavioral overlay **and** a meaningful-delta rule exists. Until then every small user action would bust the day artifact.
 
 Re-open 20 times → **0 LLM** on Global after the first success; Personal still one overlay per user until Personal lifecycle lands.
+
+### Personal Day lifecycle — locked invariants (next named pass)
+
+Not this implementation. Contract for the Personal pass:
+
+1. Ordinary re-open of Today = **0 LLM calls** (same persisted Personal artifact).
+2. GET / cache read **must not** enqueue a regeneration job.
+3. `expression_version` **must not** auto-invalidate an existing Personal Day.
+4. Force rebuild recreates the **same** `PersonalDayKey` and is ledger **engineering**, not product usage.
+
+COGS measurement after Shared Global still mixes Personal-stage repeats. First controlled Token Factory run is **after** Personal lifecycle.
 
 I0 already: identical inputs + identical rule versions → identical day meaning; GET does not call LLM ([TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) I0). Runtime now persists Global under `GlobalDayKey` (`generation_logs.surface=shared_global_day`, `user_id=NULL`).
 
@@ -213,7 +223,7 @@ Main savings **without** touching Kimi 3 quality on Profile:
 
 1. **Profile invalidation** (landed: prompt ≠ snapshot key)
 2. **Shared Global Day** (this pass: `GlobalDayKey`; one Global LLM per locale/date)
-3. **Personal Day lifecycle** (`user × local_date × semantic_version`; reopen = 0 LLM; `behavior_version` only if overlay is used)
+3. **Personal Day lifecycle** (`user × local_date × semantic_version`; four invariants above; `behavior_version` deferred)
 4. **Profile selection** (after “which of 24 does Kimi use” audit — selected / mentioned / merged / ignored / contradicted; not a 5–8 cut)
 5. Behavioral overlay
 6. Tarot economics
@@ -230,6 +240,7 @@ Main savings **without** touching Kimi 3 quality on Profile:
 
 ## Changelog
 
+- **1.2.1 (2026-08-25)** — Personal Day next-pass invariants locked (0 LLM on re-open; GET does not enqueue; expression_version does not invalidate; force rebuild = same key / engineering). `behavior_version` stays out of PersonalDayKey until overlay is a real Today input.
 - **1.2 (2026-08-25)** — Shared Global Day. `GlobalDayKey = local_date + locale + semantic_version`. Force rebuild = same key. PersonalDayKey documented, not implemented. Profile selection still waits for K3 usage audit.
 - **1.1 (2026-08-25)** — Version axes. Prompt is not an invalidation key. Layered Profile store. Work order locked. Profile hash + Natal Decode lookup implemented to that rule.
 - **1.0 (2026-08-25)** — Lifecycle + artifact economics SoT. Four Profile triggers. Today persist keys. Three ledgers. Knowledge Core not expanded. Payload audit named as next meaning/cost cut.
