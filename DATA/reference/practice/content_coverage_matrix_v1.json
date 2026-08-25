@@ -14,13 +14,13 @@
   },
   "counts": {
     "need_cells": 26,
-    "need_cells_empty": 19,
-    "need_cells_seed": 7,
+    "need_cells_empty": 17,
+    "need_cells_seed": 9,
     "need_cells_covered": 0,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
-    "library_items": 7
+    "library_items": 9
   },
   "screen_need_map": {
     "calm": "need.calm.downregulate",
@@ -236,8 +236,10 @@
         "today",
         "practices_screen"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "meditation.relaxation.001"
+      ]
     },
     {
       "id": "need.sleep.prepare",
@@ -261,8 +263,10 @@
         "today",
         "practices_screen"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "meditation.sleep.001"
+      ]
     },
     {
       "id": "need.sleep.discipline",
@@ -968,7 +972,9 @@
       "content_class": "meditation",
       "type": "relaxation",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.relaxation.001"
+      ]
     },
     {
       "content_class": "meditation",
@@ -1010,7 +1016,9 @@
       "content_class": "meditation",
       "type": "sleep",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.sleep.001"
+      ]
     },
     {
       "content_class": "meditation",

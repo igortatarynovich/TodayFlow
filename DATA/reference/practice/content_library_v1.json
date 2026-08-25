@@ -269,6 +269,80 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.relaxation.001",
+        "content_class": "meditation",
+        "type": "relaxation",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.rest.downregulate"
+      },
+      "retrieval": {
+        "purpose": ["rest"],
+        "domain": [],
+        "input_state": ["overstimulated"],
+        "direction": ["downregulate"],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": ["work", "anytime"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Тяжесть в руках",
+            "body": "Сядь. Положи руки на колени. На выдохе дай им стать тяжелее. Три дыхания."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Мягче"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.sleep.001",
+        "content_class": "meditation",
+        "type": "sleep",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.sleep.prepare"
+      },
+      "retrieval": {
+        "purpose": ["sleep"],
+        "domain": [],
+        "input_state": ["restless", "overstimulated"],
+        "direction": ["prepare"],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": ["evening", "before_sleep"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Челюсть мягче",
+            "body": "Ляг. Закрой глаза. На выдохе отпусти челюсть. Ещё четыре дыхания."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Ко сну"
+          }
+        }
+      }
     }
   ]
 }
