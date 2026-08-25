@@ -4,7 +4,7 @@ Last updated: 2026-08-25
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — landed (`PersonalDayKey = user_identity + local_date + semantic_version`). Re-open = 0 Personal LLM. GET miss does not enqueue. `expression_version` is a stamp. Force rebuild = same key / engineering when a ready artifact existed. 402/fallback is not a cache hit. **Do not top up Token Factory until owner starts the controlled COGS run.** Next named = Profile Selection **after** that live check (user 1 Global+Personal → reopen → user 2 same locale → force Personal user 1). Do not add `behavior_version` until overlay is a real Today input. Do not mechanical-cut Profile to 5–8. Cost guard stands. Do not degrade K3 on Profile.
+**NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
 
 ## Architecture impact — Personal Day lifecycle (2026-08-25)
 
@@ -62,7 +62,7 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle · IL-3 payload audit · this tracker · LLM quality · freeze “do not expand” · README
 - **Backward compatible?** yes for clients. Force rebuild stays for pre-release testing (engineering ledger).
 
-**NOW (OPS / LLM, 2026-08-25):** **Cost Containment / LLM Usage Observability** — router SoT: request → policy → budget → provider → accounting. K3 allowlist (natal/CE only). Today output 1400 / retry 600. Tenant `LLM_DAILY_USD_CEILING=$5`. Over budget = downgrade (Qwen) or deny. `@example.com` out of prewarm. `$5/100 users` retired. I0 Global is shared by `GlobalDayKey`; Personal by `PersonalDayKey`. Next: one controlled Token Factory COGS run (Shared Global + Personal live path), then Profile Selection.
+**NOW (OPS / LLM, 2026-08-25):** **Cost Containment / LLM Usage Observability** — router SoT: request → policy → budget → provider → accounting. K3 allowlist (natal/CE only). Today output 1400 / retry 600. Tenant `LLM_DAILY_USD_CEILING=$5`. Over budget = downgrade (Qwen) or deny. `@example.com` out of prewarm. `$5/100 users` retired. I0 Global is shared by `GlobalDayKey`; Personal by `PersonalDayKey`. Live COGS **stopped on TF 402**; `/models` 200 is not billing. Latch stays until paid chat 200. After pass: write the four-step USD total as first clean COGS baseline, then Profile Selection.
 
 ## Architecture impact — Cost Containment llm_cost_guard_v1 (2026-08-25)
 
