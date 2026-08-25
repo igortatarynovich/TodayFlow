@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "status": "draft",
   "semantic_version": "content-taxonomy-v1.1",
-  "description": "Content Item = three groups. Canon: docs/practices/PRACTICE_CONTENT_TAXONOMY_V1.md §10. Fill policy: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md",
+  "description": "Content Item = three groups. Product expression of a Canonical Technique when identity.technique_id is set. Canon: docs/practices/PRACTICE_CONTENT_TAXONOMY_V1.md §10. Provenance: docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md. Fill policy: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md (frozen pending technique canon).",
   "groups": {
     "identity": {
       "required": ["item_id", "content_class", "type", "status", "semantic_version"],
-      "optional": ["family", "seed_cell"],
+      "optional": ["family", "seed_cell", "technique_id"],
       "fields": {
         "item_id": "stable id; never emitted by Meaning",
         "content_class": "practice | meditation | affirmation | discipline",
@@ -15,7 +15,8 @@
         "type": "technique code unique within content_class",
         "status": "draft | active | retired",
         "semantic_version": "content-taxonomy-v1.x",
-        "seed_cell": "P0 seed-pass only: the one need cell this item was created for. Retrieval tags do not close other cells."
+        "seed_cell": "P0 seed-pass only: the one need cell this item was created for. Retrieval tags do not close other cells.",
+        "technique_id": "optional until registry has canonical rows; must exist in technique_canon_v1 if set; Meaning never emits it"
       }
     },
     "retrieval": {
@@ -50,9 +51,11 @@
     }
   },
   "invariants": [
-    "Meaning never stores item_id",
+    "Meaning never stores item_id or technique_id",
     "purpose must not be encoded in type",
     "empty payload is not publishable",
-    "family is required iff content_class is practice"
+    "family is required iff content_class is practice",
+    "technique_id if set must exist in technique_canon_v1",
+    "item is a product expression of a canonical technique, not the source of the technique"
   ]
 }

@@ -140,9 +140,9 @@ Reference Layer → Profile → Daily Context → Personal Intelligence Layer
 **Machine:** duration_min, difficulty, target_states[], target_goals[], time_of_day.  
 **Content:** title, steps, expected outcome, when_best.
 
-**Категории / типы (SoT):** [PRACTICE_CONTENT_TAXONOMY_V1.md](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md) + vocab `DATA/reference/practice/content_taxonomy_v1.json`. Четыре `content_class` (`practice` · `meditation` · `affirmation` · `discipline`). Purpose / domain / input_state / direction — атрибуты, не типы. C1.1 `practice_definition_registry_v1.json` остаётся evolution action types, не библиотека. Fill: [PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+**Категории / типы (SoT):** [PRACTICE_CONTENT_TAXONOMY_V1.md](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md) + vocab `DATA/reference/practice/content_taxonomy_v1.json`. Четыре `content_class` (`practice` · `meditation` · `affirmation` · `discipline`). Purpose / domain / input_state / direction — атрибуты, не типы. C1.1 `practice_definition_registry_v1.json` остаётся evolution action types, не библиотека. Fill: [PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md) (**frozen**). Provenance: [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md).
 
-**Текущее хранение:** vocab **draft**; coverage ledger **empty**; Content Items — **empty** (`content_library_v1.json`). Legacy: `CONTENT/practices/practices.json`, `rituals.json`, `mantras.json` — не SoT types.
+**Текущее хранение:** vocab **draft**; coverage ledger **provisional / fill_frozen**; Content Items — **133 llm_provisional** (`content_library_v1.json`); technique canon **empty**. Legacy: `CONTENT/practices/practices.json`, `rituals.json`, `mantras.json` — не SoT types.
 
 ### 2.6 Goal
 
@@ -487,8 +487,8 @@ Daily Context → DayModel → PIL (retrieval + refinement) → split Generation
 | Emotional State | MoodSlug | ritual + tracking slugs | slug, intensity, tempo_bias, veto_tags | display label, verdict line | Today check-in, DayModel, LLM | partial |
 | Emotional State | OperatingMode | `profile_engine/models.py` | enum, selector weights | — | Profile Selector, prompts | partial |
 | Emotional State | CheckInDimension | `check_ins.json` | dimension id, scale | prompts | Tracking, fusion | partial |
-| Practice | PracticeTemplate | `DATA/reference/practice/content_library_v1.json` (empty) + legacy `CONTENT/practices/practices.json` | identity + retrieval + payload | title, body | Flow, Today recommendations | empty library; coverage-first P0 |
-| Practice | PracticeCategory | `DATA/reference/practice/content_taxonomy_v1.json` | `content_class` · `family` · `type` | labels in canon | Practice picker, retrieval | draft vocab (items missing) |
+| Practice | PracticeTemplate | `DATA/reference/practice/content_library_v1.json` (133 llm_provisional) + empty `technique_canon_v1.json` + legacy `CONTENT/practices/practices.json` | identity + retrieval + payload; optional `technique_id` | title, body | Flow, Today recommendations | fill frozen; provenance next |
+| Practice | PracticeCategory | `DATA/reference/practice/content_taxonomy_v1.json` | `content_class` · `family` · `type` | labels in canon | Practice picker, retrieval | draft vocab; items provisional |
 | Goal | GoalCategory | — | code (money, relations, …) | label, typical blocks | Profile, Today actions | missing |
 | Goal | GoalType | — | cadence, difficulty | decomposition hints | Weekly goals, Calendar | missing |
 | Habit | HabitType | — | frequency, min/opt, streak rules | name, relapse copy | Today trackers, Calendar | missing |

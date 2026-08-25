@@ -17,6 +17,7 @@ PAYLOAD_LOGIC_MARKERS = (
     "input_state",
     "content-taxonomy",
     "seed_cell",
+    "technique_id",
 )
 
 IDENTITY_REQUIRED = ("item_id", "content_class", "type", "status", "semantic_version")
@@ -44,6 +45,60 @@ DISCIPLINE_PAYLOAD_EXTRA = (
     "completion_condition",
 )
 ALLOWED_STATUS = frozenset({"draft", "active", "retired"})
+TECHNIQUE_ID_PREFIX = "technique."
+ARCHITECTURE_PROBE_COUNT = 11
+ALLOWED_SOURCE_FAMILY = frozenset(
+    {
+        "clinical_psychology",
+        "mindfulness_protocol",
+        "behavioral_science",
+        "official_health",
+        "academic_description",
+        "recognized_school",
+        "tradition_primary",
+        "historical_philosophical",
+    }
+)
+ALLOWED_EVIDENCE_LEVEL = frozenset(
+    {
+        "unverified",
+        "tradition_attested",
+        "protocol_attested",
+        "academic_described",
+        "product_only",
+    }
+)
+ALLOWED_EFFICACY_CLAIM_LEVEL = frozenset(
+    {"not_claimed", "anecdote", "single_study", "review", "guideline"}
+)
+ALLOWED_TECHNIQUE_REVIEW_STATUS = frozenset(
+    {
+        "empty",
+        "landscape",
+        "extracted",
+        "normalized",
+        "safety_reviewed",
+        "canonical",
+        "rejected",
+    }
+)
+TECHNIQUE_REQUIRED = (
+    "technique_id",
+    "content_class",
+    "type",
+    "source_family",
+    "source_refs",
+    "tradition",
+    "evidence_level",
+    "efficacy_claim_level",
+    "canonical_mechanism",
+    "canonical_steps",
+    "safety_notes",
+    "allowed_claims",
+    "prohibited_claims",
+    "review_status",
+    "semantic_version",
+)
 ALLOWED_BODY_KIND = frozenset(
     {"instruction", "script", "affirmation_text", "commitment_rule"}
 )
@@ -136,6 +191,15 @@ def validate_content_item_v1(
             )
     elif family not in (None,):
         errors.append(f"{prefix}: family must be absent/null unless practice")
+
+    technique_id = identity.get("technique_id")
+    if technique_id is not None:
+        if not isinstance(technique_id, str) or not technique_id.startswith(
+            TECHNIQUE_ID_PREFIX
+        ):
+            errors.append(
+                f"{prefix}: identity.technique_id must be string starting with {TECHNIQUE_ID_PREFIX!r}"
+            )
 
     if identity.get("status") not in ALLOWED_STATUS:
         errors.append(f"{prefix}: invalid identity.status")
@@ -254,11 +318,68 @@ def validate_content_item_v1(
     return errors
 
 
+def validate_technique_canon_v1(registry: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if registry.get("contract_version") != "technique_canon_v1":
+        errors.append("invalid technique canon contract_version")
+    techniques = registry.get("techniques")
+    if not isinstance(techniques, list):
+        errors.append("techniques must be list")
+        return errors
+    seen: set[str] = set()
+    for i, row in enumerate(techniques):
+        prefix = f"technique[{i}]"
+        if not isinstance(row, dict):
+            errors.append(f"{prefix}: must be object")
+            continue
+        for key in TECHNIQUE_REQUIRED:
+            if key not in row:
+                errors.append(f"{prefix}: missing {key}")
+        technique_id = row.get("technique_id")
+        if not isinstance(technique_id, str) or not technique_id.startswith(
+            TECHNIQUE_ID_PREFIX
+        ):
+            errors.append(f"{prefix}: technique_id must start with {TECHNIQUE_ID_PREFIX!r}")
+        elif technique_id in seen:
+            errors.append(f"{prefix}: duplicate technique_id {technique_id!r}")
+        else:
+            seen.add(technique_id)
+        if row.get("source_family") not in ALLOWED_SOURCE_FAMILY:
+            errors.append(f"{prefix}: invalid source_family")
+        if row.get("evidence_level") not in ALLOWED_EVIDENCE_LEVEL:
+            errors.append(f"{prefix}: invalid evidence_level")
+        if row.get("efficacy_claim_level") not in ALLOWED_EFFICACY_CLAIM_LEVEL:
+            errors.append(f"{prefix}: invalid efficacy_claim_level")
+        if row.get("review_status") not in ALLOWED_TECHNIQUE_REVIEW_STATUS:
+            errors.append(f"{prefix}: invalid review_status")
+        for list_key in (
+            "source_refs",
+            "tradition",
+            "canonical_steps",
+            "safety_notes",
+            "allowed_claims",
+            "prohibited_claims",
+        ):
+            value = row.get(list_key)
+            if list_key == "source_refs":
+                if not isinstance(value, list):
+                    errors.append(f"{prefix}: {list_key} must be list")
+                elif not all(isinstance(x, dict) for x in value):
+                    errors.append(f"{prefix}: source_refs must be object list")
+            elif _as_str_list(value, allow_empty=True) is None:
+                errors.append(f"{prefix}: {list_key} must be string list")
+        mechanism = row.get("canonical_mechanism")
+        if not isinstance(mechanism, str) or not mechanism.strip():
+            errors.append(f"{prefix}: canonical_mechanism must be non-empty string")
+    return errors
+
+
 def validate_content_library_v1(
     library: dict[str, Any],
     *,
     vocab: dict[str, Any],
     coverage: dict[str, Any] | None = None,
+    techniques: dict[str, Any] | None = None,
 ) -> list[str]:
     errors: list[str] = []
     if library.get("contract_version") != "content_library_v1":
@@ -283,6 +404,38 @@ def validate_content_library_v1(
             seen_ids.add(item_id)
             by_id[item_id] = item
         errors.extend(validate_content_item_v1(item, vocab=vocab, prefix=prefix or item_id))
+
+    probe_ids = library.get("architecture_probe_item_ids")
+    if probe_ids is not None:
+        if not isinstance(probe_ids, list) or not all(
+            isinstance(x, str) and x.strip() for x in probe_ids
+        ):
+            errors.append("architecture_probe_item_ids must be string list")
+        else:
+            if len(probe_ids) != ARCHITECTURE_PROBE_COUNT:
+                errors.append(
+                    f"architecture_probe_item_ids must list {ARCHITECTURE_PROBE_COUNT} items"
+                )
+            for iid in probe_ids:
+                if iid not in seen_ids:
+                    errors.append(f"architecture_probe unknown item_id {iid!r}")
+
+    if library.get("fill_frozen") is True and not (
+        isinstance(probe_ids, list) and probe_ids
+    ):
+        errors.append("fill_frozen library requires architecture_probe_item_ids")
+    if techniques is not None:
+        errors.extend(validate_technique_canon_v1(techniques))
+        technique_ids = {
+            row["technique_id"]
+            for row in techniques.get("techniques") or []
+            if isinstance(row, dict) and isinstance(row.get("technique_id"), str)
+        }
+        for iid, item in by_id.items():
+            identity = item.get("identity") if isinstance(item.get("identity"), dict) else {}
+            tid = identity.get("technique_id")
+            if isinstance(tid, str) and tid not in technique_ids:
+                errors.append(f"item {iid} technique_id {tid!r} not in technique canon")
 
     if coverage is None:
         return errors
@@ -363,6 +516,93 @@ def first_empty_p0_cell(coverage: dict[str, Any]) -> dict[str, Any] | None:
     for cell in cells:
         if isinstance(cell, dict) and cell.get("status") == "empty":
             return cell
+    return None
+
+
+def first_empty_p0_type(coverage: dict[str, Any]) -> dict[str, Any] | None:
+    """After need cells are seeded: first P0 type_spine row with empty item_ids."""
+    spine = coverage.get("type_spine")
+    if not isinstance(spine, list):
+        return None
+    for row in spine:
+        if (
+            isinstance(row, dict)
+            and row.get("phase") == "P0"
+            and not (row.get("item_ids") or [])
+        ):
+            return row
+    return None
+
+
+def _retrieval_axis(item: dict[str, Any]) -> tuple[Any, ...]:
+    retrieval = item.get("retrieval") if isinstance(item.get("retrieval"), dict) else {}
+    return (
+        retrieval.get("duration"),
+        retrieval.get("duration_days"),
+        tuple(retrieval.get("context") or []),
+        tuple(retrieval.get("delivery") or []),
+    )
+
+
+def first_p0_type_needing_density(
+    coverage: dict[str, Any],
+    library: dict[str, Any],
+) -> dict[str, Any] | None:
+    """First P0 type in spine order with no same-cell duration/context/delivery sibling."""
+    return _first_p0_type_missing_sibling(coverage, library, axis="retrieval")
+
+
+def first_p0_type_needing_context_density(
+    coverage: dict[str, Any],
+    library: dict[str, Any],
+) -> dict[str, Any] | None:
+    """First P0 type with no same-cell sibling whose context set differs."""
+    return _first_p0_type_missing_sibling(coverage, library, axis="context")
+
+
+def _context_key(item: dict[str, Any]) -> tuple[str, ...]:
+    retrieval = item.get("retrieval") if isinstance(item.get("retrieval"), dict) else {}
+    return tuple(retrieval.get("context") or [])
+
+
+def _first_p0_type_missing_sibling(
+    coverage: dict[str, Any],
+    library: dict[str, Any],
+    *,
+    axis: str,
+) -> dict[str, Any] | None:
+    items = {
+        item.get("identity", {}).get("item_id"): item
+        for item in library.get("items") or []
+        if isinstance(item, dict)
+    }
+    spine = coverage.get("type_spine")
+    if not isinstance(spine, list):
+        return None
+    for row in spine:
+        if not isinstance(row, dict) or row.get("phase") != "P0":
+            continue
+        iids = [i for i in (row.get("item_ids") or []) if i]
+        if not iids:
+            continue
+        first = items.get(iids[0])
+        if not isinstance(first, dict):
+            continue
+        seed = (first.get("identity") or {}).get("seed_cell")
+        key0 = _retrieval_axis(first) if axis == "retrieval" else _context_key(first)
+        has_sibling = False
+        for iid in iids[1:]:
+            other = items.get(iid)
+            if not isinstance(other, dict):
+                continue
+            if (other.get("identity") or {}).get("seed_cell") != seed:
+                continue
+            key = _retrieval_axis(other) if axis == "retrieval" else _context_key(other)
+            if key != key0:
+                has_sibling = True
+                break
+        if not has_sibling:
+            return row
     return None
 
 

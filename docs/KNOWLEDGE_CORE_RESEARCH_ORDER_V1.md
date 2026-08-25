@@ -5,7 +5,7 @@
 **Владелец:** Product + Research.  
 **Не является:** Meaning SoT дня · IL lookup · Machine Contract · KASP (сбор данных пользователя).
 
-**Связь:** [Interpretation Library](./astrology/INTERPRETATION_LIBRARY_V1.md) (астрологический lookup; IL-1 уже в полёте) · [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) (машинные/контентные контракты справочника — другой порядок) · [NUMBER_BASE_V1.md](./numerology/NUMBER_BASE_V1.md) · [TAROT_CARD_BASE_V1.md](./tarot/TAROT_CARD_BASE_V1.md) · [PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) (экран ≠ knowledge core).
+**Связь:** [Interpretation Library](./astrology/INTERPRETATION_LIBRARY_V1.md) (астрологический lookup; IL-1 уже в полёте) · [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) (машинные/контентные контракты справочника — другой порядок) · [NUMBER_BASE_V1.md](./numerology/NUMBER_BASE_V1.md) · [TAROT_CARD_BASE_V1.md](./tarot/TAROT_CARD_BASE_V1.md) · [PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) (экран ≠ knowledge core) · [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md) (практики как система техник: parent = этот порядок; не IL CORE).
 
 ---
 
@@ -141,6 +141,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 ## 7. Changelog
 
+- **1.12 note (2026-08-25)** — практики как система техник: [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md). Parent sequence 1–9 stands. Не IL CORE. Не author-lock.
 - **1.0 (2026-08-17)** — locked sequence для семантических ядер. Урок IL-1: provenance раньше author-lock. Parent для IL §6.9. Обязателен для следующего ядра и для нумерологии / психологии / практик / медицины как систем знаний.
 - **1.1 (2026-08-17)** — IL-1 in-flight remaining planet budget (IL §6.10 / 1.3.45) is psychological coverage of empty slots. This file's sequence for the *next* core is unchanged. CORE=0 is not a KPI.
 - **1.1 note (2026-08-17)** — IL-1.3.46 filled Uranus psychological from Tarnas official intro. Remaining empty slots: Neptune → Venus → Mars. Recount still deferred. This file's sequence for the *next* core is unchanged.

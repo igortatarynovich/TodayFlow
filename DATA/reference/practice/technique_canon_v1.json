@@ -1,0 +1,9 @@
+{
+  "contract_version": "technique_canon_v1",
+  "version": "1.0.0",
+  "status": "empty",
+  "semantic_version": "practice-technique-v1.0",
+  "description": "Canonical techniques for Practice Content Library. Empty until provenance ingest. Do not seed from LLM. Canon: docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md",
+  "fill_frozen_until_canonical_rows": true,
+  "techniques": []
+}

@@ -1,26 +1,30 @@
 {
   "contract_version": "content_coverage_matrix_v1",
   "version": "1.0.0",
-  "status": "seed",
+  "status": "provisional",
   "semantic_version": "content-taxonomy-v1.1",
-  "description": "Coverage-first ledger. Need cells before mass fill. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md",
+  "fill_frozen": true,
+  "next_pass": "technique_provenance",
+  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen pending Canonical Technique. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · provenance: docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,
     "p0_before_density": true,
     "meaning_does_not_emit_item_id": true,
     "next_cell_is_first_empty_in_ledger_order": true,
-    "seed_closes_exactly_one_cell": true
+    "seed_closes_exactly_one_cell": true,
+    "llm_is_not_technique_source": true,
+    "fill_frozen_until_technique_canon": true
   },
   "counts": {
     "need_cells": 26,
-    "need_cells_empty": 15,
-    "need_cells_seed": 11,
+    "need_cells_empty": 0,
+    "need_cells_seed": 26,
     "need_cells_covered": 0,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
-    "library_items": 11
+    "library_items": 133
   },
   "screen_need_map": {
     "calm": "need.calm.downregulate",
@@ -55,7 +59,9 @@
       ],
       "status": "seed",
       "item_ids": [
-        "practice.extended_exhale.001"
+        "practice.extended_exhale.001",
+        "practice.extended_exhale.002",
+        "practice.extended_exhale.003"
       ]
     },
     {
@@ -81,7 +87,12 @@
       ],
       "status": "seed",
       "item_ids": [
-        "practice.box_breathing.001"
+        "practice.box_breathing.001",
+        "meditation.focused_attention.001",
+        "practice.box_breathing.002",
+        "meditation.focused_attention.002",
+        "practice.box_breathing.003",
+        "meditation.focused_attention.003"
       ]
     },
     {
@@ -108,7 +119,12 @@
       ],
       "status": "seed",
       "item_ids": [
-        "practice.energizing_breath.001"
+        "practice.energizing_breath.001",
+        "practice.mobility.001",
+        "practice.energizing_breath.002",
+        "practice.mobility.002",
+        "practice.energizing_breath.003",
+        "practice.mobility.003"
       ]
     },
     {
@@ -136,7 +152,12 @@
       ],
       "status": "seed",
       "item_ids": [
-        "practice.sensory_grounding.001"
+        "practice.sensory_grounding.001",
+        "meditation.grounding.001",
+        "practice.sensory_grounding.002",
+        "meditation.grounding.002",
+        "practice.sensory_grounding.003",
+        "meditation.grounding.003"
       ]
     },
     {
@@ -162,7 +183,12 @@
       ],
       "status": "seed",
       "item_ids": [
-        "practice.prompted_reflection.001"
+        "practice.prompted_reflection.001",
+        "meditation.reflection_meditation.001",
+        "practice.prompted_reflection.002",
+        "meditation.reflection_meditation.002",
+        "practice.prompted_reflection.003",
+        "meditation.reflection_meditation.003"
       ]
     },
     {
@@ -186,7 +212,12 @@
       ],
       "status": "seed",
       "item_ids": [
-        "affirmation.capability.001"
+        "affirmation.capability.001",
+        "affirmation.self_trust.001",
+        "affirmation.self_trust.002",
+        "affirmation.capability.002",
+        "affirmation.self_trust.003",
+        "affirmation.capability.003"
       ]
     },
     {
@@ -212,7 +243,12 @@
       ],
       "status": "seed",
       "item_ids": [
-        "practice.body_release.001"
+        "practice.body_release.001",
+        "meditation.letting_go.001",
+        "practice.body_release.002",
+        "meditation.letting_go.002",
+        "practice.body_release.003",
+        "meditation.letting_go.003"
       ]
     },
     {
@@ -238,7 +274,9 @@
       ],
       "status": "seed",
       "item_ids": [
-        "meditation.relaxation.001"
+        "meditation.relaxation.001",
+        "meditation.relaxation.002",
+        "meditation.relaxation.003"
       ]
     },
     {
@@ -265,7 +303,12 @@
       ],
       "status": "seed",
       "item_ids": [
-        "meditation.sleep.001"
+        "meditation.sleep.001",
+        "practice.evening_ritual.001",
+        "practice.evening_ritual.002",
+        "meditation.sleep.002",
+        "practice.evening_ritual.003",
+        "meditation.sleep.003"
       ]
     },
     {
@@ -288,7 +331,9 @@
       "note": "same purpose as need.sleep.prepare; different job (rule over days, not tonight session)",
       "status": "seed",
       "item_ids": [
-        "discipline.sleep_discipline.001"
+        "discipline.sleep_discipline.001",
+        "discipline.sleep_discipline.002",
+        "discipline.sleep_discipline.003"
       ]
     },
     {
@@ -314,7 +359,12 @@
       ],
       "status": "seed",
       "item_ids": [
-        "practice.micro_action.001"
+        "practice.micro_action.001",
+        "affirmation.agency.001",
+        "practice.micro_action.002",
+        "affirmation.agency.002",
+        "practice.micro_action.003",
+        "affirmation.agency.003"
       ]
     },
     {
@@ -338,8 +388,15 @@
         "today",
         "practices_screen"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.self_check_in.001",
+        "meditation.open_awareness.001",
+        "practice.self_check_in.002",
+        "meditation.open_awareness.002",
+        "practice.self_check_in.003",
+        "meditation.open_awareness.003"
+      ]
     },
     {
       "id": "need.self_connection.reflect",
@@ -361,8 +418,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.journaling.001",
+        "meditation.body_scan.001",
+        "practice.journaling.002",
+        "meditation.body_scan.002",
+        "practice.journaling.003",
+        "meditation.body_scan.003"
+      ]
     },
     {
       "id": "need.connection.connect",
@@ -384,8 +448,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.connection_action.001",
+        "affirmation.relationship.001",
+        "practice.connection_action.002",
+        "affirmation.relationship.002",
+        "practice.connection_action.003",
+        "affirmation.relationship.003"
+      ]
     },
     {
       "id": "need.creativity.open",
@@ -408,8 +479,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.creative_prompt.001",
+        "practice.free_writing.001",
+        "practice.free_writing.002",
+        "practice.creative_prompt.002",
+        "practice.free_writing.003",
+        "practice.creative_prompt.003"
+      ]
     },
     {
       "id": "need.decision_making.focus",
@@ -432,8 +510,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.priority_setting.001",
+        "practice.intention_setting.001",
+        "practice.intention_setting.002",
+        "practice.priority_setting.002",
+        "practice.intention_setting.003",
+        "practice.priority_setting.003"
+      ]
     },
     {
       "id": "need.transition.prepare",
@@ -456,8 +541,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.transition_ritual.001",
+        "practice.morning_ritual.001",
+        "practice.morning_ritual.002",
+        "practice.transition_ritual.002",
+        "practice.morning_ritual.003",
+        "practice.transition_ritual.003"
+      ]
     },
     {
       "id": "need.recovery.recover",
@@ -481,8 +573,12 @@
         "today",
         "practices_screen"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.progressive_relaxation.001",
+        "practice.progressive_relaxation.002",
+        "practice.progressive_relaxation.003"
+      ]
     },
     {
       "id": "need.discipline.prepare",
@@ -503,8 +599,12 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "discipline.routine_commitment.001",
+        "discipline.routine_commitment.002",
+        "discipline.routine_commitment.003"
+      ]
     },
     {
       "id": "need.self_control.stabilize",
@@ -525,8 +625,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "discipline.attention_discipline.001",
+        "discipline.digital_limit.001",
+        "discipline.digital_limit.002",
+        "discipline.attention_discipline.002",
+        "discipline.digital_limit.003",
+        "discipline.attention_discipline.003"
+      ]
     },
     {
       "id": "need.detachment.release",
@@ -547,8 +654,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "discipline.abstinence.001",
+        "meditation.acceptance.001",
+        "meditation.acceptance.002",
+        "discipline.abstinence.002",
+        "meditation.acceptance.003",
+        "discipline.abstinence.003"
+      ]
     },
     {
       "id": "need.consistency.prepare",
@@ -569,8 +683,12 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "discipline.consistency_challenge.001",
+        "discipline.consistency_challenge.003",
+        "discipline.consistency_challenge.004"
+      ]
     },
     {
       "id": "need.simplicity.release",
@@ -591,8 +709,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "discipline.reduction.001",
+        "discipline.consumption_limit.001",
+        "discipline.reduction.002",
+        "discipline.consumption_limit.002",
+        "discipline.reduction.003",
+        "discipline.consumption_limit.003"
+      ]
     },
     {
       "id": "need.reset.release",
@@ -615,8 +740,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "practice.digital_pause.001",
+        "practice.environment_reset.001",
+        "practice.environment_reset.002",
+        "practice.digital_pause.002",
+        "practice.environment_reset.003",
+        "practice.digital_pause.003"
+      ]
     },
     {
       "id": "need.presence.stabilize",
@@ -638,8 +770,15 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "meditation.mindfulness.001",
+        "meditation.breath_awareness.001",
+        "meditation.breath_awareness.002",
+        "meditation.mindfulness.002",
+        "meditation.breath_awareness.003",
+        "meditation.mindfulness.003"
+      ]
     },
     {
       "id": "need.habit_change.prepare",
@@ -660,8 +799,10 @@
       "surfaces": [
         "today"
       ],
-      "status": "empty",
-      "item_ids": []
+      "status": "seed",
+      "item_ids": [
+        "discipline.consistency_challenge.002"
+      ]
     }
   ],
   "type_spine": [
@@ -677,7 +818,9 @@
       "type": "extended_exhale",
       "phase": "P0",
       "item_ids": [
-        "practice.extended_exhale.001"
+        "practice.extended_exhale.001",
+        "practice.extended_exhale.002",
+        "practice.extended_exhale.003"
       ],
       "family": "breathwork"
     },
@@ -686,7 +829,9 @@
       "type": "box_breathing",
       "phase": "P0",
       "item_ids": [
-        "practice.box_breathing.001"
+        "practice.box_breathing.001",
+        "practice.box_breathing.002",
+        "practice.box_breathing.003"
       ],
       "family": "breathwork"
     },
@@ -702,7 +847,9 @@
       "type": "energizing_breath",
       "phase": "P0",
       "item_ids": [
-        "practice.energizing_breath.001"
+        "practice.energizing_breath.001",
+        "practice.energizing_breath.002",
+        "practice.energizing_breath.003"
       ],
       "family": "breathwork"
     },
@@ -711,7 +858,9 @@
       "type": "body_release",
       "phase": "P0",
       "item_ids": [
-        "practice.body_release.001"
+        "practice.body_release.001",
+        "practice.body_release.002",
+        "practice.body_release.003"
       ],
       "family": "somatic"
     },
@@ -733,7 +882,11 @@
       "content_class": "practice",
       "type": "progressive_relaxation",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.progressive_relaxation.001",
+        "practice.progressive_relaxation.002",
+        "practice.progressive_relaxation.003"
+      ],
       "family": "somatic"
     },
     {
@@ -741,7 +894,9 @@
       "type": "sensory_grounding",
       "phase": "P0",
       "item_ids": [
-        "practice.sensory_grounding.001"
+        "practice.sensory_grounding.001",
+        "practice.sensory_grounding.002",
+        "practice.sensory_grounding.003"
       ],
       "family": "somatic"
     },
@@ -749,7 +904,11 @@
       "content_class": "practice",
       "type": "mobility",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.mobility.001",
+        "practice.mobility.002",
+        "practice.mobility.003"
+      ],
       "family": "movement"
     },
     {
@@ -784,7 +943,11 @@
       "content_class": "practice",
       "type": "journaling",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.journaling.001",
+        "practice.journaling.002",
+        "practice.journaling.003"
+      ],
       "family": "reflection"
     },
     {
@@ -792,7 +955,9 @@
       "type": "prompted_reflection",
       "phase": "P0",
       "item_ids": [
-        "practice.prompted_reflection.001"
+        "practice.prompted_reflection.001",
+        "practice.prompted_reflection.002",
+        "practice.prompted_reflection.003"
       ],
       "family": "reflection"
     },
@@ -807,7 +972,11 @@
       "content_class": "practice",
       "type": "self_check_in",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.self_check_in.001",
+        "practice.self_check_in.002",
+        "practice.self_check_in.003"
+      ],
       "family": "reflection"
     },
     {
@@ -821,14 +990,22 @@
       "content_class": "practice",
       "type": "intention_setting",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.intention_setting.001",
+        "practice.intention_setting.002",
+        "practice.intention_setting.003"
+      ],
       "family": "intention"
     },
     {
       "content_class": "practice",
       "type": "priority_setting",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.priority_setting.001",
+        "practice.priority_setting.002",
+        "practice.priority_setting.003"
+      ],
       "family": "intention"
     },
     {
@@ -850,7 +1027,9 @@
       "type": "micro_action",
       "phase": "P0",
       "item_ids": [
-        "practice.micro_action.001"
+        "practice.micro_action.001",
+        "practice.micro_action.002",
+        "practice.micro_action.003"
       ],
       "family": "behavioral"
     },
@@ -858,14 +1037,22 @@
       "content_class": "practice",
       "type": "environment_reset",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.environment_reset.001",
+        "practice.environment_reset.002",
+        "practice.environment_reset.003"
+      ],
       "family": "behavioral"
     },
     {
       "content_class": "practice",
       "type": "digital_pause",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.digital_pause.001",
+        "practice.digital_pause.002",
+        "practice.digital_pause.003"
+      ],
       "family": "behavioral"
     },
     {
@@ -879,14 +1066,22 @@
       "content_class": "practice",
       "type": "connection_action",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.connection_action.001",
+        "practice.connection_action.002",
+        "practice.connection_action.003"
+      ],
       "family": "behavioral"
     },
     {
       "content_class": "practice",
       "type": "free_writing",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.free_writing.001",
+        "practice.free_writing.002",
+        "practice.free_writing.003"
+      ],
       "family": "creative"
     },
     {
@@ -907,28 +1102,44 @@
       "content_class": "practice",
       "type": "creative_prompt",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.creative_prompt.001",
+        "practice.creative_prompt.002",
+        "practice.creative_prompt.003"
+      ],
       "family": "creative"
     },
     {
       "content_class": "practice",
       "type": "morning_ritual",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.morning_ritual.001",
+        "practice.morning_ritual.002",
+        "practice.morning_ritual.003"
+      ],
       "family": "ritual"
     },
     {
       "content_class": "practice",
       "type": "evening_ritual",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.evening_ritual.001",
+        "practice.evening_ritual.002",
+        "practice.evening_ritual.003"
+      ],
       "family": "ritual"
     },
     {
       "content_class": "practice",
       "type": "transition_ritual",
       "phase": "P0",
-      "item_ids": [],
+      "item_ids": [
+        "practice.transition_ritual.001",
+        "practice.transition_ritual.002",
+        "practice.transition_ritual.003"
+      ],
       "family": "ritual"
     },
     {
@@ -942,44 +1153,70 @@
       "content_class": "meditation",
       "type": "breath_awareness",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.breath_awareness.001",
+        "meditation.breath_awareness.002",
+        "meditation.breath_awareness.003"
+      ]
     },
     {
       "content_class": "meditation",
       "type": "body_scan",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.body_scan.001",
+        "meditation.body_scan.002",
+        "meditation.body_scan.003"
+      ]
     },
     {
       "content_class": "meditation",
       "type": "open_awareness",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.open_awareness.001",
+        "meditation.open_awareness.002",
+        "meditation.open_awareness.003"
+      ]
     },
     {
       "content_class": "meditation",
       "type": "focused_attention",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.focused_attention.001",
+        "meditation.focused_attention.002",
+        "meditation.focused_attention.003"
+      ]
     },
     {
       "content_class": "meditation",
       "type": "mindfulness",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.mindfulness.001",
+        "meditation.mindfulness.002",
+        "meditation.mindfulness.003"
+      ]
     },
     {
       "content_class": "meditation",
       "type": "grounding",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.grounding.001",
+        "meditation.grounding.002",
+        "meditation.grounding.003"
+      ]
     },
     {
       "content_class": "meditation",
       "type": "relaxation",
       "phase": "P0",
       "item_ids": [
-        "meditation.relaxation.001"
+        "meditation.relaxation.001",
+        "meditation.relaxation.002",
+        "meditation.relaxation.003"
       ]
     },
     {
@@ -1004,13 +1241,21 @@
       "content_class": "meditation",
       "type": "acceptance",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.acceptance.001",
+        "meditation.acceptance.002",
+        "meditation.acceptance.003"
+      ]
     },
     {
       "content_class": "meditation",
       "type": "letting_go",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.letting_go.001",
+        "meditation.letting_go.002",
+        "meditation.letting_go.003"
+      ]
     },
     {
       "content_class": "meditation",
@@ -1023,7 +1268,9 @@
       "type": "sleep",
       "phase": "P0",
       "item_ids": [
-        "meditation.sleep.001"
+        "meditation.sleep.001",
+        "meditation.sleep.002",
+        "meditation.sleep.003"
       ]
     },
     {
@@ -1036,7 +1283,11 @@
       "content_class": "meditation",
       "type": "reflection_meditation",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "meditation.reflection_meditation.001",
+        "meditation.reflection_meditation.002",
+        "meditation.reflection_meditation.003"
+      ]
     },
     {
       "content_class": "meditation",
@@ -1054,7 +1305,11 @@
       "content_class": "affirmation",
       "type": "self_trust",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "affirmation.self_trust.001",
+        "affirmation.self_trust.002",
+        "affirmation.self_trust.003"
+      ]
     },
     {
       "content_class": "affirmation",
@@ -1067,7 +1322,9 @@
       "type": "capability",
       "phase": "P0",
       "item_ids": [
-        "affirmation.capability.001"
+        "affirmation.capability.001",
+        "affirmation.capability.002",
+        "affirmation.capability.003"
       ]
     },
     {
@@ -1092,7 +1349,11 @@
       "content_class": "affirmation",
       "type": "agency",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "affirmation.agency.001",
+        "affirmation.agency.002",
+        "affirmation.agency.003"
+      ]
     },
     {
       "content_class": "affirmation",
@@ -1134,31 +1395,51 @@
       "content_class": "affirmation",
       "type": "relationship",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "affirmation.relationship.001",
+        "affirmation.relationship.002",
+        "affirmation.relationship.003"
+      ]
     },
     {
       "content_class": "discipline",
       "type": "abstinence",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "discipline.abstinence.001",
+        "discipline.abstinence.002",
+        "discipline.abstinence.003"
+      ]
     },
     {
       "content_class": "discipline",
       "type": "reduction",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "discipline.reduction.001",
+        "discipline.reduction.002",
+        "discipline.reduction.003"
+      ]
     },
     {
       "content_class": "discipline",
       "type": "digital_limit",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "discipline.digital_limit.001",
+        "discipline.digital_limit.002",
+        "discipline.digital_limit.003"
+      ]
     },
     {
       "content_class": "discipline",
       "type": "consumption_limit",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "discipline.consumption_limit.001",
+        "discipline.consumption_limit.002",
+        "discipline.consumption_limit.003"
+      ]
     },
     {
       "content_class": "discipline",
@@ -1176,13 +1457,21 @@
       "content_class": "discipline",
       "type": "attention_discipline",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "discipline.attention_discipline.001",
+        "discipline.attention_discipline.002",
+        "discipline.attention_discipline.003"
+      ]
     },
     {
       "content_class": "discipline",
       "type": "routine_commitment",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "discipline.routine_commitment.001",
+        "discipline.routine_commitment.002",
+        "discipline.routine_commitment.003"
+      ]
     },
     {
       "content_class": "discipline",
@@ -1201,7 +1490,9 @@
       "type": "sleep_discipline",
       "phase": "P0",
       "item_ids": [
-        "discipline.sleep_discipline.001"
+        "discipline.sleep_discipline.001",
+        "discipline.sleep_discipline.002",
+        "discipline.sleep_discipline.003"
       ]
     },
     {
@@ -1238,7 +1529,12 @@
       "content_class": "discipline",
       "type": "consistency_challenge",
       "phase": "P0",
-      "item_ids": []
+      "item_ids": [
+        "discipline.consistency_challenge.001",
+        "discipline.consistency_challenge.002",
+        "discipline.consistency_challenge.003",
+        "discipline.consistency_challenge.004"
+      ]
     }
   ]
 }

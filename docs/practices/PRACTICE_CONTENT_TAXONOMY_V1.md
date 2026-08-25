@@ -1,25 +1,27 @@
 # Practice Content Taxonomy v1
 
 **Статус:** `ACCEPTED` — SoT библиотеки практик / медитаций / аффирмаций / дисциплин.  
-**Версия:** 1.1 (2026-08-25) — pipeline Meaning→Retrieval→Library; Content Item = identity / retrieval / payload; fill = coverage-first.  
+**Версия:** 1.2 (2026-08-25) — Canonical Technique слой; item = expression; fill frozen.  
 **Владелец:** Product.  
 **Machine vocab:** [`DATA/reference/practice/content_taxonomy_v1.json`](../../DATA/reference/practice/content_taxonomy_v1.json).  
 **Item contract:** [`DATA/reference/practice/content_item_contract_v1.json`](../../DATA/reference/practice/content_item_contract_v1.json).  
+**Technique canon:** [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · [`technique_canon_v1.json`](../../DATA/reference/practice/technique_canon_v1.json).  
 **Coverage (fill-pass):** [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) · [`content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).
 
 **Это:** классы, типы и атрибуты контентных объектов. Смысловой движок говорит *какая потребность*, библиотека отвечает *каким объектом*.  
-**Это не:** экран `/practices` · C1 evolution registries · массовое наполнение items · психологическое/медицинское ядро знаний.
+**Это не:** экран `/practices` · C1 evolution registries · массовое LLM-наполнение items · медицинские claims. Provenance техник — отдельный канон, не этот файл.
 
 **Связанные (не заменяют этот файл):**
 
 | Документ | Роль |
 |----------|------|
-| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | Coverage-first fill. Need cells до генерации текста. Meaning не знает item_id. |
+| [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) | **SoT происхождения техники.** Source → canonical technique → item. LLM не источник метода. |
+| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | Coverage-first fill. **Frozen** pending technique canon. Meaning не знает item_id / technique_id. |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | Need/format чипы и цикл сессии. Need ≠ type. Format ≠ type. |
 | [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md) §2.5 · §2.8 | Куда кладётся Machine + Content. P2 fill ещё впереди. |
 | [TODAYFLOW_PRODUCT_BUILD_MAP.md](../TODAYFLOW_PRODUCT_BUILD_MAP.md) `PracticeRecommendation` | Одна рекомендация на день. Meaning не знает `item_id`. |
 | [TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md) | Человек, не система. Ритуал = последовательность действий, не магия. |
-| [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) | Если практики станут *системой знаний* — отдельный порядок. Этот файл = продуктовая taxonomy объектов, не knowledge core. |
+| [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) | Parent порядка исследования. Практики как система техник идут через provenance, не через IL CORE. |
 
 ---
 
@@ -34,6 +36,8 @@
 
 **v1.1:** pipeline Meaning → Need → Retrieval → Library → Item locked. Content Item = identity / retrieval / payload. Fill = coverage-first ([PRACTICE_CONTENT_COVERAGE_V1](./PRACTICE_CONTENT_COVERAGE_V1.md)); library file empty. Public JSON still unchanged.
 
+**v1.2:** Canonical Technique is the source of the *method*. Content Item is a product expression (`identity.technique_id` optional until registry has rows). LLM may formulate payload after canon exists; it is not the technique source. Fill frozen — [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md). Public JSON still unchanged.
+
 ---
 
 ## 0. Закон
@@ -43,7 +47,8 @@
 3. **Один type — одна техника.** Цель живёт в `purpose[]`. Сфера — в `domain[]` (nullable). Состояние — в `input_state[]` / `direction[]`.
 4. **Четыре разных job'а, четыре класса.** Разовое действие ≠ направленное внимание ≠ когнитивная формулировка ≠ правило на период.
 5. **Не лечить.** Нет медицинских обещаний, протоколов расстройств, гарантий сна/питания. Contraindications — ограничения продукта, не диагноз.
-6. **Обратной зависимости нет.** Ни Meaning, ни астрологическая семантика не знают `item_id`, текст медитации или конкретную практику.
+6. **Обратной зависимости нет.** Ни Meaning, ни астрологическая семантика не знают `item_id`, `technique_id`, текст медитации или конкретную практику.
+7. **Техника не выдумывается под ячейку.** Need cell говорит, *какую потребность* закрыть. Canonical Technique говорит, *какой метод* существует. Item — наша реализация. См. [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md).
 
 Исключение product-layer: meditation type `sleep` (пользователь ищет «Sleep Meditation»). Семантически это цель; в retrieval всё равно ставить `purpose: sleep`. Других purpose-as-type не добавлять.
 
@@ -51,29 +56,42 @@
 
 ## 0.1 Pipeline (граница ответственности)
 
+Две цепочки. Не смешивать.
+
+**Происхождение метода** — [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md):
+
+```text
+Source → Technique extraction → normalization → safety review
+      → Canonical Technique → Content Item expression
+```
+
+**Продуктовая выдача:**
+
 ```text
 Meaning → Need → Retrieval constraints → Content Library → Content Item
 ```
 
 | Слой | Выдаёт | Не выдаёт |
 |------|--------|-----------|
-| **Meaning** (астрология, Character Engine, Today, Profile, Tarot) | `input_state` → `direction` → `purpose[]`; при необходимости `domain[]` / `context[]` | `item_id`, title, script, type как «эта медитация» |
+| **Meaning** (астрология, Character Engine, Today, Profile, Tarot) | `input_state` → `direction` → `purpose[]`; при необходимости `domain[]` / `context[]` | `item_id`, `technique_id`, title, script, type как «эта медитация» |
+| **Canonical Technique** | устойчивое ядро метода, provenance, safety, allowed/prohibited claims | пользовательский UI copy; смысл дня |
 | **Retrieval** | `content_class` → `family?` → `type` + duration / intensity / energy_effect / delivery и прочие ограничения | пользовательский текст |
-| **Library** | конкретный `item_id` | смысл дня |
+| **Library** | конкретный `item_id` (expression канона) | смысл дня |
 
 Need в этой цепочке — семантическая потребность (state/direction/purpose), не chip экрана `/practices`. Screen need — UX-проекция, см. §12.1.
 
-Fill-pass **не** начинается с «написать много контента». Сначала покрытие ячеек — [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md).
+Fill-pass **заморожен**, пока нет canonical technique rows. Coverage ячеек не разрешает писать payload из головы LLM — [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md).
 
 ---
 
 ## 1. Слои
 
 ```text
-content_class          product object
-  └─ family            только practice (breathwork, somatic, …)
-       └─ type         техника
-            └─ item    конкретный текст / аудио / инструкция
+canonical technique    verified method kernel (provenance)
+  └─ content_class     product object
+       └─ family       только practice (breathwork, somatic, …)
+            └─ type    код техники в taxonomy
+                 └─ item    продуктовая реализация (2 min / audio / evening)
 ```
 
 Атрибуты висят на **item** (и могут быть дефолтом на type, но не вместо type):
@@ -347,15 +365,16 @@ retrieval
 ## 10. Content Item — три группы
 
 Machine: [`content_item_contract_v1.json`](../../DATA/reference/practice/content_item_contract_v1.json).  
-Library (пока пустая): [`content_library_v1.json`](../../DATA/reference/practice/content_library_v1.json).
+Library (provisional, fill frozen): [`content_library_v1.json`](../../DATA/reference/practice/content_library_v1.json).  
+Technique registry (empty until ingest): [`technique_canon_v1.json`](../../DATA/reference/practice/technique_canon_v1.json).
 
 Три группы. Не смешивать identity с retrieval и retrieval с текстом.
 
 ### 10.1 identity
 
-`item_id` · `content_class` · `family` (только practice, иначе null) · `type` · `status` (`draft` \| `active` \| `retired`) · `semantic_version` · `seed_cell` (P0 seed-pass: ровно одна need cell; не Meaning, не payload)
+`item_id` · `content_class` · `family` (только practice, иначе null) · `type` · `status` (`draft` \| `active` \| `retired`) · `semantic_version` · `seed_cell` (P0 seed-pass: ровно одна need cell; не Meaning, не payload) · `technique_id` (optional, пока registry пуст; обязан существовать в technique canon, если задан)
 
-`item_id` стабилен. Meaning его не эмитит.
+`item_id` и `technique_id` стабильны. Meaning их не эмитит. Publish (`active`) — только с каноном `review_status = canonical`.
 
 ### 10.2 retrieval
 
@@ -450,7 +469,8 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 - Кодировать цель или сферу в type (`meditation_for_focus`, `affirmation_money`).
 - Второй purpose-as-type после `meditation.sleep`.
 - Дублировать списки purpose/type на фронте как вторую SoT (FE = отображение и null-защита).
-- Выдавать item_id из астрологии / CE / day_story. Meaning → state/direction/purpose.
+- Выдавать item_id или technique_id из астрологии / CE / day_story. Meaning → state/direction/purpose.
+- Писать Content Item из головы LLM как источник техники. Formulation — после Canonical Technique.
 - Медицинские, диагностические, «вылечит тревогу/бессонницу» формулировки.
 - Обязательные эзотерические акты как условие ritual type.
 - Параллельный «канон практик» в корне `docs/` или в screen-файле.
@@ -461,10 +481,10 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 ## 14. Что дальше
 
-1. **Coverage-first** — [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md). P0 need cells + P0 types. Не плодить 40 grounding при дырах в purpose.
-2. Seed items только в пустые P0 ячейки (`content_library_v1.json`).
-3. Retrieval runtime **после** P0 coverage (фильтр по retrieval-полям). Meaning по-прежнему без `item_id`.
-4. Density (P1) и remap legacy `CONTENT/practices/*.json` — после зелёной матрицы, не вместо неё.
+1. **Provenance** — [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md). Ландшафт → shortlist → ingest → canonical technique. Не новые LLM items.
+2. Coverage-first архитектура (26 cells, type spine) стоит; fill **frozen**. Audio vs text отменён как next step.
+3. Retrieval runtime **после** canonical techniques + P0 coverage. Meaning по-прежнему без `item_id` / `technique_id`.
+4. Density (P1) и remap legacy `CONTENT/practices/*.json` — только как expressions канона, не вместо provenance.
 
 ---
 
@@ -472,5 +492,6 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | **v1.2** — Canonical Technique слой; item = expression; `technique_id` optional; fill frozen ([PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md)) |
 | 2026-08-25 | **v1.1** — pipeline Meaning→Need→Retrieval→Library→Item; item = identity/retrieval/payload; fill = coverage-first ([PRACTICE_CONTENT_COVERAGE_V1](./PRACTICE_CONTENT_COVERAGE_V1.md)) |
 | 2026-08-25 | v1.0 ACCEPTED — четыре class, locked types, purpose/domain/state/direction, item shape, discipline extras |

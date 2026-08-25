@@ -1,9 +1,24 @@
 {
   "contract_version": "content_library_v1",
   "version": "1.0.0",
-  "status": "seed",
+  "status": "provisional",
   "semantic_version": "content-taxonomy-v1.1",
-  "description": "Content Items for Practice Content Taxonomy. Coverage-first P0 seed. Item shape: content_item_contract_v1. Cells: content_coverage_matrix_v1.",
+  "content_origin": "llm_provisional",
+  "fill_frozen": true,
+  "description": "Provisional Content Items. Architecture probe only. Technique source is not LLM. Fill frozen until Canonical Technique rows exist. Provenance: docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md",
+  "architecture_probe_item_ids": [
+    "practice.sensory_grounding.001",
+    "practice.extended_exhale.001",
+    "practice.box_breathing.001",
+    "practice.energizing_breath.001",
+    "practice.prompted_reflection.001",
+    "affirmation.capability.001",
+    "practice.body_release.001",
+    "meditation.relaxation.001",
+    "meditation.sleep.001",
+    "discipline.sleep_discipline.001",
+    "practice.micro_action.001"
+  ],
   "items": [
     {
       "identity": {
@@ -16,16 +31,30 @@
         "seed_cell": "need.grounding.stabilize"
       },
       "retrieval": {
-        "purpose": ["grounding"],
+        "purpose": [
+          "grounding"
+        ],
         "domain": [],
-        "input_state": ["scattered", "disconnected", "tense"],
-        "direction": ["stabilize"],
+        "input_state": [
+          "scattered",
+          "disconnected",
+          "tense"
+        ],
+        "direction": [
+          "stabilize"
+        ],
         "duration": 2,
         "duration_unit": "minutes",
         "intensity": "low",
         "energy_effect": "neutral",
-        "context": ["work", "anytime"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -34,11 +63,16 @@
           "ru": {
             "title": "Три вещи вокруг",
             "body": "Остановись. Назови три вещи, которые видишь. Затем две, которые слышишь. Затем одну, которой касаешься. Не объясняй."
+          },
+          "en": {
+            "title": "Three things around",
+            "body": "Stop. Name three things you see. Then two you hear. Then one you touch. Do not explain."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Опора здесь"
+            "ru": "Опора здесь",
+            "en": "Here now"
           }
         }
       }
@@ -54,16 +88,29 @@
         "seed_cell": "need.calm.downregulate"
       },
       "retrieval": {
-        "purpose": ["calm"],
+        "purpose": [
+          "calm"
+        ],
         "domain": [],
-        "input_state": ["overstimulated", "tense"],
-        "direction": ["downregulate"],
+        "input_state": [
+          "overstimulated",
+          "tense"
+        ],
+        "direction": [
+          "downregulate"
+        ],
         "duration": 2,
         "duration_unit": "minutes",
         "intensity": "low",
         "energy_effect": "down",
-        "context": ["work", "anytime"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -72,11 +119,16 @@
           "ru": {
             "title": "Длинный выдох",
             "body": "Вдох через нос. Выдох длиннее вдоха. Повтори четыре раза. Не ускоряй."
+          },
+          "en": {
+            "title": "Long out-breath",
+            "body": "In through the nose. Out longer than in. Four times. Do not speed up."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Тише"
+            "ru": "Тише",
+            "en": "Quieter"
           }
         }
       }
@@ -92,16 +144,28 @@
         "seed_cell": "need.focus.focus"
       },
       "retrieval": {
-        "purpose": ["focus"],
+        "purpose": [
+          "focus"
+        ],
         "domain": [],
-        "input_state": ["scattered"],
-        "direction": ["focus"],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "focus"
+        ],
         "duration": 2,
         "duration_unit": "minutes",
         "intensity": "low",
         "energy_effect": "neutral",
-        "context": ["work", "anytime"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -110,11 +174,16 @@
           "ru": {
             "title": "Четыре фазы",
             "body": "Вдох на четыре. Пауза на четыре. Выдох на четыре. Пауза на четыре. Один цикл. Повтори ещё три."
+          },
+          "en": {
+            "title": "Four counts",
+            "body": "In for four. Hold for four. Out for four. Hold for four. One round. Then stop."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Собраться"
+            "ru": "Собраться",
+            "en": "Gather"
           }
         }
       }
@@ -130,16 +199,28 @@
         "seed_cell": "need.energy.activate"
       },
       "retrieval": {
-        "purpose": ["energy"],
+        "purpose": [
+          "energy"
+        ],
         "domain": [],
-        "input_state": ["low_energy"],
-        "direction": ["activate"],
+        "input_state": [
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
         "duration": 2,
         "duration_unit": "minutes",
         "intensity": "medium",
         "energy_effect": "up",
-        "context": ["work", "anytime"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -148,11 +229,16 @@
           "ru": {
             "title": "Короткий выдох",
             "body": "Вдох через нос. Выдох через рот короче вдоха. Повтори шесть раз. Не задерживай."
+          },
+          "en": {
+            "title": "Short out-breath",
+            "body": "In through the nose. Out through the mouth, shorter than in. Six times. Do not hold."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Живее"
+            "ru": "Живее",
+            "en": "Brighter"
           }
         }
       }
@@ -168,16 +254,28 @@
         "seed_cell": "need.clarity.reflect"
       },
       "retrieval": {
-        "purpose": ["clarity"],
+        "purpose": [
+          "clarity"
+        ],
         "domain": [],
-        "input_state": ["uncertain"],
-        "direction": ["reflect"],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "reflect"
+        ],
         "duration": 2,
         "duration_unit": "minutes",
         "intensity": "low",
         "energy_effect": "neutral",
-        "context": ["work", "anytime"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -186,11 +284,16 @@
           "ru": {
             "title": "Одно предложение",
             "body": "Запиши одним предложением, что сейчас неясно. Не объясняй. Не правь."
+          },
+          "en": {
+            "title": "One sentence",
+            "body": "Write one sentence about what is unclear now. Do not explain. Do not edit."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Яснее"
+            "ru": "Яснее",
+            "en": "Clearer"
           }
         }
       }
@@ -205,16 +308,28 @@
         "seed_cell": "need.confidence.open"
       },
       "retrieval": {
-        "purpose": ["confidence"],
+        "purpose": [
+          "confidence"
+        ],
         "domain": [],
-        "input_state": ["uncertain"],
-        "direction": ["open"],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "open"
+        ],
         "duration": 1,
         "duration_unit": "minutes",
         "intensity": "low",
         "energy_effect": "neutral",
-        "context": ["work", "anytime"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -223,11 +338,16 @@
           "ru": {
             "title": "Следующий шаг",
             "body": "Я справлюсь с тем, что прямо сейчас. Скажи это один раз."
+          },
+          "en": {
+            "title": "Next step",
+            "body": "I can handle what is in front of me now. Say it once."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Могу"
+            "ru": "Могу",
+            "en": "I can"
           }
         }
       }
@@ -243,16 +363,29 @@
         "seed_cell": "need.release.release"
       },
       "retrieval": {
-        "purpose": ["release"],
+        "purpose": [
+          "release"
+        ],
         "domain": [],
-        "input_state": ["emotionally_heavy", "stuck"],
-        "direction": ["release"],
+        "input_state": [
+          "emotionally_heavy",
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
         "duration": 2,
         "duration_unit": "minutes",
         "intensity": "low",
         "energy_effect": "down",
-        "context": ["work", "anytime"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -261,11 +394,16 @@
           "ru": {
             "title": "Плечи вниз",
             "body": "Подними плечи к ушам. Удержи два счёта. Отпусти. Ещё два раза."
+          },
+          "en": {
+            "title": "Shoulders down",
+            "body": "Lift your shoulders to your ears. Hold two counts. Drop them. Two more times."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Сброс"
+            "ru": "Сброс",
+            "en": "Drop"
           }
         }
       }
@@ -280,16 +418,28 @@
         "seed_cell": "need.rest.downregulate"
       },
       "retrieval": {
-        "purpose": ["rest"],
+        "purpose": [
+          "rest"
+        ],
         "domain": [],
-        "input_state": ["overstimulated"],
-        "direction": ["downregulate"],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "downregulate"
+        ],
         "duration": 3,
         "duration_unit": "minutes",
         "intensity": "low",
         "energy_effect": "down",
-        "context": ["work", "anytime"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -298,11 +448,16 @@
           "ru": {
             "title": "Тяжесть в руках",
             "body": "Сядь. Положи руки на колени. На выдохе дай им стать тяжелее. Три дыхания."
+          },
+          "en": {
+            "title": "Heavy hands",
+            "body": "Sit. Hands on your knees. On the out-breath, let them grow heavy. Three breaths."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Мягче"
+            "ru": "Мягче",
+            "en": "Softer"
           }
         }
       }
@@ -317,16 +472,29 @@
         "seed_cell": "need.sleep.prepare"
       },
       "retrieval": {
-        "purpose": ["sleep"],
+        "purpose": [
+          "sleep"
+        ],
         "domain": [],
-        "input_state": ["restless", "overstimulated"],
-        "direction": ["prepare"],
+        "input_state": [
+          "restless",
+          "overstimulated"
+        ],
+        "direction": [
+          "prepare"
+        ],
         "duration": 5,
         "duration_unit": "minutes",
         "intensity": "low",
         "energy_effect": "down",
-        "context": ["evening", "before_sleep"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "evening",
+          "before_sleep"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -335,11 +503,16 @@
           "ru": {
             "title": "Челюсть мягче",
             "body": "Ляг. Закрой глаза. На выдохе отпусти челюсть. Ещё четыре дыхания."
+          },
+          "en": {
+            "title": "Softer jaw",
+            "body": "Lie down. Close your eyes. On the out-breath, ease the jaw. Four more breaths."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Ко сну"
+            "ru": "Ко сну",
+            "en": "Toward bed"
           }
         }
       }
@@ -354,10 +527,16 @@
         "seed_cell": "need.sleep.discipline"
       },
       "retrieval": {
-        "purpose": ["sleep"],
+        "purpose": [
+          "sleep"
+        ],
         "domain": [],
-        "input_state": ["restless"],
-        "direction": ["prepare"],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "prepare"
+        ],
         "duration_days": 7,
         "frequency": "daily",
         "difficulty": "low",
@@ -365,8 +544,14 @@
         "check_in_frequency": "daily",
         "intensity": "low",
         "energy_effect": "down",
-        "context": ["evening", "before_sleep"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "evening",
+          "before_sleep"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -375,6 +560,10 @@
           "ru": {
             "title": "Один и тот же час",
             "body": "Семь дней ложись не позже выбранного часа. Не переноси на завтра."
+          },
+          "en": {
+            "title": "The same hour",
+            "body": "For seven days, lie down no later than the hour you chose. Do not push it to tomorrow."
           }
         },
         "commitment_rule": "Ложись не позже выбранного часа каждый вечер.",
@@ -384,7 +573,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Режим"
+            "ru": "Режим",
+            "en": "Same hour"
           }
         }
       }
@@ -400,16 +590,29 @@
         "seed_cell": "need.motivation.activate"
       },
       "retrieval": {
-        "purpose": ["motivation"],
+        "purpose": [
+          "motivation"
+        ],
         "domain": [],
-        "input_state": ["stuck", "low_energy"],
-        "direction": ["activate"],
+        "input_state": [
+          "stuck",
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
         "duration": 2,
         "duration_unit": "minutes",
         "intensity": "low",
         "energy_effect": "up",
-        "context": ["work", "anytime"],
-        "delivery": ["text", "unguided"],
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
         "contraindications": []
       },
       "payload": {
@@ -418,11 +621,6872 @@
           "ru": {
             "title": "Две минуты",
             "body": "Назови одно действие короче двух минут. Сделай его сейчас. Остановись."
+          },
+          "en": {
+            "title": "Two minutes",
+            "body": "Name one action shorter than two minutes. Do it now. Stop."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Сдвиг"
+            "ru": "Сдвиг",
+            "en": "Shift"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.self_check_in.001",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "self_check_in",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.emotional_awareness.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "emotional_awareness"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно слово",
+            "body": "Назови одним словом, что чувствуешь. Не объясняй. Не правь."
+          },
+          "en": {
+            "title": "One word",
+            "body": "Name in one word what you feel. Do not explain. Do not edit."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Заметить",
+            "en": "Notice"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.journaling.001",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "journaling",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_connection.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Три строки",
+            "body": "Напиши три предложения от себя. Не правь. Закрой."
+          },
+          "en": {
+            "title": "Three lines",
+            "body": "Write three sentences from you. Do not edit. Close."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Своё",
+            "en": "Mine"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.connection_action.001",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "connection_action",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.connection.connect"
+      },
+      "retrieval": {
+        "purpose": [
+          "connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "connect"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно сообщение",
+            "body": "Напиши одно короткое сообщение человеку, которого давно не касался. Отправь. Не объясняй."
+          },
+          "en": {
+            "title": "One message",
+            "body": "Write one short message to a person you have not reached in a while. Send it. Do not write a second."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "К другому",
+            "en": "Toward them"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.creative_prompt.001",
+        "content_class": "practice",
+        "family": "creative",
+        "type": "creative_prompt",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.creativity.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "creativity"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одна линия",
+            "body": "Нарисуй одну линию. Не стирай. Остановись."
+          },
+          "en": {
+            "title": "One line",
+            "body": "Draw one line. Do not erase. Stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Иначе",
+            "en": "Otherwise"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.priority_setting.001",
+        "content_class": "practice",
+        "family": "intention",
+        "type": "priority_setting",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.decision_making.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "decision_making"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно дело",
+            "body": "Напиши одно дело, которое сейчас важнее остальных. Остальное отложи. Закрой."
+          },
+          "en": {
+            "title": "One task",
+            "body": "Write the one task that matters more than the rest right now. Put the rest aside. Close."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Выбрать",
+            "en": "Pick"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.transition_ritual.001",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "transition_ritual",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.transition.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "transition"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Между",
+            "body": "Закрой то, что делал. Встань. Три шага. Сядь к следующему."
+          },
+          "en": {
+            "title": "Between",
+            "body": "Close what you were doing. Stand. Three steps. Sit for the next thing."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Смена",
+            "en": "Switch"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.progressive_relaxation.001",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "progressive_relaxation",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.recovery.recover"
+      },
+      "retrieval": {
+        "purpose": [
+          "recovery"
+        ],
+        "domain": [],
+        "input_state": [
+          "tense",
+          "low_energy"
+        ],
+        "direction": [
+          "recover"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Кулак",
+            "body": "Сожми кулаки на вдохе. На выдохе разожми. Повтори три раза."
+          },
+          "en": {
+            "title": "Fists",
+            "body": "Make fists on the in-breath. Open them on the out-breath. Three times."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Снять",
+            "en": "Unclench"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.routine_commitment.001",
+        "content_class": "discipline",
+        "type": "routine_commitment",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.discipline.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "discipline"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Одно время",
+            "body": "Семь дней делай одно выбранное действие в одно и то же время. Действие не меняй."
+          },
+          "en": {
+            "title": "The same time",
+            "body": "For seven days, do one chosen action at the same time. Do not change the action."
+          }
+        },
+        "commitment_rule": "Каждый день одно выбранное действие в одно время.",
+        "restriction": "Не менять действие и не переносить на завтра.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней подряд.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Режим",
+            "en": "Same time"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.attention_discipline.001",
+        "content_class": "discipline",
+        "type": "attention_discipline",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_control.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_control"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Одна лента",
+            "body": "Семь дней не держи больше одной ленты открытой. Лишнее закрой сразу."
+          },
+          "en": {
+            "title": "One feed",
+            "body": "For seven days, do not keep more than one feed open. Close the extra at once."
+          }
+        },
+        "commitment_rule": "Не больше одной ленты на экране.",
+        "restriction": "Не открывать вторую ленту «на минуту».",
+        "start_condition": "Сейчас.",
+        "completion_condition": "Семь дней.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Узже",
+            "en": "Narrower"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.abstinence.001",
+        "content_class": "discipline",
+        "type": "abstinence",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.detachment.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "detachment"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Без этого",
+            "body": "Семь дней не бери выбранное. Если потянуло — скажи нет и отойди."
+          },
+          "en": {
+            "title": "Without this",
+            "body": "For seven days, do not take the thing you named. If the pull comes, say no and step away."
+          }
+        },
+        "commitment_rule": "Не брать выбранное семь дней.",
+        "restriction": "Не делать исключение «на сегодня».",
+        "start_condition": "Сейчас.",
+        "completion_condition": "Семь дней без выбранного.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отказ",
+            "en": "Refuse"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.consistency_challenge.001",
+        "content_class": "discipline",
+        "type": "consistency_challenge",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.consistency.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "consistency"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "restart",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Семь подряд",
+            "body": "Семь дней подряд отмечай одно короткое действие. Пропуск обнуляет счёт."
+          },
+          "en": {
+            "title": "Seven in a row",
+            "body": "For seven days in a row, mark one short action. A miss resets the count."
+          }
+        },
+        "commitment_rule": "Каждый день одно короткое действие без пропуска.",
+        "restriction": "Пропуск обнуляет счёт. Не переносить день.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней подряд без пропуска.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Ряд",
+            "en": "Streak"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.reduction.001",
+        "content_class": "discipline",
+        "type": "reduction",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.simplicity.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "simplicity"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Меньше",
+            "body": "Семь дней убери одну лишнюю вещь из дня. Не возвращай её раньше срока."
+          },
+          "en": {
+            "title": "Less",
+            "body": "For seven days, drop one extra thing from the day. Do not bring it back early."
+          }
+        },
+        "commitment_rule": "Каждый день без одной выбранной лишней вещи.",
+        "restriction": "Не возвращать её раньше семи дней.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней с одной убранной вещью.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Проще",
+            "en": "Simpler"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.digital_pause.001",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "digital_pause",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.reset.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "reset"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Экран вниз",
+            "body": "Положи телефон экраном вниз. Не бери две минуты. Смотри в окно."
+          },
+          "en": {
+            "title": "Screen down",
+            "body": "Put the phone face down. Do not pick it up for two minutes. Look out the window."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Пауза",
+            "en": "Face down"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.mindfulness.001",
+        "content_class": "meditation",
+        "type": "mindfulness",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.presence.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "presence"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "balanced"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Три звука",
+            "body": "Сядь. Назови три звука, которые слышишь. Не оценивай. Ещё одно дыхание."
+          },
+          "en": {
+            "title": "Three sounds",
+            "body": "Sit. Name three sounds you hear. Do not judge. One more breath."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Здесь",
+            "en": "Here"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.consistency_challenge.002",
+        "content_class": "discipline",
+        "type": "consistency_challenge",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.habit_change.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "habit_change"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Вместо",
+            "body": "Семь дней, когда тянет к старому, сделай одно новое короткое действие вместо него."
+          },
+          "en": {
+            "title": "Instead",
+            "body": "For seven days, when the old pull comes, do one new short action in its place."
+          }
+        },
+        "commitment_rule": "При тяге к старому — одно новое короткое действие.",
+        "restriction": "Не возвращаться к старому в эти семь дней.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней с новым действием вместо старого.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Замена",
+            "en": "Swap"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.mobility.001",
+        "content_class": "practice",
+        "family": "movement",
+        "type": "mobility",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.energy.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "energy"
+        ],
+        "domain": [],
+        "input_state": [
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Кисти",
+            "body": "Покрути кистями восемь раз. Потом плечами. Остановись."
+          },
+          "en": {
+            "title": "Wrists",
+            "body": "Circle your wrists eight times. Then your shoulders. Stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Размять",
+            "en": "Loosen"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.intention_setting.001",
+        "content_class": "practice",
+        "family": "intention",
+        "type": "intention_setting",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.decision_making.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "decision_making"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "На час",
+            "body": "Напиши одно намерение на ближайший час. Остальное не трогай."
+          },
+          "en": {
+            "title": "For an hour",
+            "body": "Write one aim for the next hour. Leave the rest. Do not touch it."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Курс",
+            "en": "Aim"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.environment_reset.001",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "environment_reset",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.reset.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "reset"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Один предмет",
+            "body": "Убери один предмет со стола. Поставь его туда, где ему место. Сядь."
+          },
+          "en": {
+            "title": "One object",
+            "body": "Take one object off the desk. Put it where it belongs. Sit."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Место",
+            "en": "Place"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.free_writing.001",
+        "content_class": "practice",
+        "family": "creative",
+        "type": "free_writing",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.creativity.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "creativity"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Без правки",
+            "body": "Пиши две минуты не останавливаясь. Не стирай. Точка."
+          },
+          "en": {
+            "title": "No edits",
+            "body": "Write for two minutes without stopping. Do not erase. Period."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Текст",
+            "en": "Words"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.morning_ritual.001",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "morning_ritual",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.transition.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "transition"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "morning",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Стакан",
+            "body": "Выпей воду. Открой окно. Назови одно дело. Начни."
+          },
+          "en": {
+            "title": "A glass",
+            "body": "Drink water. Open the window. Name one task. Begin."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Утро",
+            "en": "Morning"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.evening_ritual.001",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "evening_ritual",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.sleep.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "sleep"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless",
+          "overstimulated"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "before_sleep"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Свет ниже",
+            "body": "Приглуши свет. Положи телефон дальше. Сядь. Три выдоха."
+          },
+          "en": {
+            "title": "Lower light",
+            "body": "Dim the light. Put the phone farther away. Sit. Three out-breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "К ночи",
+            "en": "Toward night"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.breath_awareness.001",
+        "content_class": "meditation",
+        "type": "breath_awareness",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.presence.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "presence"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "balanced"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Вдох как есть",
+            "body": "Сядь. Следи за вдохом. Не меняй его. Пять циклов."
+          },
+          "en": {
+            "title": "The in-breath as it is",
+            "body": "Sit. Watch the in-breath. Do not change it. Five cycles."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Дыхание",
+            "en": "Breath"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.body_scan.001",
+        "content_class": "meditation",
+        "type": "body_scan",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_connection.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Стопы",
+            "body": "Сядь. Заметь стопы. Потом кисти. Не двигай. Одно дыхание."
+          },
+          "en": {
+            "title": "Feet",
+            "body": "Sit. Notice your feet. Then your hands. Do not move. One breath."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Тело",
+            "en": "Body"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.open_awareness.001",
+        "content_class": "meditation",
+        "type": "open_awareness",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.emotional_awareness.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "emotional_awareness"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Что есть",
+            "body": "Сядь. Назови, что есть сейчас, одним словом. Не объясняй. Ещё одно дыхание."
+          },
+          "en": {
+            "title": "What is here",
+            "body": "Sit. Name what is here now in one word. Do not explain. One more breath."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Заметить",
+            "en": "Notice"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.focused_attention.001",
+        "content_class": "meditation",
+        "type": "focused_attention",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.focus.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "focus"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Точка",
+            "body": "Выбери одну точку перед собой. Смотри на неё. Если ушёл — вернись. Три дыхания."
+          },
+          "en": {
+            "title": "A point",
+            "body": "Pick one point in front of you. Look at it. If you leave, return. Three breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Держать",
+            "en": "Hold"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.grounding.001",
+        "content_class": "meditation",
+        "type": "grounding",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.grounding.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "grounding"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "disconnected",
+          "tense"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Вес",
+            "body": "Сядь. Почувствуй вес на сиденье. Не вставай. Три дыхания."
+          },
+          "en": {
+            "title": "Weight",
+            "body": "Sit. Feel the weight on the seat. Do not stand. Three breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Здесь",
+            "en": "Here"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.acceptance.001",
+        "content_class": "meditation",
+        "type": "acceptance",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.detachment.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "detachment"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Как есть",
+            "body": "Сядь. Заметь, что сейчас слишком. Не убирай. Три дыхания рядом."
+          },
+          "en": {
+            "title": "As it is",
+            "body": "Sit. Notice what feels like too much. Do not push it away. Three breaths beside it."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Рядом",
+            "en": "Beside"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.letting_go.001",
+        "content_class": "meditation",
+        "type": "letting_go",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.release.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "release"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy",
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "На выдохе",
+            "body": "Вдох. На выдохе отпусти плечи. Не держи. Ещё два раза."
+          },
+          "en": {
+            "title": "On the out-breath",
+            "body": "In. On the out-breath, drop the shoulders. Do not hold. Two more times."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отпустить",
+            "en": "Drop"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.reflection_meditation.001",
+        "content_class": "meditation",
+        "type": "reflection_meditation",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.clarity.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "clarity"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Один вопрос",
+            "body": "Сядь. Задай себе один вопрос. Не отвечай сразу. Три дыхания. Потом одно слово."
+          },
+          "en": {
+            "title": "One question",
+            "body": "Sit. Ask yourself one question. Do not answer yet. Three breaths. Then one word."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Яснее",
+            "en": "Clearer"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.self_trust.001",
+        "content_class": "affirmation",
+        "type": "self_trust",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.confidence.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "confidence"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 1,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "Своё",
+            "body": "Я могу опереться на своё решение. Скажи это один раз."
+          },
+          "en": {
+            "title": "My call",
+            "body": "I can stand on my own call. Say it once."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Опора",
+            "en": "Stand"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.agency.001",
+        "content_class": "affirmation",
+        "type": "agency",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.motivation.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "motivation"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck",
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 1,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "Я выбираю",
+            "body": "Я выбираю следующий маленький шаг. Скажи это и сделай его."
+          },
+          "en": {
+            "title": "I choose",
+            "body": "I choose the next small step. Say it and do it."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Выбор",
+            "en": "Choose"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.relationship.001",
+        "content_class": "affirmation",
+        "type": "relationship",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.connection.connect"
+      },
+      "retrieval": {
+        "purpose": [
+          "connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "connect"
+        ],
+        "duration": 1,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "К человеку",
+            "body": "Я могу сделать один тёплый шаг к человеку. Скажи это один раз."
+          },
+          "en": {
+            "title": "Toward a person",
+            "body": "I can take one warm step toward a person. Say it once."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "К ним",
+            "en": "Toward them"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.digital_limit.001",
+        "content_class": "discipline",
+        "type": "digital_limit",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_control.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_control"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Час без ленты",
+            "body": "Семь дней один час в день без лент. Поставь таймер. Не открывай."
+          },
+          "en": {
+            "title": "An hour off feeds",
+            "body": "For seven days, one hour a day with no feeds. Set a timer. Do not open them."
+          }
+        },
+        "commitment_rule": "Один час в день без лент.",
+        "restriction": "Не открывать ленту «на минуту» в этот час.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней с одним часом без лент.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Лимит",
+            "en": "Cap"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.consumption_limit.001",
+        "content_class": "discipline",
+        "type": "consumption_limit",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.simplicity.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "simplicity"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Не сейчас",
+            "body": "Семь дней не покупай то, что не планировал утром. Отложи."
+          },
+          "en": {
+            "title": "Not now",
+            "body": "For seven days, do not buy what you did not plan this morning. Put it off."
+          }
+        },
+        "commitment_rule": "Не покупать незапланированное.",
+        "restriction": "Не делать исключение «маленькая вещь».",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней без незапланированных покупок.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отложить",
+            "en": "Later"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.extended_exhale.002",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "extended_exhale",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.calm.downregulate"
+      },
+      "retrieval": {
+        "purpose": [
+          "calm"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated",
+          "tense"
+        ],
+        "direction": [
+          "downregulate"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Длинный выдох",
+            "body": "Вдох через нос. Выдох длиннее вдоха. Повтори восемь раз. Не ускоряй."
+          },
+          "en": {
+            "title": "Long out-breath",
+            "body": "In through the nose. Out longer than in. Eight times. Do not speed up."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Тише",
+            "en": "Quieter"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.box_breathing.002",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "box_breathing",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.focus.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "focus"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Четыре фазы",
+            "body": "Вдох на четыре. Пауза на четыре. Выдох на четыре. Пауза на четыре. Три круга. Остановись."
+          },
+          "en": {
+            "title": "Four counts",
+            "body": "In for four. Hold for four. Out for four. Hold for four. Three rounds. Then stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Собраться",
+            "en": "Gather"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.energizing_breath.002",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "energizing_breath",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.energy.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "energy"
+        ],
+        "domain": [],
+        "input_state": [
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "medium",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Короткий выдох",
+            "body": "Вдох через нос. Выдох через рот короче вдоха. Повтори двенадцать раз. Не задерживай."
+          },
+          "en": {
+            "title": "Short out-breath",
+            "body": "In through the nose. Out through the mouth, shorter than in. Twelve times. Do not hold."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Живее",
+            "en": "Brighter"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.body_release.002",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "body_release",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.release.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "release"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy",
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Плечи вниз",
+            "body": "Подними плечи к ушам. Удержи два счёта. Отпусти. Ещё шесть раз."
+          },
+          "en": {
+            "title": "Shoulders down",
+            "body": "Lift your shoulders to your ears. Hold two counts. Drop them. Six more times."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Сброс",
+            "en": "Drop"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.progressive_relaxation.002",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "progressive_relaxation",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.recovery.recover"
+      },
+      "retrieval": {
+        "purpose": [
+          "recovery"
+        ],
+        "domain": [],
+        "input_state": [
+          "tense",
+          "low_energy"
+        ],
+        "direction": [
+          "recover"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Кулак",
+            "body": "Сожми кулаки на вдохе. На выдохе разожми. Повтори восемь раз."
+          },
+          "en": {
+            "title": "Fists",
+            "body": "Make fists on the in-breath. Open them on the out-breath. Eight times."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Снять",
+            "en": "Unclench"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.sensory_grounding.002",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "sensory_grounding",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.grounding.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "grounding"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "disconnected",
+          "tense"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Три вещи вокруг",
+            "body": "Остановись. Назови три вещи, которые видишь. Затем две, которые слышишь. Затем одну, которой касаешься. Повтори круг."
+          },
+          "en": {
+            "title": "Three things around",
+            "body": "Stop. Name three things you see. Then two you hear. Then one you touch. Repeat the round."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Опора здесь",
+            "en": "Here now"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.mobility.002",
+        "content_class": "practice",
+        "family": "movement",
+        "type": "mobility",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.energy.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "energy"
+        ],
+        "domain": [],
+        "input_state": [
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Кисти",
+            "body": "Покрути кистями восемь раз. Потом плечами. Потом стопами. Остановись."
+          },
+          "en": {
+            "title": "Wrists",
+            "body": "Circle your wrists eight times. Then your shoulders. Then your feet. Stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Размять",
+            "en": "Loosen"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.journaling.002",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "journaling",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_connection.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Три строки",
+            "body": "Напиши три предложения от себя. Не правь. Посиди с ними. Закрой."
+          },
+          "en": {
+            "title": "Three lines",
+            "body": "Write three sentences from you. Do not edit. Sit with them. Close."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Своё",
+            "en": "Mine"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.prompted_reflection.002",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "prompted_reflection",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.clarity.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "clarity"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно предложение",
+            "body": "Запиши одним предложением, что сейчас неясно. Не объясняй. Не правь. Прочитай раз."
+          },
+          "en": {
+            "title": "One sentence",
+            "body": "Write one sentence about what is unclear now. Do not explain. Do not edit. Read it once."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Яснее",
+            "en": "Clearer"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.self_check_in.002",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "self_check_in",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.emotional_awareness.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "emotional_awareness"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно слово",
+            "body": "Назови одним словом, что чувствуешь. Не объясняй. Не правь. Подыши два раза."
+          },
+          "en": {
+            "title": "One word",
+            "body": "Name in one word what you feel. Do not explain. Do not edit. Take two breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Заметить",
+            "en": "Notice"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.intention_setting.002",
+        "content_class": "practice",
+        "family": "intention",
+        "type": "intention_setting",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.decision_making.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "decision_making"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "На час",
+            "body": "Напиши одно намерение на ближайший час. Остальное не трогай. Прочитай его ещё раз."
+          },
+          "en": {
+            "title": "For an hour",
+            "body": "Write one aim for the next hour. Leave the rest. Read it once more."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Курс",
+            "en": "Aim"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.priority_setting.002",
+        "content_class": "practice",
+        "family": "intention",
+        "type": "priority_setting",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.decision_making.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "decision_making"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно дело",
+            "body": "Напиши одно дело, которое сейчас важнее остальных. Остальное отложи. Закрой. Проверь список."
+          },
+          "en": {
+            "title": "One task",
+            "body": "Write the one task that matters more than the rest right now. Put the rest aside. Close. Check the list."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Выбрать",
+            "en": "Pick"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.micro_action.002",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "micro_action",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.motivation.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "motivation"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck",
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Две минуты",
+            "body": "Назови одно действие короче двух минут. Сделай его сейчас. Затем ещё одно такое же короткое. Остановись."
+          },
+          "en": {
+            "title": "Two minutes",
+            "body": "Name one action shorter than two minutes. Do it now. Then one more that short. Stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Сдвиг",
+            "en": "Shift"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.environment_reset.002",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "environment_reset",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.reset.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "reset"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Один предмет",
+            "body": "Убери один предмет со стола. Поставь его туда, где ему место. Убери второй. Сядь."
+          },
+          "en": {
+            "title": "One object",
+            "body": "Take one object off the desk. Put it where it belongs. Take a second. Sit."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Место",
+            "en": "Place"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.digital_pause.002",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "digital_pause",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.reset.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "reset"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Экран вниз",
+            "body": "Положи телефон экраном вниз. Не бери пять минут. Смотри в окно."
+          },
+          "en": {
+            "title": "Screen down",
+            "body": "Put the phone face down. Do not pick it up for five minutes. Look out the window."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Пауза",
+            "en": "Face down"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.connection_action.002",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "connection_action",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.connection.connect"
+      },
+      "retrieval": {
+        "purpose": [
+          "connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "connect"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно сообщение",
+            "body": "Напиши одно короткое сообщение человеку, которого давно не касался. Отправь. Не пиши второе."
+          },
+          "en": {
+            "title": "One message",
+            "body": "Write one short message to a person you have not reached in a while. Send it. Do not write a second."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "К другому",
+            "en": "Toward them"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.free_writing.002",
+        "content_class": "practice",
+        "family": "creative",
+        "type": "free_writing",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.creativity.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "creativity"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Без правки",
+            "body": "Пиши пять минут не останавливаясь. Не стирай. Точка."
+          },
+          "en": {
+            "title": "No edits",
+            "body": "Write for five minutes without stopping. Do not erase. Period."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Текст",
+            "en": "Words"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.creative_prompt.002",
+        "content_class": "practice",
+        "family": "creative",
+        "type": "creative_prompt",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.creativity.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "creativity"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одна линия",
+            "body": "Нарисуй одну линию. Не стирай. Рядом ещё одну. Остановись."
+          },
+          "en": {
+            "title": "One line",
+            "body": "Draw one line. Do not erase. Draw one more beside it. Stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Иначе",
+            "en": "Otherwise"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.morning_ritual.002",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "morning_ritual",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.transition.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "transition"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "morning",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Стакан",
+            "body": "Выпей воду. Открой окно. Назови одно дело. Потянись. Начни."
+          },
+          "en": {
+            "title": "A glass",
+            "body": "Drink water. Open the window. Name one task. Stretch. Begin."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Утро",
+            "en": "Morning"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.evening_ritual.002",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "evening_ritual",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.sleep.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "sleep"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless",
+          "overstimulated"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "before_sleep"
+        ],
+        "delivery": [
+          "audio",
+          "guided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Свет ниже",
+            "body": "Приглуши свет. Положи телефон дальше. Сядь. Закрой глаза. Три выдоха. Ещё три."
+          },
+          "en": {
+            "title": "Lower light",
+            "body": "Dim the light. Put the phone farther away. Sit. Close your eyes. Three out-breaths. Three more."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "К ночи",
+            "en": "Toward night"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.transition_ritual.002",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "transition_ritual",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.transition.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "transition"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Между",
+            "body": "Закрой то, что делал. Встань. Три шага. Сядь к следующему. Назови его вслух."
+          },
+          "en": {
+            "title": "Between",
+            "body": "Close what you were doing. Stand. Three steps. Sit for the next thing. Say its name out loud."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Смена",
+            "en": "Switch"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.breath_awareness.002",
+        "content_class": "meditation",
+        "type": "breath_awareness",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.presence.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "presence"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "balanced"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Вдох как есть",
+            "body": "Сядь. Следи за вдохом. Не меняй его. Десять циклов."
+          },
+          "en": {
+            "title": "The in-breath as it is",
+            "body": "Sit. Watch the in-breath. Do not change it. Ten cycles."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Дыхание",
+            "en": "Breath"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.body_scan.002",
+        "content_class": "meditation",
+        "type": "body_scan",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_connection.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Стопы",
+            "body": "Сядь. Заметь стопы. Потом кисти. Потом лицо. Не двигай. Одно дыхание на каждое."
+          },
+          "en": {
+            "title": "Feet",
+            "body": "Sit. Notice your feet. Then your hands. Then your face. Do not move. One breath on each."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Тело",
+            "en": "Body"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.open_awareness.002",
+        "content_class": "meditation",
+        "type": "open_awareness",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.emotional_awareness.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "emotional_awareness"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Что есть",
+            "body": "Сядь. Назови, что есть сейчас, одним словом. Не объясняй. Ещё три дыхания."
+          },
+          "en": {
+            "title": "What is here",
+            "body": "Sit. Name what is here now in one word. Do not explain. Three more breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Заметить",
+            "en": "Notice"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.focused_attention.002",
+        "content_class": "meditation",
+        "type": "focused_attention",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.focus.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "focus"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Точка",
+            "body": "Выбери одну точку перед собой. Смотри на неё. Если ушёл — вернись. Восемь дыханий."
+          },
+          "en": {
+            "title": "A point",
+            "body": "Pick one point in front of you. Look at it. If you leave, return. Eight breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Держать",
+            "en": "Hold"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.mindfulness.002",
+        "content_class": "meditation",
+        "type": "mindfulness",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.presence.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "presence"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "balanced"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Три звука",
+            "body": "Сядь. Назови три звука, которые слышишь. Не оценивай. Ещё пять дыханий."
+          },
+          "en": {
+            "title": "Three sounds",
+            "body": "Sit. Name three sounds you hear. Do not judge. Five more breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Здесь",
+            "en": "Here"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.grounding.002",
+        "content_class": "meditation",
+        "type": "grounding",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.grounding.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "grounding"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "disconnected",
+          "tense"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Вес",
+            "body": "Сядь. Почувствуй вес на сиденье. Не вставай. Восемь дыханий."
+          },
+          "en": {
+            "title": "Weight",
+            "body": "Sit. Feel the weight on the seat. Do not stand. Eight breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Здесь",
+            "en": "Here"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.relaxation.002",
+        "content_class": "meditation",
+        "type": "relaxation",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.rest.downregulate"
+      },
+      "retrieval": {
+        "purpose": [
+          "rest"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "downregulate"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Тяжесть в руках",
+            "body": "Сядь. Положи руки на колени. На выдохе дай им стать тяжелее. Восемь дыханий."
+          },
+          "en": {
+            "title": "Heavy hands",
+            "body": "Sit. Hands on your knees. On the out-breath, let them grow heavy. Eight breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Мягче",
+            "en": "Softer"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.acceptance.002",
+        "content_class": "meditation",
+        "type": "acceptance",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.detachment.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "detachment"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Как есть",
+            "body": "Сядь. Заметь, что сейчас слишком. Не убирай. Восемь дыханий рядом."
+          },
+          "en": {
+            "title": "As it is",
+            "body": "Sit. Notice what feels like too much. Do not push it away. Eight breaths beside it."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Рядом",
+            "en": "Beside"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.letting_go.002",
+        "content_class": "meditation",
+        "type": "letting_go",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.release.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "release"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy",
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "На выдохе",
+            "body": "Вдох. На выдохе отпусти плечи. Не держи. Ещё шесть раз."
+          },
+          "en": {
+            "title": "On the out-breath",
+            "body": "In. On the out-breath, drop the shoulders. Do not hold. Six more times."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отпустить",
+            "en": "Drop"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.sleep.002",
+        "content_class": "meditation",
+        "type": "sleep",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.sleep.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "sleep"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless",
+          "overstimulated"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "before_sleep"
+        ],
+        "delivery": [
+          "audio",
+          "guided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Челюсть мягче",
+            "body": "Ляг. Закрой глаза. На выдохе отпусти челюсть. Слушай выдох до конца. Ещё шесть дыханий."
+          },
+          "en": {
+            "title": "Softer jaw",
+            "body": "Lie down. Close your eyes. On the out-breath, ease the jaw. Follow the out-breath to the end. Six more breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Ко сну",
+            "en": "Toward bed"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.reflection_meditation.002",
+        "content_class": "meditation",
+        "type": "reflection_meditation",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.clarity.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "clarity"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Один вопрос",
+            "body": "Сядь. Задай себе один вопрос. Не отвечай сразу. Восемь дыханий. Потом одно слово."
+          },
+          "en": {
+            "title": "One question",
+            "body": "Sit. Ask yourself one question. Do not answer yet. Eight breaths. Then one word."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Яснее",
+            "en": "Clearer"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.self_trust.002",
+        "content_class": "affirmation",
+        "type": "self_trust",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.confidence.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "confidence"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "Своё",
+            "body": "Я могу опереться на своё решение. Скажи это два раза."
+          },
+          "en": {
+            "title": "My call",
+            "body": "I can stand on my own call. Say it twice."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Опора",
+            "en": "Stand"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.capability.002",
+        "content_class": "affirmation",
+        "type": "capability",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.confidence.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "confidence"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "Следующий шаг",
+            "body": "Я справлюсь с тем, что прямо сейчас. Скажи это два раза."
+          },
+          "en": {
+            "title": "Next step",
+            "body": "I can handle what is in front of me now. Say it twice."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Могу",
+            "en": "I can"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.agency.002",
+        "content_class": "affirmation",
+        "type": "agency",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.motivation.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "motivation"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck",
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "Я выбираю",
+            "body": "Я выбираю следующий маленький шаг. Скажи это два раза и сделай его."
+          },
+          "en": {
+            "title": "I choose",
+            "body": "I choose the next small step. Say it twice and do it."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Выбор",
+            "en": "Choose"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.relationship.002",
+        "content_class": "affirmation",
+        "type": "relationship",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.connection.connect"
+      },
+      "retrieval": {
+        "purpose": [
+          "connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "connect"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "К человеку",
+            "body": "Я могу сделать один тёплый шаг к человеку. Скажи это два раза."
+          },
+          "en": {
+            "title": "Toward a person",
+            "body": "I can take one warm step toward a person. Say it twice."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "К ним",
+            "en": "Toward them"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.abstinence.002",
+        "content_class": "discipline",
+        "type": "abstinence",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.detachment.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "detachment"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration_days": 14,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Без этого",
+            "body": "Четырнадцать дней не бери выбранное. Если потянуло — скажи нет и отойди."
+          },
+          "en": {
+            "title": "Without this",
+            "body": "For fourteen days, do not take the thing you named. If the pull comes, say no and step away."
+          }
+        },
+        "commitment_rule": "Не брать выбранное четырнадцать дней.",
+        "restriction": "Не делать исключение «на сегодня».",
+        "start_condition": "Сейчас.",
+        "completion_condition": "Четырнадцать дней без выбранного.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отказ",
+            "en": "Refuse"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.reduction.002",
+        "content_class": "discipline",
+        "type": "reduction",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.simplicity.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "simplicity"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration_days": 14,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Меньше",
+            "body": "Четырнадцать дней убери одну лишнюю вещь из дня. Не возвращай её раньше срока."
+          },
+          "en": {
+            "title": "Less",
+            "body": "For fourteen days, drop one extra thing from the day. Do not bring it back early."
+          }
+        },
+        "commitment_rule": "Каждый день без одной выбранной лишней вещи.",
+        "restriction": "Не возвращать её раньше четырнадцати дней.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Четырнадцать дней с одной убранной вещью.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Проще",
+            "en": "Simpler"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.digital_limit.002",
+        "content_class": "discipline",
+        "type": "digital_limit",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_control.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_control"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration_days": 14,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Час без ленты",
+            "body": "Четырнадцать дней один час в день без лент. Поставь таймер. Не открывай."
+          },
+          "en": {
+            "title": "An hour off feeds",
+            "body": "For fourteen days, one hour a day with no feeds. Set a timer. Do not open them."
+          }
+        },
+        "commitment_rule": "Один час в день без лент.",
+        "restriction": "Не открывать ленту «на минуту» в этот час.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Четырнадцать дней с одним часом без лент.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Лимит",
+            "en": "Cap"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.consumption_limit.002",
+        "content_class": "discipline",
+        "type": "consumption_limit",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.simplicity.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "simplicity"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration_days": 14,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Не сейчас",
+            "body": "Четырнадцать дней не покупай то, что не планировал утром. Отложи."
+          },
+          "en": {
+            "title": "Not now",
+            "body": "For fourteen days, do not buy what you did not plan this morning. Put it off."
+          }
+        },
+        "commitment_rule": "Не покупать незапланированное.",
+        "restriction": "Не делать исключение «маленькая вещь».",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Четырнадцать дней без незапланированных покупок.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отложить",
+            "en": "Later"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.attention_discipline.002",
+        "content_class": "discipline",
+        "type": "attention_discipline",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_control.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_control"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration_days": 14,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Одна лента",
+            "body": "Четырнадцать дней не держи больше одной ленты открытой. Лишнее закрой сразу."
+          },
+          "en": {
+            "title": "One feed",
+            "body": "For fourteen days, do not keep more than one feed open. Close the extra at once."
+          }
+        },
+        "commitment_rule": "Не больше одной ленты на экране.",
+        "restriction": "Не открывать вторую ленту «на минуту».",
+        "start_condition": "Сейчас.",
+        "completion_condition": "Четырнадцать дней.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Узже",
+            "en": "Narrower"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.routine_commitment.002",
+        "content_class": "discipline",
+        "type": "routine_commitment",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.discipline.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "discipline"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration_days": 14,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Одно время",
+            "body": "Четырнадцать дней делай одно выбранное действие в одно и то же время. Действие не меняй."
+          },
+          "en": {
+            "title": "The same time",
+            "body": "For fourteen days, do one chosen action at the same time. Do not change the action."
+          }
+        },
+        "commitment_rule": "Каждый день одно выбранное действие в одно время.",
+        "restriction": "Не менять действие и не переносить на завтра.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Четырнадцать дней подряд.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Режим",
+            "en": "Same time"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.sleep_discipline.002",
+        "content_class": "discipline",
+        "type": "sleep_discipline",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.sleep.discipline"
+      },
+      "retrieval": {
+        "purpose": [
+          "sleep"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration_days": 14,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "before_sleep"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Один и тот же час",
+            "body": "Четырнадцать дней ложись не позже выбранного часа. Не переноси на завтра."
+          },
+          "en": {
+            "title": "The same hour",
+            "body": "For fourteen days, lie down no later than the hour you chose. Do not push it to tomorrow."
+          }
+        },
+        "commitment_rule": "Ложись не позже выбранного часа каждый вечер.",
+        "restriction": "Не сдвигать час позже.",
+        "start_condition": "Сегодня вечером.",
+        "completion_condition": "Четырнадцать вечеров подряд.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Режим",
+            "en": "Same hour"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.consistency_challenge.003",
+        "content_class": "discipline",
+        "type": "consistency_challenge",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.consistency.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "consistency"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration_days": 14,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "restart",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Семь подряд",
+            "body": "Четырнадцать дней подряд отмечай одно короткое действие. Пропуск обнуляет счёт."
+          },
+          "en": {
+            "title": "Seven in a row",
+            "body": "For fourteen days in a row, mark one short action. A miss resets the count."
+          }
+        },
+        "commitment_rule": "Каждый день одно короткое действие без пропуска.",
+        "restriction": "Пропуск обнуляет счёт. Не переносить день.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Четырнадцать дней подряд без пропуска.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Ряд",
+            "en": "Streak"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.extended_exhale.003",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "extended_exhale",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.calm.downregulate"
+      },
+      "retrieval": {
+        "purpose": [
+          "calm"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated",
+          "tense"
+        ],
+        "direction": [
+          "downregulate"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Длинный выдох",
+            "body": "Вдох через нос. Выдох длиннее вдоха. Повтори четыре раза. Не ускоряй."
+          },
+          "en": {
+            "title": "Long out-breath",
+            "body": "In through the nose. Out longer than in. Four times. Do not speed up."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Тише",
+            "en": "Quieter"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.box_breathing.003",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "box_breathing",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.focus.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "focus"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Четыре фазы",
+            "body": "Вдох на четыре. Пауза на четыре. Выдох на четыре. Пауза на четыре. Один цикл. Повтори ещё три."
+          },
+          "en": {
+            "title": "Four counts",
+            "body": "In for four. Hold for four. Out for four. Hold for four. One round. Then stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Собраться",
+            "en": "Gather"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.energizing_breath.003",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "energizing_breath",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.energy.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "energy"
+        ],
+        "domain": [],
+        "input_state": [
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "medium",
+        "energy_effect": "up",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Короткий выдох",
+            "body": "Вдох через нос. Выдох через рот короче вдоха. Повтори шесть раз. Не задерживай."
+          },
+          "en": {
+            "title": "Short out-breath",
+            "body": "In through the nose. Out through the mouth, shorter than in. Six times. Do not hold."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Живее",
+            "en": "Brighter"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.body_release.003",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "body_release",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.release.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "release"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy",
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Плечи вниз",
+            "body": "Подними плечи к ушам. Удержи два счёта. Отпусти. Ещё два раза."
+          },
+          "en": {
+            "title": "Shoulders down",
+            "body": "Lift your shoulders to your ears. Hold two counts. Drop them. Two more times."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Сброс",
+            "en": "Drop"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.progressive_relaxation.003",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "progressive_relaxation",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.recovery.recover"
+      },
+      "retrieval": {
+        "purpose": [
+          "recovery"
+        ],
+        "domain": [],
+        "input_state": [
+          "tense",
+          "low_energy"
+        ],
+        "direction": [
+          "recover"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Кулак",
+            "body": "Сожми кулаки на вдохе. На выдохе разожми. Повтори три раза."
+          },
+          "en": {
+            "title": "Fists",
+            "body": "Make fists on the in-breath. Open them on the out-breath. Three times."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Снять",
+            "en": "Unclench"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.sensory_grounding.003",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "sensory_grounding",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.grounding.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "grounding"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "disconnected",
+          "tense"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Три вещи вокруг",
+            "body": "Остановись. Назови три вещи, которые видишь. Затем две, которые слышишь. Затем одну, которой касаешься. Не объясняй."
+          },
+          "en": {
+            "title": "Three things around",
+            "body": "Stop. Name three things you see. Then two you hear. Then one you touch. Do not explain."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Опора здесь",
+            "en": "Here now"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.mobility.003",
+        "content_class": "practice",
+        "family": "movement",
+        "type": "mobility",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.energy.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "energy"
+        ],
+        "domain": [],
+        "input_state": [
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Кисти",
+            "body": "Покрути кистями восемь раз. Потом плечами. Остановись."
+          },
+          "en": {
+            "title": "Wrists",
+            "body": "Circle your wrists eight times. Then your shoulders. Stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Размять",
+            "en": "Loosen"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.journaling.003",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "journaling",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_connection.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Три строки",
+            "body": "Напиши три предложения от себя. Не правь. Закрой."
+          },
+          "en": {
+            "title": "Three lines",
+            "body": "Write three sentences from you. Do not edit. Close."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Своё",
+            "en": "Mine"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.prompted_reflection.003",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "prompted_reflection",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.clarity.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "clarity"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно предложение",
+            "body": "Запиши одним предложением, что сейчас неясно. Не объясняй. Не правь."
+          },
+          "en": {
+            "title": "One sentence",
+            "body": "Write one sentence about what is unclear now. Do not explain. Do not edit."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Яснее",
+            "en": "Clearer"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.self_check_in.003",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "self_check_in",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.emotional_awareness.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "emotional_awareness"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно слово",
+            "body": "Назови одним словом, что чувствуешь. Не объясняй. Не правь."
+          },
+          "en": {
+            "title": "One word",
+            "body": "Name in one word what you feel. Do not explain. Do not edit."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Заметить",
+            "en": "Notice"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.intention_setting.003",
+        "content_class": "practice",
+        "family": "intention",
+        "type": "intention_setting",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.decision_making.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "decision_making"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "На час",
+            "body": "Напиши одно намерение на ближайший час. Остальное не трогай."
+          },
+          "en": {
+            "title": "For an hour",
+            "body": "Write one aim for the next hour. Leave the rest. Do not touch it."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Курс",
+            "en": "Aim"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.priority_setting.003",
+        "content_class": "practice",
+        "family": "intention",
+        "type": "priority_setting",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.decision_making.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "decision_making"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно дело",
+            "body": "Напиши одно дело, которое сейчас важнее остальных. Остальное отложи. Закрой."
+          },
+          "en": {
+            "title": "One task",
+            "body": "Write the one task that matters more than the rest right now. Put the rest aside. Close."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Выбрать",
+            "en": "Pick"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.micro_action.003",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "micro_action",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.motivation.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "motivation"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck",
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Две минуты",
+            "body": "Назови одно действие короче двух минут. Сделай его сейчас. Остановись."
+          },
+          "en": {
+            "title": "Two minutes",
+            "body": "Name one action shorter than two minutes. Do it now. Stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Сдвиг",
+            "en": "Shift"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.environment_reset.003",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "environment_reset",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.reset.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "reset"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Один предмет",
+            "body": "Убери один предмет со стола. Поставь его туда, где ему место. Сядь."
+          },
+          "en": {
+            "title": "One object",
+            "body": "Take one object off the desk. Put it where it belongs. Sit."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Место",
+            "en": "Place"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.digital_pause.003",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "digital_pause",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.reset.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "reset"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Экран вниз",
+            "body": "Положи телефон экраном вниз. Не бери две минуты. Смотри в окно."
+          },
+          "en": {
+            "title": "Screen down",
+            "body": "Put the phone face down. Do not pick it up for two minutes. Look out the window."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Пауза",
+            "en": "Face down"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.connection_action.003",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "connection_action",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.connection.connect"
+      },
+      "retrieval": {
+        "purpose": [
+          "connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "connect"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно сообщение",
+            "body": "Напиши одно короткое сообщение человеку, которого давно не касался. Отправь. Не объясняй."
+          },
+          "en": {
+            "title": "One message",
+            "body": "Write one short message to a person you have not reached in a while. Send it. Do not write a second."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "К другому",
+            "en": "Toward them"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.free_writing.003",
+        "content_class": "practice",
+        "family": "creative",
+        "type": "free_writing",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.creativity.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "creativity"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Без правки",
+            "body": "Пиши две минуты не останавливаясь. Не стирай. Точка."
+          },
+          "en": {
+            "title": "No edits",
+            "body": "Write for two minutes without stopping. Do not erase. Period."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Текст",
+            "en": "Words"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.creative_prompt.003",
+        "content_class": "practice",
+        "family": "creative",
+        "type": "creative_prompt",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.creativity.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "creativity"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одна линия",
+            "body": "Нарисуй одну линию. Не стирай. Остановись."
+          },
+          "en": {
+            "title": "One line",
+            "body": "Draw one line. Do not erase. Stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Иначе",
+            "en": "Otherwise"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.morning_ritual.003",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "morning_ritual",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.transition.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "transition"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Стакан",
+            "body": "Выпей воду. Открой окно. Назови одно дело. Начни."
+          },
+          "en": {
+            "title": "A glass",
+            "body": "Drink water. Open the window. Name one task. Begin."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Утро",
+            "en": "Morning"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.evening_ritual.003",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "evening_ritual",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.sleep.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "sleep"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless",
+          "overstimulated"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Свет ниже",
+            "body": "Приглуши свет. Положи телефон дальше. Сядь. Три выдоха."
+          },
+          "en": {
+            "title": "Lower light",
+            "body": "Dim the light. Put the phone farther away. Sit. Three out-breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "К ночи",
+            "en": "Toward night"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.transition_ritual.003",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "transition_ritual",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.transition.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "transition"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Между",
+            "body": "Закрой то, что делал. Встань. Три шага. Сядь к следующему."
+          },
+          "en": {
+            "title": "Between",
+            "body": "Close what you were doing. Stand. Three steps. Sit for the next thing."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Смена",
+            "en": "Switch"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.breath_awareness.003",
+        "content_class": "meditation",
+        "type": "breath_awareness",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.presence.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "presence"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "balanced"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Вдох как есть",
+            "body": "Сядь. Следи за вдохом. Не меняй его. Пять циклов."
+          },
+          "en": {
+            "title": "The in-breath as it is",
+            "body": "Sit. Watch the in-breath. Do not change it. Five cycles."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Дыхание",
+            "en": "Breath"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.body_scan.003",
+        "content_class": "meditation",
+        "type": "body_scan",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_connection.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Стопы",
+            "body": "Сядь. Заметь стопы. Потом кисти. Не двигай. Одно дыхание."
+          },
+          "en": {
+            "title": "Feet",
+            "body": "Sit. Notice your feet. Then your hands. Do not move. One breath."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Тело",
+            "en": "Body"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.open_awareness.003",
+        "content_class": "meditation",
+        "type": "open_awareness",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.emotional_awareness.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "emotional_awareness"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Что есть",
+            "body": "Сядь. Назови, что есть сейчас, одним словом. Не объясняй. Ещё одно дыхание."
+          },
+          "en": {
+            "title": "What is here",
+            "body": "Sit. Name what is here now in one word. Do not explain. One more breath."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Заметить",
+            "en": "Notice"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.focused_attention.003",
+        "content_class": "meditation",
+        "type": "focused_attention",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.focus.focus"
+      },
+      "retrieval": {
+        "purpose": [
+          "focus"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "focus"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Точка",
+            "body": "Выбери одну точку перед собой. Смотри на неё. Если ушёл — вернись. Три дыхания."
+          },
+          "en": {
+            "title": "A point",
+            "body": "Pick one point in front of you. Look at it. If you leave, return. Three breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Держать",
+            "en": "Hold"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.mindfulness.003",
+        "content_class": "meditation",
+        "type": "mindfulness",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.presence.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "presence"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "balanced"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Три звука",
+            "body": "Сядь. Назови три звука, которые слышишь. Не оценивай. Ещё одно дыхание."
+          },
+          "en": {
+            "title": "Three sounds",
+            "body": "Sit. Name three sounds you hear. Do not judge. One more breath."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Здесь",
+            "en": "Here"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.grounding.003",
+        "content_class": "meditation",
+        "type": "grounding",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.grounding.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "grounding"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "disconnected",
+          "tense"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Вес",
+            "body": "Сядь. Почувствуй вес на сиденье. Не вставай. Три дыхания."
+          },
+          "en": {
+            "title": "Weight",
+            "body": "Sit. Feel the weight on the seat. Do not stand. Three breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Здесь",
+            "en": "Here"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.relaxation.003",
+        "content_class": "meditation",
+        "type": "relaxation",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.rest.downregulate"
+      },
+      "retrieval": {
+        "purpose": [
+          "rest"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "downregulate"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Тяжесть в руках",
+            "body": "Сядь. Положи руки на колени. На выдохе дай им стать тяжелее. Три дыхания."
+          },
+          "en": {
+            "title": "Heavy hands",
+            "body": "Sit. Hands on your knees. On the out-breath, let them grow heavy. Three breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Мягче",
+            "en": "Softer"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.acceptance.003",
+        "content_class": "meditation",
+        "type": "acceptance",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.detachment.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "detachment"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Как есть",
+            "body": "Сядь. Заметь, что сейчас слишком. Не убирай. Три дыхания рядом."
+          },
+          "en": {
+            "title": "As it is",
+            "body": "Sit. Notice what feels like too much. Do not push it away. Three breaths beside it."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Рядом",
+            "en": "Beside"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.letting_go.003",
+        "content_class": "meditation",
+        "type": "letting_go",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.release.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "release"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy",
+          "stuck"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "На выдохе",
+            "body": "Вдох. На выдохе отпусти плечи. Не держи. Ещё два раза."
+          },
+          "en": {
+            "title": "On the out-breath",
+            "body": "In. On the out-breath, drop the shoulders. Do not hold. Two more times."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отпустить",
+            "en": "Drop"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.sleep.003",
+        "content_class": "meditation",
+        "type": "sleep",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.sleep.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "sleep"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless",
+          "overstimulated"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 5,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Челюсть мягче",
+            "body": "Ляг. Закрой глаза. На выдохе отпусти челюсть. Ещё четыре дыхания."
+          },
+          "en": {
+            "title": "Softer jaw",
+            "body": "Lie down. Close your eyes. On the out-breath, ease the jaw. Four more breaths."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Ко сну",
+            "en": "Toward bed"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.reflection_meditation.003",
+        "content_class": "meditation",
+        "type": "reflection_meditation",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.clarity.reflect"
+      },
+      "retrieval": {
+        "purpose": [
+          "clarity"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "script",
+        "locales": {
+          "ru": {
+            "title": "Один вопрос",
+            "body": "Сядь. Задай себе один вопрос. Не отвечай сразу. Три дыхания. Потом одно слово."
+          },
+          "en": {
+            "title": "One question",
+            "body": "Sit. Ask yourself one question. Do not answer yet. Three breaths. Then one word."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Яснее",
+            "en": "Clearer"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.self_trust.003",
+        "content_class": "affirmation",
+        "type": "self_trust",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.confidence.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "confidence"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 1,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "Своё",
+            "body": "Я могу опереться на своё решение. Скажи это один раз."
+          },
+          "en": {
+            "title": "My call",
+            "body": "I can stand on my own call. Say it once."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Опора",
+            "en": "Stand"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.capability.003",
+        "content_class": "affirmation",
+        "type": "capability",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.confidence.open"
+      },
+      "retrieval": {
+        "purpose": [
+          "confidence"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 1,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "Следующий шаг",
+            "body": "Я справлюсь с тем, что прямо сейчас. Скажи это один раз."
+          },
+          "en": {
+            "title": "Next step",
+            "body": "I can handle what is in front of me now. Say it once."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Могу",
+            "en": "I can"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.agency.003",
+        "content_class": "affirmation",
+        "type": "agency",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.motivation.activate"
+      },
+      "retrieval": {
+        "purpose": [
+          "motivation"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck",
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 1,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "Я выбираю",
+            "body": "Я выбираю следующий маленький шаг. Скажи это и сделай его."
+          },
+          "en": {
+            "title": "I choose",
+            "body": "I choose the next small step. Say it and do it."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Выбор",
+            "en": "Choose"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "affirmation.relationship.003",
+        "content_class": "affirmation",
+        "type": "relationship",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.connection.connect"
+      },
+      "retrieval": {
+        "purpose": [
+          "connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "connect"
+        ],
+        "duration": 1,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "affirmation_text",
+        "locales": {
+          "ru": {
+            "title": "К человеку",
+            "body": "Я могу сделать один тёплый шаг к человеку. Скажи это один раз."
+          },
+          "en": {
+            "title": "Toward a person",
+            "body": "I can take one warm step toward a person. Say it once."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "К ним",
+            "en": "Toward them"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.abstinence.003",
+        "content_class": "discipline",
+        "type": "abstinence",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.detachment.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "detachment"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Без этого",
+            "body": "Семь дней не бери выбранное. Если потянуло — скажи нет и отойди."
+          },
+          "en": {
+            "title": "Without this",
+            "body": "For seven days, do not take the thing you named. If the pull comes, say no and step away."
+          }
+        },
+        "commitment_rule": "Не брать выбранное семь дней.",
+        "restriction": "Не делать исключение «на сегодня».",
+        "start_condition": "Сейчас.",
+        "completion_condition": "Семь дней без выбранного.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отказ",
+            "en": "Refuse"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.reduction.003",
+        "content_class": "discipline",
+        "type": "reduction",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.simplicity.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "simplicity"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Меньше",
+            "body": "Семь дней убери одну лишнюю вещь из дня. Не возвращай её раньше срока."
+          },
+          "en": {
+            "title": "Less",
+            "body": "For seven days, drop one extra thing from the day. Do not bring it back early."
+          }
+        },
+        "commitment_rule": "Каждый день без одной выбранной лишней вещи.",
+        "restriction": "Не возвращать её раньше семи дней.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней с одной убранной вещью.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Проще",
+            "en": "Simpler"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.digital_limit.003",
+        "content_class": "discipline",
+        "type": "digital_limit",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_control.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_control"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Час без ленты",
+            "body": "Семь дней один час в день без лент. Поставь таймер. Не открывай."
+          },
+          "en": {
+            "title": "An hour off feeds",
+            "body": "For seven days, one hour a day with no feeds. Set a timer. Do not open them."
+          }
+        },
+        "commitment_rule": "Один час в день без лент.",
+        "restriction": "Не открывать ленту «на минуту» в этот час.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней с одним часом без лент.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Лимит",
+            "en": "Cap"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.consumption_limit.003",
+        "content_class": "discipline",
+        "type": "consumption_limit",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.simplicity.release"
+      },
+      "retrieval": {
+        "purpose": [
+          "simplicity"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Не сейчас",
+            "body": "Семь дней не покупай то, что не планировал утром. Отложи."
+          },
+          "en": {
+            "title": "Not now",
+            "body": "For seven days, do not buy what you did not plan this morning. Put it off."
+          }
+        },
+        "commitment_rule": "Не покупать незапланированное.",
+        "restriction": "Не делать исключение «маленькая вещь».",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней без незапланированных покупок.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отложить",
+            "en": "Later"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.attention_discipline.003",
+        "content_class": "discipline",
+        "type": "attention_discipline",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.self_control.stabilize"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_control"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Одна лента",
+            "body": "Семь дней не держи больше одной ленты открытой. Лишнее закрой сразу."
+          },
+          "en": {
+            "title": "One feed",
+            "body": "For seven days, do not keep more than one feed open. Close the extra at once."
+          }
+        },
+        "commitment_rule": "Не больше одной ленты на экране.",
+        "restriction": "Не открывать вторую ленту «на минуту».",
+        "start_condition": "Сейчас.",
+        "completion_condition": "Семь дней.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Узже",
+            "en": "Narrower"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.routine_commitment.003",
+        "content_class": "discipline",
+        "type": "routine_commitment",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.discipline.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "discipline"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Одно время",
+            "body": "Семь дней делай одно выбранное действие в одно и то же время. Действие не меняй."
+          },
+          "en": {
+            "title": "The same time",
+            "body": "For seven days, do one chosen action at the same time. Do not change the action."
+          }
+        },
+        "commitment_rule": "Каждый день одно выбранное действие в одно время.",
+        "restriction": "Не менять действие и не переносить на завтра.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней подряд.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Режим",
+            "en": "Same time"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.sleep_discipline.003",
+        "content_class": "discipline",
+        "type": "sleep_discipline",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.sleep.discipline"
+      },
+      "retrieval": {
+        "purpose": [
+          "sleep"
+        ],
+        "domain": [],
+        "input_state": [
+          "restless"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "continue",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Один и тот же час",
+            "body": "Семь дней ложись не позже выбранного часа. Не переноси на завтра."
+          },
+          "en": {
+            "title": "The same hour",
+            "body": "For seven days, lie down no later than the hour you chose. Do not push it to tomorrow."
+          }
+        },
+        "commitment_rule": "Ложись не позже выбранного часа каждый вечер.",
+        "restriction": "Не сдвигать час позже.",
+        "start_condition": "Сегодня вечером.",
+        "completion_condition": "Семь вечеров подряд.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Режим",
+            "en": "Same hour"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "discipline.consistency_challenge.004",
+        "content_class": "discipline",
+        "type": "consistency_challenge",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.consistency.prepare"
+      },
+      "retrieval": {
+        "purpose": [
+          "consistency"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration_days": 7,
+        "frequency": "daily",
+        "difficulty": "low",
+        "failure_policy": "restart",
+        "check_in_frequency": "daily",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "commitment_rule",
+        "locales": {
+          "ru": {
+            "title": "Семь подряд",
+            "body": "Семь дней подряд отмечай одно короткое действие. Пропуск обнуляет счёт."
+          },
+          "en": {
+            "title": "Seven in a row",
+            "body": "For seven days in a row, mark one short action. A miss resets the count."
+          }
+        },
+        "commitment_rule": "Каждый день одно короткое действие без пропуска.",
+        "restriction": "Пропуск обнуляет счёт. Не переносить день.",
+        "start_condition": "Сегодня.",
+        "completion_condition": "Семь дней подряд без пропуска.",
+        "allowed_exceptions": [],
+        "presentation": {
+          "outcome_label": {
+            "ru": "Ряд",
+            "en": "Streak"
           }
         }
       }

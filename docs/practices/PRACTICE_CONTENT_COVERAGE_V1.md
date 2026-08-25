@@ -1,30 +1,32 @@
 # Practice Content Coverage v1
 
-**Статус:** `ACCEPTED` — SoT fill-pass библиотеки.  
-**Версия:** 1.0 (2026-08-25).  
+**Статус:** `ACCEPTED` — SoT fill-pass библиотеки. **Fill frozen** 2026-08-25.  
+**Версия:** 1.1 (2026-08-25).  
 **Владелец:** Product.  
 **Ledger:** [`DATA/reference/practice/content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).  
-**Parent:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) §0.1 · §10.
+**Parent:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) §0.1 · §10.  
+**Provenance (next):** [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md).
 
 **Это:** какие ячейки продукт обязан уметь закрыть **до** массовой генерации текста.  
-**Это не:** тексты практик · runtime retrieval · screen need-чипы · cartesian product всех enum.
+**Это не:** тексты практик как SoT · runtime retrieval · screen need-чипы · cartesian product · разрешение писать payload из LLM.
 
 ---
 
 ## Architecture impact
 
-- **SoT before:** taxonomy locked types/purpose/state; fill implied as «написать items против vocab». Риск — плотность в одной технике (40 grounding) и дыры в purpose/direction/class.
-- **SoT after:** fill = coverage-first. P0 = 25 need cells (один канонический `purpose × direction` на каждый purpose) + listed forms. Item = identity / retrieval / payload. Matrix status `empty` until seed items exist. Meaning still does not emit `item_id`. Preferred type in a cell is a **fill target**, not a meaning output.
+- **SoT before:** taxonomy locked types/purpose/state; fill implied as «написать items против vocab». Риск — плотность в одной технике (40 grounding) и дыры в purpose/direction/class. После P0/P1 density: 133 LLM-draft items закрывали cells, но техника не имела provenance.
+- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание не SoT.** Fill frozen. Следующий pass = Canonical Technique, не audio vs text. Первые 11 items = architecture probes.
 - **Public contract changed?** no
-- **Migration required?** no runtime. No Content Items in this pass.
-- **Canon updated?** yes — this file · matrix JSON · item contract · empty library · taxonomy v1.1 · `_INDEX` · README · tracker
-- **Backward compatible?** yes. Legacy `CONTENT/practices/*.json` untouched (P2 remap after P0).
+- **Migration required?** no runtime. 133 drafts stay provisional without `technique_id`.
+- **Canon updated?** yes — this file · matrix JSON · [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · taxonomy v1.2 · tracker
+- **Backward compatible?** yes for clients. Not compatible with continuing LLM-seed as content SoT.
 
 ---
 
 ## 0. Закон fill-pass
 
-1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0.
+0. **Fill frozen.** Не писать новые items (включая audio vs text), пока нет Canonical Technique. 133 draft = `llm_provisional`. Первые 11 = architecture probes.
+1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
 4. **Preferred type — fill target.** Meaning по-прежнему эмитит только state → direction → purpose. Retrieval может выбрать alt form (другой class/type), если constraints так говорят.
@@ -126,6 +128,35 @@ Seed-pass не закрывает несколько cells одним item, да
 5. Payload: `ru` обязателен. Без medical claims. Ritual = последовательность, не магия.
 6. Записать `item_id` **только** в `item_ids[]` этой ячейки (+ type_spine этого type). Status cell → `seed` пока draft, `covered` когда item `active`.
 
+**Шаг 2 — оставшиеся P0 types** (после того как нет empty need cells):
+
+1. Взять **первый** P0 `type_spine[]` с `item_ids = []`.
+2. `seed_cell` = первая `need_cells[]` cell, чей primary **или** alt совпадает с этим class/type.
+3. Форма item = alt (или primary, если type ещё не сеяли). Retrieval = purpose/direction/typical states **этой** cell.
+4. Append `item_id` в `item_ids[]` этой cell (primary остаётся первым). Не писать тот же item во вторую cell, даже если type там тоже alt (`meditation.body_scan` → только `need.self_connection.reflect`, не recovery).
+5. Discipline extras / session duration — по class, как в шаге 1.
+
+**Шаг 3 — P1 density** (после закрытых P0 cells и P0 types). Одна ось на type, порядок `type_spine[]` P0:
+
+1. Взять первый P0 type без same-cell sibling с другим `duration` / `duration_days` / `context` / `delivery`.
+2. Тот же `seed_cell`, class, type, purpose, direction, что у первого item этого type.
+3. Ось: session `duration < 5` → `5`; session уже `5` (sleep/evening) → `delivery = audio + guided` (без `media_ref`); discipline → `duration_days = 14`. Не EN и не вторая ось на том же item.
+4. Append в cell `item_ids` и `type_spine` этого type. Не писать во вторую cell.
+5. **P1 types (42)** не вешать на P0 cells: validator `form_ok` = только primary/alt ячейки. Это не density и не этот pass.
+
+**Шаг 4 — EN locale** (после шага 3). Не новые items:
+
+1. На каждом существующем item: `payload.locales.en.title` + `body`; `presentation.outcome_label.en`.
+2. `ru` остаётся обязательным. Discipline extras (`commitment_rule` и др.) остаются в исходной строке — не плодить второй контракт.
+3. Те же запреты payload: без `purpose` / `direction` / type code / `item_id`. Для `meditation.sleep` английский текст не содержит `sleep`.
+
+**Шаг 5 — context `work` vs `evening`** (после шага 4). Одна ось, порядок P0 `type_spine[]`:
+
+1. Клонировать первый item type (`.001` / первый в `item_ids`). Duration/delivery/`duration_days` не менять.
+2. Context: `work` (без evening) → `evening + anytime`; already evening/`before_sleep` → `work + anytime`; `morning` → `evening + anytime`; только `anytime` → `evening`.
+3. Тот же `seed_cell`. Payload ru+en копируются (техника та же, меняется когда предлагать).
+4. Не вешать P1 types на P0 cells.
+
 **DoD одной ячейки** (не «текст хороший»):
 
 - ячейка больше не `empty`
@@ -136,19 +167,24 @@ Seed-pass не закрывает несколько cells одним item, да
 - другие empty cells не получили этот `item_id`
 - Meaning / public Today JSON **не** менялись
 
-Семена: `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`; `need.energy.activate` → `practice.energizing_breath.001`; `need.clarity.reflect` → `practice.prompted_reflection.001`; `need.confidence.open` → `affirmation.capability.001`; `need.release.release` → `practice.body_release.001`; `need.rest.downregulate` → `meditation.relaxation.001`; `need.sleep.prepare` → `meditation.sleep.001`; `need.sleep.discipline` → `discipline.sleep_discipline.001`; `need.motivation.activate` → `practice.micro_action.001`.
+Семена: `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`; `need.energy.activate` → `practice.energizing_breath.001`; `need.clarity.reflect` → `practice.prompted_reflection.001`; `need.confidence.open` → `affirmation.capability.001`; `need.release.release` → `practice.body_release.001`; `need.rest.downregulate` → `meditation.relaxation.001`; `need.sleep.prepare` → `meditation.sleep.001`; `need.sleep.discipline` → `discipline.sleep_discipline.001`; `need.motivation.activate` → `practice.micro_action.001`; `need.emotional_awareness.reflect` → `practice.self_check_in.001`; `need.self_connection.reflect` → `practice.journaling.001`; `need.connection.connect` → `practice.connection_action.001`; `need.creativity.open` → `practice.creative_prompt.001`; `need.decision_making.focus` → `practice.priority_setting.001`; `need.transition.prepare` → `practice.transition_ritual.001`; `need.recovery.recover` → `practice.progressive_relaxation.001`; `need.discipline.prepare` → `discipline.routine_commitment.001`; `need.self_control.stabilize` → `discipline.attention_discipline.001`; `need.detachment.release` → `discipline.abstinence.001`; `need.consistency.prepare` → `discipline.consistency_challenge.001`; `need.simplicity.release` → `discipline.reduction.001`; `need.reset.release` → `practice.digital_pause.001`; `need.presence.stabilize` → `meditation.mindfulness.001`; `need.habit_change.prepare` → `discipline.consistency_challenge.002`.
 
-Запрещено: генерировать payload без пустой P0 cell; закрывать cell только title без retrieval-полей; ставить `item_id` в meaning/prompt; автозакрывать соседние cells по пересечению tags.
+Запрещено: генерировать payload без пустой P0 cell (шаг 1) или без пустого P0 type_spine (шаг 2) или без P0 type, которому ещё нет density sibling (шаг 3); вешать P1 type на P0 cell; закрывать cell только title без retrieval-полей; ставить `item_id` в meaning/prompt; автозакрывать соседние cells по пересечению tags. EN без `locales.ru` не считается закрытым item.
 
 ---
 
-## 5. P1 / P2 (не сейчас)
+## 5. P1 / P2
 
-| Phase | Что |
-|-------|-----|
-| P1 density | второй duration, другой context (`work` vs `evening`), audio, EN, оставшиеся types семейства |
-| P1 variants | тот же purpose, другой direction (`need.focus.stabilize` и т. п.) — только после P0 |
-| P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types |
+| Phase | Что | Статус |
+|-------|-----|--------|
+| P1 density (ось duration/delivery) | второй duration (5 min / 14 days) или audio+guided если now-job уже 5 | **done** — 44 siblings, тот же `seed_cell` |
+| P1 density (EN locale) | `locales.en` + `outcome_label.en` на всех 89 items | **done** |
+| P1 density (другой context) | `work` vs `evening` как отдельная ось retrieval | **done** — 44 siblings |
+| P1 density (audio vs text) | `delivery` audio+guided на seed, который ещё text+unguided | **cancelled** — fill frozen; LLM is not technique source |
+| P1 types семейства | 42 types не primary/alt ни одной P0 cell | **blocked**: `form_ok` не пускает на текущие cells. Нужны P1 variant cells или смена SoT |
+| P1 variants | тот же purpose, другой direction (`need.focus.stabilize` и т. п.) | не этот pass — расширение ledger |
+| **Technique provenance** | Canonical Technique rows, затем item → `technique_id` | **next** — [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) |
+| P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после provenance, не вместо |
 
 ---
 
@@ -157,11 +193,11 @@ Seed-pass не закрывает несколько cells одним item, да
 Ledger JSON:
 
 - `need_cells[].status`: `empty` · `seed` · `covered`
-- `need_cells[].item_ids`: `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`; `need.energy.activate` → `practice.energizing_breath.001`; `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.clarity.reflect` → `practice.prompted_reflection.001`; `need.confidence.open` → `affirmation.capability.001`; `need.release.release` → `practice.body_release.001`; `need.rest.downregulate` → `meditation.relaxation.001`; `need.sleep.prepare` → `meditation.sleep.001`; `need.sleep.discipline` → `discipline.sleep_discipline.001`; `need.motivation.activate` → `practice.micro_action.001`; остальные `[]`
+- `need_cells[].item_ids`: `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`; `need.energy.activate` → `practice.energizing_breath.001`; `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.clarity.reflect` → `practice.prompted_reflection.001`; `need.confidence.open` → `affirmation.capability.001`; `need.release.release` → `practice.body_release.001`; `need.rest.downregulate` → `meditation.relaxation.001`; `need.sleep.prepare` → `meditation.sleep.001`; `need.sleep.discipline` → `discipline.sleep_discipline.001`; `need.motivation.activate` → `practice.micro_action.001`; `need.emotional_awareness.reflect` → `practice.self_check_in.001`; `need.self_connection.reflect` → `practice.journaling.001`; `need.connection.connect` → `practice.connection_action.001`; `need.creativity.open` → `practice.creative_prompt.001`; `need.decision_making.focus` → `practice.priority_setting.001`; `need.transition.prepare` → `practice.transition_ritual.001`; `need.recovery.recover` → `practice.progressive_relaxation.001`; `need.discipline.prepare` → `discipline.routine_commitment.001`; `need.self_control.stabilize` → `discipline.attention_discipline.001`; `need.detachment.release` → `discipline.abstinence.001`; `need.consistency.prepare` → `discipline.consistency_challenge.001`; `need.simplicity.release` → `discipline.reduction.001`; `need.reset.release` → `practice.digital_pause.001`; `need.presence.stabilize` → `meditation.mindfulness.001`; `need.habit_change.prepare` → `discipline.consistency_challenge.002`
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
-- `gaps`: 15 P0 cells still `empty`
+- `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **первая empty P0 cell в порядке ledger**, тем же процессом. Не batch-fill.
+Следующий рабочий шаг: **technique provenance**, не audio vs text. Не вешать 42 P1 types на P0 cells. Не писать новые items.
 
 ---
 
@@ -169,6 +205,26 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | **Fill frozen.** Audio vs text cancelled. 133 items = llm_provisional. First 11 = architecture probes. Next = [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md). |
+| 2026-08-25 | P1 density context: 44 siblings, `work` ↔ `evening`. First = `practice.extended_exhale.003`. Sleep/evening seeds flip to `work`. Next = audio vs text. |
+| 2026-08-25 | P1 density EN locale: `locales.en` + `outcome_label.en` on all 89 items. `ru` kept. `meditation.sleep` EN has no `sleep`. Next = other context (`work` vs `evening`). |
+| 2026-08-25 | P1 density (ledger P0 type order): 44 siblings. First = `practice.extended_exhale.002` (duration 5) on `need.calm.downregulate`. Sleep/evening now-jobs → audio+guided. Discipline → 14 days. P1 types (42) not attached — contract `form_ok`. Next = EN locale. |
+| 2026-08-25 | P0 type-spine fill (ledger order): 19 remaining P0 types. First empty type was `practice.mobility` → `need.energy.activate`. `meditation.body_scan.001` listed only on `need.self_connection.reflect`, not recovery. P0 type spine complete (44/44). Next = P1 density. |
+| 2026-08-25 | P0 seed #26 (ledger order): `need.habit_change.prepare` → `discipline.consistency_challenge.002`. Same type as #22 does not share coverage. P0 need cells complete (26/26). Next = remaining empty P0 type_spine types (19). |
+| 2026-08-25 | P0 seed #25 (ledger order): `need.presence.stabilize` → `meditation.mindfulness.001`. Overlapping `scattered` / `stabilize` do not close focus/grounding/transition/self_control. Next empty = `need.habit_change.prepare`. |
+| 2026-08-25 | P0 seed #24 (ledger order): `need.reset.release` → `practice.digital_pause.001`. Overlapping `stuck` / `release` do not close release/motivation/creativity/habit_change/detachment. Next empty = `need.presence.stabilize`. |
+| 2026-08-25 | P0 seed #23 (ledger order): `need.simplicity.release` → `discipline.reduction.001`. Overlapping `overstimulated` / `release` do not close detachment/rest/calm/reset. Next empty = `need.reset.release`. |
+| 2026-08-25 | P0 seed #22 (ledger order): `need.consistency.prepare` → `discipline.consistency_challenge.001`. Overlapping `scattered` / `prepare` do not close transition/focus/habit_change. Next empty = `need.simplicity.release`. |
+| 2026-08-25 | P0 seed #21 (ledger order): `need.detachment.release` → `discipline.abstinence.001`. Overlapping `overstimulated` / `release` do not close calm/rest/simplicity/reset. Next empty = `need.consistency.prepare`. |
+| 2026-08-25 | P0 seed #20 (ledger order): `need.self_control.stabilize` → `discipline.attention_discipline.001`. Overlapping `restless` / `stabilize` do not close sleep/discipline/grounding/presence. Next empty = `need.detachment.release`. |
+| 2026-08-25 | P0 seed #19 (ledger order): `need.discipline.prepare` → `discipline.routine_commitment.001`. Overlapping `restless` / `prepare` do not close sleep/self_control/transition/consistency. Next empty = `need.self_control.stabilize`. |
+| 2026-08-25 | P0 seed #18 (ledger order): `need.recovery.recover` → `practice.progressive_relaxation.001`. Overlapping `tense` / `low_energy` do not close grounding/calm/energy/motivation. Next empty = `need.discipline.prepare`. |
+| 2026-08-25 | P0 seed #17 (ledger order): `need.transition.prepare` → `practice.transition_ritual.001`. Overlapping `scattered` / `prepare` do not close focus/grounding/consistency. Next empty = `need.recovery.recover`. |
+| 2026-08-25 | P0 seed #16 (ledger order): `need.decision_making.focus` → `practice.priority_setting.001`. Overlapping `uncertain` / `focus` do not close clarity/confidence/box_breathing. Next empty = `need.transition.prepare`. |
+| 2026-08-25 | P0 seed #15 (ledger order): `need.creativity.open` → `practice.creative_prompt.001`. Overlapping `stuck` does not close release/motivation/reset. Next empty = `need.decision_making.focus`. |
+| 2026-08-25 | P0 seed #14 (ledger order): `need.connection.connect` → `practice.connection_action.001`. Overlapping `disconnected` does not close grounding/self_connection. Next empty = `need.creativity.open`. |
+| 2026-08-25 | P0 seed #13 (ledger order): `need.self_connection.reflect` → `practice.journaling.001`. Overlapping `disconnected` does not close grounding/connection. Next empty = `need.connection.connect`. |
+| 2026-08-25 | P0 seed #12 (ledger order): `need.emotional_awareness.reflect` → `practice.self_check_in.001`. Overlapping `emotionally_heavy` does not close release. Next empty = `need.self_connection.reflect`. |
 | 2026-08-25 | P0 seed #11 (ledger order): `need.motivation.activate` → `practice.micro_action.001`. Overlapping `stuck` / `low_energy` do not close release/energy/recovery. Next empty = `need.emotional_awareness.reflect`. |
 | 2026-08-25 | P0 seed #10 (ledger order): `need.sleep.discipline` → `discipline.sleep_discipline.001`. Same `purpose=sleep` as `meditation.sleep.001` does not share coverage. Period `duration_days`, not session minutes. Next empty = `need.motivation.activate`. |
 | 2026-08-25 | P0 seed #9 (ledger order): `need.sleep.prepare` → `meditation.sleep.001`. Same `purpose=sleep` does not close `need.sleep.discipline`. Next empty = `need.sleep.discipline`. |
