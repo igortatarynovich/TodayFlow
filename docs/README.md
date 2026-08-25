@@ -70,6 +70,7 @@
 - [astrology/IL4_EDITORIAL_CONSUME_V1.md](./astrology/IL4_EDITORIAL_CONSUME_V1.md) — **IL-4 editorial consume (1.3.113):** generation phrases packs. Fill-empty / reject-invalid. Public JSON unchanged. Polish **done 1.3.114**. Compat editorial **done 1.3.115**.
 - [today/TODAY_MEANING_POLISH_V1.md](./today/TODAY_MEANING_POLISH_V1.md) — **Today meaning polish (1.3.114):** native astrology chorus binds to IL-4. Prompt c4.2. Public JSON unchanged. Compat editorial **done 1.3.115**. Profile polish **done 1.3.123**.
 - [profile/PROFILE_MEANING_POLISH_V1.md](./profile/PROFILE_MEANING_POLISH_V1.md) — **Profile meaning polish (1.3.123):** Natal Decode sky theses bind to IL-4. Identity Core stays CE. Prompt 1.1.0. Public JSON unchanged.
+- [profile/PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md](./profile/PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md) — **Natal Decode cache refresh (1.3.124):** ops one-shot onto v0.3 fingerprint. GET never rebuilds.
 - [astrology/COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md](./astrology/COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md) — **Compatibility synastry editorial IL-4 (1.3.115):** editorial phrases packs when charts supplied. Prompt v1.1. Public JSON unchanged.
 - [astrology/ANGLE_CANON_V1.md](./astrology/ANGLE_CANON_V1.md) — **Angle Canon V1 (1.3.102):** two packs + origin. Collision vs House 1/10. Stored 1.3.103
 - [astrology/SIGN_CANON_GRAMMAR_V1.md](./astrology/SIGN_CANON_GRAMMAR_V1.md) — **Sign Canon grammar (1.3.84):** manner · excess. Dry-run ≠ fill

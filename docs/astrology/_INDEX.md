@@ -44,6 +44,7 @@
 | [../today/TODAY_MEANING_POLISH_V1.md](../today/TODAY_MEANING_POLISH_V1.md) | **1.3.114 Today meaning polish:** native astrology chorus binds to IL-4. Prompt c4.2. Public JSON unchanged |
 | [COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md](./COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md) | **1.3.115 Compatibility synastry editorial IL-4:** editorial phrases packs when charts supplied. Prompt v1.1. Public JSON unchanged |
 | [../profile/PROFILE_MEANING_POLISH_V1.md](../profile/PROFILE_MEANING_POLISH_V1.md) | **1.3.123 Profile meaning polish:** Natal Decode sky theses bind to IL-4. Identity Core stays CE. Prompt 1.1.0. Public JSON unchanged |
+| [../profile/PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md](../profile/PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md) | **1.3.124 Natal Decode cache refresh:** ops one-shot onto v0.3 fingerprint. GET never rebuilds |
 | [TODAYFLOW_CANON_V1.md](./TODAYFLOW_CANON_V1.md) | TodayFlow Canon structuring. Mainstream V1 / Canon / Lenses. Runtime: atoms → composition → LLM formulates |
 | [COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md) | Co–Star teardown Phase 0. **Recognition check** on Mainstream rows. Not IL ingest. Not the product-meaning source |
 | [IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md) | Outer Planet Draft Representation (1.3.72). Meaning keys optional on IL-1 draft outers. Fill waits for Canon. Not ingest, not objects |

@@ -7,12 +7,21 @@ SoT: docs/astrology/IL2_COMPOSITION_RULES_V1.md
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping
 
 ROOT = Path(__file__).resolve().parents[4]
-OBJECTS = ROOT / "DATA" / "reference" / "astrology" / "interpretation_v1" / "objects_v1.json"
+
+
+def objects_path() -> Path:
+    """Catalog lives under TODAYFLOW_DATA_DIR in the API image (`/DATA`), not site-packages parents."""
+    data_root = Path(os.getenv("TODAYFLOW_DATA_DIR", str(ROOT / "DATA")))
+    return data_root / "reference" / "astrology" / "interpretation_v1" / "objects_v1.json"
+
+
+OBJECTS = objects_path()
 
 JOBS = ("what", "how", "where", "relation", "orientation")
 
@@ -124,7 +133,7 @@ class ComposedFrame:
 
 
 def load_objects(path: Path | None = None) -> dict[str, dict[str, Any]]:
-    payload = json.loads((path or OBJECTS).read_text(encoding="utf-8"))
+    payload = json.loads((path or objects_path()).read_text(encoding="utf-8"))
     return {obj["object_id"]: obj for obj in payload["objects"]}
 
 
