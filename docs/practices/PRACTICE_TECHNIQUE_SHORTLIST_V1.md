@@ -137,8 +137,8 @@ Landscape candidate family
 
 ## 8. Что дальше
 
-1. Slice стоит. Ingest V1 записал три evidence records. Normalization = `insufficient_evidence`. Targeted shortlist закрыт. Canon пуст. Type не attested.
-2. Следующий named pass: **targeted ingest** → **Normalization V1.1**. Не следующая семья.
+1. Slice стоит. Ingest V1 записал три evidence records. Normalization = `insufficient_evidence`. Targeted shortlist закрыт. Targeted ingest закрыт. Canon пуст. Type не attested.
+2. Следующий named pass: **Normalization V1.1**. Не следующая семья.
 3. `technique_id` — только после `canonical`.
 
 ---
@@ -147,6 +147,7 @@ Landscape candidate family
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |
 | 2026-08-25 | pointer: Targeted Shortlist V1 closed; next = targeted ingest → Normalization V1.1 |
 | 2026-08-25 | pointer: Normalization V1 = insufficient_evidence; next = targeted shortlist |
 | 2026-08-25 | pointer: Ingest V1 recorded selected loci as evidence; next = Normalization V1 |

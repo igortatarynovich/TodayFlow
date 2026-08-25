@@ -24,7 +24,16 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-25):** **Targeted Shortlist V1** — `equal_count_breath` / post-exhale hold identity. Scope = one question, not box breathing вообще. Definition + contrast selected (BYU Marchant · NHS Wales CAVUHB). Replication 4-4-4-4 not selected. Variant not found in preferred class. Technique canon empty. Probe still without `technique_id`. Next = **targeted ingest** → **Normalization V1.1**, not Safety Review. Repeat `insufficient_evidence` after V1.1 is allowed. [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-25):** **Targeted Ingest V1** — two resolution loci only (Marchant 2025 · NHS Wales CAVUHB). Square and 5:5 stored separately; author contrast is not a family definition. 4-4-6-2 is a *square* label observation, not an allowed variant. Phase structure and equal-count stay unglued (signal only). Technique canon empty. Probe still without `technique_id`. Next = **Normalization V1.1** (two identity questions, then overall verdict), not Safety Review. [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+
+## Architecture impact — Practice Technique Targeted Ingest V1 (2026-08-25)
+
+- **SoT before:** Targeted Shortlist had two selected resolution loci. Next step could generalize Marchant's 5:5 contrast into a family definition, or treat CAVUHB 4-4-6-2 as a variant of a future canonical method.
+- **SoT after:** Targeted ingest writes two independent evidence records. Author contrast stays study-local. Unequal square stays a label observation. Two axes (`shape_phase_structure`, `timing_ratio`) are signal-only. V1.1 will answer `post_exhale_hold` and `equal_count` separately, then keep the three overall verdicts. Landscape kernel unchanged. Safety Review still closed. Library unattested.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) · targeted ingest JSON · provenance 1.7 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with `technique_id`, canon rows, axis glue, or Safety Review from this pass.
 
 ## Architecture impact — Practice Technique Targeted Shortlist V1 (2026-08-25)
 
@@ -2557,6 +2566,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Practices / Canon | **Targeted Ingest V1 (two resolution loci)** | **ACCEPTED** | Marchant square and 5:5 stored separately; author contrast is not a family definition. CAVUHB 4-4-6-2 is label observation, not variant. Two axes signal-only. Next = Normalization V1.1. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md).
 - 2026-08-25 | Practices / Canon | **Targeted Shortlist V1 (post-exhale hold identity)** | **ACCEPTED** | One research question. Definition + contrast selected. Replication not selected. Variant not found in preferred class. Next = targeted ingest → Normalization V1.1. Repeat insufficient_evidence allowed. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md).
 - 2026-08-25 | Practices / Canon | **Normalization V1 (equal_count_breath)** | **ACCEPTED** | Four-level compare. Decision `insufficient_evidence` (success). Not 2-vs-1. Not optional hold. Next = targeted shortlist on post-exhale hold identity. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md).
 - 2026-08-25 | Practices / Canon | **Ingest V1 (equal_count_breath)** | **ACCEPTED** | Three independent evidence records. observed_* = source observation, not canonical fields. Newcastle recorded as conflict, not variant. Canon empty. Next = Normalization V1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_INGEST_V1](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md).

@@ -1262,6 +1262,262 @@ def validate_technique_targeted_shortlist_v1(
     return errors
 
 
+TARGETED_INGEST_CLAIM_SCOPE = frozenset(
+    {
+        "experimental_named_conditions",
+        "method_sequence_and_label",
+    }
+)
+TARGETED_INGEST_FORBIDDEN_SYNTHESIS = INGEST_FORBIDDEN_SYNTHESIS + (
+    "universal definition",
+    "family definition",
+    "allowed variant",
+    "допустимым variant",
+)
+TARGETED_INGEST_SELECTED_LOCI = (
+    "src.byu.marchant.2025.square",
+    "src.nhs.wales.cavuhb.square",
+)
+TARGETED_INGEST_AXES = (
+    "shape_phase_structure",
+    "timing_ratio",
+)
+V1_1_HOLD_ANSWERS = frozenset({"required", "optional", "unresolved"})
+V1_1_EQUAL_COUNT_ANSWERS = frozenset(
+    {"identity_bearing", "common_parameter", "unresolved"}
+)
+
+
+def _targeted_ingest_blob(row: dict[str, Any]) -> str:
+    contrast = row.get("observed_contrast_condition")
+    contrast_steps = []
+    if isinstance(contrast, dict):
+        contrast_steps = _as_str_list(contrast.get("observed_steps"), allow_empty=True) or []
+    named = row.get("observed_named_conditions")
+    named_blob = ""
+    if isinstance(named, list):
+        named_blob = " ".join(
+            str(item.get("name_in_source") or "")
+            for item in named
+            if isinstance(item, dict)
+        )
+    return " ".join(
+        [
+            _ingest_blob(row),
+            named_blob,
+            " ".join(contrast_steps),
+            str((contrast or {}).get("note") or "") if isinstance(contrast, dict) else "",
+        ]
+    ).lower()
+
+
+def validate_technique_targeted_ingest_v1(
+    targeted_ingest: dict[str, Any],
+    *,
+    targeted_shortlist: dict[str, Any] | None = None,
+    family_ingest: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if targeted_ingest.get("contract_version") != "technique_targeted_ingest_v1":
+        errors.append("invalid targeted ingest contract_version")
+    if targeted_ingest.get("writes_technique_canon") is not False:
+        errors.append("targeted ingest must not write technique canon")
+    if targeted_ingest.get("technique_id_allowed") is not False:
+        errors.append("targeted ingest must not allow technique_id")
+    if targeted_ingest.get("does_not_normalize") is not True:
+        errors.append("targeted ingest must declare does_not_normalize")
+    if targeted_ingest.get("does_not_glue_axes") is not True:
+        errors.append("targeted ingest must not glue phase structure to equal-count")
+    if targeted_ingest.get("does_not_replace_family_ingest") is not True:
+        errors.append("targeted ingest must not replace family ingest V1")
+    if targeted_ingest.get("does_not_rewrite_landscape_kernel") is not True:
+        errors.append("targeted ingest must not rewrite landscape kernel")
+    if targeted_ingest.get("family_id") != SLICE_FAMILY_V1:
+        errors.append(f"targeted ingest family must be {SLICE_FAMILY_V1}")
+    if targeted_ingest.get("boundary_held") != (
+        "selected_resolution_loci_to_ingested_evidence_not_canonical_kernel"
+    ):
+        errors.append("boundary_held must record resolution loci→evidence, not a kernel")
+    if targeted_ingest.get("next_named_pass") != "technique_normalization_v1_1":
+        errors.append("next_named_pass must be Normalization V1.1, not safety review")
+    not_next = targeted_ingest.get("not_next")
+    if not isinstance(not_next, list) or "safety_review" not in not_next:
+        errors.append("not_next must include safety_review")
+
+    axes = targeted_ingest.get("axes_observed_not_decided")
+    if not isinstance(axes, list) or [a.get("axis_id") for a in axes if isinstance(a, dict)] != list(
+        TARGETED_INGEST_AXES
+    ):
+        errors.append("axes_observed_not_decided must be shape_phase_structure then timing_ratio")
+    else:
+        for axis in axes:
+            if not isinstance(axis, dict):
+                continue
+            if axis.get("status") != "signal_only":
+                errors.append(f"axis {axis.get('axis_id')} must stay signal_only this pass")
+
+    questions = targeted_ingest.get("v1_1_identity_questions")
+    if not isinstance(questions, list) or len(questions) != 2:
+        errors.append("v1_1_identity_questions must lock two identity questions")
+    else:
+        by_qid = {
+            q.get("id"): q for q in questions if isinstance(q, dict) and q.get("id")
+        }
+        hold = by_qid.get("post_exhale_hold") or {}
+        equal = by_qid.get("equal_count") or {}
+        if set(hold.get("allowed") or []) != V1_1_HOLD_ANSWERS:
+            errors.append("post_exhale_hold allowed answers must be required|optional|unresolved")
+        if set(equal.get("allowed") or []) != V1_1_EQUAL_COUNT_ANSWERS:
+            errors.append(
+                "equal_count allowed answers must be identity_bearing|common_parameter|unresolved"
+            )
+    verdicts = targeted_ingest.get("v1_1_overall_verdict_unchanged")
+    if list(verdicts or []) != ["normalize_one", "split_family", "insufficient_evidence"]:
+        errors.append("V1.1 overall verdicts must stay the three Normalization outcomes")
+
+    expected_prior = list(NORMALIZATION_EVIDENCE_V1)
+    if family_ingest:
+        rows = family_ingest.get("evidence")
+        if isinstance(rows, list):
+            expected_prior = [
+                str(row.get("evidence_id"))
+                for row in rows
+                if isinstance(row, dict) and row.get("evidence_id")
+            ]
+    if targeted_ingest.get("prior_ingest_corpus") != expected_prior:
+        errors.append("prior_ingest_corpus must match family ingest V1 evidence ids")
+
+    expected_sources = list(TARGETED_INGEST_SELECTED_LOCI)
+    if targeted_shortlist:
+        listed = targeted_shortlist.get("selected_loci")
+        if isinstance(listed, list) and all(isinstance(x, str) for x in listed):
+            expected_sources = listed
+
+    rows = targeted_ingest.get("evidence")
+    if not isinstance(rows, list) or len(rows) != 2:
+        errors.append("targeted ingest must contain exactly two evidence records")
+        return errors
+
+    seen_ids: set[str] = set()
+    source_ids: list[str] = []
+    by_source: dict[str, dict[str, Any]] = {}
+    for i, row in enumerate(rows):
+        prefix = f"evidence[{i}]"
+        if not isinstance(row, dict):
+            errors.append(f"{prefix}: must be object")
+            continue
+        for key in INGEST_REQUIRED:
+            if key not in row:
+                errors.append(f"{prefix}: missing {key}")
+        evidence_id = row.get("evidence_id")
+        if not isinstance(evidence_id, str) or not evidence_id.startswith("ev."):
+            errors.append(f"{prefix}: evidence_id must start with ev.")
+        elif evidence_id in seen_ids:
+            errors.append(f"{prefix}: duplicate evidence_id")
+        else:
+            seen_ids.add(evidence_id)
+        if row.get("candidate_family") != SLICE_FAMILY_V1:
+            errors.append(f"{prefix}: candidate_family must be the slice family")
+        if row.get("source_family") not in ALLOWED_SOURCE_FAMILY:
+            errors.append(f"{prefix}: invalid source_family")
+        if row.get("ingest_status") != "ingested":
+            errors.append(f"{prefix}: ingest_status must be ingested")
+        if row.get("claim_scope") not in TARGETED_INGEST_CLAIM_SCOPE:
+            errors.append(f"{prefix}: invalid claim_scope")
+        source_ref = row.get("source_ref")
+        if not isinstance(source_ref, dict):
+            errors.append(f"{prefix}: source_ref must be object")
+            continue
+        source_id = source_ref.get("source_id")
+        if not isinstance(source_id, str) or not source_id.startswith("src."):
+            errors.append(f"{prefix}: source_ref.source_id invalid")
+        else:
+            source_ids.append(source_id)
+            by_source[source_id] = row
+        if not isinstance(row.get("paraphrase"), str) or not str(row.get("paraphrase") or "").strip():
+            errors.append(f"{prefix}: paraphrase empty")
+        if not isinstance(row.get("observed_mechanism"), str) or not str(
+            row.get("observed_mechanism") or ""
+        ).strip():
+            errors.append(f"{prefix}: observed_mechanism empty")
+        if not isinstance(row.get("locus"), str) or not str(row.get("locus") or "").strip():
+            errors.append(f"{prefix}: locus empty")
+        for list_key in (
+            "observed_steps",
+            "observed_bounds",
+            "observed_safety",
+            "observed_variants",
+            "conflict_tags",
+        ):
+            if _as_str_list(row.get(list_key), allow_empty=True) is None:
+                errors.append(f"{prefix}: {list_key} must be string list")
+        steps = _as_str_list(row.get("observed_steps"), allow_empty=True) or []
+        if len(steps) < 4:
+            errors.append(f"{prefix}: observed_steps too short for a method observation")
+        blob = _targeted_ingest_blob(row)
+        for phrase in TARGETED_INGEST_FORBIDDEN_SYNTHESIS:
+            if phrase in blob:
+                errors.append(f"{prefix}: synthesis phrase {phrase!r} is normalization")
+
+    if source_ids != expected_sources:
+        errors.append("targeted ingest source_ids must match selected_loci in order")
+
+    marchant = by_source.get("src.byu.marchant.2025.square")
+    if marchant:
+        if marchant.get("does_not_generalize_author_contrast") is not True:
+            errors.append("Marchant must declare author contrast is not a family definition")
+        if marchant.get("claim_scope") != "experimental_named_conditions":
+            errors.append("Marchant claim_scope must be experimental_named_conditions")
+        variants = _as_str_list(marchant.get("observed_variants"), allow_empty=True) or []
+        if variants:
+            errors.append("Marchant must not declare observed_variants this pass")
+        named = marchant.get("observed_named_conditions")
+        if not isinstance(named, list) or len(named) != 2:
+            errors.append("Marchant must record square and 5:5 as separate named conditions")
+        else:
+            names = [c.get("name_in_source") for c in named if isinstance(c, dict)]
+            if names != ["Square breathing", "5:5 breathing"]:
+                errors.append("Marchant named conditions must be Square breathing then 5:5 breathing")
+            square = named[0] if isinstance(named[0], dict) else {}
+            five = named[1] if isinstance(named[1], dict) else {}
+            if square.get("holds") != "after_inhale_and_after_exhale":
+                errors.append("Marchant square must observe holds after inhale and after exhale")
+            if five.get("holds") != "none_written":
+                errors.append("Marchant 5:5 must observe that holds are not written")
+        contrast = marchant.get("observed_contrast_condition")
+        if not isinstance(contrast, dict):
+            errors.append("Marchant must store 5:5 as a separate contrast condition")
+        else:
+            contrast_blob = " ".join(
+                _as_str_list(contrast.get("observed_steps"), allow_empty=True) or []
+            ).lower()
+            if "hold" in contrast_blob and "does not write a hold" not in contrast_blob:
+                errors.append("Marchant 5:5 contrast must not add holds the methods did not write")
+        tags = _as_str_list(marchant.get("conflict_tags"), allow_empty=True) or []
+        if "author_contrast_not_family_definition" not in tags:
+            errors.append("Marchant must tag author contrast as not a family definition")
+
+    cavuhb = by_source.get("src.nhs.wales.cavuhb.square")
+    if cavuhb:
+        if cavuhb.get("does_not_treat_unequal_counts_as_variant") is not True:
+            errors.append("CAVUHB must not treat unequal counts as a variant")
+        if cavuhb.get("claim_scope") != "method_sequence_and_label":
+            errors.append("CAVUHB claim_scope must be method_sequence_and_label")
+        variants = _as_str_list(cavuhb.get("observed_variants"), allow_empty=True) or []
+        if variants:
+            errors.append("CAVUHB must not declare observed_variants this pass")
+        tags = _as_str_list(cavuhb.get("conflict_tags"), allow_empty=True) or []
+        if "recorded_as_label_observation_not_variant" not in tags:
+            errors.append("CAVUHB must be tagged as label observation, not variant")
+        steps_blob = " ".join(
+            _as_str_list(cavuhb.get("observed_steps"), allow_empty=True) or []
+        ).lower()
+        if "six" not in steps_blob or "two" not in steps_blob:
+            errors.append("CAVUHB must observe the 4-4-6-2 counts")
+
+    return errors
+
+
 def validate_content_library_v1(
     library: dict[str, Any],
     *,

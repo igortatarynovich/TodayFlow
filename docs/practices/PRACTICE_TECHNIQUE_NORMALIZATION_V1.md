@@ -54,7 +54,7 @@ Landscape → Shortlist → Ingest → Normalize → Safety Review → Canonical
 insufficient_evidence → targeted shortlist → targeted ingest → Normalization V1.1
 ```
 
-Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) (закрыт). Следующий named pass: targeted ingest, не следующая семья.
+Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) (закрыт). Targeted ingest: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) (закрыт). Следующий named pass: **Normalization V1.1** (два identity-вопроса, затем overall verdict). Не Safety Review.
 
 ---
 
@@ -108,8 +108,8 @@ Landscape `mechanism_shape` **не** переписан. Семья **не** р�
 ## 7. Что дальше
 
 1. Normalization закрыт как `insufficient_evidence`. Canon пуст.
-2. Targeted shortlist на research question **закрыт**: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md).
-3. Следующий named pass: **targeted ingest** selected resolution loci, затем **Normalization V1.1**. Не Safety Review.
+2. Targeted shortlist закрыт. Targeted ingest двух resolution loci закрыт: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md).
+3. Следующий named pass: **Normalization V1.1** — `post_exhale_hold` и `equal_count` как отдельные оси, затем `normalize_one` | `split_family` | `insufficient_evidence`. Не Safety Review.
 4. `technique_id` — только при `canonical`.
 
 ---
@@ -118,5 +118,6 @@ Landscape `mechanism_shape` **не** переписан. Семья **не** р�
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |
 | 2026-08-25 | pointer: Targeted Shortlist V1 closed; next = targeted ingest → Normalization V1.1 |
 | 2026-08-25 | v1.0 ACCEPTED — four-level compare; decision `insufficient_evidence`; research question on post-exhale hold identity; not canon |

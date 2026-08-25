@@ -175,9 +175,9 @@ Safety Review **не** открывается от `insufficient_evidence` и **
 
 ## 9. Что дальше
 
-1. Targeted shortlist закрыт. Canon пуст. Type не attested.
-2. Следующий named pass: **targeted ingest** двух selected resolution loci, затем **Normalization V1.1**.
-3. Safety Review — только после будущего `normalize_one`.
+1. Targeted shortlist закрыт. Targeted ingest двух selected loci закрыт: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Canon пуст. Type не attested.
+2. Следующий named pass: **Normalization V1.1** (два identity-вопроса, затем overall verdict). Не Safety Review.
+3. Safety Review — только после будущего `normalize_one` с достаточно определённым kernel.
 4. `technique_id` — только при `canonical`.
 5. Повторный `insufficient_evidence` после V1.1 — допустим; тогда type может остаться без production item.
 
@@ -187,4 +187,5 @@ Safety Review **не** открывается от `insufficient_evidence` и **
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |
 | 2026-08-25 | v1.0 ACCEPTED — post-exhale hold identity; definition + contrast selected; variant not found in preferred class; next = targeted ingest → Normalization V1.1 |

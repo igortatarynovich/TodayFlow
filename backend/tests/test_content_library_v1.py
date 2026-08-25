@@ -19,6 +19,7 @@ from todayflow_backend.data.content_library_validator_v1 import (
     validate_technique_ingest_v1,
     validate_technique_normalization_v1,
     validate_technique_targeted_shortlist_v1,
+    validate_technique_targeted_ingest_v1,
 )
 from todayflow_backend.data.reference_machine_loader import DATA_ROOT
 
@@ -82,6 +83,14 @@ TARGETED_SHORTLIST_CANON = (
     / "docs"
     / "practices"
     / "PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md"
+)
+TARGETED_INGEST_PATH = PRACTICE_REF / "technique_targeted_ingest_v1.json"
+TARGETED_INGEST_CONTRACT_PATH = PRACTICE_REF / "technique_targeted_ingest_contract_v1.json"
+TARGETED_INGEST_CANON = (
+    Path(__file__).resolve().parents[2]
+    / "docs"
+    / "practices"
+    / "PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md"
 )
 
 SEED_1_ID = "practice.sensory_grounding.001"
@@ -196,7 +205,7 @@ def test_fill_frozen_provisional_probes() -> None:
     assert library["fill_frozen"] is True
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is True
-    assert coverage["next_pass"] == "targeted_ingest_post_exhale_hold_identity"
+    assert coverage["next_pass"] == "technique_normalization_v1_1"
     probes = library["architecture_probe_item_ids"]
     assert probes == [
         SEED_1_ID,
@@ -251,6 +260,9 @@ def test_provenance_paths_exist() -> None:
     assert TARGETED_SHORTLIST_CANON.is_file()
     assert TARGETED_SHORTLIST_PATH.is_file()
     assert TARGETED_SHORTLIST_CONTRACT_PATH.is_file()
+    assert TARGETED_INGEST_CANON.is_file()
+    assert TARGETED_INGEST_PATH.is_file()
+    assert TARGETED_INGEST_CONTRACT_PATH.is_file()
 
 
 def test_technique_landscape_v1_splits_probe_families() -> None:
@@ -278,7 +290,8 @@ def test_technique_landscape_v1_splits_probe_families() -> None:
     assert landscape["targeted_shortlist_canon"] == (
         "PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1"
     )
-    assert landscape["next_named_pass"] == "targeted_ingest_post_exhale_hold_identity"
+    assert landscape["targeted_ingest_canon"] == "PRACTICE_TECHNIQUE_TARGETED_INGEST_V1"
+    assert landscape["next_named_pass"] == "technique_normalization_v1_1"
     assert by_id["family.practice.equal_count_breath"]["normalization_status"] == (
         "insufficient_evidence"
     )
@@ -439,6 +452,59 @@ def test_technique_targeted_shortlist_v1_hold_identity_not_canon() -> None:
         "src.byu.marchant.2025.square",
         "src.nhs.wales.cavuhb.square",
     ]
+    assert _techniques()["techniques"] == []
+    _vocab, library, _coverage = _load()
+    probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
+    assert "technique_id" not in probe["identity"]
+    landscape = load_json(LANDSCAPE_PATH)
+    eq = next(
+        r
+        for r in landscape["families"]
+        if r["family_id"] == "family.practice.equal_count_breath"
+    )
+    assert eq["mechanism_shape"].startswith("four equal phases")
+    assert eq["normalization_status"] == "insufficient_evidence"
+
+
+def test_technique_targeted_ingest_v1_two_loci_not_kernel() -> None:
+    targeted = load_json(TARGETED_SHORTLIST_PATH)
+    family_ingest = load_json(INGEST_PATH)
+    ingest = load_json(TARGETED_INGEST_PATH)
+    assert validate_technique_targeted_ingest_v1(
+        ingest, targeted_shortlist=targeted, family_ingest=family_ingest
+    ) == []
+    assert ingest["writes_technique_canon"] is False
+    assert ingest["does_not_normalize"] is True
+    assert ingest["does_not_glue_axes"] is True
+    assert ingest["does_not_replace_family_ingest"] is True
+    assert ingest["next_named_pass"] == "technique_normalization_v1_1"
+    assert "safety_review" in ingest["not_next"]
+    assert [a["axis_id"] for a in ingest["axes_observed_not_decided"]] == [
+        "shape_phase_structure",
+        "timing_ratio",
+    ]
+    assert all(a["status"] == "signal_only" for a in ingest["axes_observed_not_decided"])
+    qids = [q["id"] for q in ingest["v1_1_identity_questions"]]
+    assert qids == ["post_exhale_hold", "equal_count"]
+    assert ingest["v1_1_overall_verdict_unchanged"] == [
+        "normalize_one",
+        "split_family",
+        "insufficient_evidence",
+    ]
+    by_src = {row["source_ref"]["source_id"]: row for row in ingest["evidence"]}
+    assert list(by_src) == targeted["selected_loci"]
+    marchant = by_src["src.byu.marchant.2025.square"]
+    cavuhb = by_src["src.nhs.wales.cavuhb.square"]
+    assert marchant["claim_scope"] == "experimental_named_conditions"
+    assert marchant["does_not_generalize_author_contrast"] is True
+    assert marchant["observed_variants"] == []
+    names = [c["name_in_source"] for c in marchant["observed_named_conditions"]]
+    assert names == ["Square breathing", "5:5 breathing"]
+    assert marchant["observed_contrast_condition"]["name_in_source"] == "5:5 breathing"
+    assert cavuhb["claim_scope"] == "method_sequence_and_label"
+    assert cavuhb["does_not_treat_unequal_counts_as_variant"] is True
+    assert cavuhb["observed_variants"] == []
+    assert "recorded_as_label_observation_not_variant" in cavuhb["conflict_tags"]
     assert _techniques()["techniques"] == []
     _vocab, library, _coverage = _load()
     probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)

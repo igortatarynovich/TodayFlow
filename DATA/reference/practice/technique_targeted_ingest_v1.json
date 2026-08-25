@@ -1,0 +1,164 @@
+{
+  "contract_version": "technique_targeted_ingest_v1",
+  "version": "1.0.0",
+  "status": "ingested_evidence",
+  "semantic_version": "practice-technique-targeted-ingest-v1.0",
+  "description": "Targeted ingest of two post-exhale-hold resolution loci. Paraphrase per locus. Not a kernel. Not Normalization V1.1. Not canon. Canon: docs/practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md",
+  "family_id": "family.practice.equal_count_breath",
+  "candidate_family": "equal-count / square breathing",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "does_not_normalize": true,
+  "does_not_glue_axes": true,
+  "does_not_replace_family_ingest": true,
+  "does_not_rewrite_landscape_kernel": true,
+  "boundary_held": "selected_resolution_loci_to_ingested_evidence_not_canonical_kernel",
+  "accessed": "2026-08-25",
+  "prior_ingest_corpus": [
+    "ev.equal_count.bhf.heart_matters.box",
+    "ev.equal_count.nhs_sfh.box_leaflet",
+    "ev.equal_count.nhs_newcastle.square"
+  ],
+  "landscape_family_name_may_encode_premature_hypothesis": true,
+  "axes_observed_not_decided": [
+    {
+      "axis_id": "shape_phase_structure",
+      "question": "Are four timed phases present?",
+      "status": "signal_only"
+    },
+    {
+      "axis_id": "timing_ratio",
+      "question": "Are those phase durations equal?",
+      "status": "signal_only"
+    }
+  ],
+  "v1_1_identity_questions": [
+    {
+      "id": "post_exhale_hold",
+      "allowed": ["required", "optional", "unresolved"]
+    },
+    {
+      "id": "equal_count",
+      "allowed": ["identity_bearing", "common_parameter", "unresolved"]
+    }
+  ],
+  "v1_1_overall_verdict_unchanged": [
+    "normalize_one",
+    "split_family",
+    "insufficient_evidence"
+  ],
+  "next_named_pass": "technique_normalization_v1_1",
+  "not_next": [
+    "safety_review",
+    "canonical",
+    "next_family_slice",
+    "technique_id_on_probe",
+    "glue_phase_structure_to_equal_count"
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev.equal_count.byu.marchant.2025.square",
+      "candidate_family": "family.practice.equal_count_breath",
+      "source_ref": {
+        "source_id": "src.byu.marchant.2025.square",
+        "author": "Joshua Marchant",
+        "institution": "Brigham Young University",
+        "title": "Comparing the Effects of Square, 4-7-8, and 6 Breaths-per-Minute Breathing Conditions on Heart Rate Variability, CO2 Levels, and Mood",
+        "year": 2025,
+        "url": "https://scholarsarchive.byu.edu/etd/10696",
+        "section": "Methods / Procedures — breathing condition scripts"
+      },
+      "locus": "BYU ScholarsArchive thesis PDF, Methods: named conditions Square breathing and 5:5 breathing (accessed 2026-08-25).",
+      "source_family": "academic_description",
+      "paraphrase": "This methods section trains each participant in several separately named breathing conditions. Under the name Square breathing, the protocol times inhale four seconds, hold four seconds, exhale four seconds, and hold four seconds to a pacer. Under the name 5:5 breathing, the protocol times inhale five seconds and exhale five seconds to a pacer, with no holds written. Those two names are kept as two experimental conditions of this study. This record does not promote the author's contrast into a definition of the landscape family. Other named conditions in the same methods (4:6 and 4-7-8) are noted only as further separate conditions and are not extracted as family variants. Outcome claims are out of scope.",
+      "observed_mechanism": "This locus writes multiple named timed-breath conditions. Square, as this protocol writes it, is a four-phase equal-count cycle with holds after inhale and after exhale. 5:5, as this protocol writes it, is equal inhale and exhale with no holds. The two remain unmerged in this record.",
+      "observed_steps": [
+        "Named condition 'Square breathing', as this methods section writes it:",
+        "Inhale for four seconds to a pacer.",
+        "Hold for four seconds.",
+        "Exhale for four seconds.",
+        "Hold for four seconds.",
+        "These four timed actions are the square condition of this study, not a silent rewrite of other loci."
+      ],
+      "observed_named_conditions": [
+        {
+          "name_in_source": "Square breathing",
+          "counts": "4-4-4-4",
+          "holds": "after_inhale_and_after_exhale",
+          "role_in_source": "named_experimental_condition"
+        },
+        {
+          "name_in_source": "5:5 breathing",
+          "counts": "5-5",
+          "holds": "none_written",
+          "role_in_source": "named_experimental_condition"
+        }
+      ],
+      "observed_contrast_condition": {
+        "name_in_source": "5:5 breathing",
+        "observed_steps": [
+          "Inhale for five seconds to a pacer.",
+          "Exhale for five seconds to a pacer.",
+          "This methods section does not write a hold after inhale or after exhale for 5:5."
+        ],
+        "note": "Author's experimental contrast in this study. Not a family-wide identity claim for equal-count / square / box."
+      },
+      "does_not_generalize_author_contrast": true,
+      "observed_bounds": [
+        "Phase lengths are fixed for each named condition of this protocol.",
+        "Nose-in / mouth-out and shallow-if-dizzy instructions belong to this experimental script, not to a family kernel."
+      ],
+      "observed_safety": [
+        "Research assistants told participants not to breathe too deeply and to breathe more shallowly if they felt dizzy or light-headed. That is an experimental stop in this methods section, not a general who-must-not-hold bound."
+      ],
+      "observed_variants": [],
+      "claim_scope": "experimental_named_conditions",
+      "conflict_tags": [
+        "author_contrast_not_family_definition",
+        "named_conditions_unmerged"
+      ],
+      "ingest_status": "ingested",
+      "not_ingested": "HRV, PETCO2, blood pressure, and mood results. 4:6 and 4-7-8 remain other named conditions of the same methods and are not ingested as family variants or as a kernel."
+    },
+    {
+      "evidence_id": "ev.equal_count.nhs_wales.cavuhb.square",
+      "candidate_family": "family.practice.equal_count_breath",
+      "source_ref": {
+        "source_id": "src.nhs.wales.cavuhb.square",
+        "publisher": "Cardiff and Vale University Health Board",
+        "unit": "Resilience Project",
+        "title": "An Anxiety Self-Help Workbook for Young People in Secondary School",
+        "url": "https://cavuhb.nhs.wales/files/resilience-project/rp-changes-18-8/anxiety-self-help-workbook/",
+        "section": "Square breathing"
+      },
+      "locus": "CAVUHB anxiety self-help workbook, heading Square breathing (accessed 2026-08-25).",
+      "source_family": "official_health",
+      "paraphrase": "Under the heading Square breathing, this workbook asks the reader to trace a square (an object, or one pictured in the air) starting at the bottom left. The four sides are timed as: breathe in for four counts, hold for four counts, breathe out for six counts, hold for two counts. It then says the reader has completed one deep breath and may repeat the square three times. The heading uses the name square for that 4-4-6-2 sequence. This record notes that the name square here does not mean equal-count. It does not recast the unequal counts as a family-level option of a future canonical method.",
+      "observed_mechanism": "A four-side finger-traced square whose side counts are 4, 4, 6, and 2, written under the heading Square breathing.",
+      "observed_steps": [
+        "Find or picture a square and trace its sides.",
+        "Start at the bottom left of the square.",
+        "Breathe in for four counts along the first side.",
+        "Hold the breath for four counts along the second side.",
+        "Breathe out for six counts along the third side.",
+        "Hold the breath for two counts along the final side.",
+        "The workbook treats that circuit as one breath and says to repeat the square three times."
+      ],
+      "does_not_treat_unequal_counts_as_variant": true,
+      "observed_bounds": [
+        "Counts on this page are 4, 4, 6, and 2 — not four equal counts.",
+        "Repeat three times, as this section states.",
+        "This section does not state who should avoid holding the breath."
+      ],
+      "observed_safety": [],
+      "observed_variants": [],
+      "claim_scope": "method_sequence_and_label",
+      "conflict_tags": [
+        "conflict.equal_count_vs_unequal_timing",
+        "recorded_as_label_observation_not_variant"
+      ],
+      "ingest_status": "ingested",
+      "not_ingested": "Anxiety psychoeducation, grounding, belly breathing, and other workbook exercises. Benefit or 'notice anything different' framing."
+    }
+  ]
+}

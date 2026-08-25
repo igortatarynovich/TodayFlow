@@ -92,8 +92,8 @@ Landscape candidate family
 
 ## 5. Что дальше
 
-1. Ingest стоит. Normalization V1 = `insufficient_evidence`. Targeted shortlist закрыт. Canon пуст. Type не attested.
-2. Следующий named pass: **targeted ingest** resolution loci, затем **Normalization V1.1**. Не Safety Review.
+1. Ingest стоит. Normalization V1 = `insufficient_evidence`. Targeted shortlist закрыт. Targeted ingest закрыт. Canon пуст. Type не attested.
+2. Следующий named pass: **Normalization V1.1**. Не Safety Review.
 3. `technique_id` — только после `canonical`.
 
 ---
@@ -102,6 +102,7 @@ Landscape candidate family
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |
 | 2026-08-25 | pointer: Targeted Shortlist V1 closed; next = targeted ingest → Normalization V1.1 |
 | 2026-08-25 | pointer: Normalization V1 closed as insufficient_evidence; next = targeted shortlist |
 | 2026-08-25 | v1.0 ACCEPTED — three independent evidence records for equal_count_breath selected loci; not kernel; not canon |
