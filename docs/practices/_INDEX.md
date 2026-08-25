@@ -2,7 +2,8 @@
 
 | Документ | Роль |
 |----------|------|
-| [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) | **SoT библиотеки** (v1.0): `content_class` → type → attributes. Practice / Meditation / Affirmation / Discipline. Purpose, domain, state, direction — не типы. Vocab: `DATA/reference/practice/content_taxonomy_v1.json` |
+| [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) | **SoT библиотеки** (v1.1): class → type → attributes · pipeline Meaning→Retrieval→Library · item = identity/retrieval/payload. Vocab: `DATA/reference/practice/content_taxonomy_v1.json` |
+| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Fill-pass** (v1.0): coverage-first · 26 P0 need cells · 44 P0 types. Ledger: `DATA/reference/practice/content_coverage_matrix_v1.json`. Library empty. |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | **SoT экрана** (v1.1): цикл состояния; 6 needs (тело + рефлексия; Уснуть last); 9 formats (yoga/stretch/music + reflection/sleep); сессия; music layer |
 | [practices_screen_mockup_v1.png](./practices_screen_mockup_v1.png) | **Визуальный референс** экрана (загруженный скрин спеки) — UI-паритет + C0b need-лента |
 

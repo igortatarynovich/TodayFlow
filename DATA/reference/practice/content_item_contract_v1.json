@@ -1,0 +1,57 @@
+{
+  "contract_version": "content_item_contract_v1",
+  "version": "1.0.0",
+  "status": "draft",
+  "semantic_version": "content-taxonomy-v1.1",
+  "description": "Content Item = three groups. Canon: docs/practices/PRACTICE_CONTENT_TAXONOMY_V1.md §10. Fill policy: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md",
+  "groups": {
+    "identity": {
+      "required": ["item_id", "content_class", "type", "status", "semantic_version"],
+      "optional": ["family"],
+      "fields": {
+        "item_id": "stable id; never emitted by Meaning",
+        "content_class": "practice | meditation | affirmation | discipline",
+        "family": "practice only; else null",
+        "type": "technique code unique within content_class",
+        "status": "draft | active | retired",
+        "semantic_version": "content-taxonomy-v1.x"
+      }
+    },
+    "retrieval": {
+      "required": ["purpose", "input_state", "direction", "intensity", "energy_effect", "context", "delivery"],
+      "optional": ["domain", "duration", "duration_unit", "contraindications"],
+      "fields": {
+        "purpose": "purpose[] from vocab",
+        "domain": "domain[]; empty allowed",
+        "input_state": "input_state[] from vocab",
+        "direction": "direction[] from vocab",
+        "duration": "number; practice/meditation/affirmation session length",
+        "duration_unit": "seconds | minutes",
+        "intensity": "low | medium | high",
+        "energy_effect": "down | neutral | up",
+        "context": "context[]",
+        "delivery": "delivery[]",
+        "contraindications": "product limits, not diagnoses"
+      },
+      "discipline_extra_required": ["duration_days", "frequency", "difficulty", "failure_policy", "check_in_frequency"]
+    },
+    "payload": {
+      "required": ["body_kind", "locales"],
+      "optional": ["media_ref", "presentation"],
+      "fields": {
+        "body_kind": "instruction | script | affirmation_text | commitment_rule",
+        "locales": "{ lang: { title, body } }; ru required for P0",
+        "media_ref": "optional audio",
+        "presentation": "surface labels only; not a second retrieval index"
+      },
+      "discipline_extra_required": ["commitment_rule", "restriction", "start_condition", "completion_condition"],
+      "discipline_extra_optional": ["allowed_exceptions"]
+    }
+  },
+  "invariants": [
+    "Meaning never stores item_id",
+    "purpose must not be encoded in type",
+    "empty payload is not publishable",
+    "family is required iff content_class is practice"
+  ]
+}

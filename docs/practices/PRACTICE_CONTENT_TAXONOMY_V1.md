@@ -1,17 +1,20 @@
 # Practice Content Taxonomy v1
 
 **Статус:** `ACCEPTED` — SoT библиотеки практик / медитаций / аффирмаций / дисциплин.  
-**Версия:** 1.0 (2026-08-25).  
+**Версия:** 1.1 (2026-08-25) — pipeline Meaning→Retrieval→Library; Content Item = identity / retrieval / payload; fill = coverage-first.  
 **Владелец:** Product.  
-**Machine vocab:** [`DATA/reference/practice/content_taxonomy_v1.json`](../../DATA/reference/practice/content_taxonomy_v1.json).
+**Machine vocab:** [`DATA/reference/practice/content_taxonomy_v1.json`](../../DATA/reference/practice/content_taxonomy_v1.json).  
+**Item contract:** [`DATA/reference/practice/content_item_contract_v1.json`](../../DATA/reference/practice/content_item_contract_v1.json).  
+**Coverage (fill-pass):** [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) · [`content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).
 
 **Это:** классы, типы и атрибуты контентных объектов. Смысловой движок говорит *какая потребность*, библиотека отвечает *каким объектом*.  
-**Это не:** экран `/practices` · C1 evolution registries · наполнение Content Items · психологическое/медицинское ядро знаний.
+**Это не:** экран `/practices` · C1 evolution registries · массовое наполнение items · психологическое/медицинское ядро знаний.
 
 **Связанные (не заменяют этот файл):**
 
 | Документ | Роль |
 |----------|------|
+| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | Coverage-first fill. Need cells до генерации текста. Meaning не знает item_id. |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | Need/format чипы и цикл сессии. Need ≠ type. Format ≠ type. |
 | [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md) §2.5 · §2.8 | Куда кладётся Machine + Content. P2 fill ещё впереди. |
 | [TODAYFLOW_PRODUCT_BUILD_MAP.md](../TODAYFLOW_PRODUCT_BUILD_MAP.md) `PracticeRecommendation` | Одна рекомендация на день. Meaning не знает `item_id`. |
@@ -29,6 +32,8 @@
 - **Canon updated?** yes — этот файл · vocab JSON · `docs/practices/_INDEX.md` · README · Reference Layer §2.5/§2.8/§6 · tracker.
 - **Backward compatible?** yes. Screen chips и C1 codes не deprecated. Новые объекты базы обязаны нести поля этой taxonomy.
 
+**v1.1:** pipeline Meaning → Need → Retrieval → Library → Item locked. Content Item = identity / retrieval / payload. Fill = coverage-first ([PRACTICE_CONTENT_COVERAGE_V1](./PRACTICE_CONTENT_COVERAGE_V1.md)); library file empty. Public JSON still unchanged.
+
 ---
 
 ## 0. Закон
@@ -38,8 +43,27 @@
 3. **Один type — одна техника.** Цель живёт в `purpose[]`. Сфера — в `domain[]` (nullable). Состояние — в `input_state[]` / `direction[]`.
 4. **Четыре разных job'а, четыре класса.** Разовое действие ≠ направленное внимание ≠ когнитивная формулировка ≠ правило на период.
 5. **Не лечить.** Нет медицинских обещаний, протоколов расстройств, гарантий сна/питания. Contraindications — ограничения продукта, не диагноз.
+6. **Обратной зависимости нет.** Ни Meaning, ни астрологическая семантика не знают `item_id`, текст медитации или конкретную практику.
 
 Исключение product-layer: meditation type `sleep` (пользователь ищет «Sleep Meditation»). Семантически это цель; в retrieval всё равно ставить `purpose: sleep`. Других purpose-as-type не добавлять.
+
+---
+
+## 0.1 Pipeline (граница ответственности)
+
+```text
+Meaning → Need → Retrieval constraints → Content Library → Content Item
+```
+
+| Слой | Выдаёт | Не выдаёт |
+|------|--------|-----------|
+| **Meaning** (астрология, Character Engine, Today, Profile, Tarot) | `input_state` → `direction` → `purpose[]`; при необходимости `domain[]` / `context[]` | `item_id`, title, script, type как «эта медитация» |
+| **Retrieval** | `content_class` → `family?` → `type` + duration / intensity / energy_effect / delivery и прочие ограничения | пользовательский текст |
+| **Library** | конкретный `item_id` | смысл дня |
+
+Need в этой цепочке — семантическая потребность (state/direction/purpose), не chip экрана `/practices`. Screen need — UX-проекция, см. §12.1.
+
+Fill-pass **не** начинается с «написать много контента». Сначала покрытие ячеек — [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md).
 
 ---
 
@@ -320,33 +344,38 @@ retrieval
 
 ---
 
-## 10. Content Item — общий контракт
+## 10. Content Item — три группы
 
-Ниже — форма записи. Наполнение базы = следующий шаг, не этот документ.
+Machine: [`content_item_contract_v1.json`](../../DATA/reference/practice/content_item_contract_v1.json).  
+Library (пока пустая): [`content_library_v1.json`](../../DATA/reference/practice/content_library_v1.json).
 
-```text
-id
-content_class          practice | meditation | affirmation | discipline
-family                 practice only; иначе null
-type                   техника из vocab этого class
-purpose[]              §7
-domain[]               §8, may be empty
-input_state[]          §9.1
-direction[]            §9.2
-duration               practice/meditation/affirmation: секунды или минуты (см. unit)
-duration_unit          seconds | minutes
-intensity              low | medium | high
-energy_effect          down | neutral | up
-context[]              morning | work | evening | before_sleep | anytime
-delivery               text | audio | guided | unguided
-contraindications[]    product limits, not diagnoses
-semantic_version
-title                  i18n
-body                   инструкция / текст аффирмации / guided script
-media_ref              optional audio
-```
+Три группы. Не смешивать identity с retrieval и retrieval с текстом.
 
-`guided` / `unguided` — форма подачи, не type.
+### 10.1 identity
+
+`item_id` · `content_class` · `family` (только practice, иначе null) · `type` · `status` (`draft` \| `active` \| `retired`) · `semantic_version`
+
+`item_id` стабилен. Meaning его не эмитит.
+
+### 10.2 retrieval
+
+То, по чему ищет retrieval. Не пользовательский текст.
+
+`purpose[]` · `domain[]` (may be empty) · `input_state[]` · `direction[]` · `duration` + `duration_unit` · `intensity` · `energy_effect` · `context[]` · `delivery[]` · `contraindications[]`
+
+Discipline additionally (constraints, not prose): `duration_days` · `frequency` · `difficulty` · `failure_policy` · `check_in_frequency`.
+
+`guided` / `unguided` — delivery, не type.
+
+### 10.3 payload
+
+То, что видит человек. Не участвует в matching, кроме отсутствия (пустой payload = item не publishable).
+
+`locales.{lang}.title` · `locales.{lang}.body` · `body_kind` (`instruction` \| `script` \| `affirmation_text` \| `commitment_rule`) · `media_ref?` · `presentation?` (surface labels; не второй retrieval)
+
+Discipline payload extras: `commitment_rule` · `restriction` · `allowed_exceptions[]` · `start_condition` · `completion_condition`.
+
+P0 locale = `ru`. EN — density-pass, не блокер покрытия.
 
 ---
 
@@ -430,11 +459,12 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 ---
 
-## 14. Что дальше (не этот документ)
+## 14. Что дальше
 
-1. Наполнить Content Items против vocab (практики, медитации, аффирмации, дисциплины).
-2. Retrieval: фильтр по class/type/purpose/state/duration/context.
-3. Подключить surfaces (Today recommendation, `/practices`, Profile, Tarot, onboarding) **после** fill — без прошивки item_id в meaning.
+1. **Coverage-first** — [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md). P0 need cells + P0 types. Не плодить 40 grounding при дырах в purpose.
+2. Seed items только в пустые P0 ячейки (`content_library_v1.json`).
+3. Retrieval runtime **после** P0 coverage (фильтр по retrieval-полям). Meaning по-прежнему без `item_id`.
+4. Density (P1) и remap legacy `CONTENT/practices/*.json` — после зелёной матрицы, не вместо неё.
 
 ---
 
@@ -442,4 +472,5 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | **v1.1** — pipeline Meaning→Need→Retrieval→Library→Item; item = identity/retrieval/payload; fill = coverage-first ([PRACTICE_CONTENT_COVERAGE_V1](./PRACTICE_CONTENT_COVERAGE_V1.md)) |
 | 2026-08-25 | v1.0 ACCEPTED — четыре class, locked types, purpose/domain/state/direction, item shape, discipline extras |

@@ -1,0 +1,8 @@
+{
+  "contract_version": "content_library_v1",
+  "version": "1.0.0",
+  "status": "empty",
+  "semantic_version": "content-taxonomy-v1.1",
+  "description": "Content Items for Practice Content Taxonomy. Empty until coverage-first P0 seed. Item shape: content_item_contract_v1. Cells: content_coverage_matrix_v1.",
+  "items": []
+}
