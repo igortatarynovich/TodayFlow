@@ -21,6 +21,7 @@
 | [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) | **Shortlist** (parent 9): vertical slice одной семьи; selected ≠ canon. |
 | [PRACTICE_TECHNIQUE_INGEST_V1.md](./PRACTICE_TECHNIQUE_INGEST_V1.md) | **Ingest** (parent 10): paraphrase selected loci; observed ≠ canonical. |
 | [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) | **Normalization**: compare evidence; three decisions; this slice = insufficient_evidence. |
+| [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) | **Targeted shortlist**: post-exhale hold identity; resolution ≠ replication. |
 | [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | Coverage-first fill. **Frozen** pending technique canon. Meaning не знает item_id / technique_id. |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | Need/format чипы и цикл сессии. Need ≠ type. Format ≠ type. |
 | [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md) §2.5 · §2.8 | Куда кладётся Machine + Content. P2 fill ещё впереди. |
@@ -72,7 +73,7 @@ candidate_family → shortlist candidates → selected loci
   → Content Item (technique_id only if canonical)
 ```
 
-Shortlist slice + ingest + normalize: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) · [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md) · [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Criteria V1 задаёт допуск, не корпус. Safety review не открыт.
+Shortlist slice + ingest + normalize: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) · [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md) · [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Criteria V1 задаёт допуск, не корпус. Safety review не открыт.
 
 **Продуктовая выдача:**
 
@@ -490,7 +491,7 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 ## 14. Что дальше
 
-1. **Normalization V1** — [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Дальше: targeted shortlist на post-exhale hold. Не новые LLM items. `technique_canon_v1.json` пуст. `technique_id` только после canonical.
+1. **Targeted Shortlist V1** — [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) (закрыт). Дальше: targeted ingest → Normalization V1.1. Не новые LLM items. `technique_canon_v1.json` пуст. `technique_id` только после canonical. Повторный `insufficient_evidence` допустим.
 2. Coverage-first архитектура (26 cells, type spine) стоит; fill **frozen**. Audio vs text отменён как next step.
 3. Retrieval runtime **после** canonical techniques + P0 coverage. Meaning по-прежнему без `item_id` / `technique_id`.
 4. Density (P1) и remap legacy `CONTENT/practices/*.json` — только как expressions канона, не вместо provenance.
@@ -501,6 +502,7 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Targeted Shortlist V1 closed; next = targeted ingest → Normalization V1.1 |
 | 2026-08-25 | **v1.2** — Canonical Technique слой; item = expression; `technique_id` optional; fill frozen ([PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md)) |
 | 2026-08-25 | **v1.1** — pipeline Meaning→Need→Retrieval→Library→Item; item = identity/retrieval/payload; fill = coverage-first ([PRACTICE_CONTENT_COVERAGE_V1](./PRACTICE_CONTENT_COVERAGE_V1.md)) |
 | 2026-08-25 | v1.0 ACCEPTED — четыре class, locked types, purpose/domain/state/direction, item shape, discipline extras |

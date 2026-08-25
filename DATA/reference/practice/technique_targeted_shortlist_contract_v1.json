@@ -1,0 +1,70 @@
+{
+  "contract_version": "technique_targeted_shortlist_contract_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-targeted-shortlist-v1.0",
+  "description": "Narrow shortlist on one research question after insufficient_evidence. Selected = allowed for targeted ingest, not canonical. Replication is not resolution. Canon: docs/practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md",
+  "unit_of_shortlist": "research_question",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "selected_means": "allowed_for_targeted_ingest_pass",
+  "selected_does_not_mean": [
+    "proved_the_technique",
+    "efficacy",
+    "canonical",
+    "attested_taxonomy_type",
+    "optional_hold",
+    "general_box_breathing_research"
+  ],
+  "resolution_role": [
+    "definition",
+    "contrast",
+    "variant",
+    "replication",
+    "non_resolving"
+  ],
+  "resolution_roles_that_may_be_selected": [
+    "definition",
+    "contrast",
+    "variant"
+  ],
+  "identity_statement": [
+    "required",
+    "optional",
+    "absent_but_unaddressed",
+    "distinguishes_method",
+    "unknown"
+  ],
+  "selection_decision": [
+    "selected",
+    "supporting",
+    "rejected",
+    "already_ingested"
+  ],
+  "stop_when": [
+    "resolution_candidates_found_for_targeted_ingest",
+    "unresolved_reasonable_search_found_no_resolution_evidence"
+  ],
+  "next_after_close": [
+    "targeted_ingest_of_selected_resolution_loci",
+    "normalization_v1_1_retry"
+  ],
+  "not_next": [
+    "safety_review",
+    "canonical",
+    "next_family_slice",
+    "technique_id_on_probe",
+    "general_box_breathing_research"
+  ],
+  "invariants": [
+    "scope is one research question, not box breathing in general",
+    "replication pages are not selected",
+    "resolution_role and identity_statement classify source speech, not canonical inference",
+    "does not write technique_canon_v1",
+    "does not set technique_id",
+    "does not declare an optional hold from rejected C7 loci",
+    "landscape kernel unchanged",
+    "other landscape families remain not_opened",
+    "repeat insufficient_evidence after Normalization V1.1 is allowed"
+  ]
+}

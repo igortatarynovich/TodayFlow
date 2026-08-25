@@ -1022,6 +1022,246 @@ def validate_technique_normalization_v1(
     return errors
 
 
+TARGETED_SHORTLIST_RESOLUTION_ROLES = frozenset(
+    {"definition", "contrast", "variant", "replication", "non_resolving"}
+)
+TARGETED_SHORTLIST_SELECTABLE_ROLES = frozenset({"definition", "contrast", "variant"})
+TARGETED_SHORTLIST_IDENTITY = frozenset(
+    {
+        "required",
+        "optional",
+        "absent_but_unaddressed",
+        "distinguishes_method",
+        "unknown",
+    }
+)
+TARGETED_SHORTLIST_DECISIONS = frozenset(
+    {"selected", "supporting", "rejected", "already_ingested"}
+)
+TARGETED_SHORTLIST_STOP = frozenset(
+    {
+        "resolution_candidates_found_for_targeted_ingest",
+        "unresolved_reasonable_search_found_no_resolution_evidence",
+    }
+)
+TARGETED_SHORTLIST_REQUIRED = (
+    "source_id",
+    "source_family",
+    "bibliographic_identity",
+    "authority_provenance",
+    "locus",
+    "gates",
+    "extractable",
+    "resolution_role",
+    "identity_statement",
+    "conflicts_unknowns",
+    "research_function",
+    "selection_decision",
+    "rejection_reason",
+)
+ALREADY_INGESTED_LOCI_V1 = SELECTED_LOCI_V1
+
+
+def validate_technique_targeted_shortlist_v1(
+    targeted: dict[str, Any],
+    *,
+    ingest: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if targeted.get("contract_version") != "technique_targeted_shortlist_v1":
+        errors.append("invalid targeted shortlist contract_version")
+    if targeted.get("writes_technique_canon") is not False:
+        errors.append("targeted shortlist must not write technique canon")
+    if targeted.get("technique_id_allowed") is not False:
+        errors.append("targeted shortlist must not allow technique_id")
+    if targeted.get("unit_of_shortlist") != "research_question":
+        errors.append("unit_of_shortlist must be research_question")
+    if targeted.get("selected_means") != "allowed_for_targeted_ingest_pass":
+        errors.append("selected_means must be allowed_for_targeted_ingest_pass")
+    if targeted.get("does_not_rewrite_landscape_kernel") is not True:
+        errors.append("targeted shortlist must not rewrite landscape kernel")
+    if targeted.get("boundary_held") != (
+        "research_question_to_resolution_loci_not_canonical"
+    ):
+        errors.append("boundary_held must record question→resolution loci, not canon")
+    if targeted.get("family_id") != SLICE_FAMILY_V1:
+        errors.append(f"V1 targeted shortlist family must be {SLICE_FAMILY_V1}")
+    question = str(targeted.get("research_question") or "").lower()
+    if "post-exhale hold" not in question and "post-exhale" not in question:
+        errors.append("research_question must name post-exhale hold identity")
+    not_in_scope = targeted.get("not_in_scope")
+    if not isinstance(not_in_scope, list) or "box_breathing_in_general" not in not_in_scope:
+        errors.append("must declare box_breathing_in_general out of scope")
+    hypothesis = targeted.get("expression_hypothesis")
+    if not isinstance(hypothesis, dict):
+        errors.append("expression_hypothesis must be object")
+    else:
+        if hypothesis.get("type") != "box_breathing":
+            errors.append("expression hypothesis type must stay box_breathing")
+        if hypothesis.get("status") != "not_attested":
+            errors.append("expression hypothesis must stay not_attested")
+    stop = targeted.get("stop_reason")
+    if stop not in TARGETED_SHORTLIST_STOP:
+        errors.append("stop_reason must be a declared stopping criterion")
+    if targeted.get("next_named_pass") != "targeted_ingest_post_exhale_hold_identity":
+        errors.append("next_named_pass must be targeted ingest, then Normalization V1.1")
+    not_next = targeted.get("not_next")
+    if not isinstance(not_next, list) or "safety_review" not in not_next:
+        errors.append("not_next must include safety_review")
+    if targeted.get("repeat_insufficient_evidence_after_v1_1_is_allowed") is not True:
+        errors.append("repeat insufficient_evidence after V1.1 must remain allowed")
+    if targeted.get("variant_found_in_preferred_class") is not False:
+        errors.append("this pass must record that preferred-class variant was not found")
+
+    already = targeted.get("already_ingested_loci")
+    expected_already = list(ALREADY_INGESTED_LOCI_V1)
+    if ingest:
+        rows = ingest.get("evidence")
+        if isinstance(rows, list):
+            expected_already = []
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                ref = row.get("source_ref")
+                if isinstance(ref, dict) and ref.get("source_id"):
+                    expected_already.append(str(ref.get("source_id")))
+    if already != expected_already:
+        errors.append("already_ingested_loci must match Ingest V1 selected sources")
+
+    loci = targeted.get("candidate_loci")
+    if not isinstance(loci, list) or not loci:
+        errors.append("candidate_loci must be non-empty list")
+        return errors
+
+    seen: set[str] = set()
+    selected_ids: list[str] = []
+    already_ids: list[str] = []
+    selected_roles: set[str] = set()
+    by_id: dict[str, dict[str, Any]] = {}
+    for i, src in enumerate(loci):
+        prefix = f"locus[{i}]"
+        if not isinstance(src, dict):
+            errors.append(f"{prefix}: must be object")
+            continue
+        for key in TARGETED_SHORTLIST_REQUIRED:
+            if key not in src:
+                errors.append(f"{prefix}: missing {key}")
+        source_id = src.get("source_id")
+        if not isinstance(source_id, str) or not source_id.startswith("src."):
+            errors.append(f"{prefix}: source_id must start with src.")
+        elif source_id in seen:
+            errors.append(f"{prefix}: duplicate source_id")
+        else:
+            seen.add(source_id)
+            by_id[source_id] = src
+        decision = src.get("selection_decision")
+        if decision not in TARGETED_SHORTLIST_DECISIONS:
+            errors.append(f"{prefix}: invalid selection_decision")
+        role = src.get("resolution_role")
+        if role not in TARGETED_SHORTLIST_RESOLUTION_ROLES:
+            errors.append(f"{prefix}: invalid resolution_role")
+        identity = src.get("identity_statement")
+        if identity not in TARGETED_SHORTLIST_IDENTITY:
+            errors.append(f"{prefix}: invalid identity_statement")
+        reason = src.get("rejection_reason")
+        if decision == "selected":
+            if reason is not None:
+                errors.append(f"{prefix}: selected must have rejection_reason null")
+            if role not in TARGETED_SHORTLIST_SELECTABLE_ROLES:
+                errors.append(f"{prefix}: selected must be definition, contrast, or variant")
+            selected_ids.append(str(source_id))
+            if isinstance(role, str):
+                selected_roles.add(role)
+        elif decision == "already_ingested":
+            if reason is not None:
+                errors.append(f"{prefix}: already_ingested must have rejection_reason null")
+            already_ids.append(str(source_id))
+        elif decision == "rejected":
+            if not isinstance(reason, str) or not reason.strip():
+                errors.append(f"{prefix}: rejected must have rejection_reason")
+        source_family = src.get("source_family")
+        if decision in {"selected", "supporting", "already_ingested"}:
+            if source_family not in ALLOWED_SOURCE_FAMILY:
+                errors.append(f"{prefix}: source_family must be a provenance class")
+        elif not isinstance(source_family, str) or not source_family.strip():
+            errors.append(f"{prefix}: source_family empty")
+        if not isinstance(src.get("bibliographic_identity"), dict):
+            errors.append(f"{prefix}: bibliographic_identity must be object")
+        if not isinstance(src.get("locus"), str) or not str(src.get("locus") or "").strip():
+            errors.append(f"{prefix}: locus empty")
+        gates = src.get("gates")
+        if not isinstance(gates, dict):
+            errors.append(f"{prefix}: gates must be object")
+        else:
+            if tuple(gates.keys()) != CRITERIA_GATE_IDS:
+                errors.append(f"{prefix}: gates must be C1–C9")
+            for gid, body in gates.items():
+                if not isinstance(body, dict) or body.get("result") not in SHORTLIST_GATE_RESULTS:
+                    errors.append(f"{prefix}.{gid}: invalid gate result")
+            if decision == "selected":
+                for gid in SHORTLIST_HARD_GATES:
+                    result = (gates.get(gid) or {}).get("result")
+                    if result != "pass":
+                        errors.append(f"{prefix}: selected requires {gid}=pass")
+        extractable = src.get("extractable")
+        if not isinstance(extractable, dict):
+            errors.append(f"{prefix}: extractable must be object")
+        else:
+            for key in ("mechanism", "kernel", "bounds", "safety", "variants"):
+                if key not in extractable:
+                    errors.append(f"{prefix}: extractable missing {key}")
+        blob = " ".join(
+            [
+                str(src.get("conflicts_unknowns") or ""),
+                str((extractable or {}).get("kernel") or ""),
+                str(src.get("research_function") or ""),
+            ]
+        ).lower()
+        if decision == "selected" and (
+            "optional hold" in blob or "second hold is optional" in blob
+        ):
+            errors.append(f"{prefix}: must not synthesize an optional hold")
+
+    listed = targeted.get("selected_loci")
+    if not isinstance(listed, list) or [x for x in listed if not isinstance(x, str)]:
+        errors.append("selected_loci must be string list")
+    elif listed != selected_ids:
+        errors.append("selected_loci must match loci with selection_decision=selected")
+    if already_ids != expected_already:
+        errors.append("already_ingested candidate rows must match already_ingested_loci")
+
+    if stop == "resolution_candidates_found_for_targeted_ingest" and not selected_ids:
+        errors.append("stop_reason requires at least one selected resolution locus")
+    if (
+        stop == "unresolved_reasonable_search_found_no_resolution_evidence"
+        and selected_ids
+    ):
+        errors.append("unresolved stop cannot select resolution loci")
+
+    bhf = by_id.get("src.bhf.heart_matters.box")
+    if bhf:
+        if bhf.get("selection_decision") != "already_ingested":
+            errors.append("BHF must stay already_ingested this pass")
+        if bhf.get("resolution_role") != "replication":
+            errors.append("BHF is replication for this question, not new resolution")
+    sfh = by_id.get("src.nhs.sfh.box_leaflet")
+    if sfh:
+        if sfh.get("resolution_role") != "replication":
+            errors.append("SFH is replication for this question, not new resolution")
+    newcastle = by_id.get("src.nhs.newcastle.square")
+    if newcastle:
+        if newcastle.get("resolution_role") != "non_resolving":
+            errors.append("Newcastle does not contrast 3-phase vs 4-phase")
+        if newcastle.get("identity_statement") != "absent_but_unaddressed":
+            errors.append("Newcastle identity_statement must be absent_but_unaddressed")
+
+    kinds = targeted.get("resolution_kinds_found")
+    if not isinstance(kinds, list) or set(kinds) != selected_roles:
+        errors.append("resolution_kinds_found must match selected resolution_role values")
+
+    return errors
+
+
 def validate_content_library_v1(
     library: dict[str, Any],
     *,

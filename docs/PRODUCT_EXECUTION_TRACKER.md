@@ -24,7 +24,16 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-25):** **Normalization V1** — `equal_count_breath` decision = `insufficient_evidence`. Four-level compare; not 2-vs-1; post-exhale hold identity unresolved. Technique canon empty. Probe still without `technique_id`. Next = **targeted shortlist** on that question, not Safety Review. [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-25):** **Targeted Shortlist V1** — `equal_count_breath` / post-exhale hold identity. Scope = one question, not box breathing вообще. Definition + contrast selected (BYU Marchant · NHS Wales CAVUHB). Replication 4-4-4-4 not selected. Variant not found in preferred class. Technique canon empty. Probe still without `technique_id`. Next = **targeted ingest** → **Normalization V1.1**, not Safety Review. Repeat `insufficient_evidence` after V1.1 is allowed. [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+
+## Architecture impact — Practice Technique Targeted Shortlist V1 (2026-08-25)
+
+- **SoT before:** Normalization V1 closed as `insufficient_evidence`. Next step could re-collect 4-4-4-4 pages, open Safety Review, or declare the post-exhale hold optional.
+- **SoT after:** After `insufficient_evidence` the path is targeted shortlist → targeted ingest → Normalization V1.1. Unit = one research question. `resolution_role` / `identity_statement` classify source speech, not a kernel. Selected = targeted-ingest permission. Landscape kernel unchanged. Repeat `insufficient_evidence` after V1.1 may leave `box_breathing` without a production item.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) · targeted shortlist JSON · provenance 1.6 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with `technique_id`, canon rows, optional-hold synthesis, or Safety Review from this pass.
 
 ## Architecture impact — Practice Technique Normalization V1 (2026-08-25)
 
@@ -2548,6 +2557,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Practices / Canon | **Targeted Shortlist V1 (post-exhale hold identity)** | **ACCEPTED** | One research question. Definition + contrast selected. Replication not selected. Variant not found in preferred class. Next = targeted ingest → Normalization V1.1. Repeat insufficient_evidence allowed. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md).
 - 2026-08-25 | Practices / Canon | **Normalization V1 (equal_count_breath)** | **ACCEPTED** | Four-level compare. Decision `insufficient_evidence` (success). Not 2-vs-1. Not optional hold. Next = targeted shortlist on post-exhale hold identity. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md).
 - 2026-08-25 | Practices / Canon | **Ingest V1 (equal_count_breath)** | **ACCEPTED** | Three independent evidence records. observed_* = source observation, not canonical fields. Newcastle recorded as conflict, not variant. Canon empty. Next = Normalization V1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_INGEST_V1](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md).
 - 2026-08-25 | Practices / Canon | **Shortlist V1 (equal_count_breath slice)** | **ACCEPTED** | Vertical research slice. Selected = ingest permission, not canon/efficacy. Conflicts (3-phase vs 4-phase; holds-as-kernel vs NEED_OWNER) recorded, not averaged. Other families closed. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md).

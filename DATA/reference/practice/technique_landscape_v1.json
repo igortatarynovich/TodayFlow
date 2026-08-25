@@ -13,7 +13,8 @@
   "shortlist_canon": "PRACTICE_TECHNIQUE_SHORTLIST_V1",
   "ingest_canon": "PRACTICE_TECHNIQUE_INGEST_V1",
   "normalization_canon": "PRACTICE_TECHNIQUE_NORMALIZATION_V1",
-  "next_named_pass": "targeted_shortlist_post_exhale_hold_identity",
+  "targeted_shortlist_canon": "PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1",
+  "next_named_pass": "targeted_ingest_post_exhale_hold_identity",
   "families": [
     {
       "family_id": "family.practice.slow_paced_breath",

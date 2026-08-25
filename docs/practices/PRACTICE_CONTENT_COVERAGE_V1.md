@@ -188,7 +188,9 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Shortlist by family** | loci под критерии; type = expression hypothesis | **done** — one slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) |
 | **Ingest** | paraphrase selected loci → evidence records | **done** — [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md) |
 | **Normalization** | один kernel / split / insufficient_evidence | **done** — [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`) |
-| **Targeted shortlist** | identity post-exhale hold | **next** |
+| **Targeted shortlist** | identity post-exhale hold | **done** — [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) |
+| **Targeted ingest** | paraphrase selected resolution loci | **next** |
+| **Normalization V1.1** | retry on expanded evidence | after targeted ingest |
 | **Technique provenance / canon** | safety review → canonical; item → `technique_id` | after a future `normalize_one` |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после provenance, не вместо |
 
@@ -211,6 +213,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | **Targeted Shortlist V1.** Post-exhale hold identity. Definition + contrast selected; variant not found in preferred class. Next = targeted ingest → Normalization V1.1. [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). |
 | 2026-08-25 | **Normalization V1.** Decision `insufficient_evidence`. Research question: post-exhale hold identity. [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md). |
 | 2026-08-25 | **Ingest V1.** Three evidence records for equal_count selected loci. Not kernel, not canon. [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md). |
 | 2026-08-25 | **Shortlist V1.** Vertical slice `equal_count_breath`. Selected = ingest permission, not canon. [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). |

@@ -18,6 +18,7 @@ from todayflow_backend.data.content_library_validator_v1 import (
     validate_technique_shortlist_v1,
     validate_technique_ingest_v1,
     validate_technique_normalization_v1,
+    validate_technique_targeted_shortlist_v1,
 )
 from todayflow_backend.data.reference_machine_loader import DATA_ROOT
 
@@ -71,6 +72,16 @@ NORMALIZATION_CANON = (
     / "docs"
     / "practices"
     / "PRACTICE_TECHNIQUE_NORMALIZATION_V1.md"
+)
+TARGETED_SHORTLIST_PATH = PRACTICE_REF / "technique_targeted_shortlist_v1.json"
+TARGETED_SHORTLIST_CONTRACT_PATH = (
+    PRACTICE_REF / "technique_targeted_shortlist_contract_v1.json"
+)
+TARGETED_SHORTLIST_CANON = (
+    Path(__file__).resolve().parents[2]
+    / "docs"
+    / "practices"
+    / "PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md"
 )
 
 SEED_1_ID = "practice.sensory_grounding.001"
@@ -185,7 +196,7 @@ def test_fill_frozen_provisional_probes() -> None:
     assert library["fill_frozen"] is True
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is True
-    assert coverage["next_pass"] == "targeted_shortlist_post_exhale_hold_identity"
+    assert coverage["next_pass"] == "targeted_ingest_post_exhale_hold_identity"
     probes = library["architecture_probe_item_ids"]
     assert probes == [
         SEED_1_ID,
@@ -237,6 +248,9 @@ def test_provenance_paths_exist() -> None:
     assert INGEST_CONTRACT_PATH.is_file()
     assert NORMALIZATION_PATH.is_file()
     assert NORMALIZATION_CONTRACT_PATH.is_file()
+    assert TARGETED_SHORTLIST_CANON.is_file()
+    assert TARGETED_SHORTLIST_PATH.is_file()
+    assert TARGETED_SHORTLIST_CONTRACT_PATH.is_file()
 
 
 def test_technique_landscape_v1_splits_probe_families() -> None:
@@ -261,7 +275,10 @@ def test_technique_landscape_v1_splits_probe_families() -> None:
     assert landscape["shortlist_canon"] == "PRACTICE_TECHNIQUE_SHORTLIST_V1"
     assert landscape["ingest_canon"] == "PRACTICE_TECHNIQUE_INGEST_V1"
     assert landscape["normalization_canon"] == "PRACTICE_TECHNIQUE_NORMALIZATION_V1"
-    assert landscape["next_named_pass"] == "targeted_shortlist_post_exhale_hold_identity"
+    assert landscape["targeted_shortlist_canon"] == (
+        "PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1"
+    )
+    assert landscape["next_named_pass"] == "targeted_ingest_post_exhale_hold_identity"
     assert by_id["family.practice.equal_count_breath"]["normalization_status"] == (
         "insufficient_evidence"
     )
@@ -393,6 +410,47 @@ def test_technique_normalization_v1_insufficient_evidence_not_canon() -> None:
     )
     assert eq["mechanism_shape"].startswith("four equal phases")
     assert eq["shortlist_status"] == "sliced"
+
+
+def test_technique_targeted_shortlist_v1_hold_identity_not_canon() -> None:
+    ingest = load_json(INGEST_PATH)
+    targeted = load_json(TARGETED_SHORTLIST_PATH)
+    assert validate_technique_targeted_shortlist_v1(targeted, ingest=ingest) == []
+    assert targeted["writes_technique_canon"] is False
+    assert targeted["technique_id_allowed"] is False
+    assert targeted["unit_of_shortlist"] == "research_question"
+    assert targeted["selected_means"] == "allowed_for_targeted_ingest_pass"
+    assert targeted["stop_reason"] == "resolution_candidates_found_for_targeted_ingest"
+    assert targeted["variant_found_in_preferred_class"] is False
+    assert targeted["repeat_insufficient_evidence_after_v1_1_is_allowed"] is True
+    assert targeted["next_named_pass"] == "targeted_ingest_post_exhale_hold_identity"
+    assert "safety_review" in targeted["not_next"]
+    assert "box_breathing_in_general" in targeted["not_in_scope"]
+    by_id = {row["source_id"]: row for row in targeted["candidate_loci"]}
+    assert by_id["src.bhf.heart_matters.box"]["resolution_role"] == "replication"
+    assert by_id["src.nhs.sfh.box_leaflet"]["resolution_role"] == "replication"
+    assert by_id["src.nhs.newcastle.square"]["identity_statement"] == (
+        "absent_but_unaddressed"
+    )
+    assert by_id["src.byu.marchant.2025.square"]["resolution_role"] == "contrast"
+    assert by_id["src.nhs.wales.cavuhb.square"]["resolution_role"] == "definition"
+    assert by_id["src.growtherapy.square"]["selection_decision"] == "rejected"
+    assert targeted["selected_loci"] == [
+        "src.byu.marchant.2025.square",
+        "src.nhs.wales.cavuhb.square",
+    ]
+    assert _techniques()["techniques"] == []
+    _vocab, library, _coverage = _load()
+    probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
+    assert "technique_id" not in probe["identity"]
+    landscape = load_json(LANDSCAPE_PATH)
+    eq = next(
+        r
+        for r in landscape["families"]
+        if r["family_id"] == "family.practice.equal_count_breath"
+    )
+    assert eq["mechanism_shape"].startswith("four equal phases")
+    assert eq["normalization_status"] == "insufficient_evidence"
 
 
 def test_seed_pass_closes_exactly_one_cell_per_item() -> None:

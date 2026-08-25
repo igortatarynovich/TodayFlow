@@ -123,6 +123,7 @@
 - [practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md) — **shortlist slice**: `equal_count_breath`; selected loci ≠ canonical technique
 - [practices/PRACTICE_TECHNIQUE_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md) — **ingest**: selected loci → evidence records; not kernel
 - [practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) — **normalization**: `insufficient_evidence`; not canon
+- [practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) — **targeted shortlist**: post-exhale hold identity; not box breathing вообще
 - [practices/PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md) — **coverage-first fill**: 26 P0 need cells; **frozen** pending technique canon
 - [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — **Практики** SoT экрана: цикл состояния · locked need/format · сессия · music layer ([index](./practices/_INDEX.md))
 - [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md)

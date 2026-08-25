@@ -48,7 +48,13 @@
 Landscape → Shortlist → Ingest → Normalize → Safety Review → Canonical → Item expression
 ```
 
-После `insufficient_evidence` Safety Review **не** открывается. Следующий шаг — targeted shortlist на research question.
+После `insufficient_evidence` Safety Review **не** открывается.
+
+```text
+insufficient_evidence → targeted shortlist → targeted ingest → Normalization V1.1
+```
+
+Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) (закрыт). Следующий named pass: targeted ingest, не следующая семья.
 
 ---
 
@@ -102,8 +108,8 @@ Landscape `mechanism_shape` **не** переписан. Семья **не** р�
 ## 7. Что дальше
 
 1. Normalization закрыт как `insufficient_evidence`. Canon пуст.
-2. Следующий named pass: **targeted shortlist** на research question (post-exhale hold identity).
-3. Safety Review → Canonical — только после будущего `normalize_one` (отдельный pass).
+2. Targeted shortlist на research question **закрыт**: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md).
+3. Следующий named pass: **targeted ingest** selected resolution loci, затем **Normalization V1.1**. Не Safety Review.
 4. `technique_id` — только при `canonical`.
 
 ---
@@ -112,4 +118,5 @@ Landscape `mechanism_shape` **не** переписан. Семья **не** р�
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | pointer: Targeted Shortlist V1 closed; next = targeted ingest → Normalization V1.1 |
 | 2026-08-25 | v1.0 ACCEPTED — four-level compare; decision `insufficient_evidence`; research question on post-exhale hold identity; not canon |
