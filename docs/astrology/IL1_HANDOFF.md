@@ -1,6 +1,6 @@
 # IL-1 handoff — next agent
 
-**Date:** 2026-08-23  
+**Date:** 2026-08-24  
 **Owner intent:** **1.3.122 Native C1 conflict→scene seed retry** (why_today must not paste into scene.why; prompt **c5.5**; detectors unchanged). **1.3.121 Native C1 astro jargon retry LOCKED**. **1.3.120 Native C1 seed leak retry LOCKED**. **1.3.119 Native C1 everyday scene retry LOCKED**. **1.3.118 Native C1 evidence pack binding LOCKED** (`unknown_evidence` allowlist / foundation aliases; prompt c5.1). **1.3.117 Native C1 editorial gate calibration LOCKED**. **1.3.116 Native C1 I0 generation split LOCKED** (Global LLM stage + Personal overlay). **1.3.115 Compatibility synastry editorial IL-4 LOCKED**. **1.3.114 Today meaning polish LOCKED**. **1.3.113 IL-4 editorial consume LOCKED**. Coverage = 616 composed cells; gold 43/12. **1.3.109 IL-4 Expression stands.** Voice ≠ meaning. **1.3.108 IL-3** sky-internal rank ≠ user relevance. **1.3.107 IL-2** weights / conflict / merge. Layer 5 gold with atoms = composed. Catalog 38 draft / 0 `active`. Freeze 1.3.106 stands. Not pair catalog. Not `active`. Historical lock text below still holds. **1.3.105 final atomic smoke stands.** Five stored families. Operators discriminate. Occupancy ≠ conjunction. **STOP Angles.** **1.3.104 stored Planet×Angle composition smoke stands.** Four gates. Frames read `canon.orientation`. Mars AT ASC ≠ Mars AT MC ≠ Mars IN 1st ≠ Mars IN 10th. Occupancy ≠ conjunction. **1.3.103 Angle Canon storage/materialization stands.** Two `type=angle` drafts carry locked 1.3.102 `orientation` packs verbatim. Catalog 38 draft / 0 `active`. **1.3.102 Angle Canon fill stands.** Two `orientation` packs. Origin `direct` from include. House 1/10 collision. Secondary unused. **1.3.101 Angle Canon grammar stands.** One slot (`orientation`). Include-first. Secondary = collision-zone, not default. **1.3.100 Mainstream Angle Semantic Map stands.** Same panel. House 1/10 vocabulary is not proof. Angular strength is not meaning. Planet-on-angle cookbooks are out. **1.3.99 Angle Canon model stands** (orientation loci). **1.3.107 IL-2 stands.** Next named = **IL-3**. **1.3.98 stored Planet × Aspect composition smoke PASS.** Four gates. Frames read `canon.relation`, not `interaction`. Trine vs Sextile on one pair. **STOP Aspects.** **1.3.97 Aspect Canon storage stands.** **1.3.96 Aspect Canon fill stands.** **1.3.95 Aspect Canon grammar stands.** **1.3.94 Mainstream Aspect Semantic Map stands.** **1.3.93 Planet × House composition smoke PASS.** Historical 1.3.82 AspectPair / house PARTIAL = snapshots. **STOP Houses.** **STOP Signs.** Do **not** reopen planet research. Do **not** promote 1.3.78 dry-run. Do **not** open books. Do **not** score CORE (not a gate). Do **not** ingest Co–Star. Catalog/priority transfer SHA: **`ecb4cbe4`**. **1.3.29 supersedes author-first discovery** (1.3.25–1.3.28 Greene+Hand queue). **1.3.30** parent: [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — model before literature. **1.3.59:** Sun→Pluto planet fill is **research-stable**, not semantically finalized. Do **not** generate planet research to raise coverage. Planet work is opportunistic: a named NEED_OWNER locus opens → extract; otherwise do not hunt a fourth analog. **1.3.60:** Layer 2 Signs schools + source types locked in IL §6.14. **1.3.61:** literature map in [IL1_LAYER2_SIGNS_LITERATURE_MAP.md](./IL1_LAYER2_SIGNS_LITERATURE_MAP.md). **1.3.62:** selection criteria in [IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md). **1.3.63:** shortlist in [IL1_LAYER2_SIGNS_SHORTLIST.md](./IL1_LAYER2_SIGNS_SHORTLIST.md). **1.3.64:** Houlding triplicity ontology extracted onto `astro.sign.classifications` (rulers out; no sign objects). **1.3.65:** Layer 2 psychological later-interpretive (Cell C) is `ACCESS_BLOCKED` — three named loci remain NEED_OWNER; discovery for that slot stops; no fourth book. **1.3.66:** Rudhyar *Pulse of Life* Part One extracted as humanistic cycle (not Cell C; later-interpretive not filled). **1.3.67:** later-interpretive slots optional on IL-1 draft `type=sign`; still 0 objects that pass. **1.3.68:** twelve Lilly classification-only `type=sign` drafts (later-interpretive omitted). **1.3.69:** Layer 2 **classification-complete / interpretation-deferred** (close-out audit; no ingest). **1.3.70:** Layer 1 outers definition/readiness (no ingest, no objects). **Not** ingest of 12 portraits. Not CORE scoring. `NEED_OWNER(author/locus)` ≠ `NEED_EVIDENCE(semantic slot)` ≠ `ACCESS_BLOCKED(semantic slot)` (1.3.57). Do **not** replace closed Greene/Hand pages with summaries of those authors. CORE scoring **blocked** (not a gate). CORE-candidate audit **premature**.
 
 **Catalog state (correct, not a gap):** 38 draft / 0 active / 2 angle objects (`type=angle` + `canon` orientation) / 12 sign objects (Lilly classification + `canon` manner/excess) / 12 house objects (Lilly classical + `canon` arena) / 5 aspect objects (`interaction` + `canon.relation`) / CORE unscored. Uranus claims = Hand 1981 + Rudhyar NMNM (humanistic) + Tarnas official intro (psychological); object withheld. Neptune claims = Hand 1981 + Rudhyar NMNM (humanistic) + Tarnas official intro (psychological); object withheld. Pluto claims = Hand 1981 + Rudhyar NMNM + Greene/Campion interview (psychological); object withheld. Planet `function` slots remain classical elemental for Sun–Saturn. Saturn `themes` remain cold/dryness/slowness/solitude/austerity. Watters 2003 is a classification gap (`professional` / `modern_general_practical`), not a new school enum. Layer 1 landscape: Sun = classical + modern general + Luminaries + Rudhyar *New Mansions* (humanistic) + Greene Apollon Issue 1 (psychological), Apollo's Chariot unread; Moon = classical + modern general + Luminaries + Rudhyar *New Mansions* (humanistic); Mercury = classical + modern general + Inner Planets Hermes + Rudhyar *New Mansions* (humanistic); Venus = classical + modern general + Hand Ch.4 + Rudhyar *New Mansions* (humanistic) + Sullivan official-site *Venus and Jupiter* excerpt (psychological), Greene p.69 unread; Mars = classical + modern general + Hand Ch.4 + Rudhyar *New Mansions* (humanistic), **psychological ACCESS_BLOCKED** (p.138 / Dynamics Part 1 / Huber p.59 unread); Jupiter = classical + modern general + CPA page + *By Jove!* extract (psychological) + Hand Ch.4 + Rudhyar *New Mansions* (humanistic); Saturn = classical + traditional + Greene Introduction + Hand Ch.4 + Rudhyar *New Mansions* (humanistic) + Tarnas official intro Saturn/senex (psychological); Uranus = Hand Ch.4 1981 + Rudhyar NMNM (humanistic) + Tarnas official intro (psychological), object withheld, monograph still unread; Neptune = Hand Ch.4 1981 + Rudhyar NMNM (humanistic) + Tarnas official intro (psychological), object withheld, *The Astrological Neptune* still unread; Pluto = Hand Ch.4 + Rudhyar NMNM + Greene/Campion *Living with Pluto* (psychological), object withheld. Remaining IL-1 planet budget: **§6.10 closed**; planet fill **research-stable (1.3.59)**. Mercury still only Inner Planets Hermes after 1.3.52.
@@ -10,7 +10,7 @@
 Canon: [`INTERPRETATION_LIBRARY_V1.md`](./INTERPRETATION_LIBRARY_V1.md) (**1.3.106** Knowledge Core V1 FREEZE · **1.3.105** final atomic smoke PASS · **1.3.104** stored Planet × Angle smoke PASS · **1.3.103** Angle Canon storage/materialization · **1.3.102** Angle Canon fill · **1.3.101** Angle Canon grammar · **1.3.100** Mainstream Angle Semantic Map · **1.3.99** Angle Canon model · **1.3.98** stored Planet × Aspect smoke PASS · **1.3.97** Aspect Canon storage/materialization · **1.3.96** Aspect Canon fill · **1.3.95** Aspect Canon grammar · **1.3.94** Mainstream Aspect Semantic Map · **1.3.93** Planet × House smoke PASS · **1.3.92** House Canon storage/materialization · **1.3.91** House Canon fill · **1.3.90** House Canon grammar · **1.3.89** Mainstream House Semantic Map · **1.3.88** Planet × Sign smoke-test · **1.3.87** Sign Canon materialization · **1.3.86** Sign Canon storage · **1.3.85** Sign Canon fill · **1.3.84** Sign Canon grammar · **1.3.83** Mainstream Sign Semantic Map · **1.3.82** composition smoke-test · **1.3.81** Sun–Saturn `canon` fill · **1.3.80** Planet Canon storage · **1.3.79** Planet Canon V1 · **1.3.78** Planet Canon grammar · **1.3.77** Mainstream planet map · **1.3.76** Product Canon vs Lenses · **1.3.75** Co–Star teardown Phase 0 · **1.3.74** Corpus/Consensus/Canon · **1.3.73** TodayFlow Canon · **1.3.72** outer draft representation · **1.3.71** V1 inventory APPROVED · **1.3.70** outers definition · **1.3.69** Layer 2 close-out · **1.3.68** Lilly classification drafts · **1.3.67** later-interpretive optional · **1.3.66** Pulse Part One extract · **1.3.65** Cell C ACCESS_BLOCKED · **1.3.64** Houlding ontology extract · **1.3.63** shortlist · **1.3.62** selection criteria · **1.3.61** literature map · **1.3.60** schools + source types · **1.3.59** planet research-stable; CORE unscored). Parent: [`KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md`](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md). Inventory: [`KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md`](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md). Split: [`KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md`](./KNOWLEDGE_CORE_V1_PRODUCT_CANON_AND_LENSES.md). Planet map: [`MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md`](./MAINSTREAM_PLANET_SEMANTIC_MAP_V1.md). Grammar: [`PLANET_CANON_GRAMMAR_V1.md`](./PLANET_CANON_GRAMMAR_V1.md). Planet Canon: [`PLANET_CANON_V1.md`](./PLANET_CANON_V1.md). Storage: [`PLANET_CANON_STORAGE_V1.md`](./PLANET_CANON_STORAGE_V1.md). Fill: [`PLANET_CANON_SUN_SATURN_FILL_V1.md`](./PLANET_CANON_SUN_SATURN_FILL_V1.md). Smoke: [`PLANET_CANON_COMPOSITION_SMOKE_V1.md`](./PLANET_CANON_COMPOSITION_SMOKE_V1.md). Sign map: [`MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md`](./MAINSTREAM_SIGN_SEMANTIC_MAP_V1.md). Sign grammar: [`SIGN_CANON_GRAMMAR_V1.md`](./SIGN_CANON_GRAMMAR_V1.md). Sign Canon: [`SIGN_CANON_V1.md`](./SIGN_CANON_V1.md). Sign storage: [`SIGN_CANON_STORAGE_V1.md`](./SIGN_CANON_STORAGE_V1.md). Sign materialization: [`SIGN_CANON_MATERIALIZATION_V1.md`](./SIGN_CANON_MATERIALIZATION_V1.md). Sign smoke: [`SIGN_CANON_COMPOSITION_SMOKE_V1.md`](./SIGN_CANON_COMPOSITION_SMOKE_V1.md). House map: [`MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md`](./MAINSTREAM_HOUSE_SEMANTIC_MAP_V1.md). House grammar: [`HOUSE_CANON_GRAMMAR_V1.md`](./HOUSE_CANON_GRAMMAR_V1.md). House Canon: [`HOUSE_CANON_V1.md`](./HOUSE_CANON_V1.md). House storage: [`HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md`](./HOUSE_CANON_STORAGE_MATERIALIZATION_V1.md). House smoke: [`HOUSE_CANON_COMPOSITION_SMOKE_V1.md`](./HOUSE_CANON_COMPOSITION_SMOKE_V1.md). Aspect map: [`MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md`](./MAINSTREAM_ASPECT_SEMANTIC_MAP_V1.md). Aspect grammar: [`ASPECT_CANON_GRAMMAR_V1.md`](./ASPECT_CANON_GRAMMAR_V1.md). Aspect Canon: [`ASPECT_CANON_V1.md`](./ASPECT_CANON_V1.md). Aspect storage: [`ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md`](./ASPECT_CANON_STORAGE_MATERIALIZATION_V1.md). Aspect smoke: [`ASPECT_CANON_COMPOSITION_SMOKE_V1.md`](./ASPECT_CANON_COMPOSITION_SMOKE_V1.md). Angle smoke: [`ANGLE_CANON_COMPOSITION_SMOKE_V1.md`](./ANGLE_CANON_COMPOSITION_SMOKE_V1.md). Atomic smoke: [`ATOMIC_CANON_COMPOSITION_SMOKE_V1.md`](./ATOMIC_CANON_COMPOSITION_SMOKE_V1.md). Freeze: [`KNOWLEDGE_CORE_V1_FREEZE.md`](./KNOWLEDGE_CORE_V1_FREEZE.md). Angle storage: [`ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md`](./ANGLE_CANON_STORAGE_MATERIALIZATION_V1.md). Angle Canon: [`ANGLE_CANON_V1.md`](./ANGLE_CANON_V1.md). Angle grammar: [`ANGLE_CANON_GRAMMAR_V1.md`](./ANGLE_CANON_GRAMMAR_V1.md). Angle model: [`ANGLE_CANON_MODEL_V1.md`](./ANGLE_CANON_MODEL_V1.md). Angle map: [`MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md`](./MAINSTREAM_ANGLE_SEMANTIC_MAP_V1.md). Canon selection: [`TODAYFLOW_CANON_V1.md`](./TODAYFLOW_CANON_V1.md). Teardown: [`COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md`](../audits/COSTAR_SEMANTIC_CONTENT_ENGINE_TEARDOWN_V1.md). Representation: [`IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md`](./IL1_OUTER_PLANET_DRAFT_REPRESENTATION.md). Map: [`IL1_LAYER2_SIGNS_LITERATURE_MAP.md`](./IL1_LAYER2_SIGNS_LITERATURE_MAP.md). Criteria: [`IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md`](./IL1_LAYER2_SIGNS_SELECTION_CRITERIA.md). Shortlist: [`IL1_LAYER2_SIGNS_SHORTLIST.md`](./IL1_LAYER2_SIGNS_SHORTLIST.md). Audit (live dashboard): [`IL1_SUN_PLUTO_GAP_AUDIT.md`](./IL1_SUN_PLUTO_GAP_AUDIT.md). QA snapshot: [`IL1_CORPUS_QA.md`](./IL1_CORPUS_QA.md).  
 Today Meaning SoT remains [`docs/today/TODAY_CONTENT_PIPELINE_V1.md`](../today/TODAY_CONTENT_PIPELINE_V1.md). IL is pipeline step 2 lookup only. **IL-3 boundary:** this file §3 — sky-internal theme rank ≠ user relevance; not a new SoT file.
 
-Prior chat: [Compat synastry editorial 1.3.115](0f696da4-d00c-41ea-8755-bfaec0ea90fa) · [Today meaning polish 1.3.114](0f696da4-d00c-41ea-8755-bfaec0ea90fa) · [IL-4 Expression 1.3.109](b8dc63d9-b6cb-4f4e-8a85-82318c23a1d8). This pass closed Compatibility synastry editorial IL-4 as **1.3.115**. Polish remains **1.3.114**. Consume remains **1.3.113**. Attach remains **1.3.112**.
+Prior chats: [Native C1 1.3.117–121](ffa9d4d5-5366-4358-99ae-c479234c3331) · [Native C1 1.3.122](7e1da904-5643-49a9-a9cf-83ae7218aa08). IL-4 Expression: [1.3.109](b8dc63d9-b6cb-4f4e-8a85-82318c23a1d8). Consume **1.3.113** · polish **1.3.114** · compat editorial **1.3.115** · I0 split **1.3.116** stand.
 
 ---
 
@@ -19,7 +19,7 @@ Prior chat: [Compat synastry editorial 1.3.115](0f696da4-d00c-41ea-8755-bfaec0ea
 1. Read this file + IL § Sequence + **Activation gates** + §6 ingest + Layer 1–4 fill-rules.
 2. 1.3.8 activation gates are **committed** (`3c62a5c6`). Do not reopen them.
 3. IL ingest lives on short-lived `il/il-1-ingest` (from that tip). Do **not** mix Profile v2 / Foundation UI / landing / Trust / motion into IL commits. Working tree on the host often has those dirty; leave them.
-4. **IL product wire sequence is CLOSED through 1.3.115.** Attach **done 1.3.112**. Consume **done 1.3.113**. Today polish **done 1.3.114**. Synastry editorial IL-4 **done 1.3.115**. Wire calc → IL **done 1.3.111** (library layer). Library scale **done 1.3.110**. IL-4 1.3.109, IL-3 1.3.108, IL-2 1.3.107, FREEZE 1.3.106 stand. **Next named = owner-directed post-IL polish** (scope not declared). Do **not** start IL-4 rewrite. Do **not** start IL-3 rank rewrite. Do **not** reopen library scale / wire / attach / consume / polish / compat editorial without owner. **1.3.106: Knowledge Core V1 FREEZE.** Five stored families = V1 atoms. Catalog 38 draft / 0 `active`. **STOP Angles.** IL-2 composition rules **done 1.3.107** (not pair catalog). **1.3.105: final atomic smoke stands.** Five stored families. Operators discriminate. Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle composition smoke stands.** Four gates. `canon.orientation` is the operator. Mars AT ASC ≠ Mars AT MC ≠ House 1/10. Occupancy ≠ conjunction. **1.3.103 Angle Canon storage/materialization stands.** Two `type=angle` drafts. `canon.orientation` copied verbatim from 1.3.102. Catalog 38 draft / 0 `active`. **1.3.102 Angle Canon fill stands.** Two packs. Origin `direct` from 1.3.100 include. Collision vs House 1/10. Secondary unused. **1.3.101 Angle Canon grammar stands.** One slot (`orientation`). Include-first. Secondary collision-zone not default. Facing as own slot surplus. Arena copy forbidden. **1.3.100 Mainstream Angle Semantic Map stands.** Same panel. House 1/10 not proof. Angular strength not meaning. Planet-on-angle cookbooks out. **1.3.99 Angle Canon model stands** (parent 1–4). Orientation loci. **1.3.98 stored Planet × Aspect composition smoke PASS.** Four gates. Frames read `canon.relation`. Trine vs Sextile on Venus×Mars while both keep `interaction=flow`. Historical 1.3.82 AspectPair = snapshot. **STOP Aspects.** **1.3.97 Aspect Canon storage stands.** **1.3.96 Aspect Canon fill stands.** **1.3.95 Aspect Canon grammar stands.** **1.3.94 Mainstream Aspect Semantic Map stands.** **1.3.93 Planet × House smoke PASS.** `$defs.house_canon_pack` (`arena`) stands. Twelve house drafts carry locked 1.3.91 packs. Lilly `domain` unchanged. **STOP Houses.** **STOP Signs.** Co–Star teardown Phase 0 stands as a recognition check. Do **not** start CORE scoring. Do **not** start ASC cookbooks. Layer 2 Signs stays **classification-complete / interpretation-deferred**; do **not** reopen sign literature as portraits.
+4. **IL product wire sequence is CLOSED through 1.3.115.** Native C1 I0 split **done 1.3.116**. Editorial calibration **done 1.3.117**. Evidence pack binding **done 1.3.118**. Everyday scene retry **done 1.3.119**. Seed-leak retry **done 1.3.120**. Astro jargon retry **done 1.3.121**. Conflict→scene seed retry **done 1.3.122**. Attach **done 1.3.112**. Consume **done 1.3.113**. Today polish **done 1.3.114**. Synastry editorial IL-4 **done 1.3.115**. Wire calc → IL **done 1.3.111** (library layer). Library scale **done 1.3.110**. IL-4 1.3.109, IL-3 1.3.108, IL-2 1.3.107, FREEZE 1.3.106 stand. **Next named = owner-directed** (scope not declared). Do **not** start IL-4 rewrite. Do **not** start IL-3 rank rewrite. Do **not** reopen library scale / wire / attach / consume / polish / compat editorial without owner. **1.3.106: Knowledge Core V1 FREEZE.** Five stored families = V1 atoms. Catalog 38 draft / 0 `active`. **STOP Angles.** IL-2 composition rules **done 1.3.107** (not pair catalog). **1.3.105: final atomic smoke stands.** Five stored families. Operators discriminate. Occupancy ≠ conjunction. **1.3.104 stored Planet×Angle composition smoke stands.** Four gates. `canon.orientation` is the operator. Mars AT ASC ≠ Mars AT MC ≠ House 1/10. Occupancy ≠ conjunction. **1.3.103 Angle Canon storage/materialization stands.** Two `type=angle` drafts. `canon.orientation` copied verbatim from 1.3.102. Catalog 38 draft / 0 `active`. **1.3.102 Angle Canon fill stands.** Two packs. Origin `direct` from 1.3.100 include. Collision vs House 1/10. Secondary unused. **1.3.101 Angle Canon grammar stands.** One slot (`orientation`). Include-first. Secondary collision-zone not default. Facing as own slot surplus. Arena copy forbidden. **1.3.100 Mainstream Angle Semantic Map stands.** Same panel. House 1/10 not proof. Angular strength not meaning. Planet-on-angle cookbooks out. **1.3.99 Angle Canon model stands** (parent 1–4). Orientation loci. **1.3.98 stored Planet × Aspect composition smoke PASS.** Four gates. Frames read `canon.relation`. Trine vs Sextile on Venus×Mars while both keep `interaction=flow`. Historical 1.3.82 AspectPair = snapshot. **STOP Aspects.** **1.3.97 Aspect Canon storage stands.** **1.3.96 Aspect Canon fill stands.** **1.3.95 Aspect Canon grammar stands.** **1.3.94 Mainstream Aspect Semantic Map stands.** **1.3.93 Planet × House smoke PASS.** `$defs.house_canon_pack` (`arena`) stands. Twelve house drafts carry locked 1.3.91 packs. Lilly `domain` unchanged. **STOP Houses.** **STOP Signs.** Co–Star teardown Phase 0 stands as a recognition check. Do **not** start CORE scoring. Do **not** start ASC cookbooks. Layer 2 Signs stays **classification-complete / interpretation-deferred**; do **not** reopen sign literature as portraits.
 
 v1.3.8 is closed: `requires_action` and Layer 5 stay draft→active gates, not IL-1 re-ontology.  
 `876e6f98` is closed as first traditional class: classical layer not rewritten.  
@@ -30,7 +30,7 @@ v1.3.8 is closed: `requires_action` and Layer 5 stay draft→active gates, not I
 
 ## 1. Locked (do not reopen)
 
-Sequence: **IL-0 ✅ → IL-1 atoms FROZEN → IL-2 ✅ 1.3.107 → IL-3 ✅ 1.3.108 → IL-4 ✅ 1.3.109 → library scale ✅ 1.3.110 → wire calc → IL ✅ 1.3.111 → attach IL-4 packs ✅ 1.3.112 → consume IL-4 in editorial generation ✅ 1.3.113 → Today meaning polish ✅ 1.3.114 → synastry editorial IL-4 ✅ 1.3.115 → native C1 I0 split ✅ 1.3.116**.
+Sequence: **IL-0 ✅ → IL-1 atoms FROZEN → IL-2 ✅ 1.3.107 → IL-3 ✅ 1.3.108 → IL-4 ✅ 1.3.109 → library scale ✅ 1.3.110 → wire calc → IL ✅ 1.3.111 → attach IL-4 packs ✅ 1.3.112 → consume IL-4 in editorial generation ✅ 1.3.113 → Today meaning polish ✅ 1.3.114 → synastry editorial IL-4 ✅ 1.3.115 → native C1 I0 split ✅ 1.3.116 → editorial calibration ✅ 1.3.117 → evidence binding ✅ 1.3.118 → everyday retry ✅ 1.3.119 → seed-leak retry ✅ 1.3.120 → jargon retry ✅ 1.3.121 → conflict→scene seed retry ✅ 1.3.122**.
 
 This sequence *is* the knowledge engine (atoms + provenance → composition rules → themes → expression). It is not a library of texts. Do not add a second vision document.
 
@@ -517,11 +517,14 @@ TodayFlow. Продукт: Personal Model → Profile + Today. SoT = docs/, не
 
 СОСТОЯНИЕ
 - Branch: il/il-1-ingest (tracks origin/il/il-1-ingest). Не merge в main. Draft PR #17 vs main — stale; не merge.
-- Tip: `1b187d97` — 1.3.115 compat editorial + 1.3.114 polish + 1.3.113 consume. Pushed. **Next named: owner-directed post-IL polish** (scope не объявлен — спросить owner).
+- Tip: `bcebb4a6` — 1.3.122 conflict→scene seed retry (code/canon). This file: §5 paste refresh through 1.3.122. Origin in sync after push.
+- Live backend: prompt **day-scenario-native-c5.5** (compose recreate ~45m ago, healthy). Live user **2** gen **1122** PASS.
+- Live frontend: container ~23h old — **не** содержит `f97e9307` (Today scroll + Practices first paint) и `17eefbfe` (mobile login hang). Ledger ≠ server.
 - Catalog: 38 draft / 0 active. Schema/objects не менять без named Architecture impact.
-- Runtime игнорирует draft. Не deploy. Не set active. Не CORE scoring.
-- Prior IL-4: [IL-4 Expression 1.3.109](b8dc63d9-b6cb-4f4e-8a85-82318c23a1d8)
-  Prior freeze: [Knowledge Core V1 FREEZE](0c589057-9823-4af2-8990-114e10a93556)
+- Runtime игнорирует draft. Не set active. Не CORE scoring.
+- Prior: [Native C1 1.3.117–121](ffa9d4d5-5366-4358-99ae-c479234c3331) · [Native C1 1.3.122](7e1da904-5643-49a9-a9cf-83ae7218aa08)
+  IL-4: [Expression 1.3.109](b8dc63d9-b6cb-4f4e-8a85-82318c23a1d8)
+  Freeze: [Knowledge Core V1 FREEZE](0c589057-9823-4af2-8990-114e10a93556)
 
 ЧТО УЖЕ ЗАКРЫТО (не трогать packs / lemmas)
 Planet  core_function  what     1.3.82
@@ -540,11 +543,18 @@ ATTACH  IL-4 LLM input          1.3.112  LOCKED
 CONSUME editorial phrase        1.3.113  LOCKED
 POLISH  Today chorus bind       1.3.114  LOCKED
 COMPAT  synastry editorial      1.3.115  LOCKED
+I0      native C1 split         1.3.116  LOCKED
+CALIB   editorial gate retry    1.3.117  LOCKED
+BIND    evidence allowlist      1.3.118  LOCKED
+SCENE   everyday retry          1.3.119  LOCKED
+SEED    Global seed-kill retry  1.3.120  LOCKED
+JARGON  astro jargon cross-hint 1.3.121  LOCKED
+C→SCENE why_today→scene.why     1.3.122  LOCKED
 
 ОЧЕРЕДЬ (locked)
-fill 1.3.102 → ... → consume 1.3.113 LOCKED → polish 1.3.114 LOCKED → compat editorial 1.3.115 LOCKED → NEXT: owner-directed post-IL polish.
+fill 1.3.102 → … → 1.3.122 LOCKED → NEXT: owner-directed (scope не объявлен — спросить owner).
 
-NEXT NAMED = owner-directed post-IL polish. Не pair catalog. Не `active`. Не reopen wire / attach / consume / polish / compat editorial.
+NEXT NAMED = owner-directed. Не pair catalog. Не `active`. Не reopen wire / attach / consume / polish / compat editorial / I0 / C3.1 detectors / 1.3.117–122 retry. Native C1 unavailable shells за 2 дня = 0; не открывать следующий quality pass без нового prod reject.
 
 Locked packs (verbatim):
 - mars   act · pursue · assert
@@ -583,15 +593,36 @@ CONSUME IL-4 IN EDITORIAL GENERATION — ЗАКРЫТ 1.3.113 (IL §6.67 · inve
 Generation phrases packs (prompt + protected IL4_MEANING). Fill-empty / reject-invalid. Не overwrite. Не Today prompts as meaning SoT.
 
 TODAY MEANING POLISH — ЗАКРЫТ 1.3.114 (IL §6.68 · inventory step 42 · KC-C-TODAY-POLISH)
-Native astrology chorus binds to IL-4 lemmas. Prompt c4.2. Conflict/scenes stay DRAMATURGY_BRIEF. Не `active`. Не Relevance.
+Native astrology chorus binds to IL-4 lemmas. Conflict/scenes stay DRAMATURGY_BRIEF. Prompt later bumped **c5.0–c5.5**; polish contract unchanged. Не `active`. Не Relevance.
 
 COMPAT SYNASTRY EDITORIAL IL-4 — ЗАКРЫТ 1.3.115 (IL §6.69 · inventory step 43 · KC-C-COMPAT-EDITORIAL)
 Synastry `generate_compatibility_editorial` phrases IL-4 when charts supplied. Prompt v1.1. Quick-compat without charts unchanged. Не `active`. Не Relevance.
 
+NATIVE C1 I0 SPLIT — ЗАКРЫТ 1.3.116
+Global LLM stage then optional Personal overlay. Personal consumes GLOBAL_LOCKED. Degrade → Global-only. Не reopen.
+
+EDITORIAL GATE CALIBRATION — ЗАКРЫТ 1.3.117
+Prompt c5.1 + format_editorial_retry_feedback. Gates not weakened.
+
+EVIDENCE PACK BINDING — ЗАКРЫТ 1.3.118
+unknown_evidence allowlist = events pack + foundation aliases. Gate not weakened.
+
+EVERYDAY SCENE RETRY — ЗАКРЫТ 1.3.119
+Prompt c5.2; all-scene lived-marker retry; Global max_attempts 3.
+
+SEED-LEAK RETRY — ЗАКРЫТ 1.3.120
+verbatim_seed_leak + conflict_short_name_is_sky_fact on Global native validate. Prompt c5.3. Detector unchanged.
+
+ASTRO JARGON RETRY — ЗАКРЫТ 1.3.121
+SEED_JARGON_CROSS_HINT_RU; don't trade ASTRO_JARGON_BARE for why_today paste into human_meaning. Prompt c5.4. Live gen **1118** PASS.
+
+CONFLICT→SCENE SEED RETRY — ЗАКРЫТ 1.3.122
+Don't paste why_today/why_arose (≥6 слов) into scenes[].why / why_sphere / setup; don't fix that leak by jargon rollback. Prompt **c5.5**. Detectors unchanged. Live user **2** gen **1122** PASS. Canon: docs/today/NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1.md.
+
 RUNTIME WIRING (IL-4 editorial path, не public JSON)
 | Surface | Module | attach | consume | polish | prompt |
 |---------|--------|--------|---------|--------|--------|
-| Today native | day_scenario_native_llm_c1 | il4_surface_attach | il4_editorial_consume | today_meaning_polish | day-scenario-native-c4.2 |
+| Today native | day_scenario_native_llm_c1 | il4_surface_attach | il4_editorial_consume | today_meaning_polish | day-scenario-native-c5.5 |
 | Profile | profile_contract_v1 | il4_surface_attach | il4_editorial_consume | — | (profile contract) |
 | Compat dynamics | compatibility_llm | il4_surface_attach | il4_editorial_consume | — | (compat LLM) |
 | Compat synastry editorial | compatibility_editorial | attach_from_chart_pair | il4_editorial_consume | — | compatibility-editorial-v1.1 |
@@ -599,74 +630,69 @@ RUNTIME WIRING (IL-4 editorial path, не public JSON)
 KNOWN GAPS (не баги; не чинить без named pass)
 - Quick-compat editorial без charts → IL-4 нет
 - personality_v1 / CE path → IL-4 by design нет
-- I0: native C1 всё ещё один LLM-call (chorus+conflict+natal) — отдельный future pass
-- Server deploy не делался (ledger ≠ server; compose rebuild по owner)
+- Parse can burn a Global retry slot (gen **1121**: leak → parse → jargon[2]; kept prior)
+- GET /today/contract не auto-rebuild unavailable (assemble-once). Recovery: POST /today/story/refresh force=true
+- Frontend compose не пересобран после login-hang / Today-scroll / Practices-paint commits
+- Profile polish (mirror 1.3.114) — не начат; нужен конкретный Profile quality gap
 
 OWNER OPTIONS для next named (выбрать один, не угадывать)
-A) Deploy backend на todayflow.today (compose rebuild)
-B) I0 split native C1 (отдельный canon + Architecture impact)
-C) Profile / other surface polish (mirror 1.3.114 pattern)
+A) Deploy frontend (login hang + Today appMain scroll + Practices first paint) — commits `17eefbfe` + `f97e9307` already on branch
+B) Profile polish (mirror 1.3.114) — только если есть конкретный Profile quality gap
+C) Native C1 residual — только если новый prod unavailable / named reject после c5.5 (не reopen 1.3.117–122)
 D) Relevance / Prioritization — OUT OF SCOPE без owner
 E) IL-1 ingest / books / active — OUT OF SCOPE
+F) Merge il/il-1-ingest → main — OUT OF SCOPE без owner
 
 Читай ПЕРВЫМ (назвать paths+sections в Architecture impact):
-1. docs/astrology/COMPAT_SYNASTRY_EDITORIAL_IL4_V1.md
-2. docs/today/TODAY_MEANING_POLISH_V1.md
-3. docs/astrology/IL4_EDITORIAL_CONSUME_V1.md
-4. docs/astrology/IL4_SURFACE_ATTACH_V1.md
-5. docs/astrology/CALC_IL_WIRE_V1.md
-6. docs/astrology/INTERPRETATION_LIBRARY_V1.md — Sequence · §6.69 · §7
-7. docs/astrology/KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md — step 43 · KC-C-COMPAT-EDITORIAL
-8. docs/astrology/IL4_EXPRESSION_V1.md
-9. docs/astrology/IL3_INTERPRETATION_ENGINE_V1.md
-10. docs/astrology/IL2_COMPOSITION_RULES_V1.md
-11. docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md
-12. docs/astrology/IL1_HANDOFF.md §3 · §5
-13. docs/PRODUCT_EXECUTION_TRACKER.md NOW
-14. AGENTS.md Architecture impact
+1. docs/today/NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1.md
+2. docs/today/NATIVE_C1_ASTRO_JARGON_RETRY_V1.md
+3. docs/today/NATIVE_C1_SEED_LEAK_RETRY_V1.md
+4. docs/today/NATIVE_C1_I0_GENERATION_SPLIT_V1.md
+5. docs/today/NATIVE_C1_EDITORIAL_GATE_CALIBRATION_V1.md
+6. docs/astrology/IL1_HANDOFF.md §3 · §5
+7. docs/PRODUCT_EXECUTION_TRACKER.md NOW
+8. AGENTS.md Architecture impact
+9. docs/astrology/INTERPRETATION_LIBRARY_V1.md — Sequence
+10. docs/today/TODAY_CONTENT_PIPELINE_V1.md I0
 
-WIRE НЕ ДОЛЖЕН
+НЕ ДОЛЖЕН
 - lemma rewrite / pack enrich / schema без named impact
 - set active / Today prompts as meaning SoT
+- weaken C3.1 / seed-kill / unknown_evidence detectors
+- post-LLM hard overwrite of meaning slots
 - books / CORE scoring / Co–Star ingest
 - ASC cookbooks; outer objects
 - occupancy = conjunction; House 1 = ASC; MC = career
 - стартовать Relevance / Prioritization / Continuity / Trust as meaning engines
-- merge to main mid-pass; deploy
-- reopen FREEZE / IL-2 / IL-3 / IL-4 / SCALE / WIRE / ATTACH / CONSUME / Angles / Aspects / Houses / Signs
+- merge to main mid-pass
+- reopen FREEZE / IL-2 / IL-3 / IL-4 / SCALE / WIRE / ATTACH / CONSUME / POLISH / COMPAT / I0 / 1.3.117–122
+- mix FE chrome (scroll/login/practices) into an IL meaning commit
 
 STOP Angles. STOP Aspects. STOP Houses. STOP Signs. STOP IL-2 rules rewrite. STOP IL-3 rank rewrite. STOP IL-4 meaning rewrite. STOP library-scale reopen.
 Do not start CORE scoring. Do not start ASC cookbooks.
 Layer 2 Signs = classification-complete / interpretation-deferred.
 
 Git: only il/il-1-ingest. Commit/push только если owner попросит. Не --no-verify. Не force push.
-Author via env (не git config): TodayFlow Agent <agent@todayflow.app>
+Author via env (не git config): TodayFlow Agent <agent@todayflow.today>
 
-Тесты (host python3 часто без pytest → backend/.venv/bin/python; pytest.ini --cov → -o addopts=):
+Тесты (host python3 часто без pytest → backend/.venv/bin/python; pytest.ini --cov → --no-cov):
 cd /opt/TodayFlow/backend && .venv/bin/python -m pytest \
-  tests/test_compat_synastry_editorial_il4_v1.py \
+  tests/test_native_c1_conflict_scene_seed_retry_v1.py \
+  tests/test_native_c1_astro_jargon_retry_v1.py \
+  tests/test_native_c1_seed_leak_retry_v1.py \
+  tests/test_native_c1_everyday_scene_retry_v1.py \
+  tests/test_native_c1_editorial_gate_calibration_v1.py \
+  tests/test_native_c1_i0_generation_split_v1.py \
   tests/test_today_meaning_polish_v1.py \
+  tests/test_compat_synastry_editorial_il4_v1.py \
   tests/test_il4_editorial_consume_v1.py \
-  tests/test_il4_surface_attach_v1.py \
-  tests/test_calc_il_wire_v1.py \
-  tests/test_library_scale_v1.py \
-  tests/test_il4_expression_engine_v1.py \
-  tests/test_il3_interpretation_engine_v1.py \
-  tests/test_il2_composition_rules_v1.py \
   tests/test_knowledge_core_v1_freeze.py \
-  tests/test_atomic_canon_composition_smoke_v1.py \
-  tests/test_angle_canon_composition_smoke_v1.py \
-  tests/test_angle_canon_v1.py \
-  tests/test_angle_canon_grammar_v1.py \
-  tests/test_mainstream_angle_semantic_map_v1.py \
-  tests/test_angle_canon_model_v1.py \
-  tests/test_aspect_canon_composition_smoke_v1.py \
-  tests/test_astrology_interpretation_schema_v1.py \
-  tests/test_house_canon_composition_smoke_v1.py \
-  tests/test_sign_canon_composition_smoke_v1.py \
-  tests/test_planet_canon_composition_smoke_v1.py \
-  -q --tb=short --noconftest -o addopts=
-(1.3.115 compat + 1.3.114 polish + 1.3.113 consume + 1.3.112 attach + 1.3.111 wire + 1.3.110 scale + 1.3.109 IL-4 + 1.3.108 IL-3 + 1.3.107 IL-2 + 1.3.106 freeze baseline. Не claim CI green unless GitHub checks on the SHA.)
+  -q --no-cov
+Ops (prod DB, inside backend container):
+docker exec todayflow-backend-1 python /app/scripts/list_unavailable_native_shells_v1.py --days 2
+docker exec todayflow-backend-1 python /app/scripts/collect_native_gate_rejects_v1.py --days 2
+docker exec todayflow-backend-1 python /app/scripts/native_c1_regression_matrix_v1.py --user-id N --date YYYY-MM-DD
+(Не claim CI green unless GitHub checks on the SHA.)
 
-Не pair catalog. Не книги. Не active. Не reopen freeze / IL-2 / IL-3 / IL-4 / scale / wire / attach / consume / polish / compat editorial.
+Не pair catalog. Не книги. Не active. Не reopen freeze / IL-2 / IL-3 / IL-4 / scale / wire / attach / consume / polish / compat editorial / I0 / 1.3.117–122.
 ```
