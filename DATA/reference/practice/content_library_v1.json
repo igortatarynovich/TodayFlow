@@ -388,6 +388,44 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.micro_action.001",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "micro_action",
+        "status": "draft",
+        "semantic_version": "content-taxonomy-v1.1",
+        "seed_cell": "need.motivation.activate"
+      },
+      "retrieval": {
+        "purpose": ["motivation"],
+        "domain": [],
+        "input_state": ["stuck", "low_energy"],
+        "direction": ["activate"],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": ["work", "anytime"],
+        "delivery": ["text", "unguided"],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Две минуты",
+            "body": "Назови одно действие короче двух минут. Сделай его сейчас. Остановись."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Сдвиг"
+          }
+        }
+      }
     }
   ]
 }

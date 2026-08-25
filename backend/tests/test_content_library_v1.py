@@ -36,6 +36,8 @@ SEED_9_ID = "meditation.sleep.001"
 SEED_9_CELL = "need.sleep.prepare"
 SEED_10_ID = "discipline.sleep_discipline.001"
 SEED_10_CELL = "need.sleep.discipline"
+SEED_11_ID = "practice.micro_action.001"
+SEED_11_CELL = "need.motivation.activate"
 
 
 def _load() -> tuple[dict, dict, dict]:
@@ -249,9 +251,27 @@ def test_p0_seed_10_is_first_ledger_empty_cell_sleep_discipline() -> None:
     assert SEED_10_ID not in (sleep_prepare.get("item_ids") or [])
     assert sleep_prepare["item_ids"] == [SEED_9_ID]
 
+
+def test_p0_seed_11_is_first_ledger_empty_cell_motivation() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_11_ID)
+    assert item["identity"]["content_class"] == "practice"
+    assert item["identity"]["family"] == "behavioral"
+    assert item["identity"]["type"] == "micro_action"
+    assert item["identity"]["seed_cell"] == SEED_11_CELL
+    assert item["retrieval"]["purpose"] == ["motivation"]
+    assert item["retrieval"]["direction"] == ["activate"]
+    assert item["retrieval"]["input_state"] == ["stuck", "low_energy"]
+    assert item["payload"]["body_kind"] == "instruction"
+
+    cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_11_CELL)
+    assert cell["status"] == "seed"
+    assert cell["item_ids"] == [SEED_11_ID]
+    assert coverage["need_cells"][10]["id"] == SEED_11_CELL
+
     next_empty = first_empty_p0_cell(coverage)
     assert next_empty is not None
-    assert next_empty["id"] == "need.motivation.activate"
+    assert next_empty["id"] == "need.emotional_awareness.reflect"
 
 
 def test_overlapping_state_does_not_close_other_cells() -> None:
@@ -261,7 +281,7 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
     focus = next(c for c in coverage["need_cells"] if c["id"] == SEED_3_CELL)
     energy = next(c for c in coverage["need_cells"] if c["id"] == SEED_4_CELL)
     clarity = next(c for c in coverage["need_cells"] if c["id"] == SEED_5_CELL)
-    motivation = next(c for c in coverage["need_cells"] if c["id"] == "need.motivation.activate")
+    motivation = next(c for c in coverage["need_cells"] if c["id"] == SEED_11_CELL)
     recovery = next(c for c in coverage["need_cells"] if c["id"] == "need.recovery.recover")
     confidence = next(c for c in coverage["need_cells"] if c["id"] == SEED_6_CELL)
     decision = next(c for c in coverage["need_cells"] if c["id"] == "need.decision_making.focus")
@@ -272,6 +292,7 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
     rest = next(c for c in coverage["need_cells"] if c["id"] == SEED_8_CELL)
     detachment = next(c for c in coverage["need_cells"] if c["id"] == "need.detachment.release")
     simplicity = next(c for c in coverage["need_cells"] if c["id"] == "need.simplicity.release")
+    release = next(c for c in coverage["need_cells"] if c["id"] == SEED_7_CELL)
     assert SEED_1_ID not in (calm.get("item_ids") or [])
     assert SEED_2_ID not in (grounding.get("item_ids") or [])
     assert SEED_1_ID not in (focus.get("item_ids") or [])
@@ -291,7 +312,10 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
     assert SEED_9_ID not in (rest.get("item_ids") or [])
     assert SEED_9_ID not in (sleep_discipline.get("item_ids") or [])
     assert SEED_10_ID not in (sleep_prepare.get("item_ids") or [])
-    assert motivation["status"] == "empty"
+    assert SEED_11_ID not in (energy.get("item_ids") or [])
+    assert SEED_11_ID not in (release.get("item_ids") or [])
+    assert SEED_11_ID not in (recovery.get("item_ids") or [])
+    assert SEED_11_ID not in (reset.get("item_ids") or [])
     assert recovery["status"] == "empty"
     assert decision["status"] == "empty"
     assert awareness["status"] == "empty"
@@ -303,13 +327,14 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
     assert calm["item_ids"] == [SEED_2_ID]
     assert sleep_prepare["item_ids"] == [SEED_9_ID]
     assert sleep_discipline["item_ids"] == [SEED_10_ID]
+    assert motivation["item_ids"] == [SEED_11_ID]
 
 
 def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
-    assert coverage["counts"]["library_items"] == 10
-    assert coverage["counts"]["need_cells_empty"] == 16
-    assert coverage["counts"]["need_cells_seed"] == 10
+    assert coverage["counts"]["library_items"] == 11
+    assert coverage["counts"]["need_cells_empty"] == 15
+    assert coverage["counts"]["need_cells_seed"] == 11
     assert library["status"] == "seed"
 
 

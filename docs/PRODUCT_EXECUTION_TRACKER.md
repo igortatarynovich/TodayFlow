@@ -24,7 +24,7 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-25):** **P0 seed #10 landed (ledger order).** `need.sleep.discipline` → `discipline.sleep_discipline.001`. Next = first remaining empty cell (`need.motivation.activate`). One item closes one cell. No batch-fill. Meaning still does not emit `item_id`.
+**NOW (PRACTICES / CANON, 2026-08-25):** **P0 seed #11 landed (ledger order).** `need.motivation.activate` → `practice.micro_action.001`. Next = first remaining empty cell (`need.emotional_awareness.reflect`). One item closes one cell. No batch-fill. Meaning still does not emit `item_id`.
 
 ## Architecture impact — Practice Content Coverage V1 (2026-08-25)
 
@@ -2494,6 +2494,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Practices / Canon | **P0 seed #11 (ledger order)** | **SEEDED** | First empty cell was `need.motivation.activate` → `practice.micro_action.001`. Overlapping `stuck` / `low_energy` do not close release/energy/recovery. Next empty = `need.emotional_awareness.reflect`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
 - 2026-08-25 | Practices / Canon | **P0 seed #10 (ledger order)** | **SEEDED** | First empty cell was `need.sleep.discipline` → `discipline.sleep_discipline.001`. Same `purpose=sleep` as `meditation.sleep.001` does not share coverage. Period `duration_days`, not session minutes. Next empty = `need.motivation.activate`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
 - 2026-08-25 | Practices / Canon | **P0 seed #9 (ledger order)** | **SEEDED** | First empty cell was `need.sleep.prepare` → `meditation.sleep.001`. Same `purpose=sleep` does not close `need.sleep.discipline`. Next empty = `need.sleep.discipline`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
 - 2026-08-25 | Practices / Canon | **P0 seed #8 (ledger order)** | **SEEDED** | First empty cell was `need.rest.downregulate` → `meditation.relaxation.001`. Overlapping `overstimulated` does not close sleep/detachment/simplicity or calm. Next empty = `need.sleep.prepare`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).

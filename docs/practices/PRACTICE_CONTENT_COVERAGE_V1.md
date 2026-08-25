@@ -136,7 +136,7 @@ Seed-pass не закрывает несколько cells одним item, да
 - другие empty cells не получили этот `item_id`
 - Meaning / public Today JSON **не** менялись
 
-Семена: `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`; `need.energy.activate` → `practice.energizing_breath.001`; `need.clarity.reflect` → `practice.prompted_reflection.001`; `need.confidence.open` → `affirmation.capability.001`; `need.release.release` → `practice.body_release.001`; `need.rest.downregulate` → `meditation.relaxation.001`; `need.sleep.prepare` → `meditation.sleep.001`; `need.sleep.discipline` → `discipline.sleep_discipline.001`.
+Семена: `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`; `need.energy.activate` → `practice.energizing_breath.001`; `need.clarity.reflect` → `practice.prompted_reflection.001`; `need.confidence.open` → `affirmation.capability.001`; `need.release.release` → `practice.body_release.001`; `need.rest.downregulate` → `meditation.relaxation.001`; `need.sleep.prepare` → `meditation.sleep.001`; `need.sleep.discipline` → `discipline.sleep_discipline.001`; `need.motivation.activate` → `practice.micro_action.001`.
 
 Запрещено: генерировать payload без пустой P0 cell; закрывать cell только title без retrieval-полей; ставить `item_id` в meaning/prompt; автозакрывать соседние cells по пересечению tags.
 
@@ -157,9 +157,9 @@ Seed-pass не закрывает несколько cells одним item, да
 Ledger JSON:
 
 - `need_cells[].status`: `empty` · `seed` · `covered`
-- `need_cells[].item_ids`: `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`; `need.energy.activate` → `practice.energizing_breath.001`; `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.clarity.reflect` → `practice.prompted_reflection.001`; `need.confidence.open` → `affirmation.capability.001`; `need.release.release` → `practice.body_release.001`; `need.rest.downregulate` → `meditation.relaxation.001`; `need.sleep.prepare` → `meditation.sleep.001`; `need.sleep.discipline` → `discipline.sleep_discipline.001`; остальные `[]`
+- `need_cells[].item_ids`: `need.calm.downregulate` → `practice.extended_exhale.001`; `need.focus.focus` → `practice.box_breathing.001`; `need.energy.activate` → `practice.energizing_breath.001`; `need.grounding.stabilize` → `practice.sensory_grounding.001`; `need.clarity.reflect` → `practice.prompted_reflection.001`; `need.confidence.open` → `affirmation.capability.001`; `need.release.release` → `practice.body_release.001`; `need.rest.downregulate` → `meditation.relaxation.001`; `need.sleep.prepare` → `meditation.sleep.001`; `need.sleep.discipline` → `discipline.sleep_discipline.001`; `need.motivation.activate` → `practice.micro_action.001`; остальные `[]`
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
-- `gaps`: 16 P0 cells still `empty`
+- `gaps`: 15 P0 cells still `empty`
 
 Следующий рабочий шаг: **первая empty P0 cell в порядке ledger**, тем же процессом. Не batch-fill.
 
@@ -169,6 +169,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | P0 seed #11 (ledger order): `need.motivation.activate` → `practice.micro_action.001`. Overlapping `stuck` / `low_energy` do not close release/energy/recovery. Next empty = `need.emotional_awareness.reflect`. |
 | 2026-08-25 | P0 seed #10 (ledger order): `need.sleep.discipline` → `discipline.sleep_discipline.001`. Same `purpose=sleep` as `meditation.sleep.001` does not share coverage. Period `duration_days`, not session minutes. Next empty = `need.motivation.activate`. |
 | 2026-08-25 | P0 seed #9 (ledger order): `need.sleep.prepare` → `meditation.sleep.001`. Same `purpose=sleep` does not close `need.sleep.discipline`. Next empty = `need.sleep.discipline`. |
 | 2026-08-25 | P0 seed #8 (ledger order): `need.rest.downregulate` → `meditation.relaxation.001`. Overlapping `overstimulated` does not close sleep/detachment/simplicity or calm. Next empty = `need.sleep.prepare`. |
