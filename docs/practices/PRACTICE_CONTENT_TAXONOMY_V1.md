@@ -16,6 +16,7 @@
 | Документ | Роль |
 |----------|------|
 | [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) | **SoT происхождения техники.** Source → canonical technique → item. LLM не источник метода. |
+| [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) | **Research landscape** (parent 5–7): семьи методов по class; shortlist закрыт; canon пуст. |
 | [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | Coverage-first fill. **Frozen** pending technique canon. Meaning не знает item_id / technique_id. |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | Need/format чипы и цикл сессии. Need ≠ type. Format ≠ type. |
 | [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md) §2.5 · §2.8 | Куда кладётся Machine + Content. P2 fill ещё впереди. |
@@ -481,7 +482,7 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 ## 14. Что дальше
 
-1. **Provenance** — [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md). Ландшафт → shortlist → ingest → canonical technique. Не новые LLM items.
+1. **Landscape** — [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md). Затем критерии → shortlist → ingest. Не новые LLM items. `technique_canon_v1.json` пуст.
 2. Coverage-first архитектура (26 cells, type spine) стоит; fill **frozen**. Audio vs text отменён как next step.
 3. Retrieval runtime **после** canonical techniques + P0 coverage. Meaning по-прежнему без `item_id` / `technique_id`.
 4. Density (P1) и remap legacy `CONTENT/practices/*.json` — только как expressions канона, не вместо provenance.

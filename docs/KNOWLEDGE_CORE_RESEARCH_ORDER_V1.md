@@ -141,6 +141,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 ## 7. Changelog
 
+- **1.12 note (2026-08-25)** — Practice Technique Landscape V1: [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md). Parent steps 5–7. Shortlist not opened. Не IL CORE.
 - **1.12 note (2026-08-25)** — практики как система техник: [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md). Parent sequence 1–9 stands. Не IL CORE. Не author-lock.
 - **1.0 (2026-08-17)** — locked sequence для семантических ядер. Урок IL-1: provenance раньше author-lock. Parent для IL §6.9. Обязателен для следующего ядра и для нумерологии / психологии / практик / медицины как систем знаний.
 - **1.1 (2026-08-17)** — IL-1 in-flight remaining planet budget (IL §6.10 / 1.3.45) is psychological coverage of empty slots. This file's sequence for the *next* core is unchanged. CORE=0 is not a KPI.

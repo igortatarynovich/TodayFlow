@@ -1,0 +1,44 @@
+{
+  "contract_version": "technique_landscape_contract_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-landscape-v1.0",
+  "description": "Research landscape of technique families by content_class. Not technique canon. Not shortlist. Canon: docs/practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md",
+  "parent_steps": "KNOWLEDGE_CORE_RESEARCH_ORDER_V1 steps 5–7",
+  "required": [
+    "family_id",
+    "candidate_family",
+    "content_class",
+    "candidate_types",
+    "mechanism_shape",
+    "bounds_to_research",
+    "variant_axes",
+    "source_families",
+    "claim_risk",
+    "probe_links",
+    "shortlist_status"
+  ],
+  "fields": {
+    "family_id": "family.{content_class}.{slug}",
+    "candidate_family": "stable method family in the field, not an app brand",
+    "content_class": "practice | meditation | affirmation | discipline",
+    "candidate_types": "taxonomy type codes that may express this family; empty if the field family must not map to a current type",
+    "mechanism_shape": "what the person does or attends to",
+    "bounds_to_research": "identity and safety distinctions shortlist must be able to close",
+    "variant_axes": "what can change without becoming a different family",
+    "source_families": "provenance source_family enum; types of text, not authors",
+    "claim_risk": "none_until_ingest | product_only | likely_invention | construct_mismatch | family_collapse | medical_protocol_bleed | manifestation | efficacy_bleed",
+    "probe_links": "architecture-probe item_ids whose payload currently sits in this family",
+    "shortlist_status": "this pass: not_opened",
+    "likely_disposition": "optional research hint: keep_research | reject_or_remap | split_construct | do_not_collapse"
+  },
+  "invariants": [
+    "shortlist_status is not_opened on every row",
+    "does not write technique_canon_v1",
+    "authors are not fields",
+    "energizing_breath must not sit on activating_forceful_breath",
+    "capability must not sit on values_self_affirmation",
+    "body_release must not sit on progressive_muscle_relaxation",
+    "sleep_discipline must not sit on clinical_insomnia_protocol"
+  ]
+}

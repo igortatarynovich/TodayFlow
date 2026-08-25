@@ -24,7 +24,16 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-25):** **Fill frozen.** LLM is not the technique source. Canonical Technique layer in. Registry empty. First 11 items = architecture probes (unattested). 133 drafts stay provisional. Audio vs text **cancelled**. Next = landscape/shortlist/ingest per [PRACTICE_TECHNIQUE_PROVENANCE_V1](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-25):** **Technique landscape V1.** Four class maps; families not authors. Shortlist **closed**. Technique canon still empty. Fill frozen. Next = selection criteria (parent step 8), not ingest. [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+
+## Architecture impact — Practice Technique Landscape V1 (2026-08-25)
+
+- **SoT before:** provenance pipeline locked; next step could collapse a probe into the first recognizable school (PMR, CBT-I, values self-affirmation, forceful pranayama).
+- **SoT after:** named pass = landscape of candidate families by class. Ledger rows are families, not canonical techniques. Four probe splits locked as research distinctions. Shortlist / ingest / technique_canon fill remain closed.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Library still llm_provisional. `technique_id` unused.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) · `technique_landscape_v1.json` · provenance 1.1 · coverage next_pass · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with opening shortlist from this pass.
 
 ## Architecture impact — Practice Technique Provenance V1 (2026-08-25)
 
@@ -2503,6 +2512,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-25 | Practices / Canon | **Technique landscape V1** | **ACCEPTED** | Four class maps. Families ≠ authors. Shortlist closed. Technique canon empty. Four probe splits: energizing_breath reject/remap; capability = coping not values self-affirmation; body_release ≠ PMR; sleep_discipline ≠ CBT-I. Next = selection criteria, not ingest. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md).
 - 2026-08-25 | Practices / Canon | **Technique provenance + fill freeze** | **ACCEPTED** | LLM is not the technique source. Canonical Technique contract + empty registry. First 11 items gap-reviewed, not ingested. 133 drafts = llm_provisional. Audio vs text cancelled. Next = landscape/shortlist/ingest, not more seeds. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_PROVENANCE_V1](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md).
 - 2026-08-25 | Practices / Canon | **P1 density context (work vs evening)** | **SEEDED** | 44 siblings. First = `practice.extended_exhale.003` (`evening`). Sleep/evening seeds flip to `work`. Same duration as seed. Next = audio vs text. 42 P1 types still blocked. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
 - 2026-08-25 | Practices / Canon | **P1 density EN locale** | **SEEDED** | `locales.en` + `outcome_label.en` on all 89 items. `ru` kept. Sleep EN avoids type code `sleep`. Next = other context (`work` vs `evening`). 42 P1 types still blocked. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).

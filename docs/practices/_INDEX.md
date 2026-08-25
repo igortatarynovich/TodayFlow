@@ -4,7 +4,8 @@
 |----------|------|
 | [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) | **SoT библиотеки** (v1.2): class → type → attributes · Canonical Technique → Item expression · pipeline Meaning→Retrieval→Library. Vocab: `DATA/reference/practice/content_taxonomy_v1.json` |
 | [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) | **SoT происхождения техники.** Source → canonical technique → item. LLM не источник метода. Fill frozen. Registry empty. |
-| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Fill-pass** (v1.1): 26/26 P0 cells · architecture stands · **frozen**. Next = provenance, not audio vs text |
+| [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) | **Landscape V1** (parent 5–7): четыре карты class; семьи не авторы. Shortlist закрыт. |
+| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Fill-pass** (v1.1): 26/26 P0 cells · architecture stands · **frozen**. Next = landscape, not shortlist |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | **SoT экрана** (v1.1): цикл состояния; 6 needs (тело + рефлексия; Уснуть last); 9 formats (yoga/stretch/music + reflection/sleep); сессия; music layer |
 | [practices_screen_mockup_v1.png](./practices_screen_mockup_v1.png) | **Визуальный референс** экрана (загруженный скрин спеки) — UI-паритет + C0b need-лента |
 

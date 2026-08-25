@@ -82,6 +82,34 @@ ALLOWED_TECHNIQUE_REVIEW_STATUS = frozenset(
         "rejected",
     }
 )
+ALLOWED_CLAIM_RISK = frozenset(
+    {
+        "none_until_ingest",
+        "product_only",
+        "likely_invention",
+        "construct_mismatch",
+        "family_collapse",
+        "medical_protocol_bleed",
+        "manifestation",
+        "efficacy_bleed",
+    }
+)
+LANDSCAPE_REQUIRED = (
+    "family_id",
+    "candidate_family",
+    "content_class",
+    "candidate_types",
+    "mechanism_shape",
+    "bounds_to_research",
+    "variant_axes",
+    "source_families",
+    "claim_risk",
+    "probe_links",
+    "shortlist_status",
+)
+LANDSCAPE_CONTENT_CLASS = frozenset(
+    {"practice", "meditation", "affirmation", "discipline"}
+)
 TECHNIQUE_REQUIRED = (
     "technique_id",
     "content_class",
@@ -371,6 +399,119 @@ def validate_technique_canon_v1(registry: dict[str, Any]) -> list[str]:
         mechanism = row.get("canonical_mechanism")
         if not isinstance(mechanism, str) or not mechanism.strip():
             errors.append(f"{prefix}: canonical_mechanism must be non-empty string")
+    return errors
+
+
+def validate_technique_landscape_v1(
+    landscape: dict[str, Any],
+    *,
+    vocab: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if landscape.get("contract_version") != "technique_landscape_v1":
+        errors.append("invalid technique landscape contract_version")
+    if landscape.get("shortlist_opened") is not False:
+        errors.append("shortlist_opened must be false")
+    if landscape.get("writes_technique_canon") is not False:
+        errors.append("writes_technique_canon must be false")
+    families = landscape.get("families")
+    if not isinstance(families, list) or not families:
+        errors.append("families must be non-empty list")
+        return errors
+
+    allowed_types: dict[str, set[str]] = {}
+    if vocab:
+        for cls, rows in (vocab.get("types") or {}).items():
+            allowed_types[str(cls)] = {
+                row["code"]
+                for row in rows
+                if isinstance(row, dict) and row.get("code")
+            }
+
+    seen_ids: set[str] = set()
+    classes_seen: set[str] = set()
+    types_by_family: dict[str, set[str]] = {}
+    for i, row in enumerate(families):
+        prefix = f"family[{i}]"
+        if not isinstance(row, dict):
+            errors.append(f"{prefix}: must be object")
+            continue
+        for key in LANDSCAPE_REQUIRED:
+            if key not in row:
+                errors.append(f"{prefix}: missing {key}")
+        family_id = row.get("family_id")
+        if not isinstance(family_id, str) or not family_id.startswith("family."):
+            errors.append(f"{prefix}: family_id must start with 'family.'")
+        elif family_id in seen_ids:
+            errors.append(f"{prefix}: duplicate family_id {family_id!r}")
+        else:
+            seen_ids.add(family_id)
+        content_class = row.get("content_class")
+        if content_class not in LANDSCAPE_CONTENT_CLASS:
+            errors.append(f"{prefix}: invalid content_class")
+        else:
+            classes_seen.add(str(content_class))
+        if row.get("shortlist_status") != "not_opened":
+            errors.append(f"{prefix}: shortlist_status must be not_opened")
+        if row.get("claim_risk") not in ALLOWED_CLAIM_RISK:
+            errors.append(f"{prefix}: invalid claim_risk")
+        if not isinstance(row.get("candidate_family"), str) or not str(
+            row.get("candidate_family") or ""
+        ).strip():
+            errors.append(f"{prefix}: candidate_family empty")
+        if not isinstance(row.get("mechanism_shape"), str) or not str(
+            row.get("mechanism_shape") or ""
+        ).strip():
+            errors.append(f"{prefix}: mechanism_shape empty")
+        for list_key in (
+            "candidate_types",
+            "bounds_to_research",
+            "variant_axes",
+            "source_families",
+            "probe_links",
+        ):
+            values = _as_str_list(row.get(list_key), allow_empty=True)
+            if values is None:
+                errors.append(f"{prefix}: {list_key} must be string list")
+                continue
+            if list_key == "source_families":
+                bad = [x for x in values if x not in ALLOWED_SOURCE_FAMILY]
+                if bad:
+                    errors.append(f"{prefix}: unknown source_families {bad}")
+            if list_key == "candidate_types" and vocab and content_class in allowed_types:
+                bad = [x for x in values if x not in allowed_types[str(content_class)]]
+                if bad:
+                    errors.append(f"{prefix}: candidate_types not in vocab {bad}")
+                types_by_family[str(family_id)] = set(values)
+
+    missing_cls = LANDSCAPE_CONTENT_CLASS - classes_seen
+    if missing_cls:
+        errors.append(f"landscape missing content_class {sorted(missing_cls)}")
+
+    def _types(fid: str) -> set[str]:
+        return types_by_family.get(fid, set())
+
+    if "energizing_breath" in _types("family.practice.activating_forceful_breath"):
+        errors.append("energizing_breath must not map to activating_forceful_breath")
+    if "energizing_breath" not in _types("family.practice.unattested_short_exhale"):
+        errors.append("energizing_breath must sit on unattested_short_exhale")
+    if "capability" in _types("family.affirmation.values_self_affirmation"):
+        errors.append("capability must not map to values_self_affirmation")
+    if "capability" not in _types("family.affirmation.coping_statement"):
+        errors.append("capability must sit on coping_statement")
+    if "body_release" in _types("family.practice.progressive_muscle_relaxation"):
+        errors.append("body_release must not map to PMR")
+    if "body_release" not in _types("family.practice.informal_somatic_release"):
+        errors.append("body_release must sit on informal_somatic_release")
+    if "sleep_discipline" in _types("family.discipline.clinical_insomnia_protocol"):
+        errors.append("sleep_discipline must not map to clinical_insomnia_protocol")
+    if "sleep_discipline" not in _types("family.discipline.schedule_window"):
+        errors.append("sleep_discipline must sit on schedule_window")
+    if _types("family.discipline.clinical_insomnia_protocol"):
+        errors.append("clinical_insomnia_protocol candidate_types must stay empty")
+    if _types("family.affirmation.values_self_affirmation"):
+        errors.append("values_self_affirmation candidate_types must stay empty until a type exists")
+
     return errors
 
 

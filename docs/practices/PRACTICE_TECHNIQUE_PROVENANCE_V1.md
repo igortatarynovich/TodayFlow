@@ -1,13 +1,14 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.0 (2026-08-25).  
+**Версия:** 1.1 (2026-08-25).  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (шаги 1–9 до ingest).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
 **Taxonomy:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md).  
 **Fill freeze:** [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md).  
-**Machine:** [`technique_canon_contract_v1.json`](../../DATA/reference/practice/technique_canon_contract_v1.json) · [`technique_canon_v1.json`](../../DATA/reference/practice/technique_canon_v1.json).
+**Machine:** [`technique_canon_contract_v1.json`](../../DATA/reference/practice/technique_canon_contract_v1.json) · [`technique_canon_v1.json`](../../DATA/reference/practice/technique_canon_v1.json) (empty).  
+**Landscape (parent 5–7):** [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) · [`technique_landscape_v1.json`](../../DATA/reference/practice/technique_landscape_v1.json).
 
 **Это:** откуда берётся *техника*; как она становится канонической; чем Content Item отличается от канона.  
 **Это не:** экран `/practices` · Meaning дня · медицинский протокол · разрешение копировать чужой текст · разрешение заявлять efficacy.
@@ -220,7 +221,7 @@ Coverage-first **архитектуру** (26 cells, type spine, item shape) н�
 
 Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context siblings) — тот же LLM-origin. Этот pass их **не** аттестует и **не** удаляет.
 
-Следующий рабочий шаг — не audio. Следующий шаг: ландшафт семей техник для probes §9 (типы источников, не список обязательных книг), затем shortlist, затем ingest, затем canonical rows, затем либо привязка item → `technique_id`, либо `rejected` + замена item.
+Следующий рабочий шаг — не audio. Landscape семей техник: [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md). Shortlist и ingest **закрыты**. `technique_canon_v1.json` пуст.
 
 ---
 
@@ -266,10 +267,10 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 ## 11. Что дальше
 
-1. Для probes §9: шаги 1–4 parent уже почти закрыты taxonomy (class, type, mechanism vs purpose). Дописать bounds/variants как модель, **без** ingest.
-2. Шаги 5–7: школы/традиции и карта *типов* источников по class §4. Не библиография из головы LLM.
-3. Шаги 8–9: критерии и shortlist.
-4. Ingest: paraphrase loci → draft technique rows (`extracted`, не `canonical`).
+1. **Сейчас:** [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) (parent шаги 5–7). Shortlist не открыт.
+2. Затем критерии отбора (шаг 8) от модели семей, не от первой главы.
+3. Затем shortlist (шаг 9) по семьям — приоритет четыре различия landscape §4.
+4. Только потом ingest: paraphrase loci → draft technique rows (`extracted`, не `canonical`).
 5. Safety review → `canonical` → привязать probe item или заменить.
 6. Только потом — новые expressions (5 min / audio) от канона, не от LLM-seed.
 
@@ -281,4 +282,5 @@ Registry сейчас **пуст**. Это правильно.
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-25 | v1.1 — next named pass = landscape ([PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md)); shortlist still closed |
 | 2026-08-25 | v1.0 ACCEPTED — Canonical Technique слой; existence ≠ efficacy; LLM = formulation; fill frozen; 11 probes gap-reviewed, not ingested |

@@ -13,6 +13,7 @@ from todayflow_backend.data.content_library_validator_v1 import (
     load_json,
     validate_content_library_v1,
     validate_technique_canon_v1,
+    validate_technique_landscape_v1,
 )
 from todayflow_backend.data.reference_machine_loader import DATA_ROOT
 
@@ -22,11 +23,19 @@ LIBRARY_PATH = PRACTICE_REF / "content_library_v1.json"
 COVERAGE_PATH = PRACTICE_REF / "content_coverage_matrix_v1.json"
 TECHNIQUE_PATH = PRACTICE_REF / "technique_canon_v1.json"
 TECHNIQUE_CONTRACT_PATH = PRACTICE_REF / "technique_canon_contract_v1.json"
+LANDSCAPE_PATH = PRACTICE_REF / "technique_landscape_v1.json"
+LANDSCAPE_CONTRACT_PATH = PRACTICE_REF / "technique_landscape_contract_v1.json"
 PROVENANCE_CANON = (
     Path(__file__).resolve().parents[2]
     / "docs"
     / "practices"
     / "PRACTICE_TECHNIQUE_PROVENANCE_V1.md"
+)
+LANDSCAPE_CANON = (
+    Path(__file__).resolve().parents[2]
+    / "docs"
+    / "practices"
+    / "PRACTICE_TECHNIQUE_LANDSCAPE_V1.md"
 )
 
 SEED_1_ID = "practice.sensory_grounding.001"
@@ -141,7 +150,7 @@ def test_fill_frozen_provisional_probes() -> None:
     assert library["fill_frozen"] is True
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is True
-    assert coverage["next_pass"] == "technique_provenance"
+    assert coverage["next_pass"] == "technique_landscape"
     probes = library["architecture_probe_item_ids"]
     assert probes == [
         SEED_1_ID,
@@ -177,8 +186,33 @@ def test_unknown_technique_id_rejected() -> None:
 
 def test_provenance_paths_exist() -> None:
     assert PROVENANCE_CANON.is_file()
+    assert LANDSCAPE_CANON.is_file()
     assert TECHNIQUE_PATH.is_file()
     assert TECHNIQUE_CONTRACT_PATH.is_file()
+    assert LANDSCAPE_PATH.is_file()
+    assert LANDSCAPE_CONTRACT_PATH.is_file()
+
+
+def test_technique_landscape_v1_splits_probe_families() -> None:
+    vocab, _library, _coverage = _load()
+    landscape = load_json(LANDSCAPE_PATH)
+    assert validate_technique_landscape_v1(landscape, vocab=vocab) == []
+    assert landscape["shortlist_opened"] is False
+    assert landscape["writes_technique_canon"] is False
+    assert _techniques()["techniques"] == []
+    classes = {row["content_class"] for row in landscape["families"]}
+    assert classes == {"practice", "meditation", "affirmation", "discipline"}
+    assert all(row["shortlist_status"] == "not_opened" for row in landscape["families"])
+    by_id = {row["family_id"]: row for row in landscape["families"]}
+    assert "energizing_breath" in by_id["family.practice.unattested_short_exhale"]["candidate_types"]
+    assert by_id["family.practice.activating_forceful_breath"]["candidate_types"] == []
+    assert by_id["family.practice.unattested_short_exhale"]["likely_disposition"] == "reject_or_remap"
+    assert "capability" in by_id["family.affirmation.coping_statement"]["candidate_types"]
+    assert by_id["family.affirmation.values_self_affirmation"]["candidate_types"] == []
+    assert "body_release" in by_id["family.practice.informal_somatic_release"]["candidate_types"]
+    assert "body_release" not in by_id["family.practice.progressive_muscle_relaxation"]["candidate_types"]
+    assert "sleep_discipline" in by_id["family.discipline.schedule_window"]["candidate_types"]
+    assert by_id["family.discipline.clinical_insomnia_protocol"]["candidate_types"] == []
 
 
 def test_seed_pass_closes_exactly_one_cell_per_item() -> None:
@@ -941,5 +975,11 @@ def test_coverage_counts() -> None:
 
 
 def test_repo_paths_exist() -> None:
-    for path in (VOCAB_PATH, LIBRARY_PATH, COVERAGE_PATH, TECHNIQUE_PATH):
+    for path in (
+        VOCAB_PATH,
+        LIBRARY_PATH,
+        COVERAGE_PATH,
+        TECHNIQUE_PATH,
+        LANDSCAPE_PATH,
+    ):
         assert Path(path).is_file()
