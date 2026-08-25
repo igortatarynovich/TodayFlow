@@ -171,6 +171,41 @@ def test_list_latest_and_ops_force_skips_cache(monkeypatch, db_session) -> None:
     assert refreshed["writes_character_engine"] is False
     assert refreshed["identity_core"]["thesis_key"] == "builds_through_autonomy"
     assert _fingerprint(identity, natal_pack, numerology_pack) == fingerprint
+    legacy = _fingerprint(
+        identity, natal_pack, numerology_pack, decode_version="natal_decode_depth_v0.2"
+    )
+    assert legacy != fingerprint
+
+
+def test_legacy_expression_fingerprint_still_hits_get(db_session) -> None:
+    from todayflow_backend.services.natal_decode_depth_v0 import resolve_natal_decode_get
+
+    user = User(id=42, email="decode-legacy-fp@test.local", password_hash="x")
+    db_session.add(user)
+    db_session.commit()
+    identity, natal_pack, numerology_pack, _avail, semantic_fp = _inputs_for_payload(
+        _ce_payload(), None
+    )
+    assert identity and semantic_fp
+    legacy_fp = _fingerprint(
+        identity, natal_pack, numerology_pack, decode_version="natal_decode_depth_v0.2"
+    )
+    db_session.add(
+        GenerationLog(
+            user_id=42,
+            module="profile",
+            surface=LAYER_KIND,
+            status="success",
+            input_payload={"fingerprint": legacy_fp, "decode_version": "natal_decode_depth_v0.2"},
+            normalized_response=_grounded_body(
+                version="natal_decode_depth_v0.2", thesis="LEGACY_HIT"
+            ),
+        )
+    )
+    db_session.commit()
+    out = resolve_natal_decode_get(db_session, user_id=42, core_profile_payload=_ce_payload())
+    assert out.get("pattern_thesis") == "LEGACY_HIT"
+    assert out.get("access") == "ready"
 
 
 def test_load_objects_honors_todayflow_data_dir(monkeypatch, tmp_path) -> None:

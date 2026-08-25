@@ -11,7 +11,7 @@ IL-3 SoT: [IL3_INTERPRETATION_ENGINE_V1.md](../astrology/IL3_INTERPRETATION_ENGI
 ## Architecture impact
 
 - **SoT before:** IL-4 attach named “today = primary theme only; profile/compat = full rank.” No measured bag size on the LLM side, so Kimi could still be treated as the selector.
-- **SoT after:** This audit is the **payload fact sheet**. Today IL meaning is 1 line before Kimi. Profile natal decode and Compatibility send the **entire composed IL-3 list** (no 5–8 cut). Rank is position, not a score. 245+84 is library cartesian coverage, not activations in the prompt. Next engineering (owner-directed): **selection after IL-3** for Profile/Compat (and drop `dropped` refusals from Today prompts). Do not reopen IL-3 as user relevance. Do not add atoms.
+- **SoT after:** This audit is the **payload fact sheet**. Today IL meaning is 1 line before Kimi. Profile natal decode and Compatibility send the **entire composed IL-3 list**. Rank is position, not a score. **Do not** mechanically cut Profile to 5–8 until a usage audit shows which of the ~24 themes Kimi uses / ignores / competes on. Today can already select before LLM. Next engineering: [COMPUTE_LIFECYCLE](../COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md) work order (invalidation → Global → Personal Day → Profile selection).
 - **Public contract changed?** no
 - **Migration required?** no
 - **Canon updated?** yes — this file · compute lifecycle §7 · tracker
@@ -103,7 +103,7 @@ IL-3 ranked themes  →  ??? selection ???  →  product / Kimi
 | Compat | **none** (full bag) | same |
 | Relevance engine | **not implemented** (out of IL-3 scope) | do not put person-relevance inside IL-3 |
 
-**Next cut without new atoms:** curated **5–8** already-ranked IL-3 themes into Natal Decode / Compatibility prompts; strip `dropped` from Today `IL4_MEANING`; stop sending raw natal_pack as a parallel meaning source once IL-4 lines are the sky theses.
+**Next cut without new atoms:** Today — system Selection already has 1 IL line; strip `dropped` from `IL4_MEANING`. Profile — **usage audit first** (which of ~24 lines the model cites vs ignores), then a Selection Engine that reproduces that choice. Do not hard-cap 5–8 blindly.
 
 ---
 

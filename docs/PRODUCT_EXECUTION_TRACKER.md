@@ -4,7 +4,16 @@ Last updated: 2026-08-25
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (ARCH / LLM, 2026-08-25):** **Compute Lifecycle + Artifact Economics** — SoT: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](./COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md). Profile = layers, not monthly TTL. Four rebuild triggers only. Today persist = `user × local_date × semantic_version`; Global = `date × locale/version`. LLM last. Do not expand Knowledge Core V1. Do not degrade K3 until useless calls are gone. Payload audit: [audits/IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md](./audits/IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md) (Today IL = 1 line; Profile/Compat = full ~24–35 bag). Router cost guard stands. Next engineering: lifecycle gaps (shared Global, profile_hash, prewarm off MAU, IL selection 5–8) then 1-profile measurement.
+**NOW (ARCH / LLM, 2026-08-25):** **Profile invalidation** — prompt/`expression_version` is not a snapshot key. Axes: `calc` / `semantic` / `expression` / `behavior`. Layers: NatalFacts → CanonicalMeaning → SelectedThemes → ProfileExpression → BehavioralOverlay. SoT: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](./COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md) § version axes. **Work order:** invalidation (this) → shared Global Day → Personal Day lifecycle → Profile selection (after Kimi usage audit, not a 5–8 cut) → behavioral overlay → Tarot → Compatibility. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — Profile invalidation axes (2026-08-25)
+
+- **SoT before:** `profile_hash` included `PROFILE_CONTRACT_PROMPT_VER` + funnel prompt versions; Natal Decode fingerprint included `DECODE_VERSION` polish stamp. A voice polish orphaned snapshots / GET offers.
+- **SoT after:** Snapshot key = identity + birth + `calc_version` + `semantic_version`. Expression stamped on payload, not the key. GET reuses identity-compatible snapshots. Natal Decode lookup accepts semantic fingerprint + legacy v0.2/v0.3 polish fingerprints. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Existing snapshots reused via identity fallback; decode logs via legacy fingerprints.
+- **Canon updated?** yes — compute lifecycle 1.1 · this tracker · payload audit (no mechanical 5–8)
+- **Backward compatible?** yes for clients. Old prompt-keyed hashes still resolve via fallback.
 
 ## Architecture impact — Compute Lifecycle V1 (2026-08-25)
 

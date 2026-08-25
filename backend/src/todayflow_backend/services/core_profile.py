@@ -35,6 +35,9 @@ class CoreProfileService:
     profile_version: str = "core-v3"
     cache_ttl_seconds: int = 900
     forming_retry_seconds: int = 300
+    # Artifact axes (Compute Lifecycle). Expression/prompt MUST NOT be a snapshot key.
+    calc_version: str = "calc.v1"
+    semantic_version: str = "semantic.v1"
 
     def __post_init__(self) -> None:
         self._cache: dict[str, tuple[float, dict[str, Any]]] = {}
@@ -401,7 +404,14 @@ class CoreProfileService:
         numerology_context = self._build_numerology_context(numerology_profile)
         profile_hash = self._build_profile_hash(settings, astro_context, numerology_context)
 
-        snapshot = self._load_snapshot(db, user.id, profile_hash)
+        snapshot = self._load_snapshot(
+            db,
+            user.id,
+            profile_hash,
+            settings=settings,
+            astro_context=astro_context,
+            numerology_context=numerology_context,
+        )
         if snapshot is not None and self._snapshot_is_reusable(snapshot, now=now):
             cached_payload = self._normalize_payload_contract(deepcopy(snapshot))
             if isinstance(cached_payload.get("astro"), dict):
@@ -1297,33 +1307,97 @@ class CoreProfileService:
         hard = {"astro_birth_date", "numerology_life_path"}
         return [field for field in missing_fields if field in hard]
 
+    def _identity_key_parts(
+        self,
+        settings: db_models.UserSettings | None,
+        astro_context: dict[str, Any],
+        numerology_context: dict[str, Any],
+    ) -> tuple[str, ...]:
+        """Person + birth + calc/semantic axes. Never prompt/expression versions."""
+        return (
+            str(settings.first_name if settings else ""),
+            str(
+                (
+                    str(getattr(settings, "gender", None) or "").strip().lower()
+                    if settings and str(getattr(settings, "gender", None) or "").strip().lower()
+                    in _CANONICAL_USER_GENDERS
+                    else ""
+                )
+            ),
+            str(astro_context.get("birth_date") or ""),
+            str(astro_context.get("birth_time") or ""),
+            str(astro_context.get("location_name") or ""),
+            str(astro_context.get("sun_sign") or ""),
+            str(numerology_context.get("life_path") or ""),
+            str(numerology_context.get("expression") or ""),
+            self.calc_version,
+            self.semantic_version,
+        )
+
+    def _payload_identity_parts(self, payload: dict[str, Any]) -> tuple[str, ...]:
+        person = payload.get("person") if isinstance(payload.get("person"), dict) else {}
+        astro = payload.get("astro") if isinstance(payload.get("astro"), dict) else {}
+        numerology = payload.get("numerology") if isinstance(payload.get("numerology"), dict) else {}
+        return (
+            str(person.get("first_name") or ""),
+            str(person.get("gender") or ""),
+            str(astro.get("birth_date") or ""),
+            str(astro.get("birth_time") or ""),
+            str(astro.get("location_name") or ""),
+            str(astro.get("sun_sign") or ""),
+            str(numerology.get("life_path") or ""),
+            str(numerology.get("expression") or ""),
+            str(payload.get("artifact_calc_version") or "calc.v1"),
+            str(payload.get("artifact_semantic_version") or "semantic.v1"),
+        )
+
     def _build_profile_hash(
         self,
         settings: db_models.UserSettings | None,
         astro_context: dict[str, Any],
         numerology_context: dict[str, Any],
     ) -> str:
-        raw = "|".join(
-            [
-                str(settings.first_name if settings else ""),
-                str(settings.last_name if settings else ""),
-                str(getattr(settings, "gender", None) or "" if settings else ""),
-                str(astro_context.get("birth_date") or ""),
-                str(astro_context.get("birth_time") or ""),
-                str(astro_context.get("location_name") or ""),
-                str(astro_context.get("sun_sign") or ""),
-                str(numerology_context.get("life_path") or ""),
-                str(numerology_context.get("expression") or ""),
-                # Bust snapshot cache when portrait prompt/contract evolves.
-                PROFILE_CONTRACT_PROMPT_VER,
-                self.profile_version,
-                # Per-prompt version invalidation (any of 4 steps).
-                "|".join(f"{k}={v}" for k, v in sorted(profile_prompt_versions().items())),
-            ]
-        )
-        return sha1(raw.encode("utf-8")).hexdigest()
+        return sha1(
+            "|".join(self._identity_key_parts(settings, astro_context, numerology_context)).encode(
+                "utf-8"
+            )
+        ).hexdigest()
 
-    def _load_snapshot(self, db: Session, user_id: int, profile_hash: str) -> dict[str, Any] | None:
+    def _stamp_artifact_versions(self, payload: dict[str, Any]) -> dict[str, Any]:
+        payload["artifact_calc_version"] = self.calc_version
+        payload["artifact_semantic_version"] = self.semantic_version
+        payload["artifact_expression_version"] = PROFILE_CONTRACT_PROMPT_VER
+        living = payload.get("living") if isinstance(payload.get("living"), dict) else {}
+        payload["artifact_behavior_version"] = str(living.get("cache_marker") or "")
+        return payload
+
+    def _hydrate_snapshot_record(
+        self,
+        record: db_models.CoreProfileSnapshot,
+        *,
+        profile_hash: str,
+    ) -> dict[str, Any] | None:
+        if not isinstance(record.payload, dict):
+            return None
+        payload = deepcopy(record.payload)
+        if record.updated_at:
+            payload["generated_at"] = record.updated_at.isoformat()
+        if "profile_version" not in payload:
+            payload["profile_version"] = record.profile_version or self.profile_version
+        payload["profile_hash"] = profile_hash
+        payload["snapshot_id"] = record.id
+        return self._normalize_payload_contract(payload)
+
+    def _load_snapshot(
+        self,
+        db: Session,
+        user_id: int,
+        profile_hash: str,
+        *,
+        settings: db_models.UserSettings | None = None,
+        astro_context: dict[str, Any] | None = None,
+        numerology_context: dict[str, Any] | None = None,
+    ) -> dict[str, Any] | None:
         record = (
             db.query(db_models.CoreProfileSnapshot)
             .filter(
@@ -1332,17 +1406,25 @@ class CoreProfileService:
             )
             .first()
         )
-        if record is None or not isinstance(record.payload, dict):
+        if record is not None:
+            return self._hydrate_snapshot_record(record, profile_hash=profile_hash)
+        if astro_context is None or numerology_context is None:
             return None
-        payload = deepcopy(record.payload)
-        # Keep generated_at stable from persisted record.
-        if record.updated_at:
-            payload["generated_at"] = record.updated_at.isoformat()
-        if "profile_version" not in payload:
-            payload["profile_version"] = record.profile_version or self.profile_version
-        payload["profile_hash"] = record.profile_hash or profile_hash
-        payload["snapshot_id"] = record.id
-        return self._normalize_payload_contract(payload)
+        wanted = self._identity_key_parts(settings, astro_context, numerology_context)
+        rows = (
+            db.query(db_models.CoreProfileSnapshot)
+            .filter(db_models.CoreProfileSnapshot.user_id == user_id)
+            .order_by(db_models.CoreProfileSnapshot.updated_at.desc())
+            .limit(8)
+            .all()
+        )
+        for row in rows:
+            hydrated = self._hydrate_snapshot_record(row, profile_hash=profile_hash)
+            if hydrated is None:
+                continue
+            if self._payload_identity_parts(hydrated) == wanted:
+                return hydrated
+        return None
 
     def _save_snapshot(
         self,
@@ -1360,9 +1442,10 @@ class CoreProfileService:
             )
             .first()
         )
+        payload = self._stamp_artifact_versions(deepcopy(payload))
         if existing is not None:
             existing.profile_version = self.profile_version
-            existing.payload = deepcopy(payload)
+            existing.payload = payload
             db.add(existing)
             db.commit()
             db.refresh(existing)
@@ -1406,8 +1489,9 @@ class CoreProfileService:
 
         Assemble-once rule (natal-chart style):
         - Same ``profile_hash`` + Stage 5 already in payload → **no CE recompute** on GET.
-        - Rebuild only when hash changes (birth/name/gender/prompt ver) or explicit
+        - Rebuild only when hash changes (birth/name/gender/calc/semantic) or explicit
           portrait publish (``include_stage2=True`` / POST refresh / core-setup).
+          Prompt / expression_version is not a rebuild key.
         - Read path may deterministic fill-once if consumption is on and Stage 5 missing,
           then caller persists into the snapshot.
 

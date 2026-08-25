@@ -32,7 +32,9 @@ from todayflow_backend.services.prose_clip_v1 import clip_prose
 
 logger = logging.getLogger(__name__)
 
-DECODE_VERSION = "natal_decode_depth_v0.3"
+DECODE_VERSION = "natal_decode_depth_v0.3"  # expression/polish stamp — not a cache key
+NATAL_DECODE_SEMANTIC_VERSION = "natal-decode-semantic.v1"
+_LEGACY_DECODE_VERSIONS = ("natal_decode_depth_v0.3", "natal_decode_depth_v0.2")
 PROMPT_ID = "profile.natal_decode_depth.v1"
 LAYER_KIND = "natal_decode_depth"
 _ALLOWED_SECTION_IDS = frozenset({"mind", "feelings", "will", "growth", "presence", "structure"})
@@ -236,15 +238,22 @@ def _fingerprint(
     identity_core: dict[str, Any],
     natal_pack: dict[str, Any],
     numerology_pack: dict[str, Any] | None = None,
+    *,
+    decode_version: str | None = None,
 ) -> str:
+    """Semantic cache key: identity + natal facts. Expression/polish version is not a key."""
+    payload: dict[str, Any] = {
+        "thesis": identity_core.get("thesis_key"),
+        "surface": identity_core.get("surface_text"),
+        "natal": natal_pack,
+        "numerology": numerology_pack or {},
+        "semantic_version": NATAL_DECODE_SEMANTIC_VERSION,
+    }
+    if decode_version:
+        payload["decode_version"] = decode_version
+        payload.pop("semantic_version", None)
     raw = json.dumps(
-        {
-            "thesis": identity_core.get("thesis_key"),
-            "surface": identity_core.get("surface_text"),
-            "natal": natal_pack,
-            "numerology": numerology_pack or {},
-            "decode_version": DECODE_VERSION,
-        },
+        payload,
         ensure_ascii=False,
         sort_keys=True,
         default=str,
@@ -252,13 +261,38 @@ def _fingerprint(
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
 
 
+def _lookup_fingerprints(
+    identity_core: dict[str, Any],
+    natal_pack: dict[str, Any],
+    numerology_pack: dict[str, Any] | None = None,
+) -> set[str]:
+    fps = {_fingerprint(identity_core, natal_pack, numerology_pack)}
+    for ver in _LEGACY_DECODE_VERSIONS:
+        fps.add(
+            _fingerprint(
+                identity_core,
+                natal_pack,
+                numerology_pack,
+                decode_version=ver,
+            )
+        )
+    return fps
+
+
 def load_cached_natal_decode(
     db: Session,
     *,
     user_id: int,
     fingerprint: str,
+    identity_core: dict[str, Any] | None = None,
+    natal_pack: dict[str, Any] | None = None,
+    numerology_pack: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
-    """Return grounded decode for fingerprint from generation_logs, if any."""
+    """Return grounded decode for semantic fingerprint. Polish version is not a miss."""
+    wanted = {str(fingerprint or "")}
+    if identity_core is not None and natal_pack is not None:
+        wanted |= _lookup_fingerprints(identity_core, natal_pack, numerology_pack)
+    wanted.discard("")
     rows = (
         db.query(models.GenerationLog)
         .filter(
@@ -273,7 +307,7 @@ def load_cached_natal_decode(
     )
     for row in rows:
         inp = row.input_payload if isinstance(row.input_payload, dict) else {}
-        if str(inp.get("fingerprint") or "") != fingerprint:
+        if str(inp.get("fingerprint") or "") not in wanted:
             continue
         body = row.normalized_response if isinstance(row.normalized_response, dict) else None
         if not body:
@@ -478,7 +512,14 @@ def resolve_natal_decode_get(
     )
     cached = None
     if identity and fingerprint:
-        cached = load_cached_natal_decode(db, user_id=user_id, fingerprint=fingerprint)
+        cached = load_cached_natal_decode(
+            db,
+            user_id=user_id,
+            fingerprint=fingerprint,
+            identity_core=identity,
+            natal_pack=natal_pack,
+            numerology_pack=numerology_pack,
+        )
     return build_offer_payload(
         identity_core=identity,
         natal_available=natal_available,
@@ -577,7 +618,14 @@ def generate_natal_decode_depth_v0(
             "can_generate": False,
         }
 
-    cached = load_cached_natal_decode(db, user_id=user_id, fingerprint=fingerprint)
+    cached = load_cached_natal_decode(
+        db,
+        user_id=user_id,
+        fingerprint=fingerprint,
+        identity_core=identity,
+        natal_pack=natal_pack,
+        numerology_pack=numerology_pack,
+    )
     if cached and not ops_force:
         out = dict(cached)
         out["access"] = "ready"
