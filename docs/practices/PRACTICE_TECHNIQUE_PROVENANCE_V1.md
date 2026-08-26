@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.9 (2026-08-26).  
+**Версия:** 1.10 (2026-08-26).  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (шаги 1–9 до ingest).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -16,7 +16,8 @@
 **Targeted shortlist (post-exhale hold identity):** [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) · [`technique_targeted_shortlist_v1.json`](../../DATA/reference/practice/technique_targeted_shortlist_v1.json). Resolution loci ≠ canon.  
 **Targeted ingest (two resolution loci):** [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) · [`technique_targeted_ingest_v1.json`](../../DATA/reference/practice/technique_targeted_ingest_v1.json). Evidence records, not V1.1.  
 **Normalization V1.1:** [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) · [`technique_normalization_v1_1.json`](../../DATA/reference/practice/technique_normalization_v1_1.json). `normalize_one` candidate, not canon.  
-**Safety Review:** [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) · [`technique_safety_review_v1.json`](../../DATA/reference/practice/technique_safety_review_v1.json). `insufficient_safety`; not canon.
+**Safety Review:** [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) · [`technique_safety_review_v1.json`](../../DATA/reference/practice/technique_safety_review_v1.json). `insufficient_safety`; not canon.  
+**Targeted Safety Shortlist:** [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) · [`technique_targeted_safety_shortlist_v1.json`](../../DATA/reference/practice/technique_targeted_safety_shortlist_v1.json). who_must_not_hold; selected ≠ who-list.
 
 **Это:** откуда берётся *техника*; как она становится канонической; чем Content Item отличается от канона.  
 **Это не:** экран `/practices` · Meaning дня · медицинский протокол · разрешение копировать чужой текст · разрешение заявлять efficacy.
@@ -79,10 +80,11 @@ candidate_family
   → normalization (normalize_one | split_family | insufficient_evidence)
   → if insufficient_evidence: targeted shortlist → targeted ingest → Normalization V1.1
   → safety review (only after normalize_one)
+  → if insufficient_safety: targeted safety shortlist → targeted safety ingest → Safety Review V1.1
   → canonical | rejected → Content Item expression (technique_id only if canonical)
 ```
 
-Shortlist: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md). Normalization: [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Targeted ingest: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Normalization V1.1: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) (`normalize_one` candidate). Safety review: [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) (`insufficient_safety`). Canon пуст.
+Shortlist: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md). Normalization: [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Targeted ingest: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Normalization V1.1: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) (`normalize_one` candidate). Safety review: [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) (`insufficient_safety`). Targeted safety shortlist: [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (who_must_not_hold; selected ≠ who-list). Canon пуст.
 
 **Продуктовая выдача** (без изменения)
 
@@ -282,8 +284,8 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 ## 11. Что дальше
 
-1. Landscape → Shortlist → Ingest → Normalize V1 = `insufficient_evidence`. V1.1 = `normalize_one` (candidate, не canon). Safety Review = `insufficient_safety`. `family_id` — ledger key; equal-count hypothesis ремаплена.
-2. Следующий named pass назначает **owner**. Не открывается этим review. Вероятный hint: targeted safety research на `who_must_not_hold`, без reopen kernel. Canon пуст.
+1. Landscape → Shortlist → Ingest → Normalize V1 = `insufficient_evidence`. V1.1 = `normalize_one`. Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A (Joshi 2024 + Nivethitha 2017). Canon пуст.
+2. Следующий named pass: **Targeted Safety Ingest** selected hold loci. Затем Safety Review V1.1. Не canonical.
 3. `technique_id` на probe — только после `may_release` и `canonical`.
 4. Затем expressions (5 min / audio) от канона, не от LLM-seed.
 
@@ -295,6 +297,7 @@ Registry сейчас **пуст**. Это правильно.
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | v1.10 — Targeted Safety Shortlist V1: who_must_not_hold; stop A; next = targeted safety ingest |
 | 2026-08-26 | v1.9 — Safety Review V1: S-B2; insufficient_safety; not canon; next = owner decides |
 | 2026-08-25 | v1.8 — Normalization V1.1: hold required, equal_count common_parameter; normalize_one candidate; landscape remapped; next = Safety Review |
 | 2026-08-25 | v1.7 — Targeted Ingest V1: two resolution loci; axes signal-only; next = Normalization V1.1 |

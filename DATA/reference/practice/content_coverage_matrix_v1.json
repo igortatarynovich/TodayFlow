@@ -4,8 +4,8 @@
   "status": "provisional",
   "semantic_version": "content-taxonomy-v1.1",
   "fill_frozen": true,
-  "next_pass": "owner_decides_next_named_pass",
-  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen. Equal-count thread = Safety Review insufficient_safety, not canon. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · safety review: docs/practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md",
+  "next_pass": "targeted_safety_ingest_who_must_not_hold",
+  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen. Equal-count thread = Safety Review insufficient_safety; targeted safety shortlist selected hold loci. Not canon. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · targeted safety shortlist: docs/practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,

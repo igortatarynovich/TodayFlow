@@ -2007,10 +2007,266 @@ def validate_technique_safety_review_v1(
                 errors.append("landscape must preserve the V1 mechanism_shape beside the remap")
             if eq.get("normalization_status") != "normalize_one":
                 errors.append("landscape normalization_status must remain normalize_one")
-            if landscape.get("next_named_pass") != "owner_decides_next_named_pass":
-                errors.append("landscape next_named_pass must wait for owner after this review")
             if eq.get("safety_review_status") != decision:
                 errors.append("landscape safety_review_status must follow this review decision")
+
+    return errors
+
+
+SAFETY_SHORTLIST_STOP = frozenset(
+    {
+        "preferred_class_hold_evidence_found_for_targeted_safety_ingest",
+        "unresolved_only_general_breathwork_precautions",
+        "structural_finding_universal_who_list_incorrect",
+    }
+)
+SAFETY_SHORTLIST_SPEECH = frozenset(
+    {
+        "hold_exclusion",
+        "hold_precaution",
+        "general_breathwork_precaution",
+        "experimental_script",
+        "none",
+    }
+)
+SAFETY_SHORTLIST_SELECTABLE_SPEECH = frozenset({"hold_exclusion", "hold_precaution"})
+SAFETY_SHORTLIST_SELECTABLE_FAMILIES = frozenset(
+    {"official_health", "clinical_psychology", "academic_description"}
+)
+SAFETY_SHORTLIST_REQUIRED = (
+    "source_id",
+    "source_family",
+    "bibliographic_identity",
+    "authority_provenance",
+    "locus",
+    "gates",
+    "extractable",
+    "safety_speech",
+    "conflicts_unknowns",
+    "research_function",
+    "selection_decision",
+    "rejection_reason",
+)
+ALREADY_INGESTED_SAFETY_SOURCE_IDS = (
+    "src.bhf.heart_matters.box",
+    "src.nhs.sfh.box_leaflet",
+    "src.nhs.newcastle.square",
+    "src.byu.marchant.2025.square",
+    "src.nhs.wales.cavuhb.square",
+)
+
+
+def _safety_shortlist_already_expected(
+    family_ingest: dict[str, Any] | None,
+    targeted_ingest: dict[str, Any] | None,
+) -> list[str]:
+    expected: list[str] = []
+    for blob in (family_ingest, targeted_ingest):
+        if not blob:
+            continue
+        rows = blob.get("evidence")
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            ref = row.get("source_ref")
+            if isinstance(ref, dict) and ref.get("source_id"):
+                expected.append(str(ref.get("source_id")))
+    return expected or list(ALREADY_INGESTED_SAFETY_SOURCE_IDS)
+
+
+def validate_technique_targeted_safety_shortlist_v1(
+    targeted: dict[str, Any],
+    *,
+    family_ingest: dict[str, Any] | None = None,
+    targeted_ingest: dict[str, Any] | None = None,
+    normalization_v1_1: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if targeted.get("contract_version") != "technique_targeted_safety_shortlist_v1":
+        errors.append("invalid targeted safety shortlist contract_version")
+    if targeted.get("writes_technique_canon") is not False:
+        errors.append("targeted safety shortlist must not write technique canon")
+    if targeted.get("technique_id_allowed") is not False:
+        errors.append("targeted safety shortlist must not allow technique_id")
+    if targeted.get("does_not_reopen_kernel") is not True:
+        errors.append("must not reopen the kernel")
+    if targeted.get("does_not_rewrite_safety_contract") is not True:
+        errors.append("must not rewrite the Safety Review V1 contract")
+    if targeted.get("does_not_invent_who_list") is not True:
+        errors.append("must not invent a product who-list")
+    if targeted.get("unit_of_shortlist") != "research_question":
+        errors.append("unit_of_shortlist must be research_question")
+    if targeted.get("selected_means") != "allowed_for_targeted_safety_ingest_pass":
+        errors.append("selected_means must be targeted safety ingest permission")
+    if targeted.get("family_id") != SLICE_FAMILY_V1:
+        errors.append(f"family_id must stay {SLICE_FAMILY_V1} as ledger key")
+    question = str(targeted.get("research_question") or "").lower()
+    if "breath hold" not in question and "who_must_not" not in question:
+        errors.append("research_question must name required holds / who_must_not_hold")
+    not_in_scope = targeted.get("not_in_scope")
+    if not isinstance(not_in_scope, list) or "box_breathing_in_general" not in not_in_scope:
+        errors.append("must declare box_breathing_in_general out of scope")
+    if not isinstance(not_in_scope, list) or "kernel_rewrite" not in not_in_scope:
+        errors.append("must declare kernel_rewrite out of scope")
+
+    kernel = targeted.get("identity_kernel_unchanged")
+    if not isinstance(kernel, dict):
+        errors.append("identity_kernel_unchanged must be object")
+    else:
+        if kernel.get("post_exhale_hold") != "required":
+            errors.append("must keep post_exhale_hold required")
+        if kernel.get("shape") != "four_timed_phases":
+            errors.append("must keep four_timed_phases")
+    if normalization_v1_1:
+        prior = (
+            (normalization_v1_1.get("normalized_candidate") or {}).get("identity_kernel")
+            if isinstance(normalization_v1_1.get("normalized_candidate"), dict)
+            else None
+        )
+        if prior != kernel:
+            errors.append("kernel must match the V1.1 normalized candidate")
+
+    stop = targeted.get("stop_reason")
+    if stop not in SAFETY_SHORTLIST_STOP:
+        errors.append("stop_reason must be a declared stopping criterion")
+    if targeted.get("next_named_pass") != "targeted_safety_ingest_who_must_not_hold":
+        errors.append("next_named_pass must be targeted safety ingest")
+    not_next = targeted.get("not_next")
+    if not isinstance(not_next, list) or "canonical" not in not_next:
+        errors.append("not_next must include canonical")
+    if not isinstance(not_next, list) or "rewrite_safety_contract_inside_shortlist" not in not_next:
+        errors.append("not_next must include rewrite_safety_contract_inside_shortlist")
+    finding = str(targeted.get("structural_finding") or "").lower()
+    if "who-list" not in finding and "who_must_not" not in finding:
+        errors.append("must record a structural finding about the who-list field")
+
+    hypothesis = targeted.get("expression_hypothesis")
+    if not isinstance(hypothesis, dict) or hypothesis.get("status") != "not_attested":
+        errors.append("expression hypothesis must stay not_attested")
+
+    expected_already = _safety_shortlist_already_expected(family_ingest, targeted_ingest)
+    if targeted.get("already_ingested_loci") != expected_already:
+        errors.append("already_ingested_loci must match family then targeted ingest sources")
+
+    loci = targeted.get("candidate_loci")
+    if not isinstance(loci, list) or not loci:
+        errors.append("candidate_loci must be non-empty list")
+        return errors
+
+    seen: set[str] = set()
+    selected_ids: list[str] = []
+    already_ids: list[str] = []
+    selected_speech: set[str] = set()
+    by_id: dict[str, dict[str, Any]] = {}
+    for i, src in enumerate(loci):
+        prefix = f"locus[{i}]"
+        if not isinstance(src, dict):
+            errors.append(f"{prefix}: must be object")
+            continue
+        for key in SAFETY_SHORTLIST_REQUIRED:
+            if key not in src:
+                errors.append(f"{prefix}: missing {key}")
+        source_id = src.get("source_id")
+        if not isinstance(source_id, str) or not source_id.startswith("src."):
+            errors.append(f"{prefix}: source_id must start with src.")
+        elif source_id in seen:
+            errors.append(f"{prefix}: duplicate source_id")
+        else:
+            seen.add(source_id)
+            by_id[source_id] = src
+        decision = src.get("selection_decision")
+        if decision not in {"selected", "supporting", "rejected", "already_ingested"}:
+            errors.append(f"{prefix}: invalid selection_decision")
+        elif decision == "selected":
+            selected_ids.append(str(source_id))
+            selected_speech.add(str(src.get("safety_speech")))
+        elif decision == "already_ingested":
+            already_ids.append(str(source_id))
+        if decision == "rejected":
+            reason = src.get("rejection_reason")
+            if not isinstance(reason, str) or not reason.strip():
+                errors.append(f"{prefix}: rejected must have rejection_reason")
+        speech = src.get("safety_speech")
+        if speech not in SAFETY_SHORTLIST_SPEECH:
+            errors.append(f"{prefix}: invalid safety_speech")
+        source_family = src.get("source_family")
+        if decision in {"selected", "supporting", "already_ingested"}:
+            if source_family not in ALLOWED_SOURCE_FAMILY:
+                errors.append(f"{prefix}: source_family must be a provenance class")
+        if decision == "selected":
+            if speech not in SAFETY_SHORTLIST_SELECTABLE_SPEECH:
+                errors.append(f"{prefix}: selected speech must be hold_exclusion or hold_precaution")
+            if source_family not in SAFETY_SHORTLIST_SELECTABLE_FAMILIES:
+                errors.append(
+                    f"{prefix}: wellness/tradition/school cannot be selected for who_must_not_hold"
+                )
+            if speech == "general_breathwork_precaution":
+                errors.append(f"{prefix}: general breathwork precaution must not be selected")
+        gates = src.get("gates")
+        if not isinstance(gates, dict):
+            errors.append(f"{prefix}: gates must be object")
+        else:
+            if tuple(gates.keys()) != CRITERIA_GATE_IDS:
+                errors.append(f"{prefix}: gates must be C1–C9")
+            if decision == "selected":
+                for gid in SHORTLIST_HARD_GATES:
+                    result = (gates.get(gid) or {}).get("result")
+                    if result != "pass":
+                        errors.append(f"{prefix}: selected requires {gid}=pass")
+        extractable = src.get("extractable")
+        if not isinstance(extractable, dict):
+            errors.append(f"{prefix}: extractable must be object")
+        blob = " ".join(
+            [
+                str(src.get("conflicts_unknowns") or ""),
+                str((extractable or {}).get("kernel") or ""),
+                str(src.get("research_function") or ""),
+            ]
+        ).lower()
+        if "optional hold" in blob or "hold is optional" in blob:
+            errors.append(f"{prefix}: must not declare an optional hold")
+
+    listed = targeted.get("selected_loci")
+    if not isinstance(listed, list) or listed != selected_ids:
+        errors.append("selected_loci must match loci with selection_decision=selected")
+    if already_ids != expected_already:
+        errors.append("already_ingested candidate rows must match already_ingested_loci")
+
+    if (
+        stop == "preferred_class_hold_evidence_found_for_targeted_safety_ingest"
+        and not selected_ids
+    ):
+        errors.append("stop A requires at least one selected hold_exclusion or hold_precaution")
+    if stop == "unresolved_only_general_breathwork_precautions" and selected_ids:
+        errors.append("stop B cannot select hold loci")
+
+    kinds = targeted.get("safety_speech_found")
+    if not isinstance(kinds, list) or set(kinds) != selected_speech:
+        errors.append("safety_speech_found must match selected speech acts")
+
+    healthline = by_id.get("src.healthline.box")
+    if healthline and healthline.get("selection_decision") != "rejected":
+        errors.append("wellness Healthline must be rejected for who_must_not_hold")
+    bts = by_id.get("src.bts.2009.physio_spontaneously_breathing")
+    if bts:
+        if bts.get("selection_decision") != "supporting":
+            errors.append("BTS exertion advice must stay supporting, not selected")
+        if bts.get("safety_speech") != "general_breathwork_precaution":
+            errors.append("BTS is general_breathwork_precaution, not hold_exclusion for this candidate")
+    joshi = by_id.get("src.wjm.joshi.2024.yoga_hypertension")
+    if joshi:
+        if joshi.get("selection_decision") != "selected":
+            errors.append("Joshi 2024 kumbhaka exclusion must be selected")
+        if joshi.get("safety_speech") != "hold_exclusion":
+            errors.append("Joshi 2024 speech must be hold_exclusion")
+    nive = by_id.get("src.nivethitha.2017.bahir_kumbhaka")
+    if nive:
+        if nive.get("selection_decision") != "selected":
+            errors.append("Nivethitha 2017 must be selected as hold_precaution")
+        if nive.get("safety_speech") != "hold_precaution":
+            errors.append("Nivethitha 2017 speech must be hold_precaution")
 
     return errors
 

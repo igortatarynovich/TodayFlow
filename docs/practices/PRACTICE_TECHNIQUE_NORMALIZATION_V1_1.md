@@ -162,12 +162,14 @@ Probe `box_breathing` остаётся expression hypothesis. 4-4-4-4 payload с
 
 ```text
 Normalized candidate → Safety Review (closed: insufficient_safety)
-  → owner decides next named pass
+  → Targeted Safety Shortlist (stop A)
+  → Targeted Safety Ingest
+  → Safety Review V1.1
   → (if later may_release) canonical | rejected → technique_id → probe assessment
 ```
 
-1. V1.1 = `normalize_one` (история). Safety Review = `insufficient_safety`. Canon пуст.
-2. Следующий named pass назначает owner. Не следующая семья.
+1. V1.1 = `normalize_one` (история). Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A. Canon пуст.
+2. Следующий named pass: **Targeted Safety Ingest**. Не следующая семья.
 3. `technique_id` — только при `canonical`.
 
 ---
@@ -176,5 +178,6 @@ Normalized candidate → Safety Review (closed: insufficient_safety)
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | pointer: Targeted Safety Shortlist V1 = stop A; next = Targeted Safety Ingest |
 | 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | v1.1 ACCEPTED — axes: hold required, equal_count common_parameter; overall normalize_one; landscape remapped; candidate ≠ canon |

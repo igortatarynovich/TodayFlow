@@ -192,6 +192,8 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Targeted ingest** | paraphrase selected resolution loci | **done** — [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) |
 | **Normalization V1.1** | retry: post_exhale_hold + equal_count axes, then overall verdict | **done** — [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) (`normalize_one` candidate) |
 | **Safety Review** | bounds / claims of the normalized candidate | **done** — [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) (`insufficient_safety`) |
+| **Targeted Safety Shortlist** | who_must_not_hold for required holds | **done** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
+| **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **next** |
 | **Technique provenance / canon** | canonical → item `technique_id` | after `may_release` + owner canonical close |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после provenance, не вместо |
 
@@ -206,7 +208,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг назначает **owner**. Safety Review закрыт как `insufficient_safety`. Не следующая семья. Не писать новые items. Не ставить `technique_id`. Canon пуст.
+Следующий рабочий шаг: **Targeted Safety Ingest** selected hold loci. Не следующая семья. Не писать новые items. Не ставить `technique_id`. Canon пуст.
 
 ---
 
@@ -214,6 +216,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | **Targeted Safety Shortlist V1.** who_must_not_hold. Stop A. Joshi 2024 + Nivethitha 2017 selected. Wellness rejected. Next = Targeted Safety Ingest. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md). |
 | 2026-08-26 | **Safety Review V1.** S-B2 locked. Overall `insufficient_safety`. Not canon. Next = owner decides. [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md). |
 | 2026-08-25 | **Normalization V1.1.** Axes: hold required, equal_count common_parameter. Overall `normalize_one` candidate. Landscape remapped. Next = Safety Review. [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md). |
 | 2026-08-25 | **Targeted Ingest V1.** Two resolution loci. Square vs 5:5 unmerged. 4-4-6-2 is label observation, not variant. Next = Normalization V1.1. [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). |

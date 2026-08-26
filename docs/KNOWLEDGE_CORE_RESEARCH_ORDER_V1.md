@@ -141,6 +141,7 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 ## 7. Changelog
 
+- **1.12 note (2026-08-26)** — Practice Technique Targeted Safety Shortlist V1: [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md). who_must_not_hold. Not canon. Не IL CORE.
 - **1.12 note (2026-08-26)** — Practice Technique Safety Review V1: [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md). `insufficient_safety`. Not canon. Не IL CORE.
 - **1.12 note (2026-08-25)** — Practice Technique Normalization V1.1: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md). `normalize_one` candidate. Not canon. Не IL CORE.
 - **1.12 note (2026-08-25)** — Practice Technique Targeted Ingest V1: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Two resolution loci. Not kernel. Не IL CORE.

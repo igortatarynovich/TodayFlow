@@ -22,6 +22,7 @@ from todayflow_backend.data.content_library_validator_v1 import (
     validate_technique_targeted_ingest_v1,
     validate_technique_normalization_v1_1,
     validate_technique_safety_review_v1,
+    validate_technique_targeted_safety_shortlist_v1,
 )
 from todayflow_backend.data.reference_machine_loader import DATA_ROOT
 
@@ -113,6 +114,16 @@ SAFETY_REVIEW_CANON = (
     / "docs"
     / "practices"
     / "PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md"
+)
+SAFETY_SHORTLIST_PATH = PRACTICE_REF / "technique_targeted_safety_shortlist_v1.json"
+SAFETY_SHORTLIST_CONTRACT_PATH = (
+    PRACTICE_REF / "technique_targeted_safety_shortlist_contract_v1.json"
+)
+SAFETY_SHORTLIST_CANON = (
+    Path(__file__).resolve().parents[2]
+    / "docs"
+    / "practices"
+    / "PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md"
 )
 
 SEED_1_ID = "practice.sensory_grounding.001"
@@ -227,7 +238,7 @@ def test_fill_frozen_provisional_probes() -> None:
     assert library["fill_frozen"] is True
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is True
-    assert coverage["next_pass"] == "owner_decides_next_named_pass"
+    assert coverage["next_pass"] == "targeted_safety_ingest_who_must_not_hold"
     probes = library["architecture_probe_item_ids"]
     assert probes == [
         SEED_1_ID,
@@ -291,6 +302,9 @@ def test_provenance_paths_exist() -> None:
     assert SAFETY_REVIEW_CANON.is_file()
     assert SAFETY_REVIEW_PATH.is_file()
     assert SAFETY_REVIEW_CONTRACT_PATH.is_file()
+    assert SAFETY_SHORTLIST_CANON.is_file()
+    assert SAFETY_SHORTLIST_PATH.is_file()
+    assert SAFETY_SHORTLIST_CONTRACT_PATH.is_file()
 
 
 def test_technique_landscape_v1_splits_probe_families() -> None:
@@ -323,7 +337,10 @@ def test_technique_landscape_v1_splits_probe_families() -> None:
         "PRACTICE_TECHNIQUE_NORMALIZATION_V1_1"
     )
     assert landscape["safety_review_canon"] == "PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1"
-    assert landscape["next_named_pass"] == "owner_decides_next_named_pass"
+    assert landscape["targeted_safety_shortlist_canon"] == (
+        "PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1"
+    )
+    assert landscape["next_named_pass"] == "targeted_safety_ingest_who_must_not_hold"
     eq = by_id["family.practice.equal_count_breath"]
     assert eq["normalization_status"] == "normalize_one"
     assert eq["safety_review_status"] == "insufficient_safety"
@@ -643,6 +660,61 @@ def test_technique_safety_review_v1_insufficient_safety_not_canon() -> None:
     assert eq["mechanism_shape_at_landscape_v1"].startswith("four equal phases")
     assert eq["mechanism_shape"].startswith("four timed phases")
     assert eq["normalization_status"] == "normalize_one"
+    assert eq["safety_review_status"] == "insufficient_safety"
+    v1 = load_json(NORMALIZATION_PATH)
+    assert v1["decision"] == "insufficient_evidence"
+
+
+def test_technique_targeted_safety_shortlist_v1_who_must_not_not_canon() -> None:
+    family_ingest = load_json(INGEST_PATH)
+    targeted_ingest = load_json(TARGETED_INGEST_PATH)
+    normalization = load_json(NORMALIZATION_V1_1_PATH)
+    targeted = load_json(SAFETY_SHORTLIST_PATH)
+    assert validate_technique_targeted_safety_shortlist_v1(
+        targeted,
+        family_ingest=family_ingest,
+        targeted_ingest=targeted_ingest,
+        normalization_v1_1=normalization,
+    ) == []
+    assert targeted["writes_technique_canon"] is False
+    assert targeted["technique_id_allowed"] is False
+    assert targeted["does_not_reopen_kernel"] is True
+    assert targeted["does_not_rewrite_safety_contract"] is True
+    assert targeted["stop_reason"] == (
+        "preferred_class_hold_evidence_found_for_targeted_safety_ingest"
+    )
+    assert targeted["selected_loci"] == [
+        "src.wjm.joshi.2024.yoga_hypertension",
+        "src.nivethitha.2017.bahir_kumbhaka",
+    ]
+    assert targeted["next_named_pass"] == "targeted_safety_ingest_who_must_not_hold"
+    assert "rewrite_safety_contract_inside_shortlist" in targeted["not_next"]
+    by_id = {row["source_id"]: row for row in targeted["candidate_loci"]}
+    assert by_id["src.wjm.joshi.2024.yoga_hypertension"]["safety_speech"] == (
+        "hold_exclusion"
+    )
+    assert by_id["src.nivethitha.2017.bahir_kumbhaka"]["safety_speech"] == (
+        "hold_precaution"
+    )
+    assert by_id["src.bts.2009.physio_spontaneously_breathing"]["selection_decision"] == (
+        "supporting"
+    )
+    assert by_id["src.healthline.box"]["selection_decision"] == "rejected"
+    assert by_id["src.nhs.sfh.box_leaflet"]["safety_speech"] == (
+        "general_breathwork_precaution"
+    )
+    assert targeted["identity_kernel_unchanged"]["post_exhale_hold"] == "required"
+    assert _techniques()["techniques"] == []
+    _vocab, library, _coverage = _load()
+    probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
+    assert "technique_id" not in probe["identity"]
+    landscape = load_json(LANDSCAPE_PATH)
+    eq = next(
+        r
+        for r in landscape["families"]
+        if r["family_id"] == "family.practice.equal_count_breath"
+    )
+    assert eq["mechanism_shape_at_landscape_v1"].startswith("four equal phases")
     assert eq["safety_review_status"] == "insufficient_safety"
     v1 = load_json(NORMALIZATION_PATH)
     assert v1["decision"] == "insufficient_evidence"

@@ -127,8 +127,8 @@ Safety Review открывается **только** если V1.1 даст д�
 
 ## 7. Что дальше
 
-1. Targeted ingest стоит. Family ingest V1 стоит. Normalization V1.1 = `normalize_one` candidate. Safety Review = `insufficient_safety`. Canon пуст. Type не attested.
-2. Следующий named pass назначает owner. `technique_id` — только после `canonical`.
+1. Targeted ingest стоит. Family ingest V1 стоит. Normalization V1.1 = `normalize_one` candidate. Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A. Canon пуст. Type не attested.
+2. Следующий named pass: **Targeted Safety Ingest**. `technique_id` — только после `canonical`.
 
 ---
 
@@ -136,6 +136,7 @@ Safety Review открывается **только** если V1.1 даст д�
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | pointer: Targeted Safety Shortlist V1 = stop A; next = Targeted Safety Ingest |
 | 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | pointer: Normalization V1.1 = normalize_one candidate; next = Safety Review |
 | 2026-08-25 | v1.0 ACCEPTED — two resolution loci; square vs 5:5 unmerged; 4-4-6-2 is label observation not variant; two axes signal-only; next = Normalization V1.1 |

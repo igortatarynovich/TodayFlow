@@ -12,8 +12,9 @@
 | [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) | **Targeted Shortlist V1**: hold identity; definition+contrast selected. |
 | [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) | **Targeted Ingest V1**: two resolution loci; axes unglued. |
 | [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) | **Normalization V1.1**: `normalize_one` candidate; landscape remapped. |
-| [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) | **Safety Review V1**: `insufficient_safety`; not canon; next = owner decides. |
-| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Fill-pass** (v1.1): 26/26 P0 cells · architecture stands · **frozen**. Next = owner decides (Safety Review closed) |
+| [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) | **Safety Review V1**: `insufficient_safety`; not canon. |
+| [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) | **Targeted Safety Shortlist V1**: who_must_not_hold; stop A; selected ≠ who-list. |
+| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Fill-pass** (v1.1): 26/26 P0 cells · architecture stands · **frozen**. Next = Targeted Safety Ingest |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | **SoT экрана** (v1.1): цикл состояния; 6 needs (тело + рефлексия; Уснуть last); 9 formats (yoga/stretch/music + reflection/sleep); сессия; music layer |
 | [practices_screen_mockup_v1.png](./practices_screen_mockup_v1.png) | **Визуальный референс** экрана (загруженный скрин спеки) — UI-паритет + C0b need-лента |
 

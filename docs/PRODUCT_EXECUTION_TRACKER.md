@@ -1,6 +1,6 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-25
+Last updated: 2026-08-26
 Owner: Product + Engineering
 Status: Active working document
 
@@ -24,7 +24,16 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-26):** **Safety Review V1** — S-B2 locked (required hold: SFH stop-rules ≠ `may_release` until `who_must_not_hold` is closed; missing ≠ ban). Three verdicts. Corpus → `insufficient_safety`. Candidate stays `normalized`. Canon empty. Probe still without `technique_id`. Next named pass = **owner decides** (hint: targeted safety research on who-must-not-hold; not auto-opened). [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-26):** **Targeted Safety Shortlist V1** — research question = who_must_not_hold for required holds, not box/square identity. Stop A: Joshi 2024 (`hold_exclusion`) + Nivethitha 2017 (`hold_precaution`) selected for Targeted Safety Ingest. Wellness who-lists rejected. BTS/CUH exertion advice supporting, not transferred. Structural finding recorded; Safety Review V1 contract unchanged. Canon empty. Next = **Targeted Safety Ingest**, then Safety Review V1.1. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+
+## Architecture impact — Practice Technique Targeted Safety Shortlist V1 (2026-08-26)
+
+- **SoT before:** Safety Review V1 `insufficient_safety`. S-B2 blocked `may_release` without who-must-not. Next step could import wellness who-lists, transfer COPD exertion advice onto seated timed holds, or jump to canon.
+- **SoT after:** Separate safety evidence track. Three speech acts. Wellness/popularizer/tradition are not sufficient SoT for medical contraindications. Selected = ingest permission, not a product who-list. Structural finding: do not glue method-page silence, rehab exertion advice, and kumbhaka exclusion into binary `who_must_not_hold` inside this shortlist. Exclude/precaution/stop_rule remap waits for owner on Safety Review V1.1 after ingest.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Fill frozen.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) · safety-shortlist JSON · provenance 1.10 · coverage · landscape 1.4 pointer · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with writing `technique_canon`, `technique_id`, optional hold, or `may_release` from this pass.
 
 ## Architecture impact — Practice Technique Safety Review V1 (2026-08-26)
 
@@ -2584,6 +2593,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-26 | Practices / Canon | **Targeted Safety Shortlist V1 (who_must_not_hold)** | **ACCEPTED** | Stop A. Joshi 2024 hold_exclusion + Nivethitha 2017 hold_precaution selected. Wellness rejected. Exertion rehab supporting, not transferred. Structural finding recorded; Safety Review V1 contract unchanged. Next = Targeted Safety Ingest → Safety Review V1.1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md).
 - 2026-08-26 | Practices / Canon | **Safety Review V1 (insufficient_safety)** | **ACCEPTED** | S-B2 locked. Stop-rules present (SFH, not in kernel). who_must_not_hold unknown. Prohibition none. Claims default-closed. Overall insufficient_safety, not may_not_release. Canon empty. Next = owner decides. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md).
 - 2026-08-25 | Practices / Canon | **Normalization V1.1 (four-phase remap)** | **ACCEPTED** | Hold required (N-H1). Equal count common_parameter (N-E2). Overall normalize_one candidate, not canon. Landscape remapped; V1 hypothesis preserved. Next = Safety Review. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md).
 - 2026-08-25 | Practices / Canon | **Targeted Ingest V1 (two resolution loci)** | **ACCEPTED** | Marchant square and 5:5 stored separately; author contrast is not a family definition. CAVUHB 4-4-6-2 is label observation, not variant. Two axes signal-only. Next = Normalization V1.1. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md).

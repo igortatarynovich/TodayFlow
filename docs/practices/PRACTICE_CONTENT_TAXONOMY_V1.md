@@ -24,7 +24,8 @@
 | [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) | **Targeted shortlist**: post-exhale hold identity; resolution ≠ replication. |
 | [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) | **Targeted ingest**: two resolution loci; axes unglued; not V1.1. |
 | [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) | **Normalization V1.1**: `normalize_one` candidate; landscape remapped. |
-| [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) | **Safety Review V1**: `insufficient_safety`; not canon; next = owner decides. |
+| [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) | **Safety Review V1**: `insufficient_safety`; not canon. |
+| [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) | **Targeted Safety Shortlist V1**: who_must_not_hold; stop A; selected ≠ who-list. |
 | [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | Coverage-first fill. **Frozen** pending technique canon. Meaning не знает item_id / technique_id. |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | Need/format чипы и цикл сессии. Need ≠ type. Format ≠ type. |
 | [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md) §2.5 · §2.8 | Куда кладётся Machine + Content. P2 fill ещё впереди. |
@@ -76,7 +77,7 @@ candidate_family → shortlist candidates → selected loci
   → Content Item (technique_id only if canonical)
 ```
 
-Shortlist slice + ingest + normalize: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) · [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md) · [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Targeted ingest: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Normalization V1.1: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) (`normalize_one` candidate). Safety review: [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) (`insufficient_safety`). Criteria V1 задаёт допуск, не корпус. Canon пуст.
+Shortlist slice + ingest + normalize: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) · [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md) · [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Targeted ingest: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Normalization V1.1: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) (`normalize_one` candidate). Safety review: [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) (`insufficient_safety`). Targeted safety shortlist: [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md). Criteria V1 задаёт допуск, не корпус. Canon пуст.
 
 **Продуктовая выдача:**
 
@@ -494,7 +495,7 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 ## 14. Что дальше
 
-1. **Safety Review V1** — [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) (`insufficient_safety`). Следующий named pass назначает owner. Не новые LLM items. `technique_canon_v1.json` пуст. `technique_id` только после canonical.
+1. **Targeted Safety Shortlist V1** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A). Дальше: Targeted Safety Ingest. Не новые LLM items. `technique_canon_v1.json` пуст. `technique_id` только после canonical.
 2. Coverage-first архитектура (26 cells, type spine) стоит; fill **frozen**. Audio vs text отменён как next step.
 3. Retrieval runtime **после** canonical techniques + P0 coverage. Meaning по-прежнему без `item_id` / `technique_id`.
 4. Density (P1) и remap legacy `CONTENT/practices/*.json` — только как expressions канона, не вместо provenance.
@@ -505,6 +506,7 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | pointer: Targeted Safety Shortlist V1 = stop A; next = Targeted Safety Ingest |
 | 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | pointer: Normalization V1.1 = normalize_one candidate; next = Safety Review |
 | 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |

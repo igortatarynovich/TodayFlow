@@ -108,8 +108,8 @@ Landscape `mechanism_shape` **не** переписан. Семья **не** р�
 ## 7. Что дальше
 
 1. Normalization V1 закрыт как `insufficient_evidence` (история). V1.1 = `normalize_one` candidate: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md).
-2. Targeted shortlist и targeted ingest закрыты. Safety Review = `insufficient_safety`.
-3. Следующий named pass назначает owner. Не следующая семья. Canon пуст.
+2. Targeted shortlist и targeted ingest закрыты. Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A.
+3. Следующий named pass: **Targeted Safety Ingest**. Не следующая семья. Canon пуст.
 4. `technique_id` — только при `canonical`.
 
 ---
@@ -118,6 +118,7 @@ Landscape `mechanism_shape` **не** переписан. Семья **не** р�
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | pointer: Targeted Safety Shortlist V1 = stop A; next = Targeted Safety Ingest |
 | 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | pointer: Normalization V1.1 = normalize_one candidate; next = Safety Review |
 | 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |

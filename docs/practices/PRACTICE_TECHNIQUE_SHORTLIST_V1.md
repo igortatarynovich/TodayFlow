@@ -137,8 +137,8 @@ Landscape candidate family
 
 ## 8. Что дальше
 
-1. Slice стоит. Ingest V1 записал три evidence records. Normalization V1 = `insufficient_evidence`. V1.1 = `normalize_one` candidate. Safety Review = `insufficient_safety`. Canon пуст. Type не attested.
-2. Следующий named pass назначает owner. Не следующая семья.
+1. Slice стоит. Ingest V1 записал три evidence records. Normalization V1 = `insufficient_evidence`. V1.1 = `normalize_one` candidate. Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A. Canon пуст. Type не attested.
+2. Следующий named pass: **Targeted Safety Ingest**. Не следующая семья.
 3. `technique_id` — только после `canonical`.
 
 ---
@@ -147,6 +147,7 @@ Landscape candidate family
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | pointer: Targeted Safety Shortlist V1 = stop A; next = Targeted Safety Ingest |
 | 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | pointer: Normalization V1.1 = normalize_one candidate; next = Safety Review |
 | 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |

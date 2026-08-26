@@ -171,13 +171,14 @@ Required hold + S-W2 + S-P0 → не ship, не запрет.
 ## 6. Что дальше
 
 ```text
-Normalized candidate → Safety Review (this pass = insufficient_safety)
-  → owner decides next named pass
-  → (if later may_release) canonical | rejected → technique_id → probe assessment
+Safety Review insufficient_safety
+  → Targeted Safety Shortlist (stop A)
+  → Targeted Safety Ingest
+  → Safety Review V1.1
 ```
 
-1. Safety Review закрыт как `insufficient_safety`. Canon пуст. Type не attested.
-2. Следующий named pass назначает **owner**. Вероятный hint (не pass): targeted safety research на `who_must_not_hold`, без reopen kernel / Normalization.
+1. Safety Review закрыт как `insufficient_safety`. Targeted Safety Shortlist = stop A. Canon пуст. Type не attested.
+2. Следующий named pass: **Targeted Safety Ingest**. Не canonical.
 3. `technique_id` — только при `canonical`, и только после `may_release`.
 
 ---
@@ -186,4 +187,5 @@ Normalized candidate → Safety Review (this pass = insufficient_safety)
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | pointer: Targeted Safety Shortlist V1 = stop A; next = Targeted Safety Ingest |
 | 2026-08-26 | v1.0 ACCEPTED — S-B2 locked; three verdicts; corpus → `insufficient_safety`; not canon; next = owner decides |
