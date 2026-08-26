@@ -18,6 +18,33 @@
       "status": "skipped",
       "skip_reason": "skipped_for_now",
       "note": "Equal-count / four-phase hold research became a sunk-cost trap. Do not continue Safety Review V1.1 or targeted safety work on this type. Use another suitable type for the need. Existing library items stay provisional without technique_id."
+    },
+    {
+      "technique_id": "technique.extended_exhale",
+      "content_class": "practice",
+      "type": "extended_exhale",
+      "canonical_description": "A short unforced breath cycle: inhale gently through the nose, then exhale longer than the inhale, without a hold. Counting (for example two in / three out, or five in / seven out) is only a pace aid. Breath-holds are not part of this product version.",
+      "source_refs": [
+        {
+          "source": "Cambridge University Hospitals NHS — Breathing pattern disorders and physiotherapy",
+          "url": "https://www.cuh.nhs.uk/patient-information/breathing-pattern-disorders-and-physiotherapy/",
+          "locus": "Breathing control exercises, Step 2 Slow breathing (in for one-to-two-or-three, out for one-to-three-or-four; out-breath passive); during activity, out-breath longer than in-breath",
+          "note": "official_health. Method confirmation only. Not imported as a breathlessness-retraining protocol. Optional post-exhale pause in that page is not in this product version."
+        },
+        {
+          "source": "Berkshire Healthcare NHS Foundation Trust — How breathing can reduce stress and anxiety",
+          "url": "https://www.berkshirehealthcare.nhs.uk/breathingcanreducestress",
+          "locus": "Tip 1: rectangular breathing, inhale 5 seconds and exhale 7 seconds, then repeating",
+          "note": "official_health. Longer out-breath, no hold in this example."
+        }
+      ],
+      "safety_notes": [
+        "Do not force the out-breath or take bigger breaths.",
+        "Stop if dizzy or faint.",
+        "This product version has no breath-hold."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
     }
   ]
 }

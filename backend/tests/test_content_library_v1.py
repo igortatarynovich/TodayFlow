@@ -253,12 +253,17 @@ def test_technique_canon_lightweight_skip_box() -> None:
     assert techniques["research_ladder_required"] is False
     rows = techniques["techniques"]
     assert rows
-    assert all(row.get("status") != "accepted" for row in rows)
     by_id = {row["technique_id"]: row for row in rows}
     box = by_id["technique.box_breathing"]
     assert box["status"] == "skipped"
     assert box["skip_reason"] == "skipped_for_now"
     assert box["type"] == "box_breathing"
+    exhale = by_id["technique.extended_exhale"]
+    assert exhale["status"] == "accepted"
+    assert exhale["type"] == "extended_exhale"
+    assert exhale["allowed_claims"] == []
+    assert exhale["source_refs"]
+    assert exhale["canonical_description"].strip()
 
 
 def test_fill_unfrozen_provisional_probes() -> None:
@@ -269,7 +274,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is False
     assert coverage["next_pass"] == "library_fill_lightweight_provenance"
-    assert coverage["next_fill_cell"] == "need.calm.downregulate"
+    assert coverage["next_fill_cell"] == "need.focus.focus"
     assert "box_breathing" in coverage["skipped_types"]
     probes = library["architecture_probe_item_ids"]
     assert probes == [
@@ -287,16 +292,24 @@ def test_fill_unfrozen_provisional_probes() -> None:
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
-    for item in library["items"]:
-        assert "technique_id" not in item["identity"]
-    assert all(r.get("status") != "accepted" for r in techniques["techniques"])
+    sourced = {
+        item["identity"]["item_id"]: item["identity"].get("technique_id")
+        for item in library["items"]
+        if "technique_id" in item["identity"]
+    }
+    assert sourced == {
+        "practice.extended_exhale.001": "technique.extended_exhale",
+        "practice.extended_exhale.002": "technique.extended_exhale",
+        "practice.extended_exhale.003": "technique.extended_exhale",
+    }
+    assert any(r.get("status") == "accepted" for r in techniques["techniques"])
 
 
 def test_unknown_technique_id_rejected() -> None:
     vocab, library, coverage = _load()
     library["items"][0]["identity"] = {
         **library["items"][0]["identity"],
-        "technique_id": "technique.extended_exhale",
+        "technique_id": "technique.does_not_exist",
     }
     errors = validate_content_library_v1(
         library, vocab=vocab, coverage=coverage, techniques=_techniques()
@@ -364,7 +377,11 @@ def test_technique_landscape_v1_splits_probe_families() -> None:
     assert landscape["writes_technique_canon"] is False
     assert landscape["shortlist_mode"] == "vertical_slice"
     assert landscape["shortlist_slice_family"] == "family.practice.equal_count_breath"
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     classes = {row["content_class"] for row in landscape["families"]}
     assert classes == {"practice", "meditation", "affirmation", "discipline"}
     by_id = {row["family_id"]: row for row in landscape["families"]}
@@ -421,7 +438,11 @@ def test_shortlist_criteria_v1_does_not_open_shortlist() -> None:
     assert criteria["pipeline_after_open"][0] == "candidate_family"
     assert criteria["pipeline_after_open"][-1] == "canonical_or_rejected"
     assert [g["id"] for g in criteria["gates"]] == [f"C{i}" for i in range(1, 10)]
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     landscape = load_json(LANDSCAPE_PATH)
     assert landscape["shortlist_opened"] is False
     assert criteria["shortlist_opened"] is False
@@ -458,10 +479,15 @@ def test_technique_shortlist_v1_equal_count_slice_not_canon() -> None:
     assert "conflict.phase_count" in conflict_ids
     assert "conflict.holds_as_kernel_vs_later_ratio" in conflict_ids
     assert landscape["shortlist_slice_family"] == family["family_id"]
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     _vocab, library, _coverage = _load()
     for item in library["items"]:
-        assert "technique_id" not in item["identity"]
+        if item["identity"]["type"] == "box_breathing":
+            assert "technique_id" not in item["identity"]
 
 
 def test_technique_ingest_v1_equal_count_evidence_not_kernel() -> None:
@@ -488,7 +514,11 @@ def test_technique_ingest_v1_equal_count_evidence_not_kernel() -> None:
     assert newcastle["observed_variants"] == []
     assert "recorded_as_conflicting_description_not_variant" in newcastle["conflict_tags"]
     assert all(row["ingest_status"] == "ingested" for row in ingest["evidence"])
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     _vocab, library, _coverage = _load()
     probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
     assert library["status"] == "provisional"
@@ -517,7 +547,11 @@ def test_technique_normalization_v1_insufficient_evidence_not_canon() -> None:
         == "targeted_shortlist_post_exhale_hold_identity"
     )
     assert "safety_review" in normalization["not_next"]
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     _vocab, library, _coverage = _load()
     probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
     assert "technique_id" not in probe["identity"]
@@ -558,7 +592,11 @@ def test_technique_targeted_shortlist_v1_hold_identity_not_canon() -> None:
         "src.byu.marchant.2025.square",
         "src.nhs.wales.cavuhb.square",
     ]
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     _vocab, library, _coverage = _load()
     probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
     assert "technique_id" not in probe["identity"]
@@ -611,7 +649,11 @@ def test_technique_targeted_ingest_v1_two_loci_not_kernel() -> None:
     assert cavuhb["does_not_treat_unequal_counts_as_variant"] is True
     assert cavuhb["observed_variants"] == []
     assert "recorded_as_label_observation_not_variant" in cavuhb["conflict_tags"]
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     _vocab, library, _coverage = _load()
     probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
     assert "technique_id" not in probe["identity"]
@@ -654,7 +696,11 @@ def test_technique_normalization_v1_1_normalize_one_candidate_not_canon() -> Non
     assert candidate["identity_kernel"]["equal_count"] == "common_parameter"
     assert normalization["next_named_pass"] == "technique_safety_review_v1"
     assert "canonical" in normalization["not_next"]
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     _vocab, library, _coverage = _load()
     probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
     assert "technique_id" not in probe["identity"]
@@ -702,7 +748,11 @@ def test_technique_safety_review_v1_insufficient_safety_not_canon() -> None:
     assert review["next_named_pass"] == "owner_decides_next_named_pass"
     assert "canonical" in review["not_next"]
     assert "auto_open_targeted_safety_research" in review["not_next"]
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     _vocab, library, _coverage = _load()
     probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
     assert "technique_id" not in probe["identity"]
@@ -758,7 +808,11 @@ def test_technique_targeted_safety_shortlist_v1_who_must_not_not_canon() -> None
         "general_breathwork_precaution"
     )
     assert targeted["identity_kernel_unchanged"]["post_exhale_hold"] == "required"
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     _vocab, library, _coverage = _load()
     probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
     assert "technique_id" not in probe["identity"]
@@ -811,7 +865,11 @@ def test_technique_targeted_safety_ingest_v1_observations_not_who_list() -> None
     assert nive["dose_or_duration"] == "unspecified_in_this_legally_readable_locus"
     assert "study response is not a contraindication" in nive["transfer_limits"]
     assert ingest["identity_kernel_unchanged"]["post_exhale_hold"] == "required"
-    assert all(r.get("status") != "accepted" for r in _techniques()["techniques"])
+    assert next(
+        r["status"]
+        for r in _techniques()["techniques"]
+        if r["technique_id"] == "technique.box_breathing"
+    ) == "skipped"
     _vocab, library, _coverage = _load()
     probe = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_3_ID)
     assert "technique_id" not in probe["identity"]
@@ -860,8 +918,11 @@ def test_p0_seed_2_is_first_ledger_empty_cell_calm() -> None:
     assert "tense" in item["retrieval"]["input_state"]
 
     cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_2_CELL)
-    assert cell["status"] == "seed"
+    assert cell["status"] == "covered"
+    assert cell.get("fill_status") == "sourced"
     assert cell["item_ids"][0] == SEED_2_ID
+    assert item["identity"]["technique_id"] == "technique.extended_exhale"
+    assert item["identity"]["status"] == "active"
     assert coverage["need_cells"][0]["id"] == SEED_2_CELL
 
 
@@ -1580,7 +1641,8 @@ def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
     assert coverage["counts"]["library_items"] == 133
     assert coverage["counts"]["need_cells_empty"] == 0
-    assert coverage["counts"]["need_cells_seed"] == 26
+    assert coverage["counts"]["need_cells_seed"] == 25
+    assert coverage["counts"]["need_cells_covered"] == 1
     assert library["status"] == "provisional"
     assert library["fill_frozen"] is False
     assert len(library["items"]) == 133

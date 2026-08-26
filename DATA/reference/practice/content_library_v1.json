@@ -5,7 +5,7 @@
   "semantic_version": "content-taxonomy-v1.1",
   "content_origin": "llm_provisional",
   "fill_frozen": false,
-  "description": "Provisional Content Items. Architecture probe + llm_provisional drafts. Research ladder does not block fill. Active fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md. Existing items stay provisional until a cell is rewritten against an accepted technique.",
+  "description": "Provisional Content Items. First sourced cell: need.calm.downregulate (technique.extended_exhale). Remaining items llm_provisional. Research ladder does not block fill. Active fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md.",
   "architecture_probe_item_ids": [
     "practice.sensory_grounding.001",
     "practice.extended_exhale.001",
@@ -83,9 +83,10 @@
         "content_class": "practice",
         "family": "breathwork",
         "type": "extended_exhale",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.calm.downregulate"
+        "seed_cell": "need.calm.downregulate",
+        "technique_id": "technique.extended_exhale"
       },
       "retrieval": {
         "purpose": [
@@ -118,11 +119,11 @@
         "locales": {
           "ru": {
             "title": "Длинный выдох",
-            "body": "Вдох через нос. Выдох длиннее вдоха. Повтори четыре раза. Не ускоряй."
+            "body": "Вдох через нос. Выдох длиннее вдоха, без усилия. Повтори четыре раза. Не ускоряй и не задерживай."
           },
           "en": {
             "title": "Long out-breath",
-            "body": "In through the nose. Out longer than in. Four times. Do not speed up."
+            "body": "In through the nose. Out longer than in, without pushing. Four times. Do not speed up or hold."
           }
         },
         "presentation": {
@@ -2559,7 +2560,8 @@
         "type": "extended_exhale",
         "status": "draft",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.calm.downregulate"
+        "seed_cell": "need.calm.downregulate",
+        "technique_id": "technique.extended_exhale"
       },
       "retrieval": {
         "purpose": [
@@ -2592,11 +2594,11 @@
         "locales": {
           "ru": {
             "title": "Длинный выдох",
-            "body": "Вдох через нос. Выдох длиннее вдоха. Повтори восемь раз. Не ускоряй."
+            "body": "Вдох через нос. Выдох длиннее вдоха, без усилия. Повтори восемь раз. Не ускоряй и не задерживай."
           },
           "en": {
             "title": "Long out-breath",
-            "body": "In through the nose. Out longer than in. Eight times. Do not speed up."
+            "body": "In through the nose. Out longer than in, without pushing. Eight times. Do not speed up or hold."
           }
         },
         "presentation": {
@@ -5029,7 +5031,8 @@
         "type": "extended_exhale",
         "status": "draft",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.calm.downregulate"
+        "seed_cell": "need.calm.downregulate",
+        "technique_id": "technique.extended_exhale"
       },
       "retrieval": {
         "purpose": [
@@ -5062,11 +5065,11 @@
         "locales": {
           "ru": {
             "title": "Длинный выдох",
-            "body": "Вдох через нос. Выдох длиннее вдоха. Повтори четыре раза. Не ускоряй."
+            "body": "Вдох через нос. Выдох длиннее вдоха, без усилия. Повтори четыре раза. Не ускоряй и не задерживай."
           },
           "en": {
             "title": "Long out-breath",
-            "body": "In through the nose. Out longer than in. Four times. Do not speed up."
+            "body": "In through the nose. Out longer than in, without pushing. Four times. Do not speed up or hold."
           }
         },
         "presentation": {

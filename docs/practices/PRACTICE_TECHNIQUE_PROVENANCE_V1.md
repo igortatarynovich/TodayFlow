@@ -274,9 +274,9 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 ## 11. Что дальше
 
 1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
-2. `box_breathing` = `skipped_for_now`. Probe без `technique_id`.
-3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Первая ячейка: `need.calm.downregulate`.
-4. 133 items остаются `llm_provisional`, пока fill не перепишет ячейку.
+2. `extended_exhale` = `accepted`. `need.calm.downregulate` sourced. `box_breathing` = `skipped_for_now`.
+3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.focus.focus`.
+4. Остальные items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
 

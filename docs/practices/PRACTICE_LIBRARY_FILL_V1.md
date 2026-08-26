@@ -68,7 +68,7 @@ status                    accepted | skipped
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `box_breathing` = `skipped_for_now`. Не открывать Safety Review V1.1. Следующая ячейка fill: `need.calm.downregulate` (preferred `extended_exhale`). Существующие box items остаются provisional, без `technique_id`.
+**Сейчас:** `extended_exhale` = `accepted`. `need.calm.downregulate` sourced. `box_breathing` = `skipped_for_now`. Следующая ячейка: `need.focus.focus` (preferred type skipped — другой type или skip ячейки). Не открывать Safety Review V1.1.
 
 ---
 

@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **library fill** ([PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md)). Первая sourced-ячейка: `need.calm.downregulate`. `box_breathing` = skipped_for_now. Не Safety Review V1.1. 133 items остаются provisional без `technique_id`, пока ячейка не переписана.
+Следующий рабочий шаг: **library fill** следующей ячейки. `need.calm.downregulate` sourced (`technique.extended_exhale`). Next = `need.focus.focus`. Preferred `box_breathing` = skipped_for_now — другой type или skip ячейки. Не Safety Review. Не box research.
 
 ---
 
@@ -218,7 +218,8 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
-| 2026-08-26 | **Research escalation closed.** Ladder = archive / non-blocking. Fill unfrozen. Lightweight provenance is the fill process. `box_breathing` skipped_for_now. Next sourced cell = `need.calm.downregulate`. [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). |
+| 2026-08-26 | **First sourced cell.** `technique.extended_exhale` accepted. `need.calm.downregulate` covered. Next = `need.focus.focus`. |
+| 2026-08-26 | **Research escalation closed.** Ladder = archive / non-blocking. Fill unfrozen. Lightweight provenance is the fill process. `box_breathing` skipped_for_now. [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). |
 | 2026-08-26 | **Targeted Safety Shortlist V1.** who_must_not_hold. Stop A. Joshi 2024 + Nivethitha 2017 selected. Wellness rejected. Next = Targeted Safety Ingest. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md). |
 | 2026-08-26 | **Safety Review V1.** S-B2 locked. Overall `insufficient_safety`. Not canon. Next = owner decides. [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md). |
 | 2026-08-25 | **Normalization V1.1.** Axes: hold required, equal_count common_parameter. Overall `normalize_one` candidate. Landscape remapped. Next = Safety Review. [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md). |
