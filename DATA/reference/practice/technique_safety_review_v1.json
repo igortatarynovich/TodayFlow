@@ -1,0 +1,128 @@
+{
+  "contract_version": "technique_safety_review_v1",
+  "version": "1.0.0",
+  "status": "safety_reviewed_ledger",
+  "semantic_version": "practice-technique-safety-review-v1.0",
+  "description": "Safety Review of the equal_count_breath normalized candidate. Applies S-B2 and three verdicts to the ingested corpus. Not canon. Canon: docs/practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md",
+  "family_id": "family.practice.equal_count_breath",
+  "family_id_is_ledger_key_not_identity_claim": true,
+  "candidate_family": "four-phase square / box breathing",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "safety_review_is_not_canonical": true,
+  "does_not_reopen_kernel": true,
+  "does_not_erase_v1": true,
+  "does_not_advance_to_safety_reviewed": true,
+  "does_not_open_next_pass": true,
+  "boundary_held": "normalized_candidate_to_safety_verdict_not_canonical",
+  "accessed": "2026-08-26",
+  "prior_decision": {
+    "pass": "technique_normalization_v1_1",
+    "decision": "normalize_one"
+  },
+  "identity_kernel_unchanged": {
+    "shape": "four_timed_phases",
+    "post_exhale_hold": "required",
+    "equal_count": "common_parameter"
+  },
+  "evidence_ids": [
+    "ev.equal_count.bhf.heart_matters.box",
+    "ev.equal_count.nhs_sfh.box_leaflet",
+    "ev.equal_count.nhs_newcastle.square",
+    "ev.equal_count.byu.marchant.2025.square",
+    "ev.equal_count.nhs_wales.cavuhb.square"
+  ],
+  "axes": {
+    "bounds": {
+      "decision": "recorded",
+      "not_used": "locus count",
+      "holds": "required; identity-bearing from V1.1; not reopened",
+      "timing": "count length and whether sides are equal remain common parameters",
+      "effort": "sources that mention depth treat it as a local script, not a kernel bound"
+    },
+    "stop_rules": {
+      "decision": "present",
+      "criterion": "S-S1",
+      "evidence_id": "ev.equal_count.nhs_sfh.box_leaflet",
+      "not_mixed_into_kernel": true,
+      "observed": [
+        "Light-headedness when breathing more deeply: sitting or lying may help until accustomed.",
+        "If attending to the breath is uncomfortable because of breathing-related issues, grounding exercises may be more useful than this breathing leaflet."
+      ],
+      "not_stop_rules": [
+        "Marchant methods tell participants not to breathe too deeply and to breathe more shallowly if dizzy. That is an experimental script, not a product stop-rule.",
+        "BHF, Newcastle, and CAVUHB write no stop-rules in the ingested sections."
+      ]
+    },
+    "who_must_not_hold": {
+      "decision": "unknown",
+      "criterion": "S-W2",
+      "locked_rule": "S-B2",
+      "not_used": "locus count",
+      "per_evidence": {
+        "ev.equal_count.bhf.heart_matters.box": "Box section does not state who should avoid pausing the breath. observed_safety empty.",
+        "ev.equal_count.nhs_sfh.box_leaflet": "Stop-rules and redirect are present. They are not a who-must-not-hold population exclusion for a required hold.",
+        "ev.equal_count.nhs_newcastle.square": "Section does not state who should avoid holding the breath. observed_safety empty.",
+        "ev.equal_count.byu.marchant.2025.square": "Experimental shallow-if-dizzy instruction is not a general who-must-not-hold bound.",
+        "ev.equal_count.nhs_wales.cavuhb.square": "Section does not state who should avoid holding the breath. observed_safety empty."
+      },
+      "why_sfh_is_not_enough": "S-B2: required identity-bearing hold. SFH when-to-stop / sit-lie / grounding redirect does not close who_must_not_hold."
+    },
+    "prohibition": {
+      "decision": "none",
+      "criterion": "S-P0",
+      "why_not_present": "No ingested source says the product must not offer this method. SFH publishes the sequence with a later stop heading. Silence on who-must-not is not a ban."
+    },
+    "claim_surface": {
+      "decision": "default_closed",
+      "criterion": "S-C1",
+      "allowed_claims": [],
+      "efficacy_claim_level": "not_claimed",
+      "prohibited_claims": [
+        "treatment or diagnosis of a disorder",
+        "guaranteed sleep, calm, money, or relationship outcomes",
+        "will cure anxiety or insomnia",
+        "manifestation of a result by repeating a phrase"
+      ],
+      "not_used_as_claims": [
+        "BHF benefit headers",
+        "Marchant HRV / mood / anxiety results",
+        "tradition or locus count",
+        "viral SEAL box breathing packaging"
+      ]
+    }
+  },
+  "decision": "insufficient_safety",
+  "why_insufficient_safety": [
+    "Hold is required. S-B2 therefore needs who_must_not_hold closed before may_release.",
+    "All five ingested records leave who_must_not_hold unknown (S-W2).",
+    "Stop-rules are present (S-S1) and claim surface is default-closed (S-C1). Those do not complete the required safety surface.",
+    "Prohibition is none (S-P0). Unknown is not a ban, so this is not may_not_release."
+  ],
+  "why_not_may_release": [
+    "S-B2: SFH stop-rules without who_must_not_hold are not permission to ship a required-hold method."
+  ],
+  "why_not_may_not_release": [
+    "S-B2 does not convert missing who-must-not into a prohibition.",
+    "No positive evidence that the candidate cannot be released in product bounds."
+  ],
+  "candidate_review_status": "normalized",
+  "expression_hypothesis": {
+    "type": "box_breathing",
+    "probe_item_id": "practice.box_breathing.001",
+    "status": "not_attested",
+    "note": "Safety Review does not attest the probe. technique_id remains forbidden."
+  },
+  "next_named_pass": "owner_decides_next_named_pass",
+  "owner_hint_not_a_pass": "targeted_safety_research_who_must_not_hold",
+  "not_next": [
+    "canonical",
+    "rejected_canon_row",
+    "technique_id_on_probe",
+    "next_family_slice",
+    "write_technique_canon",
+    "reopen_kernel",
+    "optional_hold",
+    "auto_open_targeted_safety_research"
+  ]
+}

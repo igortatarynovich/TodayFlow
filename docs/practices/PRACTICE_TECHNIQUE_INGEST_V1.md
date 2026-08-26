@@ -92,8 +92,8 @@ Landscape candidate family
 
 ## 5. Что дальше
 
-1. Ingest стоит. Normalization V1 = `insufficient_evidence`. V1.1 = `normalize_one` candidate. Canon пуст. Type не attested.
-2. Следующий named pass: **Safety Review**.
+1. Ingest стоит. Normalization V1 = `insufficient_evidence`. V1.1 = `normalize_one` candidate. Safety Review = `insufficient_safety`. Canon пуст. Type не attested.
+2. Следующий named pass назначает owner.
 3. `technique_id` — только после `canonical`.
 
 ---
@@ -102,6 +102,7 @@ Landscape candidate family
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | pointer: Normalization V1.1 = normalize_one candidate; next = Safety Review |
 | 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |
 | 2026-08-25 | pointer: Targeted Shortlist V1 closed; next = targeted ingest → Normalization V1.1 |

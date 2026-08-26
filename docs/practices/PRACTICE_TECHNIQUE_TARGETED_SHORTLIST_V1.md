@@ -175,8 +175,8 @@ Safety Review **не** открывается от `insufficient_evidence` и **
 
 ## 9. Что дальше
 
-1. Targeted shortlist закрыт. Targeted ingest закрыт. Normalization V1.1 = `normalize_one` candidate. Canon пуст. Type не attested.
-2. Следующий named pass: **Safety Review**. Не следующая семья.
+1. Targeted shortlist закрыт. Targeted ingest закрыт. Normalization V1.1 = `normalize_one` candidate. Safety Review = `insufficient_safety`. Canon пуст. Type не attested.
+2. Следующий named pass назначает owner. Не следующая семья.
 3. `technique_id` — только при `canonical`.
 
 ---
@@ -185,6 +185,7 @@ Safety Review **не** открывается от `insufficient_evidence` и **
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | pointer: Normalization V1.1 = normalize_one candidate; next = Safety Review |
 | 2026-08-25 | pointer: Targeted Ingest V1 closed; next = Normalization V1.1 |
 | 2026-08-25 | v1.0 ACCEPTED — post-exhale hold identity; definition + contrast selected; variant not found in preferred class; next = targeted ingest → Normalization V1.1 |

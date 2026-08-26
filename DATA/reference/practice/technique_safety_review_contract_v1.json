@@ -1,0 +1,55 @@
+{
+  "contract_version": "technique_safety_review_contract_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-safety-review-v1.0",
+  "description": "Safety Review of a normalized candidate. Bounds, stop-rules, who-must-not, claim surface. Not a kernel rewrite. Not a technique_canon row. Canon: docs/practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "safety_review_is_not_canonical": true,
+  "does_not_reopen_kernel": true,
+  "does_not_open_next_pass": true,
+  "allowed_decisions": [
+    "may_release",
+    "insufficient_safety",
+    "may_not_release"
+  ],
+  "axis_ids": [
+    "bounds",
+    "stop_rules",
+    "who_must_not_hold",
+    "prohibition",
+    "claim_surface"
+  ],
+  "bounds_allowed": ["recorded", "unresolved"],
+  "stop_rules_allowed": ["present", "absent"],
+  "who_must_not_hold_allowed": ["closed", "unknown"],
+  "prohibition_allowed": ["none", "present"],
+  "claim_surface_allowed": ["default_closed", "invalid_fill"],
+  "criteria": {
+    "S-B2": "When breath hold is identity-bearing and required, SFH-class stop-rules are not enough for may_release until who_must_not_hold is closed. Missing who-must-not is not proof the method is forbidden, so S-B2 does not by itself yield may_not_release.",
+    "S-S1": "preferred-class stop-rules exist (when to stop / sit-lie / redirect) and stay out of kernel steps",
+    "S-S2": "no stop-rules in the ingested corpus",
+    "S-W1": "preferred-class source states who must not hold (population exclusion for a required hold)",
+    "S-W2": "who_must_not_hold unknown: no ingested source states it; silence is not prohibition",
+    "S-P0": "no positive evidence that the product must not release this candidate",
+    "S-P1": "positive evidence that the candidate cannot be released in product bounds",
+    "S-C1": "allowed_claims empty; prohibited_claims at provenance minimum; efficacy_claim_level not_claimed",
+    "S-C2": "allowed_claims filled from trial, tradition, or benefit headers — invalid"
+  },
+  "overall_rules": {
+    "may_release": "required safety surface closed: bounds recorded + stop-rules present + who_must_not_hold closed + claim surface default_closed",
+    "insufficient_safety": "not enough evidence to ship, and no evidence of a product ban. unknown ≠ unsafe and unknown ≠ permission to ship",
+    "may_not_release": "positive evidence that the candidate cannot be released in product bounds"
+  },
+  "invariants": [
+    "does not invent or rewrite the V1.1 kernel",
+    "does not declare an optional or unresolved hold",
+    "SFH sequence and stop-rules stay in different fields",
+    "Marchant trial results do not fill allowed_claims",
+    "viral SEAL packaging is not a source",
+    "insufficient_safety does not open a next named pass",
+    "canonical and technique_id remain owner decisions after a may_release review",
+    "V1 insufficient_evidence and landscape V1 hypothesis remain historical"
+  ]
+}

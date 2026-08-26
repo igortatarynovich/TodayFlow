@@ -1701,6 +1701,320 @@ def validate_technique_normalization_v1_1(
     return errors
 
 
+SAFETY_REVIEW_DECISIONS = frozenset(
+    {"may_release", "insufficient_safety", "may_not_release"}
+)
+SAFETY_REVIEW_AXIS_IDS = (
+    "bounds",
+    "stop_rules",
+    "who_must_not_hold",
+    "prohibition",
+    "claim_surface",
+)
+WHO_UNKNOWN_MARKERS = (
+    "does not state who should avoid",
+    "not a general who-must-not-hold",
+)
+PROHIBITION_MARKERS = (
+    "must not offer",
+    "must not release",
+    "do not publish this",
+    "product must not",
+)
+
+
+def _safety_evidence_rows(
+    family_ingest: dict[str, Any] | None,
+    targeted_ingest: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for blob in (family_ingest, targeted_ingest):
+        if not blob:
+            continue
+        evidence = blob.get("evidence")
+        if isinstance(evidence, list):
+            rows.extend(row for row in evidence if isinstance(row, dict))
+    return rows
+
+
+def _safety_blob(row: dict[str, Any]) -> str:
+    parts: list[str] = []
+    for key in ("observed_bounds", "observed_safety"):
+        values = row.get(key)
+        if isinstance(values, list):
+            parts.extend(str(item) for item in values)
+    return " ".join(parts).lower()
+
+
+def _who_must_not_from_corpus(rows: list[dict[str, Any]]) -> str:
+    """closed if any locus states a hold exclusion; else unknown. Silence is not closed."""
+    for row in rows:
+        blob = _safety_blob(row)
+        if any(marker in blob for marker in WHO_UNKNOWN_MARKERS):
+            continue
+        safety = row.get("observed_safety")
+        if not isinstance(safety, list) or not safety:
+            continue
+        if "who-must-not" in blob or "must not hold" in blob or "should not hold" in blob:
+            return "closed"
+        # SFH stop-rules / redirect are not a population exclusion for required hold.
+    return "unknown"
+
+
+def _stop_rules_from_corpus(rows: list[dict[str, Any]]) -> str:
+    for row in rows:
+        if row.get("claim_scope") != "method_sequence_and_stop_rules":
+            continue
+        safety = row.get("observed_safety")
+        steps = row.get("observed_steps")
+        if not isinstance(safety, list) or not safety:
+            continue
+        step_text = " ".join(str(item) for item in steps).lower() if isinstance(steps, list) else ""
+        if "grounding" in step_text:
+            continue
+        return "present"
+    return "absent"
+
+
+def _prohibition_from_corpus(rows: list[dict[str, Any]]) -> str:
+    for row in rows:
+        blob = _safety_blob(row)
+        if any(marker in blob for marker in PROHIBITION_MARKERS):
+            return "present"
+    return "none"
+
+
+def _expected_safety_decision(
+    *,
+    hold_required: bool,
+    stop_rules: str,
+    who_must_not: str,
+    prohibition: str,
+    claim_surface: str,
+    bounds: str,
+) -> str:
+    if prohibition == "present":
+        return "may_not_release"
+    if hold_required and who_must_not != "closed":
+        # S-B2: required hold without who-must-not is not may_release; missing ≠ ban.
+        return "insufficient_safety"
+    if (
+        bounds == "recorded"
+        and stop_rules == "present"
+        and who_must_not == "closed"
+        and claim_surface == "default_closed"
+    ):
+        return "may_release"
+    return "insufficient_safety"
+
+
+def validate_technique_safety_review_v1(
+    review: dict[str, Any],
+    *,
+    family_ingest: dict[str, Any] | None = None,
+    targeted_ingest: dict[str, Any] | None = None,
+    normalization_v1_1: dict[str, Any] | None = None,
+    landscape: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if review.get("contract_version") != "technique_safety_review_v1":
+        errors.append("invalid technique safety review contract_version")
+    if review.get("writes_technique_canon") is not False:
+        errors.append("safety review must not write technique canon")
+    if review.get("technique_id_allowed") is not False:
+        errors.append("safety review must not allow technique_id")
+    if review.get("safety_review_is_not_canonical") is not True:
+        errors.append("safety review must remain not-canonical")
+    if review.get("does_not_reopen_kernel") is not True:
+        errors.append("safety review must not reopen the kernel")
+    if review.get("does_not_erase_v1") is not True:
+        errors.append("safety review must not erase the V1 insufficient_evidence record")
+    if review.get("does_not_open_next_pass") is not True:
+        errors.append("insufficient_safety must not auto-open a next named pass")
+    if review.get("does_not_advance_to_safety_reviewed") is not True:
+        errors.append("insufficient_safety must not advance review_status to safety_reviewed")
+    if review.get("family_id") != SLICE_FAMILY_V1:
+        errors.append(f"safety review family_id must stay {SLICE_FAMILY_V1} as ledger key")
+    if review.get("family_id_is_ledger_key_not_identity_claim") is not True:
+        errors.append("family_id must be declared a ledger key, not the identity claim")
+    if review.get("boundary_held") != (
+        "normalized_candidate_to_safety_verdict_not_canonical"
+    ):
+        errors.append("boundary_held must record candidate→verdict, not canon")
+
+    prior = review.get("prior_decision")
+    if not isinstance(prior, dict) or prior.get("decision") != "normalize_one":
+        errors.append("safety review requires prior_decision normalize_one")
+
+    kernel = review.get("identity_kernel_unchanged")
+    if not isinstance(kernel, dict):
+        errors.append("identity_kernel_unchanged must be object")
+    else:
+        if kernel.get("shape") != "four_timed_phases":
+            errors.append("safety review must keep four_timed_phases")
+        if kernel.get("post_exhale_hold") != "required":
+            errors.append("safety review must not reopen hold as optional or unresolved")
+        if kernel.get("equal_count") != "common_parameter":
+            errors.append("safety review must keep equal_count as common_parameter")
+
+    if normalization_v1_1:
+        prior_kernel = (
+            (normalization_v1_1.get("normalized_candidate") or {}).get("identity_kernel")
+            if isinstance(normalization_v1_1.get("normalized_candidate"), dict)
+            else None
+        )
+        if prior_kernel != kernel:
+            errors.append("safety review kernel must match the V1.1 normalized candidate")
+
+    expected_ids = list(V1_1_EVIDENCE)
+    ingest_rows = _safety_evidence_rows(family_ingest, targeted_ingest)
+    if ingest_rows:
+        expected_ids = [
+            str(row.get("evidence_id"))
+            for row in ingest_rows
+            if row.get("evidence_id")
+        ]
+    if review.get("evidence_ids") != expected_ids:
+        errors.append("evidence_ids must be family ingest then targeted ingest, in order")
+
+    axes = review.get("axes")
+    if not isinstance(axes, dict) or tuple(axes.keys()) != SAFETY_REVIEW_AXIS_IDS:
+        errors.append(
+            "axes must be bounds, stop_rules, who_must_not_hold, prohibition, claim_surface"
+        )
+        return errors
+
+    bounds = axes.get("bounds") if isinstance(axes.get("bounds"), dict) else {}
+    stop_rules = axes.get("stop_rules") if isinstance(axes.get("stop_rules"), dict) else {}
+    who = axes.get("who_must_not_hold") if isinstance(axes.get("who_must_not_hold"), dict) else {}
+    prohibition = axes.get("prohibition") if isinstance(axes.get("prohibition"), dict) else {}
+    claims = axes.get("claim_surface") if isinstance(axes.get("claim_surface"), dict) else {}
+
+    if bounds.get("decision") not in {"recorded", "unresolved"}:
+        errors.append("bounds decision invalid")
+    if stop_rules.get("decision") not in {"present", "absent"}:
+        errors.append("stop_rules decision invalid")
+    if who.get("decision") not in {"closed", "unknown"}:
+        errors.append("who_must_not_hold decision invalid")
+    if prohibition.get("decision") not in {"none", "present"}:
+        errors.append("prohibition decision invalid")
+    if claims.get("decision") not in {"default_closed", "invalid_fill"}:
+        errors.append("claim_surface decision invalid")
+    if who.get("not_used") != "locus count":
+        errors.append("who_must_not_hold must not use locus count")
+    if who.get("locked_rule") != "S-B2":
+        errors.append("who_must_not_hold must lock S-B2")
+    if who.get("criterion") != "S-W2" and who.get("decision") == "unknown":
+        errors.append("unknown who_must_not_hold must cite S-W2")
+    if stop_rules.get("not_mixed_into_kernel") is not True and stop_rules.get("decision") == "present":
+        errors.append("SFH stop-rules must stay out of the kernel")
+    if stop_rules.get("evidence_id") != "ev.equal_count.nhs_sfh.box_leaflet" and (
+        stop_rules.get("decision") == "present"
+    ):
+        errors.append("present stop-rules must cite the SFH evidence record")
+
+    allowed = claims.get("allowed_claims")
+    if not isinstance(allowed, list) or allowed:
+        errors.append("allowed_claims must stay empty until a later claims review")
+    if claims.get("efficacy_claim_level") != "not_claimed":
+        errors.append("efficacy_claim_level must stay not_claimed")
+    prohibited = claims.get("prohibited_claims")
+    if not isinstance(prohibited, list) or len(prohibited) < 4:
+        errors.append("prohibited_claims must include the provenance minimum")
+    else:
+        joined = " ".join(str(item).lower() for item in prohibited)
+        for needle in ("treatment", "guaranteed", "anxiety", "manifestation"):
+            if needle not in joined:
+                errors.append(f"prohibited_claims missing {needle}")
+
+    corpus_who = _who_must_not_from_corpus(ingest_rows) if ingest_rows else who.get("decision")
+    corpus_stop = _stop_rules_from_corpus(ingest_rows) if ingest_rows else stop_rules.get("decision")
+    corpus_ban = _prohibition_from_corpus(ingest_rows) if ingest_rows else prohibition.get("decision")
+    if ingest_rows:
+        if who.get("decision") != corpus_who:
+            errors.append("who_must_not_hold must follow the ingested corpus, not a pre-written result")
+        if stop_rules.get("decision") != corpus_stop:
+            errors.append("stop_rules must follow the ingested corpus")
+        if prohibition.get("decision") != corpus_ban:
+            errors.append("prohibition must follow the ingested corpus")
+
+    expected = _expected_safety_decision(
+        hold_required=kernel.get("post_exhale_hold") == "required" if isinstance(kernel, dict) else True,
+        stop_rules=str(stop_rules.get("decision") or ""),
+        who_must_not=str(who.get("decision") or ""),
+        prohibition=str(prohibition.get("decision") or ""),
+        claim_surface=str(claims.get("decision") or ""),
+        bounds=str(bounds.get("decision") or ""),
+    )
+    decision = review.get("decision")
+    if decision not in SAFETY_REVIEW_DECISIONS:
+        errors.append("decision must be may_release, insufficient_safety, or may_not_release")
+    elif decision != expected:
+        errors.append(
+            f"overall must apply the contract to the axes ({expected}), not a pre-written result"
+        )
+
+    if decision == "insufficient_safety" and review.get("candidate_review_status") != "normalized":
+        errors.append("insufficient_safety must leave candidate_review_status normalized")
+    if review.get("next_named_pass") != "owner_decides_next_named_pass":
+        errors.append("insufficient_safety must not auto-open a next named pass")
+    not_next = review.get("not_next")
+    if not isinstance(not_next, list) or "canonical" not in not_next:
+        errors.append("not_next must include canonical")
+    if not isinstance(not_next, list) or "auto_open_targeted_safety_research" not in not_next:
+        errors.append("not_next must include auto_open_targeted_safety_research")
+
+    blob = " ".join(
+        [
+            " ".join(str(x) for x in (review.get("why_insufficient_safety") or [])),
+            " ".join(str(x) for x in (review.get("why_not_may_release") or [])),
+            " ".join(str(x) for x in (review.get("why_not_may_not_release") or [])),
+            str(who.get("why_sfh_is_not_enough") or ""),
+        ]
+    ).lower()
+    if "optional hold" in blob or "hold is optional" in blob:
+        errors.append("must not declare an optional hold")
+    if decision == "insufficient_safety":
+        if not isinstance(review.get("why_not_may_release"), list) or not review.get(
+            "why_not_may_release"
+        ):
+            errors.append("must record why_not_may_release")
+        if not isinstance(review.get("why_not_may_not_release"), list) or not review.get(
+            "why_not_may_not_release"
+        ):
+            errors.append("must record why_not_may_not_release")
+
+    hypothesis = review.get("expression_hypothesis")
+    if not isinstance(hypothesis, dict) or hypothesis.get("status") != "not_attested":
+        errors.append("expression hypothesis must stay not_attested")
+
+    if landscape:
+        families = landscape.get("families")
+        eq = None
+        if isinstance(families, list):
+            eq = next(
+                (
+                    row
+                    for row in families
+                    if isinstance(row, dict) and row.get("family_id") == SLICE_FAMILY_V1
+                ),
+                None,
+            )
+        if not isinstance(eq, dict):
+            errors.append("landscape missing equal_count family")
+        else:
+            if eq.get("mechanism_shape_at_landscape_v1") != LANDSCAPE_V1_EQUAL_COUNT_SHAPE:
+                errors.append("landscape must preserve the V1 mechanism_shape beside the remap")
+            if eq.get("normalization_status") != "normalize_one":
+                errors.append("landscape normalization_status must remain normalize_one")
+            if landscape.get("next_named_pass") != "owner_decides_next_named_pass":
+                errors.append("landscape next_named_pass must wait for owner after this review")
+            if eq.get("safety_review_status") != decision:
+                errors.append("landscape safety_review_status must follow this review decision")
+
+    return errors
+
+
 def validate_content_library_v1(
     library: dict[str, Any],
     *,

@@ -161,11 +161,13 @@ Probe `box_breathing` остаётся expression hypothesis. 4-4-4-4 payload с
 ## 8. Что дальше
 
 ```text
-Normalized candidate → Safety Review → canonical | rejected → technique_id → probe assessment
+Normalized candidate → Safety Review (closed: insufficient_safety)
+  → owner decides next named pass
+  → (if later may_release) canonical | rejected → technique_id → probe assessment
 ```
 
-1. V1.1 = `normalize_one`. Canon пуст.
-2. Следующий named pass: **Safety Review** этого candidate. Не следующая семья.
+1. V1.1 = `normalize_one` (история). Safety Review = `insufficient_safety`. Canon пуст.
+2. Следующий named pass назначает owner. Не следующая семья.
 3. `technique_id` — только при `canonical`.
 
 ---
@@ -174,4 +176,5 @@ Normalized candidate → Safety Review → canonical | rejected → technique_id
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | v1.1 ACCEPTED — axes: hold required, equal_count common_parameter; overall normalize_one; landscape remapped; candidate ≠ canon |

@@ -1,8 +1,8 @@
 {
   "contract_version": "technique_landscape_v1",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "status": "landscape",
-  "semantic_version": "practice-technique-landscape-v1.2",
+  "semantic_version": "practice-technique-landscape-v1.3",
   "description": "Research landscape of technique families. Not canon. Full shortlist not opened. One vertical slice may be sliced. Canon: docs/practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md",
   "shortlist_opened": false,
   "shortlist_mode": "vertical_slice",
@@ -14,9 +14,10 @@
   "ingest_canon": "PRACTICE_TECHNIQUE_INGEST_V1",
   "normalization_canon": "PRACTICE_TECHNIQUE_NORMALIZATION_V1",
   "normalization_v1_1_canon": "PRACTICE_TECHNIQUE_NORMALIZATION_V1_1",
+  "safety_review_canon": "PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1",
   "targeted_shortlist_canon": "PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1",
   "targeted_ingest_canon": "PRACTICE_TECHNIQUE_TARGETED_INGEST_V1",
-  "next_named_pass": "technique_safety_review_v1",
+  "next_named_pass": "owner_decides_next_named_pass",
   "families": [
     {
       "family_id": "family.practice.slow_paced_breath",
@@ -46,6 +47,7 @@
       "probe_links": ["practice.box_breathing.001"],
       "shortlist_status": "sliced",
       "normalization_status": "normalize_one",
+      "safety_review_status": "insufficient_safety",
       "landscape_hypothesis_remap": "equal_count_was_premature_four_phase_is_identity"
     },
     {
