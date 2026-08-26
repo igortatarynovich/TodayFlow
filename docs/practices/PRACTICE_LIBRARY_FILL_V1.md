@@ -35,6 +35,7 @@ Meaning → Need → Retrieval → Item **без изменения**. Meaning �
 4. **Safety только где материально нужно.** Задержки дыхания — да; journaling — обычно нет.
 5. **Skip ≠ запрет продукта навсегда.** `skipped_for_now` можно открыть позже. Не продолжать ту же лестницу.
 6. **Существование ≠ efficacy.** `allowed_claims[]` по умолчанию пуст.
+7. **Источник подтверждает технику.** Техника не обязана оправдывать старый probe. LLM items — расходный материал; taxonomy / needs — каркас.
 
 ---
 
@@ -62,13 +63,13 @@ status                    accepted | skipped
 2. Проверить, что нормальная техника этого type существует (несколько надёжных источников).
 3. Если ясно — `accepted`: ядро своими словами + ссылки.
 4. Если есть очевидный safety-вопрос — коротко проверить и записать `safety_notes[]`.
-5. Если начинается спор — `skipped` / `skipped_for_now`. Другой подходящий type для этой need.
+5. Если начинается спор — `skipped` / `skipped_for_now`. Вернуться к самой need и взять другой **уже существующий** taxonomy type. Не спасать skipped type похожей заменой того же семейства. Если подходящего type нет — ячейка остаётся uncovered; не изобретать технику ради покрытия.
 6. Написать Content Item (expression принятой техники).
 7. Validator → следующая ячейка.
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `extended_exhale` = `accepted`. `need.calm.downregulate` sourced. `box_breathing` = `skipped_for_now`. Следующая ячейка: `need.focus.focus` (preferred type skipped — другой type или skip ячейки). Не открывать Safety Review V1.1.
+**Сейчас:** `extended_exhale`, `focused_attention`, `mobility` = `accepted`. Sourced: `need.calm.downregulate`, `need.focus.focus`, `need.energy.activate`. `box_breathing` и `energizing_breath` = `skipped_for_now` (не спасать probe и не мапить на pranayama). Следующая ячейка: `need.grounding.stabilize`. Не открывать Safety Review V1.1.
 
 ---
 
@@ -86,4 +87,6 @@ status                    accepted | skipped
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | Source confirms the technique; the technique need not justify an old probe. LLM items are disposable. |
+| 2026-08-26 | Skip preferred type → return to the need, pick another existing type, or leave uncovered. Do not invent a similar replacement. |
 | 2026-08-26 | v1.0 ACCEPTED — research escalation retired; lightweight fill is the active process; box_breathing skipped_for_now |

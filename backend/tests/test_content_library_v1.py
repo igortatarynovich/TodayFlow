@@ -264,6 +264,22 @@ def test_technique_canon_lightweight_skip_box() -> None:
     assert exhale["allowed_claims"] == []
     assert exhale["source_refs"]
     assert exhale["canonical_description"].strip()
+    fa = by_id["technique.focused_attention"]
+    assert fa["status"] == "accepted"
+    assert fa["type"] == "focused_attention"
+    assert fa["allowed_claims"] == []
+    assert fa["source_refs"]
+    assert fa["canonical_description"].strip()
+    energy = by_id["technique.energizing_breath"]
+    assert energy["status"] == "skipped"
+    assert energy["skip_reason"] == "skipped_for_now"
+    assert energy["type"] == "energizing_breath"
+    mobility = by_id["technique.mobility"]
+    assert mobility["status"] == "accepted"
+    assert mobility["type"] == "mobility"
+    assert mobility["allowed_claims"] == []
+    assert mobility["source_refs"]
+    assert mobility["canonical_description"].strip()
 
 
 def test_fill_unfrozen_provisional_probes() -> None:
@@ -274,8 +290,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is False
     assert coverage["next_pass"] == "library_fill_lightweight_provenance"
-    assert coverage["next_fill_cell"] == "need.focus.focus"
+    assert coverage["next_fill_cell"] == "need.grounding.stabilize"
     assert "box_breathing" in coverage["skipped_types"]
+    assert "energizing_breath" in coverage["skipped_types"]
     probes = library["architecture_probe_item_ids"]
     assert probes == [
         SEED_1_ID,
@@ -301,6 +318,12 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.extended_exhale.001": "technique.extended_exhale",
         "practice.extended_exhale.002": "technique.extended_exhale",
         "practice.extended_exhale.003": "technique.extended_exhale",
+        "meditation.focused_attention.001": "technique.focused_attention",
+        "meditation.focused_attention.002": "technique.focused_attention",
+        "meditation.focused_attention.003": "technique.focused_attention",
+        "practice.mobility.001": "technique.mobility",
+        "practice.mobility.002": "technique.mobility",
+        "practice.mobility.003": "technique.mobility",
     }
     assert any(r.get("status") == "accepted" for r in techniques["techniques"])
 
@@ -933,13 +956,24 @@ def test_p0_seed_3_is_first_ledger_empty_cell_focus() -> None:
     assert item["identity"]["family"] == "breathwork"
     assert item["identity"]["type"] == "box_breathing"
     assert item["identity"]["seed_cell"] == SEED_3_CELL
+    assert "technique_id" not in item["identity"]
     assert item["retrieval"]["purpose"] == ["focus"]
     assert item["retrieval"]["direction"] == ["focus"]
     assert item["retrieval"]["input_state"] == ["scattered"]
 
     cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_3_CELL)
-    assert cell["status"] == "seed"
-    assert cell["item_ids"][0] == SEED_3_ID
+    assert cell["status"] == "covered"
+    assert cell.get("fill_status") == "sourced"
+    assert cell["primary"]["type"] == "focused_attention"
+    assert SEED_3_ID in cell["item_ids"]
+    assert "meditation.focused_attention.001" in cell["item_ids"]
+    fa = next(
+        i
+        for i in library["items"]
+        if i["identity"]["item_id"] == "meditation.focused_attention.001"
+    )
+    assert fa["identity"]["technique_id"] == "technique.focused_attention"
+    assert fa["identity"]["status"] == "active"
     assert coverage["need_cells"][1]["id"] == SEED_3_CELL
 
 
@@ -950,13 +984,24 @@ def test_p0_seed_4_is_first_ledger_empty_cell_energy() -> None:
     assert item["identity"]["family"] == "breathwork"
     assert item["identity"]["type"] == "energizing_breath"
     assert item["identity"]["seed_cell"] == SEED_4_CELL
+    assert "technique_id" not in item["identity"]
     assert item["retrieval"]["purpose"] == ["energy"]
     assert item["retrieval"]["direction"] == ["activate"]
     assert item["retrieval"]["input_state"] == ["low_energy"]
 
     cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_4_CELL)
-    assert cell["status"] == "seed"
-    assert cell["item_ids"][0] == SEED_4_ID
+    assert cell["status"] == "covered"
+    assert cell.get("fill_status") == "sourced"
+    assert cell["primary"]["type"] == "mobility"
+    assert SEED_4_ID in cell["item_ids"]
+    assert "practice.mobility.001" in cell["item_ids"]
+    mobility = next(
+        i
+        for i in library["items"]
+        if i["identity"]["item_id"] == "practice.mobility.001"
+    )
+    assert mobility["identity"]["technique_id"] == "technique.mobility"
+    assert mobility["identity"]["status"] == "active"
     assert coverage["need_cells"][2]["id"] == SEED_4_CELL
 
 
@@ -1391,7 +1436,13 @@ def test_p0_spine_fills_remaining_types_in_ledger_order() -> None:
         assert item["retrieval"]["direction"] == direction
         cell = next(c for c in coverage["need_cells"] if c["id"] == seed_cell)
         assert item_id in (cell.get("item_ids") or [])
-        assert cell["item_ids"][0] != item_id
+        if (
+            cell.get("fill_status") == "sourced"
+            and cell.get("primary", {}).get("type") == type_code
+        ):
+            assert cell["item_ids"][0] == item_id
+        else:
+            assert cell["item_ids"][0] != item_id
         spine_row = next(
             r
             for r in coverage["type_spine"]
@@ -1605,7 +1656,7 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
     assert SEED_26_ID not in (release.get("item_ids") or [])
     assert SEED_26_ID not in (consistency.get("item_ids") or [])
     assert SEED_26_ID not in (discipline.get("item_ids") or [])
-    assert energy["item_ids"][0] == SEED_4_ID
+    assert energy["item_ids"][0] == "practice.mobility.001"
     assert confidence["item_ids"][0] == SEED_6_ID
     assert calm["item_ids"][0] == SEED_2_ID
     assert sleep_prepare["item_ids"][0] == SEED_9_ID
@@ -1641,8 +1692,8 @@ def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
     assert coverage["counts"]["library_items"] == 133
     assert coverage["counts"]["need_cells_empty"] == 0
-    assert coverage["counts"]["need_cells_seed"] == 25
-    assert coverage["counts"]["need_cells_covered"] == 1
+    assert coverage["counts"]["need_cells_seed"] == 23
+    assert coverage["counts"]["need_cells_covered"] == 3
     assert library["status"] == "provisional"
     assert library["fill_frozen"] is False
     assert len(library["items"]) == 133

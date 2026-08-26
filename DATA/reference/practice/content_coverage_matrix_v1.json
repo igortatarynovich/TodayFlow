@@ -5,9 +5,9 @@
   "semantic_version": "content-taxonomy-v1.1",
   "fill_frozen": false,
   "next_pass": "library_fill_lightweight_provenance",
-  "next_fill_cell": "need.focus.focus",
-  "skipped_types": ["box_breathing"],
-  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing skipped_for_now. Sourced: need.calm.downregulate (extended_exhale). Next cell: need.focus.focus. Remaining items llm_provisional until rewritten. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
+  "next_fill_cell": "need.grounding.stabilize",
+  "skipped_types": ["box_breathing", "energizing_breath"],
+  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing and energizing_breath skipped_for_now. Sourced: need.calm.downregulate (extended_exhale), need.focus.focus (focused_attention), need.energy.activate (mobility). Next cell: need.grounding.stabilize. Remaining items llm_provisional until rewritten. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,
@@ -21,8 +21,8 @@
   "counts": {
     "need_cells": 26,
     "need_cells_empty": 0,
-    "need_cells_seed": 25,
-    "need_cells_covered": 1,
+    "need_cells_seed": 23,
+    "need_cells_covered": 3,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
@@ -75,27 +75,28 @@
         "scattered"
       ],
       "primary": {
+        "content_class": "meditation",
+        "type": "focused_attention"
+      },
+      "alt": {
         "content_class": "practice",
         "type": "box_breathing",
         "family": "breathwork"
-      },
-      "alt": {
-        "content_class": "meditation",
-        "type": "focused_attention"
       },
       "job": "now",
       "surfaces": [
         "today",
         "practices_screen"
       ],
-      "status": "seed",
+      "status": "covered",
+      "fill_status": "sourced",
       "item_ids": [
-        "practice.box_breathing.001",
         "meditation.focused_attention.001",
-        "practice.box_breathing.002",
         "meditation.focused_attention.002",
-        "practice.box_breathing.003",
-        "meditation.focused_attention.003"
+        "meditation.focused_attention.003",
+        "practice.box_breathing.001",
+        "practice.box_breathing.002",
+        "practice.box_breathing.003"
       ]
     },
     {
@@ -107,27 +108,28 @@
       ],
       "primary": {
         "content_class": "practice",
-        "type": "energizing_breath",
-        "family": "breathwork"
+        "type": "mobility",
+        "family": "movement"
       },
       "alt": {
         "content_class": "practice",
-        "type": "mobility",
-        "family": "movement"
+        "type": "energizing_breath",
+        "family": "breathwork"
       },
       "job": "now",
       "surfaces": [
         "today",
         "practices_screen"
       ],
-      "status": "seed",
+      "status": "covered",
+      "fill_status": "sourced",
       "item_ids": [
-        "practice.energizing_breath.001",
         "practice.mobility.001",
-        "practice.energizing_breath.002",
         "practice.mobility.002",
-        "practice.energizing_breath.003",
-        "practice.mobility.003"
+        "practice.mobility.003",
+        "practice.energizing_breath.001",
+        "practice.energizing_breath.002",
+        "practice.energizing_breath.003"
       ]
     },
     {

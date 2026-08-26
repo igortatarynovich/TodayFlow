@@ -26,7 +26,7 @@
 
 ## 0. Закон fill-pass
 
-0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 11 = architecture probes. Next sourced cell = `need.calm.downregulate`.
+0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 11 = architecture probes. Next sourced cell = `need.grounding.stabilize`.
 1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
@@ -59,8 +59,8 @@ Remap (P2): legacy catalog → эти cells, не новый type-список.
 | id | purpose | direction | typical input_state | primary form | alt form | job |
 |----|---------|-----------|---------------------|--------------|----------|-----|
 | `need.calm.downregulate` | calm | downregulate | overstimulated, tense | practice / extended_exhale | meditation / relaxation | now |
-| `need.focus.focus` | focus | focus | scattered | practice / box_breathing | meditation / focused_attention | now |
-| `need.energy.activate` | energy | activate | low_energy | practice / energizing_breath | practice / mobility | now |
+| `need.focus.focus` | focus | focus | scattered | meditation / focused_attention | practice / box_breathing (skipped) | now |
+| `need.energy.activate` | energy | activate | low_energy | practice / mobility | practice / energizing_breath (skipped) | now |
 | `need.grounding.stabilize` | grounding | stabilize | scattered, disconnected, tense | practice / sensory_grounding | meditation / grounding | now |
 | `need.clarity.reflect` | clarity | reflect | uncertain | practice / prompted_reflection | meditation / reflection_meditation | now |
 | `need.confidence.open` | confidence | open | uncertain | affirmation / capability | affirmation / self_trust | now |
@@ -196,7 +196,7 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Targeted Safety Shortlist** | who_must_not_hold for required holds | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
 | **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) (not continued) |
 | **Safety Review V1.1** | may_release vs model of who_must_not_hold | **not opened** — research escalation closed |
-| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); first cell `need.calm.downregulate`; `box_breathing` skipped_for_now |
+| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.grounding.stabilize`; sourced calm + focus + energy; `box_breathing` and `energizing_breath` skipped_for_now |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после sourced fill, не вместо |
 
 ---
@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **library fill** следующей ячейки. `need.calm.downregulate` sourced (`technique.extended_exhale`). Next = `need.focus.focus`. Preferred `box_breathing` = skipped_for_now — другой type или skip ячейки. Не Safety Review. Не box research.
+Следующий рабочий шаг: **library fill** следующей ячейки. Sourced: `need.calm.downregulate` (`extended_exhale`), `need.focus.focus` (`focused_attention`), `need.energy.activate` (`mobility`; `energizing_breath` leftover, not saved). Next = `need.grounding.stabilize`. Не Safety Review. Не box / energizing-breath research.
 
 ---
 
@@ -218,6 +218,8 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | **Energy cell sourced via mobility.** Preferred `energizing_breath` skipped. Probe not saved. No pranayama remap. `technique.mobility` accepted. Next = `need.grounding.stabilize`. |
+| 2026-08-26 | **Focus cell sourced via focused_attention.** Preferred `box_breathing` stayed skipped. No breath substitute. `technique.focused_attention` accepted. Next = `need.energy.activate`. |
 | 2026-08-26 | **First sourced cell.** `technique.extended_exhale` accepted. `need.calm.downregulate` covered. Next = `need.focus.focus`. |
 | 2026-08-26 | **Research escalation closed.** Ladder = archive / non-blocking. Fill unfrozen. Lightweight provenance is the fill process. `box_breathing` skipped_for_now. [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). |
 | 2026-08-26 | **Targeted Safety Shortlist V1.** who_must_not_hold. Stop A. Joshi 2024 + Nivethitha 2017 selected. Wellness rejected. Next = Targeted Safety Ingest. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md). |

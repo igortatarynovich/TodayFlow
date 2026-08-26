@@ -45,6 +45,82 @@
       ],
       "allowed_claims": [],
       "status": "accepted"
+    },
+    {
+      "technique_id": "technique.focused_attention",
+      "content_class": "meditation",
+      "type": "focused_attention",
+      "canonical_description": "Sit with one chosen object of attention: a visual point, the breath, a sound, or a short phrase. Keep attention there. When the mind wanders, notice it and return. Wandering is part of the method. This product version is not a clinical mindfulness protocol and does not use breath-holds.",
+      "source_refs": [
+        {
+          "source": "NCCIH — Meditation and Mindfulness: Effectiveness and Safety",
+          "url": "https://www.nccih.nih.gov/health/meditation-and-mindfulness-effectiveness-and-safety",
+          "locus": "What are meditation and mindfulness?: some types maintain mental focus on a particular sensation such as breathing, a sound, a visual image, or a mantra",
+          "note": "official_health. Method confirmation. Efficacy claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Meditation: A simple, fast way to reduce stress",
+          "url": "https://www.mayoclinic.org/tests-procedures/meditation/in-depth/meditation/art-20045858",
+          "locus": "Parts of meditation / Focused attention: focus on an object, image, mantra, or breathing; when the mind wanders, slowly return",
+          "note": "official_health. Method confirmation. Benefit lists and illness claims not imported."
+        },
+        {
+          "source": "Harvard Health — Mindfulness practice for focus",
+          "url": "https://www.health.harvard.edu/healthbeat/mindfulness-practice-for-focus",
+          "locus": "Focused attention (FA) meditation: keep attention on a particular object or sensation; if the mind wanders, return to the focal point",
+          "note": "academic_description. Method confirmation. Productivity/efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if the practice makes you feel worse or more agitated.",
+        "Not a treatment for attention or mental-health conditions."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.energizing_breath",
+      "content_class": "practice",
+      "type": "energizing_breath",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "skipped_for_now",
+      "note": "The LLM probe (gentle shorter mouth exhale) is not a confirmed method. Real activating-breath techniques are forceful/pumping (bhastrika, kapalabhati, firebreath): no single safe product kernel, material safety. Do not map this type onto pranayama to save the preferred slot. Use another suitable type for the need."
+    },
+    {
+      "technique_id": "technique.mobility",
+      "content_class": "practice",
+      "type": "mobility",
+      "canonical_description": "A short unforced movement of a few joints, seated or standing: for example circle the wrists, then the shoulders, within a comfortable range. Stop if it hurts. This product version is not a stretch-hold protocol, not a workout, and not a treatment.",
+      "source_refs": [
+        {
+          "source": "NHS — Sitting exercises",
+          "url": "https://www.nhs.uk/live-well/exercise/sitting-exercises/",
+          "locus": "Gentle sitting exercises to improve mobility; move as far as is comfortable; examples include hip marching and joint/neck movement, not a gym workout",
+          "note": "official_health. Method confirmation. Exercise-prescription counts, clot/disease claims, and named stretch scripts not imported."
+        },
+        {
+          "source": "NHS — Why we should sit less",
+          "url": "https://www.nhs.uk/live-well/exercise/why-sitting-too-much-is-bad-for-us/",
+          "locus": "UK Chief Medical Officers' Physical Activity Guidelines: break up long periods of sitting with at least light activity",
+          "note": "official_health. Method confirmation for brief light movement. Illness/sitting-risk claims not imported."
+        },
+        {
+          "source": "Chartered Society of Physiotherapy — Desk-based exercises",
+          "url": "https://innovations.csp.org.uk/public-patient/keeping-active-healthy/staying-healthy-work/desk-based-exercises",
+          "locus": "Break up prolonged sitting with short bursts of activity; keep moving; stretches should not cause pain or tingling",
+          "note": "professional_body. Method confirmation. Named stretch-hold scripts and wall-press sets not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stay in a comfortable range. Stop if it hurts.",
+        "Not a treatment and not an exercise prescription."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
     }
   ]
 }
