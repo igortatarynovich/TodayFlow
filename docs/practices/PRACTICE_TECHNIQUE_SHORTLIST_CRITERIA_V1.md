@@ -1,5 +1,7 @@
 # Practice Technique Shortlist Criteria v1
 
+> **Research archive / non-blocking (2026-08-26).** Historical evidence only. Not in NOW. Does not unlock fill. Active process: [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md). Index: [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md).
+
 **Статус:** `ACCEPTED` — SoT допуска семьи к shortlist. **Не** shortlist. **Не** ingest.  
 **Версия:** 1.0 (2026-08-25).  
 **Владелец:** Product + Research.  
@@ -192,12 +194,15 @@ SEO, viral tactical, manifestation deck, LLM — вне предпочтения
 3. Следующий named pass: **targeted shortlist** (post-exhale hold identity).
 4. `technique_id` — на canonical.
 
+**Live (2026-08-26):** research escalation archived, non-blocking. Safety Review V1.1 is **not** the next Product and is not opened. Next = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing` = skipped_for_now.
+
 ---
 
 ## Changelog
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | research archive / non-blocking; live next = library fill, not Safety Review V1.1 |
 | 2026-08-25 | pointer: Normalization V1 insufficient_evidence; this file still does not open the corpus |
 | 2026-08-25 | pointer: Ingest V1 recorded evidence; this file still does not open the corpus |
 | 2026-08-25 | pointer: Shortlist V1 vertical slice opened one family; this file still does not open the corpus |

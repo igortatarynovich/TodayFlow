@@ -28,7 +28,10 @@
     "status": "not_attested",
     "note": "Targeted shortlist does not attest the type. Probe payload remains an expression hypothesis."
   },
-  "resolution_kinds_found": ["definition", "contrast"],
+  "resolution_kinds_found": [
+    "definition",
+    "contrast"
+  ],
   "variant_found_in_preferred_class": false,
   "stop_reason": "resolution_candidates_found_for_targeted_ingest",
   "repeat_insufficient_evidence_after_v1_1_is_allowed": true,
@@ -65,15 +68,42 @@
       "locus": "Heart Matters wellbeing page, section '1. Box breathing' (ingested 2026-08-25).",
       "access": "already_ingested",
       "gates": {
-        "C1": {"result": "pass", "note": "Four timed phases."},
-        "C2": {"result": "pass", "note": "Named public URL."},
-        "C3": {"result": "pass", "note": "Shape name; steps separable from tactical branding."},
-        "C4": {"result": "pass", "note": "Count illustrated; hold contraindications bounds_unknown."},
-        "C5": {"result": "pass", "note": "Already paraphrased; do not re-copy."},
-        "C6": {"result": "pass", "note": "Method only; no new benefit ingest."},
-        "C7": {"result": "preference_match", "note": "official_health."},
-        "C8": {"result": "pass", "note": "Conflict with Newcastle already recorded at ingest."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Four timed phases."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named public URL."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Shape name; steps separable from tactical branding."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Count illustrated; hold contraindications bounds_unknown."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased; do not re-copy."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Method only; no new benefit ingest."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "official_health."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Conflict with Newcastle already recorded at ingest."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "equal-count cycle with inhale, hold, exhale, hold",
@@ -103,15 +133,42 @@
       "locus": "PDF leaflet, heading BOX BREATHING (ingested 2026-08-25).",
       "access": "already_ingested",
       "gates": {
-        "C1": {"result": "pass", "note": "Four equal counts around a box."},
-        "C2": {"result": "pass", "note": "Named NHS PDF."},
-        "C3": {"result": "pass", "note": "Box/square visualization; steps separable."},
-        "C4": {"result": "pass", "note": "Stop-rules recorded separately at ingest."},
-        "C5": {"result": "pass", "note": "Already paraphrased."},
-        "C6": {"result": "pass", "note": "Method + stop-rules already split."},
-        "C7": {"result": "preference_match", "note": "clinical_psychology."},
-        "C8": {"result": "pass", "note": "Conflict with Newcastle already recorded."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Four equal counts around a box."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named NHS PDF."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Box/square visualization; steps separable."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Stop-rules recorded separately at ingest."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Method + stop-rules already split."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "clinical_psychology."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Conflict with Newcastle already recorded."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "equal-count four-phase box breathing",
@@ -139,15 +196,42 @@
       "locus": "Newcastle Hospitals square-breathing patient page (ingested 2026-08-25).",
       "access": "already_ingested",
       "gates": {
-        "C1": {"result": "pass", "note": "Timed inhale, hold, exhale."},
-        "C2": {"result": "pass", "note": "Named public URL."},
-        "C3": {"result": "pass", "note": "Square as a count aid."},
-        "C4": {"result": "pass", "note": "Count of four illustrated."},
-        "C5": {"result": "pass", "note": "Already paraphrased."},
-        "C6": {"result": "pass", "note": "Method sequence only."},
-        "C7": {"result": "preference_match", "note": "clinical_psychology / NHS."},
-        "C8": {"result": "pass", "note": "Recorded as conflict, not variant."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Timed inhale, hold, exhale."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named public URL."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Square as a count aid."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Count of four illustrated."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Method sequence only."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "clinical_psychology / NHS."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Recorded as conflict, not variant."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "timed square breathing without a written hold after exhale",
@@ -179,15 +263,42 @@
       "locus": "BYU ScholarsArchive thesis PDF, Methods: Square breathing vs 5:5 vs 4:6 vs 4-7-8 (accessed 2026-08-25).",
       "access": "body_read",
       "gates": {
-        "C1": {"result": "pass", "note": "Methods list timed phases for each named condition."},
-        "C2": {"result": "pass", "note": "Named thesis URL and methods section."},
-        "C3": {"result": "pass", "note": "Intro may mention popular tactical promotion; the methods script defines square independently of a brand protocol."},
-        "C4": {"result": "pass", "note": "Four-second phases stated; dizziness instruction is experimental stop, not a general who-must-not-hold bound."},
-        "C5": {"result": "pass", "note": "Paraphrase the operational definition; do not copy the training script."},
-        "C6": {"result": "pass", "note": "HRV, PETCO2, and mood findings must not be ingested. Extract definition/contrast only."},
-        "C7": {"result": "preference_match", "note": "academic_description."},
-        "C8": {"result": "pass", "note": "Do not average this square definition with Newcastle three-phase square."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Methods list timed phases for each named condition."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named thesis URL and methods section."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Intro may mention popular tactical promotion; the methods script defines square independently of a brand protocol."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Four-second phases stated; dizziness instruction is experimental stop, not a general who-must-not-hold bound."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Paraphrase the operational definition; do not copy the training script."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "HRV, PETCO2, and mood findings must not be ingested. Extract definition/contrast only."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "academic_description."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Do not average this square definition with Newcastle three-phase square."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "named experimental conditions with timed breath phases",
@@ -217,15 +328,42 @@
       "locus": "CAVUHB anxiety self-help workbook, heading Square breathing (accessed 2026-08-25).",
       "access": "body_read",
       "gates": {
-        "C1": {"result": "pass", "note": "Lists four timed sides of a traced square."},
-        "C2": {"result": "pass", "note": "Named NHS Wales workbook URL and heading."},
-        "C3": {"result": "pass", "note": "Square is a tracing visualization; steps are the counts, not a brand protocol."},
-        "C4": {"result": "pass", "note": "Counts stated (4 / 4 / 6 / 2); who-must-not-hold bounds_unknown in this section."},
-        "C5": {"result": "pass", "note": "Paraphrase the count structure; do not copy workbook prose."},
-        "C6": {"result": "pass", "note": "Anxiety self-help claims stay out. Extract the square structure only."},
-        "C7": {"result": "preference_match", "note": "official_health."},
-        "C8": {"result": "pass", "note": "Unequal counts under the name square conflict with equal-count 4-4-4-4; record, do not average."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Lists four timed sides of a traced square."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named NHS Wales workbook URL and heading."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Square is a tracing visualization; steps are the counts, not a brand protocol."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Counts stated (4 / 4 / 6 / 2); who-must-not-hold bounds_unknown in this section."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Paraphrase the count structure; do not copy workbook prose."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Anxiety self-help claims stay out. Extract the square structure only."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "official_health."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Unequal counts under the name square conflict with equal-count 4-4-4-4; record, do not average."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "finger-trace square used as a four-side breath count",
@@ -255,15 +393,42 @@
       "locus": "Iyengar 1981 ch.18 (NEED_OWNER). Not ingested.",
       "access": "named_unread",
       "gates": {
-        "C1": {"result": "unknown", "note": "Edition unread in this pass."},
-        "C2": {"result": "fail", "note": "Named but not legally readable here; NEED_OWNER."},
-        "C3": {"result": "unknown", "note": "Unread."},
-        "C4": {"result": "unknown", "note": "Unread."},
-        "C5": {"result": "fail", "note": "Do not ingest from Ayurwiki or Archive.org dumps."},
-        "C6": {"result": "n_a", "note": "No efficacy extract attempted."},
-        "C7": {"result": "preference_match", "note": "recognized_school, unread."},
-        "C8": {"result": "pass", "note": "Do not treat secondary reports of a beginner no-hold track as this edition."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "unknown",
+          "note": "Edition unread in this pass."
+        },
+        "C2": {
+          "result": "fail",
+          "note": "Named but not legally readable here; NEED_OWNER."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Unread."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Unread."
+        },
+        "C5": {
+          "result": "fail",
+          "note": "Do not ingest from Ayurwiki or Archive.org dumps."
+        },
+        "C6": {
+          "result": "n_a",
+          "note": "No efficacy extract attempted."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "recognized_school, unread."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Do not treat secondary reports of a beginner no-hold track as this edition."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "unread in this pass",
@@ -294,15 +459,42 @@
       "locus": "PMC9873947 methods: box = inhale, hold, exhale, hold of equal duration (accessed 2026-08-25).",
       "access": "body_read",
       "gates": {
-        "C1": {"result": "pass", "note": "Methods state the four-phase protocol."},
-        "C2": {"result": "pass", "note": "Named PMC article."},
-        "C3": {"result": "pass", "note": "Kernel separable from lab/media packaging for this classification; still not selected because it only replicates 4-hold box."},
-        "C4": {"result": "pass", "note": "Equal-duration phases in the protocol."},
-        "C5": {"result": "pass", "note": "Do not copy protocol prose."},
-        "C6": {"result": "pass", "note": "Outcome claims out of scope."},
-        "C7": {"result": "preference_match", "note": "academic_description."},
-        "C8": {"result": "pass", "note": "Do not average with Newcastle."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Methods state the four-phase protocol."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named PMC article."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Kernel separable from lab/media packaging for this classification; still not selected because it only replicates 4-hold box."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Equal-duration phases in the protocol."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Do not copy protocol prose."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Outcome claims out of scope."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "academic_description."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Do not average with Newcastle."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "box breathing as inhale-hold-exhale-hold of equal duration",
@@ -329,15 +521,42 @@
       "locus": "Healthline box-breathing explainer (scanned, not ingested).",
       "access": "scanned",
       "gates": {
-        "C1": {"result": "pass", "note": "Repeats four equal phases."},
-        "C2": {"result": "pass", "note": "Public URL exists; not used."},
-        "C3": {"result": "unknown", "note": "Often mixes tactical branding."},
-        "C4": {"result": "unknown", "note": "Not extracted."},
-        "C5": {"result": "pass", "note": "Not copied."},
-        "C6": {"result": "fail", "note": "Benefit-led health-ed; not resolution evidence."},
-        "C7": {"result": "preference_weak", "note": "SEO, not official_health/academic."},
-        "C8": {"result": "n_a", "note": "Not selected."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Repeats four equal phases."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Public URL exists; not used."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Often mixes tactical branding."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "fail",
+          "note": "Benefit-led health-ed; not resolution evidence."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "SEO, not official_health/academic."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "typical 4-4-4-4 explainer",
@@ -364,15 +583,42 @@
       "locus": "USU Extension box-breathing page (scanned, not ingested).",
       "access": "scanned",
       "gates": {
-        "C1": {"result": "pass", "note": "Four phases."},
-        "C2": {"result": "pass", "note": "Public page."},
-        "C3": {"result": "fail", "note": "Tactical/SEAL packaging is the identity of the locus."},
-        "C4": {"result": "unknown", "note": "Not extracted."},
-        "C5": {"result": "pass", "note": "Not copied."},
-        "C6": {"result": "unknown", "note": "Not extracted."},
-        "C7": {"result": "preference_weak", "note": "Not a preferred provenance class."},
-        "C8": {"result": "n_a", "note": "Not selected."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Four phases."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Public page."
+        },
+        "C3": {
+          "result": "fail",
+          "note": "Tactical/SEAL packaging is the identity of the locus."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "Not a preferred provenance class."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "4-4-4-4 box",
@@ -399,15 +645,42 @@
       "locus": "Grow Therapy square/box explainer (scanned, not ingested).",
       "access": "scanned",
       "gates": {
-        "C1": {"result": "pass", "note": "Describes four-phase square/box and a no-hold panic version."},
-        "C2": {"result": "pass", "note": "Public page."},
-        "C3": {"result": "unknown", "note": "Equates square with box as packaging."},
-        "C4": {"result": "unknown", "note": "Not extracted."},
-        "C5": {"result": "pass", "note": "Not copied."},
-        "C6": {"result": "fail", "note": "Benefit/panic framing; adaptation is not a method-identity statement we will ingest."},
-        "C7": {"result": "preference_weak", "note": "SEO. Must not become identity SoT."},
-        "C8": {"result": "n_a", "note": "Not selected — would look like optional-hold synthesis."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Describes four-phase square/box and a no-hold panic version."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Public page."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Equates square with box as packaging."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "fail",
+          "note": "Benefit/panic framing; adaptation is not a method-identity statement we will ingest."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "SEO. Must not become identity SoT."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected — would look like optional-hold synthesis."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "four-phase square equated with box; mentions a no-hold version for panic",
@@ -434,15 +707,42 @@
       "locus": "YogaEasy samavritti explainer (scanned snippets only; not ingested).",
       "access": "scanned",
       "gates": {
-        "C1": {"result": "unknown", "note": "Snippet-level only."},
-        "C2": {"result": "unknown", "note": "Public page; not used as locus."},
-        "C3": {"result": "unknown", "note": "Mixes samavrtti and box language."},
-        "C4": {"result": "unknown", "note": "Not extracted."},
-        "C5": {"result": "pass", "note": "Not copied."},
-        "C6": {"result": "unknown", "note": "Not extracted."},
-        "C7": {"result": "preference_weak", "note": "Consumer yoga. Not identity SoT."},
-        "C8": {"result": "n_a", "note": "Not selected."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "unknown",
+          "note": "Snippet-level only."
+        },
+        "C2": {
+          "result": "unknown",
+          "note": "Public page; not used as locus."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Mixes samavrtti and box language."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "Consumer yoga. Not identity SoT."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "equal breathing with optional retentions (snippet-level; unverified as ingest)",
@@ -469,15 +769,42 @@
       "locus": "Ayurwiki Vritti Pranayama (rejected C2/C5).",
       "access": "rejected",
       "gates": {
-        "C1": {"result": "unknown", "note": "Derivative text."},
-        "C2": {"result": "fail", "note": "Not the named edition."},
-        "C3": {"result": "unknown", "note": "Not used."},
-        "C4": {"result": "unknown", "note": "Not used."},
-        "C5": {"result": "fail", "note": "Do not ingest wiki as Iyengar."},
-        "C6": {"result": "n_a", "note": "Not used."},
-        "C7": {"result": "preference_weak", "note": "Wiki."},
-        "C8": {"result": "n_a", "note": "Not selected."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "unknown",
+          "note": "Derivative text."
+        },
+        "C2": {
+          "result": "fail",
+          "note": "Not the named edition."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Not used."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not used."
+        },
+        "C5": {
+          "result": "fail",
+          "note": "Do not ingest wiki as Iyengar."
+        },
+        "C6": {
+          "result": "n_a",
+          "note": "Not used."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "Wiki."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "not used",
@@ -493,5 +820,7 @@
       "selection_decision": "rejected",
       "rejection_reason": "C2_C5_wiki_not_legal_locus"
     }
-  ]
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
 }

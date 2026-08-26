@@ -1,5 +1,7 @@
 # Practice Technique Normalization v1
 
+> **Research archive / non-blocking (2026-08-26).** Historical evidence only. Not in NOW. Does not unlock fill. Active process: [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md). Index: [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md).
+
 **Статус:** `ACCEPTED` — аналитическое сравнение ingested evidence. **Не** Canonical Technique.  
 **Версия:** 1.0 (2026-08-25).  
 **Владелец:** Product + Research.  
@@ -108,9 +110,11 @@ Landscape `mechanism_shape` **не** переписан. Семья **не** р�
 ## 7. Что дальше
 
 1. Normalization V1 закрыт как `insufficient_evidence` (история). V1.1 = `normalize_one` candidate: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md).
-2. Targeted shortlist и targeted ingest закрыты. Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A.
-3. Следующий named pass: **Targeted Safety Ingest**. Не следующая семья. Canon пуст.
+2. Targeted shortlist и targeted ingest закрыты. Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A. Targeted Safety Ingest = two observations.
+3. Исторический next этого pass: Safety Review V1.1 (**не открывать**). Не следующая семья. Canon пуст.
 4. `technique_id` — только при `canonical`.
+
+**Live (2026-08-26):** research escalation archived, non-blocking. Safety Review V1.1 is **not** the next Product and is not opened. Next = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing` = skipped_for_now.
 
 ---
 
@@ -118,6 +122,8 @@ Landscape `mechanism_shape` **не** переписан. Семья **не** р�
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | research archive / non-blocking; live next = library fill, not Safety Review V1.1 |
+| 2026-08-26 | pointer: Targeted Safety Ingest V1 closed; next = Safety Review V1.1 |
 | 2026-08-26 | pointer: Targeted Safety Shortlist V1 = stop A; next = Targeted Safety Ingest |
 | 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | pointer: Normalization V1.1 = normalize_one candidate; next = Safety Review |

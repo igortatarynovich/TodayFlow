@@ -114,19 +114,13 @@ TECHNIQUE_REQUIRED = (
     "technique_id",
     "content_class",
     "type",
-    "source_family",
+    "canonical_description",
     "source_refs",
-    "tradition",
-    "evidence_level",
-    "efficacy_claim_level",
-    "canonical_mechanism",
-    "canonical_steps",
     "safety_notes",
     "allowed_claims",
-    "prohibited_claims",
-    "review_status",
-    "semantic_version",
+    "status",
 )
+ALLOWED_TECHNIQUE_STATUS = frozenset({"accepted", "skipped"})
 ALLOWED_BODY_KIND = frozenset(
     {"instruction", "script", "affirmation_text", "commitment_rule"}
 )
@@ -350,6 +344,8 @@ def validate_technique_canon_v1(registry: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if registry.get("contract_version") != "technique_canon_v1":
         errors.append("invalid technique canon contract_version")
+    if registry.get("research_ladder_required") is True:
+        errors.append("research ladder must not be required for technique rows")
     techniques = registry.get("techniques")
     if not isinstance(techniques, list):
         errors.append("techniques must be list")
@@ -360,7 +356,19 @@ def validate_technique_canon_v1(registry: dict[str, Any]) -> list[str]:
         if not isinstance(row, dict):
             errors.append(f"{prefix}: must be object")
             continue
-        for key in TECHNIQUE_REQUIRED:
+        status = row.get("status")
+        if status not in ALLOWED_TECHNIQUE_STATUS:
+            errors.append(f"{prefix}: status must be accepted or skipped")
+        required = TECHNIQUE_REQUIRED
+        if status == "skipped":
+            required = (
+                "technique_id",
+                "content_class",
+                "type",
+                "status",
+                "skip_reason",
+            )
+        for key in required:
             if key not in row:
                 errors.append(f"{prefix}: missing {key}")
         technique_id = row.get("technique_id")
@@ -372,33 +380,27 @@ def validate_technique_canon_v1(registry: dict[str, Any]) -> list[str]:
             errors.append(f"{prefix}: duplicate technique_id {technique_id!r}")
         else:
             seen.add(technique_id)
-        if row.get("source_family") not in ALLOWED_SOURCE_FAMILY:
-            errors.append(f"{prefix}: invalid source_family")
-        if row.get("evidence_level") not in ALLOWED_EVIDENCE_LEVEL:
-            errors.append(f"{prefix}: invalid evidence_level")
-        if row.get("efficacy_claim_level") not in ALLOWED_EFFICACY_CLAIM_LEVEL:
-            errors.append(f"{prefix}: invalid efficacy_claim_level")
-        if row.get("review_status") not in ALLOWED_TECHNIQUE_REVIEW_STATUS:
-            errors.append(f"{prefix}: invalid review_status")
-        for list_key in (
-            "source_refs",
-            "tradition",
-            "canonical_steps",
-            "safety_notes",
-            "allowed_claims",
-            "prohibited_claims",
-        ):
-            value = row.get(list_key)
-            if list_key == "source_refs":
-                if not isinstance(value, list):
-                    errors.append(f"{prefix}: {list_key} must be list")
-                elif not all(isinstance(x, dict) for x in value):
-                    errors.append(f"{prefix}: source_refs must be object list")
-            elif _as_str_list(value, allow_empty=True) is None:
+        if row.get("content_class") not in LANDSCAPE_CONTENT_CLASS:
+            errors.append(f"{prefix}: invalid content_class")
+        source_refs = row.get("source_refs")
+        if source_refs is not None:
+            if not isinstance(source_refs, list):
+                errors.append(f"{prefix}: source_refs must be list")
+            elif not all(isinstance(x, dict) for x in source_refs):
+                errors.append(f"{prefix}: source_refs must be object list")
+        for list_key in ("safety_notes", "allowed_claims"):
+            if list_key in row and _as_str_list(row.get(list_key), allow_empty=True) is None:
                 errors.append(f"{prefix}: {list_key} must be string list")
-        mechanism = row.get("canonical_mechanism")
-        if not isinstance(mechanism, str) or not mechanism.strip():
-            errors.append(f"{prefix}: canonical_mechanism must be non-empty string")
+        if status == "accepted":
+            description = str(row.get("canonical_description") or "").strip()
+            if not description:
+                errors.append(f"{prefix}: accepted row needs canonical_description")
+            if not isinstance(source_refs, list) or not source_refs:
+                errors.append(f"{prefix}: accepted row needs source_refs")
+        if status == "skipped":
+            reason = str(row.get("skip_reason") or "").strip()
+            if not reason:
+                errors.append(f"{prefix}: skipped row needs skip_reason")
     return errors
 
 
@@ -2271,6 +2273,303 @@ def validate_technique_targeted_safety_shortlist_v1(
     return errors
 
 
+SAFETY_INGEST_REQUIRED = (
+    "evidence_id",
+    "candidate_family",
+    "source_ref",
+    "locus",
+    "source_family",
+    "paraphrase",
+    "speech_type",
+    "named_practice",
+    "practice_context",
+    "hold_phase",
+    "dose_or_duration",
+    "population",
+    "observed_exclusions",
+    "observed_precautions",
+    "observed_physiology",
+    "transfer_limits",
+    "source_claim_scope",
+    "ingest_status",
+)
+SAFETY_INGEST_SPEECH = frozenset(
+    {"hold_exclusion", "observed_physiological_response"}
+)
+SAFETY_INGEST_CLAIM_SCOPE = frozenset(
+    {
+        "kumbhaka_exclusion_statements_in_yoga_hypertension_review",
+        "acute_cardiovascular_response_during_bahir_kumbhaka",
+    }
+)
+SAFETY_INGEST_FORBIDDEN_SYNTHESIS = INGEST_FORBIDDEN_SYNTHESIS + (
+    "who_must_not_hold =",
+    "contraindicated for box",
+    "contraindicated for square",
+    "box breathing is contraindicated",
+    "square breathing is contraindicated",
+    "may_release",
+)
+JOSHI_TRANSFER_LIMITS = (
+    "kumbhaka is not four-phase square breathing",
+    "unspecified or long retention is not a short timed hold",
+)
+NIVETHITHA_TRANSFER_LIMITS = (
+    "empty-lung retention is physiologically closer to a post-exhale hold but is not the product dose",
+    "study response is not a contraindication",
+)
+
+
+def _safety_ingest_blob(row: dict[str, Any]) -> str:
+    return " ".join(
+        [
+            str(row.get("paraphrase") or ""),
+            str(row.get("named_practice") or ""),
+            str(row.get("practice_context") or ""),
+            str(row.get("hold_phase") or ""),
+            str(row.get("dose_or_duration") or ""),
+            str(row.get("population") or ""),
+            str(row.get("source_claim_scope") or ""),
+        ]
+    ).lower()
+
+
+def validate_technique_targeted_safety_ingest_v1(
+    ingest: dict[str, Any],
+    *,
+    targeted_safety_shortlist: dict[str, Any] | None = None,
+    normalization_v1_1: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if ingest.get("contract_version") != "technique_targeted_safety_ingest_v1":
+        errors.append("invalid targeted safety ingest contract_version")
+    if ingest.get("writes_technique_canon") is not False:
+        errors.append("targeted safety ingest must not write technique canon")
+    if ingest.get("technique_id_allowed") is not False:
+        errors.append("targeted safety ingest must not allow technique_id")
+    if ingest.get("does_not_reopen_kernel") is not True:
+        errors.append("must not reopen the kernel")
+    if ingest.get("does_not_rewrite_safety_contract") is not True:
+        errors.append("must not rewrite the Safety Review V1 contract")
+    if ingest.get("does_not_write_who_must_not_hold") is not True:
+        errors.append("must not write who_must_not_hold")
+    if ingest.get("does_not_write_safety_rules") is not True:
+        errors.append("must not write new product safety rules")
+    if ingest.get("does_not_transfer_onto_four_phase_candidate") is not True:
+        errors.append("must not transfer other-context evidence onto the four-phase candidate")
+    if ingest.get("family_id") != SLICE_FAMILY_V1:
+        errors.append(f"family_id must stay {SLICE_FAMILY_V1} as ledger key")
+    if ingest.get("boundary_held") != (
+        "selected_safety_loci_to_source_faithful_observations_not_contraindication_list"
+    ):
+        errors.append("boundary_held must record selected loci→observations, not a who-list")
+    if ingest.get("next_named_pass") != "technique_safety_review_v1_1":
+        errors.append("next_named_pass must be Safety Review V1.1")
+    not_next = ingest.get("not_next")
+    if not isinstance(not_next, list) or "canonical" not in not_next:
+        errors.append("not_next must include canonical")
+    if not isinstance(not_next, list) or "write_who_must_not_hold" not in not_next:
+        errors.append("not_next must include write_who_must_not_hold")
+    if not isinstance(not_next, list) or "may_release" not in not_next:
+        errors.append("not_next must include may_release")
+
+    kernel = ingest.get("identity_kernel_unchanged")
+    if not isinstance(kernel, dict):
+        errors.append("identity_kernel_unchanged must be object")
+    else:
+        if kernel.get("post_exhale_hold") != "required":
+            errors.append("must keep post_exhale_hold required")
+        if kernel.get("shape") != "four_timed_phases":
+            errors.append("must keep four_timed_phases")
+    if normalization_v1_1:
+        prior = (
+            (normalization_v1_1.get("normalized_candidate") or {}).get("identity_kernel")
+            if isinstance(normalization_v1_1.get("normalized_candidate"), dict)
+            else None
+        )
+        if prior != kernel:
+            errors.append("kernel must match the V1.1 normalized candidate")
+
+    questions = ingest.get("v1_1_questions_not_decided")
+    if not isinstance(questions, list) or len(questions) != 2:
+        errors.append("v1_1_questions_not_decided must lock two unanswered questions")
+    else:
+        by_qid = {q.get("id"): q for q in questions if isinstance(q, dict)}
+        release = by_qid.get("enough_for_may_release") or {}
+        model = by_qid.get("binary_who_must_not_hold_still_correct_model") or {}
+        if release.get("status") != "unanswered":
+            errors.append("enough_for_may_release must stay unanswered this pass")
+        if model.get("status") != "unanswered":
+            errors.append("binary who_must_not_hold model question must stay unanswered")
+        if model.get("later_structural_model_first_allowed_at") != (
+            "technique_safety_review_v1_1"
+        ):
+            errors.append("exclusion/precaution/stop_rule is first allowed at Safety Review V1.1")
+
+    hypothesis = ingest.get("expression_hypothesis")
+    if not isinstance(hypothesis, dict) or hypothesis.get("status") != "not_attested":
+        errors.append("expression hypothesis must stay not_attested")
+
+    expected_sources = [
+        "src.wjm.joshi.2024.yoga_hypertension",
+        "src.nivethitha.2017.bahir_kumbhaka",
+    ]
+    if targeted_safety_shortlist:
+        listed = targeted_safety_shortlist.get("selected_loci")
+        if isinstance(listed, list) and all(isinstance(x, str) for x in listed):
+            expected_sources = listed
+
+    rows = ingest.get("evidence")
+    if not isinstance(rows, list) or len(rows) != 2:
+        errors.append("targeted safety ingest must contain exactly two evidence records")
+        return errors
+
+    seen_ids: set[str] = set()
+    source_ids: list[str] = []
+    by_source: dict[str, dict[str, Any]] = {}
+    for i, row in enumerate(rows):
+        prefix = f"evidence[{i}]"
+        if not isinstance(row, dict):
+            errors.append(f"{prefix}: must be object")
+            continue
+        for key in SAFETY_INGEST_REQUIRED:
+            if key not in row:
+                errors.append(f"{prefix}: missing {key}")
+        evidence_id = row.get("evidence_id")
+        if not isinstance(evidence_id, str) or not evidence_id.startswith("ev.safety."):
+            errors.append(f"{prefix}: evidence_id must start with ev.safety.")
+        elif evidence_id in seen_ids:
+            errors.append(f"{prefix}: duplicate evidence_id")
+        else:
+            seen_ids.add(evidence_id)
+        if row.get("candidate_family") != SLICE_FAMILY_V1:
+            errors.append(f"{prefix}: candidate_family must be the slice family ledger key")
+        if row.get("source_family") not in ALLOWED_SOURCE_FAMILY:
+            errors.append(f"{prefix}: invalid source_family")
+        if row.get("ingest_status") != "ingested":
+            errors.append(f"{prefix}: ingest_status must be ingested")
+        if row.get("speech_type") not in SAFETY_INGEST_SPEECH:
+            errors.append(f"{prefix}: invalid speech_type")
+        if row.get("source_claim_scope") not in SAFETY_INGEST_CLAIM_SCOPE:
+            errors.append(f"{prefix}: invalid source_claim_scope")
+        if row.get("is_not_who_must_not_hold_candidate") is not True:
+            errors.append(f"{prefix}: must declare is_not_who_must_not_hold_candidate")
+        source_ref = row.get("source_ref")
+        if not isinstance(source_ref, dict):
+            errors.append(f"{prefix}: source_ref must be object")
+            continue
+        source_id = source_ref.get("source_id")
+        if not isinstance(source_id, str) or not source_id.startswith("src."):
+            errors.append(f"{prefix}: source_ref.source_id invalid")
+        else:
+            source_ids.append(source_id)
+            by_source[source_id] = row
+        if not isinstance(row.get("paraphrase"), str) or not str(row.get("paraphrase") or "").strip():
+            errors.append(f"{prefix}: paraphrase empty")
+        if not isinstance(row.get("locus"), str) or not str(row.get("locus") or "").strip():
+            errors.append(f"{prefix}: locus empty")
+        if not isinstance(row.get("named_practice"), str) or not str(
+            row.get("named_practice") or ""
+        ).strip():
+            errors.append(f"{prefix}: named_practice empty")
+        if _as_str_list(row.get("transfer_limits"), allow_empty=False) is None:
+            errors.append(f"{prefix}: transfer_limits must be a non-empty string list")
+        if _as_str_list(row.get("observed_precautions"), allow_empty=True) is None:
+            errors.append(f"{prefix}: observed_precautions must be a list")
+        exclusions = row.get("observed_exclusions")
+        if not isinstance(exclusions, list):
+            errors.append(f"{prefix}: observed_exclusions must be list")
+        physiology = row.get("observed_physiology")
+        if not isinstance(physiology, list):
+            errors.append(f"{prefix}: observed_physiology must be list")
+        blob = _safety_ingest_blob(row)
+        for phrase in SAFETY_INGEST_FORBIDDEN_SYNTHESIS:
+            if phrase in blob:
+                errors.append(f"{prefix}: synthesis phrase {phrase!r} is a product rule")
+        if "1 min" in blob or "1-minute" in blob or "60 s" in blob:
+            errors.append(f"{prefix}: must not import hold duration from other papers")
+
+    if source_ids != expected_sources:
+        errors.append("targeted safety ingest source_ids must match selected_loci in order")
+
+    joshi = by_source.get("src.wjm.joshi.2024.yoga_hypertension")
+    if joshi:
+        if joshi.get("speech_type") != "hold_exclusion":
+            errors.append("Joshi speech_type must be hold_exclusion")
+        if joshi.get("practice_context") != "kumbhaka":
+            errors.append("Joshi practice_context must be kumbhaka")
+        named = str(joshi.get("named_practice") or "").lower()
+        if "kumbhaka" not in named:
+            errors.append("Joshi named_practice must be kumbhaka")
+        if "box" in named or "square" in named:
+            errors.append("Joshi named_practice must not be box/square")
+        if joshi.get("dose_or_duration") != "unspecified_in_this_locus":
+            errors.append("Joshi dose_or_duration must stay unspecified in this locus")
+        exclusions = joshi.get("observed_exclusions")
+        if not isinstance(exclusions, list) or len(exclusions) != 3:
+            errors.append("Joshi must record three observed exclusion statements")
+        else:
+            conditions = [
+                str(item.get("condition") or "").lower()
+                for item in exclusions
+                if isinstance(item, dict)
+            ]
+            blob = " ".join(conditions)
+            for needed in ("hypertension", "heart disease", "illness"):
+                if needed not in blob:
+                    errors.append(f"Joshi exclusions must include {needed}")
+            for item in exclusions:
+                if not isinstance(item, dict):
+                    continue
+                if item.get("practice_context") != "kumbhaka":
+                    errors.append("Joshi exclusion practice_context must stay kumbhaka")
+                if item.get("is_not_product_who_must_not_hold") is not True:
+                    errors.append("Joshi exclusions are not a product who-list")
+        limits = _as_str_list(joshi.get("transfer_limits"), allow_empty=False) or []
+        for needed in JOSHI_TRANSFER_LIMITS:
+            if needed not in limits:
+                errors.append(f"Joshi transfer_limits must include {needed!r}")
+        if joshi.get("source_claim_scope") != (
+            "kumbhaka_exclusion_statements_in_yoga_hypertension_review"
+        ):
+            errors.append("Joshi source_claim_scope must stay on kumbhaka exclusion statements")
+
+    nive = by_source.get("src.nivethitha.2017.bahir_kumbhaka")
+    if nive:
+        if nive.get("speech_type") != "observed_physiological_response":
+            errors.append("Nivethitha speech_type must be observed_physiological_response")
+        if nive.get("practice_context") != "bahir_kumbhaka":
+            errors.append("Nivethitha practice_context must be bahir_kumbhaka")
+        if nive.get("hold_phase") != "external_empty_lung_retention":
+            errors.append("Nivethitha hold_phase must be external empty-lung retention")
+        if nive.get("dose_or_duration") != "unspecified_in_this_legally_readable_locus":
+            errors.append("Nivethitha dose_or_duration must stay unspecified in this locus")
+        exclusions = nive.get("observed_exclusions")
+        if exclusions != []:
+            errors.append("Nivethitha must not write an exclusion list")
+        physiology = nive.get("observed_physiology")
+        if not isinstance(physiology, list) or len(physiology) < 3:
+            errors.append("Nivethitha must record SBP/DBP/MAP observations")
+        else:
+            measures = {
+                str(item.get("measure") or "")
+                for item in physiology
+                if isinstance(item, dict)
+            }
+            if not {"SBP", "DBP", "MAP"} <= measures:
+                errors.append("Nivethitha physiology must include SBP, DBP, and MAP")
+        limits = _as_str_list(nive.get("transfer_limits"), allow_empty=False) or []
+        for needed in NIVETHITHA_TRANSFER_LIMITS:
+            if needed not in limits:
+                errors.append(f"Nivethitha transfer_limits must include {needed!r}")
+        if nive.get("source_claim_scope") != (
+            "acute_cardiovascular_response_during_bahir_kumbhaka"
+        ):
+            errors.append("Nivethitha source_claim_scope must stay on acute physiology")
+
+    return errors
+
+
 def validate_content_library_v1(
     library: dict[str, Any],
     *,
@@ -2323,15 +2622,29 @@ def validate_content_library_v1(
         errors.append("fill_frozen library requires architecture_probe_item_ids")
     if techniques is not None:
         errors.extend(validate_technique_canon_v1(techniques))
-        technique_ids = {
-            row["technique_id"]
+        technique_rows = [
+            row
             for row in techniques.get("techniques") or []
             if isinstance(row, dict) and isinstance(row.get("technique_id"), str)
+        ]
+        accepted_ids = {
+            row["technique_id"]
+            for row in technique_rows
+            if row.get("status") == "accepted"
+        }
+        skipped_ids = {
+            row["technique_id"]
+            for row in technique_rows
+            if row.get("status") == "skipped"
         }
         for iid, item in by_id.items():
             identity = item.get("identity") if isinstance(item.get("identity"), dict) else {}
             tid = identity.get("technique_id")
-            if isinstance(tid, str) and tid not in technique_ids:
+            if not isinstance(tid, str):
+                continue
+            if tid in skipped_ids:
+                errors.append(f"item {iid} must not attach skipped technique_id {tid!r}")
+            elif tid not in accepted_ids:
                 errors.append(f"item {iid} technique_id {tid!r} not in technique canon")
 
     if coverage is None:

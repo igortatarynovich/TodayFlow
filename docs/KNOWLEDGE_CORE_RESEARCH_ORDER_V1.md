@@ -5,7 +5,7 @@
 **Владелец:** Product + Research.  
 **Не является:** Meaning SoT дня · IL lookup · Machine Contract · KASP (сбор данных пользователя).
 
-**Связь:** [Interpretation Library](./astrology/INTERPRETATION_LIBRARY_V1.md) (астрологический lookup; IL-1 уже в полёте) · [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) (машинные/контентные контракты справочника — другой порядок) · [NUMBER_BASE_V1.md](./numerology/NUMBER_BASE_V1.md) · [TAROT_CARD_BASE_V1.md](./tarot/TAROT_CARD_BASE_V1.md) · [PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) (экран ≠ knowledge core) · [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md) (практики как система техник: parent = этот порядок; не IL CORE).
+**Связь:** [Interpretation Library](./astrology/INTERPRETATION_LIBRARY_V1.md) (астрологический lookup; IL-1 уже в полёте) · [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) (машинные/контентные контракты справочника — другой порядок) · [NUMBER_BASE_V1.md](./numerology/NUMBER_BASE_V1.md) · [TAROT_CARD_BASE_V1.md](./tarot/TAROT_CARD_BASE_V1.md) · [PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) (экран ≠ knowledge core) · [PRACTICE_LIBRARY_FILL_V1.md](./practices/PRACTICE_LIBRARY_FILL_V1.md) (practice fill; parent 5–10 **не** обязательны) · [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md) (практики как система техник; не IL CORE).
 
 ---
 
@@ -141,6 +141,8 @@ IL `ACCESS_BLOCKED(slot)` (1.3.57) — если для пустого слота
 
 ## 7. Changelog
 
+- **1.12 note (2026-08-26)** — Practice library fill no longer mandates parent steps 5–10. Active: [PRACTICE_LIBRARY_FILL_V1.md](./practices/PRACTICE_LIBRARY_FILL_V1.md). Research ladder = [archive](./practices/PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md), non-blocking. Не IL CORE.
+- **1.12 note (2026-08-26)** — Practice Technique Targeted Safety Ingest V1: [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md). Observations, not a who-list. Not canon. Не IL CORE.
 - **1.12 note (2026-08-26)** — Practice Technique Targeted Safety Shortlist V1: [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md). who_must_not_hold. Not canon. Не IL CORE.
 - **1.12 note (2026-08-26)** — Practice Technique Safety Review V1: [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md). `insufficient_safety`. Not canon. Не IL CORE.
 - **1.12 note (2026-08-25)** — Practice Technique Normalization V1.1: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md). `normalize_one` candidate. Not canon. Не IL CORE.

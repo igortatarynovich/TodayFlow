@@ -35,11 +35,19 @@
   "v1_1_identity_questions": [
     {
       "id": "post_exhale_hold",
-      "allowed": ["required", "optional", "unresolved"]
+      "allowed": [
+        "required",
+        "optional",
+        "unresolved"
+      ]
     },
     {
       "id": "equal_count",
-      "allowed": ["identity_bearing", "common_parameter", "unresolved"]
+      "allowed": [
+        "identity_bearing",
+        "common_parameter",
+        "unresolved"
+      ]
     }
   ],
   "v1_1_overall_verdict_unchanged": [
@@ -160,5 +168,7 @@
       "ingest_status": "ingested",
       "not_ingested": "Anxiety psychoeducation, grounding, belly breathing, and other workbook exercises. Benefit or 'notice anything different' framing."
     }
-  ]
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
 }

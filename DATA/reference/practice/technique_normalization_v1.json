@@ -62,5 +62,7 @@
     "canonical",
     "next_family_slice",
     "technique_id_on_probe"
-  ]
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
 }

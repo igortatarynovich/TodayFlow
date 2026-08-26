@@ -1,7 +1,9 @@
 # Practice Technique Landscape v1
 
+> **Research archive / non-blocking (2026-08-26).** Historical evidence only. Not in NOW. Does not unlock fill. Active process: [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md). Index: [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md).
+
 **Статус:** `ACCEPTED` — research ledger поля техник. **Не** technique canon. Full shortlist **не** открыт.  
-**Версия:** 1.4 (2026-08-26) — pointer: Targeted Safety Shortlist closed stop A; next = Targeted Safety Ingest. Kernel remap of 1.2 stands.  
+**Версия:** 1.6 (2026-08-26) — research archive / non-blocking. Live next = library fill, not Safety Review V1.1. Kernel remap of 1.2 stands.  
 **Владелец:** Product + Research.  
 **Parent order:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) шаги 5–7.  
 **Provenance:** [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md).  
@@ -11,7 +13,7 @@
 **Это:** какие устойчивые *семейства методов* существуют в поле; какими **типами источников** они описываются; какие kernel / bounds / variants надо различать до shortlist.  
 **Это не:** корпус авторов · ingest · `technique_canon_v1.json` · efficacy · разрешение писать Content Items.
 
-`technique_canon_v1.json` остаётся **пустым**. Full shortlist **не открыт**. Один family-slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md).
+`technique.box_breathing` в registry = `skipped_for_now`. Full shortlist **не открыт**. Этот ledger **не** блокирует fill.
 
 ---
 
@@ -228,8 +230,10 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 
 1. Landscape стоит. Criteria V1 принят. Full shortlist **закрыт** (`shortlist_opened = false`).
 2. Vertical slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md).
-3. Следующий named pass: **Targeted Safety Ingest** (Safety Review `insufficient_safety`; Targeted Safety Shortlist stop A). Не следующая семья.
+3. Исторический next этого pass: Safety Review V1.1 (**не открывать**) (Targeted Safety Ingest closed; observations ≠ who-list). Не следующая семья.
 4. `technique_id` — только на canonical.
+
+**Live (2026-08-26):** research escalation archived, non-blocking. Safety Review V1.1 is **not** the next Product and is not opened. Next = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing` = skipped_for_now.
 
 ---
 
@@ -237,6 +241,8 @@ Probe — первое. CBT-I держится строкой с `candidate_type
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | research archive / non-blocking; live next = library fill, not Safety Review V1.1 |
+| 2026-08-26 | v1.5 — pointer: Targeted Safety Ingest V1 closed; observations ≠ who-list; next = Safety Review V1.1 |
 | 2026-08-26 | v1.4 — pointer: Targeted Safety Shortlist V1 = stop A; next = Targeted Safety Ingest |
 | 2026-08-26 | v1.3 — pointer: Safety Review V1 = insufficient_safety; next = owner decides; kernel remap unchanged |
 | 2026-08-25 | v1.2 — remap after V1.1: four-phase identity; equal count common parameter; V1 hypothesis preserved |

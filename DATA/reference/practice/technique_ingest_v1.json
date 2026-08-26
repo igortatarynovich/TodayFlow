@@ -48,7 +48,9 @@
         "Hands on the belly during the inhale, if the reader wants."
       ],
       "claim_scope": "method_sequence_only",
-      "conflict_tags": ["conflict.phase_count"],
+      "conflict_tags": [
+        "conflict.phase_count"
+      ],
       "ingest_status": "ingested",
       "not_ingested": "Page-level stress, heart-rate, and sleep benefit framing."
     },
@@ -86,7 +88,9 @@
         "Tracing a phone or notepad as the square is offered on this leaflet."
       ],
       "claim_scope": "method_sequence_and_stop_rules",
-      "conflict_tags": ["conflict.phase_count"],
+      "conflict_tags": [
+        "conflict.phase_count"
+      ],
       "ingest_status": "ingested",
       "not_ingested": "Leaflet overview claims about heart rate, oxygen, anxiety, or thinking more clearly. Finger-trace breathing on the same PDF is a different exercise and is not this record."
     },
@@ -129,5 +133,7 @@
       "ingest_status": "ingested",
       "not_ingested": "Panic-attack psychoeducation as a treatment claim. Other Trust pages that reprint the same three-phase steps are not additional kernels."
     }
-  ]
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
 }

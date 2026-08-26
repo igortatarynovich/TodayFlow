@@ -102,5 +102,7 @@
       "family_id": "family.discipline.clinical_insomnia_protocol",
       "must_not_attest_type": "sleep_discipline"
     }
-  ]
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
 }

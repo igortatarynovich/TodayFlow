@@ -1,5 +1,7 @@
 # Practice Technique Targeted Safety Shortlist v1
 
+> **Research archive / non-blocking (2026-08-26).** Historical evidence only. Not in NOW. Does not unlock fill. Active process: [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md). Index: [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md).
+
 **Статус:** `ACCEPTED` — узкий safety shortlist на один research question. **Не** technique canon. **Не** повтор identity shortlist.  
 **Версия:** 1.0 (2026-08-26).  
 **Владелец:** Product + Research.  
@@ -175,9 +177,11 @@ Safety Review V1 insufficient_safety
 
 ## 10. Что дальше
 
-1. Targeted Safety Shortlist закрыт (A). Canon пуст. Probe не attested.
-2. Следующий named pass: **Targeted Safety Ingest** selected loci.
-3. Затем Safety Review V1.1 — не canonical.
+1. Targeted Safety Shortlist закрыт (A). Targeted Safety Ingest закрыт (two observations). Canon пуст. Probe не attested.
+2. Исторический next этого pass: Safety Review V1.1 (**не открывать**). Не canonical.
+3. `technique_id` — только при `canonical`, и только после `may_release`.
+
+**Live (2026-08-26):** research escalation archived, non-blocking. Safety Review V1.1 is **not** the next Product and is not opened. Next = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing` = skipped_for_now.
 
 ---
 
@@ -185,4 +189,6 @@ Safety Review V1 insufficient_safety
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | research archive / non-blocking; live next = library fill, not Safety Review V1.1 |
+| 2026-08-26 | pointer: Targeted Safety Ingest V1 closed; next = Safety Review V1.1 |
 | 2026-08-26 | v1.0 ACCEPTED — who_must_not_hold; stop A; Joshi 2024 + Nivethitha 2017 selected; wellness rejected; structural finding recorded, contract unchanged |

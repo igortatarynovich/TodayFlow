@@ -1,49 +1,43 @@
 {
   "contract_version": "technique_canon_contract_v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "accepted",
-  "semantic_version": "practice-technique-v1.0",
-  "description": "Canonical Technique = verified method kernel. Content Item is a product expression. Canon: docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md. Registry starts empty; LLM is not a technique source.",
-  "parent": "docs/KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md",
+  "semantic_version": "practice-technique-v1.1",
+  "description": "Lightweight technique row. No Landscape/Shortlist/Ingest/Normalization required. Canon: docs/practices/PRACTICE_LIBRARY_FILL_V1.md · docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md",
   "required": [
     "technique_id",
     "content_class",
     "type",
-    "source_family",
+    "canonical_description",
     "source_refs",
-    "tradition",
-    "evidence_level",
-    "efficacy_claim_level",
-    "canonical_mechanism",
-    "canonical_steps",
     "safety_notes",
     "allowed_claims",
-    "prohibited_claims",
-    "review_status",
-    "semantic_version"
+    "status"
+  ],
+  "required_if_skipped": [
+    "technique_id",
+    "content_class",
+    "type",
+    "status",
+    "skip_reason"
   ],
   "fields": {
     "technique_id": "technique.{slug}; never emitted by Meaning",
     "content_class": "practice | meditation | affirmation | discipline",
-    "type": "taxonomy type code this kernel implements",
-    "source_family": "clinical_psychology | mindfulness_protocol | behavioral_science | official_health | academic_description | recognized_school | tradition_primary | historical_philosophical",
-    "source_refs": "list of {source, edition?, locus, paraphrase}; no copyrighted prose",
-    "tradition": "string list; intellectual lines, not an app brand",
-    "evidence_level": "existence of the method: unverified | tradition_attested | protocol_attested | academic_described | product_only",
-    "efficacy_claim_level": "right to claim effect: not_claimed | anecdote | single_study | review | guideline; default not_claimed",
-    "canonical_mechanism": "one sentence: what the method does",
-    "canonical_steps": "string list: stable kernel + safety-relevant bounds; not UI copy",
-    "safety_notes": "string list: product limits, not diagnoses",
-    "allowed_claims": "string list; empty until reviewed",
-    "prohibited_claims": "string list; medical / guaranteed outcomes / manifestation at minimum",
-    "review_status": "empty | landscape | extracted | normalized | safety_reviewed | canonical | rejected",
-    "semantic_version": "practice-technique-v1.x"
+    "type": "taxonomy type code",
+    "canonical_description": "own words; required if accepted; empty allowed if skipped",
+    "source_refs": "list of {source, url?, locus?, note?}; required non-empty if accepted",
+    "safety_notes": "string list; empty unless a material safety question exists",
+    "allowed_claims": "string list; default empty",
+    "status": "accepted | skipped",
+    "skip_reason": "required if skipped, e.g. skipped_for_now"
   },
   "invariants": [
-    "LLM is not the field source of mechanism or steps",
-    "tradition does not imply efficacy",
-    "review_status canonical required before item status active",
+    "LLM is not the field source of the method",
+    "research ladder is not required to write a row",
+    "skipped rows must not be attached to Content Items",
     "Meaning never stores technique_id",
-    "empty registry is valid"
+    "empty registry is valid",
+    "skipped_for_now is valid and non-blocking"
   ]
 }

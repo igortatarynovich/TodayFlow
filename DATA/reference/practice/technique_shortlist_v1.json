@@ -41,15 +41,42 @@
           "locus": "Heart Matters wellbeing page, section '1. Box breathing' (public URL, 2026-08-25).",
           "access": "body_read",
           "gates": {
-            "C1": {"result": "pass", "note": "Describes four timed phases, not only an outcome."},
-            "C2": {"result": "pass", "note": "Named public URL and section heading."},
-            "C3": {"result": "pass", "note": "'Box' is a four-step shape name. Steps are separable from Navy/tactical branding."},
-            "C4": {"result": "pass", "note": "Hold contraindications are not in this section; marked bounds_unknown. Do not import 4-7-8 notes from a sibling section as box bounds."},
-            "C5": {"result": "pass", "note": "Short public how-to; paraphrase kernel, do not copy page prose."},
-            "C6": {"result": "pass", "note": "Page frames breathing as stress/sleep help. Extract method only; do not ingest benefit claims."},
-            "C7": {"result": "preference_match", "note": "official_health patient education; landscape source_families updated to include this class after the slice."},
-            "C8": {"result": "pass", "note": "Four phases with two holds. Conflict with Newcastle three-phase is family-level, not averaged here."},
-            "C9": {"result": "n_a", "note": "Family is not product_only / likely_invention."}
+            "C1": {
+              "result": "pass",
+              "note": "Describes four timed phases, not only an outcome."
+            },
+            "C2": {
+              "result": "pass",
+              "note": "Named public URL and section heading."
+            },
+            "C3": {
+              "result": "pass",
+              "note": "'Box' is a four-step shape name. Steps are separable from Navy/tactical branding."
+            },
+            "C4": {
+              "result": "pass",
+              "note": "Hold contraindications are not in this section; marked bounds_unknown. Do not import 4-7-8 notes from a sibling section as box bounds."
+            },
+            "C5": {
+              "result": "pass",
+              "note": "Short public how-to; paraphrase kernel, do not copy page prose."
+            },
+            "C6": {
+              "result": "pass",
+              "note": "Page frames breathing as stress/sleep help. Extract method only; do not ingest benefit claims."
+            },
+            "C7": {
+              "result": "preference_match",
+              "note": "official_health patient education; landscape source_families updated to include this class after the slice."
+            },
+            "C8": {
+              "result": "pass",
+              "note": "Four phases with two holds. Conflict with Newcastle three-phase is family-level, not averaged here."
+            },
+            "C9": {
+              "result": "n_a",
+              "note": "Family is not product_only / likely_invention."
+            }
           },
           "extractable": {
             "mechanism": "equal-count cycle of inhale, hold, exhale, hold",
@@ -77,15 +104,42 @@
           "locus": "PDF leaflet, heading BOX BREATHING, plus 'WHAT IF BREATHING EXERCISES DON'T WORK FOR ME?' (2026-08-25).",
           "access": "body_read",
           "gates": {
-            "C1": {"result": "pass", "note": "Four equal counts around a box/square visualization."},
-            "C2": {"result": "pass", "note": "Named NHS PDF URL and heading."},
-            "C3": {"result": "pass", "note": "Box visualization is a timing aid, not a brand protocol."},
-            "C4": {"result": "pass", "note": "Dizziness; sit or lie until accustomed; breath-focus may be uncomfortable if breathing-related issues — then grounding instead. Repeat up to four times if comfortable."},
-            "C5": {"result": "pass", "note": "Short staff leaflet; paraphrase, do not copy."},
-            "C6": {"result": "pass", "note": "Overview mentions heart rate / oxygen / anxiety. Extract method and stop-rules only."},
-            "C7": {"result": "preference_match", "note": "clinical_psychology educational text."},
-            "C8": {"result": "pass", "note": "Same four-phase kernel as BHF; does not resolve the three-phase NHS square."},
-            "C9": {"result": "n_a", "note": "Family is not product_only."}
+            "C1": {
+              "result": "pass",
+              "note": "Four equal counts around a box/square visualization."
+            },
+            "C2": {
+              "result": "pass",
+              "note": "Named NHS PDF URL and heading."
+            },
+            "C3": {
+              "result": "pass",
+              "note": "Box visualization is a timing aid, not a brand protocol."
+            },
+            "C4": {
+              "result": "pass",
+              "note": "Dizziness; sit or lie until accustomed; breath-focus may be uncomfortable if breathing-related issues — then grounding instead. Repeat up to four times if comfortable."
+            },
+            "C5": {
+              "result": "pass",
+              "note": "Short staff leaflet; paraphrase, do not copy."
+            },
+            "C6": {
+              "result": "pass",
+              "note": "Overview mentions heart rate / oxygen / anxiety. Extract method and stop-rules only."
+            },
+            "C7": {
+              "result": "preference_match",
+              "note": "clinical_psychology educational text."
+            },
+            "C8": {
+              "result": "pass",
+              "note": "Same four-phase kernel as BHF; does not resolve the three-phase NHS square."
+            },
+            "C9": {
+              "result": "n_a",
+              "note": "Family is not product_only."
+            }
           },
           "extractable": {
             "mechanism": "equal-count four-phase breath timed around a square",
@@ -113,15 +167,42 @@
           "locus": "Section 'Square breathing', numbered steps 1–4 (2026-08-25). Same three-phase pattern also appears on the Trust's PICU-coping and brain-fog pages.",
           "access": "body_read",
           "gates": {
-            "C1": {"result": "pass", "note": "Inhale 4, hold 4, exhale 4, then repeat. No second hold."},
-            "C2": {"result": "pass", "note": "Named NHS URL and heading."},
-            "C3": {"result": "pass", "note": "'Square' is a slowing aid. Not a tactical brand."},
-            "C4": {"result": "pass", "note": "Hold-breath who-must-not is not stated; marked bounds_unknown. Context is panic psychoeducation for children/young people, not a hold protocol."},
-            "C5": {"result": "pass", "note": "Short public leaflet; paraphrase."},
-            "C6": {"result": "pass", "note": "Page is coping-with-panic education. Do not ingest as treatment of panic disorder."},
-            "C7": {"result": "preference_match", "note": "clinical_psychology official health-system text."},
-            "C8": {"result": "pass", "note": "This locus is the three-phase side of the family conflict. Keep it; do not average with BHF/SFH."},
-            "C9": {"result": "n_a", "note": "Family is not product_only."}
+            "C1": {
+              "result": "pass",
+              "note": "Inhale 4, hold 4, exhale 4, then repeat. No second hold."
+            },
+            "C2": {
+              "result": "pass",
+              "note": "Named NHS URL and heading."
+            },
+            "C3": {
+              "result": "pass",
+              "note": "'Square' is a slowing aid. Not a tactical brand."
+            },
+            "C4": {
+              "result": "pass",
+              "note": "Hold-breath who-must-not is not stated; marked bounds_unknown. Context is panic psychoeducation for children/young people, not a hold protocol."
+            },
+            "C5": {
+              "result": "pass",
+              "note": "Short public leaflet; paraphrase."
+            },
+            "C6": {
+              "result": "pass",
+              "note": "Page is coping-with-panic education. Do not ingest as treatment of panic disorder."
+            },
+            "C7": {
+              "result": "preference_match",
+              "note": "clinical_psychology official health-system text."
+            },
+            "C8": {
+              "result": "pass",
+              "note": "This locus is the three-phase side of the family conflict. Keep it; do not average with BHF/SFH."
+            },
+            "C9": {
+              "result": "n_a",
+              "note": "Family is not product_only."
+            }
           },
           "extractable": {
             "mechanism": "equal-count inhale, hold, exhale, then repeat",
@@ -150,15 +231,42 @@
           "locus": "Health Essentials article, 'How to do box breathing' numbered steps (2026-08-25).",
           "access": "body_read",
           "gates": {
-            "C1": {"result": "pass", "note": "Four equal counts including both holds; 3–4 rounds; do not strain."},
-            "C2": {"result": "pass", "note": "Named public URL and section."},
-            "C3": {"result": "fail", "note": "Page identifies the method as employed by US Navy SEALs and as sama vritti pranayama. Kernel exists but is not separable from that packaging at this locus."},
-            "C4": {"result": "pass", "note": "Stay at comfort, breathe gently, not straining. Who-must-not-hold still bounds_unknown."},
-            "C5": {"result": "pass", "note": "Public how-to; paraphrase if ever used."},
-            "C6": {"result": "pass", "note": "Benefits framing (cortisol, blood pressure, physiology). Do not ingest claims. Decision is supporting, not selected."},
-            "C7": {"result": "preference_weak", "note": "official_health, but identity is packaged as SEAL + yogic name."},
-            "C8": {"result": "pass", "note": "Four-phase same as BHF; naming collapse is a C3 issue, not a phase-count conflict."},
-            "C9": {"result": "n_a", "note": "Family is not product_only."}
+            "C1": {
+              "result": "pass",
+              "note": "Four equal counts including both holds; 3–4 rounds; do not strain."
+            },
+            "C2": {
+              "result": "pass",
+              "note": "Named public URL and section."
+            },
+            "C3": {
+              "result": "fail",
+              "note": "Page identifies the method as employed by US Navy SEALs and as sama vritti pranayama. Kernel exists but is not separable from that packaging at this locus."
+            },
+            "C4": {
+              "result": "pass",
+              "note": "Stay at comfort, breathe gently, not straining. Who-must-not-hold still bounds_unknown."
+            },
+            "C5": {
+              "result": "pass",
+              "note": "Public how-to; paraphrase if ever used."
+            },
+            "C6": {
+              "result": "pass",
+              "note": "Benefits framing (cortisol, blood pressure, physiology). Do not ingest claims. Decision is supporting, not selected."
+            },
+            "C7": {
+              "result": "preference_weak",
+              "note": "official_health, but identity is packaged as SEAL + yogic name."
+            },
+            "C8": {
+              "result": "pass",
+              "note": "Four-phase same as BHF; naming collapse is a C3 issue, not a phase-count conflict."
+            },
+            "C9": {
+              "result": "n_a",
+              "note": "Family is not product_only."
+            }
           },
           "extractable": {
             "mechanism": "four equal counts with both holds",
@@ -189,15 +297,42 @@
           "locus": "Named edition + chapter. Body not legally ingested this pass (NEED_OWNER). Archive.org dumps and wiki quotes are not a legal paraphrase body.",
           "access": "NEED_OWNER",
           "gates": {
-            "C1": {"result": "unknown", "note": "Method is expected in the named chapter; this pass did not ingest the licensed body."},
-            "C2": {"result": "fail", "note": "Named but not legally readable for paraphrase until a licensed copy is used. NEED_OWNER."},
-            "C3": {"result": "unknown", "note": "School textbook, not an app brand; kernel vs school packaging unread."},
-            "C4": {"result": "unknown", "note": "Secondary reports of visamavrtti caution are not ingested from wiki."},
-            "C5": {"result": "fail", "note": "Cannot ingest from unauthorized full-text dumps or wiki extracts of the book."},
-            "C6": {"result": "n_a", "note": "Not used as efficacy evidence."},
-            "C7": {"result": "preference_match", "note": "recognized_school / tradition_primary class is on the family's list; still not selected without a legal body."},
-            "C8": {"result": "pass", "note": "Secondary reports (not ingested) that beginner equal in/out precedes 1:1:1:1 are recorded as unresolved conflict with the landscape kernel, not averaged."},
-            "C9": {"result": "n_a", "note": "Family is not product_only."}
+            "C1": {
+              "result": "unknown",
+              "note": "Method is expected in the named chapter; this pass did not ingest the licensed body."
+            },
+            "C2": {
+              "result": "fail",
+              "note": "Named but not legally readable for paraphrase until a licensed copy is used. NEED_OWNER."
+            },
+            "C3": {
+              "result": "unknown",
+              "note": "School textbook, not an app brand; kernel vs school packaging unread."
+            },
+            "C4": {
+              "result": "unknown",
+              "note": "Secondary reports of visamavrtti caution are not ingested from wiki."
+            },
+            "C5": {
+              "result": "fail",
+              "note": "Cannot ingest from unauthorized full-text dumps or wiki extracts of the book."
+            },
+            "C6": {
+              "result": "n_a",
+              "note": "Not used as efficacy evidence."
+            },
+            "C7": {
+              "result": "preference_match",
+              "note": "recognized_school / tradition_primary class is on the family's list; still not selected without a legal body."
+            },
+            "C8": {
+              "result": "pass",
+              "note": "Secondary reports (not ingested) that beginner equal in/out precedes 1:1:1:1 are recorded as unresolved conflict with the landscape kernel, not averaged."
+            },
+            "C9": {
+              "result": "n_a",
+              "note": "Family is not product_only."
+            }
           },
           "extractable": {
             "mechanism": "not extracted this pass",
@@ -229,15 +364,42 @@
           "locus": "Methods: four phases of 4 seconds named samavritti; 6 cycles/session (abstract/PDF record, 2026-08-25).",
           "access": "abstract_and_methods_record",
           "gates": {
-            "C1": {"result": "pass", "note": "Methods describe inhale / inner hold / exhale / outer hold of equal duration."},
-            "C2": {"result": "pass", "note": "DOI and journal article."},
-            "C3": {"result": "pass", "note": "Names samavritti as equal four processes; do not collapse this into Navy box branding."},
-            "C4": {"result": "pass", "note": "Population is CKD/IDH in-session; not transferable product bounds. Marked not-for-product."},
-            "C5": {"result": "pass", "note": "Methods paraphrase possible; do not copy the paper."},
-            "C6": {"result": "pass", "note": "BP results are out of scope. Existence of a 4s four-phase operationalization ≠ allowed_claims."},
-            "C7": {"result": "preference_weak", "note": "academic_description class matches; medical-trial context is not a first ingest locus for a consumer library."},
-            "C8": {"result": "pass", "note": "Four-phase 4s operationalization; does not resolve beginner no-hold samavrtti reports."},
-            "C9": {"result": "n_a", "note": "Family is not product_only."}
+            "C1": {
+              "result": "pass",
+              "note": "Methods describe inhale / inner hold / exhale / outer hold of equal duration."
+            },
+            "C2": {
+              "result": "pass",
+              "note": "DOI and journal article."
+            },
+            "C3": {
+              "result": "pass",
+              "note": "Names samavritti as equal four processes; do not collapse this into Navy box branding."
+            },
+            "C4": {
+              "result": "pass",
+              "note": "Population is CKD/IDH in-session; not transferable product bounds. Marked not-for-product."
+            },
+            "C5": {
+              "result": "pass",
+              "note": "Methods paraphrase possible; do not copy the paper."
+            },
+            "C6": {
+              "result": "pass",
+              "note": "BP results are out of scope. Existence of a 4s four-phase operationalization ≠ allowed_claims."
+            },
+            "C7": {
+              "result": "preference_weak",
+              "note": "academic_description class matches; medical-trial context is not a first ingest locus for a consumer library."
+            },
+            "C8": {
+              "result": "pass",
+              "note": "Four-phase 4s operationalization; does not resolve beginner no-hold samavrtti reports."
+            },
+            "C9": {
+              "result": "n_a",
+              "note": "Family is not product_only."
+            }
           },
           "extractable": {
             "mechanism": "equal duration of four breathing processes, operationalized as 4 seconds each in this trial",
@@ -263,15 +425,42 @@
           "locus": "Page body, numbered four-count cycle (search/snippet confirmed 2026-08-25).",
           "access": "snippet_confirmed",
           "gates": {
-            "C1": {"result": "pass", "note": "Four-count inhale, hold, exhale, hold is described."},
-            "C2": {"result": "pass", "note": "Named URL."},
-            "C3": {"result": "fail", "note": "Identity of the locus is tactical/military packaging. Landscape bound: popular tactical packaging is not a family source."},
-            "C4": {"result": "n_a", "note": "Not assessed for ingest."},
-            "C5": {"result": "n_a", "note": "Not selected."},
-            "C6": {"result": "fail", "note": "Page sells calm/sleep/pain effects as what tactical breathing does."},
-            "C7": {"result": "fail", "note": "Tactical packaging is outside family preference."},
-            "C8": {"result": "n_a", "note": "Not used to average a kernel."},
-            "C9": {"result": "n_a", "note": "Family is not product_only."}
+            "C1": {
+              "result": "pass",
+              "note": "Four-count inhale, hold, exhale, hold is described."
+            },
+            "C2": {
+              "result": "pass",
+              "note": "Named URL."
+            },
+            "C3": {
+              "result": "fail",
+              "note": "Identity of the locus is tactical/military packaging. Landscape bound: popular tactical packaging is not a family source."
+            },
+            "C4": {
+              "result": "n_a",
+              "note": "Not assessed for ingest."
+            },
+            "C5": {
+              "result": "n_a",
+              "note": "Not selected."
+            },
+            "C6": {
+              "result": "fail",
+              "note": "Page sells calm/sleep/pain effects as what tactical breathing does."
+            },
+            "C7": {
+              "result": "fail",
+              "note": "Tactical packaging is outside family preference."
+            },
+            "C8": {
+              "result": "n_a",
+              "note": "Not used to average a kernel."
+            },
+            "C9": {
+              "result": "n_a",
+              "note": "Family is not product_only."
+            }
           },
           "extractable": {
             "mechanism": "four-count cycle exists on the page",
@@ -297,15 +486,42 @@
           "locus": "Article body (search/snippet 2026-08-25). Not used as evidence.",
           "access": "snippet_confirmed",
           "gates": {
-            "C1": {"result": "pass", "note": "How-to exists, but the page is not the preferred class."},
-            "C2": {"result": "pass", "note": "Named URL."},
-            "C3": {"result": "fail", "note": "Method is sold together with COPD/anxiety/depression/PTSD/insomnia claims and medical-condition caveats as the article identity."},
-            "C4": {"result": "n_a", "note": "Not ingested."},
-            "C5": {"result": "n_a", "note": "Not selected."},
-            "C6": {"result": "fail", "note": "Efficacy and disease-management framing is the point of the page."},
-            "C7": {"result": "fail", "note": "SEO explainer, outside family preference."},
-            "C8": {"result": "n_a", "note": "Not used."},
-            "C9": {"result": "n_a", "note": "Family is not product_only."}
+            "C1": {
+              "result": "pass",
+              "note": "How-to exists, but the page is not the preferred class."
+            },
+            "C2": {
+              "result": "pass",
+              "note": "Named URL."
+            },
+            "C3": {
+              "result": "fail",
+              "note": "Method is sold together with COPD/anxiety/depression/PTSD/insomnia claims and medical-condition caveats as the article identity."
+            },
+            "C4": {
+              "result": "n_a",
+              "note": "Not ingested."
+            },
+            "C5": {
+              "result": "n_a",
+              "note": "Not selected."
+            },
+            "C6": {
+              "result": "fail",
+              "note": "Efficacy and disease-management framing is the point of the page."
+            },
+            "C7": {
+              "result": "fail",
+              "note": "SEO explainer, outside family preference."
+            },
+            "C8": {
+              "result": "n_a",
+              "note": "Not used."
+            },
+            "C9": {
+              "result": "n_a",
+              "note": "Family is not product_only."
+            }
           },
           "extractable": {
             "mechanism": "not used",
@@ -330,15 +546,42 @@
           "locus": "Not used. Chapter/page identity belongs to the Iyengar edition row.",
           "access": "rejected_derivative",
           "gates": {
-            "C1": {"result": "n_a", "note": "Not assessed as a source."},
-            "C2": {"result": "fail", "note": "Wiki is not the named edition."},
-            "C3": {"result": "n_a", "note": "Not used."},
-            "C4": {"result": "n_a", "note": "Not used."},
-            "C5": {"result": "fail", "note": "Risk of copying the book via wiki."},
-            "C6": {"result": "n_a", "note": "Not used."},
-            "C7": {"result": "fail", "note": "Derivative, not recognized_school text."},
-            "C8": {"result": "n_a", "note": "Not used to invent Iyengar claims."},
-            "C9": {"result": "n_a", "note": "Family is not product_only."}
+            "C1": {
+              "result": "n_a",
+              "note": "Not assessed as a source."
+            },
+            "C2": {
+              "result": "fail",
+              "note": "Wiki is not the named edition."
+            },
+            "C3": {
+              "result": "n_a",
+              "note": "Not used."
+            },
+            "C4": {
+              "result": "n_a",
+              "note": "Not used."
+            },
+            "C5": {
+              "result": "fail",
+              "note": "Risk of copying the book via wiki."
+            },
+            "C6": {
+              "result": "n_a",
+              "note": "Not used."
+            },
+            "C7": {
+              "result": "fail",
+              "note": "Derivative, not recognized_school text."
+            },
+            "C8": {
+              "result": "n_a",
+              "note": "Not used to invent Iyengar claims."
+            },
+            "C9": {
+              "result": "n_a",
+              "note": "Family is not product_only."
+            }
           },
           "extractable": {
             "mechanism": "not used",
@@ -382,5 +625,7 @@
       ],
       "selection_summary": "Three selected loci, different jobs: BHF = four-phase kernel; NHS SFH = four-phase kernel plus stop-rules; Newcastle = three-phase conflict locus. Supporting loci must not be averaged into that kernel. Type box_breathing remains unattested. Technique canon stays empty."
     }
-  ]
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
 }

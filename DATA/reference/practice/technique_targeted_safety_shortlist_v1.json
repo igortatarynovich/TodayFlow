@@ -35,7 +35,10 @@
     "status": "not_attested",
     "note": "Safety shortlist does not attest the probe."
   },
-  "safety_speech_found": ["hold_exclusion", "hold_precaution"],
+  "safety_speech_found": [
+    "hold_exclusion",
+    "hold_precaution"
+  ],
   "general_breathwork_found_not_selected": true,
   "stop_reason": "preferred_class_hold_evidence_found_for_targeted_safety_ingest",
   "structural_finding": "Official-health pages for this method do not publish a who-list. Breathlessness-rehab official health discourages holding during exertion, a different job. Peer-reviewed yoga literature contraindicates kumbhaka in hypertension and heart disease. Those are different speech acts. This pass does not glue them into a binary product who_must_not_hold list and does not rewrite Safety Review V1. If later review needs exclude / precaution / stop_rule instead of binary must_not, that is an owner decision for Safety Review V1.1 after ingest.",
@@ -76,15 +79,42 @@
       "locus": "Heart Matters box-breathing section (ingested 2026-08-25).",
       "access": "already_ingested",
       "gates": {
-        "C1": {"result": "pass", "note": "Four timed phases already paraphrased."},
-        "C2": {"result": "pass", "note": "Named public URL."},
-        "C3": {"result": "pass", "note": "Method steps separable."},
-        "C4": {"result": "pass", "note": "Who-must-not-hold unknown in this section."},
-        "C5": {"result": "pass", "note": "Already paraphrased."},
-        "C6": {"result": "pass", "note": "No new benefit ingest."},
-        "C7": {"result": "preference_match", "note": "official_health method page, not a who-list."},
-        "C8": {"result": "pass", "note": "Silence is not a ban."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Four timed phases already paraphrased."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named public URL."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Method steps separable."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Who-must-not-hold unknown in this section."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "No new benefit ingest."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "official_health method page, not a who-list."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Silence is not a ban."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "four-phase box cycle with both holds",
@@ -112,15 +142,42 @@
       "locus": "Leaflet stop/safety heading, not BOX BREATHING steps (ingested 2026-08-25).",
       "access": "already_ingested",
       "gates": {
-        "C1": {"result": "pass", "note": "Stop-rules described."},
-        "C2": {"result": "pass", "note": "Named NHS PDF."},
-        "C3": {"result": "pass", "note": "Safety heading separate from sequence."},
-        "C4": {"result": "pass", "note": "Dizziness sit/lie; breath-focus redirect. Not a hold-exclusion population."},
-        "C5": {"result": "pass", "note": "Already paraphrased."},
-        "C6": {"result": "pass", "note": "No efficacy ingest."},
-        "C7": {"result": "preference_match", "note": "clinical_psychology."},
-        "C8": {"result": "pass", "note": "S-B2: stop-rules ≠ who_must_not_hold."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Stop-rules described."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named NHS PDF."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Safety heading separate from sequence."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Dizziness sit/lie; breath-focus redirect. Not a hold-exclusion population."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "No efficacy ingest."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "clinical_psychology."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "S-B2: stop-rules ≠ who_must_not_hold."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "not this pass",
@@ -148,15 +205,42 @@
       "locus": "Square breathing steps (ingested 2026-08-25).",
       "access": "already_ingested",
       "gates": {
-        "C1": {"result": "pass", "note": "Timed steps."},
-        "C2": {"result": "pass", "note": "Named URL."},
-        "C3": {"result": "pass", "note": "Square as a label."},
-        "C4": {"result": "pass", "note": "Who-must-not-hold not stated."},
-        "C5": {"result": "pass", "note": "Already paraphrased."},
-        "C6": {"result": "pass", "note": "Panic psychoeducation not ingested as treatment."},
-        "C7": {"result": "preference_match", "note": "clinical_psychology."},
-        "C8": {"result": "pass", "note": "Naming conflict already recorded."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Timed steps."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named URL."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Square as a label."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Who-must-not-hold not stated."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Panic psychoeducation not ingested as treatment."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "clinical_psychology."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Naming conflict already recorded."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "three timed actions",
@@ -183,15 +267,42 @@
       "locus": "Methods stop if dizzy / do not breathe too deeply (ingested 2026-08-25).",
       "access": "already_ingested",
       "gates": {
-        "C1": {"result": "pass", "note": "Named conditions already paraphrased."},
-        "C2": {"result": "pass", "note": "Named thesis."},
-        "C3": {"result": "pass", "note": "Methods separable from tactical intro."},
-        "C4": {"result": "pass", "note": "Experimental script, not a population exclusion."},
-        "C5": {"result": "pass", "note": "Already paraphrased."},
-        "C6": {"result": "pass", "note": "HRV/mood not ingested."},
-        "C7": {"result": "preference_match", "note": "academic_description."},
-        "C8": {"result": "pass", "note": "5:5 remains a different named condition."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Named conditions already paraphrased."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named thesis."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Methods separable from tactical intro."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Experimental script, not a population exclusion."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "HRV/mood not ingested."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "academic_description."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "5:5 remains a different named condition."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "square 4-4-4-4 vs 5:5",
@@ -219,15 +330,42 @@
       "locus": "Square breathing 4-4-6-2 (ingested 2026-08-25).",
       "access": "already_ingested",
       "gates": {
-        "C1": {"result": "pass", "note": "Four-side sequence."},
-        "C2": {"result": "pass", "note": "Named workbook."},
-        "C3": {"result": "pass", "note": "Square as a heading."},
-        "C4": {"result": "pass", "note": "Who-must-not-hold not stated."},
-        "C5": {"result": "pass", "note": "Already paraphrased."},
-        "C6": {"result": "pass", "note": "Anxiety framing not ingested."},
-        "C7": {"result": "preference_match", "note": "official_health."},
-        "C8": {"result": "pass", "note": "Unequal counts remain a label observation."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Four-side sequence."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named workbook."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Square as a heading."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Who-must-not-hold not stated."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Anxiety framing not ingested."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "official_health."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Unequal counts remain a label observation."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "four-side square 4-4-6-2",
@@ -258,15 +396,42 @@
       "locus": "World J Methodol 2024;14(1):90127, pranayama precautions paragraph and Table 3 (accessed 2026-08-26).",
       "access": "public_pmc",
       "gates": {
-        "C1": {"result": "pass", "note": "Names breath retention (kumbhaka) as the act."},
-        "C2": {"result": "pass", "note": "Named PMC article, section readable."},
-        "C3": {"result": "pass", "note": "Hold mechanism separable from yoga-as-treatment branding."},
-        "C4": {"result": "pass", "note": "States kumbhaka is contraindicated in hypertension, heart disease, and recovery from illness, surgery, or injury."},
-        "C5": {"result": "pass", "note": "Paraphrase the contraindication speech; do not copy the yoga protocol tables."},
-        "C6": {"result": "pass", "note": "Yoga-as-hypertension-therapy claims are out of scope. Ingest only hold-safety speech."},
-        "C7": {"result": "preference_match", "note": "peer-reviewed medical review; not wellness."},
-        "C8": {"result": "pass", "note": "Do not glue onto BHF/SFH method pages as the same speech act."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Names breath retention (kumbhaka) as the act."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named PMC article, section readable."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Hold mechanism separable from yoga-as-treatment branding."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "States kumbhaka is contraindicated in hypertension, heart disease, and recovery from illness, surgery, or injury."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Paraphrase the contraindication speech; do not copy the yoga protocol tables."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Yoga-as-hypertension-therapy claims are out of scope. Ingest only hold-safety speech."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "peer-reviewed medical review; not wellness."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Do not glue onto BHF/SFH method pages as the same speech act."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "pranayama kumbhaka = breath retention",
@@ -297,15 +462,42 @@
       "locus": "Adv Integr Med 2017;4:7–9, abstract and stated results (accessed 2026-08-26).",
       "access": "public_abstract",
       "gates": {
-        "C1": {"result": "pass", "note": "Bahir kumbhaka = external / empty-lung retention."},
-        "C2": {"result": "pass", "note": "Named DOI; abstract readable."},
-        "C3": {"result": "pass", "note": "Hold mechanism separable from yoga school branding."},
-        "C4": {"result": "pass", "note": "Reports acute rise in SBP/DBP/MAP during the practice. Does not itself write a who-list."},
-        "C5": {"result": "pass", "note": "Paraphrase results; do not copy protocol prose."},
-        "C6": {"result": "pass", "note": "Physiology, not an efficacy claim for box breathing."},
-        "C7": {"result": "preference_match", "note": "peer-reviewed; not wellness."},
-        "C8": {"result": "pass", "note": "Pilot observation ≠ product exclusion list. Keep beside Joshi 2024, do not average."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Bahir kumbhaka = external / empty-lung retention."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named DOI; abstract readable."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Hold mechanism separable from yoga school branding."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Reports acute rise in SBP/DBP/MAP during the practice. Does not itself write a who-list."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Paraphrase results; do not copy protocol prose."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Physiology, not an efficacy claim for box breathing."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "peer-reviewed; not wellness."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Pilot observation ≠ product exclusion list. Keep beside Joshi 2024, do not average."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "external breath retention (bahir kumbhaka)",
@@ -335,15 +527,42 @@
       "locus": "Thorax 2009;64(Suppl 1): good-practice point that breath-holding during exertion should be strongly discouraged (accessed 2026-08-26).",
       "access": "public",
       "gates": {
-        "C1": {"result": "pass", "note": "Names breath-holding during exertion."},
-        "C2": {"result": "pass", "note": "Named guideline DOI."},
-        "C3": {"result": "pass", "note": "Rehab instruction, not a brand."},
-        "C4": {"result": "pass", "note": "Discourages hold during effort in this COPD population."},
-        "C5": {"result": "pass", "note": "Paraphrase the good-practice point."},
-        "C6": {"result": "pass", "note": "Not an efficacy claim for box breathing."},
-        "C7": {"result": "preference_match", "note": "official_health / clinical guidance."},
-        "C8": {"result": "pass", "note": "Different job from the candidate. Do not auto-transfer."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Names breath-holding during exertion."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named guideline DOI."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Rehab instruction, not a brand."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Discourages hold during effort in this COPD population."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Paraphrase the good-practice point."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Not an efficacy claim for box breathing."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "official_health / clinical guidance."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Different job from the candidate. Do not auto-transfer."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "avoid breath-holding while making a physical effort",
@@ -370,15 +589,42 @@
       "locus": "General advice: avoid breath holding during activities e.g. climbing stairs or bending (accessed 2026-08-26).",
       "access": "public",
       "gates": {
-        "C1": {"result": "pass", "note": "Names avoid breath holding during activities."},
-        "C2": {"result": "pass", "note": "Named NHS page."},
-        "C3": {"result": "pass", "note": "Activity advice, not a brand."},
-        "C4": {"result": "pass", "note": "Activity hold, not a timed-practice who-list."},
-        "C5": {"result": "pass", "note": "Paraphrase."},
-        "C6": {"result": "pass", "note": "Not box efficacy."},
-        "C7": {"result": "preference_match", "note": "official_health."},
-        "C8": {"result": "pass", "note": "Same different-job pattern as BTS."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Names avoid breath holding during activities."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named NHS page."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Activity advice, not a brand."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Activity hold, not a timed-practice who-list."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Paraphrase."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Not box efficacy."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "official_health."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Same different-job pattern as BTS."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "avoid holding the breath during daily activities",
@@ -405,15 +651,42 @@
       "locus": "Health Essentials box-breathing explainer (accessed 2026-08-26).",
       "access": "public",
       "gates": {
-        "C1": {"result": "pass", "note": "Four equal counts including both holds."},
-        "C2": {"result": "pass", "note": "Named URL."},
-        "C3": {"result": "preference_weak", "note": "SEAL packaging present; steps still separable."},
-        "C4": {"result": "pass", "note": "Comfort / do not strain. No who-list."},
-        "C5": {"result": "pass", "note": "Do not copy."},
-        "C6": {"result": "pass", "note": "Benefit framing not used as claims."},
-        "C7": {"result": "preference_weak", "note": "Wellness explainer, not clinical guidance on contraindications."},
-        "C8": {"result": "pass", "note": "Silence is not a who-list."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Four equal counts including both holds."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named URL."
+        },
+        "C3": {
+          "result": "preference_weak",
+          "note": "SEAL packaging present; steps still separable."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Comfort / do not strain. No who-list."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Do not copy."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Benefit framing not used as claims."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "Wellness explainer, not clinical guidance on contraindications."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Silence is not a who-list."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "4-4-4-4 box",
@@ -440,15 +713,42 @@
       "locus": "Healthline box-breathing page, safety paragraph (accessed 2026-08-26).",
       "access": "public",
       "gates": {
-        "C1": {"result": "pass", "note": "Describes holds."},
-        "C2": {"result": "pass", "note": "Named URL."},
-        "C3": {"result": "fail", "note": "SEO explainer; packaging not a clinical who-list."},
-        "C4": {"result": "unknown", "note": "Lists consult-first groups without a preferred-class hold locus."},
-        "C5": {"result": "pass", "note": "Not copied."},
-        "C6": {"result": "fail", "note": "Mixes COPD benefit with the method."},
-        "C7": {"result": "fail", "note": "Wellness site is not sufficient SoT for who_must_not_hold."},
-        "C8": {"result": "pass", "note": "Do not import this list into the candidate."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Describes holds."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named URL."
+        },
+        "C3": {
+          "result": "fail",
+          "note": "SEO explainer; packaging not a clinical who-list."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Lists consult-first groups without a preferred-class hold locus."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "fail",
+          "note": "Mixes COPD benefit with the method."
+        },
+        "C7": {
+          "result": "fail",
+          "note": "Wellness site is not sufficient SoT for who_must_not_hold."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Do not import this list into the candidate."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "box breathing with holds",
@@ -475,15 +775,42 @@
       "locus": "Who should avoid box breathing paragraph (accessed 2026-08-26).",
       "access": "public",
       "gates": {
-        "C1": {"result": "pass", "note": "Mentions holding the breath."},
-        "C2": {"result": "pass", "note": "Named URL."},
-        "C3": {"result": "fail", "note": "Popular explainer."},
-        "C4": {"result": "unknown", "note": "Consult-first, not preferred-class exclusion."},
-        "C5": {"result": "pass", "note": "Not copied."},
-        "C6": {"result": "fail", "note": "Benefit framing."},
-        "C7": {"result": "fail", "note": "Not sufficient SoT for who_must_not_hold."},
-        "C8": {"result": "pass", "note": "Do not import."},
-        "C9": {"result": "n_a", "note": "Not product_only."}
+        "C1": {
+          "result": "pass",
+          "note": "Mentions holding the breath."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named URL."
+        },
+        "C3": {
+          "result": "fail",
+          "note": "Popular explainer."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Consult-first, not preferred-class exclusion."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "fail",
+          "note": "Benefit framing."
+        },
+        "C7": {
+          "result": "fail",
+          "note": "Not sufficient SoT for who_must_not_hold."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Do not import."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
       },
       "extractable": {
         "mechanism": "box breathing with holds",
@@ -498,5 +825,7 @@
       "selection_decision": "rejected",
       "rejection_reason": "Popular explainer is not sufficient SoT for medical contraindications on who_must_not_hold."
     }
-  ]
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
 }

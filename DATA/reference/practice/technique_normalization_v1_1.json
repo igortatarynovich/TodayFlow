@@ -98,5 +98,7 @@
     "technique_id_on_probe",
     "next_family_slice",
     "write_technique_canon"
-  ]
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
 }

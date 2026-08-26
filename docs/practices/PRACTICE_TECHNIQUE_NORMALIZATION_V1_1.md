@@ -1,5 +1,7 @@
 # Practice Technique Normalization v1.1
 
+> **Research archive / non-blocking (2026-08-26).** Historical evidence only. Not in NOW. Does not unlock fill. Active process: [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md). Index: [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md).
+
 **Статус:** `ACCEPTED` — повторная нормализация после targeted ingest. **Не** Canonical Technique.  
 **Версия:** 1.1 (2026-08-25).  
 **Владелец:** Product + Research.  
@@ -163,14 +165,16 @@ Probe `box_breathing` остаётся expression hypothesis. 4-4-4-4 payload с
 ```text
 Normalized candidate → Safety Review (closed: insufficient_safety)
   → Targeted Safety Shortlist (stop A)
-  → Targeted Safety Ingest
+  → Targeted Safety Ingest (observations, not a who-list)
   → Safety Review V1.1
   → (if later may_release) canonical | rejected → technique_id → probe assessment
 ```
 
-1. V1.1 = `normalize_one` (история). Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A. Canon пуст.
-2. Следующий named pass: **Targeted Safety Ingest**. Не следующая семья.
+1. V1.1 = `normalize_one` (история). Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A. Targeted Safety Ingest = two observations. Canon пуст.
+2. Исторический next этого pass: Safety Review V1.1 (**не открывать**). Не следующая семья.
 3. `technique_id` — только при `canonical`.
+
+**Live (2026-08-26):** research escalation archived, non-blocking. Safety Review V1.1 is **not** the next Product and is not opened. Next = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing` = skipped_for_now.
 
 ---
 
@@ -178,6 +182,8 @@ Normalized candidate → Safety Review (closed: insufficient_safety)
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | research archive / non-blocking; live next = library fill, not Safety Review V1.1 |
+| 2026-08-26 | pointer: Targeted Safety Ingest V1 closed; next = Safety Review V1.1 |
 | 2026-08-26 | pointer: Targeted Safety Shortlist V1 = stop A; next = Targeted Safety Ingest |
 | 2026-08-26 | pointer: Safety Review V1 = insufficient_safety; next = owner decides |
 | 2026-08-25 | v1.1 ACCEPTED — axes: hold required, equal_count common_parameter; overall normalize_one; landscape remapped; candidate ≠ canon |

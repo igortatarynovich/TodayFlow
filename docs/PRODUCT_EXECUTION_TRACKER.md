@@ -24,7 +24,25 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-26):** **Targeted Safety Shortlist V1** — research question = who_must_not_hold for required holds, not box/square identity. Stop A: Joshi 2024 (`hold_exclusion`) + Nivethitha 2017 (`hold_precaution`) selected for Targeted Safety Ingest. Wellness who-lists rejected. BTS/CUH exertion advice supporting, not transferred. Structural finding recorded; Safety Review V1 contract unchanged. Canon empty. Next = **Targeted Safety Ingest**, then Safety Review V1.1. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-26):** **Library fill** — lightweight provenance, not research ladder. Taxonomy / coverage cells / Content Item contract / Meaning boundary unchanged. Research documents (Landscape → Targeted Safety) = archive, non-blocking. Do **not** open Safety Review V1.1. Do **not** continue box_breathing. `technique.box_breathing` = `skipped_for_now`. Next sourced cell = `need.calm.downregulate` (preferred `extended_exhale`). 133 items stay `llm_provisional` without `technique_id` until a cell is rewritten. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+
+## Architecture impact — Practice Library Fill / research collapse (2026-08-26)
+
+- **SoT before:** fill blocked on Landscape → Shortlist → Ingest → Normalization → Targeted* → Safety Review. NOW = Targeted Safety Ingest → Safety Review V1.1. `technique_canon` empty. Fill frozen. One type (`box_breathing`) occupied ten passes.
+- **SoT after:** fill = lightweight provenance (source check → own-words description → safety notes if material → accepted/skipped → Content Item). Research ladder = archive, non-blocking. `box_breathing` = `skipped_for_now`. Next Product = library fill at `need.calm.downregulate`. 133 items remain `llm_provisional`. Taxonomy classes/types, coverage cells, item contract field groups, and Meaning boundary unchanged.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Existing items stay provisional without `technique_id`.
+- **Canon updated?** yes — [PRACTICE_LIBRARY_FILL_V1.md](./practices/PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./practices/PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md) · provenance 1.12 · technique canon contract 1.1 · coverage next_pass · landscape 1.6 pointer · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with continuing research escalation as an unlock of fill.
+
+## Architecture impact — Practice Technique Targeted Safety Ingest V1 (2026-08-26)
+
+- **SoT before:** Targeted Safety Shortlist V1 stop A selected Joshi (`hold_exclusion`) and Nivethitha (`hold_precaution`). Next step could glue kumbhaka contraindications and empty-lung BP rise into `who_must_not_hold` for box/square.
+- **SoT after:** Two independent safety observations. Joshi exclusions stay in kumbhaka context. Nivethitha is `observed_physiological_response`; dose/duration unspecified in this locus. Transfer limits stay visible. No new safety rules. Exclusion / precaution / stop_rule first allowed at Safety Review V1.1.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Fill frozen.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) · ingest JSON · provenance 1.11 · coverage · landscape 1.5 pointer · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with writing `technique_canon`, `technique_id`, `who_must_not_hold`, optional hold, or `may_release` from this pass.
 
 ## Architecture impact — Practice Technique Targeted Safety Shortlist V1 (2026-08-26)
 
@@ -2593,6 +2611,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-26 | Practices / Canon | **Research escalation closed; library fill unfrozen** | **ACCEPTED** | Landscape→…→Targeted Safety = archive, non-blocking. Lightweight provenance is the fill process. box_breathing skipped_for_now. Next Product = library fill at need.calm.downregulate, not Safety Review V1.1. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-26 | Practices / Canon | **Targeted Safety Ingest V1 (observations, not a who-list)** | **ACCEPTED** | Joshi kumbhaka exclusions stay in kumbhaka context. Nivethitha is empty-lung physiology, dose unspecified in this locus. Transfer limits locked. No new safety rules. Next = Safety Review V1.1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md).
 - 2026-08-26 | Practices / Canon | **Targeted Safety Shortlist V1 (who_must_not_hold)** | **ACCEPTED** | Stop A. Joshi 2024 hold_exclusion + Nivethitha 2017 hold_precaution selected. Wellness rejected. Exertion rehab supporting, not transferred. Structural finding recorded; Safety Review V1 contract unchanged. Next = Targeted Safety Ingest → Safety Review V1.1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md).
 - 2026-08-26 | Practices / Canon | **Safety Review V1 (insufficient_safety)** | **ACCEPTED** | S-B2 locked. Stop-rules present (SFH, not in kernel). who_must_not_hold unknown. Prohibition none. Claims default-closed. Overall insufficient_safety, not may_not_release. Canon empty. Next = owner decides. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md).
 - 2026-08-25 | Practices / Canon | **Normalization V1.1 (four-phase remap)** | **ACCEPTED** | Hold required (N-H1). Equal count common_parameter (N-E2). Overall normalize_one candidate, not canon. Landscape remapped; V1 hypothesis preserved. Next = Safety Review. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md).

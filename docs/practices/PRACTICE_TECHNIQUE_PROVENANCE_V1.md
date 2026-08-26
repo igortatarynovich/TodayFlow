@@ -1,23 +1,14 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.10 (2026-08-26).  
+**Версия:** 1.12 (2026-08-26) — lightweight fill; research ladder archived, non-blocking.  
 **Владелец:** Product + Research.  
-**Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (шаги 1–9 до ingest).  
+**Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (иерархия доказательности, не обязательная лестница fill).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
 **Taxonomy:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md).  
-**Fill freeze:** [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md).  
-**Machine:** [`technique_canon_contract_v1.json`](../../DATA/reference/practice/technique_canon_contract_v1.json) · [`technique_canon_v1.json`](../../DATA/reference/practice/technique_canon_v1.json) (empty).  
-**Landscape (parent 5–7):** [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) · [`technique_landscape_v1.json`](../../DATA/reference/practice/technique_landscape_v1.json).  
-**Shortlist criteria (parent 8):** [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) · [`technique_shortlist_criteria_v1.json`](../../DATA/reference/practice/technique_shortlist_criteria_v1.json).  
-**Shortlist (parent 9, vertical slice):** [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) · [`technique_shortlist_v1.json`](../../DATA/reference/practice/technique_shortlist_v1.json). Full corpus **not opened**.  
-**Ingest (parent 10, equal_count_breath):** [PRACTICE_TECHNIQUE_INGEST_V1.md](./PRACTICE_TECHNIQUE_INGEST_V1.md) · [`technique_ingest_v1.json`](../../DATA/reference/practice/technique_ingest_v1.json). Evidence records, not canon.  
-**Normalization (equal_count_breath):** [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) · [`technique_normalization_v1.json`](../../DATA/reference/practice/technique_normalization_v1.json). Decision `insufficient_evidence`.  
-**Targeted shortlist (post-exhale hold identity):** [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) · [`technique_targeted_shortlist_v1.json`](../../DATA/reference/practice/technique_targeted_shortlist_v1.json). Resolution loci ≠ canon.  
-**Targeted ingest (two resolution loci):** [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) · [`technique_targeted_ingest_v1.json`](../../DATA/reference/practice/technique_targeted_ingest_v1.json). Evidence records, not V1.1.  
-**Normalization V1.1:** [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) · [`technique_normalization_v1_1.json`](../../DATA/reference/practice/technique_normalization_v1_1.json). `normalize_one` candidate, not canon.  
-**Safety Review:** [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) · [`technique_safety_review_v1.json`](../../DATA/reference/practice/technique_safety_review_v1.json). `insufficient_safety`; not canon.  
-**Targeted Safety Shortlist:** [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) · [`technique_targeted_safety_shortlist_v1.json`](../../DATA/reference/practice/technique_targeted_safety_shortlist_v1.json). who_must_not_hold; selected ≠ who-list.
+**Active fill:** [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md).  
+**Research archive (non-blocking):** [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md).  
+**Machine:** [`technique_canon_contract_v1.json`](../../DATA/reference/practice/technique_canon_contract_v1.json) · [`technique_canon_v1.json`](../../DATA/reference/practice/technique_canon_v1.json).
 
 **Это:** откуда берётся *техника*; как она становится канонической; чем Content Item отличается от канона.  
 **Это не:** экран `/practices` · Meaning дня · медицинский протокол · разрешение копировать чужой текст · разрешение заявлять efficacy.
@@ -26,12 +17,12 @@
 
 ## Architecture impact
 
-- **SoT before:** Content Item писался сразу против need cell / type. Источник техники = формулировка LLM под taxonomy. Coverage-first закрывал ячейки, но не проверял, существует ли техника вне модели.
-- **SoT after:** техника живёт в **Canonical Technique**. Content Item — продуктовая реализация (`technique_id` + duration / delivery / locale / context). Pipeline: Source → extraction → normalization → safety review → canonical technique → item expression. LLM пишет финальный payload **после** канона, не invents mechanism/steps. Fill библиотеки **заморожен**, пока нет канонических техник. Первые 11 items — architecture probes, не content SoT.
-- **Public contract changed?** no — Today / Profile JSON, `practice_recommendation`, screen need/format не меняются.
-- **Migration required?** no runtime. `identity.technique_id` optional, пока registry пуст. Когда появятся canonical rows, новые production items обязаны ссылаться; текущие 133 draft остаются без `technique_id`.
-- **Canon updated?** yes — этот файл · technique contract + empty registry · item contract · taxonomy pipeline · coverage freeze · `_INDEX` · README · tracker
-- **Backward compatible?** yes для клиентов. Несовместимо с продолжением LLM-seed как content SoT: audio vs text и дальнейшие items **запрещены**, пока не пройден provenance.
+- **SoT before (v1.11):** техника требовала Landscape → Shortlist → Ingest → Normalization → targeted* → Safety Review до canon. Fill frozen. `box_breathing` не закрыт.
+- **SoT after:** provenance = **lightweight row** на технику (`accepted` \| `skipped`). Research ladder = [archive](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md), non-blocking. Active process = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing` = `skipped_for_now`. 133 items остаются provisional без `technique_id`, пока fill их не перепишет. Meaning по-прежнему не знает `item_id` / `technique_id`.
+- **Public contract changed?** no
+- **Migration required?** no runtime. `identity.technique_id` optional; только `status = accepted` можно ставить на item.
+- **Canon updated?** yes — этот файл · fill V1 · archive index · technique contract · coverage next_pass · tracker
+- **Backward compatible?** yes для клиентов. Несовместимо с research escalation как unlock fill.
 
 ---
 
@@ -40,7 +31,7 @@
 1. **LLM не источник техники.** Память модели, wellness-блоги, SEO-explainer'ы, «так делают все» — не evidence. LLM может извлечь paraphrase из *легально прочитанного* источника и позже сформулировать item. Не может задать mechanism, steps, safety или claim.
 2. **Существование техники ≠ efficacy.** Традиция 2000 лет не даёт медицинского эффекта. Efficacy живёт в `allowed_claims[]` / `prohibited_claims[]` и `efficacy_claim_level`, не выводится из `tradition[]`.
 3. **Своя формулировка, не копия.** Канон фиксирует устойчивое ядро (mechanism + bounds + variants). Item — наш текст. Copyrighted protocol / guided script не копируется.
-4. **Не lock авторов до shortlist.** Parent: модель → ландшафт типов источников → карта поля → критерии → shortlist → ingest. Запрещено начинать с «откроем Kabat-Zinn / Linehan / Jacobson».
+4. **Не эскалировать спор в лестницу.** Если type не закрывается коротким source check — `skipped`, другой type. Landscape / shortlist / ingest **не** обязательны.
 5. **Психология/медицина ≠ астрологический CORE.** Иерархия доказательности задаётся заранее. Межшкольная конвергенция IL не повышает клинический вес.
 6. **Meaning не знает `technique_id`.** Как и `item_id`: астрология / CE / Today эмитят need, не технику.
 
@@ -61,7 +52,7 @@ technique.extended_exhale          canonical kernel
 | **Canonical Technique** | Что это за метод? Откуда? Какое ядро? Что нельзя обещать? | этот файл + `technique_canon_v1.json` |
 | **Content Item** | Какая двухминутная / вечерняя / audio версия для Today? | taxonomy §10 + `content_library_v1.json` |
 
-Item без `technique_id` может существовать только как **provisional**. `technique_id` — только при каноне `review_status = canonical`. Убедительный shortlist библиотеку не аттестует. `status: active` и publish — только с каноном.
+Item без `technique_id` может существовать как **provisional**. `technique_id` — только при `status = accepted`. Archive shortlist / ingest библиотеку не аттестует. `status: active` и publish — только с принятой техникой.
 
 Retrieval по-прежнему выбирает **item**. Канон не участвует в matching, кроме того что item на него ссылается.
 
@@ -74,17 +65,16 @@ Retrieval по-прежнему выбирает **item**. Канон не уч�
 **Происхождение техники**
 
 ```text
-candidate_family
-  → shortlist candidates → source/locus assessment → selected loci
-  → ingest paraphrase (evidence records)
-  → normalization (normalize_one | split_family | insufficient_evidence)
-  → if insufficient_evidence: targeted shortlist → targeted ingest → Normalization V1.1
-  → safety review (only after normalize_one)
-  → if insufficient_safety: targeted safety shortlist → targeted safety ingest → Safety Review V1.1
-  → canonical | rejected → Content Item expression (technique_id only if canonical)
+preferred type
+  → reliable source check
+  → canonical_description (своими словами)
+  → safety_notes if materially required
+  → accepted | skipped
+  → Content Item (technique_id only if accepted)
 ```
 
-Shortlist: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md). Ingest: [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md). Normalization: [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`). Targeted shortlist: [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md). Targeted ingest: [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md). Normalization V1.1: [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) (`normalize_one` candidate). Safety review: [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) (`insufficient_safety`). Targeted safety shortlist: [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (who_must_not_hold; selected ≠ who-list). Canon пуст.
+Active: [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md).  
+Лестница Landscape → … → Safety Review — [archive](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md). Не unlock.
 
 **Продуктовая выдача** (без изменения)
 
@@ -92,7 +82,7 @@ Shortlist: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.m
 Meaning → Need → Retrieval constraints → Content Library → Content Item
 ```
 
-Fill-pass coverage ([PRACTICE_CONTENT_COVERAGE_V1](./PRACTICE_CONTENT_COVERAGE_V1.md)) остаётся законом *каких ячеек продукт должен уметь закрыть*. Он больше **не** разрешает писать payload из головы, чтобы закрыть ячейку.
+Fill-pass coverage ([PRACTICE_CONTENT_COVERAGE_V1](./PRACTICE_CONTENT_COVERAGE_V1.md)) остаётся законом *каких ячеек продукт должен уметь закрыть*. Payload не пишется из головы LLM. Process: [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md).
 
 ---
 
@@ -270,26 +260,23 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 ## 10. Запрещено
 
-- Писать новые Content Items, пока fill frozen.
-- Ставить `identity.technique_id` до `review_status = canonical`. Shortlist / ingest evidence этого не дают.
+- Считать research ladder обязательной для новой техники.
+- Продолжать Safety Review V1.1 / targeted safety на `box_breathing`.
+- Ставить `identity.technique_id` при `status = skipped`.
 - Считать coverage `seed` = «техника проверена».
 - Копировать астрологический CORE / school-intersection в evidence техник.
-- Lock авторов (Kabat-Zinn, Linehan, Jacobson, Steele, Fogg, …) до шагов 8–9 parent.
 - Переносить традицию в `allowed_claims`.
 - Медицинские, диагностические, манифестационные формулировки.
-- Параллельный «practice research v2» без указателя на этот файл и на parent.
 - Считать C1 registries или `CONTENT/practices/*.json` provenance.
 
 ---
 
 ## 11. Что дальше
 
-1. Landscape → Shortlist → Ingest → Normalize V1 = `insufficient_evidence`. V1.1 = `normalize_one`. Safety Review = `insufficient_safety`. Targeted Safety Shortlist = stop A (Joshi 2024 + Nivethitha 2017). Canon пуст.
-2. Следующий named pass: **Targeted Safety Ingest** selected hold loci. Затем Safety Review V1.1. Не canonical.
-3. `technique_id` на probe — только после `may_release` и `canonical`.
-4. Затем expressions (5 min / audio) от канона, не от LLM-seed.
-
-Registry сейчас **пуст**. Это правильно.
+1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
+2. `box_breathing` = `skipped_for_now`. Probe без `technique_id`.
+3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Первая ячейка: `need.calm.downregulate`.
+4. 133 items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
 
@@ -297,6 +284,8 @@ Registry сейчас **пуст**. Это правильно.
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | v1.12 — research ladder archived; lightweight fill is SoT; box_breathing skipped_for_now; next = library fill |
+| 2026-08-26 | v1.11 — Targeted Safety Ingest V1: two source-faithful hold observations; not a who-list; next = Safety Review V1.1 |
 | 2026-08-26 | v1.10 — Targeted Safety Shortlist V1: who_must_not_hold; stop A; next = targeted safety ingest |
 | 2026-08-26 | v1.9 — Safety Review V1: S-B2; insufficient_safety; not canon; next = owner decides |
 | 2026-08-25 | v1.8 — Normalization V1.1: hold required, equal_count common_parameter; normalize_one candidate; landscape remapped; next = Safety Review |

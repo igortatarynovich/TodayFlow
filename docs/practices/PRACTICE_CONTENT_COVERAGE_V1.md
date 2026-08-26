@@ -1,11 +1,12 @@
 # Practice Content Coverage v1
 
-**Статус:** `ACCEPTED` — SoT fill-pass библиотеки. **Fill frozen** 2026-08-25.  
-**Версия:** 1.1 (2026-08-25).  
+**Статус:** `ACCEPTED` — SoT fill-pass библиотеки. **Fill unfrozen** 2026-08-26.  
+**Версия:** 1.1 (2026-08-25); pointer 2026-08-26 — sourced fill, not research ladder.  
 **Владелец:** Product.  
 **Ledger:** [`DATA/reference/practice/content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).  
 **Parent:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) §0.1 · §10.  
-**Provenance (next):** [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md).
+**Active fill:** [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md).  
+**Provenance:** [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md).
 
 **Это:** какие ячейки продукт обязан уметь закрыть **до** массовой генерации текста.  
 **Это не:** тексты практик как SoT · runtime retrieval · screen need-чипы · cartesian product · разрешение писать payload из LLM.
@@ -15,17 +16,17 @@
 ## Architecture impact
 
 - **SoT before:** taxonomy locked types/purpose/state; fill implied as «написать items против vocab». Риск — плотность в одной технике (40 grounding) и дыры в purpose/direction/class. После P0/P1 density: 133 LLM-draft items закрывали cells, но техника не имела provenance.
-- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание не SoT.** Fill frozen. Следующий pass = Canonical Technique, не audio vs text. Первые 11 items = architecture probes.
+- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing` = skipped_for_now. Next sourced cell = `need.calm.downregulate`. Первые 11 items = architecture probes.
 - **Public contract changed?** no
 - **Migration required?** no runtime. 133 drafts stay provisional without `technique_id`.
-- **Canon updated?** yes — this file · matrix JSON · [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · taxonomy v1.2 · tracker
+- **Canon updated?** yes — this file · matrix JSON · [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · taxonomy pointer · tracker
 - **Backward compatible?** yes for clients. Not compatible with continuing LLM-seed as content SoT.
 
 ---
 
 ## 0. Закон fill-pass
 
-0. **Fill frozen.** Не писать новые items (включая audio vs text), пока нет Canonical Technique. 133 draft = `llm_provisional`. Первые 11 = architecture probes.
+0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 11 = architecture probes. Next sourced cell = `need.calm.downregulate`.
 1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
@@ -183,19 +184,20 @@ Seed-pass не закрывает несколько cells одним item, да
 | P1 density (audio vs text) | `delivery` audio+guided на seed, который ещё text+unguided | **cancelled** — fill frozen; LLM is not technique source |
 | P1 types семейства | 42 types не primary/alt ни одной P0 cell | **blocked**: `form_ok` не пускает на текущие cells. Нужны P1 variant cells или смена SoT |
 | P1 variants | тот же purpose, другой direction (`need.focus.stabilize` и т. п.) | не этот pass — расширение ledger |
-| **Technique landscape** | семейства методов + типы источников по class | **done** — [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md); full shortlist still closed |
-| **Shortlist criteria** | допуск семьи к shortlist (C1–C9); не корпус | **done** — [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) |
-| **Shortlist by family** | loci под критерии; type = expression hypothesis | **done** — one slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) |
-| **Ingest** | paraphrase selected loci → evidence records | **done** — [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md) |
-| **Normalization** | один kernel / split / insufficient_evidence | **done** — [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`) |
-| **Targeted shortlist** | identity post-exhale hold | **done** — [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) |
-| **Targeted ingest** | paraphrase selected resolution loci | **done** — [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) |
-| **Normalization V1.1** | retry: post_exhale_hold + equal_count axes, then overall verdict | **done** — [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) (`normalize_one` candidate) |
-| **Safety Review** | bounds / claims of the normalized candidate | **done** — [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) (`insufficient_safety`) |
-| **Targeted Safety Shortlist** | who_must_not_hold for required holds | **done** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
-| **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **next** |
-| **Technique provenance / canon** | canonical → item `technique_id` | after `may_release` + owner canonical close |
-| P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после provenance, не вместо |
+| **Technique landscape** | семейства методов + типы источников по class | **archive** — [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md); non-blocking |
+| **Shortlist criteria** | допуск семьи к shortlist (C1–C9); не корпус | **archive** — [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) |
+| **Shortlist by family** | loci под критерии; type = expression hypothesis | **archive** — one slice: [PRACTICE_TECHNIQUE_SHORTLIST_V1](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) |
+| **Ingest** | paraphrase selected loci → evidence records | **archive** — [PRACTICE_TECHNIQUE_INGEST_V1](./PRACTICE_TECHNIQUE_INGEST_V1.md) |
+| **Normalization** | один kernel / split / insufficient_evidence | **archive** — [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) (`insufficient_evidence`) |
+| **Targeted shortlist** | identity post-exhale hold | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) |
+| **Targeted ingest** | paraphrase selected resolution loci | **archive** — [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) |
+| **Normalization V1.1** | retry: post_exhale_hold + equal_count axes, then overall verdict | **archive** — [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) (`normalize_one` candidate) |
+| **Safety Review** | bounds / claims of the normalized candidate | **archive** — [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) (`insufficient_safety`) |
+| **Targeted Safety Shortlist** | who_must_not_hold for required holds | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
+| **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) (not continued) |
+| **Safety Review V1.1** | may_release vs model of who_must_not_hold | **not opened** — research escalation closed |
+| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); first cell `need.calm.downregulate`; `box_breathing` skipped_for_now |
+| P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после sourced fill, не вместо |
 
 ---
 
@@ -208,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **Targeted Safety Ingest** selected hold loci. Не следующая семья. Не писать новые items. Не ставить `technique_id`. Canon пуст.
+Следующий рабочий шаг: **library fill** ([PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md)). Первая sourced-ячейка: `need.calm.downregulate`. `box_breathing` = skipped_for_now. Не Safety Review V1.1. 133 items остаются provisional без `technique_id`, пока ячейка не переписана.
 
 ---
 
@@ -216,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-26 | **Research escalation closed.** Ladder = archive / non-blocking. Fill unfrozen. Lightweight provenance is the fill process. `box_breathing` skipped_for_now. Next sourced cell = `need.calm.downregulate`. [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). |
 | 2026-08-26 | **Targeted Safety Shortlist V1.** who_must_not_hold. Stop A. Joshi 2024 + Nivethitha 2017 selected. Wellness rejected. Next = Targeted Safety Ingest. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md). |
 | 2026-08-26 | **Safety Review V1.** S-B2 locked. Overall `insufficient_safety`. Not canon. Next = owner decides. [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md). |
 | 2026-08-25 | **Normalization V1.1.** Axes: hold required, equal_count common_parameter. Overall `normalize_one` candidate. Landscape remapped. Next = Safety Review. [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md). |

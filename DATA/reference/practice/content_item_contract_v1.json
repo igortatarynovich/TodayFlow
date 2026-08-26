@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "status": "draft",
   "semantic_version": "content-taxonomy-v1.1",
-  "description": "Content Item = three groups. Product expression of a Canonical Technique when identity.technique_id is set. Canon: docs/practices/PRACTICE_CONTENT_TAXONOMY_V1.md §10. Provenance: docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md. Fill policy: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md (frozen pending technique canon).",
+  "description": "Content Item = three groups. Product expression of a Canonical Technique when identity.technique_id is set (accepted rows only). Canon: docs/practices/PRACTICE_CONTENT_TAXONOMY_V1.md §10. Provenance: docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md. Fill policy: docs/practices/PRACTICE_LIBRARY_FILL_V1.md.",
   "groups": {
     "identity": {
       "required": ["item_id", "content_class", "type", "status", "semantic_version"],
@@ -16,7 +16,7 @@
         "status": "draft | active | retired",
         "semantic_version": "content-taxonomy-v1.x",
         "seed_cell": "P0 seed-pass only: the one need cell this item was created for. Retrieval tags do not close other cells.",
-        "technique_id": "optional until registry has canonical rows; must exist in technique_canon_v1 if set; Meaning never emits it"
+        "technique_id": "optional; only if technique_canon status=accepted; Meaning never emits it"
       }
     },
     "retrieval": {

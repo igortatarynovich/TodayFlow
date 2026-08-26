@@ -124,5 +124,7 @@
     "reopen_kernel",
     "optional_hold",
     "auto_open_targeted_safety_research"
-  ]
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
 }

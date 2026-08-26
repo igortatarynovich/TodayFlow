@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "status": "provisional",
   "semantic_version": "content-taxonomy-v1.1",
-  "fill_frozen": true,
-  "next_pass": "targeted_safety_ingest_who_must_not_hold",
-  "description": "Coverage-first ledger. Architecture coverage stands. Content fill frozen. Equal-count thread = Safety Review insufficient_safety; targeted safety shortlist selected hold loci. Not canon. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · targeted safety shortlist: docs/practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md",
+  "fill_frozen": false,
+  "next_pass": "library_fill_lightweight_provenance",
+  "next_fill_cell": "need.calm.downregulate",
+  "skipped_types": ["box_breathing"],
+  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing skipped_for_now. Next cell: need.calm.downregulate. 133 items remain llm_provisional until rewritten. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,
@@ -14,7 +16,7 @@
     "next_cell_is_first_empty_in_ledger_order": true,
     "seed_closes_exactly_one_cell": true,
     "llm_is_not_technique_source": true,
-    "fill_frozen_until_technique_canon": true
+    "research_ladder_does_not_block_fill": true
   },
   "counts": {
     "need_cells": 26,

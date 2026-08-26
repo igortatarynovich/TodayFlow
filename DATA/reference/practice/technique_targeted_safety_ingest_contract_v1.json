@@ -1,0 +1,70 @@
+{
+  "contract_version": "technique_targeted_safety_ingest_contract_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-targeted-safety-ingest-v1.0",
+  "description": "Provenance-preserving paraphrase of two targeted-safety-shortlist selected loci. Observations stay in their named-practice context. Transfer limits stay visible. Not a product who-list. Not Safety Review V1.1. Not technique canon. Canon: docs/practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "does_not_reopen_kernel": true,
+  "does_not_rewrite_safety_contract": true,
+  "does_not_write_who_must_not_hold": true,
+  "does_not_write_safety_rules": true,
+  "does_not_transfer_onto_four_phase_candidate": true,
+  "selected_means_still": "allowed_for_targeted_safety_ingest; ingest does not write a who-list",
+  "required_evidence_fields": [
+    "evidence_id",
+    "candidate_family",
+    "source_ref",
+    "locus",
+    "source_family",
+    "paraphrase",
+    "speech_type",
+    "named_practice",
+    "practice_context",
+    "hold_phase",
+    "dose_or_duration",
+    "population",
+    "observed_exclusions",
+    "observed_precautions",
+    "observed_physiology",
+    "transfer_limits",
+    "source_claim_scope",
+    "ingest_status"
+  ],
+  "ingest_status": ["ingested"],
+  "speech_type": [
+    "hold_exclusion",
+    "observed_physiological_response"
+  ],
+  "source_claim_scope": [
+    "kumbhaka_exclusion_statements_in_yoga_hypertension_review",
+    "acute_cardiovascular_response_during_bahir_kumbhaka"
+  ],
+  "v1_1_questions_not_decided": [
+    {
+      "id": "enough_for_may_release",
+      "status": "unanswered"
+    },
+    {
+      "id": "binary_who_must_not_hold_still_correct_model",
+      "status": "unanswered",
+      "later_structural_model_first_allowed_at": "technique_safety_review_v1_1",
+      "later_structural_model_allowed": ["exclusion", "precaution", "stop_rule"]
+    }
+  ],
+  "invariants": [
+    "exactly the two selected safety loci",
+    "one evidence record per selected locus",
+    "Joshi exclusions stay in practice_context kumbhaka",
+    "Joshi is not a who_must_not_hold candidate for four-phase square breathing",
+    "Nivethitha is observed_physiological_response, not an exclusion list",
+    "Nivethitha dose_or_duration stays unspecified in this locus",
+    "transfer_limits stay visible for Safety Review V1.1",
+    "does not write new product safety rules",
+    "does not write technique_canon_v1",
+    "does not set technique_id",
+    "does not reopen the kernel",
+    "does not declare an optional hold"
+  ]
+}

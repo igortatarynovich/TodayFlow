@@ -1,9 +1,23 @@
 {
   "contract_version": "technique_canon_v1",
-  "version": "1.0.0",
-  "status": "empty",
-  "semantic_version": "practice-technique-v1.0",
-  "description": "Canonical techniques for Practice Content Library. Empty until provenance ingest. Do not seed from LLM. Canon: docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md",
-  "fill_frozen_until_canonical_rows": true,
-  "techniques": []
+  "version": "1.1.0",
+  "status": "open",
+  "semantic_version": "practice-technique-v1.1",
+  "description": "Lightweight technique registry. Rows do not require Landscape/Shortlist/Ingest/Normalization. Fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
+  "fill_process": "library_fill_lightweight_provenance",
+  "research_ladder_required": false,
+  "techniques": [
+    {
+      "technique_id": "technique.box_breathing",
+      "content_class": "practice",
+      "type": "box_breathing",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "skipped_for_now",
+      "note": "Equal-count / four-phase hold research became a sunk-cost trap. Do not continue Safety Review V1.1 or targeted safety work on this type. Use another suitable type for the need. Existing library items stay provisional without technique_id."
+    }
+  ]
 }

@@ -1,27 +1,38 @@
 # Practices — индекс канона
 
+## Active
+
 | Документ | Роль |
 |----------|------|
 | [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) | **SoT библиотеки** (v1.2): class → type → attributes · Canonical Technique → Item expression · pipeline Meaning→Retrieval→Library. Vocab: `DATA/reference/practice/content_taxonomy_v1.json` |
-| [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) | **SoT происхождения техники.** Source → canonical technique → item. LLM не источник метода. Fill frozen. Registry empty. |
-| [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) | **Landscape V1** (parent 5–7): четыре карты class; семьи не авторы. Full shortlist закрыт; один slice. |
-| [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) | **Shortlist Criteria V1** (parent 8): допуск семьи; C1–C9. Corpus **not opened**. |
-| [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) | **Shortlist V1** (parent 9): vertical slice `equal_count_breath`; selected ≠ canon. |
-| [PRACTICE_TECHNIQUE_INGEST_V1.md](./PRACTICE_TECHNIQUE_INGEST_V1.md) | **Ingest V1** (parent 10): three evidence records; not kernel; not canon. |
-| [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) | **Normalization V1**: `insufficient_evidence`; research question on post-exhale hold. |
-| [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) | **Targeted Shortlist V1**: hold identity; definition+contrast selected. |
-| [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) | **Targeted Ingest V1**: two resolution loci; axes unglued. |
-| [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) | **Normalization V1.1**: `normalize_one` candidate; landscape remapped. |
-| [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) | **Safety Review V1**: `insufficient_safety`; not canon. |
-| [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) | **Targeted Safety Shortlist V1**: who_must_not_hold; stop A; selected ≠ who-list. |
-| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Fill-pass** (v1.1): 26/26 P0 cells · architecture stands · **frozen**. Next = Targeted Safety Ingest |
+| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Coverage** (v1.1): 26/26 P0 cells · type spine. Architecture stands. Sourced fill unfrozen. Next cell = `need.calm.downregulate` |
+| [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md) | **Active fill:** lightweight provenance → accepted/skipped → Content Item. Не research ladder |
+| [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) | **SoT происхождения техники** (v1.12): одна запись на технику. LLM не источник метода. Meaning не знает `item_id` / `technique_id` |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | **SoT экрана** (v1.1): цикл состояния; 6 needs (тело + рефлексия; Уснуть last); 9 formats (yoga/stretch/music + reflection/sleep); сессия; music layer |
 | [practices_screen_mockup_v1.png](./practices_screen_mockup_v1.png) | **Визуальный референс** экрана (загруженный скрин спеки) — UI-паритет + C0b need-лента |
+
+## Research archive (non-blocking)
+
+История Landscape → Shortlist → Ingest → Normalization → Targeted* → Safety Review. **Не** active fill sequence. **Не** NOW. **Не** unlock. Index: [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md).
+
+| Документ | Чем был |
+|----------|---------|
+| [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) | карта семей |
+| [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) | C1–C9 |
+| [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_SHORTLIST_V1.md) | slice `equal_count_breath` |
+| [PRACTICE_TECHNIQUE_INGEST_V1.md](./PRACTICE_TECHNIQUE_INGEST_V1.md) | three evidence records |
+| [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) | `insufficient_evidence` |
+| [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) | hold identity |
+| [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) | two resolution loci |
+| [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) | `normalize_one` candidate |
+| [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) | `insufficient_safety` |
+| [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) | who_must_not_hold; stop A |
+| [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) | two hold-safety observations |
 
 **Связанные (не заменяют этот пакет):**
 
 - [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) — практика дня / recommendation в Today
 - [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) — visual tokens (Practices не вводит параллельный Figma-канон экрана)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md) — Practice / Habit / Ascetic registries
-- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — parent порядка исследования. Применение к техникам: [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md). Клинические/психологические утверждения — своя иерархия доказательности, не астрологический CORE.
+- [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) — parent порядка исследования. Practice fill **не** требует parent steps 5–10. Клинические/психологические утверждения — своя иерархия доказательности, не астрологический CORE.
 - Legacy catalog keys в коде: map → need/format IDs, не SoT шапки
