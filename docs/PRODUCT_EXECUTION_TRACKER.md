@@ -24,7 +24,7 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-26):** **Library fill** — next cell `need.grounding.stabilize`. `need.energy.activate` sourced via existing alt type `mobility`; `energizing_breath` skipped (probe not a method; no pranayama remap). `need.focus.focus` sourced (`focused_attention`); `need.calm.downregulate` sourced (`extended_exhale`). Do **not** reopen box or energizing-breath research. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-26):** **Library fill** — next cell `need.clarity.reflect`. Sourced 4/26: calm (`extended_exhale`), focus (`focused_attention`), energy (`mobility`), grounding (`sensory_grounding`; kernel = notice present sense data, not 3-2-1). `box_breathing` and `energizing_breath` skipped. Do **not** reopen skipped-breath research. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md). Meaning still does not emit `item_id` or `technique_id`.
 
 ## Architecture impact — Practice Library Fill / research collapse (2026-08-26)
 
@@ -2611,6 +2611,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-26 | Practices / Canon | **Library fill: sensory_grounding sourced** | **ACCEPTED** | need.grounding.stabilize closed. Kernel = notice/name present sense data; 5-4-3-2-1 and 3-2-1 are not the kernel. Probe rewritten. Next cell = need.clarity.reflect. No new type. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-08-26 | Practices / Canon | **Library fill: mobility sourced** | **ACCEPTED** | need.energy.activate closed with existing alt type mobility (brief unforced joint movement). energizing_breath skipped_for_now: LLM probe is not a confirmed method; forceful pranayama not used to save the preferred type. Next cell = need.grounding.stabilize. No new type. No named pass. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-08-26 | Practices / Canon | **Library fill: focused_attention sourced** | **ACCEPTED** | need.focus.focus closed with existing alt type focused_attention (one object, return when attention wanders). box_breathing stayed skipped; no breath substitute. Next cell = need.energy.activate. No new type. No named pass. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-08-26 | Practices / Canon | **Library fill: extended_exhale sourced** | **ACCEPTED** | technique.extended_exhale accepted from two NHS method descriptions (longer unforced exhale, no hold). practice.extended_exhale.001 attached and rewritten. Cell need.calm.downregulate = sourced. Next cell = need.focus.focus (box_breathing skipped — other type or skip). No new named pass. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).

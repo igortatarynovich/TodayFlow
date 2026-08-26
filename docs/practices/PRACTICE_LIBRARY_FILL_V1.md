@@ -69,7 +69,7 @@ status                    accepted | skipped
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `extended_exhale`, `focused_attention`, `mobility` = `accepted`. Sourced: `need.calm.downregulate`, `need.focus.focus`, `need.energy.activate`. `box_breathing` и `energizing_breath` = `skipped_for_now` (не спасать probe и не мапить на pranayama). Следующая ячейка: `need.grounding.stabilize`. Не открывать Safety Review V1.1.
+**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding` = `accepted`. Sourced: calm, focus, energy, grounding (4/26). `box_breathing` и `energizing_breath` = `skipped_for_now`. Следующая ячейка: `need.clarity.reflect`. Не открывать Safety Review V1.1.
 
 ---
 

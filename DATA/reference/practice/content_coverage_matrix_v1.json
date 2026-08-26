@@ -5,9 +5,9 @@
   "semantic_version": "content-taxonomy-v1.1",
   "fill_frozen": false,
   "next_pass": "library_fill_lightweight_provenance",
-  "next_fill_cell": "need.grounding.stabilize",
+  "next_fill_cell": "need.clarity.reflect",
   "skipped_types": ["box_breathing", "energizing_breath"],
-  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing and energizing_breath skipped_for_now. Sourced: need.calm.downregulate (extended_exhale), need.focus.focus (focused_attention), need.energy.activate (mobility). Next cell: need.grounding.stabilize. Remaining items llm_provisional until rewritten. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
+  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing and energizing_breath skipped_for_now. Sourced: need.calm.downregulate (extended_exhale), need.focus.focus (focused_attention), need.energy.activate (mobility), need.grounding.stabilize (sensory_grounding). Next cell: need.clarity.reflect. Remaining items llm_provisional until rewritten. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,
@@ -21,8 +21,8 @@
   "counts": {
     "need_cells": 26,
     "need_cells_empty": 0,
-    "need_cells_seed": 23,
-    "need_cells_covered": 3,
+    "need_cells_seed": 22,
+    "need_cells_covered": 4,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
@@ -155,7 +155,8 @@
         "today",
         "practices_screen"
       ],
-      "status": "seed",
+      "status": "covered",
+      "fill_status": "sourced",
       "item_ids": [
         "practice.sensory_grounding.001",
         "meditation.grounding.001",

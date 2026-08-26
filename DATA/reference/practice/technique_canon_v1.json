@@ -121,6 +121,32 @@
       ],
       "allowed_claims": [],
       "status": "accepted"
+    },
+    {
+      "technique_id": "technique.sensory_grounding",
+      "content_class": "practice",
+      "type": "sensory_grounding",
+      "canonical_description": "Briefly notice what is available to the senses in the present surroundings: name something you see, something you hear, something you touch. Do not explain. Count schemes such as 5-4-3-2-1 or 3-2-1 are pace aids, not the kernel. This product version is not a panic, trauma, or dissociation protocol.",
+      "source_refs": [
+        {
+          "source": "Oxford Health NHS CAMHS — Ground yourself",
+          "url": "https://oxfordhealth.nhs.uk/camhs/self-care/sleep/relaxation/ground-yourself/",
+          "locus": "Grounding: move attention to the present, the current environment, and the feel of being in that place; notice small sensory details; 5-4-3-2-1 is one way",
+          "note": "official_health. Method confirmation. Anxiety/sleep-treatment claims and the named 5-4-3-2-1 script not imported."
+        },
+        {
+          "source": "NHS inform — Grounding exercises",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/grounding-exercises/",
+          "locus": "Grounding as a technique to take the mind off uncomfortable symptoms or thoughts; 5,4,3,2,1 listed as one exercise among others",
+          "note": "official_health. Method confirmation. Symptom-reduction claims and the counted script not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if the practice makes you feel worse.",
+        "Not a treatment for anxiety, panic, trauma, or dissociation."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
     }
   ]
 }

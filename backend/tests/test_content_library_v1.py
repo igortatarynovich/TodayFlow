@@ -280,6 +280,13 @@ def test_technique_canon_lightweight_skip_box() -> None:
     assert mobility["allowed_claims"] == []
     assert mobility["source_refs"]
     assert mobility["canonical_description"].strip()
+    sensory = by_id["technique.sensory_grounding"]
+    assert sensory["status"] == "accepted"
+    assert sensory["type"] == "sensory_grounding"
+    assert sensory["allowed_claims"] == []
+    assert sensory["source_refs"]
+    assert sensory["canonical_description"].strip()
+    assert "5-4-3-2-1" in sensory["canonical_description"] or "3-2-1" in sensory["canonical_description"]
 
 
 def test_fill_unfrozen_provisional_probes() -> None:
@@ -290,7 +297,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is False
     assert coverage["next_pass"] == "library_fill_lightweight_provenance"
-    assert coverage["next_fill_cell"] == "need.grounding.stabilize"
+    assert coverage["next_fill_cell"] == "need.clarity.reflect"
     assert "box_breathing" in coverage["skipped_types"]
     assert "energizing_breath" in coverage["skipped_types"]
     probes = library["architecture_probe_item_ids"]
@@ -324,6 +331,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.mobility.001": "technique.mobility",
         "practice.mobility.002": "technique.mobility",
         "practice.mobility.003": "technique.mobility",
+        "practice.sensory_grounding.001": "technique.sensory_grounding",
+        "practice.sensory_grounding.002": "technique.sensory_grounding",
+        "practice.sensory_grounding.003": "technique.sensory_grounding",
     }
     assert any(r.get("status") == "accepted" for r in techniques["techniques"])
 
@@ -924,8 +934,12 @@ def test_p0_seed_1_grounding_stabilize() -> None:
     item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_1_ID)
     assert item["identity"]["seed_cell"] == SEED_1_CELL
     assert item["identity"]["type"] == "sensory_grounding"
+    assert item["identity"]["technique_id"] == "technique.sensory_grounding"
+    assert item["identity"]["status"] == "active"
     cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_1_CELL)
-    assert cell["status"] == "seed"
+    assert cell["status"] == "covered"
+    assert cell.get("fill_status") == "sourced"
+    assert cell["primary"]["type"] == "sensory_grounding"
     assert cell["item_ids"][0] == SEED_1_ID
 
 
@@ -1692,8 +1706,8 @@ def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
     assert coverage["counts"]["library_items"] == 133
     assert coverage["counts"]["need_cells_empty"] == 0
-    assert coverage["counts"]["need_cells_seed"] == 23
-    assert coverage["counts"]["need_cells_covered"] == 3
+    assert coverage["counts"]["need_cells_seed"] == 22
+    assert coverage["counts"]["need_cells_covered"] == 4
     assert library["status"] == "provisional"
     assert library["fill_frozen"] is False
     assert len(library["items"]) == 133

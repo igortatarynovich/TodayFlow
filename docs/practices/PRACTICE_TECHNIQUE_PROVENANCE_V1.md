@@ -274,8 +274,8 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 ## 11. Что дальше
 
 1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
-2. `extended_exhale`, `focused_attention`, `mobility` = `accepted`. Sourced: `need.calm.downregulate`, `need.focus.focus`, `need.energy.activate`. `box_breathing` и `energizing_breath` = `skipped_for_now`.
-3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.grounding.stabilize`.
+2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding` = `accepted`. Sourced 4/26 P0 cells. `box_breathing` и `energizing_breath` = `skipped_for_now`.
+3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.clarity.reflect`.
 4. Остальные items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
