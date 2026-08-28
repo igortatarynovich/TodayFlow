@@ -120,7 +120,7 @@
 - [practices/PRACTICE_LIBRARY_FILL_V1.md](./practices/PRACTICE_LIBRARY_FILL_V1.md) — **наполнение библиотеки**: lightweight provenance; accepted/skipped → Content Item
 - [practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md) — **происхождение техники**: одна запись на технику; LLM не источник метода
 - [practices/PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./practices/PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md) — **архив research-лестницы** (Landscape → … → Targeted Safety): historical, non-blocking
-- [practices/PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md) — **coverage-first fill**: 26 P0 need cells; sourced 4/26; next = `need.clarity.reflect`
+- [practices/PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md) — **coverage-first fill**: 26 P0 need cells; sourced 5/26; next = `need.confidence.open`
 - [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — **Практики** SoT экрана: цикл состояния · locked need/format · сессия · music layer ([index](./practices/_INDEX.md))
 - [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md)
 - [EXPLAIN_MEANING_NOT_MECHANISM.md](./explainability/EXPLAIN_MEANING_NOT_MECHANISM.md)
@@ -129,7 +129,8 @@
 ## Статусы · схемы · i18n
 
 - [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entity catalog · build order
-- [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) — gaps · DoD · Decision Log — ⚠️ STALE
+- [status/RELEASE_PLAN_V1.md](./status/RELEASE_PLAN_V1.md) — path to soft launch · gates · success criteria · **ACTIVE**
+- [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) — historical gaps · DoD · Decision Log — SUPERSEDED by `RELEASE_PLAN_V1.md`
 - [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) — screen feel/do (reference) — ⚠️ STALE
 - [status/BEHAVIOR_CHANGE_TEST_V0.md](./status/BEHAVIOR_CHANGE_TEST_V0.md) — **Minimum Day Cycle** ship gate (Evening Close + Tomorrow) · behavior test BLOCKED
 - [status/IOS_TODAYFLOW_STATUS.md](./status/IOS_TODAYFLOW_STATUS.md) — web + iOS направление
