@@ -83,7 +83,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 2.2 | Theme / Action / Progress first-class | `TODAY_CANON_VS_CODE_DIFF.md` closed or updated with new facts | 2.1 |
 | 2.3 | Evening as time-gated surface | No evening block in morning scroll | 2.1 |
 | 2.4 | Caller audit: replace `build()` with `build_cached_or_baseline` | No LLM-on-read GETs in Today/Compat/Tarot/Account — **done 2026-08-28** (`test_tarot_daily_explain_no_llm_v1.py` green; audit doc `docs/audits/CALLER_AUDIT_LLM_ON_READ_2026-08-28.md`) | G1 |
-| 2.5 | Provenance: `snapshot_id` in Tarot/Compat generation logs | `core_profile_snapshot_id` present | 2.4 |
+| 2.5 | Provenance: `snapshot_id` in Tarot/Compat generation logs | `core_profile_snapshot_id` present in Tarot/Compatibility generation logs and Compatibility job result payload — **done 2026-08-28** (`test_compat_generation_provenance_v1.py` + `test_tarot_spread_context_provenance_v1.py` green; audit doc `docs/audits/TAROT_COMPAT_PROVENANCE_2026-08-28.md`) | 2.4 |
 | 2.6 | Profile Selection audit | Report: which of ~24 IL-3 themes K3 uses / ignores / competes on — **blocked on K3/billing top-up** | 2.4 |
 
 **Gate G2:** Today cutover stable and Personal Model read-path closed.
@@ -131,7 +131,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 
 ## 5. Immediate Next Steps (today / tomorrow)
 
-1. Phase 2.5 Provenance: ensure `core_profile_snapshot_id` is present in Tarot and Compatibility generation logs.
+1. Phase 2.6 Profile Selection audit: wait for K3/billing top-up, then measure which of the ~24 IL-3 profile themes K3 actually cites/ignores/competes on. Do not blindly cut to 5–8.
 2. Fix Token Factory billing / top-up.
 3. Run 4-step COGS baseline and record USD.
 4. Assign owner for end-to-end walkthrough Run 3 and fill the checklist in `BEHAVIOR_CHANGE_TEST_V0.md`.
@@ -145,3 +145,4 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 |------|--------|
 | 2026-08-28 | v1.0 — Release Plan created; supersedes `WEB_LAUNCH_EXECUTION_PLAN.md` for active execution. |
 | 2026-08-28 | Task 2.4 Caller audit closed; `GET /tarot/daily/explain` no longer calls LLM; audit doc added. |
+| 2026-08-28 | Task 2.5 Provenance closed; `core_profile_snapshot_id` plumbed through Tarot/Compatibility generation logs; audit doc added. |
