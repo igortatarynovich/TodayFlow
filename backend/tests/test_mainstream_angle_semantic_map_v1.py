@@ -56,7 +56,7 @@ def test_mainstream_angle_semantic_map_v1():
     assert "stored Planet×Angle smoke" in model or "STOP Angles" in model
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.115" in canon
+    assert "**Версия:** 1.3.116" in canon
     assert "### 6.54 Mainstream Angle Semantic Map" in canon
     assert canon.count("**Версия:**") == 1
 
