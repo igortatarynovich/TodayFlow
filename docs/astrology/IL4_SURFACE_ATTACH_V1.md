@@ -69,13 +69,13 @@ Today *meaning polish* may resume as an **owner-directed** pass after consume 1.
 
 Dropped refusals are preserved in the returned pack for `reject_invalid_output` validation, but `services/il4_editorial_consume_v1.compact_meaning` strips them from the LLM-facing JSON payload.
 
-Topic relevance is a product-side mapping (`ProfileTopicDomain` → IL-3 object ids), not part of the IL. It lives in the selection module, not in the library.
+Topic relevance is a product-side mapping (`ProfileTopicDomain` → IL-3 object ids), not part of the IL. It lives in the selection module, not in the library. As of 2026-08-28, all 10 standard planets, 12 houses, 4 major angles (asc/mc/dsc/ic), and 12 signs are explicitly mapped to `ProfileTopicDomain`. A line is matched by the union of topics from all object ids in the line (and a deterministic text fallback for keyword-only lines). See `docs/audits/PROFILE_SELECTION_CONNECTIONS_2026-08-28.md` for the full table and test coverage.
 
 ---
 
 ## Changelog
 
-- **1.3 (2026-08-28)** — Deterministic IL-4 theme selection applied at the gateway (`services/il4_selection_v1.py`). Today keeps 1 primary line; Profile keeps natal-only up to 24; Compatibility keeps natal+transit up to 24. Dropped refusals stay in the pack for validation but are stripped from the LLM payload by `compact_meaning`. Prompt contract changes; public JSON unchanged.
+- **1.3 (2026-08-28)** — Deterministic IL-4 theme selection applied at the gateway (`services/il4_selection_v1.py`). Today keeps 1 primary line; Profile keeps natal-only up to 24; Compatibility keeps natal+transit up to 24. Dropped refusals stay in the pack for validation but are stripped from the LLM payload by `compact_meaning`. Profile topic connections now map all planets, houses, angles, and signs to `ProfileTopicDomain` (see `docs/audits/PROFILE_SELECTION_CONNECTIONS_2026-08-28.md`). Prompt contract changes; public JSON unchanged.
 - **1.2 (2026-08-25)** — Profile meaning polish 1.3.123: natal decode is an attach consumer. This attach stands.
 - **1.1 (2026-08-23)** — Editorial consume done 1.3.113. This attach stands.
 - **1.0 (2026-08-23)** — 1.3.112. Product surfaces read IL-4 packs on LLM input. Public contracts unchanged.

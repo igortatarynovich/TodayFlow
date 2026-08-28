@@ -21,77 +21,80 @@ _SURFACE_CAPS: dict[str, int | None] = {
     "compatibility": 24,
 }
 
-# Topic relevance is outside IL-3. Heuristic: keywords that map IL-3 object ids to
-# product topic domains. Kept minimal and explicit so selection is reproducible.
-_TOPIC_KEYWORDS: dict[ProfileTopicDomain, tuple[str, ...]] = {
-    ProfileTopicDomain.RELATIONSHIPS: (
-        "astro.object.venus",
-        "astro.object.mars",
-        "astro.object.moon",
-        "astro.house.07",
-        "astro.house.05",
-        "astro.house.03",
-    ),
-    ProfileTopicDomain.INTIMACY: (
-        "astro.object.venus",
-        "astro.object.mars",
-        "astro.object.pluto",
-        "astro.house.07",
-        "astro.house.08",
-    ),
-    ProfileTopicDomain.MONEY: (
-        "astro.object.saturn",
-        "astro.object.jupiter",
-        "astro.object.venus",
-        "astro.house.02",
-        "astro.house.08",
-        "astro.house.10",
-    ),
-    ProfileTopicDomain.WORK: (
-        "astro.object.sun",
-        "astro.object.saturn",
-        "astro.object.mars",
-        "astro.object.jupiter",
-        "astro.object.mercury",
-        "astro.house.06",
-        "astro.house.10",
-    ),
-    ProfileTopicDomain.FAMILY: (
-        "astro.object.moon",
-        "astro.object.saturn",
-        "astro.house.04",
-        "astro.house.03",
-        "astro.house.10",
-    ),
-    ProfileTopicDomain.BODY_ENERGY: (
-        "astro.object.mars",
-        "astro.object.sun",
-        "astro.object.moon",
-        "astro.house.01",
-        "astro.house.06",
-    ),
-    ProfileTopicDomain.DECISION: (
-        "astro.object.mercury",
-        "astro.object.mars",
-        "astro.object.saturn",
-        "astro.object.jupiter",
-        "astro.house.03",
-    ),
-    ProfileTopicDomain.HABITS_DISCIPLINE: (
-        "astro.object.saturn",
-        "astro.object.mars",
-        "astro.object.moon",
-        "astro.house.06",
-        "astro.house.10",
-    ),
-    ProfileTopicDomain.INNER_STATE: (
-        "astro.object.moon",
-        "astro.object.neptune",
-        "astro.object.pluto",
-        "astro.house.12",
-        "astro.house.04",
-    ),
+# Topic relevance is outside IL-3. The maps below are deterministic,
+# product-side heuristics that connect IL-3 object ids (planets, houses, angles,
+# signs) to ProfileTopicDomain. They are reproducible, do not overwrite IL-3
+# meaning, and are intentionally kept separate from the interpretation canon.
+_T = ProfileTopicDomain
+
+ASTRO_OBJECT_TOPIC_MAP: dict[str, tuple[_T, ...]] = {
+    # Planets
+    "astro.object.sun": (_T.WORK, _T.BODY_ENERGY, _T.HABITS_DISCIPLINE),
+    "astro.object.moon": (_T.RELATIONSHIPS, _T.FAMILY, _T.INNER_STATE, _T.BODY_ENERGY, _T.HABITS_DISCIPLINE),
+    "astro.object.mercury": (_T.DECISION, _T.WORK, _T.RELATIONSHIPS),
+    "astro.object.venus": (_T.RELATIONSHIPS, _T.INTIMACY, _T.MONEY),
+    "astro.object.mars": (_T.BODY_ENERGY, _T.WORK, _T.INTIMACY, _T.DECISION, _T.HABITS_DISCIPLINE),
+    "astro.object.jupiter": (_T.MONEY, _T.WORK, _T.DECISION, _T.RELATIONSHIPS),
+    "astro.object.saturn": (_T.WORK, _T.MONEY, _T.FAMILY, _T.HABITS_DISCIPLINE, _T.DECISION),
+    "astro.object.uranus": (_T.DECISION, _T.INNER_STATE, _T.WORK, _T.BODY_ENERGY),
+    "astro.object.neptune": (_T.INNER_STATE, _T.RELATIONSHIPS),
+    "astro.object.pluto": (_T.INNER_STATE, _T.INTIMACY, _T.MONEY),
+    # Angles
+    "astro.object.asc": (_T.BODY_ENERGY, _T.INNER_STATE, _T.WORK, _T.DECISION),
+    "astro.object.mc": (_T.WORK, _T.MONEY, _T.FAMILY),
+    "astro.object.dsc": (_T.RELATIONSHIPS, _T.INTIMACY),
+    "astro.object.ic": (_T.FAMILY, _T.INNER_STATE),
 }
+
+_HOUSE_TOPICS: dict[int, tuple[_T, ...]] = {
+    1: (_T.BODY_ENERGY, _T.INNER_STATE, _T.DECISION),
+    2: (_T.MONEY,),
+    3: (_T.DECISION, _T.RELATIONSHIPS),
+    4: (_T.FAMILY, _T.INNER_STATE),
+    5: (_T.INTIMACY, _T.RELATIONSHIPS, _T.INNER_STATE),
+    6: (_T.WORK, _T.BODY_ENERGY, _T.HABITS_DISCIPLINE),
+    7: (_T.RELATIONSHIPS, _T.INTIMACY),
+    8: (_T.INTIMACY, _T.MONEY, _T.INNER_STATE),
+    9: (_T.DECISION, _T.WORK, _T.INNER_STATE),
+    10: (_T.WORK, _T.MONEY, _T.FAMILY),
+    11: (_T.RELATIONSHIPS, _T.WORK, _T.INNER_STATE),
+    12: (_T.INNER_STATE,),
+}
+for _n, _topics in _HOUSE_TOPICS.items():
+    ASTRO_OBJECT_TOPIC_MAP[f"astro.house.{_n:02d}"] = _topics
+
+SIGN_TOPIC_MAP: dict[str, tuple[_T, ...]] = {
+    "astro.sign.aries": (_T.BODY_ENERGY, _T.DECISION),
+    "astro.sign.taurus": (_T.MONEY, _T.BODY_ENERGY),
+    "astro.sign.gemini": (_T.DECISION, _T.RELATIONSHIPS),
+    "astro.sign.cancer": (_T.FAMILY, _T.INNER_STATE),
+    "astro.sign.leo": (_T.RELATIONSHIPS, _T.INTIMACY, _T.BODY_ENERGY),
+    "astro.sign.virgo": (_T.WORK, _T.BODY_ENERGY, _T.HABITS_DISCIPLINE),
+    "astro.sign.libra": (_T.RELATIONSHIPS, _T.INTIMACY, _T.DECISION),
+    "astro.sign.scorpio": (_T.INTIMACY, _T.MONEY, _T.INNER_STATE),
+    "astro.sign.sagittarius": (_T.DECISION, _T.INNER_STATE),
+    "astro.sign.capricorn": (_T.WORK, _T.MONEY, _T.HABITS_DISCIPLINE),
+    "astro.sign.aquarius": (_T.DECISION, _T.RELATIONSHIPS, _T.INNER_STATE),
+    "astro.sign.pisces": (_T.INNER_STATE, _T.RELATIONSHIPS),
+}
+
+_TOPIC_TEXT_HINTS: dict[ProfileTopicDomain, tuple[str, ...]] = {
+    _T.RELATIONSHIPS: ("relationship", "love", "partner", "partnership", "отношения", "любовь", "партнёр"),
+    _T.INTIMACY: ("intimacy", "sex", "sexuality", "closeness", "близость", "сексуальность", "интим"),
+    _T.MONEY: ("money", "finance", "wealth", "income", "деньги", "финансы", "доход"),
+    _T.WORK: ("work", "career", "job", "profession", "работа", "карьера", "профессия"),
+    _T.FAMILY: ("family", "home", "parent", "child", "род", "семья", "родители", "дом"),
+    _T.BODY_ENERGY: ("body", "energy", "vitality", "health", "physical", "тело", "энергия", "здоровье"),
+    _T.DECISION: ("decision", "choice", "judgment", "mind", "reasoning", "решение", "выбор", "мысль"),
+    _T.INNER_STATE: ("inner", "emotion", "psyche", "unconscious", "spiritual", "внутренний", "психика", "духовный"),
+    _T.HABITS_DISCIPLINE: ("habit", "discipline", "routine", "structure", "привычка", "дисциплина", "режим"),
+}
+
+
+_OBJECT_TOKENS: tuple[str, ...] = (
+    "sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"
+)
+_ORDINAL_HOUSE_SUFFIXES: tuple[str, ...] = ("st", "nd", "rd", "th")
 
 
 def _object_ids_from_line(line: Mapping[str, Any]) -> set[str]:
@@ -106,23 +109,52 @@ def _object_ids_from_line(line: Mapping[str, Any]) -> set[str]:
                 if isinstance(item, str):
                     found.add(item)
     text = str(line.get("text") or "").lower()
-    for token in ("venus", "mars", "moon", "saturn", "jupiter", "mercury", "sun"):
+    for token in _OBJECT_TOKENS:
         if token in text:
             found.add(f"astro.object.{token}")
     for n in range(1, 13):
-        if f"house {n}" in text or f"house_{n:02d}" in text or f" {n} дом" in text:
-            found.add(f"astro.house.{n:02d}")
+        house_id = f"astro.house.{n:02d}"
+        if house_id in text:
+            found.add(house_id)
+        if f"house_{n:02d}" in text or f"house {n}" in text or f" {n} дом" in text:
+            found.add(house_id)
+        for suffix in _ORDINAL_HOUSE_SUFFIXES:
+            if f"{n}{suffix} house" in text or f" {n}{suffix} house" in text:
+                found.add(house_id)
+    for token in ("asc", "ascedant", "асцендент"):
+        if token in text:
+            found.add("astro.object.asc")
+    for token in ("mc", "midheaven"):
+        if token in text:
+            found.add("astro.object.mc")
+    for sign in (
+        "aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio",
+        "sagittarius", "capricorn", "aquarius", "pisces",
+    ):
+        if sign in text:
+            found.add(f"astro.sign.{sign}")
     return found
+
+
+def _topics_for_line(line: Mapping[str, Any]) -> set[ProfileTopicDomain]:
+    """Return the set of ProfileTopicDomain a line is relevant to."""
+    topics: set[ProfileTopicDomain] = set()
+    for obj_id in _object_ids_from_line(line):
+        if obj_id in ASTRO_OBJECT_TOPIC_MAP:
+            topics.update(ASTRO_OBJECT_TOPIC_MAP[obj_id])
+        elif obj_id in SIGN_TOPIC_MAP:
+            topics.update(SIGN_TOPIC_MAP[obj_id])
+    text = str(line.get("text") or "").lower()
+    for topic, hints in _TOPIC_TEXT_HINTS.items():
+        if any(hint in text for hint in hints):
+            topics.add(topic)
+    return topics
 
 
 def _line_matches_topic(line: Mapping[str, Any], topic: ProfileTopicDomain) -> bool:
     if topic == ProfileTopicDomain.GENERAL:
         return True
-    keywords = _TOPIC_KEYWORDS.get(topic)
-    if not keywords:
-        return True
-    ids = _object_ids_from_line(line)
-    return any(kw in ids or kw in str(line.get("text") or "").lower() for kw in keywords)
+    return topic in _topics_for_line(line)
 
 
 def _line_band(line: Mapping[str, Any]) -> str:

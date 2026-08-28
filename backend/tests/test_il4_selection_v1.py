@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from todayflow_backend.profile_engine.models import ProfileTopicDomain
 from todayflow_backend.services.il4_selection_v1 import (
+    ASTRO_OBJECT_TOPIC_MAP,
+    SIGN_TOPIC_MAP,
     _line_matches_topic,
+    _topics_for_line,
     select_themes,
 )
 
@@ -126,3 +129,93 @@ def test_line_matches_topic_body_energy():
     line = _line(1, "natal", "Sun in 1st house", {"what": "astro.object.sun", "where": "astro.house.01"})
     assert _line_matches_topic(line, ProfileTopicDomain.BODY_ENERGY) is True
     assert _line_matches_topic(line, ProfileTopicDomain.INTIMACY) is False
+
+
+def test_all_planets_map_to_at_least_one_topic():
+    """Every standard planet object id must be connected to at least one topic domain."""
+    for planet in ("sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"):
+        line = _line(1, "natal", "test", {"what": f"astro.object.{planet}"})
+        topics = _topics_for_line(line)
+        assert topics, f"astro.object.{planet} has no topic mapping"
+
+
+def test_all_houses_map_to_at_least_one_topic():
+    """Every house object id must be connected to at least one topic domain."""
+    for n in range(1, 13):
+        line = _line(1, "natal", "test", {"where": f"astro.house.{n:02d}"})
+        topics = _topics_for_line(line)
+        assert topics, f"astro.house.{n:02d} has no topic mapping"
+
+
+def test_all_signs_map_to_at_least_one_topic():
+    """Every sign object id must be connected to at least one topic domain."""
+    for sign in (
+        "aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio",
+        "sagittarius", "capricorn", "aquarius", "pisces",
+    ):
+        line = _line(1, "natal", "test", {"what": f"astro.sign.{sign}"})
+        topics = _topics_for_line(line)
+        assert topics, f"astro.sign.{sign} has no topic mapping"
+
+
+def test_angles_map_to_at_least_one_topic():
+    """Major angles must be connected to at least one topic domain."""
+    for angle in ("asc", "mc", "dsc", "ic"):
+        line = _line(1, "natal", "test", {"what": f"astro.object.{angle}"})
+        topics = _topics_for_line(line)
+        assert topics, f"astro.object.{angle} has no topic mapping"
+
+
+def test_topic_filters_cover_all_non_general_domains():
+    """A full pack of planets in houses has at least one line for every non-GENERAL topic."""
+    lines = [
+        _line(
+            i + 1,
+            "natal",
+            f"{planet.title()} in {n}th house",
+            {"what": f"astro.object.{planet}", "where": f"astro.house.{n:02d}"},
+        )
+        for i, (planet, n) in enumerate(
+            [
+                ("sun", 10),
+                ("moon", 4),
+                ("mercury", 3),
+                ("venus", 7),
+                ("mars", 1),
+                ("jupiter", 2),
+                ("saturn", 6),
+                ("uranus", 9),
+                ("neptune", 12),
+                ("pluto", 8),
+            ]
+        )
+    ]
+    pack = _pack(lines)
+    for topic in ProfileTopicDomain:
+        if topic == ProfileTopicDomain.GENERAL:
+            continue
+        out = select_themes(pack, surface="profile", topic=topic)
+        assert out is not None and len(out["lines"]) > 0, f"topic {topic.value} has no matching lines"
+
+
+def test_line_topic_union_from_multiple_objects():
+    """A line with multiple relevant object ids contributes topics from all of them."""
+    line = _line(
+        1,
+        "natal",
+        "Venus in 7th house",
+        {"what": "astro.object.venus", "where": "astro.house.07"},
+    )
+    topics = _topics_for_line(line)
+    assert ProfileTopicDomain.RELATIONSHIPS in topics
+    assert ProfileTopicDomain.INTIMACY in topics
+    assert ProfileTopicDomain.MONEY in topics
+
+
+def test_text_fallback_for_topic_keywords():
+    """Text-only lines still match topics via explicit keyword hints."""
+    line = _line(1, "natal", "financial decision about family money")
+    topics = _topics_for_line(line)
+    assert ProfileTopicDomain.MONEY in topics
+    assert ProfileTopicDomain.FAMILY in topics
+    assert ProfileTopicDomain.DECISION in topics
