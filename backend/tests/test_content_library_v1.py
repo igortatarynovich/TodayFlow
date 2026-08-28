@@ -287,6 +287,12 @@ def test_technique_canon_lightweight_skip_box() -> None:
     assert sensory["source_refs"]
     assert sensory["canonical_description"].strip()
     assert "5-4-3-2-1" in sensory["canonical_description"] or "3-2-1" in sensory["canonical_description"]
+    prompted = by_id["technique.prompted_reflection"]
+    assert prompted["status"] == "accepted"
+    assert prompted["type"] == "prompted_reflection"
+    assert prompted["allowed_claims"] == []
+    assert prompted["source_refs"]
+    assert prompted["canonical_description"].strip()
 
 
 def test_fill_unfrozen_provisional_probes() -> None:
@@ -297,7 +303,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is False
     assert coverage["next_pass"] == "library_fill_lightweight_provenance"
-    assert coverage["next_fill_cell"] == "need.clarity.reflect"
+    assert coverage["next_fill_cell"] == "need.confidence.open"
     assert "box_breathing" in coverage["skipped_types"]
     assert "energizing_breath" in coverage["skipped_types"]
     probes = library["architecture_probe_item_ids"]
@@ -334,6 +340,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.sensory_grounding.001": "technique.sensory_grounding",
         "practice.sensory_grounding.002": "technique.sensory_grounding",
         "practice.sensory_grounding.003": "technique.sensory_grounding",
+        "practice.prompted_reflection.001": "technique.prompted_reflection",
+        "practice.prompted_reflection.002": "technique.prompted_reflection",
+        "practice.prompted_reflection.003": "technique.prompted_reflection",
     }
     assert any(r.get("status") == "accepted" for r in techniques["techniques"])
 
@@ -1026,12 +1035,16 @@ def test_p0_seed_5_is_first_ledger_empty_cell_clarity() -> None:
     assert item["identity"]["family"] == "reflection"
     assert item["identity"]["type"] == "prompted_reflection"
     assert item["identity"]["seed_cell"] == SEED_5_CELL
+    assert item["identity"]["technique_id"] == "technique.prompted_reflection"
+    assert item["identity"]["status"] == "active"
     assert item["retrieval"]["purpose"] == ["clarity"]
     assert item["retrieval"]["direction"] == ["reflect"]
     assert item["retrieval"]["input_state"] == ["uncertain"]
 
     cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_5_CELL)
-    assert cell["status"] == "seed"
+    assert cell["status"] == "covered"
+    assert cell.get("fill_status") == "sourced"
+    assert cell["primary"]["type"] == "prompted_reflection"
     assert cell["item_ids"][0] == SEED_5_ID
     assert coverage["need_cells"][4]["id"] == SEED_5_CELL
 
@@ -1706,8 +1719,8 @@ def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
     assert coverage["counts"]["library_items"] == 133
     assert coverage["counts"]["need_cells_empty"] == 0
-    assert coverage["counts"]["need_cells_seed"] == 22
-    assert coverage["counts"]["need_cells_covered"] == 4
+    assert coverage["counts"]["need_cells_seed"] == 21
+    assert coverage["counts"]["need_cells_covered"] == 5
     assert library["status"] == "provisional"
     assert library["fill_frozen"] is False
     assert len(library["items"]) == 133

@@ -147,6 +147,32 @@
       ],
       "allowed_claims": [],
       "status": "accepted"
+    },
+    {
+      "technique_id": "technique.prompted_reflection",
+      "content_class": "practice",
+      "type": "prompted_reflection",
+      "canonical_description": "Answer one specific question in your own words, briefly. A conclusion, lesson, or decision is not required. Spelling and length are not part of the method. Structured writing protocols (CBT thought records, Gibbs/Rolfe professional reflection, timed expressive writing) are not this product version.",
+      "source_refs": [
+        {
+          "source": "Best For You — Journalling for mental health (NHS-clinician approved)",
+          "url": "https://bestforyou.org.uk/guides/self-care-and-wellbeing/journalling/",
+          "locus": "Journal prompts: some are just one question or a title; others are more structured or linked to a therapy approach such as CBT; writing is for you, spelling and grammar do not matter",
+          "note": "official_health. Method confirmation. Benefit lists, thought-record templates, and therapy claims not imported."
+        },
+        {
+          "source": "VCU Writing Center — Reflective writing",
+          "url": "https://writing.vcu.edu/student-resources/reflective-writing/",
+          "locus": "Reflection is a personal response to a prompt; there is no right or wrong way to respond; start from the prompt",
+          "note": "academic_description. Method confirmation. Essay templates and learning-outcome claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if writing makes you feel worse.",
+        "Not a treatment and not a CBT thought record."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
     }
   ]
 }
