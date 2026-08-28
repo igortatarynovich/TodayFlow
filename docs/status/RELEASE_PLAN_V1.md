@@ -82,7 +82,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 2.1 | FE cutover: default `/today` uses 4-surface ScreenFlow | `?core_loop=1` becomes default; no regression in ship gate walkthrough | G1 |
 | 2.2 | Theme / Action / Progress first-class | `TODAY_CANON_VS_CODE_DIFF.md` closed or updated with new facts | 2.1 |
 | 2.3 | Evening as time-gated surface | No evening block in morning scroll | 2.1 |
-| 2.4 | Caller audit: replace `build()` with `build_cached_or_baseline` | No LLM-on-read GETs in Today/Compat/Tarot/Account | G1 |
+| 2.4 | Caller audit: replace `build()` with `build_cached_or_baseline` | No LLM-on-read GETs in Today/Compat/Tarot/Account — **done 2026-08-28** (`test_tarot_daily_explain_no_llm_v1.py` green; audit doc `docs/audits/CALLER_AUDIT_LLM_ON_READ_2026-08-28.md`) | G1 |
 | 2.5 | Provenance: `snapshot_id` in Tarot/Compat generation logs | `core_profile_snapshot_id` present | 2.4 |
 | 2.6 | Profile Selection audit | Report: which of ~24 IL-3 themes K3 uses / ignores / competes on — **blocked on K3/billing top-up** | 2.4 |
 
@@ -131,7 +131,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 
 ## 5. Immediate Next Steps (today / tomorrow)
 
-1. Merge current Practice Library changes from `git status`.
+1. Phase 2.5 Provenance: ensure `core_profile_snapshot_id` is present in Tarot and Compatibility generation logs.
 2. Fix Token Factory billing / top-up.
 3. Run 4-step COGS baseline and record USD.
 4. Assign owner for end-to-end walkthrough Run 3 and fill the checklist in `BEHAVIOR_CHANGE_TEST_V0.md`.
@@ -144,3 +144,4 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | Date | Change |
 |------|--------|
 | 2026-08-28 | v1.0 — Release Plan created; supersedes `WEB_LAUNCH_EXECUTION_PLAN.md` for active execution. |
+| 2026-08-28 | Task 2.4 Caller audit closed; `GET /tarot/daily/explain` no longer calls LLM; audit doc added. |

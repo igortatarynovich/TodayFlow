@@ -11,6 +11,8 @@ import json
 import re
 from time import perf_counter
 
+from sqlalchemy.orm import Session
+
 from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain,
     get_openai_compatible_client,
@@ -132,6 +134,41 @@ def _is_valid_tarot_explanation(explanation: Dict[str, Any]) -> bool:
     return True
 
 
+def _load_cached_explanation(
+    db: Session,
+    *,
+    user_id: int,
+    target_date: str,
+    card_id: int | None,
+    orientation: str,
+) -> Dict[str, Any] | None:
+    """Return the newest valid tarot daily explanation already stored in GenerationLog."""
+    query = (
+        db.query(db_models.GenerationLog)
+        .filter(
+            db_models.GenerationLog.user_id == user_id,
+            db_models.GenerationLog.module == "tarot",
+            db_models.GenerationLog.surface == "daily_card_explainer",
+            db_models.GenerationLog.status.in_(("success", "fallback")),
+        )
+        .order_by(db_models.GenerationLog.created_at.desc())
+    )
+    for gen in query.limit(20).all():
+        payload = gen.input_payload or {}
+        if not isinstance(payload, dict):
+            continue
+        if payload.get("target_date") != target_date:
+            continue
+        if payload.get("card_id") != card_id:
+            continue
+        if payload.get("orientation") != orientation:
+            continue
+        normalized = gen.normalized_response
+        if isinstance(normalized, dict) and _is_valid_tarot_explanation(normalized):
+            return dict(normalized)
+    return None
+
+
 def explain_tarot_card(
     user,
     db,
@@ -139,10 +176,15 @@ def explain_tarot_card(
     orientation: str = "upright",
     target_date: Optional[str] = None,
     card_id: Optional[int] = None,
+    allow_llm: bool = False,
 ) -> Dict[str, Any]:
     """
     Объясняет карту таро через призму натальной карты пользователя.
     Traditional meaning always comes from card_base_v1 when resolvable.
+
+    Read-path default (allow_llm=False): never call an LLM. Serve a cached explanation
+    or a deterministic fallback. LLM personalization is reserved for explicit write/POST
+    surfaces or background jobs that pass allow_llm=True.
     """
     learning_service = get_learning_service()
     prompt_version = learning_service.get_or_create_prompt_version(
@@ -167,6 +209,22 @@ def explain_tarot_card(
         from datetime import date
         target_date = date.today().isoformat()
 
+    # Read path: cache hit avoids any context compute or LLM work.
+    cached = _load_cached_explanation(
+        db,
+        user_id=user.id,
+        target_date=target_date,
+        card_id=resolved_id,
+        orientation=orientation,
+    )
+    if cached:
+        return _apply_base_meaning(
+            cached,
+            card_id=resolved_id,
+            card_name=card_name,
+            orientation=orientation,
+        )
+
     # Собираем контекст пользователя (натальная карта обязательна)
     try:
         user_context = get_user_context(user, target_date, db)
@@ -174,29 +232,52 @@ def explain_tarot_card(
         logger.warning(f"Failed to get user context for tarot explanation: {e}", exc_info=True)
         user_context = {}
 
+    fallback = _apply_base_meaning(
+        _fallback_tarot_explanation(
+            card_name, orientation, user_context if isinstance(user_context, dict) else {}, card_id=resolved_id
+        ),
+        card_id=resolved_id,
+        card_name=card_name,
+        orientation=orientation,
+    )
+
+    # GET /tarot/daily/explain and similar read surfaces must never call an LLM.
+    # Enrichment is reserved for explicit write/POST surfaces or background jobs.
+    if not allow_llm:
+        learning_service.log_generation(
+            db,
+            module="tarot",
+            surface="daily_card_explainer",
+            user_id=user.id,
+            core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
+            prompt_version_id=prompt_version.id,
+            model=None,
+            locale="ru",
+            input_payload={
+                "card_name": card_name,
+                "card_id": resolved_id,
+                "orientation": orientation,
+                "target_date": target_date,
+                "skip_llm": "read_path",
+            },
+            system_prompt=TAROT_EXPLAINER_SYSTEM_PROMPT,
+            user_prompt=None,
+            normalized_response=fallback,
+            status="fallback",
+            used_fallback=True,
+            duration_ms=0,
+        )
+        return fallback
+
     if not is_llm_chat_configured():
         logger.warning("LLM not configured, cannot explain tarot card")
-        return _apply_base_meaning(
-            _fallback_tarot_explanation(
-                card_name, orientation, user_context if isinstance(user_context, dict) else {}, card_id=resolved_id
-            ),
-            card_id=resolved_id,
-            card_name=card_name,
-            orientation=orientation,
-        )
+        return fallback
 
     client = get_openai_compatible_client()
     if client is None:
         logger.warning("OpenAI client not available")
-        return _apply_base_meaning(
-            _fallback_tarot_explanation(
-                card_name, orientation, user_context if isinstance(user_context, dict) else {}, card_id=resolved_id
-            ),
-            card_id=resolved_id,
-            card_name=card_name,
-            orientation=orientation,
-        )
-    
+        return fallback
+
     # Строим промпт
     prompt_parts = [
         f"Карта таро: {card_name}",

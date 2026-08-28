@@ -188,19 +188,22 @@ async def explain_daily_tarot_card(
     date: Optional[str] = None,
     user=Depends(require_user),
     db=Depends(get_session),
+    tarot_service: TarotService = Depends(get_tarot_service),
 ) -> dict:
     """
     Объясняет карту таро дня через призму натальной карты пользователя.
     Возвращает: что делать, чего избегать, какие события могут произойти и почему.
+
+    Read path: this endpoint never calls an LLM. It serves a cached explanation or a
+    deterministic fallback. LLM personalization is reserved for explicit POST/background
+    surfaces.
     """
     from datetime import date as date_class
     from todayflow_backend.core.tarot_explainer import explain_tarot_card
-    from todayflow_backend.services.tarot import get_tarot_service
-    
+
     target_date = date or date_class.today().isoformat()
-    
+
     # Only explain after reveal — do not auto-assign via GET.
-    tarot_service = get_tarot_service()
     daily_draw = tarot_service.get_daily_draw(
         user, locale=request_locale(request), assign_if_missing=False
     )
@@ -208,7 +211,7 @@ async def explain_daily_tarot_card(
     if not daily_draw or not daily_draw.card or daily_draw.selection_status != "selected":
         raise HTTPException(status_code=409, detail="card_of_day_not_selected")
     
-    # Personalization via LLM; traditional meaning forced from card_base_v1.
+    # Read path: never call LLM on GET. Serve cached explanation or deterministic fallback.
     draw_orientation = getattr(daily_draw, "orientation", None) or "upright"
     explanation = explain_tarot_card(
         user=user,
@@ -217,6 +220,7 @@ async def explain_daily_tarot_card(
         orientation=str(draw_orientation),
         target_date=target_date,
         card_id=int(daily_draw.card.id) if daily_draw.card and daily_draw.card.id is not None else None,
+        allow_llm=False,
     )
     
     return {
