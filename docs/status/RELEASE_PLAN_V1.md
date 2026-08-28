@@ -84,7 +84,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 2.3 | Evening as time-gated surface | No evening block in morning scroll | 2.1 |
 | 2.4 | Caller audit: replace `build()` with `build_cached_or_baseline` | No LLM-on-read GETs in Today/Compat/Tarot/Account | G1 |
 | 2.5 | Provenance: `snapshot_id` in Tarot/Compat generation logs | `core_profile_snapshot_id` present | 2.4 |
-| 2.6 | Profile Selection audit | Report: which of ~24 IL-3 themes K3 uses / ignores / competes on | 2.4 |
+| 2.6 | Profile Selection audit | Report: which of ~24 IL-3 themes K3 uses / ignores / competes on — **blocked on K3/billing top-up** | 2.4 |
 
 **Gate G2:** Today cutover stable and Personal Model read-path closed.
 
@@ -98,7 +98,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 3.2 | Finalize skipped techniques | `box_breathing`, `energizing_breath` — either accepted or permanently skipped with reason | 3.1 |
 | 3.3 | iOS parity wave 1 | Catalog, Reports, Forecast, Library, Discover, Growth surfaces present per `IOS_TODAYFLOW_STATUS.md` | G2 |
 | 3.4 | Maps surfaces cleanup | No orphan `/affirmations/tracker`, `/asceticisms/tracker`; routes unified under `/maps/*` | G2 |
-| 3.5 | Profile Selection Engine | Deterministic selection of ~24 IL-3 themes; repeatable portraits | 2.6 |
+| 3.5 | Profile Selection Engine | Deterministic selection of ~24 IL-3 themes; repeatable portraits — **v0 implemented** in `services/il4_selection_v1.py`; usage audit waits for K3/billing | 2.6 |
 
 **Gate G3:** content P0 complete and iOS P0 surfaces present.
 
