@@ -1,335 +1,616 @@
 # Profile Display Inventory v1
 
-**Status:** ACTIVE — **SoT конструкции экрана `/profile`**  
-**Date:** 2026-08-29  
-**Роль:** закрытый список того, что пользователь **видит**. Каждое написанное слово имеет класс, источник, лимит и причину. Слот вне этого файла **не существует** на Profile.
+**Status:** ACTIVE — **последний authority перед UI** на `/profile`  
+**Version:** 1.1 (2026-08-29)  
+**Грамматика (закон):** [DISPLAY_CONSTRUCTION_GRAMMAR_V1](../foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md)  
+**Пара:** [TODAY_DISPLAY_INVENTORY_V1](../today/TODAY_DISPLAY_INVENTORY_V1.md)
 
-**Не заменяет:** Character Engine ([PROFILE_EXPERIENCE_SCENARIO_V1](./PROFILE_EXPERIENCE_SCENARIO_V1.md)) · путешествие чувств ([PROFILE_PRODUCT_SURFACE_CANON](./PROFILE_PRODUCT_SURFACE_CANON.md)) · образцы форм ([PROFILE_PRODUCT_JOURNEY_FORMS_V1](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md)) · pipeline Snapshot ([PROFILE_CONTENT_CANON_V1](./PROFILE_CONTENT_CANON_V1.md)).
+**Не заменяет:** Character Engine · Surface Canon (чувства шагов) · Journey Forms (образцы) · Content Canon (pipeline).
 
-При конфликте «что на экране / сколько текста / откуда слово»: **побеждает этот файл**.  
-Путешествие (зачем шаг) остаётся у Surface Canon. Образцы — у Forms. Смысл личности — у Character Engine.
-
-**Пара:** [TODAY_DISPLAY_INVENTORY_V1](../today/TODAY_DISPLAY_INVENTORY_V1.md) — тот же закон конструкции для Сегодня.
+Слот вне этого файла **не существует**. FE не выбирает смысл и не заполняет пустое.
 
 ---
 
 ## Architecture impact
 
-- **SoT before:** конструкция Profile была размазана: Surface Canon (чувства) · Forms (образцы) · Screen Master (v0 layout) · Content Canon (pipeline) · живой UI с лишним актом «Портрет подробнее». Нельзя было ответить «какие именно слова на экране и почему» одним документом.
-- **SoT after:** этот файл — закрытый display contract. Новый слот = строка здесь + Architecture impact. Код, которого нет в инвентаре, — drift, не продукт.
-- **Public contract changed?** no JSON. Меняется правило **показа**, не поля Snapshot.
-- **Migration required?** no runtime. Cutover UI: убрать акт Character warehouse со скролла (см. §4).
-- **Canon updated?** yes — этот файл · `_INDEX` · README · Surface Canon pointer · Forms pointer · трекер.
-- **Backward compatible?** да для API. UI, который рисует склад strengths/drains как отдельный шаг пути, **вне рамки**.
+- **SoT before:** v1.0 named blocks and budgets; generated vs authority, allowed inputs, one_question, persist keys, and anti-dupe-by-role were incomplete. Grammar was duplicated inside this file.
+- **SoT after:** v1.1 — every visible atom is a Grammar §3 record. Grammar owns the chain. This file owns the closed slot set. LLM cannot add meaning beyond `allowed_inputs`.
+- **Public contract changed?** no JSON.
+- **Migration required?** no. UI cutover still waits (Character warehouse drift).
+- **Canon updated?** yes — this file · Grammar · `_INDEX` · tracker.
+- **Backward compatible?** yes for API.
 
 ---
 
-## 0. Закон конструкции (общий с Сегодня)
-
-Один экран = предсказуемая конструкция. Не «ещё абзац, потому что поле есть в JSON».
-
-### 0.1 Классы текста
-
-| Класс | Кто пишет | FE может придумать? |
-|-------|-----------|---------------------|
-| **chrome** | константа UI (`profileV2SystemCopy`, лейблы архетипа) | нет — только этот список |
-| **calc** | детерминированный расчёт (life_path, знак, стихия, ритм, ASC если время) | нет — показать факт |
-| **generated** | LLM в **именованный** слот Snapshot / funnel | нет — только этот слот, после gate |
-| **projected** | детерминированная проекция из generated (effort, bridge, why rows) | нет LLM |
-| **user** | человек (имя, время рождения, living notes) | нет переписывания смысла |
-| **catalog** | справочник (архетип SVG, numerology caption) | нет новой прозы |
-
-FE **не** authority смысла. Clip на клиенте — защита длины, не авторство.
-
-### 0.2 Три вопроса на каждый слот
-
-Как Today Product Flow. Нет ответа → слота нет:
-
-1. Откуда это взялось? (класс + поле + версия правил)
-2. Почему система это показала? (job шага + appear_when)
-3. Получим ли то же при тех же входах и той же версии? (reproducible)
-
-### 0.3 Рамка
-
-- Слот не в инвентаре → **не рисовать**.
-- Пусто / gate закрыт → **omit**, не шаблон «для любого».
-- Транспорт / `degraded` → «Нет соединения.» / «Не удалось загрузить.» — [AGENTS.md](../../AGENTS.md). Не выдумывать портрет.
-- День, цели, камни, трекеры на Profile **запрещены** (PR-4).
-- Голос: [TODAYFLOW_VOICE_CANON](../content/TODAYFLOW_VOICE_CANON.md) — человек, не система.
-
-### 0.4 Как читать лимиты
-
-Русский экран ~390px. Оценка: **1 короткая строка ≈ 8–14 слов ≈ 50–90 символов**.  
-В коде гейт часто в **символах**. Оба числа обязательны: человеческий бюджет (предложения / строки) и машинный (chars).
-
-| Метка | Смысл |
-|-------|--------|
-| **1 мысль** | 1 предложение, без «и… и… и…» списка черт |
-| **1–2 строки** | перенос на мобиле, не абзац |
-| **omit** | блока нет; дырки не заполнять |
-
----
-
-## 1. Что содержится в профиле (модель → экран)
-
-Профиль на экране — **первая проекция Character Engine**, не энциклопедия карты и не склад JSON.
+## 0. Поверхность
 
 ```text
-Факты рождения + расчёты     →  calc (Шаг 2)
-Evidence Graph               →  kitchen / honesty, не простыня
-Акт I одна мысль             →  recognition_name + recognition_line
-Акт III–IV напряжение        →  один insight node
-Компас derived               →  effort_vector (из help узла, без нового LLM)
-Мост в день                  →  bridge_line (детерминированный)
-Натал / числа                →  Explore, по запросу; не шаг узнавания
+Recognition → Why → Insight → Effort → Bridge → Explore
 ```
 
-**Повтор тех же входов** (тот же fingerprint Snapshot + та же chrome-версия) → тот же набор блоков и те же базовые черты. LLM формулирует слот, не меняет каскад.
+Conditional: `P-forming` · `P-data`. Нет шестого акта «Портрет» на пути.
 
-Другие модули (Today · Compat · Tarot) **читают Snapshot**, не пересобирают героя. См. Content Canon §2.
-
----
-
-## 2. Скролл (LOCKED)
-
-Ровно этот порядок. Нет шестого «акта портрета» на главном пути.
-
-```text
-[forming]     ← только пока портрет не ready
-[data CTA]    ← только если не хватает времени/места (честный next step)
-  1 Recognition     Шаг 1  меня поняли
-  2 Why             Шаг 2  понятно почему
-  3 Insight         Шаг 3  нашёл то, чего не замечал     ← один узел
-  4 Effort          Шаг 4  куда усилие  (+ 0–2 сферы)
-  5 Bridge          Шаг 5  зачем Today
-  6 Explore         не шаг пути — склад карты / деталей по раскрытию
-```
-
-**New-value:** каждый следующий шаг даёт информацию, которой не было выше. Перефраз = дефект → слить или удалить.
+**Persist meaning:** `(user_id, profile_hash)` + prompt/projection version.  
+**Chrome persist:** copy keys + Inventory version.
 
 ---
 
-## 3. Каталог блоков
+## 1. Anti-dupe (роли, не длины)
 
-Условные обозначения источника: `CE` = Character Engine consumption · `contract` = `profile_contract_v1` · `proj` = read-path projection · `live` = capability / userMessages.
+| Group | Слоты | Правило |
+|-------|-------|---------|
+| `identity_axis` | `P1.recognition_line` · `P1.identity_core` | core = раскрытие той же оси; не новый тезис |
+| `path_new_value` | `P1.recognition_line` · `P3.insight` · `P4.effort_vector` · `P5.bridge_line` | **четыре разных вопроса**; перефраз = дефект |
+| `why_not_hero` | `P1.*` · `P2.anchor.*` | факты карты не живут в герое |
+| `node_not_warehouse` | `P3.*` · (запрещённый Character act) | материалы узла не дублируются списком сил на скролле |
+| `effort_not_mission` | `P4.effort_vector` · `life_mission` | mission не заменяет вектор |
+| `bridge_not_effort` | `P4.effort_vector` · `P5.bridge_line` | мост ≠ императив «что делать» |
+
+Проверка proposition: нормализовать строки; Jaccard ≥ 0.72 или substring ≥24 = дубль роли.
 
 ---
 
-### P-forming — Портрет ещё читается
+## 2. Индекс слотов
+
+| slot_id | one_question / role | class | authority |
+|---------|---------------------|-------|-----------|
+| `P-forming.message` | Что уже читается, пока ядро не ready? | chrome | product chrome |
+| `P-data.cta_text` | Чего не хватает *мне*, чтобы открылась точность? | chrome | capability |
+| `P-data.button` | Куда идти править факты? | chrome | product chrome |
+| `P1.visual` | Какой образ ядра? | catalog | life_path → seed → asset |
+| `P1.recognition_name` | Как называется ядро? | calc | life_path → archetype |
+| `P1.recognition_line` | Кто я как наблюдаемый механизм? | generated | Character Engine / identity funnel |
+| `P1.signal` | Есть ли раскрытие той же оси? | chrome | product chrome |
+| `P1.identity_core` | Та же ось чуть шире (disclosure)? | generated | CE identity |
+| `P2.step_title` | chrome шага | chrome | product chrome |
+| `P2.selected_section` | chrome | chrome | product chrome |
+| `P2.selected_life_path` | Что **выбрало имя**? | calc | numerology life_path |
+| `P2.influenced_section` | chrome | chrome | product chrome |
+| `P2.anchor.sun` | Как Солнце расширяет *этот* портрет? | calc+bank | natal sun |
+| `P2.anchor.element` | Как стихия расширяет портрет? | calc+bank | sun element |
+| `P2.anchor.rhythm` | Какой ритм baseline? | calc | baseline.rhythm_style |
+| `P2.anchor.moon` | Как Луна расширяет портрет? | calc+bank | natal moon |
+| `P2.anchor.asc` | Как ASC расширяет внешнее проявление? | calc+bank | rising |
+| `P2.anchor.mc` | Как MC расширяет направление? | calc+bank | MC |
+| `P2.honesty_no_time` | Чего ещё нет без времени? | chrome | product chrome |
+| `P2.expand_hint` | chrome tap | chrome | product chrome |
+| `P3.step_title` | chrome | chrome | product chrome |
+| `P3.eyebrow` | chrome kind | chrome | product chrome |
+| `P3.node_title` | Как назвать эту закономерность? | generated | CE / contract materials |
+| `P3.insight` | Какую ловушку/дар я раньше не называл? | generated | CE cascade → node |
+| `P3.grounded_label` | chrome | chrome | product chrome |
+| `P3.grounded_on` | На каких **фактах** держится узел? | calc | subset of P2 facts |
+| `P3.help_label` | chrome | chrome | product chrome |
+| `P3.help` | Что помогает внутри этой оси (не день)? | generated | node.help / strengths |
+| `P3.living_label` | chrome | chrome | product chrome |
+| `P3.living_note` | chrome честности | chrome | product chrome |
+| `P3.living_evidence` | Как это уже проявлялось в отметках? | user | living notes |
+| `P4.step_title` | chrome | chrome | product chrome |
+| `P4.lead` | chrome | chrome | product chrome |
+| `P4.effort_vector` | Куда прикладывать усилие в поведении? | projected | nodes[0].help only |
+| `P4.sphere.title` | Где (ярлык сферы)? | chrome/catalog | sphere id |
+| `P4.sphere.teaser` | Где это сильнее (одна грань)? | generated | life_spheres |
+| `P4.sphere.expand` | Как / нужно / риск в этой сфере? | generated | life_spheres fields |
+| `P5.step_title` | chrome | chrome | product chrome |
+| `P5.bridge_line` | Почему сейчас открыть Today? | projected | node.kind pack |
+| `P5.cta` | chrome navigate | chrome | product chrome |
+| `P6.title` | chrome | chrome | product chrome |
+| `P6.wheel` | Как выглядит карта? | calc | natal preview |
+| `P6.numbers` | Какие числа? | calc | numerology |
+| `P6.detail` | Склад, не занятый узлом? | generated | progressiveDetails |
+| `P6.style.*` | Как решаю / близость / деньги? | generated | contract styles |
+| `P6.natal_decode` | Как карта объясняет уже известное ядро? | generated | opt-in decode |
+| `TF.no_connection` | сеть | chrome | shared |
+| `TF.unavailable` | сервер flagged | chrome | shared |
+
+---
+
+## 3. Записи слотов
+
+Поля по Grammar §3. Chrome-семейства сжаты, если закон один.
+
+### 3.1 Shared failure
+
+#### `TF.no_connection`
 
 | | |
 |---|---|
-| **Job** | Честно сказать, что ядро ещё не ready — без кухни пайплайна |
-| **appear_when** | `portraitForming` / status forming |
-| **omit_when** | Snapshot ready |
+| surface | chrome-shared |
+| one_question | Связь оборвалась? |
+| text_class | chrome |
+| authority / semantic_source | product · AGENTS.md |
+| display_source | `«Нет соединения.»` |
+| output / budget | 1 предложение · 3 слова |
+| required | conditional (throw / network) |
+| empty_behavior | показать этот слот; **не** invent портрет |
+| may_fe_transform | none |
+| may_llm_add_meaning | нет |
+| interaction | none |
+| forbidden | calm rows, «нет сигнала», offline story |
+| persist_key | n/a |
+| anti_dupe_group | `failure` |
 
-| Слот | Класс | Источник | Лимит | Почему |
-|------|-------|----------|-------|--------|
-| Сообщение | chrome (safe rewrite) | `FORMING_MESSAGE_RU` · `_safe_forming_message` | 2 предложения · ≤240 chars | Voice §0: не «генерация / тексты / формируется» |
+#### `TF.unavailable`
 
-**Запрет:** статус пайплайна, «ИИ считает», пустой экран без строки.
+Как выше; copy `«Не удалось загрузить.»`; appear when server flagged unavailable / forming-safe absence of meaning.
 
 ---
 
-### P-data — Что откроет следующий шаг
+### 3.2 Conditional
+
+#### `P-forming.message`
 
 | | |
 |---|---|
-| **Job** | Человек понимает, *чего не хватает ему*, не «системе мало данных» |
-| **appear_when** | `live.userMessages` без `l3_gated` |
-| **omit_when** | birth time+place достаточны / сообщений нет |
+| surface | profile |
+| role | честно, пока Snapshot не ready |
+| one_question | Что уже читается, пока повторы ещё не собраны? |
+| text_class | chrome |
+| authority | product chrome (Voice §0 rewrite) |
+| semantic_source | `FORMING_MESSAGE_RU` · `_safe_forming_message` |
+| display_source | то же |
+| allowed_inputs | status=forming only |
+| forbidden_inference | pipeline («генерация», «тексты», «ИИ считает») |
+| output | 2 предложения |
+| budget | ≤240 chars |
+| required | да, если forming |
+| empty_behavior | omit если ready |
+| may_fe_transform | none (rewrite only via `_safe_forming_message`) |
+| may_llm_add_meaning | нет |
+| interaction | none |
+| forbidden | day lexicon, «Профиль готов» |
+| why_here | до Шага 1 |
+| persist_key | chrome |
+| anti_dupe_group | `meta` |
 
-| Слот | Класс | Источник | Лимит | Почему |
-|------|-------|----------|-------|--------|
-| Текст CTA | chrome / capability copy | `userMessages[].text` | 1–2 предложения · ≤220 chars | ценность: ASC, дома, внешнее проявление |
-| Кнопка | chrome | «Данные рождения» | 2 слова | ведёт в редактор фактов, не в генерацию |
+#### `P-data.cta_text` / `P-data.button`
 
-**Запрет:** «Недостаточно данных», «Нам не хватает», day-лексика.
-
----
-
-### P1 — Recognition (Шаг 1)
-
-**Вопрос человека:** «Это про меня?»  
-**Метрика:** узнавание ≤5 с без скролла. Share test: имя + линия + образ.
-
-| Слот | Класс | Источник | Лимит | Почему |
-|------|-------|----------|-------|--------|
-| Visual | catalog | `baseline.archetype_seed` → `ArchetypeHeroVisual` | 1 объект, ≥ половины первого взгляда | образ первичен; pills запрещены |
-| `recognition_name` | calc | `character_engine_consumption_v0.recognition_label` или RU label seed (`Architect`/`Harmonizer`/`Explorer`/`Sage`/`Observer` ← **только** life_path) | 1 слово / название | имя ядра; не «Личный профиль» |
-| `recognition_line` | generated | `profile_contract_v1.recognition_line` | **1 мысль, 1–2 строки, 12–18 слов, 16–120 chars** | узнаваемое поведение; отличает архетип от соседних |
-| Сигнал chrome | chrome | «Почему именно ты» / «Свернуть» | 2–3 слова | раскрытие, не второй логлайн |
-| `identity_core` | generated | `profile_contract_v1.identity_core` | **только по тапу сигнала**; 2–4 предложения · ≤720 chars | кухня Шага 1; не первая строка |
-
-**Fallback line:** если нет валидной `recognition_line` — первая фраза `identity_core`, если она проходит тот же gate; иначе omit line (не invent).
-
-**Запрет на первом кадре:** Солнце/Луна/ASC/путь chips · список сил · совет «сегодня» · имя архетипа внутри line · второй абзац «кто ты» · eyebrow «Профиль».
-
-**Анти-дубль → P2:** факт карты и его смысл живут в Why, не пересказом в герое.
-
-Код: `ProfileRecognitionScene` · gate `validate_recognition_line`.
-
----
-
-### P2 — Why (Шаг 2)
-
-**Вопрос:** «Почему портрет звучит так — и что выбрало имя?»  
-**Честность:** `selected_by` ≠ `portrait_influenced_by`. Солнце **не** выбирает имя Архитектора.
-
-| Слот | Класс | Источник | Лимит | Почему |
-|------|-------|----------|-------|--------|
-| Заголовок шага | chrome | «Главное, что формирует тебя» / Forms: «Почему портрет звучит именно так» | 1 строка | job шага, не имя архетипа в заголовке |
-| Секция selected | chrome | «Выбрало имя» | 2 слова | отделяет причину label |
-| Строка архетип ← LP | calc + chrome glue | `numerology.life_path` + seed | 1 строка · факт + короткий смысл ≤120 chars | единственный selected_by |
-| Секция influenced | chrome | «Расширяет портрет» | 2 слова | не причинность имени |
-| Якорь Солнце | calc + meaning | `astro.sun_sign` + role-prose (framework / element bank / CE) | title 1–3 слова · detail факт · meaning **1 предложение, 12–22 слова, ≤160 chars** | как *у него* работает, не «Овен = лидер» из учебника |
-| Стихия | calc + meaning | `astro.sun_element` | то же | расширение, не selected_by |
-| Ритм | calc | `baseline.rhythm_style` **дословно** или укороченный факт | 1 строка · без UI-дописки | |
-| Луна | calc + meaning | natal moon | omit если нет позиции | |
-| ASC / MC | calc + meaning | rising / MC | **omit без reliable time** | |
-| Honesty без времени | chrome | Forms sample | 2 предложения | что откроется *о нём*, не определение домов |
-| Tap expand | presentation | sun / moon / asc / mc: свёрнутый meaning | hint chrome «Нажми — смысл за фактом» | плотность; смысл тот же слот |
-
-**Роль-проза якоря:** существующий bank / CE / life_path helper. Нет текста → честный fallback «расширяет портрет», не LLM на read path.
-
-**Запрет:** «вы Овен, поэтому Архитектор» · декоративные chips без meaning · дамп 12 домов · энциклопедия «7-й дом = партнёрство» · повтор `recognition_line` другими словами.
-
-Код: `portrait_why_v0` · `ProfileWhyScene` · `buildWhyFormationCards`.
+| | `cta_text` | `button` |
+|---|---|---|
+| one_question | Чего не хватает *мне*? | Куда править факты? |
+| text_class | chrome | chrome |
+| authority | capability messages | product |
+| display_source | `userMessages[].text` (не `l3_gated`) | «Данные рождения» |
+| budget | 1–2 предл. · ≤220 chars | 2 слова |
+| required | нет | вместе с текстом |
+| empty_behavior | omit | omit |
+| may_fe_transform | none | none |
+| forbidden | «Недостаточно данных», «Нам не хватает», today |
+| why_here | честный next step, не кухня | navigate editor |
+| persist_key | chrome / capability | chrome |
 
 ---
 
-### P3 — Insight node (Шаг 3)
+### 3.3 P1 Recognition
 
-**Вопрос:** «Чего я раньше не замечал?»  
-**Форма:** **один** узел-история. Не три зоны Strengths · Limits · Patterns.
+#### `P1.visual`
 
-First release: **макс. 1 узел** (`insight_nodes_v0.nodes[0]`).
+| | |
+|---|---|
+| one_question | Какой один образ ядра? |
+| text_class | catalog |
+| authority | calc seed |
+| semantic_source | `baseline.archetype_seed` ← **только** life_path mapping |
+| display_source | `ArchetypeHeroVisual` |
+| allowed_inputs | seed slug |
+| forbidden_inference | pills, второй символ, факты карты |
+| output | 1 visual object ≥ половины первого взгляда |
+| budget | 1 объект |
+| required | да, если seed есть; иначе пустой arch, не invent |
+| empty_behavior | omit illustration, keep layout |
+| may_fe_transform | none |
+| interaction | none |
+| why_here | Шаг 1 share test |
+| persist_key | profile_hash (seed) |
+| anti_dupe_group | `identity_axis` |
 
-| Слот | Класс | Источник | Лимит | Почему |
-|------|-------|----------|-------|--------|
-| Заголовок шага | chrome | «Что важно понять о себе» | 1 строка | |
-| Eyebrow kind | chrome | «Твой дар» только для `kind=strength`; tension/repeat — **без** eyebrow | 2–3 слова | Forms: заголовок узла = единственный heading для ловушки |
-| `title` | generated / projected | node.title из strengths / growth_zones / patterns | 1 строка · 4–10 слов · ≤80 chars | имя узла, не список |
-| `insight` | generated | node.insight | **2–3 предложения · 30–55 слов · ≤360 chars на экране** (склад контракта ≤900 — kitchen) | новая ценность vs Шаг 1 |
-| Опоры label | chrome | «Опоры» | 1 слово | |
-| `grounded_on[]` | calc | подмножество фактов Шага 2 | **2–4 строки** · каждая = факт, не интерпретация · ≤80 chars | не утверждать точную причинность без trace |
-| Что помогает label | chrome | «Что помогает» | 2 слова | |
-| `help` | generated | node.help · иначе одна строка strengths/practical | **1 предложение · 12–22 слова · ≤140 chars** (склад ≤360) | опора, не day tip; kitchen-фразы («механизм проявляется», zone ids) — **скрыть** |
-| Living label | chrome | «Как это уже проявлялось» + note «Контекст из отметок — не доказательство» | 1 строка + 1 note | |
-| `living_evidence[]` | user | check-in / notes | **0–2 цитаты** · каждая ≤240 chars · 1 строка | **omit** без living; не выдумывать повтор |
+#### `P1.recognition_name`
 
-**appear_when:** есть `title` + `insight`.  
-**omit_when:** нечего сказать нового относительно P1.  
-**patterns/helps LLM:** только если `patterns_generation_allowed`; иначе узел из strengths/growth + calc.
+| | |
+|---|---|
+| one_question | Как называется ядро? |
+| text_class | calc |
+| authority | numerology life_path → closed 5-set |
+| semantic_source | `CE.recognition_label` или `archetypeDisplayLabel(seed)` |
+| display_source | hero h1 |
+| allowed_inputs | life_path, seed, locale |
+| forbidden_inference | «Личный профиль»; Солнце выбрало имя |
+| output | 1 название |
+| budget | 1 слово / label |
+| required | да, если seed |
+| empty_behavior | fallback chrome «Твоя суть» (не смысл) |
+| may_fe_transform | map_label |
+| persist_key | profile_hash |
+| anti_dupe_group | `identity_axis` |
 
-**Запрет:** три равных документа · living без сигналов · «подтверждённый паттерн» при закрытом gate · пересказ recognition_line.
+#### `P1.recognition_line`
 
-Код: `profile_insight_nodes_projection_v0` · `ProfileInsightScene`.
+| | |
+|---|---|
+| one_question | **Кто я как наблюдаемый механизм?** |
+| text_class | generated |
+| authority | Character Engine / identity funnel |
+| semantic_source | `profile_contract_v1.recognition_line` |
+| display_source | projection `journey.recognition.line` |
+| allowed_inputs | CE Act I (одна мысль) from allowed snapshot depth; birth+baseline; **не** day, **не** living-as-pattern unless depth allows |
+| forbidden_inference | совет на сегодня; имя архетипа в строке; список черт; day agenda; «всегда»; диагноз |
+| output | 1 мысль |
+| budget | 1–2 строки · 12–18 слов · **16–120 chars** |
+| required | да на ready |
+| empty_behavior | fallback: first sentence of identity_core **если** проходит тот же gate; иначе omit line |
+| may_fe_transform | clip 120 |
+| may_llm_add_meaning | нет — только формулировка механизма |
+| interaction | none |
+| forbidden | chips знака/пути; второй абзац «кто ты» |
+| why_here | узнавание ≤5 с |
+| persist_key | Snapshot + prompt version |
+| anti_dupe_group | `path_new_value` · `identity_axis` |
 
----
+Gate: `validate_recognition_line`.
 
-### P4 — Effort (Шаг 4)
+#### `P1.signal`
 
-**Вопрос:** «Куда прикладывать усилия?» — одно предложение, не «кто я».
+Chrome «Почему именно ты» / «Свернуть». Budget 2–3 слова. Required если есть `P1.identity_core` отличающийся от line **или** есть P2. Interaction: disclose core **или** scroll to Why. `may_fe_transform`: none.
 
-| Слот | Класс | Источник | Лимит | Почему |
-|------|-------|----------|-------|--------|
-| Заголовок | chrome | «Куда прикладывать усилия» | 1 строка | |
-| Lead | chrome | «Одно направление — не ещё одно описание «кто ты».» | 1 предложение | анти-дубль Шага 1 |
-| `effort_vector` | **projected** | **только** `nodes[0].help`, если проходит gate (глагол в начале · ≠ insight · ≠ recognition_line · нет «сегодня/завтра») | **1 предложение · 12–22 слова · 8–140 chars** | нет отдельного LLM; null → **omit всего блока** |
-| Сферы | generated derived | `life_spheres` | **0–2 карточки на скролле** если дают *где*, не пересказ вектора. Заголовок 1–2 слова. Teaser 1 предложение · ≤88 chars. Expand: how/need/risk — по **1 предложению**, ≤220 chars | новая ценность после узла |
+#### `P1.identity_core`
 
-**Запрет:** `life_mission` как замена вектора · day agenda · императив «сделай сегодня» · swipe-лента из 8 сфер на главном пути (это склад → Explore).
-
-Код: `profile_effort_vector_projection_v0` · `ProfileEffortScene`.
-
----
-
-### P5 — Bridge (Шаг 5)
-
-**Вопрос:** «Почему теперь открыть Today?» — не второе «что делать».
-
-| Слот | Класс | Источник | Лимит | Почему |
-|------|-------|----------|-------|--------|
-| Заголовок | chrome | «Мост в день» | 1 строка | |
-| `bridge_line` | **projected** chrome-pack | `profile_bridge_line_projection_v0`: tension-pack **или** repeat-pack по `kind` узла | **2 предложения · 20–40 слов · ≤220 chars** | детерминизм; не LLM; не дубль effort |
-| CTA | chrome | «Открыть Today →» | 3 слова | навигация, не совет |
-
-Packs (смысл, не invent):
-
-- tension: особенность ясна на портрете → Today показывает проявление в конкретном дне.
-- repeat: повтор назван → Today — экран, где видно проявление и сдвиг.
-
-**Запрет:** императив · прогноз дня · камень дня · пересказ effort_vector.
-
-Код: `ProfileBridgeScene`.
-
----
-
-### P6 — Explore / Натальная карта (не шаг пути)
-
-**Вопрос:** «Как устроена карта, которая уже объяснила ядро?»  
-**Триггер:** человек раскрыл склад. Не авто-портрет.
-
-| Слот | Класс | Источник | Лимит | Почему |
-|------|-------|----------|-------|--------|
-| Заголовок | chrome | «Натальная карта» | 1 строка | |
-| Колесо / preview | calc | natal preview | визуал, не простыня аспектов на collapsed | |
-| Числа | calc | numerology facets | факты; без «имя»-glyph | |
-| Детали контракта | generated | `progressiveDetails` — слоты, **не** занятые узлом (anti-dupe) | каждая деталь: title chrome + 1–2 предложения · ≤240 chars | склад, не новый акт пути |
-| Сферы остаток | generated | сферы сверх 0–2 на P4 | same limits as P4 expand | |
-| Стили (решения / близость / деньги) | generated | `decision_style` · `relationship_style` · `money_style` | **по 2–4 предложения · ≤520 chars склад · на экране 2 предложения, ≤280 chars** | **только здесь**, не отдельный акт «Портрет» |
-| Natal Decode | generated opt-in | `POST` explicit · [PROFILE_NATAL_DECODE_DEPTH_V1](./PROFILE_NATAL_DECODE_DEPTH_V1.md) | длинная проза только после CTA; дома на базе = тезисы `how`/`do` 1–2 предложения | не второй логлайн |
-
-**Запрет:** маркетинговый список «Потенциалы и таланты / Уроки жизни / Периоды силы» без данных · авто-decode на GET · энциклопедия домов.
-
----
-
-## 4. Вне рамки (не рисовать на `/profile`)
-
-| Что | Почему |
-|-----|--------|
-| Акт **«Портрет подробнее»** (склад strengths / drains / helps / patterns как равный шаг 04) | ломает new-value; материалы → P3 узел или P6 |
-| `life_mission` отдельной карточкой на скролле | дубль P4 или кухня; omit если есть effort_vector |
-| Living Maps / My Days / week heatmaps | `/maps/*`, `/tracking/*` |
-| Today: энергия, ловушка дня, обещание, цвет | PR-4 |
-| Compatibility hub | другой продукт |
-| Сырой dump 12 домов / аспектов на первом экране | P2 = якоря; P6 = карта |
-| Имя как numerology-glyph | Social Mirror v0 killed |
-| FE-invented calm / «нет сигнала» при ошибке сети | честный failure copy |
+| | |
+|---|---|
+| one_question | Та же ось, чуть шире? (disclosure, не новый акт) |
+| text_class | generated |
+| authority | CE identity |
+| semantic_source | `profile_contract_v1.identity_core` |
+| display_source | behind signal |
+| allowed_inputs | тот же Act I; не P3 materials |
+| forbidden_inference | новый логлайн; day; encyclopedia natal |
+| output | 2–4 предложения |
+| budget | ≤720 chars склад; на экране не конкурирует с line |
+| required | нет |
+| empty_behavior | omit; signal may still scroll to Why |
+| may_fe_transform | none (не compress в line, кроме documented fallback) |
+| may_llm_add_meaning | нет |
+| interaction | disclose |
+| why_here | кухня Шага 1 |
+| persist_key | Snapshot |
+| anti_dupe_group | `identity_axis` (не `path_new_value` vs insight) |
 
 ---
 
-## 5. Код сейчас vs замок
+### 3.4 P2 Why
 
-Честно, чтобы не путать ledger с рамкой.
+#### `P2.step_title` · `P2.selected_section` · `P2.influenced_section` · `P2.expand_hint`
 
-| В коде сейчас | Замок инвентаря |
-|---------------|-----------------|
-| `ProfileCharacterScene` на главном скролле (шаг 04 «Портрет») | **drift** — убрать с пути; стили → P6 |
-| Сферы Act 4 до 8 в swipe | на пути **0–2**; остальное Explore |
-| `why.honesty` в projection часто `null` | без времени — **обязателен** chrome honesty |
-| `identity_core` за сигналом | **разрешено** как disclosure, не как line |
-| Explore `benefits[]` три обещания | **запрещены** — не слот данных |
-| `PROFILE_LIMITS` (heroTagline 110, sphereMain 88…) | наследие v0; для V2 journey действуют лимиты **этого файла** |
+Chrome. Titles: «Главное, что формирует тебя» · «Выбрало имя» · «Расширяет портрет» · «Нажми — смысл за фактом».  
+`one_question`: n/a (labels). `may_fe_transform`: none. Appear with P2.
 
-Cutover UI не требует нового JSON: скрыть Character act, если узел уже забрал материалы (`omitMaterialLists` уже есть — довести до «сцены нет»).
+#### `P2.selected_life_path`
+
+| | |
+|---|---|
+| one_question | **Что выбрало имя архетипа?** |
+| text_class | calc + chrome glue |
+| authority | numerology + baseline mapping |
+| semantic_source | `numerology.life_path` + seed |
+| display_source | why selected_by row |
+| allowed_inputs | life_path, seed, RU glue «Архетип X — из числа пути N» |
+| forbidden_inference | Солнце/стихия/ритм участвовали в выборе имени |
+| output | 1 строка факт + короткий смысл |
+| budget | ≤120 chars |
+| required | да, если LP+seed |
+| empty_behavior | omit row (нет имени без LP) |
+| may_fe_transform | map_label |
+| may_llm_add_meaning | нет |
+| interaction | none |
+| why_here | Шаг 2 trust |
+| persist_key | profile_hash |
+| anti_dupe_group | `why_not_hero` |
+
+#### `P2.anchor.sun` / `.element` / `.rhythm` / `.moon` / `.asc` / `.mc`
+
+Общий закон якоря:
+
+| | |
+|---|---|
+| one_question | Как **этот** факт расширяет уже названное ядро у *этого* человека? |
+| text_class | calc (+ role-prose **bank / CE helper**, не read-path LLM) |
+| authority | natal/astro calc; meaning = existing bank |
+| allowed_inputs | that fact + CE core as *context to phrase*, not to retell P1 |
+| forbidden_inference | «поэтому ты Архитектор»; энциклопедия дома; dump 12 houses; повтор recognition_line |
+| output | title 1–3 слова · detail факт · meaning 1 предложение |
+| budget | meaning 12–22 слов · ≤160 chars |
+| required | нет |
+| empty_behavior | omit якорь |
+| appear | sun/element/rhythm: дата известна; moon: position; asc/mc: **reliable time** |
+| may_fe_transform | none; tap-expand collapse meaning for sun/moon/asc/mc |
+| may_llm_add_meaning | нет на read path |
+| interaction | tap expand = тот же слот |
+| persist_key | profile_hash + natal |
+| anti_dupe_group | `why_not_hero` |
+
+No bank text → meaning fallback chrome «расширяет портрет» (`empty` meaning, not invent).
+
+#### `P2.honesty_no_time`
+
+| | |
+|---|---|
+| one_question | Чего ещё нет без времени рождения? |
+| text_class | chrome |
+| display_source | Forms honesty (ASC/дома → внешнее проявление и сферы) |
+| budget | 2 предложения |
+| required | да, если нет reliable time |
+| empty_behavior | omit если время есть |
+| forbidden | «система не может», «недостаточно данных» |
+| why_here | честность selected vs influenced |
+| anti_dupe_group | `meta` |
 
 ---
 
-## 6. Проверка (воспроизводимость)
+### 3.5 P3 Insight
 
-Для одного и того же Snapshot fingerprint + chrome version:
+#### `P3.step_title` · `P3.eyebrow` · `P3.grounded_label` · `P3.help_label` · `P3.living_label` · `P3.living_note`
 
-1. Набор блоков совпадает (forming / data / P1–P6).
-2. P1: name из life_path mapping; line проходит `validate_recognition_line`.
-3. P2: первая содержательная строка selected_by = LP→архетип; Солнце не в selected.
-4. P3: ровно один узел или omit; living пуст → слота нет.
-5. P4: отсутствует, если help не action-line; текст не содержит «сегодня».
-6. P5: не начинается с императива; не равен effort_vector.
-7. Нет слов из `PROFILE_V2_FORBIDDEN_LEXICON` (день, «Мы рассчитали», «Профиль готов»).
+Chrome. Eyebrow: только `kind=strength` → «Твой дар»; tension/repeat → **omit eyebrow** (title узла = heading). Living note: «Контекст из отметок — не доказательство».
 
-Ручной проход: Forms samples Case A (birth-only) и Case C (living) — [PROFILE_PRODUCT_JOURNEY_FORMS_V1](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md).
+#### `P3.node_title`
+
+| | |
+|---|---|
+| one_question | Как назвать эту одну закономерность? |
+| text_class | generated / projected from materials |
+| authority | CE → insight_nodes_v0 |
+| semantic_source | `nodes[0].title` |
+| allowed_inputs | strengths / growth_zones / patterns **materials**, не три списка на UI |
+| forbidden_inference | три заголовка зон; day tip |
+| output | 1 строка |
+| budget | 4–10 слов · ≤80 chars |
+| required | да вместе с insight |
+| empty_behavior | omit **всего P3** |
+| persist_key | Snapshot + projection version |
+| anti_dupe_group | `path_new_value` |
+
+Max nodes first release: **1**.
+
+#### `P3.insight`
+
+| | |
+|---|---|
+| one_question | **Какую закономерность / ловушку я раньше не называл?** |
+| text_class | generated |
+| authority | CE Acts III–IV |
+| semantic_source | `nodes[0].insight` |
+| allowed_inputs | ядро + contradiction + materials; living только как adjacent, не proof |
+| forbidden_inference | пересказ recognition_line; «регулярно» на birth_data_only; kitchen («механизм проявляется», zone ids) |
+| output | 2–3 предложения |
+| budget | 30–55 слов · **≤360 chars на экране** (склад ≤900 kitchen) |
+| required | да для P3 |
+| empty_behavior | omit P3 |
+| may_fe_transform | clip + scrub kitchen |
+| may_llm_add_meaning | нет сверх cascade |
+| persist_key | Snapshot |
+| anti_dupe_group | `path_new_value` |
+
+#### `P3.grounded_on`
+
+| | |
+|---|---|
+| one_question | На каких **фактах** (не интерпретациях) держится узел? |
+| text_class | calc |
+| authority | same facts as P2 subset |
+| semantic_source | `grounded_on[].label` |
+| allowed_inputs | LP, sun, element, rhythm, moon, ASC/MC if known |
+| forbidden_inference | «потому что» как причинность без trace; prose interpretation in fact slot |
+| output | 2–4 list rows |
+| budget | каждая ≤80 chars |
+| required | нет |
+| empty_behavior | omit block опор |
+| may_fe_transform | localize fact line |
+| anti_dupe_group | `why_not_hero` (факты могут повторяться как опоры, не как смысл P1) |
+
+#### `P3.help`
+
+| | |
+|---|---|
+| one_question | Что помогает **внутри этой оси** (не совет дня)? |
+| text_class | generated |
+| authority | CE; patterns/helps LLM только если gate |
+| semantic_source | `nodes[0].help` else one strengths/practical line |
+| allowed_inputs | help/strengths; **не** Today, **не** invented living |
+| forbidden_inference | day agenda; kitchen insight-help |
+| output | 1 предложение |
+| budget | 12–22 слов · ≤140 chars экрана (склад ≤360) |
+| required | нет |
+| empty_behavior | omit help step |
+| may_fe_transform | clip; hide kitchen |
+| persist_key | Snapshot |
+| anti_dupe_group | `path_new_value` (не равен effort до projection; effort **из** help если gate) |
+
+#### `P3.living_evidence`
+
+| | |
+|---|---|
+| one_question | Как это уже проявлялось в **моих** отметках? |
+| text_class | user |
+| authority | user living |
+| semantic_source | check-in / notes quotes |
+| allowed_inputs | real signals only |
+| forbidden_inference | выдуманный повтор; «подтверждённый паттерн» без gate |
+| output | 0–2 цитаты |
+| budget | каждая ≤240 chars · 1 строка |
+| required | нет |
+| empty_behavior | **omit** (слота нет) |
+| may_fe_transform | scrub |
+| anti_dupe_group | `living` |
+
+---
+
+### 3.6 P4 Effort
+
+#### `P4.step_title` · `P4.lead`
+
+Chrome: «Куда прикладывать усилия» · «Одно направление — не ещё одно описание «кто ты».»
+
+#### `P4.effort_vector`
+
+| | |
+|---|---|
+| one_question | **Куда прикладывать усилие в поведении?** |
+| text_class | projected |
+| authority | same as P3.help (no new LLM) |
+| semantic_source | `effort_vector_v0` from `nodes[0].help` only |
+| display_source | `journey.effortVector` |
+| allowed_inputs | **только** that help, if action-start · ≠ insight · ≠ recognition_line · no сегодня/завтра |
+| forbidden_inference | life_mission; new rec list; astrology; Today; second LLM |
+| output | 1 предложение-действие |
+| budget | 12–22 слов · **8–140 chars** |
+| required | нет |
+| empty_behavior | **omit всего P4** (включая сферы на пути) |
+| may_fe_transform | clip |
+| may_llm_add_meaning | нет |
+| interaction | none |
+| why_here | Шаг 4 |
+| persist_key | projection version (read-path, not Snapshot field) |
+| anti_dupe_group | `path_new_value` · `effort_not_mission` · `bridge_not_effort` |
+
+#### `P4.sphere.title` / `.teaser` / `.expand`
+
+| | title | teaser | expand |
+|---|---|---|---|
+| one_question | Где ярлык? | Где это сильнее (новая грань vs вектор)? | Как/нужно/риск здесь? |
+| text_class | chrome/catalog | generated | generated |
+| authority | life_spheres projector | CE derived | CE derived |
+| allowed_inputs | sphere id + fields that **add where** | same | how/need/risk/helps |
+| forbidden_inference | пересказ effort_vector; day agenda; 8 сфер на пути | same | same |
+| budget | 1–2 слова | 1 предл. · ≤88 chars | 1 предл. на поле · ≤220 |
+| required | нет | нет | нет |
+| empty_behavior | omit card | omit teaser | omit expand |
+| count | **0–2 на скролле** | | |
+| persist_key | Snapshot | | |
+| anti_dupe_group | `effort_where` | | |
+
+Остальные сферы → `P6.detail` only.
+
+---
+
+### 3.7 P5 Bridge
+
+#### `P5.step_title` · `P5.cta`
+
+Chrome: «Мост в день» · «Открыть Today →». CTA interaction: navigate `/today`.
+
+#### `P5.bridge_line`
+
+| | |
+|---|---|
+| one_question | **Почему сейчас открыть Today?** |
+| text_class | projected |
+| authority | product packs keyed by `node.kind` |
+| semantic_source | `bridge_line_v0` tension-pack **или** repeat-pack |
+| allowed_inputs | kind of selected node (+ living flag for pack choice); **не** effort text |
+| forbidden_inference | императив; дубль effort; прогноз дня; камень дня |
+| output | 2 предложения |
+| budget | 20–40 слов · ≤220 chars |
+| required | нет |
+| empty_behavior | omit line; CTA may remain as navigate-only **или** omit scene if no line and no copy.lead — Inventory: show CTA with chrome-only if pack null? **Lock:** if projection null → omit **line**, keep CTA as path continuation (chrome). |
+| may_fe_transform | none |
+| may_llm_add_meaning | нет |
+| persist_key | projection version |
+| anti_dupe_group | `path_new_value` · `bridge_not_effort` |
+
+---
+
+### 3.8 P6 Explore (не шаг пути)
+
+#### `P6.title`
+
+Chrome «Натальная карта». Appear if natal **or** leftover details.
+
+#### `P6.wheel` / `P6.numbers`
+
+Calc visuals/facts. one_question: как устроена карта / какие числа. No encyclopedia dump on collapsed. omit if no natal.
+
+#### `P6.detail`
+
+| | |
+|---|---|
+| one_question | Какие детали контракта ещё не сказаны на пути? |
+| text_class | generated |
+| authority | Snapshot leftover |
+| allowed_inputs | progressiveDetails **minus** slots owned by P3/P4 |
+| forbidden_inference | повтор insight/help/strengths уже в узле |
+| output | title chrome + 1–2 предл. |
+| budget | ≤240 chars body |
+| required | нет |
+| empty_behavior | omit |
+| anti_dupe_group | `node_not_warehouse` |
+
+#### `P6.style.decision` / `.relationship` / `.money`
+
+| | |
+|---|---|
+| one_question | Как я решаю / строю близость / отношусь к деньгам **как проявление ядра**? |
+| text_class | generated |
+| authority | CE derived styles (не независимый generator) |
+| semantic_source | contract `decision_style` / `relationship_style` / `money_style` |
+| allowed_inputs | cascade; не новый personality root |
+| forbidden_inference | отдельный акт на главном скролле |
+| output | 2 предложения на экране |
+| budget | ≤280 chars UI · склад ≤520 |
+| required | нет |
+| empty_behavior | omit |
+| why_here | склад, не Шаг 3–4 |
+| anti_dupe_group | `node_not_warehouse` |
+
+#### `P6.natal_decode`
+
+| | |
+|---|---|
+| one_question | Как **структура карты** объясняет уже известное ядро? |
+| text_class | generated |
+| authority | Natal Decode (not CE overwrite) |
+| semantic_source | `natal_decode_depth_v0` after explicit POST |
+| allowed_inputs | fixed identity_core + tension + natal + numerology packs |
+| forbidden_inference | второй логлайн; write CE; feed Today as character root; auto GET generate |
+| output | long-form only after CTA |
+| budget | base houses = 1–2 предл. how/do; essay only in decode |
+| required | нет |
+| empty_behavior | CTA until generated; then persist by fingerprint |
+| persist_key | decode fingerprint |
+| anti_dupe_group | `decode` |
+
+**Forbidden chrome:** marketing `benefits[]` («Потенциалы и таланты»…) — нет `slot_id` → нет UI.
+
+---
+
+## 4. Вне рамки
+
+Character warehouse act · `life_mission` как замена P4 · Maps/Tracking · Today content · Compat hub · 12-house dump on P1/P2 · name glyph · FE invent on failure.
+
+---
+
+## 5. Код vs замок
+
+| Код | Замок |
+|-----|-------|
+| `ProfileCharacterScene` шаг 04 | нет `slot_id` → удалить с пути |
+| сферы до 8 | `P4` count 0–2 |
+| `why.honesty` null | `P2.honesty_no_time` обязателен без времени |
+| Explore benefits[] | нет слота |
+| v0 `PROFILE_LIMITS` | бюджеты этого файла |
+
+---
+
+## 6. Трасса (пример)
+
+```text
+«Ты первым видишь структуру…»
+  → P1.recognition_line
+  → generated
+  → profile_contract_v1.recognition_line
+  → Character Engine Act I
+  → allowed: identity funnel; forbidden: day / archetype name
+  → Snapshot (user, profile_hash) + prompt version
+  → FE clip ≤120
+```
 
 ---
 
@@ -337,4 +618,5 @@ Cutover UI не требует нового JSON: скрыть Character act, е
 
 | Date | Change |
 |------|--------|
-| 2026-08-29 | v1.0 — закрытый display contract Profile; Character warehouse вне рамки; лимиты слотов |
+| 2026-08-29 | v1.0 — первый закрытый список |
+| 2026-08-29 | v1.1 — Grammar §3 records; one_question; allowed_inputs; forbidden_inference; anti_dupe groups; persist keys |

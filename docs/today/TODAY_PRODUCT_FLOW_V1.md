@@ -3,7 +3,7 @@
 **Status:** CANON LOCKED · **2026-08-15**  
 **Роль:** **единственный канон продуктового цикла Today** — какие экраны видит пользователь, какой вопрос у каждого, что открывается тапом, что вечером сохраняется.  
 **Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md). Этот файл **не** считает energy, drivers, windows, Personal Day.  
-**Display contract (слоты · источник слова · лимиты):** [TODAY_DISPLAY_INVENTORY_V1](./TODAY_DISPLAY_INVENTORY_V1.md) — при конфликте «что на экране / сколько текста» побеждает Inventory.
+**Display contract (последний authority перед UI):** [TODAY_DISPLAY_INVENTORY_V1](./TODAY_DISPLAY_INVENTORY_V1.md) · закон: [DISPLAY_CONSTRUCTION_GRAMMAR_V1](../foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md).
 
 **Не:** Figma · Character Engine · north star · энциклопедия аспектов.
 
