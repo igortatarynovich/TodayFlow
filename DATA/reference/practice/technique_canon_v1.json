@@ -432,6 +432,39 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.connection_action",
+      "content_class": "practice",
+      "type": "connection_action",
+      "canonical_description": "A brief behavioral practice in which the person initiates one small, concrete act of connection with another person (for example, one short message, one honest question, or one brief check-in) and stops after that single step. The action is chosen to be small enough to complete without relying on mood or reciprocity, and is not a conversation script, relationship repair protocol, or social-skills training.",
+      "source_refs": [
+        {
+          "source": "NHS Essex ICB — Looking after your mental health",
+          "url": "https://www.essex.icb.nhs.uk/health/prevention/feel-well/looking-after-your-mental-health/",
+          "locus": "Start small; choose one realistic action such as speaking to someone you trust; boost mood through connection and routine; if symptoms persist, seek support.",
+          "note": "official_health. Method confirmation for a small, single social-connection action as part of self-care. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Liu et al. (2025) — Behavioral activation for social connection: A systematic review (Journal of Social and Personal Relationships)",
+          "url": "https://www.ovid.com/journals/jspr/fulltext/10.1177/02654075261435008~behavioral-activation-for-social-connection-a-systematic",
+          "locus": "Behavioral activation improves functional dimensions of social connection (loneliness, perceived support) by increasing small, structured social actions; strongest effects when delivered with coaching and scheduled.",
+          "note": "academic_review. Mechanism support for small, scheduled social actions improving perceived connection. Not a claim that a single action cures loneliness."
+        },
+        {
+          "source": "Laidlaw et al. (2020) — Improving Social Connectedness for Homebound Older Adults (PubMed)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32238297/",
+          "locus": "Tele-delivered behavioral activation increased social interaction and satisfaction with social support and decreased loneliness compared to friendly visits alone.",
+          "note": "academic_study. Support for structured small social interactions increasing connectedness outcomes. Not a universal or self-administered claim."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for social anxiety, loneliness disorder, or any mental health condition.",
+        "If the only available relationships are unsafe or harmful, choose a different action or speak with a professional.",
+        "If feelings of loneliness or disconnection persist, seek support from a healthcare professional or trusted service."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

@@ -487,7 +487,7 @@ Daily Context → DayModel → PIL (retrieval + refinement) → split Generation
 | Emotional State | MoodSlug | ritual + tracking slugs | slug, intensity, tempo_bias, veto_tags | display label, verdict line | Today check-in, DayModel, LLM | partial |
 | Emotional State | OperatingMode | `profile_engine/models.py` | enum, selector weights | — | Profile Selector, prompts | partial |
 | Emotional State | CheckInDimension | `check_ins.json` | dimension id, scale | prompts | Tracking, fusion | partial |
-| Practice | PracticeTemplate | `DATA/reference/practice/content_library_v1.json` (133 items; sourced 13/26) + `technique_canon_v1.json` (13 accepted; box_breathing + energizing_breath + self_trust skipped) + legacy `CONTENT/practices/practices.json` | identity + retrieval + payload; optional `technique_id` only if accepted | title, body | Flow, Today recommendations | fill unfrozen; next = `need.connection.connect` |
+| Practice | PracticeTemplate | `DATA/reference/practice/content_library_v1.json` (133 items; sourced 14/26) + `technique_canon_v1.json` (14 accepted; box_breathing + energizing_breath + self_trust skipped) + legacy `CONTENT/practices/practices.json` | identity + retrieval + payload; optional `technique_id` only if accepted | title, body | Flow, Today recommendations | fill unfrozen; next = `need.creativity.open` |
 | Practice | PracticeCategory | `DATA/reference/practice/content_taxonomy_v1.json` | `content_class` · `family` · `type` | labels in canon | Practice picker, retrieval | draft vocab; items provisional |
 | Goal | GoalCategory | — | code (money, relations, …) | label, typical blocks | Profile, Today actions | missing |
 | Goal | GoalType | — | cadence, difficulty | decomposition hints | Weekly goals, Calendar | missing |

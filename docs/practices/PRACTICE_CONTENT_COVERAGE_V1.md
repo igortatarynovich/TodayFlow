@@ -1,7 +1,7 @@
 # Practice Content Coverage v1
 
 **Статус:** `ACCEPTED` — SoT fill-pass библиотеки. **Fill unfrozen** 2026-08-26.  
-**Версия:** 1.9 (2026-08-29); pointer 2026-08-29 — self-connection-reflect cell sourced via journaling, not research ladder.  
+**Версия:** 1.10 (2026-08-29); pointer 2026-08-29 — connection-connect cell sourced via connection_action, not research ladder.  
 **Владелец:** Product.  
 **Ledger:** [`DATA/reference/practice/content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).  
 **Parent:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) §0.1 · §10.  
@@ -16,7 +16,7 @@
 ## Architecture impact
 
 - **SoT before:** taxonomy locked types/purpose/state; fill implied as «написать items против vocab». Риск — плотность в одной технике (40 grounding) и дыры в purpose/direction/class. После P0/P1 density: 133 LLM-draft items закрывали cells, но техника не имела provenance.
-- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing` = skipped_for_now. Next sourced cell = `need.connection.connect`. Первые 13 items = architecture probes.
+- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing` = skipped_for_now. Next sourced cell = `need.creativity.open`. Первые 14 items = architecture probes.
 - **Public contract changed?** no
 - **Migration required?** no runtime. 133 drafts stay provisional without `technique_id`.
 - **Canon updated?** yes — this file · matrix JSON · [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · taxonomy pointer · tracker
@@ -26,7 +26,7 @@
 
 ## 0. Закон fill-pass
 
-0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 13 = architecture probes. Next sourced cell = `need.connection.connect`.
+0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 14 = architecture probes. Next sourced cell = `need.creativity.open`.
 1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 13/26. Latest: `need.self_connection.reflect` (`journaling`; brief three-sentence unedited private writing). Next = `need.connection.connect`. Не Safety Review. Не box / energizing-breath research.
+Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 14/26. Latest: `need.connection.connect` (`connection_action`; one short message / honest question / brief check-in to someone you have not reached). Next = `need.creativity.open`. Не Safety Review. Не box / energizing-breath research.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-29 | **Connection-connect cell sourced via connection_action.** `technique.connection_action` accepted (NHS Essex ICB Looking after your mental health + Liu et al. 2025 systematic review on behavioral activation for social connection + Laidlaw et al. 2020 tele-delivered behavioral activation for connectedness). One short message / honest question / brief check-in to someone you have not reached. Next = `need.creativity.open`. |
 | 2026-08-29 | **Self-connection-reflect cell sourced via journaling.** `technique.journaling` accepted (NHS Lanarkshire Writing for Wellbeing + CUH NHS Write Your Self + Greater Good Science Center Expressive Writing). Brief three-sentence unedited private writing. Next = `need.connection.connect`. |
 | 2026-08-29 | **Emotional-awareness-reflect cell sourced via self_check_in.** `technique.self_check_in` accepted (Greater Good Science Center Naming Your Emotions + NHS Lothian Emotion Workbook + Torre & Lieberman 2018 affect labeling + Nook et al. 2022 timing/intensity caution). One-word feeling + body-spot check-in. Next = `need.self_connection.reflect`. |
 | 2026-08-29 | **Motivation-activate cell sourced via micro_action.** `technique.micro_action` accepted (NHS ELFT behavioural activation + Mayo Clinic Anxiety Coach depression behavioral activation + Psychology Tools behavioral activation). Brief two-minute immediate action. Next = `need.emotional_awareness.reflect`. |
