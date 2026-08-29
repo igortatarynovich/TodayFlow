@@ -122,8 +122,6 @@ export default function TodayPage() {
   // Mood/atmosphere first-day signal (FOUNDATION_UI §8) — same resolver as
   // SectionAtmosphereBridge, so shell + dashboard don't diverge from html.
   const isFirstDayMood = resolveIsFirstDay("/today", searchParams);
-  const coreLoopViabilityMode =
-    searchParams.get("core_loop") === "1" || firstTodayMode;
   const todayExperienceMode = searchParams.get("full") !== "1";
   const ritualExperienceMode = searchParams.get("experience") === "1";
   const toast = useToast();
@@ -152,7 +150,6 @@ export default function TodayPage() {
     if (!firstQuery || firstTodayMode) return;
     const next = new URLSearchParams(searchParams.toString());
     next.delete("first");
-    next.delete("core_loop");
     const q = next.toString();
     router.replace(q ? `/today?${q}` : "/today", { scroll: false });
   }, [firstQuery, firstTodayMode, searchParams, router]);
@@ -1629,7 +1626,6 @@ export default function TodayPage() {
             onRefreshToday={() => void loadToday({ force: true })}
             onEveningPhaseSaved={() => void loadToday({ force: true })}
             onRitualSpineComplete={onRitualSpineComplete}
-            coreLoopViabilityMode={coreLoopViabilityMode}
             todayContract={todayContract}
             dayStoryUpdating={dayStoryUpdating}
             onSymbolRevealResult={onSymbolRevealResult}

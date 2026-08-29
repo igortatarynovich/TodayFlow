@@ -1,4 +1,6 @@
 > ⚠️ STALE — не отражает Journey/Day Sources. См. [audits/FULL_USER_PATH_CANON_V1.md](../audits/FULL_USER_PATH_CANON_V1.md). Полная ревизия — отдельная задача.
+>
+> **2026-08-29 update:** Phase 2.1 cutover closed. The `?core_loop=1` experiment (`TodayCoreLoopViabilitySurface`) was removed; default `/today` already uses the 4-surface `TodayProductScreenFlow` via `TodayCompositionSurface`. See [audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md](../audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md).
 
 # Today · Step A — Canon vs Code Diff
 

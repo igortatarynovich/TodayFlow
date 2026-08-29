@@ -18,7 +18,6 @@ import {
 } from "@/lib/tarotCardAssets";
 import { TodayDayLogicCallout } from "@/components/today/TodayDayLogicCallout";
 import { TodayDayHistoryStrip } from "@/components/today/TodayDayHistoryStrip";
-import { TodayCoreLoopViabilitySurface } from "@/components/today/TodayCoreLoopViabilitySurface";
 import { TodayResultView } from "@/components/today/TodayResultView";
 import type { TodayCycleData } from "@/components/today/todayPageUtils";
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
@@ -229,8 +228,6 @@ type Props = {
   };
   /** `core-profile` → `person.gender` — заголовок блока «не дожимать» в сводке ритуала. */
   profileGender?: string | null;
-  /** Phase 3 · G1-surface — Theme → Action → Progress без ritual gate (`?core_loop=1` / `?first=1`). */
-  coreLoopViabilityMode?: boolean;
   /** P0.1 wire — domain lenses из GET /today/contract. */
   todayContract?: TodayContractV1 | null;
   dayStoryUpdating?: boolean;
@@ -282,7 +279,6 @@ export function TodayRitualFlow(props: Props) {
   const onRitualSpineComplete = props.onRitualSpineComplete;
   const ritualNumerologyValue = props.numerologyValue;
   const ritualTodayData = props.todayData;
-  const coreLoopViabilityMode = Boolean(props.coreLoopViabilityMode);
 
   const [hydrated, setHydrated] = useState(false);
   const [showCardSection, setShowCardSection] = useState(false);
@@ -1048,19 +1044,6 @@ export function TodayRitualFlow(props: Props) {
     if (!ritualDayUnlocked) ritualHeroUnlockPrevRef.current = false;
   }, [hydrated, showCardSection, ritualDayUnlocked]);
 
-  const coreLoopViabilityVisibleTrackedRef = useRef(false);
-  useEffect(() => {
-    if (!coreLoopViabilityMode || !hydrated || coreLoopViabilityVisibleTrackedRef.current) return;
-    coreLoopViabilityVisibleTrackedRef.current = true;
-    trackMeaningEvent({
-      event_type: "core_loop_viability_surface_visible",
-      event_source: "today",
-      payload: {
-        instrument: "g1_surface",
-      },
-    });
-  }, [coreLoopViabilityMode, hydrated, trackMeaningEvent]);
-
   const eveningHourCompact = useMemo(() => new Date().getHours() < 19, []);
 
   return (
@@ -1122,7 +1105,7 @@ export function TodayRitualFlow(props: Props) {
         id="today-ritual-hero"
         className="today-ritual-hero todayflow-inset-hero"
         style={{
-          minHeight: !showCardSection && !coreLoopViabilityMode ? "min(72dvh, 600px)" : undefined,
+          minHeight: !showCardSection ? "min(72dvh, 600px)" : undefined,
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
@@ -1131,16 +1114,7 @@ export function TodayRitualFlow(props: Props) {
           boxSizing: "border-box",
         }}
       >
-        {coreLoopViabilityMode ? (
-          <TodayCoreLoopViabilitySurface
-            displayDate={props.displayDate}
-            guideNarrativeLoading={guideNarrativeLoading}
-            guideNarrativePayload={guideNarrativePayload}
-            onOpenOptionalRitual={!showCardSection ? onHeroCta : undefined}
-            ritualTextWrap={ritualTextWrap}
-          />
-        ) : null}
-        {!showCardSection && !coreLoopViabilityMode ? (
+        {!showCardSection ? (
           <>
             <div
               style={{

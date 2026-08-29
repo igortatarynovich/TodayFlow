@@ -79,7 +79,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 
 | # | Task | Acceptance Criteria | Depends On |
 |---|------|---------------------|------------|
-| 2.1 | FE cutover: default `/today` uses 4-surface ScreenFlow | `?core_loop=1` becomes default; no regression in ship gate walkthrough | G1 |
+| 2.1 | FE cutover: default `/today` uses 4-surface ScreenFlow | `?core_loop=1` becomes default; no regression in ship gate walkthrough — **done 2026-08-29** (`?core_loop=1` experiment removed; `TodayCoreLoopViabilitySurface` deleted; audit doc `docs/audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md`) | G1 |
 | 2.2 | Theme / Action / Progress first-class | `TODAY_CANON_VS_CODE_DIFF.md` closed or updated with new facts | 2.1 |
 | 2.3 | Evening as time-gated surface | No evening block in morning scroll — **done 2026-08-29** (`TodayProductScreenFlow.showEvening`; `TodayCompositionSurface` gates by `getTimeOfDayByHour()`; audit doc `docs/audits/EVENING_TIME_GATE_2026-08-29.md`) | 2.1 |
 | 2.4 | Caller audit: replace `build()` with `build_cached_or_baseline` | No LLM-on-read GETs in Today/Compat/Tarot/Account — **done 2026-08-28** (`test_tarot_daily_explain_no_llm_v1.py` green; audit doc `docs/audits/CALLER_AUDIT_LLM_ON_READ_2026-08-28.md`) | G1 |
@@ -150,3 +150,4 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 2026-08-29 | Profile Selection K3 usage audit harness implemented; blocked on live K3 run until billing top-up. |
 | 2026-08-29 | Phase 4.2 Production deploy runbook implemented: `docs/operations/DEPLOY_RUNBOOK_V1.md`; `.github/workflows/deploy.yml` rewrite in local diff (push blocked by token workflow scope). |
 | 2026-08-29 | Phase 2.3 Evening time-gated surface implemented: `showEvening` prop in `TodayProductScreenFlow`, gated by `getTimeOfDayByHour()` in `TodayCompositionSurface`; audit doc `docs/audits/EVENING_TIME_GATE_2026-08-29.md`. |
+| 2026-08-29 | Phase 2.1 FE cutover: default `/today` uses 4-surface ScreenFlow; `?core_loop=1` experiment and `TodayCoreLoopViabilitySurface` removed; audit doc `docs/audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md`. |
