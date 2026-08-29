@@ -4,9 +4,11 @@ Last updated: 2026-08-29
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (THEME / ACTION / PROGRESS FIRST-CLASS, 2026-08-29):** Phase 2.2 closed. `docs/status/TODAY_CANON_VS_CODE_DIFF.md` is updated to **CLOSED** with a new Phase 2.2 closure section. The pre-cutover finding "ritual-first funnel" no longer applies to the default path: `/today` now opens on the **TODAY** surface (Theme / Hero / Why), continues to **RITUAL** (Tarot + Number), then **MY DAY** (Action / Focus / Progress), and finally **EVENING** (time-gated close). The `?core_loop=1` experiment that previously offered the only near-canon preview is removed. Remaining partial items (ContinuityRecall D2+ pill, Why expandable, trackers, explore bridges, etc.) are documented as polish, not launch blockers. Next: Phase 3.4 Maps cleanup, Practice Library fill, or billing top-up to unblock LLM-dependent audits.
+
 **NOW (DISPLAY INVENTORY, 2026-08-29):** Construction SoT for Profile and Today is locked. `docs/profile/PROFILE_DISPLAY_INVENTORY_V1.md` and `docs/today/TODAY_DISPLAY_INVENTORY_V1.md` list every on-screen slot: text class (chrome / calc / generated / projected / catalog / user), source field, word/line/sentence budget, appear/omit, out-of-frame. A new UI slot requires an Inventory row + Architecture impact. Documented code drift (Profile Character warehouse as a journey act; MY DAY headline sharing `why_personal` with focus) is **not** product. Next UI: cut those drifts to the lock. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
 
-**NOW (TODAY 4-SURFACE CUTOVER, 2026-08-29):** Phase 2.1 closed. Default `/today` now uses the 4-surface `TodayProductScreenFlow` (Today → Ritual → My Day → Evening). The `?core_loop=1` experiment and its `TodayCoreLoopViabilitySurface` preview are removed from `page.tsx` and `TodayRitualFlow.tsx`; related copy keys are removed from `todayRitualCopy.ts`. `?core_loop=1` URLs are now served by the default composition path. Legacy `?full=1` and `?experience=1` paths remain as non-default overrides. Tests updated and green; frontend production build passes. Audit doc: `docs/audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md`. Next: Phase 2.2 Theme / Action / Progress first-class (update `TODAY_CANON_VS_CODE_DIFF.md` with new facts), Phase 3.4 Maps cleanup, or billing top-up to unblock LLM-dependent audits.
+**NOW (TODAY 4-SURFACE CUTOVER, 2026-08-29):** Phase 2.1 closed. Default `/today` now uses the 4-surface `TodayProductScreenFlow` (Today → Ritual → My Day → Evening). The `?core_loop=1` experiment and its `TodayCoreLoopViabilitySurface` preview are removed from `page.tsx` and `TodayRitualFlow.tsx`; related copy keys are removed from `todayRitualCopy.ts`. `?core_loop=1` URLs are now served by the default composition path. Legacy `?full=1` and `?experience=1` paths remain as non-default overrides. Tests updated and green; frontend production build passes. Audit doc: `docs/audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md`. Next: Phase 3.4 Maps cleanup, Practice Library fill, or billing top-up to unblock LLM-dependent audits.
 
 **NOW (EVENING TIME GATE, 2026-08-29):** Phase 2.3 closed. Evening close is now a time-gated surface in the product-foundation screen flow. `TodayProductScreenFlow` accepts `showEvening`; when false, the evening step is removed from the scroll, indices/dots are recomputed, and preceding steps no longer label a next step as evening. `TodayCompositionSurface` sets `showEvening = eveningMode || getTimeOfDayByHour() === "evening"`, so morning/day scrolls do not show the evening block. Tests updated and green; frontend production build passes. Audit doc: `docs/audits/EVENING_TIME_GATE_2026-08-29.md`. Next: remaining non-LLM launch-readiness items (Phase 2.1 FE cutover, Phase 3.4 Maps cleanup, Practice Library fill) or billing top-up to unblock LLM-dependent audits.
 
@@ -57,6 +59,15 @@ Status: Active working document
 - **Migration required?** no. Cached day nests keep the same shape.
 - **Canon updated?** yes — `docs/audits/EVENING_TIME_GATE_2026-08-29.md` · this tracker · `docs/status/RELEASE_PLAN_V1.md`.
 - **Backward compatible?** yes for API and data. UI behavior changes only when local time is not evening.
+
+## Architecture impact — Theme / Action / Progress first-class (2026-08-29)
+
+- **SoT before:** `docs/status/TODAY_CANON_VS_CODE_DIFF.md` concluded that the default web-Today was a **ritual-first funnel**, not a Theme → Action → Progress spine. That conclusion was accurate for the pre-cutover `?full=1` / `?experience=1` paths but contradicted the documented default `TodayCompositionSurface` path. The `?core_loop=1` experiment was the only near-canon preview of the correct spine.
+- **SoT after:** the default `/today` route is declared as the canonical 4-surface `TodayProductScreenFlow`: **TODAY** (Theme / Hero / Why) → **RITUAL** (Symbolic/Tarot+Number) → **MY DAY** (Action / Focus / Progress) → **EVENING** (time-gated close). The old diff is marked **CLOSED** with a Phase 2.2 closure section that records the new route map and lists remaining partial items as polish, not launch blockers. No new code or contract changed in this step; the cutover and time-gate architecture impacts already covered the code changes.
+- **Public contract changed?** no — the `/today/contract` payload and URL contract are unchanged.
+- **Migration required?** no.
+- **Canon updated?** yes — `docs/status/TODAY_CANON_VS_CODE_DIFF.md` · this tracker · `docs/status/RELEASE_PLAN_V1.md`.
+- **Backward compatible?** yes for clients. The legacy `?full=1` and `?experience=1` paths remain as non-default overrides.
 
 ## Architecture impact — Caller audit / LLM-on-read (2026-08-28)
 
