@@ -69,7 +69,7 @@ status                    accepted | skipped
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in` = `accepted`. Sourced 12/26. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.self_connection.reflect`. Не открывать Safety Review V1.1.
+**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling` = `accepted`. Sourced 13/26. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.connection.connect`. Не открывать Safety Review V1.1.
 
 ---
 
@@ -87,6 +87,7 @@ status                    accepted | skipped
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-29 | Self-connection-reflect cell sourced via `journaling`. `technique.journaling` accepted from NHS Lanarkshire Writing for Wellbeing + CUH NHS Write Your Self + Greater Good Science Center Expressive Writing. Brief three-sentence unedited private writing. Next = `need.connection.connect`. |
 | 2026-08-29 | Emotional-awareness-reflect cell sourced via `self_check_in`. `technique.self_check_in` accepted from Greater Good Science Center Naming Your Emotions + NHS Lothian Emotion Workbook + Torre & Lieberman (2018) affect labeling + Nook et al. (2022) timing/intensity caution. One-word feeling + body spot check-in. Next = `need.self_connection.reflect`. |
 | 2026-08-29 | Motivation-activate cell sourced via `micro_action`. `technique.micro_action` accepted from NHS ELFT behavioural activation + Mayo Clinic Anxiety Coach depression behavioral activation + Psychology Tools behavioral activation. Brief two-minute immediate action. Next = `need.emotional_awareness.reflect`. |
 | 2026-08-29 | Sleep-discipline cell sourced via `sleep_discipline`. `technique.sleep_discipline` accepted from Mayo Clinic sleep tips + Mayo Clinic insomnia CBT-I + NHS inform sleep hygiene. Fixed latest bedtime rule for 7 consecutive days. Next = `need.motivation.activate`. |

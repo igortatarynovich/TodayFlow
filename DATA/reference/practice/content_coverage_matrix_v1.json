@@ -5,9 +5,9 @@
   "semantic_version": "content-taxonomy-v1.1",
   "fill_frozen": false,
   "next_pass": "library_fill_lightweight_provenance",
-  "next_fill_cell": "need.self_connection.reflect",
+  "next_fill_cell": "need.connection.connect",
   "skipped_types": ["box_breathing", "energizing_breath"],
-  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing and energizing_breath skipped_for_now. Sourced 12/26: calm (extended_exhale), focus (focused_attention), energy (mobility), grounding (sensory_grounding), clarity (prompted_reflection), confidence (capability), release (body_release), rest (relaxation), sleep (sleep), sleep discipline (sleep_discipline), motivation (micro_action), emotional awareness (self_check_in). Next cell: need.self_connection.reflect. Remaining items llm_provisional until rewritten. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
+  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing and energizing_breath skipped_for_now. Sourced 13/26: calm (extended_exhale), focus (focused_attention), energy (mobility), grounding (sensory_grounding), clarity (prompted_reflection), confidence (capability), release (body_release), rest (relaxation), sleep (sleep), sleep discipline (sleep_discipline), motivation (micro_action), emotional awareness (self_check_in), self connection (journaling). Next cell: need.connection.connect. Remaining items llm_provisional until rewritten. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,
@@ -21,8 +21,8 @@
   "counts": {
     "need_cells": 26,
     "need_cells_empty": 0,
-    "need_cells_seed": 14,
-    "need_cells_covered": 12,
+    "need_cells_seed": 13,
+    "need_cells_covered": 13,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
@@ -432,7 +432,8 @@
       "surfaces": [
         "today"
       ],
-      "status": "seed",
+      "status": "covered",
+      "fill_status": "sourced",
       "item_ids": [
         "practice.journaling.001",
         "meditation.body_scan.001",

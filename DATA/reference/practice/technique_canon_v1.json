@@ -400,6 +400,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.journaling",
+      "content_class": "practice",
+      "type": "journaling",
+      "canonical_description": "A brief private-writing practice in which the person writes a few short sentences from their own perspective without editing or revising. The aim is to put current thoughts or feelings into words as a moment of self-connection, not to analyse, solve, or process a difficult experience. It is a single, short fragment rather than a multi-day expressive-writing protocol or therapeutic intervention.",
+      "source_refs": [
+        {
+          "source": "NHS Lanarkshire — Writing for Wellbeing",
+          "url": "https://www.nhslanarkshire.scot.nhs.uk/pulse-writing-for-wellbeing/",
+          "locus": "Writing helps explore emotions, good and bad, and gain a better understanding of our own feelings; reflective writing is a place to express yourself, your thoughts, feelings and ideas; leave a notebook anywhere for a spare minute.",
+          "note": "official_health. Method confirmation for brief private writing as a self-expression / self-connection practice. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Cambridge University Hospitals NHS — Write Your Self",
+          "url": "https://www.cuh.nhs.uk/about-us/our-structure/other-departments/cuh-arts/our-programmes/live-and-participatory-arts/resources/write-your-self/",
+          "locus": "A resource to explore creative writing and encourage self-expression; includes journaling, expressive writing, reminiscence, and self-reflection activities.",
+          "note": "official_health. Method confirmation for journaling and self-expression writing. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Greater Good Science Center — Expressive Writing",
+          "url": "https://ggia.berkeley.edu/practice/expressive_writing",
+          "locus": "Write freely about your feelings and thoughts for an experience of hurt; try not to edit or judge what you write; your writing is for your eyes only and for your own well-being.",
+          "note": "public_education. Method confirmation for private, unedited writing as a self-expression practice. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for any mental health condition.",
+        "If writing brings up overwhelming feelings, stop and consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

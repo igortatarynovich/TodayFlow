@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.19 (2026-08-29) — lightweight fill; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
+**Версия:** 1.20 (2026-08-29) — lightweight fill; journaling accepted; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (иерархия доказательности, не обязательная лестница fill).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -276,8 +276,8 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 ## 11. Что дальше
 
 1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
-2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in` = `accepted`. Sourced 12/26 P0 cells. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`.
-3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.self_connection.reflect`.
+2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling` = `accepted`. Sourced 13/26 P0 cells. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`.
+3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.connection.connect`.
 4. Остальные items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
@@ -286,6 +286,7 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-29 | v1.20 — `technique.journaling` accepted (NHS Lanarkshire Writing for Wellbeing + CUH NHS Write Your Self + Greater Good Science Center Expressive Writing); next = library fill at `need.connection.connect` |
 | 2026-08-29 | v1.19 — `technique.self_check_in` accepted (Greater Good Science Center Naming Your Emotions + NHS Lothian Emotion Workbook + Torre & Lieberman 2018 affect labeling + Nook et al. 2022 timing/intensity caution); next = library fill at `need.self_connection.reflect` |
 | 2026-08-29 | v1.18 — `technique.micro_action` accepted (NHS ELFT behavioural activation + Mayo Clinic Anxiety Coach depression behavioral activation + Psychology Tools behavioral activation); next = library fill at `need.emotional_awareness.reflect` |
 | 2026-08-29 | v1.17 — `technique.sleep_discipline` accepted (Mayo Clinic sleep tips + Mayo Clinic insomnia CBT-I + NHS inform sleep hygiene); next = library fill at `need.motivation.activate` |
