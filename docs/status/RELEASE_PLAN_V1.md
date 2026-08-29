@@ -69,7 +69,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 1.3 | Real D+1 continuity after evening close | 1 user × 2 calendar days; S0 continuity line appears without localStorage substitution | 1.2 |
 | 1.4 | Team walkthrough 2 people × 2 days | Ship gate DoD 6/6 from `BEHAVIOR_CHANGE_TEST_V0.md` | 1.3 |
 | 1.5 | Start behavior test cohort | 5–10 people, 14 days, metrics collection live | 1.4 |
-| 1.6 | Parallel: Practice Library fill | +1 sourced P0 cell per week starting from `need.confidence.open` | 0.1 |
+| 1.6 | Parallel: Practice Library fill | +1 sourced P0 cell per week starting from `need.release.release` | 0.1 |
 
 **Gate G1:** ship gate passed and behavior test started.
 
@@ -95,9 +95,9 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | # | Task | Acceptance Criteria | Depends On |
 |---|------|---------------------|------------|
 | 3.1 | Practice Library 26/26 sourced | `content_coverage_matrix_v1.json`: 26 covered, 0 seed; `content_library_v1.json` not `llm_provisional` | 1.6 |
-| 3.2 | Finalize skipped techniques | `box_breathing`, `energizing_breath` — either accepted or permanently skipped with reason | 3.1 |
+| 3.2 | Finalize skipped techniques | `box_breathing`, `energizing_breath`, `self_trust` — either accepted or permanently skipped with reason | 3.1 |
 | 3.3 | iOS parity wave 1 | Catalog, Reports, Forecast, Library, Discover, Growth surfaces present per `IOS_TODAYFLOW_STATUS.md` | G2 |
-| 3.4 | Maps surfaces cleanup | No orphan `/affirmations/tracker`, `/asceticisms/tracker`; routes unified under `/maps/*` | G2 |
+| 3.4 | Maps surfaces cleanup | No orphan `/affirmations/tracker`, `/asceticisms/tracker`; routes unified under `/maps/*` — **done 2026-08-29** (redirects in `next.config.mjs`; orphan pages deleted; links updated to `/maps/wish` and `/maps/ascetic`; iOS deep-link routing updated; backend docstring updated) | G2 |
 | 3.5 | Profile Selection Engine | Deterministic selection of ~24 IL-3 themes; repeatable portraits — **v0 implemented** in `services/il4_selection_v1.py`; **object→topic connections implemented** (planets/houses/angles/signs → `ProfileTopicDomain`); usage audit waits for K3/billing | 2.6 |
 
 **Gate G3:** content P0 complete and iOS P0 surfaces present.
@@ -152,3 +152,4 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 2026-08-29 | Phase 2.3 Evening time-gated surface implemented: `showEvening` prop in `TodayProductScreenFlow`, gated by `getTimeOfDayByHour()` in `TodayCompositionSurface`; audit doc `docs/audits/EVENING_TIME_GATE_2026-08-29.md`. |
 | 2026-08-29 | Phase 2.1 FE cutover: default `/today` uses 4-surface ScreenFlow; `?core_loop=1` experiment and `TodayCoreLoopViabilitySurface` removed; audit doc `docs/audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md`. |
 | 2026-08-29 | Phase 2.2 Theme / Action / Progress first-class: `docs/status/TODAY_CANON_VS_CODE_DIFF.md` closed with new facts; default path now Theme-first 4-surface ScreenFlow, evening time-gated. |
+| 2026-08-29 | Phase 3.4 Maps surfaces cleanup: orphan `/affirmations/tracker` and `/asceticisms/tracker` removed; redirects to `/maps/wish` and `/maps/ascetic`; links and iOS deep-link routing updated. |

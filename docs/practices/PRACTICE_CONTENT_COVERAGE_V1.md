@@ -1,7 +1,7 @@
 # Practice Content Coverage v1
 
 **Статус:** `ACCEPTED` — SoT fill-pass библиотеки. **Fill unfrozen** 2026-08-26.  
-**Версия:** 1.1 (2026-08-25); pointer 2026-08-26 — sourced fill, not research ladder.  
+**Версия:** 1.2 (2026-08-29); pointer 2026-08-29 — confidence cell sourced, not research ladder.  
 **Владелец:** Product.  
 **Ledger:** [`DATA/reference/practice/content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).  
 **Parent:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) §0.1 · §10.  
@@ -26,7 +26,7 @@
 
 ## 0. Закон fill-pass
 
-0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 11 = architecture probes. Next sourced cell = `need.confidence.open`.
+0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 11 = architecture probes. Next sourced cell = `need.release.release`.
 1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
@@ -196,7 +196,7 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Targeted Safety Shortlist** | who_must_not_hold for required holds | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
 | **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) (not continued) |
 | **Safety Review V1.1** | may_release vs model of who_must_not_hold | **not opened** — research escalation closed |
-| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.confidence.open`; sourced 5/26; `box_breathing` and `energizing_breath` skipped_for_now |
+| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.release.release`; sourced 6/26; `box_breathing`, `energizing_breath` and `self_trust` skipped_for_now |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после sourced fill, не вместо |
 
 ---
@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 5/26. Latest: `need.clarity.reflect` (`prompted_reflection`; one question, no required conclusion). Next = `need.confidence.open`. Не Safety Review. Не box / energizing-breath research.
+Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 6/26. Latest: `need.confidence.open` (`capability`; realistic first-person coping statement). Next = `need.release.release`. Не Safety Review. Не box / energizing-breath research.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-29 | **Confidence cell sourced via capability.** `technique.capability` accepted. `affirmation.self_trust` skipped (source gap). Next = `need.release.release`. |
 | 2026-08-26 | **Clarity cell sourced via prompted_reflection.** Kernel = one question → own-words answer; no required conclusion. Not a journaling protocol. Probe rewritten. Next = `need.confidence.open`. |
 | 2026-08-26 | **Grounding cell sourced via sensory_grounding.** Kernel = notice present sense data. 3-2-1 / 5-4-3-2-1 not the kernel. Probe rewritten. Next = `need.clarity.reflect`. |
 | 2026-08-26 | **Energy cell sourced via mobility.** Preferred `energizing_breath` skipped. Probe not saved. No pranayama remap. `technique.mobility` accepted. Next = `need.grounding.stabilize`. |

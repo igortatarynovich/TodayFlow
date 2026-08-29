@@ -4,7 +4,11 @@ Last updated: 2026-08-29
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (THEME / ACTION / PROGRESS FIRST-CLASS, 2026-08-29):** Phase 2.2 closed. `docs/status/TODAY_CANON_VS_CODE_DIFF.md` is updated to **CLOSED** with a new Phase 2.2 closure section. The pre-cutover finding "ritual-first funnel" no longer applies to the default path: `/today` now opens on the **TODAY** surface (Theme / Hero / Why), continues to **RITUAL** (Tarot + Number), then **MY DAY** (Action / Focus / Progress), and finally **EVENING** (time-gated close). The `?core_loop=1` experiment that previously offered the only near-canon preview is removed. Remaining partial items (ContinuityRecall D2+ pill, Why expandable, trackers, explore bridges, etc.) are documented as polish, not launch blockers. Next: Phase 3.4 Maps cleanup, Practice Library fill, or billing top-up to unblock LLM-dependent audits.
+**NOW (DISPLAY INVENTORY v1.1, 2026-08-29):** Display construction is now a five-constraint contract, not a field list. Shared law: `docs/foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md` (chain calc→authority→composition→named slot→Inventory→projection→UI; FE does not choose meaning). Both Inventories v1.1 give every visible atom `slot_id`, `one_question`, authority, `allowed_inputs`, `forbidden_inference`, persist key, anti-dupe group, empty→omit. Generated ≠ semantic authority. `why_personal` may feed `T3.focus_body` only, not headline. UI cutover still waits. Next: audit harness against these records, or cut named code drift.
+
+**NOW (MAPS SURFACES CLEANUP, 2026-08-29):** Phase 3.4 closed. Orphan routes `/affirmations/tracker` and `/asceticisms/tracker` are removed. `next.config.mjs` redirects them to `/maps/wish` and `/maps/ascetic` respectively. All internal links are updated: `/affirmations` library CTA → `/maps/wish`; `/asceticisms` catalog CTA → `/maps/ascetic`; `/tracking/progress` hub no longer lists the classic tracker cards. iOS `ContentView.swift` deep-link routing now maps the legacy tracker paths to the `.profile` tab with the corresponding map navigation. Backend `tracking.py` docstring updated to describe the new maps surfaces. Next: Practice Library fill, or billing top-up to unblock LLM-dependent audits.
+
+**NOW (THEME / ACTION / PROGRESS FIRST-CLASS, 2026-08-29):** Phase 2.2 closed. `docs/status/TODAY_CANON_VS_CODE_DIFF.md` is updated to **CLOSED** with a new Phase 2.2 closure section. The pre-cutover finding "ritual-first funnel" no longer applies to the default path: `/today` now opens on the **TODAY** surface (Theme / Hero / Why), continues to **RITUAL** (Tarot + Number), then **MY DAY** (Action / Focus / Progress), and finally **EVENING** (time-gated close). The `?core_loop=1` experiment that previously offered the only near-canon preview is removed. Remaining partial items (ContinuityRecall D2+ pill, Why expandable, trackers, explore bridges, etc.) are documented as polish, not launch blockers. Next: Practice Library fill, or billing top-up to unblock LLM-dependent audits.
 
 **NOW (DISPLAY INVENTORY, 2026-08-29):** Construction SoT for Profile and Today is locked. `docs/profile/PROFILE_DISPLAY_INVENTORY_V1.md` and `docs/today/TODAY_DISPLAY_INVENTORY_V1.md` list every on-screen slot: text class (chrome / calc / generated / projected / catalog / user), source field, word/line/sentence budget, appear/omit, out-of-frame. A new UI slot requires an Inventory row + Architecture impact. Documented code drift (Profile Character warehouse as a journey act; MY DAY headline sharing `why_personal` with focus) is **not** product. Next UI: cut those drifts to the lock. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
 
@@ -23,6 +27,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — Maps surfaces cleanup (2026-08-29)
+
+- **SoT before:** web-Today had two legacy tracker routes (`/affirmations/tracker`, `/asceticisms/tracker`) alongside the new `/maps/*` surfaces. The legacy pages duplicated tracking functionality and were still linked from the affirmations catalog, asceticisms catalog, and `/tracking/progress` hub. iOS deep-link routing also treated them as calendar-tab paths, diverging from the `/maps/*` profile-tab routing.
+- **SoT after:** the legacy routes are removed. `next.config.mjs` returns 307 redirects: `/affirmations/tracker` → `/maps/wish`, `/asceticisms/tracker` → `/maps/ascetic`. Internal CTAs now point directly to the maps surfaces. The `/tracking/progress` hub lists only the unified maps cards. iOS maps legacy tracker deep links to the `.profile` tab with the corresponding map navigation. The backend docstring points to `/maps/*` surfaces instead of the old paths.
+- **Public contract changed?** yes — URL routing. `/affirmations/tracker` and `/asceticisms/tracker` are no longer first-class pages; they redirect to `/maps/wish` and `/maps/ascetic`.
+- **Migration required?** no runtime data migration. Old bookmarks/deep links continue to work via redirect.
+- **Canon updated?** yes — `docs/status/RELEASE_PLAN_V1.md` · this tracker · `frontend/next.config.mjs`.
+- **Backward compatible?** yes for user data. API endpoints (`/tracking/progress`, `/practices/affirmations`, `/practices/asceticisms`) are unchanged. Only the web page routes and internal links are consolidated.
 
 ## Architecture impact — Display inventory Profile + Today (2026-08-29)
 
@@ -123,7 +136,7 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-26):** **Library fill** — next cell `need.confidence.open`. Sourced 5/26. Latest: `need.clarity.reflect` via `prompted_reflection` (one question → own words; no required conclusion; not a journaling protocol). `box_breathing` and `energizing_breath` skipped. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-29):** **Library fill** — next cell `need.release.release`. Sourced 6/26. Latest: `need.confidence.open` via `capability` (realistic first-person coping statement; CBT/REBT rational coping statement + NHS inform; not values-affirmation). `box_breathing`, `energizing_breath`, and `self_trust` skipped. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md). Meaning still does not emit `item_id` or `technique_id`.
 
 ## Architecture impact — Practice Library Fill / research collapse (2026-08-26)
 
@@ -2705,6 +2718,8 @@ Ordered work (aligns with canon §7):
 
 Use format:
 - `YYYY-MM-DD` | `Area` | `Change` | `Status` | `Notes`
+
+:- 2026-08-29 | Practices / Canon | **Library fill: capability sourced** | **ACCEPTED** | need.confidence.open closed with `affirmation.capability` (realistic first-person coping statement; CBT/REBT rational coping statement + NHS inform). `affirmation.self_trust` skipped (source gap). Next cell = need.release.release. No new type. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 
 Historical note:
 - older entries may mention the legacy `5-section` IA model;

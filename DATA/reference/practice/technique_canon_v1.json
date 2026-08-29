@@ -173,6 +173,44 @@
       ],
       "allowed_claims": [],
       "status": "accepted"
+    },
+    {
+      "technique_id": "technique.capability",
+      "content_class": "affirmation",
+      "type": "capability",
+      "canonical_description": "A short, realistic statement that names the present challenge and affirms the person's existing capacity to cope with it, based on lived experience or current resources. The statement is specific, believable, and phrased in the first person. It is not a prediction of success, a wish, or a guarantee of outcome. It is spoken once or a few times, then the person returns to the situation.",
+      "source_refs": [
+        {
+          "source": "College of Cognitive Behavioural Therapies — Rational coping statements: more than just 'live, laugh, love'",
+          "url": "https://www.cbttherapies.org.uk/2023/02/08/rational-coping-statements-more-than-just-live-laugh-love/",
+          "locus": "Rational coping statements are short, specific, reality-based phrases that challenge negative thoughts by acknowledging the difficulty of a situation and affirming the capacity to cope; example: 'I have handled difficult situations before, and I can handle this one too'",
+          "note": "clinical_psychology. Method confirmation. CBT/REBT model. Efficacy and treatment claims not imported."
+        },
+        {
+          "source": "NHS inform — Anxiety self-help guide",
+          "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/anxiety-self-help-guide/",
+          "locus": "CBT-based guide: reducing avoidance by continuing to confront situations helps prove to yourself that you can manage them; self-help techniques are tools, not a replacement for professional support if needed",
+          "note": "official_health. Method confirmation for realistic self-efficacy statements and behavioral management of anxiety. Diagnosis/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if the statement makes you feel worse or increases self-criticism.",
+        "Not a treatment for anxiety, depression, or any mental-health condition."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.self_trust",
+      "content_class": "affirmation",
+      "type": "self_trust",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "source_gap",
+      "note": "No authoritative clinical or educational source describing self-trust affirmation as a standalone technique was found in this pass. Cell need.confidence.open is covered by technique.capability. Existing draft items remain llm_provisional without technique_id."
     }
   ]
 }

@@ -97,11 +97,12 @@
 
 **Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. Step 2 lookup = [astrology/INTERPRETATION_LIBRARY_V1.md](./astrology/INTERPRETATION_LIBRARY_V1.md) (не второй канон дня).  
 **Today product cycle (экраны):** [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — TODAY → RITUAL → MY DAY → EVENING. Не плодить второй канон смысла.  
-**Display contracts (что на экране · откуда слово · лимит):** [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md). Новый слот только через Inventory + Architecture impact.
+**Display contracts (последний authority перед UI):** [foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) (закон) · [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md). Слот вне Inventory = нет в продукте. Новый слот только через запись + Architecture impact.
 
 - [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный канон смысла / content pipeline Today**
 - [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — **единственный канон продуктового цикла / ScreenFlow Today**
-- [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md) — **конструкция экрана Сегодня**: блоки · provenance · лимиты слов/строк
+- [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md) — **слоты Сегодня** (последний authority перед UI)
+- [foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) — **закон конструкции** (цепочка · 5 ограничений · FE не invent)
 - [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) — SoT **расчёта фактов** (не сюжет); питает Global Day
 - [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — **SUPERSEDED** как product map; current-code until cutover
 - [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual** SoT (§2 ten-layer language · natal as composition · §11 Day Atmosphere)
@@ -117,12 +118,13 @@
 - [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) — указатели → pipeline
 - [DAY_SOURCE_REGISTRY.md](./DAY_SOURCE_REGISTRY.md) · [PROFILE_DAY_SOURCE_MATRIX.md](./profile/PROFILE_DAY_SOURCE_MATRIX.md)
 - [PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) · [profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (единая модель личности) · [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) — **конструкция экрана Profile** (блоки · provenance · лимиты) · [profile/PROFILE_NATAL_DECODE_DEPTH_V1.md](./profile/PROFILE_NATAL_DECODE_DEPTH_V1.md) — Natal Decode (opt-in depth)
-- [foundation/SCREEN_FLOW_V1.md](./foundation/SCREEN_FLOW_V1.md) — **ScreenFlow** product step pager (transform · Glance-first · landing excluded)
+- [foundation/SCREEN_FLOW_V1.md](./foundation/SCREEN_FLOW_V1.md) — **ScreenFlow** pager (transform · landing excluded)
+- [foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) — **закон конструкции** экранов Profile / Today
 - [practices/PRACTICE_CONTENT_TAXONOMY_V1.md](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md) — **библиотека практик** SoT: class → type → purpose/state/domain; Canonical Technique → Item
 - [practices/PRACTICE_LIBRARY_FILL_V1.md](./practices/PRACTICE_LIBRARY_FILL_V1.md) — **наполнение библиотеки**: lightweight provenance; accepted/skipped → Content Item
 - [practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md) — **происхождение техники**: одна запись на технику; LLM не источник метода
 - [practices/PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./practices/PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md) — **архив research-лестницы** (Landscape → … → Targeted Safety): historical, non-blocking
-- [practices/PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md) — **coverage-first fill**: 26 P0 need cells; sourced 5/26; next = `need.confidence.open`
+- [practices/PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md) — **coverage-first fill**: 26 P0 need cells; sourced 6/26; next = `need.release.release`
 - [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — **Практики** SoT экрана: цикл состояния · locked need/format · сессия · music layer ([index](./practices/_INDEX.md))
 - [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md)
 - [EXPLAIN_MEANING_NOT_MECHANISM.md](./explainability/EXPLAIN_MEANING_NOT_MECHANISM.md)
@@ -149,9 +151,9 @@
 1. [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md) — **канон продукта** (Personal Model, карта, законы, north star)
 2. **Today смысл / content:** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный**; не DAY_SCENARIO_V1, не B5, не DayModel §10
 3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — experience / product cycle (подчинены п.2 для смысла; нарезка экрана — PRODUCT_FLOW)
-3a. [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md) — слоты Сегодня (побеждает при конфликте длины/состава блока)
+3a. [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md) — слоты Сегодня (**последний authority перед UI**; грамматика — [DISPLAY_CONSTRUCTION_GRAMMAR_V1](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md))
 4. [profile/PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) — уровень UI Profile
-4a. [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) — слоты Profile (побеждает при конфликте длины/состава блока)
+4a. [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) — слоты Profile (последний authority перед UI)
 5. [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entity catalog / build order
 6. [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) — статус работ
 
