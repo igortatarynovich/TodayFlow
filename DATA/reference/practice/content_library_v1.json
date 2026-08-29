@@ -362,9 +362,10 @@
         "content_class": "practice",
         "family": "somatic",
         "type": "body_release",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.release.release"
+        "seed_cell": "need.release.release",
+        "technique_id": "technique.body_release"
       },
       "retrieval": {
         "purpose": [
@@ -2730,9 +2731,10 @@
         "content_class": "practice",
         "family": "somatic",
         "type": "body_release",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.release.release"
+        "seed_cell": "need.release.release",
+        "technique_id": "technique.body_release"
       },
       "retrieval": {
         "purpose": [
@@ -5206,9 +5208,10 @@
         "content_class": "practice",
         "family": "somatic",
         "type": "body_release",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.release.release"
+        "seed_cell": "need.release.release",
+        "technique_id": "technique.body_release"
       },
       "retrieval": {
         "purpose": [

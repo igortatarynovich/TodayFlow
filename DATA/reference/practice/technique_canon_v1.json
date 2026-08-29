@@ -201,6 +201,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.body_release",
+      "content_class": "practice",
+      "type": "body_release",
+      "canonical_description": "A brief somatic exercise in which the person intentionally tenses a small, high-tension area of the body (shoulders lifted toward the ears), holds the tension for a few seconds, and then releases it, noticing the contrast between the tight and relaxed state. It is an abbreviated, single-area form of progressive muscle relaxation used to become aware of physical tension and to let it drop. It does not require a full-body sequence or a particular posture.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Progressive muscle relaxation",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/progressive-muscle-relaxation/",
+          "locus": "Tense and relax muscles one area at a time; list includes shoulders. Hold tension for a few seconds, release, let the muscle relax. Useful for reducing tension and becoming aware of early signs of anger or panic.",
+          "note": "official_health. Method confirmation for abbreviated single-area tension-release. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Relaxation techniques: Try these steps to lower stress",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/relaxation-technique/art-20045368",
+          "locus": "Progressive muscle relaxation: tense muscles for about five seconds and then relax for 30 seconds, repeating; focus on the difference between tension and relaxation.",
+          "note": "clinical_medicine. Method confirmation for tension-release contrast. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "StatPearls — Relaxation Techniques (NCBI Bookshelf)",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK513238/",
+          "locus": "Progressive Muscle Relaxation involves tensing and releasing muscles, focusing on the alleviation of tension and the experience of relaxation; targets the symptom of tension associated with anxiety.",
+          "note": "medical_literature. Method confirmation for tensing/releasing muscle groups to contrast tension and relaxation. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if the movement causes pain or sharp discomfort; do not force the shoulders upward.",
+        "Not a treatment for anxiety, chronic pain, or any medical condition."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
