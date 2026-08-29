@@ -233,6 +233,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.relaxation",
+      "content_class": "meditation",
+      "type": "relaxation",
+      "canonical_description": "A short, seated body-focused relaxation in which the person rests attention on a simple physical sensation (heaviness in the hands or arms) and links it to the out-breath. It is a brief fragment of systematic focusing or body-scan relaxation, not a full progressive muscle-relaxation sequence. The aim is to notice tension and allow the body to soften for a few breaths, then return to the situation.",
+      "source_refs": [
+        {
+          "source": "CUH NHS — Systematic focusing: relaxation technique",
+          "url": "https://www.cuh.nhs.uk/patient-information/systematic-focusing-relaxation-technique/",
+          "locus": "Get comfortable; focus on breathing; guide attention through body areas; aim for a soft, heavy feeling in the muscles; shoulders, arms, and hands become limp and heavy; tension is eased using the mind, not movement.",
+          "note": "official_health. Method confirmation for brief body-focused relaxation using heaviness as a relaxation signal. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Relaxation techniques: Try these steps to lower stress",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/relaxation-technique/art-20045368",
+          "locus": "Relaxation techniques include meditation, deep breathing, and autogenic training; person focuses on relaxing breathing or physical sensations, such as relaxing each arm or leg one by one; done in a quiet spot with eyes closed if comfortable.",
+          "note": "clinical_medicine. Method confirmation for meditation/body-focused relaxation and attention to physical sensations. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS inform — Progressive muscle relaxation",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/progressive-muscle-relaxation/",
+          "locus": "Tense and relax one area at a time, then focus on each body part and allow remaining tension to release on the out-breath; includes shoulders, arms, hands, and face.",
+          "note": "official_health. Context for releasing tension with breath and body attention; the item is a non-tensing fragment. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if focusing on the body increases anxiety or dizziness.",
+        "Not a treatment for anxiety, insomnia, or any medical condition."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

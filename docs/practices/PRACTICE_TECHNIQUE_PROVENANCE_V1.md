@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.14 (2026-08-29) — lightweight fill; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
+**Версия:** 1.15 (2026-08-29) — lightweight fill; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (иерархия доказательности, не обязательная лестница fill).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -274,8 +274,8 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 ## 11. Что дальше
 
 1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
-2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release` = `accepted`. Sourced 7/26 P0 cells. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`.
-3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.rest.downregulate`.
+2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation` = `accepted`. Sourced 8/26 P0 cells. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`.
+3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.sleep.prepare`.
 4. Остальные items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
@@ -284,6 +284,7 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-29 | v1.15 — `technique.relaxation` accepted (CUH NHS systematic focusing + Mayo Clinic relaxation techniques + NHS inform progressive muscle relaxation); next = library fill at `need.sleep.prepare` |
 | 2026-08-29 | v1.14 — `technique.body_release` accepted (NHS inform progressive muscle relaxation + Mayo Clinic + NCBI StatPearls); next = library fill at `need.rest.downregulate` |
 | 2026-08-29 | v1.13 — `technique.capability` accepted (CBT/REBT rational coping statement + NHS inform); `self_trust` skipped (source gap); next = library fill at `need.release.release` |
 | 2026-08-26 | v1.12 — research ladder archived; lightweight fill is SoT; box_breathing skipped_for_now; next = library fill |

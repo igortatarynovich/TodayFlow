@@ -69,7 +69,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 1.3 | Real D+1 continuity after evening close | 1 user × 2 calendar days; S0 continuity line appears without localStorage substitution | 1.2 |
 | 1.4 | Team walkthrough 2 people × 2 days | Ship gate DoD 6/6 from `BEHAVIOR_CHANGE_TEST_V0.md` | 1.3 |
 | 1.5 | Start behavior test cohort | 5–10 people, 14 days, metrics collection live | 1.4 |
-| 1.6 | Parallel: Practice Library fill | +1 sourced P0 cell per week starting from `need.rest.downregulate` | 0.1 |
+| 1.6 | Parallel: Practice Library fill | +1 sourced P0 cell per week starting from `need.sleep.prepare` | 0.1 |
 
 **Gate G1:** ship gate passed and behavior test started.
 

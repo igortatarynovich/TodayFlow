@@ -418,9 +418,10 @@
         "item_id": "meditation.relaxation.001",
         "content_class": "meditation",
         "type": "relaxation",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.rest.downregulate"
+        "seed_cell": "need.rest.downregulate",
+        "technique_id": "technique.relaxation"
       },
       "retrieval": {
         "purpose": [
@@ -4059,9 +4060,10 @@
         "item_id": "meditation.relaxation.002",
         "content_class": "meditation",
         "type": "relaxation",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.rest.downregulate"
+        "seed_cell": "need.rest.downregulate",
+        "technique_id": "technique.relaxation"
       },
       "retrieval": {
         "purpose": [
@@ -6536,9 +6538,10 @@
         "item_id": "meditation.relaxation.003",
         "content_class": "meditation",
         "type": "relaxation",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.rest.downregulate"
+        "seed_cell": "need.rest.downregulate",
+        "technique_id": "technique.relaxation"
       },
       "retrieval": {
         "purpose": [
