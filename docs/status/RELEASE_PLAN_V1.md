@@ -69,7 +69,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 1.3 | Real D+1 continuity after evening close | 1 user × 2 calendar days; S0 continuity line appears without localStorage substitution | 1.2 |
 | 1.4 | Team walkthrough 2 people × 2 days | Ship gate DoD 6/6 from `BEHAVIOR_CHANGE_TEST_V0.md` | 1.3 |
 | 1.5 | Start behavior test cohort | 5–10 people, 14 days, metrics collection live | 1.4 |
-| 1.6 | Parallel: Practice Library fill | +1 sourced P0 cell per week starting from `need.motivation.activate` | 0.1 |
+| 1.6 | Parallel: Practice Library fill | +1 sourced P0 cell per week starting from `need.emotional_awareness.reflect` | 0.1 |
 
 **Gate G1:** ship gate passed and behavior test started.
 
@@ -122,7 +122,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 
 | Track | Velocity | Start After |
 |-------|----------|---------------|
-| Practice Library fill | 1 cell / week | Phase 0 | // now at 10/26, next `need.motivation.activate`
+| Practice Library fill | 1 cell / week | Phase 0 | // now at 11/26, next `need.emotional_awareness.reflect`
 | iOS parity wave 1 | 1 surface / week | Phase 2 cutover stable |
 | Selection Engine design | 1 pass / week | Phase 2 caller audit |
 | Design System Task 3 | Best effort | Phase 2+ |
@@ -153,6 +153,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 2026-08-29 | Phase 2.1 FE cutover: default `/today` uses 4-surface ScreenFlow; `?core_loop=1` experiment and `TodayCoreLoopViabilitySurface` removed; audit doc `docs/audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md`. |
 | 2026-08-29 | Phase 2.2 Theme / Action / Progress first-class: `docs/status/TODAY_CANON_VS_CODE_DIFF.md` closed with new facts; default path now Theme-first 4-surface ScreenFlow, evening time-gated. |
 | 2026-08-29 | Phase 3.4 Maps surfaces cleanup: orphan `/affirmations/tracker` and `/asceticisms/tracker` removed; redirects to `/maps/wish` and `/maps/ascetic`; links and iOS deep-link routing updated. |
-|| 2026-08-29 | Practice Library fill progress: `need.sleep.discipline` sourced via `technique.sleep_discipline`; 10/26 P0 cells covered; next cell `need.motivation.activate`. |
+| 2026-08-29 | Practice Library fill progress: `need.motivation.activate` sourced via `technique.micro_action`; 11/26 P0 cells covered; next cell `need.emotional_awareness.reflect`. |
+| 2026-08-29 | Practice Library fill progress: `need.sleep.discipline` sourced via `technique.sleep_discipline`; 10/26 P0 cells covered; next cell `need.motivation.activate`. |
 | 2026-08-29 | Practice Library fill progress: `need.sleep.prepare` sourced via `technique.sleep`; 9/26 P0 cells covered; next cell `need.sleep.discipline`. |
 || 2026-08-29 | Content Library Selection v1: deterministic need→item selector implemented in `services/content_library_selection_v1.py`; exposed as `GET /practices/select`; 12 + 5 tests passed; canon doc added. |

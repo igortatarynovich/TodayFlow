@@ -329,6 +329,77 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.micro_action",
+      "content_class": "practice",
+      "type": "micro_action",
+      "canonical_description": "A brief behavioral-activation exercise in which the person names one concrete action that can be completed in about two minutes and does it immediately, then stops. The action is smaller than the task it is attached to and is chosen to break the inertia of stuckness or low energy without requiring motivation, planning, or a larger commitment. It is a single-step fragment, not a full activity schedule or CBT protocol.",
+      "source_refs": [
+        {
+          "source": "NHS East London Foundation Trust (ELFT) — Behavioural Activation",
+          "url": "https://www.elft.nhs.uk/sites/default/files/2022-05/behavioural-activation.pdf",
+          "locus": "Behavioural activation works by re-engaging with activities despite low mood; start with small, achievable, specific activities; plan what, when, where, and who; graded approach from easier to harder tasks.",
+          "note": "official_health. Method confirmation for starting with a small, specific, achievable activity when motivation is low. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic Anxiety Coach — Depression Treatment Behavioral Activation",
+          "url": "https://anxietycoach.mayoclinic.org/depression-treatment/",
+          "locus": "Break the cycle of inactivity and low mood by slowly doing more important or enjoyable activities; mood and energy improve as activity increases; activities include mastery, social, and healthy-habit categories.",
+          "note": "clinical_medicine. Method confirmation for re-engaging with a small activity despite low energy/mood. Treatment claims not imported."
+        },
+        {
+          "source": "Psychology Tools — How To Use Behavioral Activation To Overcome Depression",
+          "url": "https://www.psychologytools.com/self-help/behavioral-activation",
+          "locus": "Increase activity even if you do not feel like it; break activities down into smaller steps; start with low-difficulty activities; plan specific what/when/where/who details.",
+          "note": "professional_education. Method confirmation for small-step activation and immediate low-difficulty action. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for depression or any mental health condition.",
+        "If low mood or lack of motivation persists, consult a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.self_check_in",
+      "content_class": "practice",
+      "type": "self_check_in",
+      "canonical_description": "A brief self-check-in practice in which the person names one word for what they are feeling right now, notices one place in the body where that feeling lives, and stops. No explanation, no story, no attempt to fix or deepen the emotion. The practice is a momentary emotional-awareness and affect-labeling gesture, not a therapeutic exercise or diagnostic tool.",
+      "source_refs": [
+        {
+          "source": "Greater Good Science Center — Naming Your Emotions",
+          "url": "https://ggia.berkeley.edu/practice/naming_your_emotions",
+          "locus": "Naming an emotion can dampen the amygdala alarm response and reduce the severity of the emotional response in the moment; observe body and mind, name the feeling, do not hold it in or judge it.",
+          "note": "public_education. Method confirmation for a brief pause-name-body-noticing practice. Efficacy claims limited to momentary down-regulation of strong negative emotion."
+        },
+        {
+          "source": "NHS Lothian — Emotion Workbook",
+          "url": "https://policyonline.nhslothian.scot/wp-content/uploads/2025/10/Emotion-Workbook.pdf",
+          "locus": "Recognising and naming the emotion; noticing where it is felt in the body; saying the word out loud or writing it down; asking what else is felt.",
+          "note": "official_health. Method confirmation for recognising, naming, and locating an emotion in the body. Not imported as a treatment protocol."
+        },
+        {
+          "source": "Torre & Lieberman (2018) — Putting feelings into words: affect labeling as implicit emotion regulation",
+          "url": "https://www.thetemper.com/files/pdf/torre(2018)er.pdf",
+          "locus": "Affect labeling (putting feelings into words) can reduce self-reported distress and amygdala response to aversive stimuli; effects correlate with reappraisal benefits.",
+          "note": "academic_review. Mechanism support for labeling reducing emotional intensity in high-arousal aversive contexts. Not a universal or long-term effect claim."
+        },
+        {
+          "source": "Nook et al. (2022) — Affect labeling: the role of timing and intensity (PLOS ONE)",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0279303",
+          "locus": "Affect labeling reduced distress in high-intensity aversive conditions but increased distress in low-intensity conditions; use with caution and stop if it worsens feeling.",
+          "note": "academic_study. Safety boundary: do not present affect labeling as always helpful; it can backfire in low-intensity states."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, or any mental health condition.",
+        "If the feeling is overwhelming or worsens during the practice, stop and seek professional support.",
+        "Do not use this practice to process trauma or persistent emotional crises without a qualified professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

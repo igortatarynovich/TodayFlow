@@ -1,7 +1,7 @@
 # Practice Content Coverage v1
 
 **Статус:** `ACCEPTED` — SoT fill-pass библиотеки. **Fill unfrozen** 2026-08-26.  
-**Версия:** 1.6 (2026-08-29); pointer 2026-08-29 — sleep-discipline cell sourced, not research ladder.  
+**Версия:** 1.8 (2026-08-29); pointer 2026-08-29 — emotional-awareness-reflect cell sourced via self_check_in, not research ladder.  
 **Владелец:** Product.  
 **Ledger:** [`DATA/reference/practice/content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).  
 **Parent:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) §0.1 · §10.  
@@ -16,7 +16,7 @@
 ## Architecture impact
 
 - **SoT before:** taxonomy locked types/purpose/state; fill implied as «написать items против vocab». Риск — плотность в одной технике (40 grounding) и дыры в purpose/direction/class. После P0/P1 density: 133 LLM-draft items закрывали cells, но техника не имела provenance.
-- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing` = skipped_for_now. Next sourced cell = `need.motivation.activate`. Первые 11 items = architecture probes.
+- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing` = skipped_for_now. Next sourced cell = `need.self_connection.reflect`. Первые 12 items = architecture probes.
 - **Public contract changed?** no
 - **Migration required?** no runtime. 133 drafts stay provisional without `technique_id`.
 - **Canon updated?** yes — this file · matrix JSON · [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · taxonomy pointer · tracker
@@ -26,7 +26,7 @@
 
 ## 0. Закон fill-pass
 
-0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 11 = architecture probes. Next sourced cell = `need.motivation.activate`.
+0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 12 = architecture probes. Next sourced cell = `need.self_connection.reflect`.
 1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
@@ -196,7 +196,7 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Targeted Safety Shortlist** | who_must_not_hold for required holds | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
 | **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) (not continued) |
 | **Safety Review V1.1** | may_release vs model of who_must_not_hold | **not opened** — research escalation closed |
-| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.motivation.activate`; sourced 10/26; `box_breathing`, `energizing_breath` and `self_trust` skipped_for_now |
+| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.emotional_awareness.reflect`; sourced 11/26; `box_breathing`, `energizing_breath` and `self_trust` skipped_for_now |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после sourced fill, не вместо |
 
 ---
@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 10/26. Latest: `need.sleep.discipline` (`sleep_discipline`; fixed latest bedtime rule for 7 consecutive days). Next = `need.motivation.activate`. Не Safety Review. Не box / energizing-breath research.
+Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 12/26. Latest: `need.emotional_awareness.reflect` (`self_check_in`; one-word feeling + body-spot check-in). Next = `need.self_connection.reflect`. Не Safety Review. Не box / energizing-breath research.
 
 ---
 
@@ -218,6 +218,8 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-29 | **Emotional-awareness-reflect cell sourced via self_check_in.** `technique.self_check_in` accepted (Greater Good Science Center Naming Your Emotions + NHS Lothian Emotion Workbook + Torre & Lieberman 2018 affect labeling + Nook et al. 2022 timing/intensity caution). One-word feeling + body-spot check-in. Next = `need.self_connection.reflect`. |
+| 2026-08-29 | **Motivation-activate cell sourced via micro_action.** `technique.micro_action` accepted (NHS ELFT behavioural activation + Mayo Clinic Anxiety Coach depression behavioral activation + Psychology Tools behavioral activation). Brief two-minute immediate action. Next = `need.emotional_awareness.reflect`. |
 | 2026-08-29 | **Sleep-discipline cell sourced via sleep_discipline.** `technique.sleep_discipline` accepted (Mayo Clinic sleep tips + Mayo Clinic insomnia CBT-I + NHS inform sleep hygiene). Fixed latest bedtime rule for 7 consecutive days. Next = `need.motivation.activate`. |
 | 2026-08-29 | **Sleep-prepare cell sourced via sleep.** `technique.sleep` accepted (NHS inform sleep hygiene + Mayo Clinic Health System sleep tips + NHS inform insomnia page). Brief pre-sleep meditation (soften jaw on out-breath). Next = `need.sleep.discipline`. |
 | 2026-08-29 | **Rest cell sourced via relaxation.** `technique.relaxation` accepted (CUH NHS systematic focusing + Mayo Clinic relaxation techniques + NHS inform progressive muscle relaxation). Brief body-focused relaxation (heavy hands). Next = `need.sleep.prepare`. |

@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.17 (2026-08-29) — lightweight fill; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
+**Версия:** 1.19 (2026-08-29) — lightweight fill; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (иерархия доказательности, не обязательная лестница fill).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -18,7 +18,7 @@
 ## Architecture impact
 
 - **SoT before (v1.11):** техника требовала Landscape → Shortlist → Ingest → Normalization → targeted* → Safety Review до canon. Fill frozen. `box_breathing` не закрыт.
-- **SoT after:** provenance = **lightweight row** на технику (`accepted` \| `skipped`). Research ladder = [archive](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md), non-blocking. Active process = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing` = `skipped_for_now`. 133 items остаются provisional без `technique_id`, пока fill их не перепишет. Meaning по-прежнему не знает `item_id` / `technique_id`.
+- **SoT after:** provenance = **lightweight row** на технику (`accepted` \| `skipped`). Research ladder = [archive](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md), non-blocking. Active process = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing` = `skipped_for_now`. Sourced 12/26 P0 cells; latest accepted = `self_check_in`. 133 items остаются provisional без `technique_id`, пока fill их не перепишет. Meaning по-прежнему не знает `item_id` / `technique_id`.
 - **Public contract changed?** no
 - **Migration required?** no runtime. `identity.technique_id` optional; только `status = accepted` можно ставить на item.
 - **Canon updated?** yes — этот файл · fill V1 · archive index · technique contract · coverage next_pass · tracker
@@ -212,7 +212,7 @@ Coverage-first **архитектуру** (26 cells, type spine, item shape) н�
 
 Уже лежащие 133 draft items = **llm_provisional**. Они проверяют контракт, не происхождение.
 
-**Architecture probes (первые 11, порядок ledger):**
+**Architecture probes (первые 12, порядок ledger):**
 
 1. `practice.sensory_grounding.001`
 2. `practice.extended_exhale.001`
@@ -225,14 +225,15 @@ Coverage-first **архитектуру** (26 cells, type spine, item shape) н�
 9. `meditation.sleep.001`
 10. `discipline.sleep_discipline.001`
 11. `practice.micro_action.001`
+12. `practice.self_check_in.001`
 
-Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context siblings) — тот же LLM-origin. Этот pass их **не** аттестует и **не** удаляет.
+Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context siblings) — тот же LLM-origin. Этот pass их **не** аттестует и **не** удаляет.
 
 Следующий рабочий шаг — не audio. Landscape семей техник: [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./PRACTICE_TECHNIQUE_LANDSCAPE_V1.md). Shortlist и ingest **закрыты**. `technique_canon_v1.json` пуст.
 
 ---
 
-## 9. Проверка первых 11 — gap, не ingest
+## 9. Проверка первых 12 — gap, не ingest
 
 Это **не** shortlist и **не** канон. Ни один автор ниже не обязателен. Цель — честно сказать, что сейчас unverified, и какой *тип* ландшафта нужен.
 
@@ -251,8 +252,9 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 | 9 | `meditation.sleep.001` | челюсть мягче, лёжа | generic wind-down, не CBT-I и не yoga nidra | **unverified**. `efficacy` sleep **запрещён** (taxonomy: не лечить бессонницу). Канон, если будет, = evening downregulate attention, не «лечение сна». |
 | 10 | `discipline.sleep_discipline.001` | семь дней тот же час | sleep schedule / hygiene / stimulus-control *adjacent* (CBT-I family) | **unverified as medical**. Дисциплина «фиксированное время» — кандидат behavioral. Не заявлять лечение инсомнии. 7 дней — item window, не длина протокола CBT-I. |
 | 11 | `practice.micro_action.001` | действие < 2 мин, сделать, остановиться | behavioral activation / implementation intentions / tiny-task families | **unverified**. Не lock Fogg/BA manuals до shortlist. Ядро-кандидат: один конкретный акт короче порога + стоп. Efficacy «запустит мотивацию» — not_claimed. |
+| 12 | `practice.self_check_in.001` | одно слово о чувстве + точка в теле | affect labeling / emotional granularity / body-noticing check-in | **unverified**. Не lock Goleman/Barrett до shortlist. Ядро-кандидат: name-it-to-tame-it + interoceptive spot. Efficacy «разрешит эмоцию» — not_claimed. |
 
-**Общий итог probes:** ни один из 11 не имеет `source_refs`, `review_status = canonical` или права на efficacy. Architecture (item groups, seed_cell, coverage ledger) полезна. Содержание — неизвестного происхождения.
+**Общий итог probes:** ни один из 12 не имеет `source_refs`, `review_status = canonical` или права на efficacy. Architecture (item groups, seed_cell, coverage ledger) полезна. Содержание — неизвестного происхождения.
 
 Не делать на этом шаге: канонические JSON-тела, список обязательных книг, копирование 5-4-3-2-1 / MBSR / CBT-I скриптов.
 
@@ -274,8 +276,8 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 ## 11. Что дальше
 
 1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
-2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline` = `accepted`. Sourced 10/26 P0 cells. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`.
-3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.motivation.activate`.
+2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in` = `accepted`. Sourced 12/26 P0 cells. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`.
+3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.self_connection.reflect`.
 4. Остальные items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
@@ -284,6 +286,8 @@ Items #12–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-29 | v1.19 — `technique.self_check_in` accepted (Greater Good Science Center Naming Your Emotions + NHS Lothian Emotion Workbook + Torre & Lieberman 2018 affect labeling + Nook et al. 2022 timing/intensity caution); next = library fill at `need.self_connection.reflect` |
+| 2026-08-29 | v1.18 — `technique.micro_action` accepted (NHS ELFT behavioural activation + Mayo Clinic Anxiety Coach depression behavioral activation + Psychology Tools behavioral activation); next = library fill at `need.emotional_awareness.reflect` |
 | 2026-08-29 | v1.17 — `technique.sleep_discipline` accepted (Mayo Clinic sleep tips + Mayo Clinic insomnia CBT-I + NHS inform sleep hygiene); next = library fill at `need.motivation.activate` |
 | 2026-08-29 | v1.16 — `technique.sleep` accepted (NHS inform sleep hygiene + Mayo Clinic Health System sleep tips + NHS inform insomnia page); next = library fill at `need.sleep.discipline` |
 | 2026-08-29 | v1.15 — `technique.relaxation` accepted (CUH NHS systematic focusing + Mayo Clinic relaxation techniques + NHS inform progressive muscle relaxation); next = library fill at `need.sleep.prepare` |
