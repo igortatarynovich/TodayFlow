@@ -4,6 +4,8 @@ Last updated: 2026-08-29
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (CONTENT LIBRARY SELECTION v1, 2026-08-29):** Deterministic runtime selector implemented: `backend/src/todayflow_backend/services/content_library_selection_v1.py`. Given a product need (purpose + direction + soft state/context), it returns the best `active` Content Item whose `technique_id` is `accepted` in the technique canon. No LLM, no randomness, stable sort by overlap/duration/item_id. Tests green: `backend/tests/test_content_library_selection_v1.py` (12 passed). Canon doc: `docs/practices/CONTENT_LIBRARY_SELECTION_V1.md`. Meaning still does not emit `item_id`/`technique_id`. Next: wire selector into Today/Practices fallback surfaces, or continue another non-LLM foundation task.
+
 **NOW (JOURNEY LOCK CUTOVER, 2026-08-29):** Named code drift vs lock is cut on the FE path. Profile: Recognition → Why → Insight → Effort → Bridge; Character warehouse off the scroll; leftover styles/mission in Explore; P4 spheres 0–2. Today: `T3.headline` = `day_personal.summary_ru` (not `why_personal`); `T3.focus_title` = overlay closed-set map_label or omit; `T3.focus_body` = why_personal → natal transit → astrology summary (no `development_point`); guest/general ritual = catalog, no personal lens. Remaining: lens still follows capability `myDay`, not a persist-key flag; composition VM `focusTitle` from `primary_action` is unused by MY DAY. Next: persist-key lens gate, or machine harness — **not** another composition pass.
 
 **NOW (INVENTORY AUDIT vs JOURNEY LOCK, 2026-08-29):** Line-by-line pass closed. Profile Inventory v1.2: `path_new_value` is only recognition · insight · effort · bridge; help/title were wrongly in that group. Today Inventory: `development_point` out of `T3.focus_body`; lens omit unless Personal Day persisted (guest **and** general); affirmation/practice ≠ Priority; tasks_empty ≠ empty Priority. Named code drift **cut** (see JOURNEY LOCK CUTOVER).
@@ -42,6 +44,15 @@ Status: Active working document
 - **Migration required?** no. Remaining: lens gate is capability, not persist-key; composition VM `focusTitle` from `primary_action` unused by MY DAY pane.
 - **Canon updated?** yes — both Display Inventories §5 · this tracker.
 - **Backward compatible?** yes for API. Empty slots omit; no invented copy on failure.
+
+## Architecture impact — Content Library Selection v1 (2026-08-29)
+
+- **SoT before:** Content Library had a validator, coverage ledger, and lightweight fill process, but no runtime service that turned a product need into a selected Content Item. Meaning surfaces either used legacy catalog data (`props.affirmations[0]`) or fell back to hardcoded placeholders.
+- **SoT after:** `content_library_selection_v1.py` is the canonical deterministic selector. It loads `content_library_v1.json` and `technique_canon_v1.json`, filters for `active` items whose `technique_id` is `accepted`, matches hard tags (`purpose`/`direction`/optional class/type), and ranks by soft tag overlap (`input_state`, `context`, `energy_effect`, `duration`). The sort key is stable and reproducible. Meaning still does not emit `item_id` or `technique_id`.
+- **Public contract changed?** no — only an internal service added; no endpoint or JSON schema changed.
+- **Migration required?** no runtime.
+- **Canon updated?** yes — `docs/practices/CONTENT_LIBRARY_SELECTION_V1.md` · `docs/practices/_INDEX.md` · this tracker.
+- **Backward compatible?** yes. Legacy endpoints remain unchanged; the selector can be adopted surface-by-surface.
 
 ## Architecture impact — Inventory audit vs journey lock (2026-08-29)
 
