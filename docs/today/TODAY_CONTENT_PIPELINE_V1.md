@@ -33,9 +33,9 @@
 | Слой | Вопрос | Кто решает | Не имеет права |
 |------|--------|------------|----------------|
 | **Global Day** | Какой сегодня день? | Детерминированный Global Day Engine (+ LLM только формулирует) | Натал, карта, число, цели, история |
-| **Personal Day** | Как этот день касается *меня*? | Детерминированный natal overlay + LLM #2 формулирует | Менять global mood, drivers, strength, risk, timeline facts |
+| **Personal Day** | Как этот день касается *меня*? | Global × Natal Overlay; LLM #2 формулирует | Менять Global; CE; карта; число; цели |
 
-**I0.** Global interpretation completes **without** personal, tarot, or numerology evidence. Personal interpretation **consumes** Global Day and may contextualize it, **never redefine** it. Ritual symbols are interpretive overlays and **never** participate in Global Day determination.
+**I0.** Global interpretation completes **without** personal, tarot, numerology, or Character Engine evidence. Personal interpretation **consumes** Global Day × Natal Overlay and may contextualize it, **never redefine** it. Ritual symbols are interpretive overlays **after** Personal Day persist and **never** participate in Global or Personal Day determination.
 
 Повторность (жёстко):
 
@@ -66,15 +66,21 @@ IL / Canon — atomic astrology. Character Engine — the person. Neither layer 
 ```text
 Interpretation Library  знает астрологию.  Не знает человека.
 Character Engine        знает человека.    Не знает астрологию.
-Personal Meaning        = композиция atomic sky meaning × natal/CE context.
+Personal Day            = Global Day × Natal Overlay.
 ```
+
+Today **не** вызывает Character Engine как общий API личности. Никакой CE-output не входит в Personal Day, пока отдельная проекция не названа слотом + Architecture impact. Тогда же решить, меняет ли она `PersonalDayKey` (по умолчанию — нет: ключ без `profile_hash`).
+
+**Запрещены в Personal Day (и в lens/enrichment как CE-prose):** `recognition_line` · `identity_core` · archetype name · insight nodes · `effort_vector` · `bridge_line` · `life_mission` · living notes как смысл дня · Natal Decode essay.
+
+Natal Overlay = today sky × **natal chart** (дома, транзиты к наталу). Это астрология этого человека, не Character Engine.
 
 Planet = what · Sign = how · House = where · Aspect = relation — это **только** астрологический atomic layer. Он **не** кодирует Global vs Personal. Персонализацию **не** заталкивать в Canon.
 
 | Профиль дня | Цепочка | Не содержит |
 |-------------|---------|-------------|
 | **Global Day** | astronomical facts → IL atoms → composition → global semantic frame | натал, Character Engine, карта, число, цели |
-| **Personal Day** | global/natal astrological frame + Character Engine → personal relevance | переписывание Global energy/drivers/windows |
+| **Personal Day** | Global Day × Natal Overlay → personal relevance | Character Engine, карта, число, цели, переписывание Global energy/drivers/windows |
 
 LLM формулирует каждый слой **после** этих решений, в пределах structured payload. Текущий Personal = wrapper over `day_story` — другой продукт, не этот канон.
 
@@ -116,10 +122,10 @@ but may never mutate an upstream semantic decision.
 | Card identity | Ritual Engine |
 | Number identity | Numerology Engine |
 | Card / number base meaning | Catalogs |
-| Personal focus | Personal Day |
-| Priority / avoid | Personal Day |
-| Card / number bridge | Personal Day |
-| Color / practice / action | Downstream enrichment |
+| Personal focus axis | Natal Overlay (closed-set domain already chosen) |
+| Personal headline / focus body / priority / avoid | Personal Day |
+| Card / number lens | Personal Day × symbol (**после** persist Personal Day; не bind) |
+| Color / practice / affirmation | Downstream enrichment |
 | Формулировка текста | Соответствующий Narrative LLM |
 | Что и где показывать | [TODAY_DISPLAY_INVENTORY_V1](./TODAY_DISPLAY_INVENTORY_V1.md) |
 
@@ -135,11 +141,17 @@ Projector / ScreenFlow / FE **не** появляются в колонке Auth
 
 ## Цепочка (10 шагов)
 
-Причинный порядок (смысл):
+Причинный порядок (**вычисление / persist**):
 
 ```text
-Небо → Global Day → Natal Overlay → Ritual lenses → Personal Day → Presentation
+Небо → Global Day
+Небо × натал → Personal Day          (persist; не ждёт кадр MY DAY)
+Personal Day × карта → Card Lens
+Personal Day × число → Number Lens
 ```
+
+**Показ (ScreenFlow):** TODAY → RITUAL → MY DAY → EVENING.  
+Это другой порядок. RITUAL может показать линзу, потому что Personal Day уже в persist — не потому что пользователь открыл MY DAY.
 
 Каждый следующий слой **использует** предыдущий и **не переписывает** его.
 
@@ -149,21 +161,14 @@ Projector / ScreenFlow / FE **не** появляются в колонке Auth
 3  Global Day Engine        drivers · energy · strength · risk · windows
 4  Global Day Narrative     LLM #1 — только человеческий язык Global Profile
 5  Natal Overlay            today sky × natal — детерминированно
-6  Ritual                   карта + число уже выбраны; reveal не пересчитывает день
-7  Personal Day bind        Global + overlay + card + number (+ goals optional)
-8  Personal Narrative       LLM #2 — why you · focus · priority · avoid · bridges
-9  Deterministic enrichments цвет / практика / goal — из уже установленного смысла
-10 Contract → UI            UI ничего не интерпретирует
+6  Personal Day bind        Global + overlay **только**. Persist. Нет CE, карты, числа, целей
+7  Personal Narrative       LLM #2 — thesis · axis already chosen · how it shows · priority · avoid
+8  Ritual identity          карта + число (hash). Параллельно. Не вход Personal Day
+9  Ritual lenses            Personal Day × card / number. Guest: omit. Не mutate Personal Day
+10 Contract → UI            цвет / практика / аффирмация после смысла. UI ничего не интерпретирует
 ```
 
-UX reveal: **GLOBAL → RITUAL → PERSONAL** (порядок показа; не порядок authority).  
-Backend: ночной prebake обоих пакетов. Клик не запускает LLM.
-
-```text
-НЕБО → ОБЩИЙ ДЕНЬ
-НЕБО × НАТАЛ → МОЙ ДЕНЬ
-КАРТА / ЧИСЛО → линзы МОЕГО ДНЯ (не определяют день)
-```
+Карта/число identity можно знать в любой момент по hash. Они **не** входят в bind. UX reveal: **GLOBAL → RITUAL → PERSONAL** (порядок показа). Backend: ночной prebake Global + Personal. Клик не запускает LLM. Lens формулируется после Personal persist (тот же процесс может писать lens в том же job — в Personal Day fields карта/число не пишутся).
 
 ---
 
@@ -260,32 +265,36 @@ Natal overlay = today sky × natal (детерминированно). Не вт
 
 ---
 
-## 6. Ritual
+## 6. Personal Day bind + Personal Narrative — LLM #2
 
-Карта: `sha256(owner_key|local_date|"day_card") % 78` + orientation digest.  
-Число: Personal Day если есть `birth_date`, иначе Universal Day (masters 11/22/33).
+**Personal Day = Global Day × Natal Overlay.**
 
-Reveal открывает identity. **Не** пересобирает Global Day.  
-Base meaning = catalog. Bridge пишется только в Personal Narrative.
+**Вход bind / LLM #2:** готовый Global Day + natal overlay.  
+**Не входят:** Character Engine, card, number, goals/history, Profile Snapshot prose.
 
----
+**Выход:** personal thesis (headline) · overlay-chosen focus axis (не свободный title) · how it shows (focus body) · priority · avoid.
 
-## 7–8. Personal Day bind + Personal Narrative — LLM #2
-
-
-**Вход LLM #2:** готовый Global Day + natal overlay + card (id, orientation, base) + day number (value, base) + optional goals/history.
-
-**Выход:** why this matters to you · personal focus · priority · avoid · card bridge · number bridge · personal action.
-
-**Запрет:** менять `primary_energy`, global drivers, global strength/risk, window times/supports/cautions.
+**Запрет:** менять `primary_energy`, global drivers, global strength/risk, window times/supports/cautions; подмешивать CE; писать card/number в поля Personal Day.
 
 Strength + tension day → «силу сегодня лучше направить в самообладание», не «день на самом деле grounded».
 
+Lens card/number — **шаг 9**, не этот bind.
+
 ---
 
-## 9–10. Enrichments и UI
+## 7. Ritual identity (параллельно bind; не вход Personal Day)
 
-Цвет / практика / goal — scoring каталога **после** Global (+ Personal action types). User-facing *why* только из установленного смысла + provenance.
+Карта: `sha256(owner_key|local_date|"day_card") % 78` + orientation digest.  
+Число: numerology **Personal Day Number** если есть `birth_date`, иначе Universal Day (masters 11/22/33). Это **не** продуктовый Personal Day.
+
+Reveal открывает identity. **Не** пересобирает Global Day. **Не** создаёт и **не** мутирует Personal Day.  
+Base meaning = catalog. Personal lens (шаг 9) только если Personal Day уже persisted. Guest: catalog only.
+
+---
+
+## 8–10. Ritual lenses, enrichments и UI
+
+Цвет / практика / аффирмация — scoring каталога **после** Personal Day. Отдельный «шаг»-слот (`T3.action`) **нет** — это вопрос `T3.priority`. User-facing *why* только из установленного смысла + provenance.
 
 UI читает Contract. Не ранжирует, не invent.
 
@@ -294,13 +303,13 @@ UI читает Contract. Не ранжирует, не invent.
 | Когда | Что | Показ |
 |-------|-----|-------|
 | TODAY | Global Day: energy% · mood · Global day clock · timed transits · strength/risk | Global clock; **не** Personal Timeline |
-| RITUAL | карта, затем число (линзы; не пересчёт) | sequential reveal |
-| MY DAY | Personal Day: headline · focus · priority · cautions · rhythm · optional color/practice/action | natal timeline если есть; иначе Global `windows[]` как «Ритм дня» |
+| RITUAL | карта, затем число. Catalog всегда при identity. Lens только если Personal Day persisted | sequential reveal |
+| MY DAY | Personal Day: headline · focus axis · focus body · priority · cautions · rhythm · optional color/practice/affirmation | natal timeline если есть; иначе Global `windows[]` как «Ритм дня» |
 | EVENING | благодарность → Gratitude History | не trap-check / не «совпал ли прогноз» |
 
 Timeline **authority** = Global Engine `windows[]` (`supports` / `cautions`). **Показ Global clock** = TODAY (окно + timed transits) и, если нет natal clocks, `my_day` («Ритм дня»). **Показ Personal Timeline** = `my_day` только при natal activations («Мой ритм дня»). UI hide ≠ mutate.
 
-Guest: TODAY + ritual (universal number + card base) + evening. MY DAY omit.
+Guest: TODAY + ritual **catalog** (universal number + card base) + evening. MY DAY omit. Ritual **personal lens** omit.
 
 Core answer = TODAY (погода дня) за 1–2 минуты. MY DAY = «для меня». Ritual = две линзы. Evening = благодарность.
 
@@ -317,7 +326,8 @@ global_day_profile     # energy, drivers, strength, risk, windows
 global_narrative       # persist once
 natal_overlay          # omit if no natal
 ritual: card, number
-personal_narrative     # persist once; omit if guest / no overlay+ritual
+personal_narrative     # persist once; omit if guest / no natal overlay
+ritual_lenses          # omit if no personal_narrative; never written into personal_narrative fields
 enrichments
 manifest:
   ephemeris_version
@@ -388,6 +398,15 @@ manifest:
 12. **Interpretation Library** — Sequence LOCKED IL-0…IL-4. **IL-0 done.** Next: IL-1 ~100 surface-neutral objects keyed to calc output. Swiss is the runtime ephemeris input; **license** is a parallel legal gate (not a research blocker). Scale library only after IL-4.
 
 ---
+
+## Architecture impact — Personal Day formula + compute≠display (2026-08-29)
+
+- **SoT before:** Personal Meaning = sky × natal/CE context. Bind = Global + overlay + card + number (+ goals). Pipeline listed Ritual lenses *before* Personal Day. LLM #2 also wrote card/number bridges and personal action.
+- **SoT after:** Personal Day = **Global Day × Natal Overlay**. No CE, card, number, or goals in bind. Compute persist may complete before the MY DAY surface. Card/number are lenses *after* Personal persist. `T3.action` is not a meaning result. Guest has catalog, not personal lens.
+- **Public contract changed?** semantics of what may feed `personal_day` — CE and ritual identity are not inputs. JSON field names unchanged in this lock.
+- **Migration required?** no key bump. Runtime that still concatenates card/number/CE into Personal bind is drift; lens may share a job but must not mutate Personal Day fields.
+- **Canon updated?** yes — this file · Grammar §5.1 · Product Flow · Today Inventory v1.2 · tracker.
+- **Backward compatible?** yes for GET shape. Clients that treated CE prose or `T3.action` as Personal Day meaning are out of frame.
 
 ## Architecture impact (2026-08-15)
 

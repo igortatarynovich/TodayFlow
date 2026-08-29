@@ -2,7 +2,9 @@
 
 **Status:** ACTIVE — **закон конструкции** Profile и Today  
 **Date:** 2026-08-29  
-**Роль:** одинаковые правила для любых поверхностей. Не каталог слотов — каталоги: [PROFILE_DISPLAY_INVENTORY_V1](../profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [TODAY_DISPLAY_INVENTORY_V1](../today/TODAY_DISPLAY_INVENTORY_V1.md).
+**Version:** 1.1  
+**Роль:** одинаковые правила для любых поверхностей. Не каталог слотов — каталоги: [PROFILE_DISPLAY_INVENTORY_V1](../profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [TODAY_DISPLAY_INVENTORY_V1](../today/TODAY_DISPLAY_INVENTORY_V1.md).  
+**Верхний продуктовый путь (закрыт):** §5. Не Meaning SoT.
 
 **Не заменяет:** Character Engine · TODAY_CONTENT_PIPELINE · Product Flow · ScreenFlow mechanics · visual SoT.
 
@@ -16,6 +18,15 @@
 - **Migration required?** no. UI cutover waits until both inventories fill this record for every visible atom.
 - **Canon updated?** yes — this file · foundation `_INDEX` · README · both inventories §0 · tracker.
 - **Backward compatible?** yes for API. FE that chooses meaning, fills empty, or adds a block not in Inventory is out of frame.
+
+## Architecture impact — journey lock + compute≠display (2026-08-29)
+
+- **SoT before:** compute chain and ScreenFlow path were listed together; a reader could think Personal Day exists only after the MY DAY surface. `natal/CE context` could be read as a Today input. `T3.focus_title` was a short thesis. `T3.action` duplicated Priority.
+- **SoT after:** §5 is the closed product journey. Compute order ≠ display order. Personal Day = Global × Natal Overlay (no CE until a named projection + Architecture impact). Journey acceptance (§5.2) is a second audit layer above slot correctness.
+- **Public contract changed?** no JSON fields. Display roles: `T3.focus_title` is axis not thesis; `T3.action` is out of frame.
+- **Migration required?** no runtime key bump. Code that feeds CE prose into Personal Day, generates lens without persisted Personal Day, or paints `T3.action` is drift.
+- **Canon updated?** yes — this file · TODAY_CONTENT_PIPELINE_V1 · TODAY_PRODUCT_FLOW_V1 · TODAY_DISPLAY_INVENTORY_V1 · tracker.
+- **Backward compatible?** yes for API. Guest ritual stays catalog-only.
 
 ---
 
@@ -149,19 +160,91 @@ T1-hero.human_line                 ← LLM может сказать, каков
 
 ---
 
-## 5. Одна грамматика, разные поверхности
+## 5. Одна грамматика, разные поверхности (путь закрыт)
 
-Одинаковые правила. Не одинаковые блоки.
+Одинаковые правила. Не одинаковые блоки. Дальше не пересобирать общую композицию — только слот vs этот путь.
 
 ```text
-Profile:   Recognition → Why → Insight → Effort → Bridge → Explore
-Today:     TODAY → RITUAL → MY DAY → EVENING
+Profile path:  Recognition → Why → Insight → Effort → Bridge
+Today path:    TODAY → RITUAL → MY DAY → EVENING
 ```
 
-Внутри каждой поверхности — **закрытый** набор `slot_id`.  
-Пользователь учится, как TodayFlow разговаривает: сначала узнавание / какой день, потом почему, потом новое, потом жест, потом мост / вечер.
+**Explore** существует рядом как глубина и склад. **Не** шестой акт пути.
+
+Внутри каждой поверхности — **закрытый** набор `slot_id`.
+
+| Profile | Вопрос пути |
+|---------|-------------|
+| Recognition | Кто я? |
+| Why | Почему это про меня? |
+| Insight | Что я раньше не замечал? |
+| Effort | Куда направить усилие? |
+| Bridge | Почему имеет смысл посмотреть сегодняшний контекст? |
+
+| Today | Вопрос пути |
+|-------|-------------|
+| TODAY | Каков сегодняшний день? |
+| RITUAL | Через какие дополнительные символические линзы на него посмотреть? |
+| MY DAY | Что этот день значит лично для меня? |
+| EVENING | Что я забираю из уже прожитого дня? |
 
 New-value: следующий meaning-слот не перефразирует предыдущий proposition. Это **anti_dupe_group**, не «похожая длина».
+
+### 5.1 Вычисление ≠ показ (LOCKED)
+
+Два порядка. Их нельзя сливать в одну стрелку.
+
+**Display (ScreenFlow / Inventory):**
+
+```text
+TODAY → RITUAL → MY DAY → EVENING
+```
+
+**Compute / persist (Pipeline):**
+
+```text
+Небо → Global Day
+Небо × натал → Personal Day          (persist; может быть до кадра MY DAY)
+Personal Day × карта → Card Lens
+Personal Day × число → Number Lens
+```
+
+Personal Day **может быть рассчитан и сохранён**, до того как пользователь физически дошёл до поверхности MY DAY.
+
+RITUAL **не считает** Personal Day. RITUAL читает уже существующий Personal Day только как основу Card Lens и Number Lens. MY DAY затем **показывает** сам Personal Day.
+
+Ответ на «если MY DAY ещё не открыт, откуда RITUAL взял Personal Day?»: из persist по `PersonalDayKey`, не из факта визита на кадр.
+
+**Guest:**
+
+| | |
+|--|--|
+| RITUAL Catalog | доступен (карта/число как учебник + universal number) |
+| RITUAL Personal Lens (`T2.lens_*`) | **отсутствует** — нет Personal Day, не относительно чего строить линзу |
+| MY DAY meaning (`T3.*`) | omit |
+
+### 5.2 Journey correctness (acceptance, не UI)
+
+Два уровня проверки. Оба обязательны.
+
+1. **Slot correctness** — каждое видимое предложение законно: `slot_id`, authority, inputs, one_question, budget, persist, anti-dupe.
+2. **Journey correctness** — последовательность законных предложений выполняет job шага.
+
+После каждого шага пользователь должен **потенциально** суметь закончить одну фразу. Если слоты заполнены, а фраза невозможна — акт сломан.
+
+| Поверхность | Что пользователь должен уметь сказать |
+|-------------|--------------------------------------|
+| Recognition | «Я человек, который…» |
+| Why | «Это похоже на меня потому, что…» |
+| Insight | «Я раньше не замечал, что…» |
+| Effort | «Мне полезно направлять усилие на…» |
+| Bridge | «Сегодня стоит открыть, потому что…» |
+| TODAY | «Сегодня в целом день…» |
+| RITUAL | «Карта или число предлагают посмотреть на него через…» |
+| MY DAY | «Для меня сегодня главное…» |
+| EVENING | «Сегодня я благодарен за…» |
+
+Guest на RITUAL заканчивает фразу **каталогом** («карта значит…»), не персональной линзой.
 
 ---
 
@@ -178,14 +261,15 @@ New-value: следующий meaning-слот не перефразирует �
 | Profile | `P4.effort_vector` | Куда прикладывать усилие в поведении? |
 | Profile | `P5.bridge_line` | Почему сейчас открыть Today? |
 | Today | `T1-hero.human_line` | Каков уже выбранный общий день на человеческом языке? |
-| Today | `T3.headline` | Что главное *лично для меня* сегодня? |
-| Today | `T3.focus_body` | Где это проявится и на что направить внимание? |
-| Today | `T3.priority` | Что конкретно сделать? |
+| Today | `T3.headline` | Каков главный персональный **тезис** дня? |
+| Today | `T3.focus_title` | В какой **области / оси** этот тезис проявляется сильнее всего? |
+| Today | `T3.focus_body` | Как именно он там проявляется и куда направить внимание? |
+| Today | `T3.priority` | Что конкретно сделать относительно сегодняшней ситуации? |
 | Today | `T3.caution` | Где персональный риск, не копия Global chips? |
 | Today | `T2.catalog` | Что символ значит в каталоге? |
 | Today | `T2.lens` | Как символ окрашивает *уже посчитанный* Personal Day? |
 
-Один semantic source **не** может незаконно обслуживать две роли. Пример дефекта: `why_personal` → и `T3.headline`, и `T3.focus_body`.
+Один semantic source **не** может незаконно обслуживать две роли. Пример дефекта: `why_personal` → и `T3.headline`, и `T3.focus_body`. Второй дефект: свободный `T3.focus_title` как короткий перефраз headline.
 
 `P1.identity_core` — **раскрытие той же оси**, что `recognition_line` (не новая роль). Anti-dupe: не равен `P3.insight` / `P4` / `P5`.
 
@@ -210,7 +294,7 @@ New-value: следующий meaning-слот не перефразирует �
 | Chrome | ключ copy + версия Inventory |
 | Profile meaning | `(user_id, profile_hash)` Snapshot + prompt/projection version |
 | Global Day | `GlobalDayKey = local_date + locale + semantic_version` |
-| Personal Day | `PersonalDayKey = user_identity + local_date + semantic_version` |
+| Personal Day | `PersonalDayKey = user_identity + local_date + semantic_version` — **не** CE/`profile_hash`, **не** card id, **не** number |
 | Ritual identity | `(owner, local_date)` — не пересчитывает день |
 | Gratitude | user record + `manifest`; **не** мутирует день |
 
@@ -235,9 +319,14 @@ New-value: следующий meaning-слот не перефразирует �
 | 9 | >3 ranked drivers на T1 |
 | 10 | >4 support chips / >3 risk chips |
 | 11 | Evening в скролле до time gate |
-| 12 | guest с MY DAY meaning slots |
+| 12 | guest с MY DAY meaning slots **или** `T2.lens_*` |
 | 13 | `may_fe_transform` шире clip/map/hide_by_gate |
 | 14 | generated слот без `allowed_inputs` + `forbidden_inference` |
+| 15 | `T2.lens_*` без persisted Personal Day |
+| 16 | Character Engine field во входах Personal Day |
+| 17 | `T3.action` / второй слот на вопрос Priority |
+| 18 | `T3.focus_title` = перефраз `T3.headline` (не ось) |
+| 19 | slot correctness PASS, journey sentence (§5.2) FAIL |
 
 ---
 
@@ -256,4 +345,5 @@ New-value: следующий meaning-слот не перефразирует �
 
 | Date | Change |
 |------|--------|
+| 2026-08-29 | v1.1 — путь закрыт; compute ≠ display; Personal Day без CE; journey acceptance; focus_title = axis; T3.action out |
 | 2026-08-29 | v1.0 — цепочка; пять ограничений; generated ≠ authority; anti-dupe by question; FE powers |

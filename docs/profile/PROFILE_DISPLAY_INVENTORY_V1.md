@@ -1,7 +1,7 @@
 # Profile Display Inventory v1
 
 **Status:** ACTIVE — **последний authority перед UI** на `/profile`  
-**Version:** 1.1 (2026-08-29)  
+**Version:** 1.2 (2026-08-29)  
 **Грамматика (закон):** [DISPLAY_CONSTRUCTION_GRAMMAR_V1](../foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md)  
 **Пара:** [TODAY_DISPLAY_INVENTORY_V1](../today/TODAY_DISPLAY_INVENTORY_V1.md)
 
@@ -13,11 +13,11 @@
 
 ## Architecture impact
 
-- **SoT before:** v1.0 named blocks and budgets; generated vs authority, allowed inputs, one_question, persist keys, and anti-dupe-by-role were incomplete. Grammar was duplicated inside this file.
-- **SoT after:** v1.1 — every visible atom is a Grammar §3 record. Grammar owns the chain. This file owns the closed slot set. LLM cannot add meaning beyond `allowed_inputs`.
+- **SoT before:** v1.1 records existed, but `P3.help` and `P3.node_title` sat in `path_new_value`, so Jaccard would treat the designed Effort projection as a dupe. Bridge empty_behavior was unresolved prose.
+- **SoT after:** v1.2 — path_new_value is only the four path propositions (recognition · insight · effort · bridge). Help is node-internal; Effort may project from it. Explore stays off-path. Audit vs Grammar §5 in §7.
 - **Public contract changed?** no JSON.
 - **Migration required?** no. UI cutover still waits (Character warehouse drift).
-- **Canon updated?** yes — this file · Grammar · `_INDEX` · tracker.
+- **Canon updated?** yes — this file · Grammar §5 · tracker.
 - **Backward compatible?** yes for API.
 
 ---
@@ -25,10 +25,16 @@
 ## 0. Поверхность
 
 ```text
-Recognition → Why → Insight → Effort → Bridge → Explore
+Recognition → Why → Insight → Effort → Bridge
 ```
 
-Conditional: `P-forming` · `P-data`. Нет шестого акта «Портрет» на пути.
+Explore — склад и глубина **рядом**, не шестой акт пути. Нет акта «Портрет» на скролле.
+
+Путь (закрыт, Grammar §5): Кто я? → Почему это про меня? → Что я раньше не замечал? → Куда направить усилие? → Почему имеет смысл посмотреть сегодняшний контекст?
+
+Journey acceptance: [DISPLAY_CONSTRUCTION_GRAMMAR_V1](../foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) §5.2.
+
+Conditional: `P-forming` · `P-data`.
 
 **Persist meaning:** `(user_id, profile_hash)` + prompt/projection version.  
 **Chrome persist:** copy keys + Inventory version.
@@ -40,11 +46,14 @@ Conditional: `P-forming` · `P-data`. Нет шестого акта «Порт�
 | Group | Слоты | Правило |
 |-------|-------|---------|
 | `identity_axis` | `P1.recognition_line` · `P1.identity_core` | core = раскрытие той же оси; не новый тезис |
-| `path_new_value` | `P1.recognition_line` · `P3.insight` · `P4.effort_vector` · `P5.bridge_line` | **четыре разных вопроса**; перефраз = дефект |
+| `path_new_value` | `P1.recognition_line` · `P3.insight` · `P4.effort_vector` · `P5.bridge_line` | **четыре разных вопроса**; перефраз = дефект. **Не** title узла, **не** help |
 | `why_not_hero` | `P1.*` · `P2.anchor.*` | факты карты не живут в герое |
-| `node_not_warehouse` | `P3.*` · (запрещённый Character act) | материалы узла не дублируются списком сил на скролле |
+| `node_heading` | `P3.node_title` · `P3.insight` | title называет узел; insight = новая закономерность, не второй заголовок |
+| `node_help` | `P3.help` · `P3.insight` | help ≠ пересказ insight; Effort **может** проецироваться из help (тот же source, другой вопрос) |
+| `node_not_warehouse` | `P3.*` · (запрещённый Character act) · `P6.detail` | материалы узла не дублируются списком сил на скролле |
 | `effort_not_mission` | `P4.effort_vector` · `life_mission` | mission не заменяет вектор |
 | `bridge_not_effort` | `P4.effort_vector` · `P5.bridge_line` | мост ≠ императив «что делать» |
+| `effort_where` | `P4.effort_vector` · `P4.sphere.*` | сфера = где, не второй вектор |
 
 Проверка proposition: нормализовать строки; Jaccard ≥ 0.72 или substring ≥24 = дубль роли.
 
@@ -218,7 +227,7 @@ Conditional: `P-forming` · `P-data`. Нет шестого акта «Порт�
 | output | 1 название |
 | budget | 1 слово / label |
 | required | да, если seed |
-| empty_behavior | fallback chrome «Твоя суть» (не смысл) |
+| empty_behavior | fallback chrome «Твоя суть» (**не** смысл; не CE-строка) |
 | may_fe_transform | map_label |
 | persist_key | profile_hash |
 | anti_dupe_group | `identity_axis` |
@@ -366,7 +375,7 @@ Chrome. Eyebrow: только `kind=strength` → «Твой дар»; tension/r
 | required | да вместе с insight |
 | empty_behavior | omit **всего P3** |
 | persist_key | Snapshot + projection version |
-| anti_dupe_group | `path_new_value` |
+| anti_dupe_group | `node_heading` |
 
 Max nodes first release: **1**.
 
@@ -422,7 +431,7 @@ Max nodes first release: **1**.
 | empty_behavior | omit help step |
 | may_fe_transform | clip; hide kitchen |
 | persist_key | Snapshot |
-| anti_dupe_group | `path_new_value` (не равен effort до projection; effort **из** help если gate) |
+| anti_dupe_group | `node_help` |
 
 #### `P3.living_evidence`
 
@@ -510,7 +519,7 @@ Chrome: «Мост в день» · «Открыть Today →». CTA interactio
 | output | 2 предложения |
 | budget | 20–40 слов · ≤220 chars |
 | required | нет |
-| empty_behavior | omit line; CTA may remain as navigate-only **или** omit scene if no line and no copy.lead — Inventory: show CTA with chrome-only if pack null? **Lock:** if projection null → omit **line**, keep CTA as path continuation (chrome). |
+| empty_behavior | omit line; CTA остаётся chrome-навигацией. Нет pack → нет строки, не invent мост |
 | may_fe_transform | none |
 | may_llm_add_meaning | нет |
 | persist_key | projection version |
@@ -614,9 +623,37 @@ Character warehouse act · `life_mission` как замена P4 · Maps/Trackin
 
 ---
 
+## 7. Audit vs Grammar §5 (2026-08-29)
+
+Построчно против замка: authority · inputs · one_question · anti-dupe · стрелка. Не UI cutover.
+
+| Слот | Verdict | Заметка |
+|------|---------|---------|
+| `P-forming` / `P-data` | PASS | до пути; omit when ready / capable |
+| `P1.visual` / `recognition_name` | PASS | имя только life_path; chrome «Твоя суть» не смысл |
+| `P1.recognition_line` | PASS | механизм; journey: «Я человек, который…» |
+| `P1.identity_core` | PASS | disclosure той же оси, не path_new_value |
+| `P2.selected_life_path` + anchors | PASS | факты не в герое; CE только phrase context |
+| `P2.honesty_no_time` | PASS | required без времени |
+| `P3.node_title` | **FIXED** | был в `path_new_value` → `node_heading` |
+| `P3.insight` | PASS | единственный new-value узла; journey: «Я раньше не замечал…» |
+| `P3.help` | **FIXED** | был в `path_new_value` (ломал проекцию Effort) → `node_help` |
+| `P3.grounded_on` / living | PASS | факты / user; living не proof |
+| `P4.effort_vector` | PASS | projected from help only; omit whole P4 if unsafe |
+| `P4.sphere.*` | PASS | 0–2; где ≠ вектор; код до 8 = drift |
+| `P5.bridge_line` | **FIXED** | empty = omit line, keep CTA chrome |
+| `P5.cta` | PASS | navigate; не смысл дня |
+| `P6.*` | PASS | склад, не акт пути; `benefits[]` нет слота |
+| Character warehouse | DRIFT | нет slot_id на пути |
+
+**Остаток (не слот-дефект каталога):** `ProfileCharacterScene` шаг 04 в коде; сферы >2 на скролле. Следующий UI — cut drift, не новая композиция.
+
+---
+
 ## Changelog
 
 | Date | Change |
 |------|--------|
+| 2026-08-29 | v1.2 — audit vs Grammar §5: path_new_value = four propositions only; help/title out; bridge empty locked |
 | 2026-08-29 | v1.0 — первый закрытый список |
 | 2026-08-29 | v1.1 — Grammar §3 records; one_question; allowed_inputs; forbidden_inference; anti_dupe groups; persist keys |

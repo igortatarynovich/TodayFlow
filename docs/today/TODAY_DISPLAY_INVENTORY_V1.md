@@ -1,7 +1,7 @@
 # Today Display Inventory v1
 
 **Status:** ACTIVE — **последний authority перед UI** на Сегодня  
-**Version:** 1.1 (2026-08-29)  
+**Version:** 1.2 (2026-08-29)  
 **Грамматика (закон):** [DISPLAY_CONSTRUCTION_GRAMMAR_V1](../foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md)  
 **Meaning SoT:** [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md)  
 **Cycle SoT:** [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md)  
@@ -15,23 +15,35 @@
 
 ## Architecture impact
 
-- **SoT before:** v1.0 named surfaces and budgets; headline vs focus anti-dupe was a note, not a role lock with allowed_inputs. Grammar duplicated here.
-- **SoT after:** v1.1 — Grammar §3 records for every visible atom. `T3.headline` and `T3.focus_body` have different `one_question`; `why_personal` may feed **one** of them, not both. LLM cannot infer do/avoid inside `T1-hero.human_line`.
+- **SoT before:** v1.1 named Grammar records; headline vs focus anti-dupe existed; `T3.focus_title` was a short theme; `T3.action` duplicated Priority; compute vs display was implied.
+- **SoT after:** v1.2 — compute ≠ display; guest catalog without personal lens; `T3.headline` = thesis, `T3.focus_title` = overlay axis (projected), `T3.focus_body` = how it shows; `T3.action` **removed**. Personal Day inputs exclude CE. Audit pass: `development_point` out of focus_body; lens omit for general; affirmation/practice ≠ Priority; tasks_empty ≠ empty Priority.
 - **Public contract changed?** no JSON.
-- **Migration required?** no. UI cutover waits.
-- **Canon updated?** yes — this file · Grammar · Product Flow pointer · tracker.
+- **Migration required?** no. UI cutover waits. Code `T3.action` / headline=`why_personal` / guest or general lens / `development_point` as focus = drift.
+- **Canon updated?** yes — this file · Grammar · Pipeline · Product Flow · tracker.
 - **Backward compatible?** yes for API.
 
 ---
 
 ## 0. Поверхности
 
+**Показ:**
+
 ```text
 TODAY → RITUAL → MY DAY → EVENING
 ```
 
+**Вычисление** (не зависит от того, дошёл ли пользователь до кадра):
+
+```text
+Небо → Global Day
+Небо × натал → Personal Day     persist; может быть до MY DAY
+Personal Day × карта/число → Lens
+```
+
 Evening в скролле только если `eveningMode || local hour is evening`.  
-Guest: TODAY + RITUAL (catalog) + EVENING. **Все `T3.*` meaning omit.**
+Guest: TODAY + RITUAL **catalog** + EVENING. **`T2.lens_*` omit. Все `T3.*` meaning omit.**
+
+Personal Day **не** включает Character Engine. `PersonalDayKey` не содержит `profile_hash` / CE snapshot / card / number.
 
 | Слой | persist_key |
 |------|-------------|
@@ -50,11 +62,12 @@ Guest: TODAY + RITUAL (catalog) + EVENING. **Все `T3.*` meaning omit.**
 |-------|-------|---------|
 | `global_vs_personal` | все `T1-*` meaning · все `T3-*` meaning | natal/CE/card/number **не** во входах T1; T3 не переписывает energy/drivers/windows |
 | `day_kind` | `T1-hero.human_line` · `T1-hero.energy_word` | line формулирует **уже выбранную** энергию, не новую |
-| `personal_split` | `T3.headline` · `T3.focus_title` · `T3.focus_body` | три вопроса; **один** source не кормит headline и focus_body |
-| `do_layers` | `T1-strength.chip` · `T3.priority` | Global типы действий ≠ персональные пункты |
+| `personal_split` | `T3.headline` · `T3.focus_title` · `T3.focus_body` | **тезис → ось → объяснение**; один source не кормит две роли; title ≠ перефраз headline |
+| `do_layers` | `T1-strength.chip` · `T3.priority` · `T3.affirmation` · `T3.practice` | Global типы ≠ персональные пункты; affirmation/practice **не** второй do-список |
 | `risk_layers` | `T1-risk.chip` · `T3.caution` | Global risk ≠ personal caution |
 | `symbol_layers` | `T2.catalog_*` · `T2.lens_*` | учебник ≠ «день такой из-за карты» |
-| `focus_vs_priority` | `T3.focus_body` · `T3.priority` | внимание/где ≠ конкретный do-список |
+| `focus_vs_priority` | `T3.focus_body` · `T3.priority` | внимание/как проявляется ≠ конкретный do-список |
+| `tasks_not_priority` | `T3.priority` · `T3.tasks_empty` · `T3.tracker` | user tasks ≠ Personal do[] |
 
 Proposition test: тот же, что Profile (Jaccard / substring).
 
@@ -96,20 +109,19 @@ Proposition test: тот же, что Profile (Jaccard / substring).
 | `T2.lens_card` | Как карта окрашивает уже посчитанный Personal Day? | generated | Personal × card |
 | `T2.lens_number` | Как число окрашивает уже посчитанный Personal Day? | generated | Personal × number |
 | `T3.unavailable` | Meaning не загрузился? | chrome | product |
-| `T3.headline` | Что главное **лично для меня** сегодня? | generated | Personal Day |
+| `T3.headline` | Каков главный персональный **тезис** дня? | generated | Personal Day |
 | `T3.focus_label` | chrome | chrome | product |
-| `T3.focus_title` | Какая одна тема внимания? | generated | Personal focus |
-| `T3.focus_body` | Где это проявится и на что направить внимание? | generated | Personal (why_personal first) |
+| `T3.focus_title` | В какой **области / оси** тезис проявляется сильнее? | projected | Natal Overlay axis |
+| `T3.focus_body` | Как именно он там проявляется и куда направить внимание? | generated | Personal (why_personal first) |
 | `T3.priority_label` | chrome | chrome | product |
-| `T3.priority` | Что конкретно сделать? | generated | Personal do[] |
+| `T3.priority` | Что конкретно сделать относительно сегодняшней ситуации? | generated | Personal do[] |
 | `T3.caution_label` | chrome | chrome | product |
 | `T3.caution` | Где персональный риск? | generated | Personal avoid[] |
 | `T3.rhythm_label` | chrome | chrome | product |
 | `T3.rhythm_row` | Когда по часам support/caution? | calc | natal×windows or Global windows |
 | `T3.color.*` | Какой цвет как опора дня? | catalog+fill | color scoring |
-| `T3.practice` | Какая одна практика? | catalog | Personal focus/risk |
-| `T3.affirmation` | Какая аффирмация дня? | generated | Personal |
-| `T3.action` | Какой один выполнимый шаг? | generated | Personal |
+| `T3.practice` | Какая одна практика-техника поддержки? | catalog | Personal focus/risk |
+| `T3.affirmation` | Какая вербальная опора дня? | generated | Personal |
 | `T3.tracker` | Что я уже веду? | user | habits |
 | `T3.tasks_empty` | chrome empty | chrome | product |
 | `T3.depth` | Углубить выбранную тему? | generated | depth layer |
@@ -231,8 +243,7 @@ Chrome «Энергия дня».
 | required | нет |
 | empty_behavior | omit |
 | persist_key | GlobalDayKey |
-
-#### `T1-hero.human_line`
+| anti_dupe_group | `day_kind` |
 
 | | |
 |---|---|
@@ -407,7 +418,7 @@ Numerology Engine identity. 1–2 digits / title. Same persist. Appear state B�
 | authority | Personal Day × symbol (lens); **не** Ritual как day engine |
 | semantic_source | hook_reveal `bridge_to_day` / `personal_angle` |
 | allowed_inputs | persisted Personal Day meaning + this symbol identity + catalog as *color*, not cause |
-| forbidden_inference | «день такой потому что карта/число»; mutate energy/drivers/windows; invent lens on empty persist |
+| forbidden_inference | «день такой потому что карта/число»; mutate energy/drivers/windows; invent lens on empty persist; **CE prose**; rewrite Personal thesis |
 | output | 1–3 предложения |
 | budget | 20–45 слов · ≤280 chars |
 | required | нет |
@@ -417,7 +428,7 @@ Numerology Engine identity. 1–2 digits / title. Same persist. Appear state B�
 | persist_key | PersonalDayKey + ritual identity |
 | anti_dupe_group | `symbol_layers` · `global_vs_personal` |
 | interaction | sheet section after catalog |
-| appear | guest: omit personal lens (catalog only) |
+| appear | **omit** unless Personal Day persisted. Guest **и** general: catalog only, lens нет |
 
 ---
 
@@ -429,13 +440,13 @@ Capability: light/deep. Guest/general: **no T3 meaning slots**.
 
 | | |
 |---|---|
-| one_question | **Что главное лично для меня сегодня?** |
+| one_question | **Каков главный персональный тезис дня?** |
 | text_class | generated |
 | authority | Personal Day |
 | semantic_source | `day_personal.summary_ru` **или** personal conflict thesis |
 | display_source | `TodayMyDayPane` headline |
-| allowed_inputs | Personal overlay over **locked** Global; CE as context not rewrite of Global |
-| forbidden_inference | `why_personal` (это `T3.focus_body`); Global expect as «моё»; card/number as cause; copy of `T1-hero.human_line` |
+| allowed_inputs | Personal overlay over **locked** Global (natal activations + Global frame). **Не** CE |
+| forbidden_inference | `why_personal` (это `T3.focus_body`); Global expect as «моё»; card/number as cause; copy of `T1-hero.human_line`; CE recognition/insight |
 | output | 1 мысль |
 | budget | 12–20 слов · ≤180 chars |
 | required | нет |
@@ -455,34 +466,41 @@ Chrome callout.
 
 | | |
 |---|---|
-| one_question | Какая **одна тема** внимания? |
-| text_class | generated |
-| authority | Personal Day / Daily Focus title |
-| allowed_inputs | personal theme slot |
-| forbidden_inference | Global energy word as title; kitchen `short_name` |
-| output | 3–8 слов |
+| one_question | **В какой области или оси этот тезис проявляется сильнее всего?** |
+| text_class | **projected** (`map_label`) |
+| authority | Natal Overlay — already chosen closed-set axis |
+| semantic_source | overlay domain id (house-topic / activation domain already selected in bind) |
+| display_source | focus callout title |
+| allowed_inputs | that axis id only |
+| forbidden_inference | LLM free title; paraphrase of `T3.headline`; kitchen `short_name`; Global energy word as title |
+| output | 1–4 слова (label оси) |
 | budget | ≤72 chars |
 | required | нет |
-| empty_behavior | omit title (body may stand with chrome label) |
+| empty_behavior | **omit** if overlay did not select a closed axis — не invent title |
+| may_fe_transform | map_label |
+| may_llm_add_meaning | **нет** |
 | persist_key | PersonalDayKey |
 | anti_dupe_group | `personal_split` |
+| why_here | тезис → **область** → объяснение |
+
+Code that generates a free-form focus title = **drift**.
 
 #### `T3.focus_body`
 
 | | |
 |---|---|
-| one_question | **Где это проявится и на что направить внимание?** |
+| one_question | **Как именно тезис проявляется на этой оси и куда направить внимание?** |
 | text_class | generated |
 | authority | Personal Day |
-| semantic_source | first live: `why_personal` → natal transit story → `personal_astrology.summary_ru` → `development_point` |
+| semantic_source | first live: `why_personal` → natal transit story → `personal_astrology.summary_ru` |
 | display_source | instruction bridge |
-| allowed_inputs | those fields only, already personal |
-| forbidden_inference | rewrite `primary_energy`; copy T1 human_line; card/number cause; fill from Global strength chips |
+| allowed_inputs | those Personal overlay fields only |
+| forbidden_inference | rewrite `primary_energy`; copy T1 human_line; card/number cause; fill from Global strength chips; **`development_point` / CE**; paraphrase `T3.headline` |
 | output | 1–2 предложения |
 | budget | 18–35 слов · ≤220 chars |
 | required | нет |
 | empty_behavior | omit body |
-| may_fe_transform | clip |
+| may_fe_transform | clip; **drop if overlaps headline** (substring ≥24 / Jaccard) |
 | may_llm_add_meaning | нет |
 | persist_key | PersonalDayKey |
 | anti_dupe_group | `personal_split` · `focus_vs_priority` |
@@ -495,7 +513,7 @@ Chrome: «В приоритете» · «Осторожнее».
 
 | | |
 |---|---|
-| one_question | **Что конкретно сделать?** |
+| one_question | **Что конкретно сделать относительно сегодняшней ситуации?** |
 | text_class | generated |
 | authority | Personal Day `do[]` |
 | allowed_inputs | Personal do (action/object/moment) |
@@ -551,37 +569,66 @@ Chrome: «Мой ритм дня» если natal clocks; иначе «Ритм 
 | | |
 |---|---|
 | one_question | Какой один цвет как опора **после** energy+risk+personal focus? |
-| text_class | catalog hex + generated/catalog prose fill-empty |
+| text_class | catalog hex + catalog prose (уже в nest) |
 | authority | color scoring (LLM **не** выбирает цвет) |
 | allowed_inputs | BE `color_guide` nest |
-| forbidden_inference | FE color dictionary; catalog morning color when unavailable |
+| forbidden_inference | FE color dictionary; catalog morning color when unavailable; **invent thesis** в пустые lines |
 | output | name 1–3 слова · 3–6 short lines ≤80 chars |
 | required | нет |
-| empty_behavior | omit card if nest null |
+| empty_behavior | omit card if nest null; omit empty lines (**не** fill-empty смыслом) |
 | persist_key | PersonalDayKey / color nest |
 | anti_dupe_group | `enrichment` |
 
 #### `T3.practice`
 
-Max **one**. Catalog item from Personal Focus or compensating Personal Risk. Title ≤48 · why 1 предл. ≤160. omit otherwise. LLM does not pick. `anti_dupe_group`: `enrichment`.
+| | |
+|---|---|
+| one_question | Какая одна **готовая техника** поддержки? |
+| text_class | catalog |
+| authority | catalog retrieval from Personal focus/risk types |
+| allowed_inputs | Personal Focus or compensating Personal Risk → one catalog item |
+| forbidden_inference | LLM pick; paraphrase `T3.priority`; second practice |
+| output | title + 1 why |
+| budget | title ≤48 · why 1 предл. ≤160 · **count 1** |
+| required | нет |
+| empty_behavior | omit |
+| may_llm_add_meaning | нет |
+| persist_key | PersonalDayKey + catalog id |
+| anti_dupe_group | `enrichment` · `do_layers` |
 
 #### `T3.affirmation`
 
-Generated from Personal. 1 предл. ≤140. Not practice bucket. omit if empty.
-
-#### `T3.action`
-
-One doable step from Personal. 1 предл. ≤140. omit if empty.
+| | |
+|---|---|
+| one_question | Какая **вербальная опора** (не действие)? |
+| text_class | generated |
+| authority | Personal Day |
+| allowed_inputs | Personal affirmation field only |
+| forbidden_inference | CE identity line; rewrite `T3.priority` as «я сделаю…»; Global energy sermon |
+| output | 1 предложение |
+| budget | ≤140 chars |
+| required | нет |
+| empty_behavior | omit |
+| may_llm_add_meaning | нет |
+| persist_key | PersonalDayKey |
+| anti_dupe_group | `do_layers` · `enrichment` |
 
 #### `T3.tracker`
 
-User habits already in progress. Facts, not meaning. Not inputs to energy/drivers. appear if user has rows.
+| | |
+|---|---|
+| one_question | Что я **уже веду** (привычки), не смысл дня? |
+| text_class | user |
+| allowed_inputs | habit rows |
+| forbidden_inference | feed energy/drivers/Personal bind |
+| empty_behavior | omit if no rows |
+| anti_dupe_group | `tasks_not_priority` |
 
 #### `T3.tasks_empty`
 
-Chrome «Сегодня без отдельного задания.» when today-tasks count 0. Not invent a task.
+Chrome «Сегодня без отдельного задания.» when **user today-tasks** count 0 — **не** когда `T3.priority` omit. Не invent task. Не заменяет Priority.
 
-Today-tasks cap: **≤2** one-off + daily streak block separately.
+Today-tasks cap: **≤2** one-off + daily streak block separately. `anti_dupe_group`: `tasks_not_priority`.
 
 #### `T3.depth`
 
@@ -591,11 +638,11 @@ Today-tasks cap: **≤2** one-off + daily streak block separately.
 | text_class | generated (Trial/Paid) / chrome CTA (Free) |
 | authority | depth layer; user picks topic |
 | allowed_inputs | base day unchanged + topic pack |
-| forbidden_inference | second competing day plot; lock base chapters |
+| forbidden_inference | second competing day plot; lock base chapters; rewrite `T3.headline` |
 | required | нет |
 | empty_behavior | omit / CTA |
 | persist_key | depth generation key |
-| anti_dupe_group | `depth` |
+| anti_dupe_group | `depth` · `personal_split` (не второй тезис) |
 
 ---
 
@@ -645,13 +692,13 @@ Chrome. Save allowed if ≥1 category **or** text.
 
 ### 3.6 First Today
 
-Not a fifth surface. Reaction chips = `user` into Personal Model. Then same T1–T4 with capability. No second Global Day.
+Not a fifth surface. Reaction chips = `user` into Personal Model **as user record**. **Не** вход Personal Day bind, **не** mutate Global. Then same T1–T4 with capability. No second Global Day.
 
 ---
 
 ## 4. Вне рамки
 
-Orientation step · SCENARIO_V3 six blocks · DomainLens as required dashboard · promise/trap evening · FE color/calm invent · Personal Timeline on T1 · card as cause of energy% · `storyNext` dead keys.
+Orientation step · SCENARIO_V3 six blocks · DomainLens as required dashboard · promise/trap evening · FE color/calm invent · Personal Timeline on T1 · card as cause of energy% · `storyNext` dead keys · **`T3.action`** · Character Engine as Personal Day input.
 
 ---
 
@@ -659,8 +706,13 @@ Orientation step · SCENARIO_V3 six blocks · DomainLens as required dashboard �
 
 | Код | Замок |
 |-----|-------|
+| development_point as focus | нет входа `T3.focus_body` |
 | `TodayDayBrief` orientation pane | нет шага; не наращивать |
 | headline = `why_personal` | `T3.headline` ≠ that source |
+| free-form `T3.focus_title` | projected axis only |
+| separate action / step card | нет слота; роль = `T3.priority` |
+| guest / general `T2.lens_*` | catalog only |
+| CE prose on MY DAY | нет входа |
 | `storyNext` deprecated keys | нет slot_id |
 | loop/promise copy | нет T4 meaning |
 | guide LLM overlay VM | не authority T1 chips |
@@ -692,9 +744,37 @@ Orientation step · SCENARIO_V3 six blocks · DomainLens as required dashboard �
 
 ---
 
+## 7. Audit vs Grammar §5 + Pipeline (2026-08-29)
+
+Построчно: authority · inputs · one_question · anti-dupe · направление стрелки.
+
+| Слот | Verdict | Заметка |
+|------|---------|---------|
+| T1 energy / % / mood / human_line | PASS | Global only; human_line не do/avoid; mood ≠ новая энергия |
+| T1 clock / transit / strength / risk | PASS | ranked ≤3; chips ≠ T3 do/caution |
+| T2 catalog | PASS | guest OK; journey catalog sentence |
+| T2 lens | **FIXED** | appear только при persisted Personal Day; guest **и** general omit; CE forbidden |
+| T3.headline | PASS | thesis; не why_personal; не CE |
+| T3.focus_title | PASS | projected axis; omit если оси нет |
+| T3.focus_body | **FIXED** | `development_point` снят (не overlay); drop overlap headline |
+| T3.priority / caution | PASS | situation do / personal risk |
+| T3.rhythm | PASS | natal clocks или Global «Ритм дня», не «мой» |
+| T3.color | **FIXED** | нет fill-empty смыслом |
+| T3.practice / affirmation | **FIXED** | техника / вербальная опора ≠ Priority |
+| T3.tracker / tasks_empty | **FIXED** | user tasks ≠ Personal do[] |
+| T3.depth | **FIXED** | не второй тезис |
+| T4 gratitude | PASS | не мутирует день; journey: «Сегодня я благодарен…» |
+| First Today chips | **FIXED** | user record, не bind |
+| `T3.action` | OUT | drift если код ещё рисует |
+
+**Код-drift (не канон):** `todayDailyFocus.ts` fallback на `development_point`; free-form `dailyFocus.title`; guest/general personal_angle; отдельная action card.
+
+---
+
 ## Changelog
 
 | Date | Change |
 |------|--------|
+| 2026-08-29 | v1.2 audit — lens appear; focus_body inputs; affirmation/practice vs Priority; tasks ≠ do; color no invent |
 | 2026-08-29 | v1.0 — первый закрытый список |
 | 2026-08-29 | v1.1 — Grammar records; why_personal exclusivity; human_line forbidden_inference; persist keys; anti_dupe groups |
