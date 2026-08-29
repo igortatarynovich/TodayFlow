@@ -16,7 +16,7 @@
 - **SoT before:** v1.1 records existed, but `P3.help` and `P3.node_title` sat in `path_new_value`, so Jaccard would treat the designed Effort projection as a dupe. Bridge empty_behavior was unresolved prose.
 - **SoT after:** v1.2 — path_new_value is only the four path propositions (recognition · insight · effort · bridge). Help is node-internal; Effort may project from it. Explore stays off-path. Audit vs Grammar §5 in §7.
 - **Public contract changed?** no JSON.
-- **Migration required?** no. UI cutover still waits (Character warehouse drift).
+- **Migration required?** no. UI cutover: Character warehouse off the path; P4 spheres 0–2; leftover styles in Explore.
 - **Canon updated?** yes — this file · Grammar §5 · tracker.
 - **Backward compatible?** yes for API.
 
@@ -600,11 +600,11 @@ Character warehouse act · `life_mission` как замена P4 · Maps/Trackin
 
 | Код | Замок |
 |-----|-------|
-| `ProfileCharacterScene` шаг 04 | нет `slot_id` → удалить с пути |
-| сферы до 8 | `P4` count 0–2 |
 | `why.honesty` null | `P2.honesty_no_time` обязателен без времени |
 | Explore benefits[] | нет слота |
 | v0 `PROFILE_LIMITS` | бюджеты этого файла |
+
+Cut 2026-08-29: `ProfileCharacterScene` removed from path; P4 spheres cap 0–2; leftover styles/mission in Explore.
 
 ---
 
@@ -640,13 +640,13 @@ Character warehouse act · `life_mission` как замена P4 · Maps/Trackin
 | `P3.help` | **FIXED** | был в `path_new_value` (ломал проекцию Effort) → `node_help` |
 | `P3.grounded_on` / living | PASS | факты / user; living не proof |
 | `P4.effort_vector` | PASS | projected from help only; omit whole P4 if unsafe |
-| `P4.sphere.*` | PASS | 0–2; где ≠ вектор; код до 8 = drift |
+| `P4.sphere.*` | **FIXED** | 0–2 on path; leftovers Explore |
 | `P5.bridge_line` | **FIXED** | empty = omit line, keep CTA chrome |
 | `P5.cta` | PASS | navigate; не смысл дня |
 | `P6.*` | PASS | склад, не акт пути; `benefits[]` нет слота |
-| Character warehouse | DRIFT | нет slot_id на пути |
+| Character warehouse | **FIXED** | нет slot_id на пути; стили в Explore |
 
-**Остаток (не слот-дефект каталога):** `ProfileCharacterScene` шаг 04 в коде; сферы >2 на скролле. Следующий UI — cut drift, не новая композиция.
+**Остаток (не слот-дефект каталога):** `P2.honesty` if time-unknown still empty; Explore `benefits[]` copy unused as UI list. Character warehouse and P4>2 cut.
 
 ---
 
@@ -654,6 +654,6 @@ Character warehouse act · `life_mission` как замена P4 · Maps/Trackin
 
 | Date | Change |
 |------|--------|
-| 2026-08-29 | v1.2 — audit vs Grammar §5: path_new_value = four propositions only; help/title out; bridge empty locked |
+| 2026-08-29 | FE cutover — Character warehouse off path; P4 spheres 0–2 |
 | 2026-08-29 | v1.0 — первый закрытый список |
 | 2026-08-29 | v1.1 — Grammar §3 records; one_question; allowed_inputs; forbidden_inference; anti_dupe groups; persist keys |

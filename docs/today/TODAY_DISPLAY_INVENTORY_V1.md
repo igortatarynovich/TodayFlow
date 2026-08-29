@@ -18,7 +18,7 @@
 - **SoT before:** v1.1 named Grammar records; headline vs focus anti-dupe existed; `T3.focus_title` was a short theme; `T3.action` duplicated Priority; compute vs display was implied.
 - **SoT after:** v1.2 — compute ≠ display; guest catalog without personal lens; `T3.headline` = thesis, `T3.focus_title` = overlay axis (projected), `T3.focus_body` = how it shows; `T3.action` **removed**. Personal Day inputs exclude CE. Audit pass: `development_point` out of focus_body; lens omit for general; affirmation/practice ≠ Priority; tasks_empty ≠ empty Priority.
 - **Public contract changed?** no JSON.
-- **Migration required?** no. UI cutover waits. Code `T3.action` / headline=`why_personal` / guest or general lens / `development_point` as focus = drift.
+- **Migration required?** no. UI cutover: Profile Character warehouse off path; MY DAY headline ≠ `why_personal`; focus_title = overlay axis or omit; ritual lens omit without Personal Day capability.
 - **Canon updated?** yes — this file · Grammar · Pipeline · Product Flow · tracker.
 - **Backward compatible?** yes for API.
 
@@ -706,16 +706,14 @@ Orientation step · SCENARIO_V3 six blocks · DomainLens as required dashboard �
 
 | Код | Замок |
 |-----|-------|
-| development_point as focus | нет входа `T3.focus_body` |
 | `TodayDayBrief` orientation pane | нет шага; не наращивать |
-| headline = `why_personal` | `T3.headline` ≠ that source |
-| free-form `T3.focus_title` | projected axis only |
-| separate action / step card | нет слота; роль = `T3.priority` |
-| guest / general `T2.lens_*` | catalog only |
-| CE prose on MY DAY | нет входа |
+| guide LLM overlay VM `focusTitle` | не authority T1 chips / не `T3.focus_title` |
 | `storyNext` deprecated keys | нет slot_id |
 | loop/promise copy | нет T4 meaning |
-| guide LLM overlay VM | не authority T1 chips |
+| lens gated by capability (`myDay`) not persist key | appear = persisted Personal Day |
+| tracker `extraCards` on MY DAY | не `T3.action`; не подмена Priority |
+
+Cut 2026-08-29: `development_point` out of focus_body and Daily Focus lines; headline = `day_personal.summary_ru`; `T3.focus_title` = overlay map_label or omit; guest/general ritual lens omit.
 
 ---
 
@@ -767,7 +765,7 @@ Orientation step · SCENARIO_V3 six blocks · DomainLens as required dashboard �
 | First Today chips | **FIXED** | user record, не bind |
 | `T3.action` | OUT | drift если код ещё рисует |
 
-**Код-drift (не канон):** `todayDailyFocus.ts` fallback на `development_point`; free-form `dailyFocus.title`; guest/general personal_angle; отдельная action card.
+**Код-drift (остаток):** lens still follows capability `myDay`, not a persisted `PersonalDayKey` flag; composition VM `focusTitle` from `primary_action` is unused by MY DAY pane; tracker extraCards ≠ Priority.
 
 ---
 
@@ -775,6 +773,6 @@ Orientation step · SCENARIO_V3 six blocks · DomainLens as required dashboard �
 
 | Date | Change |
 |------|--------|
-| 2026-08-29 | v1.2 audit — lens appear; focus_body inputs; affirmation/practice vs Priority; tasks ≠ do; color no invent |
+| 2026-08-29 | FE cutover — headline/focus split; overlay axis; ritual lens capability gate; no development_point fill |
 | 2026-08-29 | v1.0 — первый закрытый список |
 | 2026-08-29 | v1.1 — Grammar records; why_personal exclusivity; human_line forbidden_inference; persist keys; anti_dupe groups |

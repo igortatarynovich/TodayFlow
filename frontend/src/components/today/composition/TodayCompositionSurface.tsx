@@ -15,7 +15,7 @@ import { TodayDayBrief } from "@/components/today/composition/TodayDayBrief";
 import { buildTodayDayBriefModel } from "@/lib/todayDayBrief";
 import { TodayMyDayRhythm } from "@/components/today/composition/TodayMyDayRhythm";
 import { TodayRitualLensPair } from "@/components/today/composition/TodayRitualLensPair";
-import { buildTodayInstructionBridgeModel } from "@/lib/todayInstructionBridge";
+import { buildTodayInstructionBridgeModel, omitIfOverlapsHeadline } from "@/lib/todayInstructionBridge";
 import { TodayDayTasksBlock } from "@/components/today/composition/TodayDayTasksBlock";
 import { buildTodayDayTasks } from "@/lib/todayDayTasks";
 import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
@@ -101,6 +101,7 @@ import { StoryBlockCue, StoryNextAnchor } from "@/components/today/composition/T
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
 import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
+import { pickPersonalFocusAxisLabel } from "@/lib/todayPersonalFocusAxis";
 import { buildGlanceEnergyFromChorus } from "@/lib/todayGlanceEnergy";
 import { buildPlotConflictNarrative, buildPlotStoryBeats } from "@/lib/todayPlotNarrative";
 import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
@@ -137,7 +138,7 @@ import {
 import { shiftDateISO } from "@/lib/moodMapModel";
 import { resolveTodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import { canOfferFocusDeepen, resolveFocusDeepenTarget } from "@/lib/todayFocusDeepen";
-import { formatRitualTarotPersonalToday, pickRitualHookLine } from "@/lib/ritualRevealCopy";
+import { formatRitualTarotPersonalToday, pickRitualPersonalLens } from "@/lib/ritualRevealCopy";
 import { buildHandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 import { resolveWelcomeActivityTags } from "@/lib/todayWelcomeActivityTags";
 import {
@@ -1001,7 +1002,7 @@ export function TodayCompositionSurface(props: Props) {
       display,
       title: view.number?.title ?? null,
       meaning: view.number?.hook_reveal?.base?.meaning ?? view.number?.summary ?? props.numerologyMeaning ?? null,
-      support: pickRitualHookLine(view.number?.hook_reveal, story.numberImpact?.body ?? null),
+      support: pickRitualPersonalLens(view.number?.hook_reveal, showMyDayAct),
     };
   }, [
     dateISO,
@@ -1009,7 +1010,7 @@ export function TodayCompositionSurface(props: Props) {
     persistEngagement,
     props.numerologyMeaning,
     props.onSymbolRevealResult,
-    story.numberImpact?.body,
+    showMyDayAct,
   ]);
 
   const onInterpretationConfirm = useCallback(
@@ -1391,11 +1392,7 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const ritualTarotPersonalText = useMemo(() => {
-    const hook = symbolHooksView?.card?.hook_reveal;
-    const personalLine =
-      String(hook?.bridge_to_day ?? "").trim() ||
-      String(hook?.personal_angle ?? "").trim() ||
-      null;
+    const personalLine = pickRitualPersonalLens(symbolHooksView?.card?.hook_reveal, showMyDayAct);
     return formatRitualTarotPersonalToday({
       personalLine,
       dayNumber: engagement.numberValue || props.numerologyValue,
@@ -1404,6 +1401,7 @@ export function TodayCompositionSurface(props: Props) {
   }, [
     engagement.numberValue,
     props.numerologyValue,
+    showMyDayAct,
     symbolHooksView?.card?.hook_reveal,
     symbolHooksView?.number?.title,
   ]);
@@ -1424,8 +1422,8 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const ritualNumberSupportText = useMemo(
-    () => pickRitualHookLine(symbolHooksView?.number?.hook_reveal, story.numberImpact?.body ?? null),
-    [story.numberImpact?.body, symbolHooksView?.number?.hook_reveal],
+    () => pickRitualPersonalLens(symbolHooksView?.number?.hook_reveal, showMyDayAct),
+    [showMyDayAct, symbolHooksView?.number?.hook_reveal],
   );
 
   const ritualNumberTitle = useMemo(
@@ -2193,12 +2191,20 @@ export function TodayCompositionSurface(props: Props) {
     .filter((line) => !myDayPriorities.includes(line))
     .slice(0, 2);
 
+  const myDayHeadline = myDayMeaningUnavailable ? null : dayBriefModel.personalLine;
+  const myDayFocusTitle = myDayMeaningUnavailable
+    ? null
+    : pickPersonalFocusAxisLabel(props.contract);
+  const myDayFocusBody = myDayMeaningUnavailable
+    ? null
+    : omitIfOverlapsHeadline(instructionBridge.lead, myDayHeadline);
+
   const myDayBody = (
     <TodayMyDayPane
       meaningUnavailable={myDayMeaningUnavailable}
-      headline={myDayMeaningUnavailable ? null : dayBriefModel.personalLine}
-      focusTitle={myDayMeaningUnavailable ? null : glanceDailyFocus?.title || null}
-      focusBody={myDayMeaningUnavailable ? null : instructionBridge.lead || null}
+      headline={myDayHeadline}
+      focusTitle={myDayFocusTitle}
+      focusBody={myDayFocusBody}
       priorities={myDayPriorities}
       cautions={myDayCautions}
       timeline={

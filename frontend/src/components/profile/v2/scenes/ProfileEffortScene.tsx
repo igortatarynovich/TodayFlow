@@ -19,8 +19,8 @@ export type ProfileEffortSceneProps = {
   lifeSpheres?: ProfileLifeSphere[];
 };
 
-/** Swipe rail upper bound — density via snap, not a hard 2-card Forms hack. */
-const MAX_ACT4_SPHERES = 8;
+/** Inventory P4.sphere.* — 0–2 on the path. Leftovers belong in Explore. */
+const MAX_ACT4_SPHERES = 2;
 
 const effortNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "effort") ?? PROFILE_V2_DEPTH_NAV[3];
 

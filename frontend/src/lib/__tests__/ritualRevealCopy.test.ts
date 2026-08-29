@@ -1,6 +1,7 @@
 import {
   formatRitualTarotPersonalToday,
   pickRitualHookLine,
+  pickRitualPersonalLens,
 } from "@/lib/ritualRevealCopy";
 import { ritualRevealCtaReady } from "@/lib/ritualRevealCascade";
 
@@ -35,6 +36,17 @@ describe("ritualRevealCopy", () => {
     expect(pickRitualHookLine({ personal_angle: "лично", base: { meaning: "база" } })).toBe("лично");
     expect(pickRitualHookLine({ base: { meaning: "база" } }, "fallback")).toBe("база");
     expect(pickRitualHookLine(null, "fallback")).toBe("fallback");
+  });
+
+  it("omits personal lens without Personal Day capability and never uses catalog as lens", () => {
+    const hook = {
+      bridge_to_day: "якорь дня",
+      personal_angle: "лично",
+      base: { meaning: "база" },
+    };
+    expect(pickRitualPersonalLens(hook, false)).toBeNull();
+    expect(pickRitualPersonalLens(hook, true)).toBe("якорь дня");
+    expect(pickRitualPersonalLens({ base: { meaning: "база" } }, true)).toBeNull();
   });
 });
 

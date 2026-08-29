@@ -17,17 +17,13 @@ export function formatRitualTarotPersonalToday(input: {
   return `При ${numPart} эта карта — ${personal}`;
 }
 
-export function pickRitualHookLine(
-  hook:
-    | {
-        bridge_to_day?: string | null;
-        personal_angle?: string | null;
-        base?: { meaning?: string | null } | null;
-      }
-    | null
-    | undefined,
-  fallback?: string | null,
-): string | null {
+type RitualHook = {
+  bridge_to_day?: string | null;
+  personal_angle?: string | null;
+  base?: { meaning?: string | null } | null;
+} | null | undefined;
+
+export function pickRitualHookLine(hook: RitualHook, fallback?: string | null): string | null {
   const bridge = String(hook?.bridge_to_day ?? "").trim();
   if (bridge) return bridge;
   const angle = String(hook?.personal_angle ?? "").trim();
@@ -36,4 +32,16 @@ export function pickRitualHookLine(
   if (meaning) return meaning;
   const fb = String(fallback ?? "").trim();
   return fb || null;
+}
+
+/** T2 lens — Personal Day × symbol. Guest/general omit. Catalog meaning is not a lens. */
+export function pickRitualPersonalLens(
+  hook: RitualHook,
+  allowPersonal: boolean,
+): string | null {
+  if (!allowPersonal) return null;
+  const bridge = String(hook?.bridge_to_day ?? "").trim();
+  if (bridge) return bridge;
+  const angle = String(hook?.personal_angle ?? "").trim();
+  return angle || null;
 }

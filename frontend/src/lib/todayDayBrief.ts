@@ -861,13 +861,10 @@ export function buildTodayDayBriefModel(input: {
     cleanAmbassadorWhy(story?.advantage) ||
     (doItems.length > 1 ? doItems.slice(1).join(" · ") : null);
 
+  /** T3.headline — thesis only. Not why_personal (focus_body) and not CE development_point. */
   const personalLine = isTodayInterpretationUnavailable(input.contract)
     ? null
-    : clipCompassProse(
-        cleanAmbassadorWhy(story?.day_scenario?.conflict?.why_personal) ||
-          cleanAmbassadorWhy(input.contract.personal_growth?.development_point),
-        180,
-      ) || null;
+    : clipCompassProse(cleanAmbassadorWhy(story?.day_personal?.summary_ru), 180) || null;
 
   const skyStrip = input.loading ? null : buildTodaySkyStripModel(input.contract, null);
   const lunarCaption = input.loading

@@ -1,7 +1,7 @@
 /**
- * Block 3 — personal bridge (trend × person).
+ * T3.focus_body — personal overlay how-it-shows.
  * LIVE contract fields only. No invent.
- * Canon: TODAY_SCREEN_SCENARIO_V3 § useful Today · block 3.
+ * Canon: TODAY_DISPLAY_INVENTORY_V1 T3.focus_body.
  */
 
 import type { TodayContractV1 } from "@/lib/todayContract";
@@ -26,9 +26,31 @@ function firstNatalTransitSoft(
   return null;
 }
 
+function normalizeOverlapKey(s: string): string {
+  return s.replace(/\s+/g, " ").trim().toLowerCase();
+}
+
+/** Inventory: drop focus_body if it overlaps T3.headline (substring ≥24). */
+export function omitIfOverlapsHeadline(
+  body: string | null | undefined,
+  headline: string | null | undefined,
+): string | null {
+  const lead = String(body ?? "").trim() || null;
+  const head = String(headline ?? "").trim() || null;
+  if (!lead) return null;
+  if (!head) return lead;
+  const aa = normalizeOverlapKey(lead);
+  const bb = normalizeOverlapKey(head);
+  if (aa === bb) return null;
+  if (aa.length >= 24 && bb.includes(aa.slice(0, Math.min(48, aa.length)))) return null;
+  if (bb.length >= 24 && aa.includes(bb.slice(0, Math.min(48, bb.length)))) return null;
+  return lead;
+}
+
 /**
- * Pick a person-facing bridge line from live slots.
- * Prefer why_personal → soft natal transit → soft astrology summary → development_point.
+ * Pick T3.focus_body from live overlay slots only.
+ * why_personal → natal transit story → personal_astrology.summary_ru.
+ * Not day_personal.summary_ru (headline) and not development_point (CE).
  */
 export function pickInstructionPersonalBridge(
   contract: TodayContractV1 | null | undefined,
@@ -42,8 +64,6 @@ export function pickInstructionPersonalBridge(
     conflict?.why_personal,
     firstNatalTransitSoft(contract),
     story.day_personal?.personal_astrology?.summary_ru,
-    story.day_personal?.summary_ru,
-    contract.personal_growth?.development_point,
   ];
 
   for (const raw of candidates) {

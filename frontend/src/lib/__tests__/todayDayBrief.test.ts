@@ -107,6 +107,9 @@ describe("buildTodayDayBriefModel", () => {
             },
             numerology: { personal_day: 10, summary_ru: "Число про ясность выбора." },
           },
+          day_personal: {
+            summary_ru: "Ты уже чувствуешь, где лишний шум.",
+          },
           day_scenario: {
             conflict: {
               why_personal: "Ты уже чувствуешь, где лишний шум.",
@@ -299,7 +302,7 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.skyStrip?.personalLine).toBeNull();
   });
 
-  it("puts natal overlay on MY DAY personalLine, not the Global sky strip", () => {
+  it("puts natal overlay thesis on MY DAY personalLine, not why_personal or CE", () => {
     const model = buildTodayDayBriefModel({
       contract: {
         ...baseContract,
@@ -309,6 +312,9 @@ describe("buildTodayDayBriefModel", () => {
         },
         day_story: {
           contract_version: "day_story_v1",
+          day_personal: {
+            summary_ru: "Сегодня твоя ось — одно обещание без лишнего шума.",
+          },
           day_scenario: {
             conflict: {
               why_personal: "тебе обычно проще держать слово, если оно взвешено заранее",
@@ -320,7 +326,8 @@ describe("buildTodayDayBriefModel", () => {
       salutation: "Привет",
     });
     expect(model.skyStrip?.personalLine).toBeNull();
-    expect(model.personalLine).toContain("держать слово");
+    expect(model.personalLine).toContain("одно обещание");
+    expect(model.personalLine).not.toContain("держать слово");
     expect(model.personalLine).not.toContain("точка роста");
   });
 

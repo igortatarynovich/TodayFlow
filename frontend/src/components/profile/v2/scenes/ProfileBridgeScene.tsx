@@ -10,7 +10,7 @@ export type ProfileBridgeSceneProps = {
   bridgeLine: string | null;
 };
 
-const bridgeNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "bridge") ?? PROFILE_V2_DEPTH_NAV[5];
+const bridgeNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "bridge") ?? PROFILE_V2_DEPTH_NAV[4];
 
 /**
  * Visual Modes #4 — Act 5 CTA-portal: why Today + one CTA (no second effort).
