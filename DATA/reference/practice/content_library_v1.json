@@ -529,9 +529,10 @@
         "item_id": "discipline.sleep_discipline.001",
         "content_class": "discipline",
         "type": "sleep_discipline",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.sleep.discipline"
+        "seed_cell": "need.sleep.discipline",
+        "technique_id": "technique.sleep_discipline"
       },
       "retrieval": {
         "purpose": [
@@ -4921,9 +4922,10 @@
         "item_id": "discipline.sleep_discipline.002",
         "content_class": "discipline",
         "type": "sleep_discipline",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.sleep.discipline"
+        "seed_cell": "need.sleep.discipline",
+        "technique_id": "technique.sleep_discipline"
       },
       "retrieval": {
         "purpose": [
@@ -7400,9 +7402,10 @@
         "item_id": "discipline.sleep_discipline.003",
         "content_class": "discipline",
         "type": "sleep_discipline",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.sleep.discipline"
+        "seed_cell": "need.sleep.discipline",
+        "technique_id": "technique.sleep_discipline"
       },
       "retrieval": {
         "purpose": [

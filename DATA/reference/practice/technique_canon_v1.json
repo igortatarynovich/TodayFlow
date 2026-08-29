@@ -297,6 +297,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.sleep_discipline",
+      "content_class": "discipline",
+      "type": "sleep_discipline",
+      "canonical_description": "A short-period behavioral rule in which the person chooses a fixed latest bedtime and commits to lying down by that time for a set number of consecutive days. The rule is about schedule consistency, not about forcing sleep, changing sleep duration, or managing insomnia. It is a lightweight, self-administered discipline rather than a full sleep-hygiene or CBT-I protocol.",
+      "source_refs": [
+        {
+          "source": "Mayo Clinic — Sleep tips: 6 steps to better sleep",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/in-depth/sleep/art-20048379",
+          "locus": "Stick to a sleep schedule: go to bed and get up at the same time every day, including weekends; being consistent reinforces the body's sleep-wake cycle.",
+          "note": "clinical_medicine. Method confirmation for fixed bedtime consistency as a sleep discipline. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Insomnia treatment: Cognitive behavioral therapy instead of sleeping pills",
+          "url": "https://www.mayoclinic.org/diseases-conditions/insomnia/in-depth/insomnia-treatment/art-20046677",
+          "locus": "CBT-I includes changing routine: set a consistent bedtime and wake time; avoid naps; use the bed only for sleep and sex; if unable to fall asleep within 20 minutes, leave the bedroom and return when sleepy while maintaining the wake-up time.",
+          "note": "clinical_medicine. Method confirmation for consistent sleep schedule as a behavioral rule. Treatment claims not imported."
+        },
+        {
+          "source": "NHS inform — Sleep hygiene",
+          "url": "https://www.nhsinform.scot/mind-to-mind/sleeping-better/sleep-hygiene/",
+          "locus": "Regular sleep routine: go to bed and wake up at the same time every day; spend time winding down before bedtime; consistent habits improve the sleep routine.",
+          "note": "official_health. Method confirmation for regular bedtime routine. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for insomnia or any sleep disorder.",
+        "If sleep problems persist, consult a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
