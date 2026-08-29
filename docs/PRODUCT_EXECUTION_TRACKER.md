@@ -28,6 +28,15 @@ Status: Active working document
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
 
+## Architecture impact — Display Inventory v1.1 + construction grammar (2026-08-29)
+
+- **SoT before:** Display Inventory v1 listed slots with provenance and length, but construction rules were implied. FE could still treat JSON fields as “show something pretty.” Generated text was not explicitly barred from becoming a sixth meaning source.
+- **SoT after:** `DISPLAY_CONSTRUCTION_GRAMMAR_V1` is the shared law (chain calc→authority→composition→named slot→Inventory→projection→UI). Inventories v1.1 make every visible atom a five-constraint record (`existence`, `authority`, `inputs`, `semantic role`, `presentation budget`) plus empty→omit. Generated slots formulate only `allowed_inputs`; `may_llm_add_meaning` is forbidden. FE may `clip` / `map_label` / `hide_by_gate` only. `why_personal` may feed `T3.focus_body` only, not `T3.headline`. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
+- **Public contract changed?** no JSON. Display rules only.
+- **Migration required?** no runtime. UI cutover still waits; named code drift stays named, not canonized.
+- **Canon updated?** yes — `docs/foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md` · both Display Inventories v1.1 · foundation/profile indexes · Surface Canon / Forms / Product Flow / Pipeline / Six Questions pointers · this tracker.
+- **Backward compatible?** yes for API. UI that invents meaning, extra blocks, or copy on transport failure remains out of frame.
+
 ## Architecture impact — Maps surfaces cleanup (2026-08-29)
 
 - **SoT before:** web-Today had two legacy tracker routes (`/affirmations/tracker`, `/asceticisms/tracker`) alongside the new `/maps/*` surfaces. The legacy pages duplicated tracking functionality and were still linked from the affirmations catalog, asceticisms catalog, and `/tracking/progress` hub. iOS deep-link routing also treated them as calendar-tab paths, diverging from the `/maps/*` profile-tab routing.
@@ -2719,7 +2728,8 @@ Ordered work (aligns with canon §7):
 Use format:
 - `YYYY-MM-DD` | `Area` | `Change` | `Status` | `Notes`
 
-:- 2026-08-29 | Practices / Canon | **Library fill: capability sourced** | **ACCEPTED** | need.confidence.open closed with `affirmation.capability` (realistic first-person coping statement; CBT/REBT rational coping statement + NHS inform). `affirmation.self_trust` skipped (source gap). Next cell = need.release.release. No new type. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: capability sourced** | **ACCEPTED** | need.confidence.open closed with `affirmation.capability` (realistic first-person coping statement; CBT/REBT rational coping statement + NHS inform). `affirmation.self_trust` skipped (source gap). Next cell = need.release.release. No new type. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Profile + Today / Canon | **Display inventory v1.1 (five-constraint contracts)** | **ACCEPTED** | Construction grammar locked. Inventories rewritten as full slot records (`one_question`, `allowed_inputs`, `forbidden_inference`, persist key, anti-dupe). Generated ≠ semantic authority. UI cutover still waits. Meaning SoT unchanged. [DISPLAY_CONSTRUCTION_GRAMMAR_V1](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) · [PROFILE_DISPLAY_INVENTORY_V1](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [TODAY_DISPLAY_INVENTORY_V1](./today/TODAY_DISPLAY_INVENTORY_V1.md).
 
 Historical note:
 - older entries may mention the legacy `5-section` IA model;

@@ -62,16 +62,6 @@ export default function ProgressTrackerHubPage() {
       desc: fc.trackingProgressCardQuickAsceticDesc,
     },
     {
-      href: "/asceticisms/tracker",
-      title: fc.trackingProgressCardAsceticClassicTitle,
-      desc: fc.trackingProgressCardAsceticClassicDesc,
-    },
-    {
-      href: "/affirmations/tracker",
-      title: fc.trackingProgressCardAffirmationsTitle,
-      desc: fc.trackingProgressCardAffirmationsDesc,
-    },
-    {
       href: "/habits",
       title: fc.trackingProgressCardHabitsListTitle,
       desc: fc.trackingProgressCardHabitsListDesc,

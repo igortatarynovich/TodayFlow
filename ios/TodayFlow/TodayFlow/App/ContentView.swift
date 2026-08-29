@@ -197,9 +197,18 @@ private struct MainTabShellView: View {
             return
         }
         if path.hasPrefix("/flow")
-            || path.hasPrefix("/tracking/calendar") || path.hasPrefix("/calendar") || path.hasPrefix("/asceticisms/tracker")
-            || path.hasPrefix("/affirmations/tracker") {
+            || path.hasPrefix("/tracking/calendar") || path.hasPrefix("/calendar") {
             selectedTab = .calendar
+            return
+        }
+        if path.hasPrefix("/asceticisms/tracker") {
+            selectedTab = .profile
+            store.requestMapNavigation(.ascetic)
+            return
+        }
+        if path.hasPrefix("/affirmations/tracker") {
+            selectedTab = .profile
+            store.requestMapNavigation(.wish)
             return
         }
         if path.hasPrefix("/tracking/progress") || path.hasPrefix("/maps") || path.hasPrefix("/habits") {
