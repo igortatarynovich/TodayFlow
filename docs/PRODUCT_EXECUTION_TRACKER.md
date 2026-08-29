@@ -4,7 +4,9 @@ Last updated: 2026-08-29
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (DEPLOY RUNBOOK, 2026-08-29):** Phase 4.2 closed. Production deploy runbook implemented at `docs/operations/DEPLOY_RUNBOOK_V1.md`. GitHub Actions `.github/workflows/deploy.yml` now runs a real CI gate: backend tests, frontend build, Docker Compose config validation, and production image builds. It does not auto-deploy to the live host; deploy remains manual per the runbook. The live server is the source of truth, not GitHub. Compose validation and image builds tested on the host. Next: any remaining non-LLM launch-readiness item, or billing top-up to unblock the LLM-dependent audits and COGS baseline.
+**NOW (EVENING TIME GATE, 2026-08-29):** Phase 2.3 closed. Evening close is now a time-gated surface in the product-foundation screen flow. `TodayProductScreenFlow` accepts `showEvening`; when false, the evening step is removed from the scroll, indices/dots are recomputed, and preceding steps no longer label a next step as evening. `TodayCompositionSurface` sets `showEvening = eveningMode || getTimeOfDayByHour() === "evening"`, so morning/day scrolls do not show the evening block. Tests updated and green; frontend production build passes. Audit doc: `docs/audits/EVENING_TIME_GATE_2026-08-29.md`. Next: remaining non-LLM launch-readiness items (Phase 2.1 FE cutover, Phase 3.4 Maps cleanup, Practice Library fill) or billing top-up to unblock LLM-dependent audits.
+
+**NOW (DEPLOY RUNBOOK, 2026-08-29):** Phase 4.2 closed. Production deploy runbook implemented at `docs/operations/DEPLOY_RUNBOOK_V1.md`. GitHub Actions `.github/workflows/deploy.yml` rewrite is in local diff but could not be pushed due to missing `workflow` OAuth scope; the runbook documents the manual deploy process and satisfies the acceptance criteria. Compose validation and image builds tested on the host. Next: any remaining non-LLM launch-readiness item, or billing top-up to unblock the LLM-dependent audits and COGS baseline.
 
 **NOW (PROVENANCE, 2026-08-28):** Phase 2.5 closed. Every Tarot/Compatibility generation log that consumes the Personal Model now carries `core_profile_snapshot_id`. Tarot `POST /spread/context` already had it; `GET /tarot/daily/explain` fallback passes `latest_snapshot.id`. The Compatibility dynamics LLM surface (`services/compatibility_llm.py::generate_llm_product_surface`) previously dropped the snapshot id; it now accepts and logs it, plumbed through `services/generation_orchestrator.py` and `services/compatibility_enrichment_v0.py`. Compatibility background job also writes the snapshot id into the job result payload. Audit doc: `docs/audits/TAROT_COMPAT_PROVENANCE_2026-08-28.md`. Tests: `test_compat_generation_provenance_v1.py` + `test_tarot_spread_context_provenance_v1.py` (3 passed). Next: Phase 2.6 Profile Selection audit (still blocked on K3/billing top-up) or G2 gate work.
 
@@ -24,6 +26,15 @@ Status: Active working document
 - **Migration required?** no. Existing deployments continue; future deploys should follow the runbook.
 - **Canon updated?** yes — `docs/operations/DEPLOY_RUNBOOK_V1.md` · this tracker · `docs/status/RELEASE_PLAN_V1.md` · `README.md` §Public deployment.
 - **Backward compatible?** yes. The CI workflow only adds validation; it does not change runtime behavior or contracts.
+
+## Architecture impact — Evening time-gated surface (2026-08-29)
+
+- **SoT before:** the product-foundation screen flow (`today` → `ritual` → `my_day` → `evening`) always rendered the evening step, so a morning/day scroll could land on or preview the evening close block.
+- **SoT after:** `TodayProductScreenFlow` is now gated by `showEvening`. `TodayCompositionSurface` sets `showEvening = eveningMode || getTimeOfDayByHour() === "evening"`. The evening step is hidden from the scroll during morning/day; indices, dot counts, and next-button labels are recomputed. The canonical four-surface model is unchanged; the gate is a presentation-layer decision.
+- **Public contract changed?** no — the same `/today/contract` payload is returned; only the FE scroll order changes.
+- **Migration required?** no. Cached day nests keep the same shape.
+- **Canon updated?** yes — `docs/audits/EVENING_TIME_GATE_2026-08-29.md` · this tracker · `docs/status/RELEASE_PLAN_V1.md`.
+- **Backward compatible?** yes for API and data. UI behavior changes only when local time is not evening.
 
 ## Architecture impact — Caller audit / LLM-on-read (2026-08-28)
 

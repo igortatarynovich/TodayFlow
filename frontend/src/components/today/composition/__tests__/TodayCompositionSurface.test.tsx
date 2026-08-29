@@ -43,6 +43,13 @@ jest.mock("@/lib/todayDayGreeting", () => ({
 
 import { resolveTodayDayPhase } from "@/lib/todayDayGreeting";
 
+jest.mock("@/lib/time-of-day", () => ({
+  ...jest.requireActual("@/lib/time-of-day"),
+  getTimeOfDayByHour: jest.fn(() => "evening"),
+}));
+
+import { getTimeOfDayByHour } from "@/lib/time-of-day";
+
 const sampleContract: TodayContractV1 = {
   contract_version: "today_contract_v1",
   global_context: { period: "День ясности — спокойный ритм и одна главная линия." },
@@ -574,5 +581,13 @@ describe("TodayCompositionSurface", () => {
     expect(screen.queryByTestId("ritual-tarot-pick-grid")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-growth")).not.toBeInTheDocument();
     (resolveTodayDayPhase as jest.Mock).mockReturnValue("morning");
+  });
+
+  it("hides evening frame outside evening time and still shows today/day", () => {
+    (getTimeOfDayByHour as jest.Mock).mockReturnValue("morning");
+    render(<TodayCompositionSurface {...baseProps} variant="default" />);
+    expect(screen.queryByTestId("today-frame-evening")).not.toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
+    (getTimeOfDayByHour as jest.Mock).mockReturnValue("evening");
   });
 });

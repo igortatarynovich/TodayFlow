@@ -22,6 +22,8 @@ import { fetchDayFacts } from "@/lib/todayDayFacts";
 export type TodayScreenFlowLayout = {
   showSymbols: boolean;
   showMyDay: boolean;
+  /** When false, the evening close step is hidden from the scroll (time-gated surface). Default true. */
+  showEvening?: boolean;
 };
 
 export type TodaySixBlockIndices = {
@@ -61,6 +63,8 @@ export type TodayProductScreenFlowProps = {
   showMyDay?: boolean;
   /** @deprecated ignored — first-today uses ConversationThread, not a 1-step collapse */
   showPersonalized?: boolean;
+  /** When false, the evening close step is hidden from the scroll (time-gated surface). Default true. */
+  showEvening?: boolean;
   dayBody?: ReactNode;
   /** @deprecated orientation folded; timeline lives on my_day */
   orientationBody?: ReactNode;
@@ -105,11 +109,12 @@ export type TodayProductScreenFlowProps = {
 export function todayHandoffIndices(layout: TodayScreenFlowLayout): TodaySixBlockIndices {
   const showSymbols = Boolean(layout.showSymbols);
   const showMyDay = Boolean(layout.showMyDay);
+  const showEvening = layout.showEvening !== false;
   let n = 0;
   const today = n++;
   const ritual = showSymbols ? n++ : -1;
   const myDay = showMyDay ? n++ : -1;
-  const evening = n++;
+  const evening = showEvening ? n++ : -1;
   return {
     today,
     ritual,
@@ -141,36 +146,62 @@ export function todayScreenFlowStepCount(opts: {
   showMyDay?: boolean;
   /** @deprecated ignored */
   showPersonalized?: boolean;
+  showEvening?: boolean;
 }): number {
-  return 1 + (opts.showSymbols ? 1 : 0) + (opts.showMyDay ? 1 : 0) + 1;
+  const showEvening = opts.showEvening !== false;
+  return 1 + (opts.showSymbols ? 1 : 0) + (opts.showMyDay ? 1 : 0) + (showEvening ? 1 : 0);
 }
 
-function layoutFromSymbols(showSymbols: boolean, showMyDay = true): TodayScreenFlowLayout {
-  return { showSymbols, showMyDay };
+function layoutFromSymbols(
+  showSymbols: boolean,
+  showMyDay = true,
+  showEvening = true,
+): TodayScreenFlowLayout {
+  return { showSymbols, showMyDay, showEvening };
 }
 
-export function todayScreenFlowReadingIndex(showSymbols: boolean, showMyDay = true): number {
-  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).instruction;
+export function todayScreenFlowReadingIndex(
+  showSymbols: boolean,
+  showMyDay = true,
+  showEvening = true,
+): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay, showEvening)).instruction;
 }
 
 export function todayScreenFlowSymbolsIndex(): number {
   return todayHandoffIndices({ showSymbols: true, showMyDay: false }).rituals;
 }
 
-export function todayScreenFlowAttributesIndex(showSymbols: boolean, showMyDay = true): number {
-  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).color;
+export function todayScreenFlowAttributesIndex(
+  showSymbols: boolean,
+  showMyDay = true,
+  showEvening = true,
+): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay, showEvening)).color;
 }
 
-export function todayScreenFlowPracticeIndex(showSymbols: boolean, showMyDay = true): number {
-  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).tasks;
+export function todayScreenFlowPracticeIndex(
+  showSymbols: boolean,
+  showMyDay = true,
+  showEvening = true,
+): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay, showEvening)).tasks;
 }
 
-export function todayScreenFlowInsightIndex(showSymbols: boolean, showMyDay = true): number {
-  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).loop;
+export function todayScreenFlowInsightIndex(
+  showSymbols: boolean,
+  showMyDay = true,
+  showEvening = true,
+): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay, showEvening)).loop;
 }
 
-export function todayScreenFlowCloseIndex(showSymbols: boolean, showMyDay = true): number {
-  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay)).loop;
+export function todayScreenFlowCloseIndex(
+  showSymbols: boolean,
+  showMyDay = true,
+  showEvening = true,
+): number {
+  return todayHandoffIndices(layoutFromSymbols(showSymbols, showMyDay, showEvening)).loop;
 }
 
 function SlotStep({
@@ -220,6 +251,7 @@ export function TodayProductScreenFlow({
   dateISO,
   showSymbols,
   showMyDay = false,
+  showEvening = true,
   symbolsBody = null,
   numberBody = null,
   cardBody = null,
@@ -242,10 +274,10 @@ export function TodayProductScreenFlow({
   greetingSection = null,
 }: TodayProductScreenFlowProps) {
   const go = (index: number) => onIndexChange(index, { reason: "select" });
-  const flowLayout = { showSymbols, showMyDay };
+  const flowLayout = { showSymbols, showMyDay, showEvening };
   const idx = todayHandoffIndices(flowLayout);
   const showChrome = activeIndex > 0;
-  const extraDots = (showSymbols ? 1 : 0) + (showMyDay ? 1 : 0) + 1;
+  const extraDots = (showSymbols ? 1 : 0) + (showMyDay ? 1 : 0) + (showEvening ? 1 : 0);
   const dotClusters = Array.from({ length: extraDots }, () => 1);
   const instruction = instructionBody ?? focusBody;
   const numberSlot = numberBody ?? (showSymbols ? symbolsBody : null);
@@ -261,9 +293,24 @@ export function TodayProductScreenFlow({
     );
   const eveningSlot = eveningBody ?? promiseBody;
 
-  const afterToday = showSymbols ? idx.ritual : showMyDay ? idx.myDay : idx.evening;
-  const afterRitual = showMyDay ? idx.myDay : idx.evening;
-  const afterMyDay = idx.evening;
+  const eveningIndex = idx.evening;
+  const afterToday = showSymbols ? idx.ritual : showMyDay ? idx.myDay : eveningIndex;
+  const afterRitual = showMyDay ? idx.myDay : eveningIndex;
+  const afterMyDay = eveningIndex;
+  const nextFromDayTitle = showSymbols
+    ? copy.storyNext.rituals
+    : showMyDay
+      ? copy.storyNext.myDay
+      : copy.storyNext.evening;
+  const nextFromDayHint = showSymbols
+    ? copy.storyNext.ritualsHint
+    : showMyDay
+      ? copy.storyNext.myDayHint
+      : copy.storyNext.eveningHint;
+  const nextFromRitualTitle = showMyDay ? copy.storyNext.myDay : copy.storyNext.evening;
+  const nextFromRitualHint = showMyDay ? copy.storyNext.myDayHint : copy.storyNext.eveningHint;
+  const nextFromMyDayTitle = showEvening ? copy.storyNext.evening : copy.storyNext.evening;
+  const nextFromMyDayHint = showEvening ? copy.storyNext.eveningHint : undefined;
   const ritualComplete = Boolean(ritualCardOpen && ritualNumberOpen && ritualResultBody);
   const ritualState = ritualNumberOpen ? "open" : ritualCardOpen ? "card" : "closed";
   const ritualEyebrow = ritualNumberOpen
@@ -301,20 +348,8 @@ export function TodayProductScreenFlow({
             wide
             compactTop
             hideNext
-            nextTitle={
-              showSymbols
-                ? copy.storyNext.rituals
-                : showMyDay
-                  ? copy.storyNext.myDay
-                  : copy.storyNext.evening
-            }
-            nextHint={
-              showSymbols
-                ? copy.storyNext.ritualsHint
-                : showMyDay
-                  ? copy.storyNext.myDayHint
-                  : copy.storyNext.eveningHint
-            }
+            nextTitle={nextFromDayTitle}
+            nextHint={nextFromDayHint}
             onNext={() => go(afterToday)}
           >
             {dayBody}
@@ -353,8 +388,8 @@ export function TodayProductScreenFlow({
                   )}
                 </div>
                 <StoryNextAnchor
-                  title={showMyDay ? copy.storyNext.myDay : copy.storyNext.evening}
-                  hint={showMyDay ? copy.storyNext.myDayHint : copy.storyNext.eveningHint}
+                  title={nextFromRitualTitle}
+                  hint={nextFromRitualHint}
                   onNext={() => go(afterRitual)}
                 />
               </div>
@@ -367,8 +402,9 @@ export function TodayProductScreenFlow({
             <SlotStep
               testId="today-frame-my-day"
               eyebrow={copy.storyNext.myDay}
-              nextTitle={copy.storyNext.evening}
-              nextHint={copy.storyNext.eveningHint}
+              nextTitle={nextFromMyDayTitle}
+              nextHint={nextFromMyDayHint}
+              hideNext={!showEvening}
               onNext={() => go(afterMyDay)}
             >
               {composedMyDay}
@@ -376,15 +412,17 @@ export function TodayProductScreenFlow({
           </ScreenFlowStep>
         ) : null}
 
-        <ScreenFlowStep id="evening" label={copy.storyNext.evening} scrollable>
-          <div className={sfStyles.storyFrame} data-testid="today-frame-evening" data-story-scroll="pane">
-            <div className={sfStyles.slotStack}>
-              <DsEyebrow>{copy.storyNext.evening}</DsEyebrow>
-              <DsHeadline as="h2">{copy.eveningGratitudeTitle}</DsHeadline>
-              <div className={sfStyles.slotBody}>{eveningSlot}</div>
+        {showEvening ? (
+          <ScreenFlowStep id="evening" label={copy.storyNext.evening} scrollable>
+            <div className={sfStyles.storyFrame} data-testid="today-frame-evening" data-story-scroll="pane">
+              <div className={sfStyles.slotStack}>
+                <DsEyebrow>{copy.storyNext.evening}</DsEyebrow>
+                <DsHeadline as="h2">{copy.eveningGratitudeTitle}</DsHeadline>
+                <div className={sfStyles.slotBody}>{eveningSlot}</div>
+              </div>
             </div>
-          </div>
-        </ScreenFlowStep>
+          </ScreenFlowStep>
+        ) : null}
       </ScreenFlow>
     </div>
   );

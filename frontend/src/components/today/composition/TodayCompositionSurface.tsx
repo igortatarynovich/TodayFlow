@@ -76,6 +76,7 @@ import {
 } from "@/lib/todayCompositionZones";
 import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
 import { useAuth } from "@/lib/useAuth";
+import { getTimeOfDayByHour } from "@/lib/time-of-day";
 import {
   fetchDaySymbolState,
   revealDayCard,
@@ -230,6 +231,8 @@ export function TodayCompositionSurface(props: Props) {
   const reduceMotion = useReduceMotion();
 
   const [eveningMode, setEveningMode] = useState(false);
+  const isEveningTime = useMemo(() => getTimeOfDayByHour() === "evening", []);
+  const showEvening = eveningMode || isEveningTime;
   const [hydrated, setHydrated] = useState(false);
   const [reactionReady, setReactionReady] = useState(() =>
     typeof window === "undefined" ? !isFirstToday : !isFirstToday || firstTodayReactionComplete(),
@@ -405,8 +408,8 @@ export function TodayCompositionSurface(props: Props) {
   const showMyDayAct = useProductFoundation && screenCapability.myDay;
   const showPersonalTimeline = showMyDayAct && screenCapability.personalTimeline;
   const screenFlowLayout = useMemo(
-    () => ({ showSymbols: showSymbolsAct, showMyDay: showMyDayAct }),
-    [showSymbolsAct, showMyDayAct],
+    () => ({ showSymbols: showSymbolsAct, showMyDay: showMyDayAct, showEvening }),
+    [showSymbolsAct, showMyDayAct, showEvening],
   );
 
   useEffect(() => {
@@ -417,9 +420,10 @@ export function TodayCompositionSurface(props: Props) {
     const stepCount = todayScreenFlowStepCount({
       showSymbols: showSymbolsAct,
       showMyDay: showMyDayAct,
+      showEvening,
     });
     setScreenFlowIndex(resolveScreenFlowEntryIndex({ searchParams: sp, stepCount }));
-  }, [useProductFoundation, showSymbolsAct, showMyDayAct]);
+  }, [useProductFoundation, showSymbolsAct, showMyDayAct, showEvening]);
 
   const onScreenFlowIndexChange = useCallback(
     (index: number, meta: { reason: ScreenFlowChangeReason }) => {
@@ -439,7 +443,7 @@ export function TodayCompositionSurface(props: Props) {
   const goToNextFromToday = useCallback(() => {
     const idx = todayHandoffIndices(screenFlowLayout);
     const next =
-      idx.ritual >= 0 ? idx.ritual : idx.myDay >= 0 ? idx.myDay : idx.evening;
+      idx.ritual >= 0 ? idx.ritual : idx.myDay >= 0 ? idx.myDay : idx.evening >= 0 ? idx.evening : 0;
     onScreenFlowIndexChange(next, { reason: "select" });
   }, [onScreenFlowIndexChange, screenFlowLayout]);
 
@@ -1162,7 +1166,7 @@ export function TodayCompositionSurface(props: Props) {
         return;
       }
       if (useProductPersonalized) {
-        const practiceIndex = todayScreenFlowPracticeIndex(showSymbolsAct, showMyDayAct);
+        const practiceIndex = todayScreenFlowPracticeIndex(showSymbolsAct, showMyDayAct, showEvening);
         if (practiceIndex >= 0) setScreenFlowIndex(practiceIndex);
       }
     },
@@ -1172,6 +1176,7 @@ export function TodayCompositionSurface(props: Props) {
       recommendedPractice?.id,
       showSymbolsAct,
       showMyDayAct,
+      showEvening,
       trackMeaningEvent,
       useProductPersonalized,
     ],
@@ -1346,7 +1351,7 @@ export function TodayCompositionSurface(props: Props) {
     setPreferredDepthTopic(target.depthTopic);
     setAutoPickDepthTopic(Boolean(target.depthTopic));
     if (useProductPersonalized) {
-      const readingIndex = todayScreenFlowReadingIndex(showSymbolsAct, showMyDayAct);
+      const readingIndex = todayScreenFlowReadingIndex(showSymbolsAct, showMyDayAct, showEvening);
       if (readingIndex >= 0) setScreenFlowIndex(readingIndex);
     } else {
       document
@@ -1371,6 +1376,7 @@ export function TodayCompositionSurface(props: Props) {
     engagement.focusTopicId,
     showSymbolsAct,
     showMyDayAct,
+    showEvening,
     trackMeaningEvent,
     useProductPersonalized,
   ]);
@@ -2233,6 +2239,7 @@ export function TodayCompositionSurface(props: Props) {
       dayBody={dayStoryBrief}
       showSymbols={showSymbolsAct}
       showMyDay={showMyDayAct}
+      showEvening={showEvening}
       ritualCardOpen={ritualCardOpen}
       ritualNumberOpen={ritualNumberOpen}
       ritualResultBody={
