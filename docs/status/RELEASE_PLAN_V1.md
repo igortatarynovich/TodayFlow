@@ -109,7 +109,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | # | Task | Acceptance Criteria | Depends On |
 |---|------|---------------------|------------|
 | 4.1 | Update stale launch docs | `WEB_LAUNCH_EXECUTION_PLAN.md` archived or marked SUPERSEDED; this plan current | G2 |
-| 4.2 | Production deploy runbook | Either `deploy.yml` is real or manual `docker compose` steps documented | G3 |
+| 4.2 | Production deploy runbook | Manual deploy runbook documented (`docs/operations/DEPLOY_RUNBOOK_V1.md`); `.github/workflows/deploy.yml` validates tests, frontend build, and compose/image build | G3 |
 | 4.3 | Monitoring live | Alerts for 402s, `/today` availability, LLM daily spend, behavior test metrics | G0 |
 | 4.4 | Final QA | All CI green, server check on live, open critical issues = 0 | 4.1–4.3 |
 | 4.5 | Go / no-go decision | Recorded in `PRODUCT_EXECUTION_TRACKER.md` | 4.4 |
@@ -148,3 +148,4 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 2026-08-28 | Task 2.5 Provenance closed; `core_profile_snapshot_id` plumbed through Tarot/Compatibility generation logs; audit doc added. |
 | 2026-08-28 | Profile Selection Engine connections: deterministic object→topic mapping (planets/houses/angles/signs) + tests; audit doc added. |
 | 2026-08-29 | Profile Selection K3 usage audit harness implemented; blocked on live K3 run until billing top-up. |
+| 2026-08-29 | Phase 4.2 Production deploy runbook implemented: `docs/operations/DEPLOY_RUNBOOK_V1.md`; `.github/workflows/deploy.yml` now validates backend tests, frontend build, compose config, and image builds. |
