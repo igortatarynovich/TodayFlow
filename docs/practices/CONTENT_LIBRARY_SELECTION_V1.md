@@ -92,6 +92,8 @@ class ContentSelection:
 
 ## 4. Usage
 
+### Service
+
 ```python
 from todayflow_backend.services.content_library_selection_v1 import (
     NeedQuery, select_content_item
@@ -101,6 +103,23 @@ q = NeedQuery(purpose="sleep", direction="prepare", input_state=["restless"])
 selection = select_content_item(q)
 assert selection.item_id == "meditation.sleep.001"
 ```
+
+### Endpoint
+
+`GET /practices/select?purpose=sleep&direction=prepare&input_state=restless`
+
+Parameters:
+- `purpose` (required)
+- `direction` (required)
+- `input_state` — comma-separated
+- `context` — comma-separated
+- `duration` — preferred session length
+- `energy_effect` — `up` | `down` | `neutral`
+- `content_class` — `practice` | `meditation` | `affirmation` | `discipline`
+- `type` — item type code
+- `locale` — `ru` (default) | `en`
+
+Response: `ContentItemSelectResponse` (item_id, title, body, outcome_label, reason, matched).
 
 ---
 

@@ -155,4 +155,4 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 | 2026-08-29 | Phase 3.4 Maps surfaces cleanup: orphan `/affirmations/tracker` and `/asceticisms/tracker` removed; redirects to `/maps/wish` and `/maps/ascetic`; links and iOS deep-link routing updated. |
 || 2026-08-29 | Practice Library fill progress: `need.sleep.discipline` sourced via `technique.sleep_discipline`; 10/26 P0 cells covered; next cell `need.motivation.activate`. |
 | 2026-08-29 | Practice Library fill progress: `need.sleep.prepare` sourced via `technique.sleep`; 9/26 P0 cells covered; next cell `need.sleep.discipline`. |
-|| 2026-08-29 | Content Library Selection v1: deterministic need→item selector (no LLM/no randomness) implemented in `services/content_library_selection_v1.py`; 12 tests passed; canon doc added. |
+|| 2026-08-29 | Content Library Selection v1: deterministic need→item selector implemented in `services/content_library_selection_v1.py`; exposed as `GET /practices/select`; 12 + 5 tests passed; canon doc added. |
