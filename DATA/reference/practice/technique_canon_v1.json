@@ -265,6 +265,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.sleep",
+      "content_class": "meditation",
+      "type": "sleep",
+      "canonical_description": "A brief pre-sleep meditation in which the person lies down, closes the eyes, and directs attention to one small area of physical tension (for example the jaw) while breathing out slowly. The goal is to wind down and signal readiness for sleep, not to force sleep or perform a full body scan. It is used as a short, repeatable part of a relaxing bedtime routine.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Sleep hygiene",
+          "url": "https://www.nhsinform.scot/mind-to-mind/sleeping-better/sleep-hygiene/",
+          "locus": "Spend time winding down before bedtime; while meditation and mindfulness is not for everyone, find a way to relax that gives a sense of peace and calm; some people find a bath or shower before bed helps.",
+          "note": "official_health. Method confirmation for wind-down / relaxation as part of sleep preparation. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic Health System — 5 ways to get better sleep",
+          "url": "https://www.mayoclinichealthsystem.org/hometown-health/speaking-of-health/5-ways-to-get-better-sleep",
+          "locus": "Adults sleep better with a bedtime routine; do the same thing before bed each night to prepare the body for rest; stick to activities that promote relaxation, such as gentle stretching, reading, or meditation.",
+          "note": "clinical_medicine. Method confirmation for a bedtime relaxation routine. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS inform — Insomnia",
+          "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/insomnia/",
+          "locus": "Improve sleep hygiene by creating a relaxing bedtime routine; if you can't sleep, get up and do a relaxing activity, then return when sleepy.",
+          "note": "official_health. Method confirmation for relaxing activity before/during sleep attempts. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for insomnia or any sleep disorder.",
+        "If sleep problems persist, consult a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

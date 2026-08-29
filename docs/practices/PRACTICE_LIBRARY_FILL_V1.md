@@ -69,7 +69,7 @@ status                    accepted | skipped
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation` = `accepted`. Sourced 8/26. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.sleep.prepare`. Не открывать Safety Review V1.1.
+**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep` = `accepted`. Sourced 9/26. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.sleep.discipline`. Не открывать Safety Review V1.1.
 
 ---
 
@@ -87,6 +87,7 @@ status                    accepted | skipped
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-29 | Sleep-prepare cell sourced via `sleep`. `technique.sleep` accepted from NHS inform sleep hygiene + Mayo Clinic Health System sleep tips + NHS inform insomnia page. Brief pre-sleep meditation (soften jaw on out-breath). Next = `need.sleep.discipline`. |
 | 2026-08-29 | Rest cell sourced via `relaxation`. `technique.relaxation` accepted from CUH NHS systematic focusing + Mayo Clinic relaxation techniques + NHS inform progressive muscle relaxation. Brief body-focused relaxation (heavy hands). Next = `need.sleep.prepare`. |
 | 2026-08-29 | Release cell sourced via `body_release`. `technique.body_release` accepted from NHS inform progressive muscle relaxation + Mayo Clinic + NCBI StatPearls. Abbreviated single-area tension-release (shoulders). Next = `need.rest.downregulate`. |
 | 2026-08-29 | Confidence cell sourced via `capability`. `technique.capability` accepted from CBT/REBT rational coping-statement method + NHS inform anxiety guide. `affirmation.self_trust` skipped (source gap). Next = `need.release.release`. |

@@ -167,12 +167,12 @@ Status: Active working document
 - **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
 - **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
 
-**NOW (PRACTICES / CANON, 2026-08-29):** **Library fill** — next cell `need.sleep.prepare`. Sourced 8/26. Latest: `need.rest.downregulate` via `relaxation` (brief body-focused relaxation / heavy hands; CUH NHS systematic focusing + Mayo Clinic relaxation techniques + NHS inform progressive muscle relaxation). `box_breathing`, `energizing_breath`, and `self_trust` skipped. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+**NOW (PRACTICES / CANON, 2026-08-29):** **Library fill** — next cell `need.sleep.discipline`. Sourced 9/26. Latest: `need.sleep.prepare` via `sleep` (brief pre-sleep meditation / soften jaw on out-breath; NHS inform sleep hygiene + Mayo Clinic Health System sleep tips + NHS inform insomnia page). `box_breathing`, `energizing_breath`, and `self_trust` skipped. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md). Meaning still does not emit `item_id` or `technique_id`.
 
 ## Architecture impact — Practice Library Fill / research collapse (2026-08-26)
 
 - **SoT before:** fill blocked on Landscape → Shortlist → Ingest → Normalization → Targeted* → Safety Review. NOW = Targeted Safety Ingest → Safety Review V1.1. `technique_canon` empty. Fill frozen. One type (`box_breathing`) occupied ten passes.
-- **SoT after:** fill = lightweight provenance (source check → own-words description → safety notes if material → accepted/skipped → Content Item). Research ladder = archive, non-blocking. `box_breathing` = `skipped_for_now`. Next Product = library fill at `need.sleep.prepare`. 133 items remain `llm_provisional`. Taxonomy classes/types, coverage cells, item contract field groups, and Meaning boundary unchanged.
+- **SoT after:** fill = lightweight provenance (source check → own-words description → safety notes if material → accepted/skipped → Content Item). Research ladder = archive, non-blocking. `box_breathing` = `skipped_for_now`. Next Product = library fill at `need.sleep.discipline`. 133 items remain `llm_provisional`. Taxonomy classes/types, coverage cells, item contract field groups, and Meaning boundary unchanged.
 - **Public contract changed?** no
 - **Migration required?** no runtime. Existing items stay provisional without `technique_id`.
 - **Canon updated?** yes — [PRACTICE_LIBRARY_FILL_V1.md](./practices/PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./practices/PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md) · provenance 1.12 · technique canon contract 1.1 · coverage next_pass · landscape 1.6 pointer · `_INDEX` · README · this tracker
@@ -2750,6 +2750,7 @@ Ordered work (aligns with canon §7):
 Use format:
 - `YYYY-MM-DD` | `Area` | `Change` | `Status` | `Notes`
 
+- 2026-08-29 | Practices / Canon | **Library fill: sleep sourced** | **ACCEPTED** | need.sleep.prepare closed with `meditation.sleep` (brief pre-sleep meditation / soften jaw on out-breath; NHS inform sleep hygiene + Mayo Clinic Health System sleep tips + NHS inform insomnia page). No new type. Meaning/public JSON unchanged. Next cell = need.sleep.discipline. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-08-29 | Practices / Canon | **Library fill: relaxation sourced** | **ACCEPTED** | need.rest.downregulate closed with `meditation.relaxation` (brief body-focused relaxation / heavy hands; CUH NHS systematic focusing + Mayo Clinic relaxation techniques + NHS inform progressive muscle relaxation). No new type. Meaning/public JSON unchanged. Next cell = need.sleep.prepare. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-08-29 | Profile + Today / Canon | **Inventory audit vs journey lock** | **ACCEPTED** | Line-by-line. Profile: help/title out of path_new_value. Today: development_point out of focus_body; lens requires persisted Personal Day; affirmation/practice ≠ Priority. Next = cut named code drift. [PROFILE_DISPLAY_INVENTORY_V1](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) §7 · [TODAY_DISPLAY_INVENTORY_V1](./today/TODAY_DISPLAY_INVENTORY_V1.md) §7.
 
