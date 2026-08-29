@@ -3,6 +3,7 @@
 **Status:** CONDITIONAL PRODUCT SIGN-OFF — samples corrected 2026-07-22; mechanism deltas next  
 **Date:** 2026-07-22  
 **Parent SoT:** [PROFILE_PRODUCT_SURFACE_CANON.md](./PROFILE_PRODUCT_SURFACE_CANON.md)  
+**Display contract (закрытый список слотов и лимитов):** [PROFILE_DISPLAY_INVENTORY_V1.md](./PROFILE_DISPLAY_INVENTORY_V1.md) — samples ниже иллюстрируют Inventory, не расширяют его  
 **Fixtures:** `pq-001` (birth-only, no time) · `pq-007` (living) — `backend/evals/profile_quality/scenarios_v1.json`  
 **Rule:** метрика = человеческая реакция. Не `PASS` по JSON.  
 **Запрет:** выдавать корреляционные признаки за причину результата, которого система не рассчитывала.

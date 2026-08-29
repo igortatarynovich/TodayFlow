@@ -14,6 +14,7 @@
 | Как считаются сырые факты неба/числа? | → [DAY_SOURCES_CANON](../DAY_SOURCES_CANON.md) | подчинён: только facts, не сюжет |
 | Что означает астрологический факт системы (Saturn, square, 7th…)? | → [INTERPRETATION_LIBRARY_V1](../astrology/INTERPRETATION_LIBRARY_V1.md) | step 2 lookup; не канон дня |
 | Как нарезан экран (какие шаги видит человек)? | → [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) | product cycle; не смысл |
+| Что именно написано в каждом блоке (лимит · источник слова)? | → [TODAY_DISPLAY_INVENTORY_V1](./TODAY_DISPLAY_INVENTORY_V1.md) | presentation contract; не смысл |
 | Как выглядят токены/атмосфера? | → [TODAYFLOW_FOUNDATION_UI](../TODAYFLOW_FOUNDATION_UI.md) | visual only |
 | Старый движок conflict/scenes (код сегодня) | → [DAY_SCENARIO_V1](../DAY_SCENARIO_V1.md) | **миграция / hygiene**, не Meaning SoT |
 | B5 «scenario exclusive» | → [DAY_SCENARIO_RUNTIME_SOT_B5](../audits/DAY_SCENARIO_RUNTIME_SOT_B5.md) | **SUPERSEDED** как meaning; runtime note до cutover |
@@ -120,7 +121,7 @@ but may never mutate an upstream semantic decision.
 | Card / number bridge | Personal Day |
 | Color / practice / action | Downstream enrichment |
 | Формулировка текста | Соответствующий Narrative LLM |
-| Что и где показывать | Today presentation contract |
+| Что и где показывать | [TODAY_DISPLAY_INVENTORY_V1](./TODAY_DISPLAY_INVENTORY_V1.md) |
 
 **Не путать:**
 

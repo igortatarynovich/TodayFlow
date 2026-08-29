@@ -3,6 +3,7 @@
 **Status:** ACTIVE — product SoT for `/profile` **reveal journey** (не composition order)  
 **Version:** 1.5.3 (2026-07-27)  
 **Locked forms:** [PROFILE_PRODUCT_JOURNEY_FORMS_V1.md](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md) — **product sign-off YES** (samples corrected); next = mechanism deltas only  
+**Display contract (что на экране · откуда слово · лимит):** [PROFILE_DISPLAY_INVENTORY_V1.md](./PROFILE_DISPLAY_INVENTORY_V1.md) — при конфликте слотов/длины побеждает Inventory  
 **Overrides:** cosmetic V2 polish · next Freeze rows as screen goal · equal-card document as «done»  
 **Composition SoT (выше reveal):** [PROFILE_EXPERIENCE_SCENARIO_V1.md](./PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (не экран); при конфликте «что существует раньше чего» / «кто SoT личности» побеждает Scenario  
 **Parents:** [PRODUCT_BLOCK_SIX_QUESTIONS.md](../PRODUCT_BLOCK_SIX_QUESTIONS.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) · [content/TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md)  
