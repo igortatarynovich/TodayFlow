@@ -465,6 +465,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.creative_prompt",
+      "content_class": "practice",
+      "type": "creative_prompt",
+      "canonical_description": "A brief micro-creativity practice in which the person makes one tiny, low-stakes mark or gesture (for example, one line, one shape, one word) and stops without editing or judging the result. The aim is to shift attention away from rumination or stuckness onto a simple, immediate act of creation; it is not an art exercise, a skill-building session, or a creative-arts therapy protocol.",
+      "source_refs": [
+        {
+          "source": "Mayo Clinic Press — The intersection of art and health: How art can help promote well-being",
+          "url": "https://mcpress.mayoclinic.org/living-well/the-intersection-of-art-and-health-how-art-can-help-promote-well-being/",
+          "locus": "Creating visual art like drawings or paintings can provide enjoyment and distraction from pain and anxiety; artistic expression and appreciation can benefit physical and mental well-being; the process of creating can support well-being without requiring professional art skills.",
+          "note": "clinical_medicine. Method confirmation for a brief, low-stakes act of creating visual art as a well-being practice. Treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Stress relievers: Tips to tame stress",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/stress-relievers/art-20047257",
+          "locus": "If music is not your interest, turn attention to another hobby such as gardening, sewing, reading, or sketching; choose anything that makes you focus on what you are doing rather than what you think you should be doing.",
+          "note": "clinical_medicine. Method confirmation for a brief, focused creative action (sketching) as a distraction/stress-relief practice. Treatment claims not imported."
+        },
+        {
+          "source": "Greater Manchester Mental Health NHS Foundation Trust — Arts for Good Health",
+          "url": "https://www.gmmh.nhs.uk/arts-for-good-health",
+          "locus": "Being creative is good for mental health; Arts for Good Health courses are short, accessible, require no previous experience, and use creativity to boost health and wellbeing.",
+          "note": "official_health. Method confirmation for short, accessible creative activities supporting mental wellbeing. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, or any mental health condition.",
+        "If the practice brings up strong self-criticism or distress, stop and consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

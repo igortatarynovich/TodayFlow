@@ -490,7 +490,7 @@ Evolution action types (`breathing`, `journaling`, `meditation`, …) — сиг
 
 ## 14. Что дальше
 
-1. **Library fill** — [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md). Sourced 14/26. Следующая ячейка: `need.creativity.open`. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`. Не Safety Review V1.1.
+1. **Library fill** — [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md). Sourced 15/26. Следующая ячейка: `need.decision_making.focus`. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`. Не Safety Review V1.1.
 2. Coverage-first архитектура (26 cells, type spine) стоит. 133 items остаются `llm_provisional`, пока fill не перепишет ячейку.
 3. Retrieval runtime **после** accepted techniques + sourced P0 coverage. Meaning по-прежнему без `item_id` / `technique_id`.
 4. Density (P1) и remap legacy `CONTENT/practices/*.json` — только как expressions принятых техник, не вместо provenance.
