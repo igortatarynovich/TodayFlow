@@ -705,6 +705,40 @@
       "note": "No authoritative general short-term abstinence method that applies to any self-chosen behavior was found. Available evidence is substance-specific (e.g., alcohol drink-free days, smoking not-a-puff) and does not generalize to a generic 'thing you named' discipline. Cell need.detachment.release is covered by technique.acceptance. Existing discipline.abstinence.* items remain llm_provisional without technique_id."
     },
     {
+      "technique_id": "technique.consistency_challenge",
+      "content_class": "discipline",
+      "type": "consistency_challenge",
+      "canonical_description": "A short-period discipline rule in which the person chooses one small, specific action and marks it every day for a set number of consecutive days (for example, seven or fourteen), keeping a visible count of the streak. The aim is to use the structure of a short streak and visible progress to support daily repetition; a missed day resets the count but does not erase the underlying practice or the value of repetition. It is not a guarantee of habit formation, a treatment for motivation or attention difficulties, or a long-term behaviour-change programme.",
+      "source_refs": [
+        {
+          "source": "Lally et al. (2010) — How are habits formed: Modelling habit formation in the real world, European Journal of Social Psychology",
+          "url": "https://doi.org/10.1002/ejsp.674",
+          "locus": "Participants carried out a self-chosen behaviour daily in the same context for 84 days; automaticity increased with repetition in a consistent context; missing one opportunity to perform the behaviour did not materially affect the habit-formation process; performing the behaviour more consistently was associated with better model fit.",
+          "note": "academic. Method confirmation for daily repetition of a small, self-chosen action in a consistent context. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Lally & Gardner (2012) — Making health habitual: the psychology of ‘habit-formation’ and general practice, British Journal of General Practice",
+          "url": "https://bjgp.org/content/62/605/664",
+          "locus": "Patients should choose a new target behaviour themselves and repeat it daily in response to a once-daily cue; missing the occasional opportunity to perform the behaviour did not seriously impair the habit-formation process; automaticity gains soon resumed after one missed performance; simple behaviours plateau faster than elaborate ones.",
+          "note": "academic/clinical. Method confirmation for self-chosen, small daily repetition in a stable context. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Scientific American — Why Keeping a Streak Boosts Your Motivation",
+          "url": "https://www.scientificamerican.com/article/why-keeping-a-streak-boosts-your-motivation/",
+          "locus": "A streak adds a higher-level goal (keeping the streak alive) to a lower-level goal (completing the individual activity); streaks add structure to an activity, which can simplify thinking and decision making; a daily streak can be more appealing and lead to more commitment than a weekly streak because it adds structure and simplifies decisions.",
+          "note": "research/popular_science. Method confirmation for a visible daily streak as a motivational structure that simplifies decision making. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, executive dysfunction, depression, anxiety, or any mental or physical health condition.",
+        "A short streak (e.g., seven or fourteen days) does not guarantee automaticity or a lasting habit; habit formation typically takes longer and varies widely between individuals.",
+        "Missing one day is normal and does not erase the value of repeated practice; if the streak feels punitive, distressing, or impossible to maintain, stop or switch to a less rigid rule.",
+        "If the chosen action becomes unsafe, painful, or unsustainable, revise or stop it and consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
