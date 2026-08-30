@@ -38,7 +38,8 @@
     "practice.free_writing.001",
     "practice.morning_ritual.001",
     "practice.evening_ritual.001",
-    "meditation.breath_awareness.001"
+    "meditation.breath_awareness.001",
+    "meditation.body_scan.001"
   ],
   "items": [
     {
@@ -1940,9 +1941,10 @@
         "item_id": "meditation.body_scan.001",
         "content_class": "meditation",
         "type": "body_scan",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.self_connection.reflect"
+        "seed_cell": "need.self_connection.reflect",
+        "technique_id": "technique.body_scan"
       },
       "retrieval": {
         "purpose": [
@@ -3846,9 +3848,10 @@
         "item_id": "meditation.body_scan.002",
         "content_class": "meditation",
         "type": "body_scan",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.self_connection.reflect"
+        "seed_cell": "need.self_connection.reflect",
+        "technique_id": "technique.body_scan"
       },
       "retrieval": {
         "purpose": [
@@ -6347,9 +6350,10 @@
         "item_id": "meditation.body_scan.003",
         "content_class": "meditation",
         "type": "body_scan",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.self_connection.reflect"
+        "seed_cell": "need.self_connection.reflect",
+        "technique_id": "technique.body_scan"
       },
       "retrieval": {
         "purpose": [

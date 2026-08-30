@@ -1021,6 +1021,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.body_scan",
+      "content_class": "meditation",
+      "type": "body_scan",
+      "canonical_description": "A brief meditation in which the person sits and directs attention sequentially through a few body areas (for example, feet, hands, and face), noticing physical sensations in each area without moving or trying to change them. When the mind wanders, the person gently returns attention to the current body area. It is not a relaxation technique, a treatment for pain, trauma, anxiety, or any mental or physical health condition, or a guarantee of calm or focus.",
+      "source_refs": [
+        {
+          "source": "NHS Scotland Right Decisions — The Body Scan (MBSR Week 1 handout)",
+          "url": "https://www.rightdecisions.scot.nhs.uk/health-improvement-staff-mindfulness-programme/mbsr/mbsr-handouts/week-1/6-the-body-scan/",
+          "locus": "We move our attention around the different parts of our body, as a means of anchoring ourselves in the present moment of sensing and experiencing. We will notice how complex the body is – a whole universe of sensation! As we continue to practice the body scan, we will find that we can enhance the awareness of our bodies at different times during our day. We can bring awareness to our posture... noticing any areas of tension and allowing them to release.",
+          "note": "official_health. Method confirmation for moving attention through body areas and noticing sensations. Treatment/relaxation claims not imported."
+        },
+        {
+          "source": "Guy's and St Thomas' NHS Foundation Trust — MBSR exercises: Body scanning",
+          "url": "https://www.guysandstthomas.nhs.uk/health-information/mindfulness-based-stress-reduction-mbsr/mbsr-exercises",
+          "locus": "Body scanning is a mindfulness exercise, where you pay attention to the sensations in the different parts of your body. You can usually do the exercise lying down or sitting up. The purpose of this exercise is to observe the mind wandering away from something that you focus on, such as your breathing. You can then gently bring your mind back to the breath.",
+          "note": "official_health. Method confirmation for paying attention to sensations in different body parts; can be done sitting or lying. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, chronic pain, PTSD, or any mental or physical health condition.",
+        "If focusing on body sensations triggers discomfort, distress, flashbacks, or overwhelm, stop the practice and consider speaking with a healthcare professional.",
+        "The practice does not guarantee relaxation, calm, or improved body awareness.",
+        "If persistent physical or emotional symptoms are concerning, seek professional advice."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
