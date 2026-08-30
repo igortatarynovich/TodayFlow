@@ -35,7 +35,8 @@
     "discipline.consistency_challenge.002",
     "practice.intention_setting.001",
     "practice.environment_reset.001",
-    "practice.free_writing.001"
+    "practice.free_writing.001",
+    "practice.morning_ritual.001"
   ],
   "items": [
     {
@@ -1769,9 +1770,10 @@
         "content_class": "practice",
         "family": "ritual",
         "type": "morning_ritual",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.transition.prepare"
+        "seed_cell": "need.transition.prepare",
+        "technique_id": "technique.morning_ritual"
       },
       "retrieval": {
         "purpose": [
@@ -3616,9 +3618,10 @@
         "content_class": "practice",
         "family": "ritual",
         "type": "morning_ritual",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.transition.prepare"
+        "seed_cell": "need.transition.prepare",
+        "technique_id": "technique.morning_ritual"
       },
       "retrieval": {
         "purpose": [
@@ -6114,9 +6117,10 @@
         "content_class": "practice",
         "family": "ritual",
         "type": "morning_ritual",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.transition.prepare"
+        "seed_cell": "need.transition.prepare",
+        "technique_id": "technique.morning_ritual"
       },
       "retrieval": {
         "purpose": [

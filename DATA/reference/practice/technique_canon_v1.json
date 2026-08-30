@@ -923,6 +923,41 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.morning_ritual",
+      "content_class": "practice",
+      "family": "ritual",
+      "type": "morning_ritual",
+      "canonical_description": "A brief sequence performed after waking or at the start of the day to transition from rest to the first task. The person does one or two simple physical actions (for example, drinking water, opening a window or stepping outside for light/air, or a short stretch), then names one task or direction for the day, and begins. It is not a sleep-hygiene protocol, a productivity system, a treatment for sleep or mental health problems, or a guarantee of improved mood or focus.",
+      "source_refs": [
+        {
+          "source": "NHS Every Mind Matters — Sleep problems",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-health-issues/sleep/",
+          "locus": "A regular routine can help your body get used to sleeping better. Try to go to bed and wake up at around the same time each day, and give yourself time to relax before bed. Simple things include making your bedroom more comfortable and avoiding caffeine late in the day.",
+          "note": "official_health. Method confirmation for a regular wake/bedtime routine as a simple behavioural transition. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS Every Mind Matters — Be active for your mental health",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/be-active-for-your-mental-health/",
+          "locus": "Aim to go to bed and get up at the same time every day, including weekends, as this can help us sleep faster and sleep better. Just a few minutes of moving can make a big difference to your mental wellbeing. Being out in nature can boost our mental wellbeing, so get active outdoors.",
+          "note": "official_health. Method confirmation for consistent wake time and short movement/light exposure as a simple morning action. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Sonnentag, S., & Kühnel, J. (2016). How to benefit from your work-related resources? The role of deliberate reattachment at work in the morning. Journal of Vocational Behavior, 94, 1–10",
+          "url": "https://doi.org/10.1016/j.jvb.2016.02.001",
+          "locus": "Reattachment to work is rebuilding a mental connection to work before actually starting work, for instance by thinking about specific tasks or by mentally simulating the workday. It occurs during the transition from the nonwork to the work role and is under employees' control.",
+          "note": "academic. Method confirmation for naming a specific task or mentally simulating the workday as part of the morning transition. Efficacy/engagement claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for insomnia, sleep disorders, anxiety, depression, ADHD, or any mental or physical health condition.",
+        "Keep actions safe and proportionate; avoid extreme temperatures, unsafe heights, or any movement that causes pain or dizziness.",
+        "A brief morning ritual does not guarantee better sleep, focus, mood, or productivity.",
+        "If persistent sleep problems, distress, or difficulty starting the day are affecting daily life, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

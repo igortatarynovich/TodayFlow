@@ -208,6 +208,8 @@ SEED_28_ID = "practice.environment_reset.001"
 SEED_28_CELL = "need.reset.release"
 SEED_29_ID = "practice.free_writing.001"
 SEED_29_CELL = "need.creativity.open"
+SEED_30_ID = "practice.morning_ritual.001"
+SEED_30_CELL = "need.transition.prepare"
 
 SPINE_SPECS = (
     ("practice.mobility.001", "need.energy.activate", "practice", "mobility", "movement", ["energy"], ["activate"]),
@@ -344,6 +346,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         SEED_27_ID,
         SEED_28_ID,
         SEED_29_ID,
+        SEED_30_ID,
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
@@ -410,6 +413,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.free_writing.001": "technique.free_writing",
         "practice.free_writing.002": "technique.free_writing",
         "practice.free_writing.003": "technique.free_writing",
+        "practice.morning_ritual.001": "technique.morning_ritual",
+        "practice.morning_ritual.002": "technique.morning_ritual",
+        "practice.morning_ritual.003": "technique.morning_ritual",
         "practice.transition_ritual.001": "technique.transition_ritual",
         "practice.transition_ritual.002": "technique.transition_ritual",
         "practice.transition_ritual.003": "technique.transition_ritual",
