@@ -5,7 +5,7 @@
   "semantic_version": "content-taxonomy-v1.1",
   "content_origin": "llm_provisional",
   "fill_frozen": false,
-  "description": "Provisional Content Items. Sourced cells: need.calm.downregulate (technique.extended_exhale), need.focus.focus (technique.focused_attention), need.energy.activate (technique.mobility), need.grounding.stabilize (technique.sensory_grounding), need.clarity.reflect (technique.prompted_reflection), need.confidence.open (technique.capability), need.release.release (technique.body_release), need.rest.downregulate (technique.relaxation), need.sleep.prepare (technique.sleep), need.sleep.discipline (technique.sleep_discipline), need.motivation.activate (technique.micro_action), need.emotional_awareness.reflect (technique.self_check_in), need.self_connection.reflect (technique.journaling), need.connection.connect (technique.connection_action), need.creativity.open (technique.creative_prompt), need.decision_making.focus (technique.priority_setting), need.transition.prepare (technique.transition_ritual), need.recovery.recover (technique.progressive_relaxation), need.discipline.prepare (technique.routine_commitment), need.self_control.stabilize (technique.attention_discipline), need.detachment.release (technique.acceptance; abstinence skipped), need.consistency.prepare (technique.consistency_challenge), need.simplicity.release (technique.reduction). Sourced 23/26. Next cell: need.reset.release. Remaining items llm_provisional. Research ladder does not block fill. Active fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md.",
+  "description": "Provisional Content Items. Sourced cells: need.calm.downregulate (technique.extended_exhale), need.focus.focus (technique.focused_attention), need.energy.activate (technique.mobility), need.grounding.stabilize (technique.sensory_grounding), need.clarity.reflect (technique.prompted_reflection), need.confidence.open (technique.capability), need.release.release (technique.body_release), need.rest.downregulate (technique.relaxation), need.sleep.prepare (technique.sleep), need.sleep.discipline (technique.sleep_discipline), need.motivation.activate (technique.micro_action), need.emotional_awareness.reflect (technique.self_check_in), need.self_connection.reflect (technique.journaling), need.connection.connect (technique.connection_action), need.creativity.open (technique.creative_prompt), need.decision_making.focus (technique.priority_setting), need.transition.prepare (technique.transition_ritual), need.recovery.recover (technique.progressive_relaxation), need.discipline.prepare (technique.routine_commitment), need.self_control.stabilize (technique.attention_discipline), need.detachment.release (technique.acceptance; abstinence skipped), need.consistency.prepare (technique.consistency_challenge), need.simplicity.release (technique.reduction), need.reset.release (technique.digital_pause). Sourced 24/26. Next cell: need.presence.stabilize. Remaining items llm_provisional. Research ladder does not block fill. Active fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md.",
   "architecture_probe_item_ids": [
     "practice.sensory_grounding.001",
     "practice.extended_exhale.001",
@@ -29,7 +29,8 @@
     "discipline.attention_discipline.001",
     "meditation.acceptance.001",
     "discipline.consistency_challenge.001",
-    "discipline.reduction.001"
+    "discipline.reduction.001",
+    "practice.digital_pause.001"
   ],
   "items": [
     {
@@ -1365,9 +1366,10 @@
         "content_class": "practice",
         "family": "behavioral",
         "type": "digital_pause",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.reset.release"
+        "seed_cell": "need.reset.release",
+        "technique_id": "technique.digital_pause"
       },
       "retrieval": {
         "purpose": [
@@ -3378,9 +3380,10 @@
         "content_class": "practice",
         "family": "behavioral",
         "type": "digital_pause",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.reset.release"
+        "seed_cell": "need.reset.release",
+        "technique_id": "technique.digital_pause"
       },
       "retrieval": {
         "purpose": [
@@ -5871,9 +5874,10 @@
         "content_class": "practice",
         "family": "behavioral",
         "type": "digital_pause",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.reset.release"
+        "seed_cell": "need.reset.release",
+        "technique_id": "technique.digital_pause"
       },
       "retrieval": {
         "purpose": [

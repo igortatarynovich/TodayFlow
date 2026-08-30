@@ -773,6 +773,35 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.digital_pause",
+      "content_class": "practice",
+      "family": "behavioral",
+      "type": "digital_pause",
+      "canonical_description": "A brief, time-bound action in which the person moves a digital device (e.g., phone) out of immediate reach or turns it face down, and refrains from interacting with it for a set short period (for example, two or five minutes). The aim is to interrupt the current digital context and reduce incoming stimuli; it is not a reset of the nervous system, a treatment for stress, attention difficulties, or any mental or physical health condition, or a guarantee of improved focus or mood.",
+      "source_refs": [
+        {
+          "source": "NHS Every Mind Matters — 6 tips to tackle working from home",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/simple-tips-to-tackle-working-from-home/",
+          "locus": "Try to take lunch and regular screen breaks, and give yourself time to concentrate on something else so you feel more focused when you return. Even just 5 to 10 minutes of short breaks each hour can really help your productivity.",
+          "note": "official_health/wellbeing. Method confirmation for regular short screen breaks and shifting attention away from the screen. Wellbeing/productivity claims not imported."
+        },
+        {
+          "source": "NHS Employers — Health, safety and wellbeing homeworking guidance (Display Screen Equipment)",
+          "url": "https://www.nhsemployers.org/articles/health-safety-and-wellbeing-homeworking-guidance",
+          "locus": "The Health and Safety (Display Screen Equipment) Regulations require employers to plan for breaks in activity to reduce the risk of eye strain or musculoskeletal problems; take short breaks often, e.g., five to ten minutes every hour, rather than longer ones less often; breaks should allow users to get up from their workstations and move around or at least stretch and change posture.",
+          "note": "official_health/safety. Method confirmation for short, frequent breaks away from display screen work as a change of activity. Risk-reduction claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for stress, anxiety, ADHD, attention difficulties, or any mental or physical health condition.",
+        "Do not use this practice if you need to remain reachable for safety, caregiving, or urgent work duties during the pause period.",
+        "Keep the pause short and bounded; do not rely on it as a long-term solution for chronic overload or burnout.",
+        "Pausing a device does not guarantee improved focus, mood, or productivity."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
