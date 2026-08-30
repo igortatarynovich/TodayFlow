@@ -204,6 +204,8 @@ SEED_26_ID = "discipline.consistency_challenge.002"
 SEED_26_CELL = "need.habit_change.prepare"
 SEED_27_ID = "practice.intention_setting.001"
 SEED_27_CELL = "need.decision_making.focus"
+SEED_28_ID = "practice.environment_reset.001"
+SEED_28_CELL = "need.reset.release"
 
 SPINE_SPECS = (
     ("practice.mobility.001", "need.energy.activate", "practice", "mobility", "movement", ["energy"], ["activate"]),
@@ -338,6 +340,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         SEED_25_ID,
         SEED_26_ID,
         SEED_27_ID,
+        SEED_28_ID,
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
@@ -398,6 +401,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.intention_setting.001": "technique.intention_setting",
         "practice.intention_setting.002": "technique.intention_setting",
         "practice.intention_setting.003": "technique.intention_setting",
+        "practice.environment_reset.001": "technique.environment_reset",
+        "practice.environment_reset.002": "technique.environment_reset",
+        "practice.environment_reset.003": "technique.environment_reset",
         "practice.transition_ritual.001": "technique.transition_ritual",
         "practice.transition_ritual.002": "technique.transition_ritual",
         "practice.transition_ritual.003": "technique.transition_ritual",

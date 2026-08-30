@@ -33,7 +33,8 @@
     "practice.digital_pause.001",
     "meditation.mindfulness.001",
     "discipline.consistency_challenge.002",
-    "practice.intention_setting.001"
+    "practice.intention_setting.001",
+    "practice.environment_reset.001"
   ],
   "items": [
     {
@@ -1655,9 +1656,10 @@
         "content_class": "practice",
         "family": "behavioral",
         "type": "environment_reset",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.reset.release"
+        "seed_cell": "need.reset.release",
+        "technique_id": "technique.environment_reset"
       },
       "retrieval": {
         "purpose": [
@@ -3332,9 +3334,10 @@
         "content_class": "practice",
         "family": "behavioral",
         "type": "environment_reset",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.reset.release"
+        "seed_cell": "need.reset.release",
+        "technique_id": "technique.environment_reset"
       },
       "retrieval": {
         "purpose": [
@@ -5828,9 +5831,10 @@
         "content_class": "practice",
         "family": "behavioral",
         "type": "environment_reset",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.reset.release"
+        "seed_cell": "need.reset.release",
+        "technique_id": "technique.environment_reset"
       },
       "retrieval": {
         "purpose": [

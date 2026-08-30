@@ -865,6 +865,35 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.environment_reset",
+      "content_class": "practice",
+      "family": "behavioral",
+      "type": "environment_reset",
+      "canonical_description": "A brief practice in which the person resets the immediate physical environment by removing, relocating, or tidying one object, or by quickly clearing a surface or workspace, before a new task or period. The action creates a visible boundary and reduces competing physical cues; it is not a treatment for stress, anxiety, ADHD, or any mental or physical health condition, and it is not a guarantee of improved focus, productivity, or wellbeing.",
+      "source_refs": [
+        {
+          "source": "Mind.org.uk — How to be mentally healthy at work: Work and stress",
+          "url": "https://www.mind.org.uk/information-support/tips-for-everyday-living/how-to-be-mentally-healthy-at-work/work-and-stress/",
+          "locus": "Develop end-of-day habits: Finish your working day by tidying your workspace or making a to-do list for tomorrow. This can help you switch off from work, especially if you're working from home.",
+          "note": "public mental-health guidance. Method confirmation for tidying workspace as a concrete end-of-day reset action. Wellness claims not imported."
+        },
+        {
+          "source": "Leicestershire Partnership NHS Trust — While You Wait: ADHD and work",
+          "url": "https://www.leicspart.nhs.uk/while-you-wait/adhd/work/",
+          "locus": "Keeping your desk and working environment clear of clutter – piles of papers, boxes, work materials, or tools boxes – helps to reduce visual noise, improves organisation and productivity, and reduces stress. Clutter can overwhelm the brain’s ability to organise and focus, providing visual cues of other projects or tasks to be completed.",
+          "note": "NHS trust guidance. Method confirmation for clearing clutter from the immediate workspace as a concrete reset action. Productivity/stress-reduction claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, ADHD, stress, or any mental or physical health condition.",
+        "The action should be safe and proportionate; do not move heavy objects, use hazardous cleaning substances, or take risks to tidy.",
+        "If the urge to clean or reset becomes compulsive or distressing, consider speaking with a healthcare professional.",
+        "A brief reset does not guarantee improved focus, productivity, or mood."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
