@@ -627,6 +627,39 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.attention_discipline",
+      "content_class": "discipline",
+      "type": "attention_discipline",
+      "canonical_description": "A short-period discipline rule in which the person reduces attention-drawing inputs by keeping only one information stream or task open at a time and closing or disabling extra ones immediately. The aim is to lower task-switching and environmental distraction by simplifying the attention space; it is not a treatment for ADHD or any attention disorder, a productivity system, or a guarantee of focus.",
+      "source_refs": [
+        {
+          "source": "American Psychological Association — Multitasking: Switching costs",
+          "url": "https://www.apa.org/topics/research/multitasking",
+          "locus": "Multitasking creates switching costs: repeatedly shifting between tasks can take more time and involve more error; understanding these costs can help people choose strategies that boost efficiency by avoiding multitasking, especially with complex tasks.",
+          "note": "research/official_psychology. Method confirmation for reducing open tasks/inputs to limit switching costs. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Harvard Health Publishing — The art of monotasking",
+          "url": "https://www.health.harvard.edu/mind-and-mood/the-art-of-monotasking",
+          "locus": "Monotasking means focusing on only one job until it is completed; strategies include blocking distractions, turning off the phone or setting it to do not disturb, and creating a distraction-free environment; even a three-second interruption can double the risk of errors.",
+          "note": "clinical_medicine. Method confirmation for a single-open-input rule and closing distractions. Treatment claims not imported."
+        },
+        {
+          "source": "Leeds Teaching Hospitals NHS Trust — Digital Wellbeing: Making your tech work for you",
+          "url": "https://www.leedsth.nhs.uk/news/digital-wellbeing-making-your-tech-work-for-you/",
+          "locus": "Managing notifications using Do Not Disturb, time-blocking email and checking at designated times, and taking breaks away from screens can help reduce digital overwhelm and maintain focus.",
+          "note": "official_health. Method confirmation for limiting digital notifications and reducing open inputs. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, executive dysfunction, or any attention or neurological condition.",
+        "If persistent difficulty concentrating, impulsivity, or distress is present, consider speaking with a healthcare professional.",
+        "This rule is an environmental simplification; it does not guarantee focus or eliminate internal distractions."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
