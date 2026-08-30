@@ -37,7 +37,8 @@
     "practice.environment_reset.001",
     "practice.free_writing.001",
     "practice.morning_ritual.001",
-    "practice.evening_ritual.001"
+    "practice.evening_ritual.001",
+    "meditation.breath_awareness.001"
   ],
   "items": [
     {
@@ -1883,9 +1884,10 @@
         "item_id": "meditation.breath_awareness.001",
         "content_class": "meditation",
         "type": "breath_awareness",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.presence.stabilize"
+        "seed_cell": "need.presence.stabilize",
+        "technique_id": "technique.breath_awareness"
       },
       "retrieval": {
         "purpose": [
@@ -3788,9 +3790,10 @@
         "item_id": "meditation.breath_awareness.002",
         "content_class": "meditation",
         "type": "breath_awareness",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.presence.stabilize"
+        "seed_cell": "need.presence.stabilize",
+        "technique_id": "technique.breath_awareness"
       },
       "retrieval": {
         "purpose": [
@@ -6288,9 +6291,10 @@
         "item_id": "meditation.breath_awareness.003",
         "content_class": "meditation",
         "type": "breath_awareness",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.presence.stabilize"
+        "seed_cell": "need.presence.stabilize",
+        "technique_id": "technique.breath_awareness"
       },
       "retrieval": {
         "purpose": [

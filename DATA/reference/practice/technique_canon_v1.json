@@ -993,6 +993,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.breath_awareness",
+      "content_class": "meditation",
+      "type": "breath_awareness",
+      "canonical_description": "A brief meditation in which the person sits and brings attention to the natural physical sensations of breathing (for example, at the nostrils, chest, or abdomen) without trying to control or change the breath. When the mind wanders, the person gently returns attention to the breath. It is not a breathing exercise, a relaxation technique, a treatment for anxiety, depression, trauma, ADHD, or any mental or physical health condition, or a guarantee of calm or focus.",
+      "source_refs": [
+        {
+          "source": "NHS — Mindfulness",
+          "url": "https://www.nhs.uk/mental-health/self-help/tips-and-support/mindfulness/",
+          "locus": "Mindfulness meditation involves sitting silently and paying attention to thoughts, sounds, the sensations of breathing or parts of your body, bringing your attention back whenever the mind starts to wander.",
+          "note": "official_health. Method confirmation for sitting silently and paying attention to breathing sensations, returning attention when the mind wanders. Treatment/wellbeing claims not imported."
+        },
+        {
+          "source": "Guy's and St Thomas' NHS Foundation Trust — MBSR exercises: Breath Awareness",
+          "url": "https://www.guysandstthomas.nhs.uk/health-information/mindfulness-based-stress-reduction-mbsr/mbsr-exercises",
+          "locus": "Feeling the sensations as the breath enters the body and as it leaves the body. Not controlling the breath, but instead allowing the breath to breathe itself. The purpose is to observe the mind wandering away from the breath and then gently bring the mind back to the breath.",
+          "note": "official_health. Method confirmation for attention to natural breath sensations without controlling the breath, and returning attention when the mind wanders. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, ADHD, panic disorder, or any mental or physical health condition.",
+        "If focusing on the breath triggers panic, breathlessness, dizziness, or discomfort, stop and try a different anchor (for example, sounds or bodily sensations) or speak with a healthcare professional.",
+        "This is a meditation practice, not a breathing exercise or a medical intervention; do not force or lengthen the breath.",
+        "If persistent distress or difficulty with attention is troubling, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
