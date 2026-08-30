@@ -1077,6 +1077,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.letting_go",
+      "content_class": "meditation",
+      "type": "letting_go",
+      "canonical_description": "A brief somatic meditation in which the person notices a small area of held tension (for example, the shoulders) and, on each out-breath, deliberately allows that area to drop or soften a little. The person may first gently lift or tense the area on the in-breath, then release it on the out-breath. The practice is not a treatment for anxiety, stress, trauma, or any physical or mental health condition, and it does not guarantee relaxation, calm, or tension relief.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Tips for doing breathing and relaxation exercises",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/tips-for-doing-breathing-and-relaxation-exercises/",
+          "locus": "Cued relaxation: use a cue (for example, a coloured dot) to remind you to drop your shoulders, check your breathing, and relax the muscles in your body.",
+          "note": "official_health. Method confirmation for a brief shoulder-drop / muscle-relax cue tied to breathing. Treatment/efficacy claims not imported."
+        },
+        {
+          "source": "Allina Health — Progressive Relaxation / Shoulder Relaxation",
+          "url": "https://account.allinahealth.org/library/download?documentUID=cbc8df58-a697-4c9d-8826-840f5b8055cf&templateUID=39D9FBC3-FBCE-4D05-87D0-3FC666F7E5B3",
+          "locus": "Shoulder Relaxation: Tighten your shoulders by lifting them up toward your ears and breathe in through your nose. Slowly drop your shoulders with a sigh as you breathe out through your mouth. Imagine your muscles letting go. Repeat at least 3 times.",
+          "note": "official_health. Method confirmation for inhale-lift / exhale-drop shoulder release. Treatment/efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, stress, trauma, or any physical or mental health condition.",
+        "If moving or tensing the shoulders causes pain, discomfort, or injury, skip the movement or stop the practice.",
+        "The practice does not guarantee relaxation, calm, or relief from tension.",
+        "If persistent physical or psychological distress is concerning, seek professional advice."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.grounding",
       "content_class": "meditation",
       "type": "grounding",

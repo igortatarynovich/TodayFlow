@@ -41,7 +41,8 @@
     "meditation.breath_awareness.001",
     "meditation.body_scan.001",
     "meditation.open_awareness.001",
-    "meditation.grounding.001"
+    "meditation.grounding.001",
+    "meditation.letting_go.001"
   ],
   "items": [
     {
@@ -2220,9 +2221,10 @@
         "item_id": "meditation.letting_go.001",
         "content_class": "meditation",
         "type": "letting_go",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.release.release"
+        "seed_cell": "need.release.release",
+        "technique_id": "technique.letting_go"
       },
       "retrieval": {
         "purpose": [
@@ -4240,9 +4242,10 @@
         "item_id": "meditation.letting_go.002",
         "content_class": "meditation",
         "type": "letting_go",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.release.release"
+        "seed_cell": "need.release.release",
+        "technique_id": "technique.letting_go"
       },
       "retrieval": {
         "purpose": [
@@ -6744,9 +6747,10 @@
         "item_id": "meditation.letting_go.003",
         "content_class": "meditation",
         "type": "letting_go",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.release.release"
+        "seed_cell": "need.release.release",
+        "technique_id": "technique.letting_go"
       },
       "retrieval": {
         "purpose": [
