@@ -1077,6 +1077,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.reflection_meditation",
+      "content_class": "meditation",
+      "type": "reflection_meditation",
+      "canonical_description": "A brief reflective meditation in which the person sits, poses one open question about present experience (for example, 'What is my experience right now?'), and does not answer it immediately. The person stays with the question for a few breaths, then notes one word that captures what is present. The practice is not a treatment for anxiety, depression, indecision, or any mental or physical health condition, and it does not guarantee clarity, insight, or decision-making.",
+      "source_refs": [
+        {
+          "source": "NHS Scotland Right Decisions — MBSR 8 week programme (Three-Minute Breathing Space)",
+          "url": "https://www.rightdecisions.scot.nhs.uk/media/2112/ms-mbsr-manual-rebuilt-280120.pdf",
+          "locus": "The three minute breathing space: (1) What's here? — silently ask yourself: 'What is my experience right now ... in my thoughts ... my feelings ... and my bodily sensations?' Recognise and accept your experience. (2) Breathing — gather attention on the breath. (3) Expand — widen awareness to include body sensations and the situation.",
+          "note": "NHS MBSR curriculum. Method confirmation for a short reflective pause that begins with an open question about present experience, followed by breath awareness. Treatment/efficacy claims not imported."
+        },
+        {
+          "source": "Mindful.net — Three-Breath Mindfulness Practice",
+          "url": "https://mindful.net/mindfulness-exercises/three-breath-mindfulness-practice",
+          "locus": "Name, Breathe, Return: pause and choose a safe posture; notice what is happening in body and mind and name it lightly; feel three steady breaths; widen awareness and continue the next action.",
+          "note": "secular mindfulness instruction. Method confirmation for pausing, naming present experience, taking three breaths, and returning. Treatment/efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, indecision, trauma, or any mental or physical health condition.",
+        "If asking about your experience intensifies distress or rumination, stop the practice and consider speaking with a healthcare professional.",
+        "The practice does not guarantee clarity, insight, or better decision-making.",
+        "It is not a substitute for professional support when facing persistent or overwhelming difficulties."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.letting_go",
       "content_class": "meditation",
       "type": "letting_go",

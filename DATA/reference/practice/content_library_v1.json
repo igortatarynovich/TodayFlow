@@ -42,7 +42,8 @@
     "meditation.body_scan.001",
     "meditation.open_awareness.001",
     "meditation.grounding.001",
-    "meditation.letting_go.001"
+    "meditation.letting_go.001",
+    "meditation.reflection_meditation.001"
   ],
   "items": [
     {
@@ -2277,9 +2278,10 @@
         "item_id": "meditation.reflection_meditation.001",
         "content_class": "meditation",
         "type": "reflection_meditation",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.clarity.reflect"
+        "seed_cell": "need.clarity.reflect",
+        "technique_id": "technique.reflection_meditation"
       },
       "retrieval": {
         "purpose": [
@@ -4354,9 +4356,10 @@
         "item_id": "meditation.reflection_meditation.002",
         "content_class": "meditation",
         "type": "reflection_meditation",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.clarity.reflect"
+        "seed_cell": "need.clarity.reflect",
+        "technique_id": "technique.reflection_meditation"
       },
       "retrieval": {
         "purpose": [
@@ -6859,9 +6862,10 @@
         "item_id": "meditation.reflection_meditation.003",
         "content_class": "meditation",
         "type": "reflection_meditation",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.clarity.reflect"
+        "seed_cell": "need.clarity.reflect",
+        "technique_id": "technique.reflection_meditation"
       },
       "retrieval": {
         "purpose": [
