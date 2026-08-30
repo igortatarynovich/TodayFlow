@@ -149,6 +149,7 @@ import { syncDayPromiseToConnection } from "@/lib/todayPromiseSync";
 import { pickTodayDepthMenu } from "@/lib/todayDepthMenuToday";
 import {
   resolveTodayCapabilityFromProfile,
+  todayAllowsRitualLens,
   TODAY_SCREEN_FLOW_CAPABILITY,
 } from "@/lib/todayScreenFlowCapability";
 
@@ -407,6 +408,7 @@ export function TodayCompositionSurface(props: Props) {
   });
   const screenCapability = TODAY_SCREEN_FLOW_CAPABILITY[capabilityDepth];
   const showMyDayAct = useProductFoundation && screenCapability.myDay;
+  const allowRitualLens = todayAllowsRitualLens(capabilityDepth, props.contract);
   const showPersonalTimeline = showMyDayAct && screenCapability.personalTimeline;
   const screenFlowLayout = useMemo(
     () => ({ showSymbols: showSymbolsAct, showMyDay: showMyDayAct, showEvening }),
@@ -811,7 +813,7 @@ export function TodayCompositionSurface(props: Props) {
       mainFocusText ||
       continuityRecord?.mainFocus ||
       story.hero.themeShort ||
-      "Главная тема дня";
+      "";
     const draft: DayContinuityRecord = {
       dateISO,
       mainFocus: focus,
@@ -1002,7 +1004,7 @@ export function TodayCompositionSurface(props: Props) {
       display,
       title: view.number?.title ?? null,
       meaning: view.number?.hook_reveal?.base?.meaning ?? view.number?.summary ?? props.numerologyMeaning ?? null,
-      support: pickRitualPersonalLens(view.number?.hook_reveal, showMyDayAct),
+      support: pickRitualPersonalLens(view.number?.hook_reveal, allowRitualLens),
     };
   }, [
     dateISO,
@@ -1010,7 +1012,7 @@ export function TodayCompositionSurface(props: Props) {
     persistEngagement,
     props.numerologyMeaning,
     props.onSymbolRevealResult,
-    showMyDayAct,
+    allowRitualLens,
   ]);
 
   const onInterpretationConfirm = useCallback(
@@ -1392,16 +1394,16 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const ritualTarotPersonalText = useMemo(() => {
-    const personalLine = pickRitualPersonalLens(symbolHooksView?.card?.hook_reveal, showMyDayAct);
+    const personalLine = pickRitualPersonalLens(symbolHooksView?.card?.hook_reveal, allowRitualLens);
     return formatRitualTarotPersonalToday({
       personalLine,
       dayNumber: engagement.numberValue || props.numerologyValue,
       dayNumberTitle: symbolHooksView?.number?.title ?? null,
     });
   }, [
+    allowRitualLens,
     engagement.numberValue,
     props.numerologyValue,
-    showMyDayAct,
     symbolHooksView?.card?.hook_reveal,
     symbolHooksView?.number?.title,
   ]);
@@ -1422,8 +1424,8 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const ritualNumberSupportText = useMemo(
-    () => pickRitualPersonalLens(symbolHooksView?.number?.hook_reveal, showMyDayAct),
-    [showMyDayAct, symbolHooksView?.number?.hook_reveal],
+    () => pickRitualPersonalLens(symbolHooksView?.number?.hook_reveal, allowRitualLens),
+    [allowRitualLens, symbolHooksView?.number?.hook_reveal],
   );
 
   const ritualNumberTitle = useMemo(
@@ -2739,9 +2741,9 @@ export function TodayCompositionSurface(props: Props) {
               <p className={styles.eveningRecapLine}>
                 Обещание на сегодня ещё можно выбрать ниже — если хочется завершить день с маленьким шагом.
               </p>
-            ) : (
+            ) : story.hero.themeShort ? (
               <p className={styles.eveningRecapLine}>Главная тема: {story.hero.themeShort}</p>
-            )}
+            ) : null}
           </section>
         ) : null}
 

@@ -302,9 +302,9 @@ Guest на RITUAL заканчивает фразу **каталогом** («к
 
 ---
 
-## 9. Audit (целевой harness — не этот PR)
+## 9. Audit (целевой harness)
 
-Когда оба Inventory заполнены записями §3, проверяемо:
+Когда оба Inventory заполнены записями §3, проверяемо. **Subset 7 / 12 / 15 / 17 / 18:** unit tests in `frontend/src/lib/todayDisplayLockAudit.ts`. Full scanner is not this pass.
 
 | # | Находка |
 |---|---------|
@@ -345,5 +345,6 @@ Guest на RITUAL заканчивает фразу **каталогом** («к
 
 | Date | Change |
 |------|--------|
-| 2026-08-29 | v1.1 — путь закрыт; compute ≠ display; Personal Day без CE; journey acceptance; focus_title = axis; T3.action out |
+| 2026-08-29 | §9 finding 7 (canned/CE invent) added to the same unit subset |
+| 2026-08-29 | §9 findings 12/15/17/18 unit-tested (`todayDisplayLockAudit`); full scanner later |
 | 2026-08-29 | v1.0 — цепочка; пять ограничений; generated ≠ authority; anti-dupe by question; FE powers |

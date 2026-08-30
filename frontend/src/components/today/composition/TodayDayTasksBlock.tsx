@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { DsCaption, DsContentCard, DsEyebrow } from "@/design-system";
+import { DsContentCard, DsEyebrow } from "@/design-system";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
 import type { TodayDayTask } from "@/lib/todayDayTasks";
@@ -28,11 +28,7 @@ export function TodayDayTasksBlock({
   const hasDaily = progressRows.length > 0;
 
   if (!hasToday && !hasDaily) {
-    return (
-      <p data-testid="today-day-tasks-empty">
-        <DsCaption>{copy.tasksEmpty}</DsCaption>
-      </p>
-    );
+    return null;
   }
 
   return (

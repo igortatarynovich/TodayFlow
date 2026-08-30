@@ -924,6 +924,35 @@ export function isTodayInterpretationUnavailable(
   return storyStatus === "unavailable" || progressStatus === "unavailable";
 }
 
+function recordHasPersistBody(value: unknown, skipKeys: ReadonlySet<string> = new Set()): boolean {
+  if (value == null) return false;
+  if (typeof value === "string") return value.trim().length > 0;
+  if (typeof value === "number" || typeof value === "boolean") return true;
+  if (Array.isArray(value)) return value.length > 0;
+  if (typeof value !== "object") return false;
+  return Object.entries(value as Record<string, unknown>).some(([key, nested]) => {
+    if (skipKeys.has(key)) return false;
+    return recordHasPersistBody(nested);
+  });
+}
+
+/**
+ * Personal Day artifact is on the contract (GET persist), not a capability wish.
+ * Numerology `personal_day` number is ritual identity — not this nest.
+ * Canon: TODAY_DISPLAY_INVENTORY_V1 T2.lens appear · Grammar §5.1
+ */
+export function contractHasPersistedPersonalDay(
+  contract: TodayContractV1 | null | undefined,
+): boolean {
+  if (!contract || isTodayInterpretationUnavailable(contract)) return false;
+  const overlay = contract.personal_day?.natal_overlay;
+  if (recordHasPersistBody(overlay)) return true;
+  const dayPersonal = contract.day_story?.day_personal;
+  if (recordHasPersistBody(dayPersonal, new Set(["contract_version"]))) return true;
+  const whyPersonal = String(contract.day_story?.day_scenario?.conflict?.why_personal ?? "").trim();
+  return Boolean(whyPersonal);
+}
+
 /** PR-3: domain is showable only with present evidence and non-empty copy. */
 export function isDomainLensPresent(lens: DomainLensV1 | null | undefined): boolean {
   if (!lens) return false;
