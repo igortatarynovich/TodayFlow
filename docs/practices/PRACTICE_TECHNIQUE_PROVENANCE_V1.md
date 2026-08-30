@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.33 (2026-08-30) — lightweight fill; all 26 P0 need cells sourced; mindfulness accepted; digital_pause accepted; reduction accepted; consistency_challenge accepted; acceptance accepted; abstinence skipped_for_now; attention_discipline accepted; routine_commitment accepted; progressive_relaxation accepted; transition_ritual accepted; priority_setting accepted; creative_prompt accepted; connection_action accepted; journaling accepted; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
+**Версия:** 1.34 (2026-08-30) — lightweight fill; all 26 P0 need cells sourced; intention_setting accepted; mindfulness accepted; digital_pause accepted; reduction accepted; consistency_challenge accepted; acceptance accepted; abstinence skipped_for_now; attention_discipline accepted; routine_commitment accepted; progressive_relaxation accepted; transition_ritual accepted; priority_setting accepted; creative_prompt accepted; connection_action accepted; journaling accepted; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (иерархия доказательности, не обязательная лестница fill).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -276,8 +276,8 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 ## 11. Что дальше
 
 1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
-2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness` = `accepted`. All 26 P0 need cells sourced. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`.
-3. Следующий Product: **finalize skipped types** (`box_breathing`, `energizing_breath`, `abstinence`) или address non-P0 cells — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md).
+2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness`, `intention_setting` = `accepted`. All 26 P0 need cells sourced. P0 type coverage: 26/44 P0 spine types sourced. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`.
+3. Следующий Product: **P0 type coverage** — следующий non-skipped P0 spine type по ledger order (`practice.environment_reset`) — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md).
 4. Остальные items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
@@ -286,6 +286,7 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | v1.34 — `technique.intention_setting` accepted (Gollwitzer 1999 + 1993); P0 type coverage: 26/44 P0 spine types sourced; next = `practice.environment_reset` |
 | 2026-08-30 | v1.33 — all 26 P0 need cells sourced; `need.habit_change.prepare` linked to existing `technique.consistency_challenge`; next = finalize skipped types or non-P0 cells |
 | 2026-08-30 | v1.32 — `technique.mindfulness` accepted (Oxford Mindfulness definition + NHS mindfulness + Bishop et al. 2004); next = library fill at `need.habit_change.prepare` |
 | 2026-08-30 | v1.31 — `technique.digital_pause` accepted (NHS Every Mind Matters screen breaks + NHS Employers DSE guidance); next = library fill at `need.presence.stabilize` |

@@ -202,6 +202,8 @@ SEED_25_ID = "meditation.mindfulness.001"
 SEED_25_CELL = "need.presence.stabilize"
 SEED_26_ID = "discipline.consistency_challenge.002"
 SEED_26_CELL = "need.habit_change.prepare"
+SEED_27_ID = "practice.intention_setting.001"
+SEED_27_CELL = "need.decision_making.focus"
 
 SPINE_SPECS = (
     ("practice.mobility.001", "need.energy.activate", "practice", "mobility", "movement", ["energy"], ["activate"]),
@@ -335,6 +337,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         SEED_24_ID,
         SEED_25_ID,
         SEED_26_ID,
+        SEED_27_ID,
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
@@ -392,6 +395,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.priority_setting.001": "technique.priority_setting",
         "practice.priority_setting.002": "technique.priority_setting",
         "practice.priority_setting.003": "technique.priority_setting",
+        "practice.intention_setting.001": "technique.intention_setting",
+        "practice.intention_setting.002": "technique.intention_setting",
+        "practice.intention_setting.003": "technique.intention_setting",
         "practice.transition_ritual.001": "technique.transition_ritual",
         "practice.transition_ritual.002": "technique.transition_ritual",
         "practice.transition_ritual.003": "technique.transition_ritual",

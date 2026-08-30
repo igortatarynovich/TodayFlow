@@ -836,6 +836,35 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.intention_setting",
+      "content_class": "practice",
+      "family": "intention",
+      "type": "intention_setting",
+      "canonical_description": "A brief practice in which the person formulates in advance a single, concrete aim or direction for a specific upcoming period or action (for example, the next hour or the next task). The aim is written or stated clearly so that the person has a pre-decided focus for that period; it is not a promise of outcome, a guarantee of behaviour change, a treatment for indecision, anxiety, or any mental or physical health condition, or a complex if-then implementation plan.",
+      "source_refs": [
+        {
+          "source": "Gollwitzer (1999) — Implementation intentions: Strong effects of simple plans, American Psychologist",
+          "url": "https://doi.org/10.1037/0003-066x.54.7.493",
+          "locus": "Goal intentions specify a certain end point or behavior one intends to reach; by forming a goal intention a person translates a noncommittal desire into a binding goal that obligates the individual to realize it. Implementation intentions are subordinate plans that specify the when, where, and how; the basic method of intention formation is pre-deciding a specific aim or response ahead of the situation.",
+          "note": "academic. Method confirmation for pre-deciding a concrete aim or direction as a binding goal. Efficacy / goal-attainment claims not imported."
+        },
+        {
+          "source": "Gollwitzer (1993) — Goal achievement: The role of intentions, European Review of Social Psychology",
+          "url": "https://doi.org/10.1080/14792779443000059",
+          "locus": "Intentions are the most immediate and important determinant of goal-directed behavior; goal intentions represent a commitment to a desired outcome or behavior, and implementation intentions represent the link of anticipated situations to goal-directed responses.",
+          "note": "academic. Method confirmation for forming a goal intention as a commitment to a specific aim or behavior. Efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, ADHD, indecision, or any mental or physical health condition.",
+        "The aim should be safe, legal, and realistically achievable in the chosen period; do not set intentions that involve harm, excessive risk, or impossible demands.",
+        "Forming an intention does not guarantee that the action will be performed or that a desired outcome will occur.",
+        "If persistent difficulty making decisions or taking action is distressing, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

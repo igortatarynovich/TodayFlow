@@ -69,7 +69,7 @@ status                    accepted | skipped
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness` = `accepted`. Все 26 P0 need cells sourced. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`. Следующая работа: finalize skipped types (box_breathing, energizing_breath, abstinence) или non-P0 cells. Не открывать Safety Review V1.1.
+**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness`, `intention_setting` = `accepted`. Все 26 P0 need cells sourced. P0 type coverage: 26/44 P0 spine types sourced. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`. Следующая работа: следующий non-skipped P0 spine type по ledger order (`practice.environment_reset`). Не открывать Safety Review V1.1.
 
 ---
 
@@ -87,6 +87,7 @@ status                    accepted | skipped
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | P0 spine type `intention_setting` sourced via `technique.intention_setting` (Gollwitzer 1999 + 1993). Brief practice: pre-formulate a single concrete aim for a specific upcoming period/action. No outcome/behavior-change guarantees. `practice.intention_setting.001/002/003` activated. Next non-skipped P0 spine type: `practice.environment_reset`. |
 | 2026-08-30 | Habit_change-prepare cell sourced via `consistency_challenge` (already accepted). `discipline.consistency_challenge.002` activated: seven-day replacement rule — when the old pull comes, do one new short action in its place. All 26 P0 need cells sourced. Next: finalize skipped types or non-P0 cells. |
 | 2026-08-30 | Presence-stabilize cell sourced via `mindfulness`. `technique.mindfulness` accepted from Oxford Mindfulness definition + NHS mindfulness + Bishop et al. (2004). Brief practice: direct attention to present-moment experience (sounds/sensations/breath), notice without judgment, return when mind wanders. No treatment claims or mind-emptying. Next = `need.habit_change.prepare`. |
 | 2026-08-30 | Reset-release cell sourced via `digital_pause`. `technique.digital_pause` accepted from NHS Every Mind Matters screen breaks + NHS Employers DSE guidance. Brief action: move device out of reach or face down and do not interact for a short bounded period (e.g., 2/5 minutes). No nervous-system reset or wellness claims. Next = `need.presence.stabilize`. |

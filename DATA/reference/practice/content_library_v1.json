@@ -32,7 +32,8 @@
     "discipline.reduction.001",
     "practice.digital_pause.001",
     "meditation.mindfulness.001",
-    "discipline.consistency_challenge.002"
+    "discipline.consistency_challenge.002",
+    "practice.intention_setting.001"
   ],
   "items": [
     {
@@ -1598,9 +1599,10 @@
         "content_class": "practice",
         "family": "intention",
         "type": "intention_setting",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.decision_making.focus"
+        "seed_cell": "need.decision_making.focus",
+        "technique_id": "technique.intention_setting"
       },
       "retrieval": {
         "purpose": [
@@ -3161,9 +3163,10 @@
         "content_class": "practice",
         "family": "intention",
         "type": "intention_setting",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.decision_making.focus"
+        "seed_cell": "need.decision_making.focus",
+        "technique_id": "technique.intention_setting"
       },
       "retrieval": {
         "purpose": [
@@ -5656,9 +5659,10 @@
         "content_class": "practice",
         "family": "intention",
         "type": "intention_setting",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.decision_making.focus"
+        "seed_cell": "need.decision_making.focus",
+        "technique_id": "technique.intention_setting"
       },
       "retrieval": {
         "purpose": [
