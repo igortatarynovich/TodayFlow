@@ -497,6 +497,70 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.priority_setting",
+      "content_class": "practice",
+      "type": "priority_setting",
+      "canonical_description": "A brief decision-making practice in which the person names one single task or priority that is most important right now and deliberately sets the rest aside. The aim is to reduce overwhelm and attention fragmentation by committing to one next step rather than creating a full plan or to-do list; it is not a productivity system, time-blocking method, or problem-solving protocol.",
+      "source_refs": [
+        {
+          "source": "NHS England — The expectations of line managers in relation to people management",
+          "url": "https://www.england.nhs.uk/wp-content/uploads/2023/11/PRN00772-expectations-of-line-managers-in-relation-to-people-management-ebooklet.pdf",
+          "locus": "Managers should set direction for individuals and teams; people need to be clear about what is expected of them and what their priorities should be; setting a clear direction helps enable people to deliver effectively and manage workload more effectively.",
+          "note": "official_health. Method confirmation for clarifying one priority to manage workload and focus. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS Elect — Time Management & Productivity Programme",
+          "url": "https://nhselect.nhs.uk/training-and-od/national-programmes/Time-management-and-personal-productivity-programme-",
+          "locus": "Evaluate competing demands using structured prioritisation frameworks such as urgent versus important and impact versus effort; make better decisions about what deserves your time and translate those decisions into a clear and manageable plan.",
+          "note": "official_health. Method confirmation for picking one priority from competing demands using simple prioritisation frameworks. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic Research — Mindful Breathing: Roberto P. Benzo, M.D.",
+          "url": "https://www.mayo.edu/research/labs/mindful-breathing/videos",
+          "locus": "When you do these exercises, have the sole intention to feel your body moving; just that. Single tasking. One thing. Pick a specific place and time to practice every day.",
+          "note": "clinical_medicine/research. Method confirmation for committing to a single, specific task or intention at a time. Treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, ADHD, or any mental health condition.",
+        "If choosing one priority feels impossible due to overwhelming demands, consider speaking with a manager, healthcare professional, or trusted support person."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.transition_ritual",
+      "content_class": "practice",
+      "type": "transition_ritual",
+      "canonical_description": "A brief transition practice that marks the boundary between two activities by cognitively closing the previous task, making a simple physical movement, and opening attention to the next task. The aim is to reduce attention residue and task-set inertia when switching contexts; it is not a rest break, a productivity planning session, or a task-completion ritual.",
+      "source_refs": [
+        {
+          "source": "Leroy, S. (2009). Why is it so hard to do my work? The challenge of attention residue when switching between work tasks. Organizational Behavior and Human Decision Processes, 109(2), 168-181",
+          "url": "https://doi.org/10.1016/j.obhdp.2009.04.002",
+          "locus": "Unfinished tasks leave attention residue that impairs performance on subsequent tasks; completing or cognitively closing the prior task before switching reduces this residue and helps attention move fully to the next task.",
+          "note": "academic. Method confirmation for a brief closure-and-switch practice between tasks. Treatment claims not imported."
+        },
+        {
+          "source": "Leroy, S., & Glomb, T. M. (2018). Tasks Interrupted: How Anticipating Time Pressure on Resumption of an Interrupted Task Causes Attention Residue and Low Performance on Interrupting Tasks and How a 'Ready-to-Resume' Plan Mitigates the Effects. Organization Science, 29(3), 380-397",
+          "url": "https://doi.org/10.1287/orsc.2017.1184",
+          "locus": "A brief ready-to-resume plan that documents where one stopped and what to do next reduces attention residue and improves performance on the interrupting task by creating cognitive closure.",
+          "note": "academic. Method confirmation for a short, structured transition plan that closes one task before moving to the next. Treatment claims not imported."
+        },
+        {
+          "source": "NHS Every Mind Matters — 6 tips to tackle working from home",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/simple-tips-to-tackle-working-from-home/",
+          "locus": "Making time for breaks and setting a boundary to stop work at the end of the day help manage stress and maintain focus; regular short breaks help you feel more focused when you return.",
+          "note": "official_health. Method confirmation for a brief pause and boundary between work periods. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, anxiety, or any neurological or mental health condition.",
+        "If difficulty switching attention is persistent, severe, or accompanied by distress, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

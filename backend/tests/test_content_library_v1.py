@@ -303,7 +303,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is False
     assert coverage["next_pass"] == "library_fill_lightweight_provenance"
-    assert coverage["next_fill_cell"] == "need.decision_making.focus"
+    assert coverage["next_fill_cell"] == "need.transition.prepare"
     assert "box_breathing" in coverage["skipped_types"]
     assert "energizing_breath" in coverage["skipped_types"]
     probes = library["architecture_probe_item_ids"]
@@ -323,6 +323,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         SEED_13_ID,
         SEED_14_ID,
         SEED_15_ID,
+        SEED_16_ID,
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
@@ -377,6 +378,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.creative_prompt.001": "technique.creative_prompt",
         "practice.creative_prompt.002": "technique.creative_prompt",
         "practice.creative_prompt.003": "technique.creative_prompt",
+        "practice.priority_setting.001": "technique.priority_setting",
+        "practice.priority_setting.002": "technique.priority_setting",
+        "practice.priority_setting.003": "technique.priority_setting",
     }
     assert any(r.get("status") == "accepted" for r in techniques["techniques"])
 
@@ -1323,7 +1327,7 @@ def test_p0_seed_15_creativity_cell_sourced() -> None:
     assert coverage["need_cells"][14]["id"] == SEED_15_CELL
 
 
-def test_p0_seed_16_is_first_ledger_empty_cell_decision_making() -> None:
+def test_p0_seed_16_decision_making_cell_sourced() -> None:
     _vocab, library, coverage = _load()
     item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_16_ID)
     assert item["identity"]["content_class"] == "practice"
@@ -1335,8 +1339,12 @@ def test_p0_seed_16_is_first_ledger_empty_cell_decision_making() -> None:
     assert item["retrieval"]["input_state"] == ["uncertain"]
     assert item["payload"]["body_kind"] == "instruction"
 
+    assert item["identity"]["technique_id"] == "technique.priority_setting"
+    assert item["identity"]["status"] == "active"
+
     cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_16_CELL)
-    assert cell["status"] == "seed"
+    assert cell["status"] == "covered"
+    assert cell.get("fill_status") == "sourced"
     assert cell["item_ids"][0] == SEED_16_ID
     assert coverage["need_cells"][15]["id"] == SEED_16_CELL
 
@@ -1793,8 +1801,8 @@ def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
     assert coverage["counts"]["library_items"] == 133
     assert coverage["counts"]["need_cells_empty"] == 0
-    assert coverage["counts"]["need_cells_seed"] == 11
-    assert coverage["counts"]["need_cells_covered"] == 15
+    assert coverage["counts"]["need_cells_seed"] == 10
+    assert coverage["counts"]["need_cells_covered"] == 16
     assert library["status"] == "provisional"
     assert library["fill_frozen"] is False
     assert len(library["items"]) == 133
