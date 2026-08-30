@@ -175,6 +175,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.agency",
+      "content_class": "affirmation",
+      "type": "agency",
+      "canonical_description": "A brief agency affirmation in which the person states a simple, first-person statement that they choose the next small step (for example, 'I choose the next small step'). The statement may be spoken once or twice, and the person may then begin the step immediately. It is not a prediction of success, a guarantee of motivation, or a treatment for low energy, stuckness, or any mental or physical health condition.",
+      "source_refs": [
+        {
+          "source": "Cohen & Sherman (2014) — The Psychology of Change: Self-Affirmation and Social Psychological Intervention",
+          "url": "https://www.annualreviews.org/doi/10.1146/annurev-psych-010213-115137",
+          "locus": "A self-affirmation is an act that demonstrates one's adequacy; small acts can affirm self-integrity and a sense of global efficacy. Self-integrity is a sense of being able to control important outcomes and of being capable of free choice. Timely affirmations at choice points can help people navigate difficulties.",
+          "note": "academic_description. Method confirmation for a brief, choice-point self-affirmation that asserts agency. Efficacy and treatment claims not imported."
+        },
+        {
+          "source": "Steele (1988) — The Psychology of Self-Affirmation",
+          "url": "https://doi.org/10.1016/S0065-2601(08)60229-4",
+          "locus": "Self-affirmation processes are triggered by threats to perceived adequacy or integrity of the self; self-integrity includes self-conceptions of being competent, capable of free choice, and able to control important outcomes.",
+          "note": "academic_description. Method confirmation for affirmations of choice and agency as part of self-integrity maintenance. Efficacy and treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for low motivation, low energy, depression, anxiety, or any mental or physical health condition.",
+        "If the statement increases self-pressure, guilt, or distress, stop using it.",
+        "The affirmation does not guarantee that the person will act, succeed, or feel more motivated.",
+        "If persistent difficulties with motivation or mood are concerning, seek professional support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.capability",
       "content_class": "affirmation",
       "type": "capability",

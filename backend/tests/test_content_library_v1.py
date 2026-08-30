@@ -224,6 +224,8 @@ SEED_36_ID = "meditation.letting_go.001"
 SEED_36_CELL = "need.release.release"
 SEED_37_ID = "meditation.reflection_meditation.001"
 SEED_37_CELL = "need.clarity.reflect"
+SEED_38_ID = "affirmation.agency.001"
+SEED_38_CELL = "need.motivation.activate"
 
 SPINE_SPECS = (
     ("practice.mobility.001", "need.energy.activate", "practice", "mobility", "movement", ["energy"], ["activate"]),
@@ -368,6 +370,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         SEED_35_ID,
         SEED_36_ID,
         SEED_37_ID,
+        SEED_38_ID,
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
@@ -458,6 +461,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "meditation.reflection_meditation.001": "technique.reflection_meditation",
         "meditation.reflection_meditation.002": "technique.reflection_meditation",
         "meditation.reflection_meditation.003": "technique.reflection_meditation",
+        "affirmation.agency.001": "technique.agency",
+        "affirmation.agency.002": "technique.agency",
+        "affirmation.agency.003": "technique.agency",
         "practice.transition_ritual.001": "technique.transition_ritual",
         "practice.transition_ritual.002": "technique.transition_ritual",
         "practice.transition_ritual.003": "technique.transition_ritual",

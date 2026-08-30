@@ -43,7 +43,8 @@
     "meditation.open_awareness.001",
     "meditation.grounding.001",
     "meditation.letting_go.001",
-    "meditation.reflection_meditation.001"
+    "meditation.reflection_meditation.001",
+    "affirmation.agency.001"
   ],
   "items": [
     {
@@ -2387,9 +2388,10 @@
         "item_id": "affirmation.agency.001",
         "content_class": "affirmation",
         "type": "agency",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.motivation.activate"
+        "seed_cell": "need.motivation.activate",
+        "technique_id": "technique.agency"
       },
       "retrieval": {
         "purpose": [
@@ -4520,9 +4522,10 @@
         "item_id": "affirmation.agency.002",
         "content_class": "affirmation",
         "type": "agency",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.motivation.activate"
+        "seed_cell": "need.motivation.activate",
+        "technique_id": "technique.agency"
       },
       "retrieval": {
         "purpose": [
@@ -7026,9 +7029,10 @@
         "item_id": "affirmation.agency.003",
         "content_class": "affirmation",
         "type": "agency",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.motivation.activate"
+        "seed_cell": "need.motivation.activate",
+        "technique_id": "technique.agency"
       },
       "retrieval": {
         "purpose": [
