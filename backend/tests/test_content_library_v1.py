@@ -216,6 +216,8 @@ SEED_32_ID = "meditation.breath_awareness.001"
 SEED_32_CELL = "need.presence.stabilize"
 SEED_33_ID = "meditation.body_scan.001"
 SEED_33_CELL = "need.self_connection.reflect"
+SEED_34_ID = "meditation.open_awareness.001"
+SEED_34_CELL = "need.emotional_awareness.reflect"
 
 SPINE_SPECS = (
     ("practice.mobility.001", "need.energy.activate", "practice", "mobility", "movement", ["energy"], ["activate"]),
@@ -356,6 +358,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         SEED_31_ID,
         SEED_32_ID,
         SEED_33_ID,
+        SEED_34_ID,
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
@@ -434,6 +437,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "meditation.body_scan.001": "technique.body_scan",
         "meditation.body_scan.002": "technique.body_scan",
         "meditation.body_scan.003": "technique.body_scan",
+        "meditation.open_awareness.001": "technique.open_awareness",
+        "meditation.open_awareness.002": "technique.open_awareness",
+        "meditation.open_awareness.003": "technique.open_awareness",
         "practice.transition_ritual.001": "technique.transition_ritual",
         "practice.transition_ritual.002": "technique.transition_ritual",
         "practice.transition_ritual.003": "technique.transition_ritual",

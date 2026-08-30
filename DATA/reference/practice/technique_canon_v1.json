@@ -1049,6 +1049,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.open_awareness",
+      "content_class": "meditation",
+      "type": "open_awareness",
+      "canonical_description": "A brief meditation in which the person sits and lightly notices or names, in one word, whatever is present in the moment (for example, a thought, sensation, sound, or emotion) without explaining, analyzing, or judging it. The attention remains open and receptive to whatever arises; the person returns to open awareness when attention narrows or gets caught. It is not a treatment for anxiety, depression, trauma, or any mental or physical health condition, or a guarantee of calm, insight, or emotional regulation.",
+      "source_refs": [
+        {
+          "source": "Lutz, A., Slagter, H. A., Dunne, J. D., & Davidson, R. J. (2008). Attention regulation and monitoring in meditation. Trends in Cognitive Sciences, 12(4), 163-169",
+          "url": "https://doi.org/10.1016/j.tics.2008.01.005",
+          "locus": "Open Monitoring (OM) meditation involves non-reactive monitoring of the content of experience from moment to moment. The practitioner aims to remain in a monitoring state, attentive moment by moment to anything that occurs in experience without focusing on any explicit object.",
+          "note": "academic. Method confirmation for open, non-receptive monitoring of present-moment experience without a fixed object. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mindful.net — Open Monitoring Meditation",
+          "url": "https://mindful.net/open-monitoring-meditation",
+          "locus": "Open monitoring meditation is a mindfulness practice where you notice thoughts, sounds, emotions, and body sensations as they arise instead of holding attention on one fixed anchor. Noting meditation is an optional labeled form that uses one-word labels such as thinking, hearing, feeling, or sensing as a small marker to recognize what is happening, then return to open awareness.",
+          "note": "secular mindfulness instruction. Method confirmation for open monitoring and optional one-word noting of present-moment experience. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, PTSD, or any mental or physical health condition.",
+        "If observing thoughts, emotions, or sensations becomes overwhelming, distressing, or destabilizing, stop and consider speaking with a healthcare professional.",
+        "The practice does not guarantee calm, insight, emotional regulation, or improved attention.",
+        "If persistent emotional or psychological difficulties are concerning, seek professional advice."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

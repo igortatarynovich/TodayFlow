@@ -39,7 +39,8 @@
     "practice.morning_ritual.001",
     "practice.evening_ritual.001",
     "meditation.breath_awareness.001",
-    "meditation.body_scan.001"
+    "meditation.body_scan.001",
+    "meditation.open_awareness.001"
   ],
   "items": [
     {
@@ -1996,9 +1997,10 @@
         "item_id": "meditation.open_awareness.001",
         "content_class": "meditation",
         "type": "open_awareness",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.emotional_awareness.reflect"
+        "seed_cell": "need.emotional_awareness.reflect",
+        "technique_id": "technique.open_awareness"
       },
       "retrieval": {
         "purpose": [
@@ -3903,9 +3905,10 @@
         "item_id": "meditation.open_awareness.002",
         "content_class": "meditation",
         "type": "open_awareness",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.emotional_awareness.reflect"
+        "seed_cell": "need.emotional_awareness.reflect",
+        "technique_id": "technique.open_awareness"
       },
       "retrieval": {
         "purpose": [
@@ -6405,9 +6408,10 @@
         "item_id": "meditation.open_awareness.003",
         "content_class": "meditation",
         "type": "open_awareness",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.emotional_awareness.reflect"
+        "seed_cell": "need.emotional_awareness.reflect",
+        "technique_id": "technique.open_awareness"
       },
       "retrieval": {
         "purpose": [
