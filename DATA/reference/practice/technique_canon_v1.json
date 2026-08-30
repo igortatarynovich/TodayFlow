@@ -958,6 +958,41 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.evening_ritual",
+      "content_class": "practice",
+      "family": "ritual",
+      "type": "evening_ritual",
+      "canonical_description": "A brief wind-down sequence performed in the evening or before sleep to signal a transition from activity to rest. The person reduces ambient light, places the phone or device out of immediate reach, sits, and takes a few slow out-breaths. It is not a sleep induction technique, a treatment for insomnia, anxiety, or any mental or physical health condition, or a guarantee that sleep will follow.",
+      "source_refs": [
+        {
+          "source": "NHS Every Mind Matters — How to fall asleep faster and sleep better",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/how-to-fall-asleep-faster-and-sleep-better/",
+          "locus": "Try not to use phones, tablets or computers for an hour before bed. The blue light from screens can make it harder to fall asleep. You may find it easier to sleep in a room that is quiet, dark and cool. Try different things to find what works for you: putting your phone on silent, fully closing curtains, keeping clocks out of view and placing your phone face down to reduce light.",
+          "note": "official_health. Method confirmation for reducing light and moving devices away as a concrete wind-down action. Efficacy/sleep claims not imported."
+        },
+        {
+          "source": "Imperial College Healthcare NHS Trust — Sleep hygiene: a timetable for a better night's sleep",
+          "url": "https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/respiratory-medicine/sleep-services/a-timetable-for-a-better-nights-sleep.pdf",
+          "locus": "Avoid using electronic devices, for example, tablets or phones, within 1 hour of bedtime. Make sure the bedroom is quiet and dark. Turn off electronic devices and ensure any timepieces are not visible during the night. Establish a set of regular pre-sleep routines to signal that bedtime is approaching.",
+          "note": "NHS patient information. Method confirmation for dimming light and removing devices before sleep as a regular pre-sleep routine. Treatment claims not imported."
+        },
+        {
+          "source": "NHS Every Mind Matters — Sleep problems",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-health-issues/sleep/",
+          "locus": "A regular routine can help your body get used to sleeping better. Give yourself time to relax before bed. Simple things include making your bedroom more comfortable and putting your phone away before bed.",
+          "note": "official_health. Method confirmation for a regular pre-sleep routine and putting the phone away. Efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for insomnia, sleep disorders, anxiety, depression, or any mental or physical health condition.",
+        "If sleep problems persist or cause distress, consider speaking with a healthcare professional.",
+        "Do not perform this practice in unsafe situations (for example, while driving or operating machinery).",
+        "A brief wind-down routine does not guarantee that sleep will occur or improve."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

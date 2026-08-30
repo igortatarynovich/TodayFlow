@@ -36,7 +36,8 @@
     "practice.intention_setting.001",
     "practice.environment_reset.001",
     "practice.free_writing.001",
-    "practice.morning_ritual.001"
+    "practice.morning_ritual.001",
+    "practice.evening_ritual.001"
   ],
   "items": [
     {
@@ -1826,9 +1827,10 @@
         "content_class": "practice",
         "family": "ritual",
         "type": "evening_ritual",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.sleep.prepare"
+        "seed_cell": "need.sleep.prepare",
+        "technique_id": "technique.evening_ritual"
       },
       "retrieval": {
         "purpose": [
@@ -3674,9 +3676,10 @@
         "content_class": "practice",
         "family": "ritual",
         "type": "evening_ritual",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.sleep.prepare"
+        "seed_cell": "need.sleep.prepare",
+        "technique_id": "technique.evening_ritual"
       },
       "retrieval": {
         "purpose": [
@@ -6173,9 +6176,10 @@
         "content_class": "practice",
         "family": "ritual",
         "type": "evening_ritual",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.sleep.prepare"
+        "seed_cell": "need.sleep.prepare",
+        "technique_id": "technique.evening_ritual"
       },
       "retrieval": {
         "purpose": [

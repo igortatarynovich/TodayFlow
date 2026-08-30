@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.37 (2026-08-30) — lightweight fill; all 26 P0 need cells sourced; morning_ritual accepted; free_writing accepted; environment_reset accepted; intention_setting accepted; mindfulness accepted; digital_pause accepted; reduction accepted; consistency_challenge accepted; acceptance accepted; abstinence skipped_for_now; attention_discipline accepted; routine_commitment accepted; progressive_relaxation accepted; transition_ritual accepted; priority_setting accepted; creative_prompt accepted; connection_action accepted; journaling accepted; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
+**Версия:** 1.38 (2026-08-30) — lightweight fill; all 26 P0 need cells sourced; evening_ritual accepted; morning_ritual accepted; free_writing accepted; environment_reset accepted; intention_setting accepted; mindfulness accepted; digital_pause accepted; reduction accepted; consistency_challenge accepted; acceptance accepted; abstinence skipped_for_now; attention_discipline accepted; routine_commitment accepted; progressive_relaxation accepted; transition_ritual accepted; priority_setting accepted; creative_prompt accepted; connection_action accepted; journaling accepted; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (иерархия доказательности, не обязательная лестница fill).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -276,8 +276,8 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 ## 11. Что дальше
 
 1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
-2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness`, `intention_setting`, `environment_reset`, `free_writing`, `morning_ritual` = `accepted`. All 26 P0 need cells sourced. P0 type coverage: 29/44 P0 spine types sourced. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`.
-3. Следующий Product: **P0 type coverage** — следующий non-skipped P0 spine type по ledger order (`practice.evening_ritual`) — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md).
+2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness`, `intention_setting`, `environment_reset`, `free_writing`, `morning_ritual`, `evening_ritual` = `accepted`. All 26 P0 need cells sourced. P0 type coverage: 30/44 P0 spine types sourced. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`.
+3. Следующий Product: **P0 type coverage** — следующий non-skipped P0 spine type по ledger order (`meditation.breath_awareness`) — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md).
 4. Остальные items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
@@ -286,6 +286,7 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | v1.38 — `technique.evening_ritual` accepted (NHS Every Mind Matters + Imperial NHS sleep hygiene); P0 type coverage: 30/44 P0 spine types sourced; next = `meditation.breath_awareness` |
 | 2026-08-30 | v1.37 — `technique.morning_ritual` accepted (NHS Every Mind Matters + Sonnentag & Kühnel 2016); P0 type coverage: 29/44 P0 spine types sourced; next = `practice.evening_ritual` |
 | 2026-08-30 | v1.36 — `technique.free_writing` accepted (Peter Elbow 1973 + MIT Writing Process); P0 type coverage: 28/44 P0 spine types sourced; next = `practice.morning_ritual` |
 | 2026-08-30 | v1.35 — `technique.environment_reset` accepted (Mind.org.uk + Leicestershire Partnership NHS Trust); P0 type coverage: 27/44 P0 spine types sourced; next = `practice.free_writing` |
