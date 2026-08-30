@@ -561,6 +561,39 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.progressive_relaxation",
+      "content_class": "practice",
+      "type": "progressive_relaxation",
+      "canonical_description": "A brief somatic recovery practice in which the person deliberately tenses a small muscle group (for example, fists, shoulders, or jaw) while inhaling, then releases the tension while exhaling for a few repetitions. The aim is to use the contrast between tension and release to reduce bodily tension and support recovery; it is not a full-body progressive muscle relaxation protocol, a treatment for anxiety or pain, or a sleep induction technique.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Progressive muscle relaxation",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/progressive-muscle-relaxation/",
+          "locus": "Progressive muscle relaxation involves tensing and relaxing the muscles one area at a time; take a breath in and tense the muscles in one area, hold for a few seconds, breathe out and release the tension, let the muscles relax; repeat in different parts of the body; if an area is painful, miss it out.",
+          "note": "official_health. Method confirmation for a brief, localized tense-and-release practice. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Relaxation techniques: Try these steps to lower stress",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/relaxation-technique/art-20045368",
+          "locus": "Progressive muscle relaxation: focus on slowly tensing and then relaxing each muscle group; tense muscles for about five seconds and then relax for 30 seconds, and repeat; can be done in a quiet area without interruptions.",
+          "note": "clinical_medicine. Method confirmation for a short, repeated tense-and-release cycle. Treatment claims not imported."
+        },
+        {
+          "source": "U.S. Department of Veterans Affairs — Whole Health Library: Progressive Muscle Relaxation",
+          "url": "https://www.va.gov/WHOLEHEALTHLIBRARY/docs/Progressive-Muscle-Relaxation.pdf",
+          "locus": "PMR is a two-step relaxation practice: create tension in a specific muscle group and notice what tension feels like, then release the tension and notice what a relaxed muscle feels like; hold tension for five seconds while breathing in, then release and relax all at once; do not strain or overly tense the muscle, and skip a body part if it causes discomfort.",
+          "note": "government_health. Method confirmation for a small, repeated tense-and-release practice. Treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, chronic pain, insomnia, or any medical or mental health condition.",
+        "Do not tense to the point of pain or cramping; if a muscle group is injured or painful, skip it.",
+        "If persistent tension, pain, or distress occurs, stop and consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

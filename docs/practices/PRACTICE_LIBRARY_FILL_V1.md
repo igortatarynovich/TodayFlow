@@ -69,7 +69,7 @@ status                    accepted | skipped
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual` = `accepted`. Sourced 17/26. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.recovery.recover`. Не открывать Safety Review V1.1.
+**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation` = `accepted`. Sourced 18/26. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.discipline.prepare`. Не открывать Safety Review V1.1.
 
 ---
 
@@ -87,6 +87,7 @@ status                    accepted | skipped
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | Recovery-recover cell sourced via `progressive_relaxation`. `technique.progressive_relaxation` accepted from NHS inform progressive muscle relaxation + Mayo Clinic relaxation techniques + VA Whole Health Library PMR. Brief localized tense-and-release (fists on inhale, open on exhale, three times). Next = `need.discipline.prepare`. |
 | 2026-08-30 | Transition-prepare cell sourced via `transition_ritual`. `technique.transition_ritual` accepted from Leroy (2009) attention residue + Leroy & Glomb (2018) ready-to-resume plan + NHS Every Mind Matters working-from-home breaks. Brief close-stand-switch practice (close what you were doing, stand, three steps, sit for next). Next = `need.recovery.recover`. |
 | 2026-08-29 | Decision-making-focus cell sourced via `priority_setting`. `technique.priority_setting` accepted from NHS England line managers expectations + NHS Elect Time Management & Productivity Programme + Mayo Clinic Research mindful single-tasking. Brief one-task commitment (write one priority, set rest aside, close). Next = `need.transition.prepare`. |
 | 2026-08-29 | Creativity-open cell sourced via `creative_prompt`. `technique.creative_prompt` accepted from Mayo Clinic Press art and health + Mayo Clinic stress relievers sketching + Greater Manchester Mental Health NHS Arts for Good Health. Brief one-line micro-creativity (draw one line, do not erase, stop). Next = `need.decision_making.focus`. |

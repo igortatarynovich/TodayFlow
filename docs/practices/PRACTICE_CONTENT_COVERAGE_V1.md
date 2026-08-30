@@ -1,7 +1,7 @@
 # Practice Content Coverage v1
 
 **Статус:** `ACCEPTED` — SoT fill-pass библиотеки. **Fill unfrozen** 2026-08-26.  
-**Версия:** 1.13 (2026-08-30); pointer 2026-08-30 — transition-prepare cell sourced via transition_ritual, not research ladder.  
+**Версия:** 1.14 (2026-08-30); pointer 2026-08-30 — recovery-recover cell sourced via progressive_relaxation, not research ladder.  
 **Владелец:** Product.  
 **Ledger:** [`DATA/reference/practice/content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).  
 **Parent:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) §0.1 · §10.  
@@ -16,7 +16,7 @@
 ## Architecture impact
 
 - **SoT before:** taxonomy locked types/purpose/state; fill implied as «написать items против vocab». Риск — плотность в одной технике (40 grounding) и дыры в purpose/direction/class. После P0/P1 density: 133 LLM-draft items закрывали cells, но техника не имела provenance.
-- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing` = skipped_for_now. Next sourced cell = `need.recovery.recover`. Первые 17 items = architecture probes.
+- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing` = skipped_for_now. Next sourced cell = `need.discipline.prepare`. Первые 18 items = architecture probes.
 - **Public contract changed?** no
 - **Migration required?** no runtime. 133 drafts stay provisional without `technique_id`.
 - **Canon updated?** yes — this file · matrix JSON · [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · taxonomy pointer · tracker
@@ -26,7 +26,7 @@
 
 ## 0. Закон fill-pass
 
-0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 17 = architecture probes. Next sourced cell = `need.recovery.recover`.
+0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 18 = architecture probes. Next sourced cell = `need.discipline.prepare`.
 1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
@@ -196,7 +196,7 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Targeted Safety Shortlist** | who_must_not_hold for required holds | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
 | **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) (not continued) |
 | **Safety Review V1.1** | may_release vs model of who_must_not_hold | **not opened** — research escalation closed |
-| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.recovery.recover`; sourced 17/26; `box_breathing`, `energizing_breath` and `self_trust` skipped_for_now |
+| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.discipline.prepare`; sourced 18/26; `box_breathing`, `energizing_breath` and `self_trust` skipped_for_now |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после sourced fill, не вместо |
 
 ---
@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 17/26. Latest: `need.transition.prepare` (`transition_ritual`; close what you were doing, stand, three steps, sit for next). Next = `need.recovery.recover`. Не Safety Review. Не box / energizing-breath research.
+Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 18/26. Latest: `need.recovery.recover` (`progressive_relaxation`; fists on inhale, open on exhale, three times). Next = `need.discipline.prepare`. Не Safety Review. Не box / energizing-breath research.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | **Recovery-recover cell sourced via progressive_relaxation.** `technique.progressive_relaxation` accepted (NHS inform progressive muscle relaxation + Mayo Clinic relaxation techniques + VA Whole Health Library PMR). Brief localized tense-and-release (fists on inhale, open on exhale, three times). Next = `need.discipline.prepare`. |
 | 2026-08-30 | **Transition-prepare cell sourced via transition_ritual.** `technique.transition_ritual` accepted (Leroy 2009 attention residue + Leroy & Glomb 2018 ready-to-resume plan + NHS Every Mind Matters working-from-home breaks). Brief close-stand-switch practice (close what you were doing, stand, three steps, sit for next). Next = `need.recovery.recover`. |
 | 2026-08-29 | **Decision-making-focus cell sourced via priority_setting.** `technique.priority_setting` accepted (NHS England line managers expectations + NHS Elect Time Management & Productivity Programme + Mayo Clinic Research mindful single-tasking). Brief one-task commitment (write one priority, set rest aside, close). Next = `need.transition.prepare`. |
 | 2026-08-29 | **Creativity-open cell sourced via creative_prompt.** `technique.creative_prompt` accepted (Mayo Clinic Press art and health + Mayo Clinic stress relievers sketching + Greater Manchester Mental Health NHS Arts for Good Health). Brief one-line micro-creativity (draw one line, do not erase, stop). Next = `need.decision_making.focus`. |
