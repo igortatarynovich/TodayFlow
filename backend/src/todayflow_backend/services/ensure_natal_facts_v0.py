@@ -35,6 +35,24 @@ def load_cached_natal_facts(db: Session, astro_profile_id: int) -> dict[str, Any
     return None
 
 
+def _load_chart_data_for_profile(
+    db: Session, astro_profile_id: int
+) -> dict[str, Any] | None:
+    """Return cached chart snapshot (positions/houses/metadata) if present."""
+    cached = (
+        db.query(db_models.CachedNatalChart)
+        .filter(db_models.CachedNatalChart.astro_profile_id == astro_profile_id)
+        .first()
+    )
+    if not cached or not cached.positions:
+        return None
+    return {
+        "positions": cached.positions,
+        "houses": cached.houses or {},
+        "metadata": cached.chart_metadata or {},
+    }
+
+
 def ensure_natal_facts_for_profile(
     db: Session,
     profile: db_models.AstroProfile,
@@ -46,7 +64,9 @@ def ensure_natal_facts_for_profile(
 ) -> dict[str, Any] | None:
     """Return validated natal_facts, generating + persisting when missing.
 
-    Never raises for generation failure — returns None so portrait can form softly.
+    Chart data is pulled from the CachedNatalChart when available; otherwise the
+    astro service is called synchronously. No LLM is involved. Never raises for
+    generation failure — returns None so portrait can form softly.
     """
     if profile.birth_date is None:
         return None
@@ -74,7 +94,12 @@ def ensure_natal_facts_for_profile(
             display_name=display_name,
             access=access,  # type: ignore[arg-type]
         )
-        facts = generate_natal_facts(available_input=available, locale=locale)
+        chart_data = _load_chart_data_for_profile(db, profile.id)
+        facts = generate_natal_facts(
+            available_input=available,
+            locale=locale,
+            chart_data=chart_data,
+        )
         persist_natal_facts_on_profile(db, profile.id, facts)
         db.commit()
         return facts

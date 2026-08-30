@@ -93,6 +93,11 @@
           "description": "CE retention: same identity_line + primary_tension; rotating day_angle (Scenario §3.1). Never a new hero.",
           "type": ["object", "null"],
           "additionalProperties": true
+        },
+        "personal_day_signal": {
+          "description": "Deterministic main personal signal for My Day (natal_activations + domain_verdicts + IL pack). Selected before LLM.",
+          "type": ["object", "null"],
+          "additionalProperties": true
         }
       }
     }

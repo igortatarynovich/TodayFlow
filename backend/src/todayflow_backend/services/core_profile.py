@@ -17,7 +17,6 @@ from todayflow_backend.services.profile_contract_v1 import (
     PROFILE_CONTRACT_V1,
     PROFILE_STATUS_FORMING,
     PROFILE_STATUS_PARTIAL,
-    build_profile_portrait_v1,
     profile_contract_from_legacy_interpretation,
 )
 from todayflow_backend.services.profile_disclosure_funnel_v0 import profile_prompt_versions
@@ -586,16 +585,11 @@ class CoreProfileService:
 
             # Ensure natal_facts before personality (server SoT — not only guest payload).
             natal_facts = None
-            catalog = None
             if astro_profile is not None and astro_profile.birth_date is not None:
                 from todayflow_backend.services.ensure_natal_facts_v0 import (
                     ensure_natal_facts_for_profile,
                 )
                 from todayflow_backend.services.insight_depth import get_insight_depth_tier
-                from todayflow_backend.services.profile_header_knowledge_v0 import (
-                    build_profile_header_knowledge,
-                    header_pack_to_matrix_catalog,
-                )
                 from todayflow_backend.services.profile_matrix_adapter_v0 import resolve_access_tier
                 from todayflow_backend.services.subscription_level import get_subscription_snapshot
 
@@ -612,15 +606,10 @@ class CoreProfileService:
                     display_name=person_pub.get("display_name") or person_pub.get("first_name"),
                     access=access,
                 )
-                header_pack = build_profile_header_knowledge(
-                    astro_profile.birth_date,
-                    life_path=numerology_context.get("life_path")
-                    if isinstance(numerology_context.get("life_path"), int)
-                    else None,
-                )
-                catalog = header_pack_to_matrix_catalog(header_pack)
 
-            profile_input = {
+            # Publish: CE cascade is the deterministic SoT for selected themes.
+            # Legacy personality / funnel / oneshot are no longer used for meaning.
+            profile_payload = {
                 "profile_version": self.profile_version,
                 "generated_at": generated_at,
                 "is_ready": is_ready,
@@ -631,109 +620,44 @@ class CoreProfileService:
                 "numerology": numerology_context,
                 "baseline": baseline,
                 "profiles": profiles_context,
-                "natal_facts": natal_facts,
+                "living": living_context,
             }
-
-            from todayflow_backend.services.character_engine_stage2_shadow_v0 import (
-                character_engine_publish_ready_enabled,
+            profile_payload = self._maybe_attach_character_engine_shadow(
+                db,
+                profile_payload,
+                astro_profile=astro_profile,
+                astro_context=astro_context,
+                numerology_context=numerology_context,
+                person_pub=person_pub,
+                profile_hash=profile_hash,
+                natal_facts=natal_facts if isinstance(natal_facts, dict) else None,
+                include_stage2=True,
+            )
+            from todayflow_backend.services.character_engine_contract_projection_v0 import (
+                project_profile_contract_from_character_engine_v0,
             )
 
-            publish_ready = character_engine_publish_ready_enabled()
-            if publish_ready:
-                # Cutover: CE cascade is SoT — do not run personality / funnel / oneshot.
-                profile_payload = {
-                    "profile_version": self.profile_version,
-                    "generated_at": generated_at,
-                    "is_ready": is_ready,
-                    "missing_fields": missing_fields,
-                    "profile_hash": profile_hash,
-                    "person": person_pub,
-                    "astro": astro_context,
-                    "numerology": numerology_context,
-                    "baseline": baseline,
-                    "profiles": profiles_context,
-                    "living": living_context,
-                }
-                profile_payload = self._maybe_attach_character_engine_shadow(
-                    db,
-                    profile_payload,
-                    astro_profile=astro_profile,
-                    astro_context=astro_context,
-                    numerology_context=numerology_context,
-                    person_pub=person_pub,
-                    profile_hash=profile_hash,
-                    natal_facts=natal_facts if isinstance(natal_facts, dict) else None,
-                    include_stage2=True,
-                )
-                from todayflow_backend.services.character_engine_contract_projection_v0 import (
-                    project_profile_contract_from_character_engine_v0,
-                )
+            contract = project_profile_contract_from_character_engine_v0(
+                profile_payload, living=living_context
+            )
+            interpretation = {
+                "source": "character_engine_v1",
+                "identity_summary": contract.get("identity_core"),
+            }
+            daily_interpretation = {"source": "character_engine_v1", "deferred": True}
+            used_fallback = str(contract.get("status") or "") != "ready"
+            profile_payload["profile_contract_v1"] = contract
+            profile_payload["interpretation"] = interpretation
+            profile_payload["daily_interpretation"] = daily_interpretation
+            # Apply deterministic editorial banks (so selected themes produce readable slots).
+            from todayflow_backend.services.character_engine_profile_consumption_v0 import (
+                apply_character_engine_profile_consumption_v0,
+            )
 
-                contract = project_profile_contract_from_character_engine_v0(
-                    profile_payload, living=living_context
-                )
-                interpretation = {
-                    "source": "character_engine_v1",
-                    "identity_summary": contract.get("identity_core"),
-                }
-                daily_interpretation = {"source": "character_engine_v1", "deferred": True}
-                used_fallback = str(contract.get("status") or "") != "ready"
-                profile_payload["profile_contract_v1"] = contract
-                profile_payload["interpretation"] = interpretation
-                profile_payload["daily_interpretation"] = daily_interpretation
-                # Persist CE-projected slots into snapshot (GET consumption still reapplies).
-                from todayflow_backend.services.character_engine_profile_consumption_v0 import (
-                    apply_character_engine_profile_consumption_v0,
-                )
-
-                profile_payload = apply_character_engine_profile_consumption_v0(profile_payload)
-                steps = []
-                gm = contract.get("generation_meta") if isinstance(contract, dict) else None
-                if isinstance(gm, dict) and isinstance(gm.get("steps"), list):
-                    steps = gm["steps"]
-                # CE Stage 2–4 may have called LLM; counter bumped inside builders if wired.
-                self._bump_llm_call_counter(len(steps) if steps else 0)
-            else:
-                contract, interpretation, daily_interpretation, used_fallback = build_profile_portrait_v1(
-                    profile_input=profile_input,
-                    living=living_context,
-                    locale=locale,
-                    natal_facts=natal_facts,
-                    catalog=catalog,
-                )
-                steps = []
-                gm = contract.get("generation_meta") if isinstance(contract, dict) else None
-                if isinstance(gm, dict) and isinstance(gm.get("steps"), list):
-                    steps = gm["steps"]
-                self._bump_llm_call_counter(len(steps) if steps else (0 if used_fallback else 1))
-
-                profile_payload = {
-                    "profile_version": self.profile_version,
-                    "generated_at": generated_at,
-                    "is_ready": is_ready,
-                    "missing_fields": missing_fields,
-                    "profile_hash": profile_hash,
-                    "person": person_pub,
-                    "astro": astro_context,
-                    "numerology": numerology_context,
-                    "baseline": baseline,
-                    "profiles": profiles_context,
-                    "profile_contract_v1": contract,
-                    "interpretation": interpretation,
-                    "daily_interpretation": daily_interpretation,
-                    "living": living_context,
-                }
-                profile_payload = self._maybe_attach_character_engine_shadow(
-                    db,
-                    profile_payload,
-                    astro_profile=astro_profile,
-                    astro_context=astro_context,
-                    numerology_context=numerology_context,
-                    person_pub=person_pub,
-                    profile_hash=profile_hash,
-                    natal_facts=natal_facts if isinstance(natal_facts, dict) else None,
-                    include_stage2=True,
-                )
+            profile_payload = apply_character_engine_profile_consumption_v0(profile_payload)
+            gm = contract.get("generation_meta") if isinstance(contract, dict) else None
+            # Deterministic CE path does not consume LLM credits.
+            self._bump_llm_call_counter(0)
 
             snapshot_id = self._save_snapshot(
                 db=db,
@@ -1499,11 +1423,9 @@ class CoreProfileService:
         """
         try:
             from todayflow_backend.services.character_engine_stage01_shadow_v0 import (
-                character_engine_stage01_should_run,
                 maybe_attach_stage01_shadow,
             )
             from todayflow_backend.services.character_engine_stage2_shadow_v0 import (
-                character_engine_stage2_should_run,
                 maybe_attach_stage2_shadow,
             )
             from todayflow_backend.services.character_engine_stage3_shadow_v0 import (
@@ -1546,16 +1468,18 @@ class CoreProfileService:
                     profile_payload, profile_fingerprint=profile_hash
                 )
 
-            # Publish: full LLM cascade when CE flags / consumption on.
+            # Publish: CE cascade is the deterministic source of selected themes.
+            # Stages 0–1 are always facts/evidence; Stages 2–4 are deterministic_only
+            # so the model never chooses meaning, only the registry + editorial banks.
             # Read: deterministic fill-once only onto an existing portrait snapshot
             # when consumption needs CE and Stage 5 is missing — never invent CE on a bare shell.
             if include_stage2:
-                run_stage2 = character_engine_stage2_should_run() or consumption
-                run_stage3 = run_stage2
-                run_stage4 = run_stage2
-                run_stage5 = run_stage2
-                run_stage01 = character_engine_stage01_should_run()
-                deterministic_only = False
+                run_stage2 = True
+                run_stage3 = True
+                run_stage4 = True
+                run_stage5 = True
+                run_stage01 = True
+                deterministic_only = True
             else:
                 has_portrait = isinstance(profile_payload.get("profile_contract_v1"), dict)
                 run_stage2 = bool(consumption and not has_stage5 and has_portrait)

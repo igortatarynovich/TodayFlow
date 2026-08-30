@@ -73,6 +73,14 @@ def test_brief_must_dramatize_from_ranked_drivers():
     assert brief["scene_slots"][0]["sphere"] == "relationships"
     assert brief["scene_slots"][0]["dramatize_from_driver_id"] == brief["must_dramatize"][0]["id"]
     assert brief["scene_slots"][0]["dramatize_from_driver_id"] in ids
+    pc = brief.get("primary_conflict")
+    assert isinstance(pc, dict)
+    assert pc.get("contract_version") == "primary_conflict_v1"
+    assert pc.get("selected_before_llm") is True
+    assert pc["main_driver_id"] == brief["must_dramatize"][0]["id"]
+    assert pc["main_fact"] == brief["must_dramatize"][0]["fact_ru"]
+    assert pc["title"] == brief["act_iii_registry_label"]["label_ru"]
+    assert "relationships" in pc["allowed_spheres"]
 
 
 def test_slim_interpretation_demotes_thesis_and_pack():

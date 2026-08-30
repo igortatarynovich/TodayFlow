@@ -46,6 +46,11 @@ def test_build_profile_portrait_v1_returns_legacy_shim(monkeypatch):
         "todayflow_backend.services.profile_contract_v1.call_profile_contract_llm_v1",
         lambda *_a, **_k: (None, {"reason": "llm_disabled_for_test"}),
     )
+    # The default path is now CE publish-ready; explicitly test legacy fallback path.
+    monkeypatch.setattr(
+        "todayflow_backend.core.config.settings.character_engine_publish_ready",
+        False,
+    )
     contract, interpretation, daily, used_fb = build_profile_portrait_v1(
         profile_input={"person": {"display_name": "Test"}, "astro": {"sun_sign": "Овен"}, "baseline": {}},
         living={"summary": "Неделя спокойная"},

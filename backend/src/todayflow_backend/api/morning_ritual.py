@@ -31,6 +31,9 @@ from todayflow_backend.services.ritual_cue_sanitize import (
     sanitize_daily_horoscope_payload,
     sanitize_daily_recommendations_payload,
 )
+from todayflow_backend.services.ritual_practice_selector_bridge_v1 import (
+    select_practice_for_ritual,
+)
 from sqlalchemy import or_
 
 from todayflow_backend.db import models as db_models
@@ -150,6 +153,7 @@ class MorningRitualResponse(BaseModel):
     daily_horoscope_generation_log_id: Optional[int] = None
     celestial_events: Optional[dict] = None  # Луна, планеты и т.д.
     daily_recommendations: Optional[dict] = None  # Общая рекомендация по дню
+    practice_recommendation: Optional[dict] = None  # Practice selected from existing library/selector
     decision_engine: Optional[dict] = None  # Deterministic hero/actions/limits for Today
     core_profile: Optional[dict] = None
     consistency: Optional[dict] = None
@@ -375,6 +379,22 @@ async def get_morning_ritual(
         db.commit()
         db.refresh(day_connection)
     
+    ritual_context_for_selector = {
+        "tarot_name_ru": tarot_card_payload.get("name") if isinstance(tarot_card_payload, dict) else None,
+        "numerology_value": (
+            numerology_number_payload.get("value") or numerology_number_payload.get("reduced_value")
+            if isinstance(numerology_number_payload, dict)
+            else None
+        ),
+        "head_topic": day_connection.morning_focus if day_connection is not None else None,
+        "mood": "neutral",
+    }
+    practice_recommendation = select_practice_for_ritual(
+        ritual_context=ritual_context_for_selector,
+        decision_engine=decision_engine,
+        core_profile=core_profile,
+    )
+
     return MorningRitualResponse(
         date=target_date,
         tarot_card=tarot_card_payload,
@@ -387,6 +407,7 @@ async def get_morning_ritual(
         daily_horoscope_generation_log_id=daily_horoscope_generation_log_id,
         celestial_events=celestial_events,
         daily_recommendations=daily_recommendations,
+        practice_recommendation=practice_recommendation,
         decision_engine=decision_engine,
         core_profile=core_profile,
         consistency=consistency,

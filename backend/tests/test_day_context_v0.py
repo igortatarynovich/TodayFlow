@@ -207,3 +207,46 @@ def test_build_day_context_v0_profile_selector_evening_task():
     ps = ctx["layers"]["profile_selector"]
     assert ps["task"] == "evening_reflection"
 
+
+def test_build_day_context_v0_includes_personal_day_signal():
+    d = date(2026, 5, 3)
+    fusion = {
+        "date": d.isoformat(),
+        "scores": {},
+        "cycle_context": {},
+        "activity_context": {},
+        "rhythm_context": {"goals": [], "habits": [], "ascetics": [], "diary": {"has_entry_today": False, "entries_last_7_days": 0}},
+        "recommendations": [],
+        "encouragement": "ok",
+    }
+    foundation = {
+        "contract_version": "day_scenario_v1",
+        "personal_natal_activations": [
+            {
+                "id": "act-1",
+                "transiting_planet": "Saturn",
+                "aspect": "square",
+                "natal_point": "Moon",
+                "orb_deg": 2.1,
+                "strength": 0.8,
+                "domain": "relationships",
+                "text": "Saturn square Moon",
+            }
+        ],
+    }
+    ctx = build_day_context_v0(
+        target_date=d,
+        locale="ru",
+        insight_depth_tier="free",
+        core_profile=None,
+        fusion_dump=fusion,
+        daily_foundation=foundation,
+    )
+    ps = ctx["layers"].get("personal_day_signal")
+    assert isinstance(ps, dict)
+    assert ps.get("contract_version") == "personal_day_signal_v1"
+    assert ps["main_signal"]["transiting_planet"] == "Saturn"
+    assert ps["main_signal"]["aspect"] == "square"
+    assert ps["main_signal"]["natal_point"] == "Moon"
+    assert len(ps["domain_verdicts"]) == 4
+

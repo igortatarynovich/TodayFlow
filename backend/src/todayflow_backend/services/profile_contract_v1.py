@@ -554,6 +554,7 @@ def build_profile_portrait_v1(
 
     if bool(getattr(settings, "character_engine_publish_ready", False)):
         forming = {
+            "contract_version": PROFILE_CONTRACT_V1,
             "status": PROFILE_STATUS_FORMING,
             "identity_core": "",
             "recognition_line": "",
@@ -566,7 +567,7 @@ def build_profile_portrait_v1(
                 "note": "legacy portrait LLM blocked — use CE publish path",
             },
         }
-        return forming, {"source": "character_engine_v1_gate"}, {"deferred": True}, True
+        return forming, {"source": "character_engine_v1_gate", "identity": ""}, {"deferred": True}, True
 
     from todayflow_backend.services.personality_contract_v1 import (
         generate_personality,

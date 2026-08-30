@@ -1,6 +1,9 @@
-"""natal_facts Generation Contract — LLM structured chart facts (MVP).
+"""natal_facts Generation Contract — deterministic chart facts (MVP).
 
-Does not run Swiss Ephemeris in the product path. Legacy Swiss remains elsewhere.
+Natal facts are calculated from the Swiss Ephemeris-backed astro service, not
+inferred by an LLM. When the service is unavailable or birth data is
+insufficient, the contract falls back to an honest, bounded subset (e.g. sun-only
+for date-only mode).
 """
 
 from __future__ import annotations
@@ -12,14 +15,7 @@ import re
 from datetime import date, time
 from typing import Any
 
-from todayflow_backend.core.llm_openai_compatible import (
-    chat_completion_text,
-    get_openai_compatible_client,
-    is_llm_chat_configured,
-    llm_call_context,
-    resolve_default_chat_model,
-)
-from todayflow_backend.prompts.registry_v1 import get_prompt
+from todayflow_backend.services.astro import ChartResponse, compute_chart_sync
 
 logger = logging.getLogger(__name__)
 
@@ -300,6 +296,245 @@ def date_only_fallback(
     )
 
 
+def _infer_sign_from_longitude(longitude: Any) -> str | None:
+    try:
+        lon = float(longitude) % 360.0
+    except (TypeError, ValueError):
+        return None
+    zodiac = (
+        "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+        "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces",
+    )
+    return zodiac[int(lon // 30) % 12]
+
+
+def _body_id(name: str | None) -> str | None:
+    if not name:
+        return None
+    raw = str(name).strip().lower().replace(" ", "_")
+    aliases: dict[str, str] = {
+        "sun": "sun",
+        "moon": "moon",
+        "mercury": "mercury",
+        "venus": "venus",
+        "mars": "mars",
+        "jupiter": "jupiter",
+        "saturn": "saturn",
+        "uranus": "uranus",
+        "neptune": "neptune",
+        "pluto": "pluto",
+        "north_node": "north_node",
+        "south_node": "south_node",
+        "chiron": "chiron",
+        "lilith": "lilith",
+    }
+    return aliases.get(raw)
+
+
+_ANGLE_ALIASES: dict[str, tuple[str, ...]] = {
+    "ascendant": ("1", "asc", "ascendant", "rising"),
+    "mc": ("10", "mc", "midheaven"),
+    "ic": ("4", "ic"),
+    "descendant": ("7", "dsc", "descendant"),
+}
+
+
+def _angle_from_chart(houses: dict[str, Any], aliases: tuple[str, ...]) -> dict[str, Any] | None:
+    raw: Any = None
+    for key in aliases:
+        if key in houses:
+            raw = houses[key]
+            break
+        if isinstance(key, str) and key.lower() in {k.lower() for k in houses}:
+            for k in houses:
+                if k.lower() == key.lower():
+                    raw = houses[k]
+                    break
+        if raw is not None:
+            break
+    if not isinstance(raw, dict):
+        return None
+    sign = _normalize_sign(raw.get("sign"))
+    if not sign:
+        sign = _infer_sign_from_longitude(raw.get("longitude"))
+    if not sign:
+        return None
+    entry: dict[str, Any] = {"sign": sign}
+    try:
+        if raw.get("degree") is not None:
+            entry["degree"] = float(raw["degree"])
+        if raw.get("longitude") is not None:
+            entry["absolute_longitude"] = float(raw["longitude"])
+    except (TypeError, ValueError):
+        pass
+    return entry
+
+
+def _planet_entry_from_position(pos: dict[str, Any], *, allow_houses: bool) -> dict[str, Any] | None:
+    pid = _body_id(pos.get("body") or pos.get("name") or pos.get("planet"))
+    if not pid:
+        return None
+    sign = _normalize_sign(pos.get("sign"))
+    if not sign:
+        sign = _infer_sign_from_longitude(pos.get("longitude"))
+    if not sign:
+        return None
+    entry: dict[str, Any] = {"id": pid, "sign": sign}
+    try:
+        if pos.get("degree") is not None:
+            entry["degree"] = float(pos["degree"])
+        if pos.get("longitude") is not None:
+            entry["absolute_longitude"] = float(pos["longitude"])
+    except (TypeError, ValueError):
+        pass
+    if "degree" not in entry and "absolute_longitude" in entry:
+        entry["degree"] = entry["absolute_longitude"] % 30.0
+    if allow_houses and pos.get("house") is not None:
+        try:
+            house = int(pos["house"])
+            if 1 <= house <= 12:
+                entry["house"] = house
+        except (TypeError, ValueError):
+            pass
+    if pos.get("retrograde") is not None:
+        entry["retrograde"] = bool(pos["retrograde"])
+    return entry
+
+
+def _house_entries_from_chart(houses: dict[str, Any]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for key, raw in houses.items():
+        if not isinstance(raw, dict):
+            continue
+        try:
+            house_num = int(key)
+        except (TypeError, ValueError):
+            continue
+        if not 1 <= house_num <= 12:
+            continue
+        sign = _normalize_sign(raw.get("sign"))
+        if not sign:
+            sign = _infer_sign_from_longitude(raw.get("longitude"))
+        if not sign:
+            continue
+        entry: dict[str, Any] = {"house": house_num, "sign": sign}
+        try:
+            if raw.get("degree") is not None:
+                entry["degree"] = float(raw["degree"])
+            if raw.get("longitude") is not None:
+                entry["absolute_longitude"] = float(raw["longitude"])
+        except (TypeError, ValueError):
+            pass
+        if "degree" not in entry and "absolute_longitude" in entry:
+            entry["degree"] = entry["absolute_longitude"] % 30.0
+        out.append(entry)
+    return out
+
+
+def _build_birth_payload_for_chart(available_input: dict[str, Any]) -> dict[str, Any]:
+    """Map capability-resolver available_input to astro-service /chart birth payload."""
+    birth: dict[str, Any] = {"date": str(available_input.get("birth_date") or "")}
+    time_str = available_input.get("birth_time")
+    if time_str:
+        birth["time"] = str(time_str)
+    location = available_input.get("location_name")
+    if location:
+        birth["location"] = str(location)
+    tz = available_input.get("timezone_name")
+    if tz:
+        birth["timezone_name"] = str(tz)
+    tz_offset = available_input.get("timezone_offset_minutes")
+    if tz_offset is not None:
+        try:
+            birth["timezone_offset_minutes"] = int(tz_offset)
+        except (TypeError, ValueError):
+            pass
+    return birth
+
+
+def build_natal_facts_from_chart(
+    chart: ChartResponse | dict[str, Any],
+    *,
+    mode: str,
+    provider: str = "astro_service",
+    provider_version: str = "1.0",
+    unavailable_reason: str | None = None,
+) -> dict[str, Any]:
+    """Convert a Swiss Ephemeris-backed chart into the natal_facts contract.
+
+    ``mode`` is the capability-resolver mode (``date_only`` or ``full``). The
+    chart may contain more geometry than the mode allows; the validator enforces
+    the contract boundaries and adds unavailable_facts when needed.
+    """
+    if isinstance(chart, ChartResponse):
+        positions = chart.positions
+        houses = chart.houses
+        metadata = chart.metadata
+    else:
+        positions = chart.get("positions") if isinstance(chart.get("positions"), list) else []
+        houses = chart.get("houses") if isinstance(chart.get("houses"), dict) else {}
+        metadata = chart.get("metadata") if isinstance(chart.get("metadata"), dict) else {}
+
+    allow_angles = mode == "full"
+    planets: list[dict[str, Any]] = []
+    for pos in positions:
+        if not isinstance(pos, dict):
+            continue
+        entry = _planet_entry_from_position(pos, allow_houses=allow_angles)
+        if entry:
+            planets.append(entry)
+
+    angles: dict[str, Any] = {
+        "ascendant": None,
+        "mc": None,
+        "ic": None,
+        "descendant": None,
+    }
+    houses_out: list[dict[str, Any]] = []
+    if allow_angles:
+        houses_out = _house_entries_from_chart(houses)
+        for angle_key, aliases in _ANGLE_ALIASES.items():
+            angles[angle_key] = _angle_from_chart(houses, aliases)
+
+    # Ensure sun is always present; chart service should provide it, but guard.
+    if not any(p.get("id") == "sun" for p in planets):
+        sun_lon = None
+        for pos in positions:
+            if isinstance(pos, dict) and _body_id(pos.get("body") or pos.get("name")) == "sun":
+                try:
+                    sun_lon = float(pos.get("longitude") or pos.get("absolute_longitude"))
+                except (TypeError, ValueError):
+                    pass
+                break
+        sun_sign = _infer_sign_from_longitude(sun_lon) if sun_lon is not None else None
+        if sun_sign:
+            planets.insert(0, {"id": "sun", "sign": sun_sign, "degree": 15.0})
+
+    aspects = metadata.get("aspects") if isinstance(metadata.get("aspects"), list) else []
+
+    unavailable: list[dict[str, str]] = []
+    if not allow_angles:
+        reason = unavailable_reason or "birth_time_or_place_missing"
+        for key in ("ascendant", "mc", "ic", "descendant", "houses"):
+            unavailable.append({"key": key, "reason": reason})
+
+    return validate_natal_facts(
+        {
+            "provider": provider,
+            "provider_version": provider_version,
+            "mode": mode,
+            "confidence": 0.92 if mode == "full" else 0.55,
+            "planets": planets,
+            "angles": angles,
+            "houses": houses_out,
+            "aspects": aspects,
+            "unavailable_facts": unavailable,
+        },
+        expected_mode=mode,
+        structure_unavailable_reason=unavailable_reason,
+    )
+
+
 def build_available_input(
     *,
     birth_date: date,
@@ -348,7 +583,18 @@ def generate_natal_facts(
     available_input: dict[str, Any],
     locale: str = "ru",
     capability: dict[str, Any] | None = None,
+    chart_data: ChartResponse | dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    """Return validated natal_facts from a deterministic chart source.
+
+    Priority:
+    1. ``chart_data`` if provided (e.g. cached CachedNatalChart).
+    2. Synchronous call to the Swiss Ephemeris-backed astro service.
+    3. Honest date-only fallback (sun sign) if the service is unavailable or
+       birth data is insufficient for full angles/houses.
+
+    ``locale`` is kept for API compatibility; no LLM call is made.
+    """
     from todayflow_backend.services.capability_resolver_v0 import merge_unavailable_into_facts
 
     mode = str(available_input.get("mode") or "date_only")
@@ -365,49 +611,41 @@ def generate_natal_facts(
     )
     structure_reason = _structure_reason_from_capability(cap)
 
-    # Strip internal capability pack before LLM / persistence of available_input echo.
-    llm_input = {k: v for k, v in available_input.items() if not str(k).startswith("_")}
-
-    if not is_llm_chat_configured():
-        logger.info("natal_facts: LLM not configured — deterministic sun fallback")
-        facts = date_only_fallback(birth, structure_unavailable_reason=structure_reason)
-        return merge_unavailable_into_facts(facts, cap) if cap else facts
-
-    system, version = get_prompt(PROMPT_ID, locale=locale)
-    user_payload = {
-        "contract_id": "natal_facts",
-        "prompt_version": version,
-        "available_input": llm_input,
-    }
-    client = get_openai_compatible_client(operation="background")
-    model = resolve_default_chat_model()
-    with llm_call_context(feature="natal.facts", ensure_operation=True, operation="natal.facts"):
-        raw = chat_completion_text(
-            client,
-            model=model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False)},
-            ],
-            temperature=0.2,
-            max_tokens=2500,
-            json_object=True,
+    def _from_chart(chart: ChartResponse | dict[str, Any]) -> dict[str, Any]:
+        facts = build_natal_facts_from_chart(
+            chart,
+            mode=mode,
+            provider="astro_service",
+            provider_version="1.0",
+            unavailable_reason=structure_reason,
         )
-    parsed = _parse_json_object(raw or "")
-    if not parsed:
-        logger.warning("natal_facts: empty/invalid LLM JSON — fallback")
-        facts = date_only_fallback(birth, structure_unavailable_reason=structure_reason)
-        return merge_unavailable_into_facts(facts, cap) if cap else facts
+        if not any(p.get("id") == "sun" for p in facts["planets"]):
+            facts["planets"].insert(0, {"id": "sun", "sign": sun_sign_from_date(birth), "degree": 15.0})
+        return facts
 
-    facts = validate_natal_facts(
-        parsed,
-        expected_mode=mode,
-        structure_unavailable_reason=structure_reason,
-    )
-    if not any(p.get("id") == "sun" for p in facts["planets"]):
-        facts["planets"].insert(0, {"id": "sun", "sign": sun_sign_from_date(birth), "degree": 15.0})
-    facts["prompt_id"] = PROMPT_ID
-    facts["prompt_version"] = version
+    if chart_data is not None:
+        facts = _from_chart(chart_data)
+        if cap:
+            facts = merge_unavailable_into_facts(facts, cap)
+        return facts
+
+    try:
+        birth_payload = _build_birth_payload_for_chart(available_input)
+        coordinates = None
+        lat = available_input.get("latitude")
+        lon = available_input.get("longitude")
+        if lat is not None and lon is not None:
+            coordinates = {"latitude": float(lat), "longitude": float(lon)}
+        chart = compute_chart_sync(birth_payload=birth_payload, coordinates=coordinates)
+        facts = _from_chart(chart)
+    except Exception as exc:
+        logger.warning(
+            "natal_facts: chart computation failed (%s) — falling back to date_only",
+            exc,
+            exc_info=True,
+        )
+        facts = date_only_fallback(birth, structure_unavailable_reason=structure_reason)
+
     if cap:
         facts = merge_unavailable_into_facts(facts, cap)
     return facts

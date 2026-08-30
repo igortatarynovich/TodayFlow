@@ -127,6 +127,27 @@ def build_day_dramaturgy_brief_c4(
             }
         )
 
+    primary_conflict = None
+    if must:
+        main = must[0]
+        main_theme = _clip(
+            thesis.get("label_ru") or thesis.get("label") or main.get("fact_ru") or main.get("id") or "",
+            120,
+        )
+        primary_conflict = {
+            "contract_version": "primary_conflict_v1",
+            "title": main_theme,
+            "main_fact": _clip(main.get("fact_ru") or main.get("id") or "", 220),
+            "main_driver_id": main.get("id"),
+            "supporting_themes": [
+                _clip(m.get("fact_ru") or "", 160)
+                for m in must[1:3]
+                if m.get("fact_ru")
+            ],
+            "allowed_spheres": [slot.get("sphere") for slot in scene_slots if slot.get("sphere")],
+            "selected_before_llm": True,
+        }
+
     card = _clip(ritual.get("tarot_name_ru") or ritual.get("tarot_name") or "", 80) or None
     number = ritual.get("numerology_value")
     if number is not None:
@@ -143,6 +164,7 @@ def build_day_dramaturgy_brief_c4(
         "must_dramatize": must,
         "supporting_facts": supporting,
         "scene_slots": scene_slots,
+        "primary_conflict": primary_conflict,
         "sphere_candidates": {
             "primary": primary_spheres,
             "ranked": ranked_spheres,

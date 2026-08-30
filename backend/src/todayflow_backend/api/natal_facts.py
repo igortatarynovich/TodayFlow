@@ -45,7 +45,7 @@ class NatalFactsResponse(BaseModel):
 @router.post("/natal-facts", response_model=NatalFactsResponse)
 @limiter.limit("20/minute")
 def post_natal_facts(request: Request, payload: NatalFactsRequest) -> NatalFactsResponse:
-    """Compute NatalChartFacts via LLM contract (guest-safe, rate-limited)."""
+    """Compute NatalChartFacts from the Swiss Ephemeris-backed astro service (guest-safe, rate-limited)."""
     locale = request_locale(request)
     access: AccessHint = payload.access or "free"
 

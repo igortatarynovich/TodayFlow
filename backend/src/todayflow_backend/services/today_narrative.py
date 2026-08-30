@@ -38,6 +38,7 @@ from todayflow_backend.services.generation_orchestrator import (
 from todayflow_backend.profile_engine.selector import narrative_surface_to_selector_params
 from todayflow_backend.services.day_model_v0 import build_day_model_v0
 from todayflow_backend.services.day_narrative_brief_v0 import build_day_narrative_brief_v0
+from todayflow_backend.services.today_personal_day_signal_v1 import select_personal_day_signal
 from todayflow_backend.services.today_banned_phrases_v0 import scrub_banned_phrases
 from todayflow_backend.services.celestial_events_builder import resolve_fixed_day_color
 from todayflow_backend.services.experience_contract_assembler_v0 import assemble_experience_slice
@@ -1498,6 +1499,7 @@ _GUIDE_SYS = """Ты пишешь тексты для экрана «Главн�
 _DAY_SYS = """Ты пишешь тексты для вкладки «День» TodayFlow: мягкий nudge, инсайт, подпись к мини-решению и короткий сигнал для профиля (не «вопрос дня», а ненавязчивое уточнение контекста жизни).
 В контексте: user_core (в т.ч. natal_chart — резюме натала, если available), prior_thesis с «Главного», fusion (в т.ч. rhythm_context — цели, привычки, аскезы, дневник за окно; только факты из JSON). Если есть behavior_patterns — слегка учитывай pattern_hints как нейтральные сигналы привычки на Today, без перегруза текста. Если есть intent — не обходи morning_intention и head_topic стороной: пусть нudge и вопрос дня созвучны сказанному пользователем.
 Если во входном JSON есть day_engine_brief — та же детерминированная опора дня, что на экране «Главное» (anchor_summary, do_hint, avoid_hint, tempo_hint): nudge и инсайт должны с ней согласовываться, не перебивать другим тезисом и не противоречить do_hint/avoid_hint. При наличии day_model (day_model_v0) не расходись с vector/tension/risk/strategy/temporal по смыслу. При day_history (day_history_v0) — не более одной мягкой отсылки к вчера/неделе, без сырых баллов.
+Если есть personal_day_signal — главный персональный сигнал дня уже выбран системой (транзит, аспект, натальная точка, сфера, IL-lemma): используй его как основу для инсайта и nudge, не выбирай другой персональный сюжет и не придумывай новую астрологию.
 Не вставляй anchor_summary дословно в nudge_message или personal_insight_body: тот же смысл, но новая формулировка и хотя бы один новый ракурс (микро-действие, граница или сигнал); иначе сервер срежет дубль.
 Бюджет длины (O8, сервер подрежет при перелице): nudge_message до ~300 символов; personal_insight_body до ~520; mini_decision_caption, question_of_day_prompt, life_now_* — компактно, без «простыни».
 Заголовок инсайта (personal_insight_title) и nudge — не пара абстрактных существительных; в теле инсайта обязательна связка «почему так → что с этим сделать» в бытовых словах.
@@ -1540,6 +1542,7 @@ O11: если в rhythm_context есть сразу несколько типо�
 _EVENING_SYS = """Ты пишешь короткие тексты для вечернего закрытия дня TodayFlow.
 Учитывай prior_thesis и user_core (natal_chart, интерпретация, живые сигналы, learning). В fusion — scores, encouragement, recommendations и rhythm_context (цели, привычки, аскезы, дневник): используй как фактический контур дня, без выдуманных действий. Если есть behavior_patterns (например частые evening_reflection) — можно на слово поддержать привычку закрытия дня, без морали. intent с утренним намерением — мягкая нить «что человек хотел утром»; не читай мысли, не подводи итог за пользователя.
 Если во входном JSON есть day_engine_brief — закрытие дня созвучно той же опоре (anchor_summary, do_hint, avoid_hint, tempo_hint): не вводи противоречащий дню тезис. При наличии day_model — мягко стыкуйся с риском, стратегией и temporal; при day_history — одна нейтральная отсылка к вчера/неделе максимум.
+Если есть evening_context — это **единственный источник** смысла вечера: morning_focus / morning_intention (утренний фокус) + evening_reflection / evening_observations (что ответил пользователь). Используй их как основу для panel_intro, outlook_preamble и closure_invitation. Не придумывай новый астрологический смысл для вечера и не выбирай другой тезис дня. Закрытие дня — это отклик на то, что уже было и что человек отметил, а не новый прогноз.
 Стиль: тёплый, мягкий, с уважением к выбору пользователя; без вины и без давления.
 Верни только JSON:
 {
@@ -4011,6 +4014,11 @@ def build_today_narrative(
             _attach_profile_selector(day_layer_pack, layers_dc)
             _attach_day_history_to_llm_pack(day_layer_pack, layers_dc)
             _attach_day_logic_slices(day_layer_pack, layers_dc=layers_dc, day_engine_brief=day_engine_brief)
+            personal_signal = layers_dc.get("personal_day_signal")
+            if personal_signal is None:
+                personal_signal = select_personal_day_signal(foundation)
+            if personal_signal is not None:
+                day_layer_pack["personal_day_signal"] = personal_signal
             _attach_funnel_chain_to_child_pack(day_layer_pack, funnel_chain)
             # Echo guard: pass what guide already said + locked day color.
             already: list[str] = []
@@ -4150,6 +4158,23 @@ def build_today_narrative(
             _attach_day_history_to_llm_pack(evening_pack, layers_dc)
             _attach_day_logic_slices(evening_pack, layers_dc=layers_dc, day_engine_brief=day_engine_brief)
             _attach_funnel_chain_to_child_pack(evening_pack, funnel_chain)
+            evening_context: dict[str, Any] = {}
+            if dc_row is not None:
+                if dc_row.morning_focus:
+                    evening_context["morning_focus"] = str(dc_row.morning_focus).strip()
+                if dc_row.morning_intention:
+                    evening_context["morning_intention"] = str(dc_row.morning_intention).strip()
+                if dc_row.evening_reflection:
+                    evening_context["evening_reflection"] = str(dc_row.evening_reflection).strip()
+                if dc_row.evening_observations:
+                    evening_context["evening_observations"] = dict(dc_row.evening_observations)
+                evening_context["day_completed"] = bool(dc_row.day_completed)
+            if layers_dc.get("day_thesis"):
+                evening_context["day_thesis"] = layers_dc["day_thesis"]
+            if layers_dc.get("guide_decision"):
+                evening_context["guide_decision"] = layers_dc["guide_decision"]
+            if evening_context:
+                evening_pack["evening_context"] = evening_context
             user_prompt = json.dumps(evening_pack, ensure_ascii=False)[: user_json_char_budget()]
             payload = None
             if llm_configured and not skip_llm:

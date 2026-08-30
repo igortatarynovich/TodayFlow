@@ -138,28 +138,21 @@ class Settings(BaseSettings):
     compatibility_content_v1: bool = False  # COMPATIBILITY_CONTENT_V1=1 to enable
 
     # Character Engine stages — flags control execution, not Snapshot SoT cutover.
-    # CHARACTER_ENGINE_STAGE01_SHADOW=1 — Stage 0–1 diagnostics only (recommended staging).
-    # CHARACTER_ENGINE_STAGE01_ENABLED=1 — also runs Stage 0–1; still diagnostics-only.
-    # CHARACTER_ENGINE_STAGE2_SHADOW / ENABLED — Stage 2 Identity Core diagnostics-only.
-    # CHARACTER_ENGINE_STAGE3_SHADOW / ENABLED — Stage 3 Internal Engine diagnostics-only.
-    # CHARACTER_ENGINE_STAGE4_SHADOW / ENABLED — Stage 4 life_bundle diagnostics-only.
-    # CHARACTER_ENGINE_STAGE5_SHADOW / ENABLED — Stage 5 Compass+adapters diagnostics-only.
-    # CHARACTER_ENGINE_PROFILE_CONSUMPTION=1 — Identity Core (+ Stage 3–5 when on) overwrites
-    #   Profile journey slots.
-    # CHARACTER_ENGINE_PUBLISH_READY=1 — cutover: character_engine_v1 is portrait SoT;
-    #   personality / disclosure funnel / oneshot blocked on publish.
+    # For MVP, the deterministic CE cascade is the portrait SoT: evidence graph selects
+    # themes, deterministic editorial banks provide prose. Stages are enabled by default;
+    # legacy personality / disclosure funnel / oneshot are no longer used for meaning.
     character_engine_stage01_shadow: bool = False
-    character_engine_stage01_enabled: bool = False
+    character_engine_stage01_enabled: bool = True
     character_engine_stage2_shadow: bool = False
-    character_engine_stage2_enabled: bool = False
+    character_engine_stage2_enabled: bool = True
     character_engine_stage3_shadow: bool = False
-    character_engine_stage3_enabled: bool = False
+    character_engine_stage3_enabled: bool = True
     character_engine_stage4_shadow: bool = False
-    character_engine_stage4_enabled: bool = False
+    character_engine_stage4_enabled: bool = True
     character_engine_stage5_shadow: bool = False
-    character_engine_stage5_enabled: bool = False
-    character_engine_profile_consumption: bool = False
-    character_engine_publish_ready: bool = False
+    character_engine_stage5_enabled: bool = True
+    character_engine_profile_consumption: bool = True
+    character_engine_publish_ready: bool = True
 
     # Push: optional cron secret for POST /internal/push/run-due (set in production)
     push_dispatch_secret: str | None = None
