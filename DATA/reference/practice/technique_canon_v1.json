@@ -660,6 +660,51 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.acceptance",
+      "content_class": "meditation",
+      "type": "acceptance",
+      "canonical_description": "A brief meditation practice in which the person notices an overstimulating or difficult inner experience (such as a sensation, emotion, or urge) and allows it to be present for a few breaths without trying to push it away, change it, or act on it. The aim is to change the relationship to the experience from struggle to observation; it is not a treatment for anxiety, trauma, chronic pain, or any mental or physical health condition, and not a substitute for professional care.",
+      "source_refs": [
+        {
+          "source": "NICE — Chronic pain (primary and secondary) in over 16s: assessment of all chronic pain and management of chronic primary pain (NG193)",
+          "url": "https://www.nice.org.uk/guidance/ng193/resources/chronic-pain-primary-and-secondary-in-over-16s-assessment-of-all-chronic-pain-and-management-of-chronic-primary-pain-pdf-66142080468421",
+          "locus": "Consider acceptance and commitment therapy (ACT) or cognitive behavioural therapy (CBT) for people aged 16 years and over with chronic primary pain; ACT helps people accept difficult thoughts and feelings rather than attempting to avoid or change them.",
+          "note": "official_health. Method confirmation for acceptance as a therapeutic process of noticing and allowing difficult inner experiences. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS Scotland The Matrix — Acceptance and Commitment Therapy (ACT)",
+          "url": "https://www.matrix.nhs.scot/explore-the-recommended-interventions-therapies/acceptance-and-commitment-therapy-act",
+          "locus": "ACT aims to increase psychological flexibility; acceptance involves accepting internal experiences or events without attempts to alter their frequency or form, and continuing engagement in meaningful activities even in the presence of pain or other unwanted internal events.",
+          "note": "official_health. Method confirmation for acceptance as noticing and allowing internal experiences without altering them. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Psychology Tools — What Is Acceptance & Commitment Therapy (ACT)?",
+          "url": "https://www.psychologytools.com/resource/what-is-acceptance-and-commitment-therapy-act",
+          "locus": "ACT is an evidence-based psychological intervention that helps people build a more flexible and values-guided life; the goal is not to get rid of difficult thoughts and feelings but to change how people respond to them, accepting them rather than trying to challenge or control them.",
+          "note": "clinical_psychology_education. Method confirmation for acceptance as noticing and allowing difficult inner experiences without control. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, chronic pain, or any mental or physical health condition.",
+        "If the practice brings up strong or overwhelming distress, or if there is a history of trauma, panic, or acute psychological difficulties, stop and consider speaking with a healthcare professional.",
+        "Allowing an experience does not mean suppressing it or acting on it; if urges feel unsafe, seek professional support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.abstinence",
+      "content_class": "discipline",
+      "type": "abstinence",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "source_gap",
+      "note": "No authoritative general short-term abstinence method that applies to any self-chosen behavior was found. Available evidence is substance-specific (e.g., alcohol drink-free days, smoking not-a-puff) and does not generalize to a generic 'thing you named' discipline. Cell need.detachment.release is covered by technique.acceptance. Existing discipline.abstinence.* items remain llm_provisional without technique_id."
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

@@ -190,6 +190,7 @@ SEED_19_CELL = "need.discipline.prepare"
 SEED_20_ID = "discipline.attention_discipline.001"
 SEED_20_CELL = "need.self_control.stabilize"
 SEED_21_ID = "discipline.abstinence.001"
+PROBE_21_ID = "meditation.acceptance.001"
 SEED_21_CELL = "need.detachment.release"
 SEED_22_ID = "discipline.consistency_challenge.001"
 SEED_22_CELL = "need.consistency.prepare"
@@ -303,7 +304,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is False
     assert coverage["next_pass"] == "library_fill_lightweight_provenance"
-    assert coverage["next_fill_cell"] == "need.detachment.release"
+    assert coverage["next_fill_cell"] == "need.consistency.prepare"
     assert "box_breathing" in coverage["skipped_types"]
     assert "energizing_breath" in coverage["skipped_types"]
     probes = library["architecture_probe_item_ids"]
@@ -328,6 +329,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         SEED_18_ID,
         SEED_19_ID,
         SEED_20_ID,
+        PROBE_21_ID,
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
@@ -397,6 +399,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "discipline.attention_discipline.001": "technique.attention_discipline",
         "discipline.attention_discipline.002": "technique.attention_discipline",
         "discipline.attention_discipline.003": "technique.attention_discipline",
+        "meditation.acceptance.001": "technique.acceptance",
+        "meditation.acceptance.002": "technique.acceptance",
+        "meditation.acceptance.003": "technique.acceptance",
     }
     assert any(r.get("status") == "accepted" for r in techniques["techniques"])
 
@@ -1454,20 +1459,32 @@ def test_p0_seed_20_self_control_cell_sourced() -> None:
     assert coverage["need_cells"][19]["id"] == SEED_20_CELL
 
 
-def test_p0_seed_21_is_first_ledger_empty_cell_detachment() -> None:
+def test_p0_seed_21_detachment_cell_sourced_via_acceptance() -> None:
     _vocab, library, coverage = _load()
-    item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_21_ID)
-    assert item["identity"]["content_class"] == "discipline"
-    assert item["identity"]["type"] == "abstinence"
-    assert item["identity"]["seed_cell"] == SEED_21_CELL
-    assert item["retrieval"]["purpose"] == ["detachment"]
-    assert item["retrieval"]["direction"] == ["release"]
-    assert item["retrieval"]["input_state"] == ["overstimulated"]
-    assert item["payload"]["body_kind"] == "commitment_rule"
+    seed = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_21_ID)
+    assert seed["identity"]["content_class"] == "discipline"
+    assert seed["identity"]["type"] == "abstinence"
+    assert seed["identity"]["seed_cell"] == SEED_21_CELL
+    assert seed["retrieval"]["purpose"] == ["detachment"]
+    assert seed["retrieval"]["direction"] == ["release"]
+    assert seed["retrieval"]["input_state"] == ["overstimulated"]
+    assert seed["payload"]["body_kind"] == "commitment_rule"
+
+    assert seed["identity"].get("technique_id") is None
+    assert seed["identity"]["status"] == "draft"
+
+    sourced = next(i for i in library["items"] if i["identity"]["item_id"] == PROBE_21_ID)
+    assert sourced["identity"]["content_class"] == "meditation"
+    assert sourced["identity"]["type"] == "acceptance"
+    assert sourced["identity"]["seed_cell"] == SEED_21_CELL
+    assert sourced["identity"]["technique_id"] == "technique.acceptance"
+    assert sourced["identity"]["status"] == "active"
 
     cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_21_CELL)
-    assert cell["status"] == "seed"
+    assert cell["status"] == "covered"
+    assert cell.get("fill_status") == "sourced"
     assert cell["item_ids"][0] == SEED_21_ID
+    assert PROBE_21_ID in cell["item_ids"]
     assert coverage["need_cells"][20]["id"] == SEED_21_CELL
 
 
@@ -1833,8 +1850,8 @@ def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
     assert coverage["counts"]["library_items"] == 133
     assert coverage["counts"]["need_cells_empty"] == 0
-    assert coverage["counts"]["need_cells_seed"] == 6
-    assert coverage["counts"]["need_cells_covered"] == 20
+    assert coverage["counts"]["need_cells_seed"] == 5
+    assert coverage["counts"]["need_cells_covered"] == 21
     assert library["status"] == "provisional"
     assert library["fill_frozen"] is False
     assert len(library["items"]) == 133

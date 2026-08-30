@@ -69,7 +69,7 @@ status                    accepted | skipped
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline` = `accepted`. Sourced 20/26. `box_breathing`, `energizing_breath` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.detachment.release`. Не открывать Safety Review V1.1.
+**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance` = `accepted`. Sourced 21/26. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.consistency.prepare`. Не открывать Safety Review V1.1.
 
 ---
 
@@ -87,6 +87,7 @@ status                    accepted | skipped
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | Detachment-release cell sourced via `acceptance` (alt); primary `abstinence` skipped for now. `technique.acceptance` accepted from NICE NG193 ACT + NHS Scotland The Matrix ACT + Psychology Tools ACT overview. Brief notice-allow-don't-push-away practice (three breaths). `technique.abstinence` skipped (source gap: no general short-term abstinence method; evidence is substance-specific). Next = `need.consistency.prepare`. |
 | 2026-08-30 | Self-control-stabilize cell sourced via `attention_discipline`. `technique.attention_discipline` accepted from APA multitasking switching costs + Harvard Health monotasking + Leeds Teaching Hospitals NHS Trust digital wellbeing. Brief one-open-feed rule (close extra feeds, one stream at a time). Next = `need.detachment.release`. |
 | 2026-08-30 | Discipline-prepare cell sourced via `routine_commitment`. `technique.routine_commitment` accepted from NICE PH49 small routine changes + Lally & Gardner (2012) making health habitual + Keller et al. (2021) routine/time cue planning. Brief repeated action at same time/cue for a short streak (e.g. 7 days). Next = `need.self_control.stabilize`. |
 | 2026-08-30 | Recovery-recover cell sourced via `progressive_relaxation`. `technique.progressive_relaxation` accepted from NHS inform progressive muscle relaxation + Mayo Clinic relaxation techniques + VA Whole Health Library PMR. Brief localized tense-and-release (fists on inhale, open on exhale, three times). Next = `need.discipline.prepare`. |

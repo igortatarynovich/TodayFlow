@@ -1,7 +1,7 @@
 # Practice Content Coverage v1
 
 **Статус:** `ACCEPTED` — SoT fill-pass библиотеки. **Fill unfrozen** 2026-08-26.  
-**Версия:** 1.16 (2026-08-30); pointer 2026-08-30 — self-control-stabilize cell sourced via attention_discipline, not research ladder.  
+**Версия:** 1.17 (2026-08-30); pointer 2026-08-30 — detachment-release cell sourced via acceptance (alt); primary abstinence skipped_for_now, not research ladder.  
 **Владелец:** Product.  
 **Ledger:** [`DATA/reference/practice/content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).  
 **Parent:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) §0.1 · §10.  
@@ -16,7 +16,7 @@
 ## Architecture impact
 
 - **SoT before:** taxonomy locked types/purpose/state; fill implied as «написать items против vocab». Риск — плотность в одной технике (40 grounding) и дыры в purpose/direction/class. После P0/P1 density: 133 LLM-draft items закрывали cells, но техника не имела provenance.
-- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing` = skipped_for_now. Next sourced cell = `need.detachment.release`. Первые 20 items = architecture probes.
+- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing`, `energizing_breath`, `abstinence` = `skipped_for_now`. Next sourced cell = `need.consistency.prepare`. Первые 21 items = architecture probes.
 - **Public contract changed?** no
 - **Migration required?** no runtime. 133 drafts stay provisional without `technique_id`.
 - **Canon updated?** yes — this file · matrix JSON · [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · taxonomy pointer · tracker
@@ -26,7 +26,7 @@
 
 ## 0. Закон fill-pass
 
-0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 20 = architecture probes. Next sourced cell = `need.detachment.release`.
+0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath` / `abstinence`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 21 = architecture probes. Next sourced cell = `need.consistency.prepare`.
 1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
@@ -78,7 +78,7 @@ Remap (P2): legacy catalog → эти cells, не новый type-список.
 | `need.recovery.recover` | recovery | recover | tense, low_energy | practice / progressive_relaxation | meditation / body_scan | now |
 | `need.discipline.prepare` | discipline | prepare | restless | discipline / routine_commitment | discipline / consistency_challenge | period |
 | `need.self_control.stabilize` | self_control | stabilize | restless | discipline / attention_discipline | discipline / digital_limit | period |
-| `need.detachment.release` | detachment | release | overstimulated | discipline / abstinence | meditation / acceptance | mixed |
+| `need.detachment.release` | detachment | release | overstimulated | discipline / abstinence (skipped; acceptance sourced) | meditation / acceptance | mixed |
 | `need.consistency.prepare` | consistency | prepare | scattered | discipline / consistency_challenge | discipline / routine_commitment | period |
 | `need.simplicity.release` | simplicity | release | overstimulated | discipline / reduction | discipline / consumption_limit | period |
 | `need.reset.release` | reset | release | stuck | practice / digital_pause | practice / environment_reset | now |
@@ -196,7 +196,7 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Targeted Safety Shortlist** | who_must_not_hold for required holds | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
 | **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) (not continued) |
 | **Safety Review V1.1** | may_release vs model of who_must_not_hold | **not opened** — research escalation closed |
-| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.detachment.release`; sourced 20/26; `box_breathing`, `energizing_breath` and `self_trust` skipped_for_now |
+| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.consistency.prepare`; sourced 21/26; `box_breathing`, `energizing_breath`, `abstinence` and `self_trust` skipped_for_now |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после sourced fill, не вместо |
 
 ---
@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 20/26. Latest: `need.self_control.stabilize` (`attention_discipline`; one open feed at a time, close extra). Next = `need.detachment.release`. Не Safety Review. Не box / energizing-breath research.
+Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 21/26. Latest: `need.detachment.release` (`acceptance`; notice-allow-don't-push-away, three breaths; primary `abstinence` skipped). Next = `need.consistency.prepare`. Не Safety Review. Не box / energizing-breath / abstinence research.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | **Detachment-release cell sourced via acceptance (alt).** Primary `abstinence` skipped_for_now (no general short-term abstinence method; evidence is substance-specific). `technique.acceptance` accepted (NICE NG193 ACT + NHS Scotland The Matrix ACT + Psychology Tools ACT overview). Brief notice-allow-don't-push-away practice (three breaths). Next = `need.consistency.prepare`. |
 | 2026-08-30 | **Self-control-stabilize cell sourced via attention_discipline.** `technique.attention_discipline` accepted (APA multitasking switching costs + Harvard Health monotasking + Leeds Teaching Hospitals NHS Trust digital wellbeing). Brief one-open-feed rule (close extra feeds, one stream at a time). Next = `need.detachment.release`. |
 | 2026-08-30 | **Discipline-prepare cell sourced via routine_commitment.** `technique.routine_commitment` accepted (NICE PH49 + Lally & Gardner (2012) making health habitual + Keller et al. (2021) routine/time cue planning). Brief repeated action at same time/cue for a short streak (e.g. 7 days). Next = `need.self_control.stabilize`. |
 | 2026-08-30 | **Recovery-recover cell sourced via progressive_relaxation.** `technique.progressive_relaxation` accepted (NHS inform progressive muscle relaxation + Mayo Clinic relaxation techniques + VA Whole Health Library PMR). Brief localized tense-and-release (fists on inhale, open on exhale, three times). Next = `need.discipline.prepare`. |
