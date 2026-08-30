@@ -40,7 +40,8 @@
     "practice.evening_ritual.001",
     "meditation.breath_awareness.001",
     "meditation.body_scan.001",
-    "meditation.open_awareness.001"
+    "meditation.open_awareness.001",
+    "meditation.grounding.001"
   ],
   "items": [
     {
@@ -2107,9 +2108,10 @@
         "item_id": "meditation.grounding.001",
         "content_class": "meditation",
         "type": "grounding",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.grounding.stabilize"
+        "seed_cell": "need.grounding.stabilize",
+        "technique_id": "technique.grounding"
       },
       "retrieval": {
         "purpose": [
@@ -4071,9 +4073,10 @@
         "item_id": "meditation.grounding.002",
         "content_class": "meditation",
         "type": "grounding",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.grounding.stabilize"
+        "seed_cell": "need.grounding.stabilize",
+        "technique_id": "technique.grounding"
       },
       "retrieval": {
         "purpose": [
@@ -6574,9 +6577,10 @@
         "item_id": "meditation.grounding.003",
         "content_class": "meditation",
         "type": "grounding",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.grounding.stabilize"
+        "seed_cell": "need.grounding.stabilize",
+        "technique_id": "technique.grounding"
       },
       "retrieval": {
         "purpose": [

@@ -1077,6 +1077,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.grounding",
+      "content_class": "meditation",
+      "type": "grounding",
+      "canonical_description": "A brief grounding meditation in which the person sits and brings attention to the physical contact points between the body and the surface it rests on (for example, the weight on the seat, the feet on the floor, or the back against the chair). The person notices the sensation of contact and support for a few breaths without trying to change the state or relax. It is not a treatment for anxiety, panic, trauma, dissociation, or any mental or physical health condition, and it is not a guarantee of calm, focus, or emotional regulation.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Grounding exercises",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/grounding-exercises/",
+          "locus": "Grounding is a technique that can help reduce symptoms of anxiety and stress when they feel overwhelming. To start, sit in a comfortable position and take a deep breath. The 5,4,3,2,1 method includes focusing on things you can feel, such as the chair or floor.",
+          "note": "official_health. Method confirmation for sitting and using sensory/body contact as a grounding exercise. Treatment/efficacy claims not imported."
+        },
+        {
+          "source": "Royal Berkshire NHS Foundation Trust — Grounding techniques to help with anxiety",
+          "url": "https://www.royalberkshire.nhs.uk/media/0ptda3ym/grounding-techniques-to-help-with-anxiety_apr26.pdf",
+          "locus": "Grounding is a technique that aims to return you back from negative, challenging emotions to the present. The 5-4-3-2-1 technique includes noticing four things you can touch (it can be the floor, the chair you are sitting on, your clothes, bag and so on). Feel your feet on the ground and tense/release your fists: whether you're sitting or standing, press your feet firmly and feel the ground beneath you for an immediate connection to the present moment and the space you're in.",
+          "note": "NHS patient information. Method confirmation for feeling feet on the ground, chair contact, and body contact as grounding. Treatment/efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, panic, trauma, dissociation, PTSD, or any mental or physical health condition.",
+        "If focusing on body contact increases distress, flashbacks, or panic, stop the practice and consider speaking with a healthcare professional.",
+        "The practice does not guarantee calm, focus, or emotional regulation.",
+        "If persistent distress or dissociation is concerning, seek professional advice."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
