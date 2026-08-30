@@ -594,6 +594,39 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.routine_commitment",
+      "content_class": "discipline",
+      "type": "routine_commitment",
+      "canonical_description": "A short-period commitment rule in which the person chooses one small, specific action and commits to performing it at the same time or after the same daily cue for a set number of consecutive days (for example, seven days). The aim is to create a stable context for repeated practice and reduce daily decision-making; it is not a guarantee of habit formation, a long-term behaviour-change programme, or a treatment for motivation or attention difficulties.",
+      "source_refs": [
+        {
+          "source": "NICE — Behaviour change: individual approaches (PH49), Recommendation 10",
+          "url": "https://www.nice.org.uk/guidance/ph49/chapter/recommendations",
+          "locus": "Help people to develop routines that support the new behaviour; note that small, manageable changes to daily routine are most likely to be maintained; ensure behaviour change is maintained for at least a year.",
+          "note": "official_health. Method confirmation for small, manageable routine changes as a behaviour-change support. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Lally & Gardner (2012) — Making health habitual: the psychology of ‘habit-formation’ and general practice, British Journal of General Practice",
+          "url": "https://doi.org/10.3399/bjgp12x659466",
+          "locus": "Advice for creating habits: repeat a chosen behaviour in the same context until it becomes automatic and effortless; the context can be an event or a time of day; a cue within an existing daily routine provides a convenient and stable starting point; patients should choose the target behaviour themselves and add a new behaviour rather than focus on stopping an existing one.",
+          "note": "academic. Method confirmation for a self-selected, repeated action anchored to a stable daily cue. Treatment claims not imported."
+        },
+        {
+          "source": "Keller et al. (2021) — Habit formation following routine-based versus time-based cue planning: A randomized controlled trial, British Journal of Health Psychology",
+          "url": "https://doi.org/10.1111/bjhp.12504",
+          "locus": "Linking a behaviour to a daily routine or a specific time was similarly effective for habit formation; interventions should encourage persons to repeatedly carry out their planned behaviour in response to the planned cue; plan enactment was a key predictor for automaticity.",
+          "note": "academic. Method confirmation for repeated enactment of a behaviour tied to a planned cue (time or routine). Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, executive dysfunction, procrastination, or any mental health condition.",
+        "A short consecutive streak does not guarantee automaticity or long-term habit formation; habits typically take longer and vary widely between individuals.",
+        "If the chosen action becomes painful, unsafe, or impossible to sustain, stop or revise it; if persistent difficulty with routine or self-regulation occurs, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
