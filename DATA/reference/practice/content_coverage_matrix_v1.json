@@ -5,9 +5,9 @@
   "semantic_version": "content-taxonomy-v1.1",
   "fill_frozen": false,
   "next_pass": "library_fill_lightweight_provenance",
-  "next_fill_cell": "need.presence.stabilize",
+  "next_fill_cell": "need.habit_change.prepare",
   "skipped_types": ["box_breathing", "energizing_breath", "abstinence"],
-  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing, energizing_breath and abstinence skipped_for_now. Sourced 24/26: calm (extended_exhale), focus (focused_attention), energy (mobility), grounding (sensory_grounding), clarity (prompted_reflection), confidence (capability), release (body_release), rest (relaxation), sleep (sleep), sleep discipline (sleep_discipline), motivation (micro_action), emotional awareness (self_check_in), self connection (journaling), connection (connection_action), creativity (creative_prompt), decision making (priority_setting), transition (transition_ritual), recovery (progressive_relaxation), discipline (routine_commitment), self control (attention_discipline), detachment (acceptance), consistency (consistency_challenge), simplicity (reduction), reset (digital_pause). Next cell: need.presence.stabilize. Remaining items llm_provisional until rewritten. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
+  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing, energizing_breath and abstinence skipped_for_now. Sourced 25/26: calm (extended_exhale), focus (focused_attention), energy (mobility), grounding (sensory_grounding), clarity (prompted_reflection), confidence (capability), release (body_release), rest (relaxation), sleep (sleep), sleep discipline (sleep_discipline), motivation (micro_action), emotional awareness (self_check_in), self connection (journaling), connection (connection_action), creativity (creative_prompt), decision making (priority_setting), transition (transition_ritual), recovery (progressive_relaxation), discipline (routine_commitment), self control (attention_discipline), detachment (acceptance), consistency (consistency_challenge), simplicity (reduction), reset (digital_pause), presence (mindfulness). Next cell: need.habit_change.prepare. Remaining items llm_provisional until rewritten. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,
@@ -21,8 +21,8 @@
   "counts": {
     "need_cells": 26,
     "need_cells_empty": 0,
-    "need_cells_seed": 2,
-    "need_cells_covered": 24,
+    "need_cells_seed": 1,
+    "need_cells_covered": 25,
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
@@ -796,7 +796,8 @@
       "surfaces": [
         "today"
       ],
-      "status": "seed",
+      "status": "covered",
+      "fill_status": "sourced",
       "item_ids": [
         "meditation.mindfulness.001",
         "meditation.breath_awareness.001",

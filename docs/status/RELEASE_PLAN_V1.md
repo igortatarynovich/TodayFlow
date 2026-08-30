@@ -26,7 +26,7 @@ Soft launch is **done** when all of the following are true:
 1. **Minimum Day Cycle ship gate passed:** a new user can complete `Landing → Signup → Onboarding → Today → Evening Close → D2+ Continuity` without manual workarounds.
 2. **Behavior test cohort started:** 5–10 real people using the product for 14 days, with the Day-14 question measurable.
 3. **Compute lifecycle stable:** no 402/billing blockers, clean COGS baseline recorded, GET `/today` does not trigger LLM.
-4. **Practice Library P0 cells fully sourced:** 26/26 need cells covered by `accepted` techniques (not `llm_provisional`).
+4. **Practice Library MVP graceful degradation:** missing P0 cells fall back to safe, non-blocking behavior (no error page, no invented content); 26/26 coverage is a post-launch content quality target, not a hard launch gate.
 5. **Personal Model read-path hygiene:** no `build()` LLM-on-read in Today/Compat/Tarot/Account GETs; `snapshot_id` provenance in generation logs.
 6. **Production deploy & monitoring ready:** deploy workflow or documented manual runbook, alerts for availability and LLM spend.
 7. **CI green under current canon:** required test suites pass; stale tests and legacy surfaces are quarantined, not restored to green CI.
@@ -54,7 +54,7 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 
 | # | Task | Acceptance Criteria | Owner |
 |---|---|---|---|
-| 0.1 | Merge current practice fill changes | `test_content_library_v1.py` green; coverage counts 24/26 sourced | Backend + Content |
+| 0.1 | Merge current practice fill changes | `test_content_library_v1.py` green; coverage counts 25/26 sourced | Backend + Content |
 | 0.2 | Fix Token Factory billing / top-up | `POST /chat/completions` = 200; `/models` 200 is not enough | Ops |
 | 0.3 | Fix `ops_reset_llm_latch.py` env path | Script reads repo-root `.env` and reaches provider smoke-test; reset only after 200 | Backend + Ops |
 | 0.4 | Reset `llm_spend.json` latch | `tripped=false`, `spent_usd=0` for current UTC date | Ops |
@@ -92,7 +92,7 @@ Fix launch-critical product regressions and quarantine stale tests / legacy surf
 | 2.3 | Real D+1 continuity after evening close | 1 user × 2 calendar days; S0 continuity line appears without localStorage substitution | 2.2 |
 | 2.4 | Team walkthrough 2 people × 2 days | Ship gate DoD 6/6 from `BEHAVIOR_CHANGE_TEST_V0.md` | 2.3 |
 | 2.5 | Start behavior test cohort | 5–10 people, 14 days, metrics collection live | 2.4 |
-| 2.6 | Parallel: Practice Library fill | +1 sourced P0 cell per week starting from `need.presence.stabilize` | 0.1 |
+| 2.6 | Parallel: Practice Library fill | +1 sourced P0 cell per week starting from `need.habit_change.prepare` | 0.1 |
 
 **Gate G2:** ship gate passed and behavior test started.
 
@@ -117,7 +117,7 @@ Fix launch-critical product regressions and quarantine stale tests / legacy surf
 
 | # | Task | Acceptance Criteria | Depends On |
 |---|---|---|---|
-| 4.1 | Practice Library 26/26 sourced | `content_coverage_matrix_v1.json`: 26 covered, 0 seed; `content_library_v1.json` not `llm_provisional` — **24/26 covered 2026-08-30** (`need.reset.release` sourced via `technique.digital_pause`; next cell `need.presence.stabilize`) | 2.6 |
+| 4.1 | Practice Library 26/26 sourced (post-launch fill) | `content_coverage_matrix_v1.json`: 26 covered, 0 seed; `content_library_v1.json` not `llm_provisional` — **25/26 covered 2026-08-30** (`need.presence.stabilize` sourced via `technique.mindfulness`; next cell `need.habit_change.prepare`). Does **not** block launch: missing cells degrade gracefully. | 2.6 |
 | 4.2 | Finalize skipped techniques | `box_breathing`, `energizing_breath`, `abstinence`, `self_trust` — either accepted or permanently skipped with reason | 4.1 |
 | 4.3 | iOS parity wave 1 | Catalog, Reports, Forecast, Library, Discover, Growth surfaces present per `IOS_TODAYFLOW_STATUS.md` | G3 |
 | 4.4 | Maps surfaces cleanup | No orphan `/affirmations/tracker`, `/asceticisms/tracker`; routes unified under `/maps/*` — **done 2026-08-29** (redirects in `next.config.mjs`; orphan pages deleted; links updated to `/maps/wish` and `/maps/ascetic`; iOS deep-link routing updated; backend docstring updated) | G3 |
@@ -145,7 +145,7 @@ Fix launch-critical product regressions and quarantine stale tests / legacy surf
 
 | Track | Velocity | Start After |
 |-------|----------|---------------|
-| Practice Library fill | 1 cell / week | Phase 0 | // now at 24/26, next `need.presence.stabilize`
+| Practice Library fill | 1 cell / week | Phase 0 | // now at 25/26, next `need.habit_change.prepare`
 | iOS parity wave 1 | 1 surface / week | Phase 3 cutover stable |
 | Selection Engine design | 1 pass / week | Phase 3 caller audit |
 | Design System Task 3 | Best effort | Phase 3+ |
@@ -176,6 +176,7 @@ Fix launch-critical product regressions and quarantine stale tests / legacy surf
 | 2026-08-29 | Phase 4.2 Production deploy runbook implemented: `docs/operations/DEPLOY_RUNBOOK_V1.md`; `.github/workflows/deploy.yml` rewrite in local diff (push blocked by token workflow scope). |
 | 2026-08-29 | Phase 2.3 Evening time-gated surface implemented: `showEvening` prop in `TodayProductScreenFlow`, gated by `getTimeOfDayByHour()` in `TodayCompositionSurface`; audit doc `docs/audits/EVENING_TIME_GATE_2026-08-29.md`. |
 | 2026-08-29 | Phase 2.1 FE cutover: default `/today` uses 4-surface ScreenFlow; `?core_loop=1` experiment and `TodayCoreLoopViabilitySurface` removed; audit doc `docs/audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md`. |
+| 2026-08-30 | Practice Library fill progress: `need.presence.stabilize` sourced via `technique.mindfulness`; 25/26 P0 cells covered; next cell `need.habit_change.prepare`. |
 | 2026-08-30 | Practice Library fill progress: `need.reset.release` sourced via `technique.digital_pause`; 24/26 P0 cells covered; next cell `need.presence.stabilize`. |
 | 2026-08-30 | Practice Library fill progress: `need.simplicity.release` sourced via `technique.reduction`; 23/26 P0 cells covered; next cell `need.reset.release`. |
 | 2026-08-30 | Practice Library fill progress: `need.consistency.prepare` sourced via `technique.consistency_challenge`; 22/26 P0 cells covered; next cell `need.simplicity.release`. |

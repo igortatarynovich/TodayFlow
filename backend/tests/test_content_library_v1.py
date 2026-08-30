@@ -304,7 +304,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
     assert library["content_origin"] == "llm_provisional"
     assert coverage["fill_frozen"] is False
     assert coverage["next_pass"] == "library_fill_lightweight_provenance"
-    assert coverage["next_fill_cell"] == "need.presence.stabilize"
+    assert coverage["next_fill_cell"] == "need.habit_change.prepare"
     assert "box_breathing" in coverage["skipped_types"]
     assert "energizing_breath" in coverage["skipped_types"]
     probes = library["architecture_probe_item_ids"]
@@ -333,6 +333,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         SEED_22_ID,
         SEED_23_ID,
         SEED_24_ID,
+        SEED_25_ID,
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
@@ -414,6 +415,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.digital_pause.001": "technique.digital_pause",
         "practice.digital_pause.002": "technique.digital_pause",
         "practice.digital_pause.003": "technique.digital_pause",
+        "meditation.mindfulness.001": "technique.mindfulness",
+        "meditation.mindfulness.002": "technique.mindfulness",
+        "meditation.mindfulness.003": "technique.mindfulness",
     }
     assert any(r.get("status") == "accepted" for r in techniques["techniques"])
 
@@ -1564,7 +1568,7 @@ def test_p0_seed_24_reset_cell_sourced() -> None:
     assert coverage["need_cells"][23]["id"] == SEED_24_CELL
 
 
-def test_p0_seed_25_is_first_ledger_empty_cell_presence() -> None:
+def test_p0_seed_25_presence_cell_sourced() -> None:
     _vocab, library, coverage = _load()
     item = next(i for i in library["items"] if i["identity"]["item_id"] == SEED_25_ID)
     assert item["identity"]["content_class"] == "meditation"
@@ -1576,8 +1580,12 @@ def test_p0_seed_25_is_first_ledger_empty_cell_presence() -> None:
     assert item["retrieval"]["input_state"] == ["scattered", "balanced"]
     assert item["payload"]["body_kind"] == "script"
 
+    assert item["identity"]["technique_id"] == "technique.mindfulness"
+    assert item["identity"]["status"] == "active"
+
     cell = next(c for c in coverage["need_cells"] if c["id"] == SEED_25_CELL)
-    assert cell["status"] == "seed"
+    assert cell["status"] == "covered"
+    assert cell.get("fill_status") == "sourced"
     assert cell["item_ids"][0] == SEED_25_ID
     assert coverage["need_cells"][24]["id"] == SEED_25_CELL
 
@@ -1874,8 +1882,8 @@ def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
     assert coverage["counts"]["library_items"] == 133
     assert coverage["counts"]["need_cells_empty"] == 0
-    assert coverage["counts"]["need_cells_seed"] == 2
-    assert coverage["counts"]["need_cells_covered"] == 24
+    assert coverage["counts"]["need_cells_seed"] == 1
+    assert coverage["counts"]["need_cells_covered"] == 25
     assert library["status"] == "provisional"
     assert library["fill_frozen"] is False
     assert len(library["items"]) == 133

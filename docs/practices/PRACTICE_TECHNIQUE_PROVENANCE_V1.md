@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.31 (2026-08-30) — lightweight fill; digital_pause accepted; reduction accepted; consistency_challenge accepted; acceptance accepted; abstinence skipped_for_now; attention_discipline accepted; routine_commitment accepted; progressive_relaxation accepted; transition_ritual accepted; priority_setting accepted; creative_prompt accepted; connection_action accepted; journaling accepted; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
+**Версия:** 1.32 (2026-08-30) — lightweight fill; mindfulness accepted; digital_pause accepted; reduction accepted; consistency_challenge accepted; acceptance accepted; abstinence skipped_for_now; attention_discipline accepted; routine_commitment accepted; progressive_relaxation accepted; transition_ritual accepted; priority_setting accepted; creative_prompt accepted; connection_action accepted; journaling accepted; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (иерархия доказательности, не обязательная лестница fill).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -18,7 +18,7 @@
 ## Architecture impact
 
 - **SoT before (v1.11):** техника требовала Landscape → Shortlist → Ingest → Normalization → targeted* → Safety Review до canon. Fill frozen. `box_breathing` не закрыт.
-- **SoT after:** provenance = **lightweight row** на технику (`accepted` \| `skipped`). Research ladder = [archive](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md), non-blocking. Active process = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing`, `energizing_breath`, `abstinence` = `skipped_for_now`. Sourced 24/26 P0 cells; latest accepted = `digital_pause`. 133 items остаются provisional без `technique_id`, пока fill их не перепишет. Meaning по-прежнему не знает `item_id` / `technique_id`.
+- **SoT after:** provenance = **lightweight row** на технику (`accepted` \| `skipped`). Research ladder = [archive](./PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md), non-blocking. Active process = [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). `box_breathing`, `energizing_breath`, `abstinence` = `skipped_for_now`. Sourced 25/26 P0 cells; latest accepted = `mindfulness`. 133 items остаются provisional без `technique_id`, пока fill их не перепишет. Meaning по-прежнему не знает `item_id` / `technique_id`.
 - **Public contract changed?** no
 - **Migration required?** no runtime. `identity.technique_id` optional; только `status = accepted` можно ставить на item.
 - **Canon updated?** yes — этот файл · fill V1 · archive index · technique contract · coverage next_pass · tracker
@@ -276,8 +276,8 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 ## 11. Что дальше
 
 1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
-2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause` = `accepted`. Sourced 24/26 P0 cells. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`.
-3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.presence.stabilize`.
+2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness` = `accepted`. Sourced 25/26 P0 cells. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`.
+3. Следующий Product: **library fill** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md). Следующая ячейка: `need.habit_change.prepare`.
 4. Остальные items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
@@ -286,6 +286,7 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | v1.32 — `technique.mindfulness` accepted (Oxford Mindfulness definition + NHS mindfulness + Bishop et al. 2004); next = library fill at `need.habit_change.prepare` |
 | 2026-08-30 | v1.31 — `technique.digital_pause` accepted (NHS Every Mind Matters screen breaks + NHS Employers DSE guidance); next = library fill at `need.presence.stabilize` |
 | 2026-08-30 | v1.30 — `technique.reduction` accepted (Paas & van Merriënboer 2020 cognitive-load stimuli reduction + RACGP clutter/cognitive resources + Sweller et al. 2019 extraneous attention-capturing stimuli); next = library fill at `need.reset.release` |
 | 2026-08-30 | v1.29 — `technique.consistency_challenge` accepted (Lally et al. 2010 daily repetition + Lally & Gardner 2012 making health habitual + Scientific American streak motivation); next = library fill at `need.simplicity.release` |

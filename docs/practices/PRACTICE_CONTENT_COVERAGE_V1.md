@@ -1,7 +1,7 @@
 # Practice Content Coverage v1
 
 **Статус:** `ACCEPTED` — SoT fill-pass библиотеки. **Fill unfrozen** 2026-08-26.  
-**Версия:** 1.20 (2026-08-30); pointer 2026-08-30 — reset-release cell sourced via digital_pause; not research ladder.  
+**Версия:** 1.21 (2026-08-30); pointer 2026-08-30 — presence-stabilize cell sourced via mindfulness; not research ladder.  
 **Владелец:** Product.  
 **Ledger:** [`DATA/reference/practice/content_coverage_matrix_v1.json`](../../DATA/reference/practice/content_coverage_matrix_v1.json).  
 **Parent:** [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) §0.1 · §10.  
@@ -16,7 +16,7 @@
 ## Architecture impact
 
 - **SoT before:** taxonomy locked types/purpose/state; fill implied as «написать items против vocab». Риск — плотность в одной технике (40 grounding) и дыры в purpose/direction/class. После P0/P1 density: 133 LLM-draft items закрывали cells, но техника не имела provenance.
-- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing`, `energizing_breath`, `abstinence` = `skipped_for_now`. Next sourced cell = `need.presence.stabilize`. Первые 24 items = architecture probes.
+- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing`, `energizing_breath`, `abstinence` = `skipped_for_now`. Next sourced cell = `need.habit_change.prepare`. Первые 25 items = architecture probes.
 - **Public contract changed?** no
 - **Migration required?** no runtime. 133 drafts stay provisional without `technique_id`.
 - **Canon updated?** yes — this file · matrix JSON · [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · taxonomy pointer · tracker
@@ -26,7 +26,7 @@
 
 ## 0. Закон fill-pass
 
-0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath` / `abstinence`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 24 = architecture probes. Next sourced cell = `need.presence.stabilize`.
+0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath` / `abstinence`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 25 = architecture probes. Next sourced cell = `need.habit_change.prepare`.
 1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
@@ -196,7 +196,7 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Targeted Safety Shortlist** | who_must_not_hold for required holds | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
 | **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) (not continued) |
 | **Safety Review V1.1** | may_release vs model of who_must_not_hold | **not opened** — research escalation closed |
-| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.presence.stabilize`; sourced 24/26; `box_breathing`, `energizing_breath`, `abstinence` and `self_trust` skipped_for_now |
+| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); next cell `need.habit_change.prepare`; sourced 25/26; `box_breathing`, `energizing_breath`, `abstinence` and `self_trust` skipped_for_now |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после sourced fill, не вместо |
 
 ---
@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 24/26. Latest: `need.reset.release` (`digital_pause`; move device out of reach/face down and do not interact for a short bounded period; no nervous-system reset or wellness claims). Next = `need.presence.stabilize`. Не Safety Review. Не box / energizing-breath / abstinence research.
+Следующий рабочий шаг: **library fill** следующей ячейки. Sourced 25/26. Latest: `need.presence.stabilize` (`mindfulness`; brief attention to present-moment sounds/sensations/breath, notice without judgment, return when mind wanders; no treatment claims or mind-emptying). Next = `need.habit_change.prepare`. Не Safety Review. Не box / energizing-breath / abstinence research.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | **Presence-stabilize cell sourced via mindfulness.** `technique.mindfulness` accepted (Oxford Mindfulness definition + NHS mindfulness + Bishop et al. 2004). Brief practice: direct attention to present-moment experience (sounds/sensations/breath), notice without judgment, return when mind wanders. No treatment claims or mind-emptying. Next = `need.habit_change.prepare`. |
 | 2026-08-30 | **Reset-release cell sourced via digital_pause.** `technique.digital_pause` accepted (NHS Every Mind Matters screen breaks + NHS Employers DSE guidance). Brief action: move device out of reach or face down and do not interact for a short bounded period (e.g., 2/5 minutes). No nervous-system reset or wellness claims. Next = `need.presence.stabilize`. |
 | 2026-08-30 | **Simplicity-release cell sourced via reduction.** `technique.reduction` accepted (Paas & van Merriënboer 2020 cognitive-load theory + RACGP clutter/cognitive resources + Sweller et al. 2019 extraneous attention-capturing stimuli). Brief discipline rule: select one unnecessary or attention-competing thing and remove/defer it for a short period (e.g., 7/14 days). No decluttering philosophy or wellness claims. Next = `need.reset.release`. |
 | 2026-08-30 | **Consistency-prepare cell sourced via consistency_challenge.** `technique.consistency_challenge` accepted (Lally et al. 2010 daily repetition + Lally & Gardner 2012 making health habitual + Scientific American streak motivation). Brief short streak challenge (seven/fourteen days; one small action; visible progress; miss resets count but does not erase practice). Next = `need.simplicity.release`. |

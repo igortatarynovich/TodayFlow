@@ -69,7 +69,7 @@ status                    accepted | skipped
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause` = `accepted`. Sourced 24/26. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.presence.stabilize`. Не открывать Safety Review V1.1.
+**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness` = `accepted`. Sourced 25/26. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.habit_change.prepare`. Не открывать Safety Review V1.1.
 
 ---
 
@@ -87,6 +87,7 @@ status                    accepted | skipped
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | Presence-stabilize cell sourced via `mindfulness`. `technique.mindfulness` accepted from Oxford Mindfulness definition + NHS mindfulness + Bishop et al. (2004). Brief practice: direct attention to present-moment experience (sounds/sensations/breath), notice without judgment, return when mind wanders. No treatment claims or mind-emptying. Next = `need.habit_change.prepare`. |
 | 2026-08-30 | Reset-release cell sourced via `digital_pause`. `technique.digital_pause` accepted from NHS Every Mind Matters screen breaks + NHS Employers DSE guidance. Brief action: move device out of reach or face down and do not interact for a short bounded period (e.g., 2/5 minutes). No nervous-system reset or wellness claims. Next = `need.presence.stabilize`. |
 | 2026-08-30 | Simplicity-release cell sourced via `reduction`. `technique.reduction` accepted from Paas & van Merriënboer (2020) cognitive-load stimuli reduction + RACGP clutter/cognitive resources + Sweller et al. (2019) extraneous attention-capturing stimuli. Brief discipline rule: select one unnecessary or attention-competing thing and remove/defer it for a short period (e.g., 7/14 days). No decluttering philosophy or wellness claims. Next = `need.reset.release`. |
 | 2026-08-30 | Consistency-prepare cell sourced via `consistency_challenge`. `technique.consistency_challenge` accepted from Lally et al. (2010) daily repetition in context + Lally & Gardner (2012) making health habitual + Scientific American streak motivation. Brief short streak challenge (seven/fourteen days; one small action; miss resets count; visible progress). Next = `need.simplicity.release`. |

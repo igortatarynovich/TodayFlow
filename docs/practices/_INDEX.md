@@ -5,9 +5,9 @@
 | Документ | Роль |
 |----------|------|
 | [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) | **SoT библиотеки** (v1.2): class → type → attributes · Canonical Technique → Item expression · pipeline Meaning→Retrieval→Library. Vocab: `DATA/reference/practice/content_taxonomy_v1.json` |
-| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Coverage** (v1.20): 26/26 P0 cells · type spine. Architecture stands. Sourced 24/26. Next cell = `need.presence.stabilize` |
+| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Coverage** (v1.21): 26/26 P0 cells · type spine. Architecture stands. Sourced 25/26. Next cell = `need.habit_change.prepare` |
 | [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md) | **Active fill:** lightweight provenance → accepted/skipped → Content Item. Не research ladder |
-| [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) | **SoT происхождения техники** (v1.31): одна запись на технику. LLM не источник метода. Meaning не знает `item_id` / `technique_id` |
+| [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) | **SoT происхождения техники** (v1.32): одна запись на технику. LLM не источник метода. Meaning не знает `item_id` / `technique_id` |
 | [CONTENT_LIBRARY_SELECTION_V1.md](./CONTENT_LIBRARY_SELECTION_V1.md) | **Runtime selector** (v1.0): deterministic selection of active Content Item by need (purpose/direction/state/context). No LLM, no randomness. Code: `services/content_library_selection_v1.py` |
 | [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | **SoT экрана** (v1.1): цикл состояния; 6 needs (тело + рефлексия; Уснуть last); 9 formats (yoga/stretch/music + reflection/sleep); сессия; music layer |
 | [practices_screen_mockup_v1.png](./practices_screen_mockup_v1.png) | **Визуальный референс** экрана (загруженный скрин спеки) — UI-паритет + C0b need-лента |
