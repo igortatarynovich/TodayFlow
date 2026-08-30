@@ -1,6 +1,6 @@
 /**
- * Grammar §9 subset — findings 7, 12, 15, 17, 18.
- * Not a full Inventory scanner. No invent.
+ * Grammar §9 subset — findings 7, 12, 15, 17, 18 (regression).
+ * Full scanner: frontend/src/lib/displayGrammar/scanDisplayGrammar.ts
  * Canon: docs/foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md §9
  */
 

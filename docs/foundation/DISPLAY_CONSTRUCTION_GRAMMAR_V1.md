@@ -28,6 +28,15 @@
 - **Canon updated?** yes — this file · TODAY_CONTENT_PIPELINE_V1 · TODAY_PRODUCT_FLOW_V1 · TODAY_DISPLAY_INVENTORY_V1 · tracker.
 - **Backward compatible?** yes for API. Guest ritual stays catalog-only.
 
+## Architecture impact — Grammar §9 Inventory scanner (2026-08-30)
+
+- **SoT before:** §9 listed 19 findings; only 7/12/15/17/18 were unit-tested. FE copy and VM fields could appear without a machine check against Inventory.
+- **SoT after:** `scanDisplayGrammar` is the harness for all 19 findings. Inventory markdown remains last authority before UI. `displayGrammar/inventoryCatalog.ts` is a derived index (sync-tested against §2). JSON may keep legacy fields; without a projection `slot_id` they must not render. Chrome copy files are not screen authority. Glance Daily Focus composition is out of this pass.
+- **Public contract changed?** no JSON.
+- **Migration required?** no. New path UI without an Inventory row fails finding 1 or 2.
+- **Canon updated?** yes — this file §9 · Today Inventory §7 · tracker.
+- **Backward compatible?** yes for API. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
+
 ---
 
 ## 1. Цепочка (LOCKED)
@@ -302,9 +311,26 @@ Guest на RITUAL заканчивает фразу **каталогом** («к
 
 ---
 
-## 9. Audit (целевой harness)
+## 9. Audit (harness)
 
-Когда оба Inventory заполнены записями §3, проверяемо. **Subset 7 / 12 / 15 / 17 / 18:** unit tests in `frontend/src/lib/todayDisplayLockAudit.ts`. Full scanner is not this pass.
+Scanner проверяет **законность происхождения и размещения**, не качество фразы. Semantic quality остаётся у authority / slot contract.
+
+**SoT слотов:** [TODAY_DISPLAY_INVENTORY_V1](../today/TODAY_DISPLAY_INVENTORY_V1.md) · [PROFILE_DISPLAY_INVENTORY_V1](../profile/PROFILE_DISPLAY_INVENTORY_V1.md).  
+Код `frontend/src/lib/displayGrammar/` — производный индекс + scanner. **Не** Meaning SoT и не пятый канон.
+
+Цепочка проверки: source → composition → `slot_id` → Inventory → projection → UI.
+
+| Слой | Правило |
+|------|---------|
+| Meaning atom | есть `slot_id` этой поверхности; class допустим; origin ∈ allowed; forbidden не протёк; FE только clip / map_label / hide_by_gate; empty → omit; anti-dupe |
+| Chrome | пользовательский label имеет chrome-запись Inventory. Строка в copy-файле **сама по себе** права на экран не даёт |
+| JSON → UI | legacy field может жить в payload; без разрешённого `slot_id` он **невидим** |
+| T1 Global | ни natal, ни CE, ни Personal Day, ни ritual identity / карта / число, ни goals/behavior |
+| T3 Personal | natal overlay персонализирует день; Character warehouse / CE prose **не** вход |
+
+Negative fixtures (обязательны): unknown filled VM field без slot → finding 2; новая содержательная строка прямо в path-component → finding 1.
+
+**Regression:** findings 7 / 12 / 15 / 17 / 18 остаются в `todayDisplayLockAudit.ts` и вливаются в `scanDisplayGrammar`.
 
 | # | Находка |
 |---|---------|
@@ -345,6 +371,7 @@ Guest на RITUAL заканчивает фразу **каталогом** («к
 
 | Date | Change |
 |------|--------|
+| 2026-08-30 | §9 full Inventory scanner (`displayGrammar`); findings 1–19; negative fixtures unknown-field / invented FE copy |
 | 2026-08-29 | §9 finding 7 (canned/CE invent) added to the same unit subset |
 | 2026-08-29 | §9 findings 12/15/17/18 unit-tested (`todayDisplayLockAudit`); full scanner later |
 | 2026-08-29 | v1.0 — цепочка; пять ограничений; generated ≠ authority; anti-dupe by question; FE powers |

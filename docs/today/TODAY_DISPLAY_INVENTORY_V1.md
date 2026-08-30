@@ -526,7 +526,7 @@ Chrome: «В приоритете» · «Осторожнее».
 | persist_key | PersonalDayKey |
 | anti_dupe_group | `do_layers` · `focus_vs_priority` |
 
-Fallback to glance `prioritize` only if `do[]` empty **and** that string is personal, not Global chip.
+Fallback to glance `prioritize` only if `do[]` empty **and** that string is personal (`today_move`), not Global chip / Global expect. Otherwise omit.
 
 #### `T3.caution`
 
@@ -709,7 +709,7 @@ Orientation step · SCENARIO_V3 six blocks · DomainLens as required dashboard �
 | `TodayDayBrief` orientation pane | нет шага; не наращивать |
 | `storyNext` deprecated keys | нет slot_id |
 | loop/promise copy | нет T4 meaning |
-| composition VM canned hero tagline | **CUT** — tagline = Global period subline or omit; not CE `development_point`, not canned |
+| Glance `prioritize` as MY DAY do | **CUT** — fallback only if personal `today_move`; Global expect/chip omit |
 
 Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.summary_ru`; overlay axis or omit; ritual lens = capability ∧ persist; `primary_action` not `focusTitle`; empty tracker omit (not Priority stand-in); hero tagline not CE/canned; evening open does not invent «Главный фокус дня».
 
@@ -753,7 +753,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 | T3.headline | PASS | thesis; не why_personal; не CE |
 | T3.focus_title | PASS | projected axis; omit если оси нет |
 | T3.focus_body | **FIXED** | `development_point` снят (не overlay); drop overlap headline |
-| T3.priority / caution | PASS | situation do / personal risk |
+| T3.priority / caution | **FIXED** | situation do / personal risk; glance fallback only if `today_move` |
 | T3.rhythm | PASS | natal clocks или Global «Ритм дня», не «мой» |
 | T3.color | **FIXED** | нет fill-empty смыслом |
 | T3.practice / affirmation | **FIXED** | техника / вербальная опора ≠ Priority |
@@ -763,7 +763,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 | First Today chips | **FIXED** | user record, не bind |
 | `T3.action` | OUT | drift если код ещё рисует |
 
-**Код-drift (остаток):** full Grammar §9 scanner (rows 1–6, 8–11, 13–14, 16, 19) not built. Subset 7/12/15/17/18 unit-tested. Glance `prioritize` as MY DAY do fallback only if personal (not this pass).
+**Код-drift (остаток):** Grammar §9 scanner **landed** (`frontend/src/lib/displayGrammar`). Glance Daily Focus composition still out of this harness (separate authority pass). Dead `ProfileCharacterScene.tsx` unused after path cut.
 
 ---
 
@@ -771,6 +771,8 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 
 | Date | Change |
 |------|--------|
+| 2026-08-30 | Grammar §9 scanner (findings 1–19); Glance composition still out of harness |
+| 2026-08-30 | T3.priority: glance `prioritize` fallback only if personal `today_move`, not Global |
 | 2026-08-29 | hero tagline: no CE / canned invent; Grammar §9 #7 unit subset |
 | 2026-08-29 | `primary_action` out of composition `focusTitle`; empty tracker omit; Grammar §9 #17/#18 |
 | 2026-08-29 | v1.0 — первый закрытый список |

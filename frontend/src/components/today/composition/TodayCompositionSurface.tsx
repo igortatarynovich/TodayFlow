@@ -101,6 +101,7 @@ import { StoryBlockCue, StoryNextAnchor } from "@/components/today/composition/T
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
 import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
+import { pickMyDayPriorityLines } from "@/lib/todayMyDayPriority";
 import { pickPersonalFocusAxisLabel } from "@/lib/todayPersonalFocusAxis";
 import { buildGlanceEnergyFromChorus } from "@/lib/todayGlanceEnergy";
 import { buildPlotConflictNarrative, buildPlotStoryBeats } from "@/lib/todayPlotNarrative";
@@ -2172,15 +2173,11 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const myDayMeaningUnavailable = isTodayInterpretationUnavailable(props.contract);
-  const myDayPriorities = myDayMeaningUnavailable
-    ? []
-    : (
-    dayBriefModel.doItems.length
-      ? dayBriefModel.doItems
-      : glanceDailyFocus?.prioritize
-        ? [glanceDailyFocus.prioritize]
-        : []
-  ).slice(0, 3);
+  const myDayPriorities = pickMyDayPriorityLines({
+    contract: props.contract,
+    doItems: dayBriefModel.doItems,
+    glancePrioritize: glanceDailyFocus?.prioritize,
+  });
   const myDayCautions = myDayMeaningUnavailable
     ? []
     : (

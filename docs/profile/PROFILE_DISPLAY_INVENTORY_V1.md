@@ -654,6 +654,7 @@ Cut 2026-08-29: `ProfileCharacterScene` removed from path; P4 spheres cap 0–2;
 
 | Date | Change |
 |------|--------|
+| 2026-08-30 | Grammar §9 scanner covers Profile path slots; catalog sync-tested against §2 |
 | 2026-08-29 | FE cutover — Character warehouse off path; P4 spheres 0–2 |
 | 2026-08-29 | v1.0 — первый закрытый список |
 | 2026-08-29 | v1.1 — Grammar §3 records; one_question; allowed_inputs; forbidden_inference; anti_dupe groups; persist keys |
