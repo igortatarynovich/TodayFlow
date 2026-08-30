@@ -34,7 +34,8 @@
     "meditation.mindfulness.001",
     "discipline.consistency_challenge.002",
     "practice.intention_setting.001",
-    "practice.environment_reset.001"
+    "practice.environment_reset.001",
+    "practice.free_writing.001"
   ],
   "items": [
     {
@@ -1712,9 +1713,10 @@
         "content_class": "practice",
         "family": "creative",
         "type": "free_writing",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.creativity.open"
+        "seed_cell": "need.creativity.open",
+        "technique_id": "technique.free_writing"
       },
       "retrieval": {
         "purpose": [
@@ -3502,9 +3504,10 @@
         "content_class": "practice",
         "family": "creative",
         "type": "free_writing",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.creativity.open"
+        "seed_cell": "need.creativity.open",
+        "technique_id": "technique.free_writing"
       },
       "retrieval": {
         "purpose": [
@@ -5999,9 +6002,10 @@
         "content_class": "practice",
         "family": "creative",
         "type": "free_writing",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.creativity.open"
+        "seed_cell": "need.creativity.open",
+        "technique_id": "technique.free_writing"
       },
       "retrieval": {
         "purpose": [

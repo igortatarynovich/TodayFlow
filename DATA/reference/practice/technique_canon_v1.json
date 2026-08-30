@@ -894,6 +894,35 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.free_writing",
+      "content_class": "practice",
+      "family": "creative",
+      "type": "free_writing",
+      "canonical_description": "A brief practice in which the person writes continuously for a set period (for example, two or five minutes) without stopping, editing, erasing, or correcting. The goal is to keep producing words for the duration, regardless of spelling, grammar, or coherence; it is not a therapeutic or clinical intervention, a creativity guarantee, a cure for writer's block, or a substitute for professional help.",
+      "source_refs": [
+        {
+          "source": "Elbow (1973) — Writing Without Teachers, Oxford University Press (excerpted in FREEWRITING by Peter Elbow)",
+          "url": "https://www.research.ucsb.edu/sites/default/files/RD/docs/FREEWRITING-by-Peter-Elbow.pdf",
+          "locus": "The idea is simply to write for ten minutes (later on, perhaps fifteen or twenty). Don't stop for anything. Go quickly without rushing. Never stop to look back, to cross something out, to wonder how to spell something, to wonder what word or thought to use, or to think about what you are doing. The main thing about freewriting is that it is nonediting. It is an exercise in bringing together the process of producing words and putting them down on the page.",
+          "note": "pedagogical origin. Method confirmation for continuous, non-editing writing for a set time. Claims about writing improvement or block reduction not imported."
+        },
+        {
+          "source": "MIT Writing Process — Freewriting",
+          "url": "https://writingprocess.mit.edu/process/step-1-generate-ideas/instructions/freewriting/",
+          "locus": "Freewriting, a writing strategy developed by Peter Elbow in 1973, is similar to brainstorming but is written in sentence and paragraph form without stopping. DO KEEP YOUR HANDS MOVING. If you can't think of anything, just keep repeating your subject or something like 'I'm waiting for ideas to come and they will' over and over until they do come.",
+          "note": "educational guidance. Method confirmation for continuous, unedited writing. Creativity/fluency claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, ADHD, or any mental or physical health condition.",
+        "If writing brings up distressing or overwhelming material, stop and consider speaking with a healthcare professional.",
+        "The practice does not guarantee improved writing, creativity, productivity, or wellbeing.",
+        "Keep the content private if you choose; do not share anything that could cause harm or breach confidentiality."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
