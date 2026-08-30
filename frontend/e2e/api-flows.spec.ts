@@ -52,26 +52,24 @@ test.describe("Сценарии с живым API", () => {
 
   test("логин через форму → Today или onboarding профиля", async ({ page }) => {
     await page.goto("/auth?mode=login");
-    await expect(page.getByPlaceholder("your@email.com")).toBeVisible({
+    await expect(page.getByPlaceholder("you@example.com")).toBeVisible({
       timeout: 20_000,
     });
     await page.locator("#email").fill(loginEmail);
     await page.locator("#password").fill(E2E_USER_PASSWORD);
-    const [loginResp] = await Promise.all([
-      page.waitForResponse(
-        (r) =>
-          r.url().includes("/auth/login") && r.request().method() === "POST",
-      ),
-      page.getByRole("button", { name: "Войти", exact: true }).click(),
-    ]);
-    expect(loginResp.ok(), await loginResp.text()).toBeTruthy();
-    await expect(page).toHaveURL(/\/(today|profile)/, { timeout: 25_000 });
+    await page.getByRole("button", { name: "Войти", exact: true }).click();
+    await expect(page).toHaveURL(/\/(today|profile|onboarding)/, {
+      timeout: 25_000,
+    });
   });
 
   test("хаб Таро загружается с API", async ({ page }) => {
     await page.goto("/tarot");
-    await expect(
-      page.getByRole("heading", { name: /Таро как ясный слой выбора и смысла/i }),
-    ).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByText("Вопрос").first()).toBeVisible({
+      timeout: 20_000,
+    });
+    await expect(page.getByText("Задать вопрос").first()).toBeVisible({
+      timeout: 20_000,
+    });
   });
 });

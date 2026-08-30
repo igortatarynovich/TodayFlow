@@ -4,10 +4,10 @@ test.describe("Главная (гость)", () => {
   test("hero и вход в приложение", async ({ page }) => {
     await page.goto("/");
     await expect(
-      page.getByRole("heading", { name: /Узнай, что для тебя актуально сегодня/i }),
+      page.getByRole("heading", { name: /Точные астрономические данные/i }),
     ).toBeVisible({ timeout: 20_000 });
-    const cta = page.getByRole("link", { name: "Начать", exact: true });
+    const cta = page.getByRole("link", { name: /Посмотреть, как это работает/i }).first();
     await expect(cta).toBeVisible();
-    await expect(cta).toHaveAttribute("href", "/auth");
+    await expect(cta).toHaveAttribute("href", "/demo/today");
   });
 });
