@@ -69,7 +69,7 @@ status                    accepted | skipped
 
 Целевой масштаб: десятки техник за рабочий проход.
 
-**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge` = `accepted`. Sourced 22/26. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.simplicity.release`. Не открывать Safety Review V1.1.
+**Сейчас:** `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction` = `accepted`. Sourced 23/26. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`. Следующая ячейка: `need.reset.release`. Не открывать Safety Review V1.1.
 
 ---
 
@@ -87,6 +87,7 @@ status                    accepted | skipped
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | Simplicity-release cell sourced via `reduction`. `technique.reduction` accepted from Paas & van Merriënboer (2020) cognitive-load stimuli reduction + RACGP clutter/cognitive resources + Sweller et al. (2019) extraneous attention-capturing stimuli. Brief discipline rule: select one unnecessary or attention-competing thing and remove/defer it for a short period (e.g., 7/14 days). No decluttering philosophy or wellness claims. Next = `need.reset.release`. |
 | 2026-08-30 | Consistency-prepare cell sourced via `consistency_challenge`. `technique.consistency_challenge` accepted from Lally et al. (2010) daily repetition in context + Lally & Gardner (2012) making health habitual + Scientific American streak motivation. Brief short streak challenge (seven/fourteen days; one small action; miss resets count; visible progress). Next = `need.simplicity.release`. |
 | 2026-08-30 | Detachment-release cell sourced via `acceptance` (alt); primary `abstinence` skipped for now. `technique.acceptance` accepted from NICE NG193 ACT + NHS Scotland The Matrix ACT + Psychology Tools ACT overview. Brief notice-allow-don't-push-away practice (three breaths). `technique.abstinence` skipped (source gap: no general short-term abstinence method; evidence is substance-specific). Next = `need.consistency.prepare`. |
 | 2026-08-30 | Self-control-stabilize cell sourced via `attention_discipline`. `technique.attention_discipline` accepted from APA multitasking switching costs + Harvard Health monotasking + Leeds Teaching Hospitals NHS Trust digital wellbeing. Brief one-open-feed rule (close extra feeds, one stream at a time). Next = `need.detachment.release`. |

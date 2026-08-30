@@ -739,6 +739,40 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.reduction",
+      "content_class": "discipline",
+      "type": "reduction",
+      "canonical_description": "A short-period discipline rule in which the person selects one unnecessary or attention-competing stimulus, obligation, or item from the day and removes it from the immediate environment or defers it for a set period (for example, seven or fourteen days). The aim is to reduce the number of simultaneous attention-capturing things by a concrete deletion or postponement action; it is not a general decluttering philosophy, a promise of reduced anxiety, a treatment for any mental or physical health condition, or a lifestyle transformation.",
+      "source_refs": [
+        {
+          "source": "Paas & van Merriënboer (2020) — Cognitive-Load Theory: Methods to Manage Working Memory Load in the Learning of Complex Tasks, Current Directions in Psychological Science",
+          "url": "https://journals.sagepub.com/doi/10.1177/0963721420922183",
+          "locus": "Environmental stimuli can impose a load on working memory; methods to manage this include helping the learner stop monitoring irrelevant stimuli in the environment (attention-capturing stimuli reduction) or suppress cognitive states caused by the environment; visual and auditory noise are typical irrelevant stimuli that take limited working-memory resources away from the task.",
+          "note": "academic. Method confirmation for reducing attention-capturing environmental stimuli to free working-memory resources. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "RACGP — What does clutter do to your brain and body?",
+          "url": "https://www1.racgp.org.au/newsgp/clinical/what-does-clutter-do-to-your-brain-and-body",
+          "locus": "Constant visual reminders of disorganisation drain cognitive resources and reduce the ability to focus; clearing clutter from the home and work environment can result in better ability to focus and process information.",
+          "note": "clinical_medicine. Method confirmation for removing visual clutter/unnecessary items from the environment to reduce attentional load. Treatment/wellness claims not imported."
+        },
+        {
+          "source": "Sweller et al. (2019) — Cognitive Load Theory and Instructional Design: A Review, Educational Psychology Review (cited in Paas & van Merriënboer 2020)",
+          "url": "https://doi.org/10.1007/s10648-019-09465-0",
+          "locus": "Extraneous cognitive load is induced when learners process elements in working memory not directly related to the activity’s learning intention; the learning environment can be altered to reduce extraneous attention-capturing stimuli, such as not over-decorating classrooms.",
+          "note": "academic. Method confirmation for altering the environment to reduce extraneous attention-capturing stimuli. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, anxiety, depression, hoarding disorder, or any mental or physical health condition.",
+        "This rule is about removing one unnecessary or attention-competing item at a time; if the item is required for safety, work, caregiving, or daily functioning, do not remove it.",
+        "If difficulty discarding items is severe, distressing, or linked to hoarding or other concerns, stop and consider speaking with a healthcare professional.",
+        "Removing an item does not guarantee reduced stress, improved mood, or any psychological outcome."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

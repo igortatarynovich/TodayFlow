@@ -46,7 +46,7 @@ DISCIPLINE_PAYLOAD_EXTRA = (
 )
 ALLOWED_STATUS = frozenset({"draft", "active", "retired"})
 TECHNIQUE_ID_PREFIX = "technique."
-ARCHITECTURE_PROBE_COUNT = 22
+ARCHITECTURE_PROBE_COUNT = 23
 ALLOWED_SOURCE_FAMILY = frozenset(
     {
         "clinical_psychology",
