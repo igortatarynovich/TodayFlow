@@ -339,6 +339,7 @@ CLASS_TO_CATEGORY: dict[str, str] = {
 
 TYPE_TO_CATEGORY: dict[str, str] = {
     "extended_exhale": "breathing",
+    "paced_breathing": "breathing",
     "box_breathing": "breathing",
     "energizing_breath": "breathing",
     "breath_awareness": "breathing",
@@ -393,6 +394,7 @@ CLASS_TO_FORMAT: dict[str, str] = {
 
 TYPE_TO_FORMAT: dict[str, str] = {
     "extended_exhale": "breath",
+    "paced_breathing": "breath",
     "box_breathing": "breath",
     "energizing_breath": "breath",
     "breath_awareness": "breath",

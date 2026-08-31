@@ -7641,6 +7641,62 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.paced_breathing.001",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "paced_breathing",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.paced_breathing"
+      },
+      "retrieval": {
+        "purpose": [
+          "calm"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated",
+          "tense"
+        ],
+        "direction": [
+          "downregulate"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Медленный ритм",
+            "body": "Дыши носом в спокойном темпе: вдох примерно 5 секунд, выдох чуть длиннее, без задержек. Не форсируй и не делай глубже обычного. Продолжай 2 минуты."
+          },
+          "en": {
+            "title": "Paced breathing",
+            "body": "Breathe through your nose at a steady pace: in for about 5 seconds, out a little longer, with no holds. Do not force or deepen the breath. Continue for 2 minutes."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Тише",
+            "en": "Quieter"
+          }
+        }
+      }
     }
   ]
 }

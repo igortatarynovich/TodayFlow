@@ -16,7 +16,7 @@
 ## Architecture impact
 
 - **SoT before:** taxonomy locked types/purpose/state; fill implied as «написать items против vocab». Риск — плотность в одной технике (40 grounding) и дыры в purpose/direction/class. После P0/P1 density: 133 LLM-draft items закрывали cells, но техника не имела provenance.
-- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing`, `energizing_breath`, `abstinence` = `skipped_for_now`. All 26 P0 need cells sourced. Первые 26 items = architecture probes. Next work: finalize skipped types or address non-P0 cells.
+- **SoT after:** fill = coverage-first **архитектура** (26 need cells, type spine, item shape) остаётся. **Содержание 133 LLM drafts не SoT.** Research ladder archived, non-blocking. Active fill = lightweight provenance. `box_breathing`, `energizing_breath`, `abstinence` = `skipped_for_now`. All 26 P0 need cells sourced. Первые 26 items = architecture probes. P1 type coverage (ledger order) or skipped-type reassessment on product demand.
 - **Public contract changed?** no
 - **Migration required?** no runtime. 133 drafts stay provisional without `technique_id`.
 - **Canon updated?** yes — this file · matrix JSON · [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_PROVENANCE_V1](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · taxonomy pointer · tracker
@@ -26,7 +26,7 @@
 
 ## 0. Закон fill-pass
 
-0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath` / `abstinence`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 26 = architecture probes. All 26 P0 need cells sourced. Next work: finalize skipped types or address non-P0 cells.
+0. **Fill unfrozen.** Не продолжать research ladder. Не продолжать `box_breathing` / `energizing_breath` / `abstinence`. 133 draft = `llm_provisional` until a cell is rewritten against an `accepted` technique. Первые 26 = architecture probes. All 26 P0 need cells sourced. P1 type coverage (ledger order) or skipped-type reassessment on product demand.
 1. **Сначала покрытие, потом плотность.** Не писать второй item в закрытую ячейку, пока есть `empty` в P0. (Архитектурный закон; плотность не возобновляется до provenance.)
 2. **Не декартово произведение.** 25 purpose × 10 direction × 86 type — не план. План = need cells ниже.
 3. **Ячейка = потребность продукта**, не «ещё одна карточка». Закрыта, когда есть ≥1 `active`/`draft` item, чьи retrieval-поля попадают в cell (purpose + direction + class/type формы).
@@ -196,7 +196,7 @@ Seed-pass не закрывает несколько cells одним item, да
 | **Targeted Safety Shortlist** | who_must_not_hold for required holds | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) (stop A) |
 | **Targeted Safety Ingest** | paraphrase selected hold-safety loci | **archive** — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) (not continued) |
 | **Safety Review V1.1** | may_release vs model of who_must_not_hold | **not opened** — research escalation closed |
-| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); all 26 P0 need cells sourced; `box_breathing`, `energizing_breath`, `abstinence` and `self_trust` skipped_for_now. Next work: finalize skipped types or address non-P0 cells |
+| **Library fill / lightweight provenance** | source check → description → safety if needed → accepted/skipped → Content Item | **next** — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md); all 26 P0 need cells sourced; `box_breathing`, `energizing_breath`, `abstinence` and `self_trust` skipped_for_now. P1 type coverage (ledger order) or skipped-type reassessment on product demand |
 | P2 remap | `CONTENT/practices/*.json`, C1.4 ascetics → items; не новые types | после sourced fill, не вместо |
 
 ---
@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **finalize skipped types** (`box_breathing`, `energizing_breath`, `abstinence`) или address non-P0 cells. Sourced 26/26 P0. Latest: `need.habit_change.prepare` (`consistency_challenge` already accepted; seven-day replacement rule: when old pull comes, do one new short action in its place). All P0 cells covered. Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.physiological_sigh`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 1/42 P1 types sourced (`practice.paced_breathing`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,7 +218,8 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
-| 2026-08-30 | **All 26 P0 need cells sourced.** `need.habit_change.prepare` closed via existing `technique.consistency_challenge` (seven-day replacement rule: when old pull comes, do one new short action in its place). Skipped types remain `box_breathing`, `energizing_breath`, `abstinence`. Next: finalize skipped types or non-P0 cells. |
+| 2026-08-31 | **P1 type coverage starts.** `practice.paced_breathing` sourced via `technique.paced_breathing` (NHS Bradford District Care Trust Ready to Relate + Harvard Health). Slow, steady breath (~5–6/min), nose inhale, exhale slightly longer, no hold. `practice.paced_breathing.001` active. Coverage matrix: 134 items, 1/42 P1 types sourced. Next P1 type: `practice.physiological_sigh`. |
+| 2026-08-30 | **All 26 P0 need cells sourced.** `need.habit_change.prepare` closed via existing `technique.consistency_challenge` (seven-day replacement rule: when old pull comes, do one new short action in its place). Skipped types remain `box_breathing`, `energizing_breath`, `abstinence`. Next: P1 type coverage or skipped-type reassessment. |
 | 2026-08-30 | **Presence-stabilize cell sourced via mindfulness.** `technique.mindfulness` accepted (Oxford Mindfulness definition + NHS mindfulness + Bishop et al. 2004). Brief practice: direct attention to present-moment experience (sounds/sensations/breath), notice without judgment, return when mind wanders. No treatment claims or mind-emptying. Next = `need.habit_change.prepare`. |
 | 2026-08-30 | **Reset-release cell sourced via digital_pause.** `technique.digital_pause` accepted (NHS Every Mind Matters screen breaks + NHS Employers DSE guidance). Brief action: move device out of reach or face down and do not interact for a short bounded period (e.g., 2/5 minutes). No nervous-system reset or wellness claims. Next = `need.presence.stabilize`. |
 | 2026-08-30 | **Simplicity-release cell sourced via reduction.** `technique.reduction` accepted (Paas & van Merriënboer 2020 cognitive-load theory + RACGP clutter/cognitive resources + Sweller et al. 2019 extraneous attention-capturing stimuli). Brief discipline rule: select one unnecessary or attention-competing thing and remove/defer it for a short period (e.g., 7/14 days). No decluttering philosophy or wellness claims. Next = `need.reset.release`. |

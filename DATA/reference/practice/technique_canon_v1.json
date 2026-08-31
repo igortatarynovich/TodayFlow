@@ -1273,6 +1273,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.paced_breathing",
+      "content_class": "practice",
+      "type": "paced_breathing",
+      "canonical_description": "Breathe to a slow, steady rhythm (about five to six breaths per minute). Inhale gently through the nose; exhale a little more slowly than the inhale, with no forced hold. A quiet count or a simple visual/audio cue can keep the pace; do not force the breath or take bigger breaths. This product version has no breath-hold.",
+      "source_refs": [
+        {
+          "source": "NHS Bradford District Care Trust — Ready to Relate: coping when you are stressed, anxious or feeling low",
+          "url": "https://readytorelate.bdct.nhs.uk/toolkit/coping-when-you-are-stressed-anxious-or-feeling-low/",
+          "locus": "Paced breathing: pace your breathing by slowing it down; on average five to six breaths per minute; breathe out more slowly than you breathe in (for example, 5 seconds in and 7 seconds out).",
+          "note": "official_health. Method confirmation for slow, paced breathing with a slower out-breath. Anxiety/sleep/treatment claims not imported."
+        },
+        {
+          "source": "Harvard Health — Breathing exercises to lower your blood pressure",
+          "url": "https://www.health.harvard.edu/preventive-care/breathing-exercises-to-lower-your-blood-pressure",
+          "locus": "Slow breathing is usually defined as anywhere from six to ten breaths per minute and features a prolonged exhalation.",
+          "note": "academic_description. Method confirmation for slow breathing and prolonged exhalation. Blood-pressure/health-outcome claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Do not force the breath or take bigger breaths.",
+        "Stop if dizzy, faint, or more anxious.",
+        "This product version has no breath-hold.",
+        "Not a treatment for any medical or mental-health condition."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
