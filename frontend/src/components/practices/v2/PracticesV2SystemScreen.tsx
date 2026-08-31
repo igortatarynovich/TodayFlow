@@ -46,7 +46,7 @@ export type PracticesV2Tab = {
   tone?: "dark" | "gold" | "default";
 };
 
-/** Live link from Today `day_story.practice_recommendation` — no new LLM. */
+/** Live link from Today `day_story.practice_recommendation` — no new narrative generation. */
 export type PracticesDayStoryRecommendation = {
   kind?: string;
   text?: string;

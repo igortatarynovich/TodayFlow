@@ -198,7 +198,7 @@ export function CompatibilityFunnelSection({ artifact, omitTopMargin }: Props) {
                 label="next_step"
                 icon="arrowDown"
                 title={artifact.llm_base_model.aligned_actions_hint}
-                testId="compat-funnel-llm-actions"
+                testId="compat-funnel-live-actions"
               />
             </div>
           ) : null}

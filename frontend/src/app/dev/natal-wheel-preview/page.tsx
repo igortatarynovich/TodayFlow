@@ -5,7 +5,7 @@ import { NatalChartWheel } from "@/components/natal-chart/NatalChartWheel";
 
 /**
  * Dev-only harness for the natal wheel (touch selection, dark theme, narrow widths).
- * Live natal data needs an LLM round-trip, which makes visual QA of the wheel itself
+ * Live natal data needs a server narrative round-trip, which makes visual QA of the wheel itself
  * slow and flaky — this renders it directly from a fixed chart.
  */
 

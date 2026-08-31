@@ -1,6 +1,10 @@
 /* Tarot funnel inside the shared product shell (FOUNDATION_UI §11.1 — void retired). */
 
 .shellMain {
+  /* ds-gate: allow — SSR first-paint fallback; token SoT is day-atmosphere.css (html[data-day-mode]) */
+  --tfb-caption: #7a7168;
+  /* ds-gate: allow — SSR first-paint fallback; token SoT is day-atmosphere.css (html[data-day-mode]) */
+  --tfb-ink-soft: #5c5348;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -16,13 +20,13 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.75rem;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
   text-decoration: none;
   width: fit-content;
 }
 
 .shellBack:hover {
-  color: var(--tf-ink-soft, #5c5348);
+  color: var(--tf-ink-soft, var(--tfb-ink-soft));
 }
 
 .railStack {
@@ -71,7 +75,7 @@
   margin: 0;
   font-size: 0.8125rem;
   line-height: 1.6;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
 }
 
 .railStepper {
@@ -115,14 +119,14 @@
   margin: 0;
   font-size: 0.8125rem;
   font-weight: 700;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
 }
 
 .railStepHint {
   margin: 0.2rem 0 0;
   font-size: 0.75rem;
   line-height: 1.35;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
 }
 
 .railTags {
@@ -154,7 +158,7 @@
   border: 1px solid rgba(201, 169, 110, 0.28);
   background: rgba(253, 251, 247, 0.05);
   font-size: 0.6875rem;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
 }
 
 .hubQuietRoot {
@@ -259,7 +263,7 @@
   background: rgba(253, 251, 247, 0.05);
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
   white-space: nowrap;
 }
 
@@ -308,7 +312,7 @@
   max-width: var(--tf-shell-readable, 36rem);
   font-size: var(--tf-type-body-size);
   line-height: 1.65;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
 }
 
 .hubHeroActions {
@@ -496,7 +500,7 @@
   margin: 0.35rem 0 0;
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
   overflow-wrap: anywhere;
 }
 
@@ -531,7 +535,7 @@
   margin: 0.5rem 0 0;
   font-size: 0.875rem;
   line-height: 1.55;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
   overflow-wrap: anywhere;
 }
 
@@ -578,7 +582,7 @@
   margin: 0;
   font-size: 0.9375rem;
   line-height: 1.6;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
 }
 
 .questionTextarea {
@@ -596,7 +600,7 @@
 }
 
 .questionTextarea::placeholder {
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
 }
 
 .questionTextarea:focus {
@@ -620,7 +624,7 @@
   background: rgba(253, 251, 247, 0.05);
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
   cursor: pointer;
 }
 
@@ -693,5 +697,5 @@
   margin: 0.35rem 0 0;
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--tf-caption, #7a7168);
+  color: var(--tf-caption, var(--tfb-caption));
 }

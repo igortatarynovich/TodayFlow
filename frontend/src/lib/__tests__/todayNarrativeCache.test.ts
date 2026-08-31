@@ -45,7 +45,9 @@ describe("todayNarrativeCache", () => {
           head_topic: "focus",
         },
       }),
-    ).toBe("2026-07-08|guide|-1|||3|7|calm|focus");
+    // Keys are user-scoped (anon without auth) since 4ee90d07 to prevent
+    // cross-user narrative leakage in shared sessionStorage.
+    ).toBe("anon|2026-07-08|guide|-1|||3|7|calm|focus");
     expect(ritualContextFingerprint(null)).toBe("");
   });
 

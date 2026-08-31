@@ -15,7 +15,7 @@ import { readTarotQuestionSession } from "@/lib/tarotQuestionSession";
 /**
  * Таро — один launch-flow: вопрос → расклад → чтение.
  * Выбор формата живёт внутри /tarot/question; отдельной сцены «Направление» на хабе нет.
- * Карта / число дня живут в ритуале «Сегодня», не здесь.
+ * Дневной ритуал живёт в разделе «Сегодня», не здесь.
  */
 export function TarotHubMain() {
   const continueHref = useMemo(() => {
@@ -54,7 +54,7 @@ export function TarotHubMain() {
         testId="tarot-hub-main-question"
       >
         <p className={journeyStyles.pairSub}>
-          Здесь вы задаёте вопрос и выбираете формат чтения. Карта и число дня — в разделе «Сегодня».
+          Здесь вы задаёте вопрос и выбираете формат чтения. Ритуал дня — в разделе «Сегодня».
         </p>
         <div className={journeyStyles.actionRow}>
           <Link href="/tarot/question" className={s.hubBtnPrimary}>

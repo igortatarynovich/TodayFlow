@@ -1,6 +1,7 @@
 import {
   buildInterpretationConfirmPayload,
   interpretationConfirmQuestion,
+  proximityOptionsForTarget,
 } from "@/lib/todayInterpretationConfirm";
 
 describe("todayInterpretationConfirm", () => {
@@ -16,8 +17,12 @@ describe("todayInterpretationConfirm", () => {
     expect(payload.headline_preview).toContain("терпение");
   });
 
-  it("questions per target", () => {
-    expect(interpretationConfirmQuestion("tarot_impact")).toContain("про тебя");
-    expect(interpretationConfirmQuestion("number_impact")).toContain("Число");
+  it("one universal proximity question; options differ per target", () => {
+    // Post-ritual confirm moved to a single proximity question — learning
+    // signal without test-like UX; per-target meaning lives in the options.
+    expect(interpretationConfirmQuestion("tarot_impact")).toBe("Что сейчас ближе?");
+    expect(interpretationConfirmQuestion("number_impact")).toBe("Что сейчас ближе?");
+    expect(proximityOptionsForTarget("tarot_impact").map((o) => o.label)).toContain("Сделать первый шаг");
+    expect(proximityOptionsForTarget("number_impact").map((o) => o.label)).toContain("Замечаю закономерность");
   });
 });

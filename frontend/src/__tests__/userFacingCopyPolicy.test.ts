@@ -9,7 +9,10 @@ const USER_FACING_DIRS = [
 const USER_FACING_FILES = [
   "src/lib/coldStart.ts",
   "src/lib/thematicReports.ts",
-  "../docs/today-language/TODAY_LANGUAGE_V1.md",
+  // TODAY_LANGUAGE_V1.md is intentionally NOT scanned: it is the internal
+  // canon that defines this gate and must name pipeline stages (draft
+  // generation, assembler) and diagnose machine-sounding text by name.
+  // User-facing copy governed by that canon lives in src/ and is scanned here.
 ];
 
 const TEXT_FILE_EXTENSIONS = new Set([".ts", ".tsx", ".md"]);

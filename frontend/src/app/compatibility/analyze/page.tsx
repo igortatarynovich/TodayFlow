@@ -337,7 +337,7 @@ function CompatibilityAnalyzeContent() {
                   ? {
                       ...prev,
                       product_surface: polled.product_surface as DynamicsResponse["product_surface"],
-                      generation_source: polled.generation_source ?? "llm",
+                      generation_source: polled.generation_source ?? COMPATIBILITY_GENERATION_LIVE,
                       score: typeof polled.score === "number" ? polled.score : prev.score,
                       access_disclosure:
                         (polled.access_disclosure as DynamicsResponse["access_disclosure"]) ??
@@ -699,7 +699,7 @@ function CompatibilityAnalyzeContent() {
                                         ...prev,
                                         product_surface:
                                           polled.product_surface as DynamicsResponse["product_surface"],
-                                        generation_source: polled.generation_source ?? "llm",
+                                        generation_source: polled.generation_source ?? COMPATIBILITY_GENERATION_LIVE,
                                         generation_lifecycle: polled.lifecycle,
                                       }
                                     : prev,

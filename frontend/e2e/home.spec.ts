@@ -6,7 +6,7 @@ test.describe("Главная (гость)", () => {
     await expect(
       page.getByRole("heading", { name: /Точные астрономические данные/i }),
     ).toBeVisible({ timeout: 20_000 });
-    const cta = page.getByRole("link", { name: /Посмотреть, как это работает/i }).first();
+    const cta = page.getByRole("link", { name: /Смотреть пример дня/i }).first();
     await expect(cta).toBeVisible();
     await expect(cta).toHaveAttribute("href", "/demo/today");
   });

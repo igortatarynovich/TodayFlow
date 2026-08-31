@@ -14,7 +14,7 @@ export const PRODUCT_WEB_LANDING_HERO = {
   ],
   manifesto:
     "Не гадаем по знаку. Положения планет — эфемериды NASA JPL. Смысл — из разных исторических слоёв, не из одной модной школы. Взгляд собирается для тебя.",
-  primaryCtaDemo: "Посмотреть, как это работает",
+  primaryCtaDemo: "Смотреть пример дня",
   loginCta: "Войти",
   learnMore: "Узнать, на чём стоит",
 } as const;

@@ -8,6 +8,7 @@ describe("ProfileLivingMapsSection", () => {
     expect(screen.getByText("Как меняется моя жизнь")).toBeInTheDocument();
     expect(screen.getByText(/без ручной статистики/i)).toBeInTheDocument();
     expect(await screen.findByTestId("profile-maps-preview")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 3, name: "Мои карты" })).toBeInTheDocument();
+    // Editorial DS pattern: section titles are styled <p>, not heading elements.
+    expect(screen.getByText("Мои карты")).toBeInTheDocument();
   });
 });

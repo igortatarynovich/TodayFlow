@@ -58,7 +58,8 @@ describe("ProfileNatalDecodePanel", () => {
     });
     expect(screen.queryByTestId("profile-natal-decode-generate")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-natal-decode-refresh")).not.toBeInTheDocument();
-    expect(screen.getByText(/готовая история/i)).toBeInTheDocument();
+    // Note copy is the unique marker; pattern_thesis mock also says "готовая история".
+    expect(screen.getByText(/не кнопка «ещё раз»/i)).toBeInTheDocument();
   });
 
   it("plays pattern one-shot when grounded and stops CTA breathe", async () => {

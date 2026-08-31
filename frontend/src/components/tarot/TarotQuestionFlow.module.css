@@ -605,5 +605,6 @@
 :global([data-product-web-frame]) .root {
   min-height: 0;
   background: transparent;
+  /* ds-gate: allow — SSR first-paint fallback; token SoT is day-atmosphere.css (html[data-day-mode]) */
   color: var(--tf-ink, #2a2520);
 }

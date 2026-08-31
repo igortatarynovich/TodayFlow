@@ -243,7 +243,7 @@ function ProfileHubPageInner() {
 
     let cancelled = false;
 
-    // Paint from session cache immediately — never wait on LLM refresh / natal warm-up.
+    // Paint from session cache immediately — never wait on narrative refresh / natal warm-up.
     const cached = readCoreProfileFromCache(null);
     if (cached) {
       setCoreProfile(cached);
@@ -251,7 +251,7 @@ function ProfileHubPageInner() {
     }
 
     Promise.all([
-      // Soft network revalidate — backend GET is snapshot-fast (no CE LLM).
+      // Soft network revalidate — backend GET is snapshot-fast (no CE narrative run).
       fetchCoreProfileCached({ force: true }).catch(() => null),
       fetchCompactUserModelCached().catch(() => null),
       getJson<UserSettings>("/account/profile").catch(() => null),
@@ -268,7 +268,7 @@ function ProfileHubPageInner() {
         hydrateSetupForm(profile, nextCore);
         setLoading(false);
 
-        // Locale republish can run a multi-step portrait LLM — background only.
+        // Locale republish can run a multi-step portrait narrative — background only.
         const uiLocale = getLocale();
         if (
           nextCore &&
