@@ -382,7 +382,8 @@ class CoreSetupPayload(BaseModel):
     time_unknown: bool = False
     timezone_offset_minutes: Optional[int] = None
     timezone_name: Optional[str] = None
-    location_name: str
+    # Optional: guests may skip place (profile stays at "general" depth until refined).
+    location_name: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     notes: Optional[str] = None
@@ -1192,9 +1193,10 @@ async def upsert_core_setup(
         settings.gender = normalized_g
     db.add(settings)
 
+    location_name = (payload.location_name or "").strip() or None
     latitude, longitude = _resolve_coordinates(
         geocoder,
-        payload.location_name,
+        location_name,
         payload.latitude,
         payload.longitude,
     )
@@ -1210,7 +1212,7 @@ async def upsert_core_setup(
             time_unknown=payload.time_unknown,
             timezone_offset_minutes=payload.timezone_offset_minutes,
             timezone_name=payload.timezone_name,
-            location_name=payload.location_name.strip(),
+            location_name=location_name,
             latitude=latitude,
             longitude=longitude,
             notes=payload.notes,
@@ -1226,7 +1228,7 @@ async def upsert_core_setup(
             payload.time_unknown,
             payload.timezone_offset_minutes,
             payload.timezone_name,
-            payload.location_name.strip(),
+            location_name,
             latitude,
             longitude,
         )
@@ -1251,7 +1253,7 @@ async def upsert_core_setup(
         primary.time_unknown = payload.time_unknown
         primary.timezone_offset_minutes = payload.timezone_offset_minutes
         primary.timezone_name = payload.timezone_name
-        primary.location_name = payload.location_name.strip()
+        primary.location_name = location_name
         primary.latitude = latitude
         primary.longitude = longitude
         primary.notes = payload.notes

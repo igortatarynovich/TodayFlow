@@ -50,7 +50,9 @@ export default function OnboardingRefinePageInner() {
     if (afterSave && isAuthenticated) {
       setClaiming(true);
       try {
-        const result = await claimGuestProfileAfterAuth();
+        // Skip path claims without a place (general depth) — never bounce back
+        // to the save step, which would trap an authenticated user in a loop.
+        const result = await claimGuestProfileAfterAuth({ allowMissingLocation: true });
         if (result.status === "ready") {
           router.push(result.profilePath);
           return;

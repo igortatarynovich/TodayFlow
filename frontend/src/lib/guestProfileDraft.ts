@@ -192,7 +192,7 @@ export function guestDraftToCoreSetupPayload(draft: GuestProfileDraft) {
     birth_date: draft.birth_date,
     birth_time: draft.time_unknown ? null : draft.birth_time || null,
     time_unknown: draft.time_unknown,
-    location_name: draft.location_name?.trim() || "",
+    location_name: draft.location_name?.trim() || null,
     latitude: draft.latitude,
     longitude: draft.longitude,
     gender: "unspecified",

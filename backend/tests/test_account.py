@@ -140,6 +140,25 @@ def test_core_setup_then_core_profile_ready(client: TestClient, test_user: User,
     assert num.get("life_path") is not None
 
 
+def test_core_setup_without_location_succeeds(client: TestClient, test_user: User, auth_token: str):
+    """Guest claim may skip place: core-setup accepts name+birth date only (general depth)."""
+    headers = {"Authorization": f"Bearer {auth_token}"}
+    payload = {
+        "first_name": "Vera",
+        "label": "Я",
+        "birth_date": "1990-04-12",
+        "time_unknown": True,
+        "gender": "unspecified",
+    }
+    r = client.post("/account/core-setup", json=payload, headers=headers)
+    assert r.status_code == 200, r.text
+    out = r.json()
+    assert out.get("status") == "ok"
+    astro = out.get("astro_profile") or {}
+    assert astro.get("birth_date") == "1990-04-12"
+    assert astro.get("location_name") is None
+
+
 def test_get_profile_requires_auth(client: TestClient):
     """Test that getting profile requires authentication."""
     response = client.get("/account/profile")

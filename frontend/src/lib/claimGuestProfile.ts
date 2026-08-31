@@ -87,14 +87,21 @@ async function claimDayProgressOnly(options?: {
   return { status: "no_draft" };
 }
 
-export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileResult> {
+export async function claimGuestProfileAfterAuth(options?: {
+  /**
+   * Refine-after-save skip path: claim with name+birth date only.
+   * The profile stays at "general" depth until place is added later;
+   * without this flag a missing place routes to refine instead of looping.
+   */
+  allowMissingLocation?: boolean;
+}): Promise<ClaimGuestProfileResult> {
   const draft = readGuestProfileDraft();
   if (!canClaimGuestProfile(draft) || !draft) {
     const result = await claimDayProgressOnly();
     return result.status === "ready" ? result : { status: "no_draft" };
   }
 
-  if (!draft.location_name?.trim()) {
+  if (!draft.location_name?.trim() && !options?.allowMissingLocation) {
     await prepareGuestClaimBeforeAuth();
     return { status: "needs_refine", refinePath: "/onboarding/refine?after=save" };
   }
