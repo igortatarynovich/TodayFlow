@@ -15,7 +15,7 @@ type ProfileSetupFormData = {
   birth_date: string;
   birth_time?: string | null;
   time_unknown: boolean;
-  location_name: string;
+  location_name: string | null;
   latitude?: number | null;
   longitude?: number | null;
   gender: string;
@@ -254,7 +254,7 @@ export function ProfileSetupSection({
             Место рождения{" "}
             <span style={{ fontWeight: 500, color: "#8a7a66" }}>(откроет Асцендент вместе со временем)</span>
             <CityAutocompleteInput
-              value={setupForm.location_name}
+              value={setupForm.location_name || ""}
               onChange={(value) => {
                 onFieldChange("location_name", value);
                 onFieldChange("latitude", null);

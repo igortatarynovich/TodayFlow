@@ -9,7 +9,7 @@ export type CoreSetupPayload = {
   birth_date: string;
   birth_time?: string | null;
   time_unknown: boolean;
-  location_name: string;
+  location_name: string | null;
   latitude?: number | null;
   longitude?: number | null;
   gender: string;
