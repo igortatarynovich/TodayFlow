@@ -266,19 +266,18 @@ class TestCompletePractice:
     def test_complete_practice_respects_limits_free(
         self, client: TestClient, auth_headers: dict, db_session: Session, test_user: User
     ):
-        """Test that free users cannot exceed their limit."""
-        # Complete one practice (free limit is 1)
+        """General free practices do not consume the personalized-practice weekly limit."""
+        # Complete one free general practice.
         response1 = client.post("/practices/breathing-4-7-8/complete", headers=auth_headers)
         assert response1.status_code == 200
-        
-        # Try to complete another personalized practice (should fail if limit exceeded)
-        # Note: This test depends on having a personalized practice available
-        # For now, we'll just verify the first completion worked
+
+        # Free general practices are recorded, but the weekly limit tracks
+        # personalized usages only, so the free limit remains untouched.
         limits_response = client.get("/practices/limits", headers=auth_headers)
         assert limits_response.status_code == 200
         limits_data = limits_response.json()
-        assert limits_data["used_this_week"] == 1
-        assert limits_data["remaining_this_week"] == 0
+        assert limits_data["used_this_week"] == 0
+        assert limits_data["remaining_this_week"] == 1
 
 
 class TestGetSequences:

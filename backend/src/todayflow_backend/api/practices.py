@@ -25,6 +25,10 @@ from todayflow_backend.data.practice_state_cycle_catalog_v1 import (
     practice_matches_need,
     rank_practices_for_need,
 )
+from todayflow_backend.services.content_library_selection_v1 import (
+    all_content_library_practices,
+    get_content_library_practice_by_id,
+)
 
 router = APIRouter(prefix="/practices", tags=["practices"])
 
@@ -1953,7 +1957,7 @@ async def get_practices(
     db: Session = Depends(get_session),
 ):
     """
-    In-memory GENERAL catalog for the hub / archive.
+    In-memory GENERAL catalog + canonical Content Library for the hub / archive.
 
     Do not run lite-report / lunar / tarot personalization here — that path
     belongs to GET /practices/current. The hub ranks locally by need/format.
@@ -1961,6 +1965,19 @@ async def get_practices(
     _ = user
     _ = db
     practices = GENERAL_PRACTICES.copy()
+
+    # Merge active, accepted Content Library items as free catalog entries.
+    practices.extend(all_content_library_practices(locale=request_locale()))
+    seen: set[str] = set()
+    deduped: list[dict] = []
+    for p in practices:
+        pid = str(p.get("id") or "")
+        if pid and pid in seen:
+            continue
+        if pid:
+            seen.add(pid)
+        deduped.append(p)
+    practices = deduped
 
     if category:
         practices = [p for p in practices if p.get("category") == category]
@@ -2720,6 +2737,9 @@ async def get_practice_detail(
     # Если не найдено, ищем в персонализированных
     if not practice:
         practice = next((p for p in PERSONALIZED_PRACTICES if p["id"] == practice_id), None)
+    
+    if not practice:
+        practice = get_content_library_practice_by_id(practice_id, locale=request_locale())
     
     if not practice:
         raise HTTPException(status_code=404, detail="Practice not found")

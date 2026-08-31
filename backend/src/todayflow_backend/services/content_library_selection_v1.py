@@ -1,25 +1,41 @@
-"""Deterministic selection of Content Items from the canonical practice library.
+"""Deterministic selection of Content Items from the canonical practice library + catalog adapter.
 
-No LLM. No randomness. A product need (purpose/direction/state/context) is matched
-against the retrieval tags of active items; the best match is returned with a short
-reason string. This is the runtime bridge between Meaning (which emits a need) and
-the Content Library (which holds the expression of an accepted technique).
+No LLM. No randomness. This module provides two things:
 
-Canon: docs/practices/CONTENT_LIBRARY_SELECTION_V1.md
+1. `select_content_item(query)` — runtime bridge between Meaning and the Content Library.
+   Returns the best active Content Item for a product need.
+
+2. `all_content_library_practices()`, `get_content_library_practice_by_id()` — catalog adapter
+   that exposes active, accepted Content Library items through the `GET /practices` hub.
+
+Canon: docs/practices/CONTENT_LIBRARY_SELECTION_V1.md · PRACTICE_LIBRARY_FILL_V1.md
 """
 
 from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from todayflow_backend.data.practice_state_cycle_catalog_v1 import (
+    STATE_CYCLE_FORMAT_IDS,
+    STATE_CYCLE_NEED_IDS,
+    rank_practices_for_need,
+)
 from todayflow_backend.data.reference_machine_loader import DATA_ROOT
 
 _PRACTICE_REF = DATA_ROOT / "reference" / "practice"
 LIBRARY_PATH = _PRACTICE_REF / "content_library_v1.json"
 TECHNIQUE_PATH = _PRACTICE_REF / "technique_canon_v1.json"
+CONTENT_LIBRARY_PATH = LIBRARY_PATH
+TECHNIQUE_CANON_PATH = TECHNIQUE_PATH
+
+LOCALE_FALLBACK = "en"
+
+
+# --- selection dataclasses -----------------------------------------------------
 
 
 @dataclass(frozen=True)
@@ -62,6 +78,9 @@ class ContentSelection:
     matched: bool
 
 
+# --- canonical loaders --------------------------------------------------------
+
+
 def load_content_library(path: Path | None = None) -> dict[str, Any]:
     """Load the canonical content library JSON."""
     with open(path or LIBRARY_PATH, encoding="utf-8") as f:
@@ -72,6 +91,9 @@ def load_technique_canon(path: Path | None = None) -> dict[str, Any]:
     """Load the canonical technique registry JSON."""
     with open(path or TECHNIQUE_PATH, encoding="utf-8") as f:
         return json.load(f)
+
+
+# --- selection helpers --------------------------------------------------------
 
 
 def _accepted_technique_ids(techniques: dict[str, Any]) -> set[str]:
@@ -244,3 +266,373 @@ def select_content_item(
         reason=reason,
         matched=True,
     )
+
+
+# --- public taxonomy mapping --------------------------------------------------
+
+
+INTENSITY_TO_DIFFICULTY = {
+    "low": "beginner",
+    "medium": "intermediate",
+    "high": "advanced",
+}
+
+PURPOSE_TO_NEED: dict[str, str] = {
+    "calm": "calm",
+    "sleep": "sleep",
+    "rest": "sleep",
+    "recovery": "recover",
+    "body": "body",
+    "focus": "focus",
+    "clarity": "focus",
+    "confidence": "focus",
+    "motivation": "focus",
+    "decision_making": "focus",
+    "emotional_awareness": "understand",
+    "self_connection": "understand",
+    "creativity": "understand",
+    "transition": "understand",
+    "detachment": "calm",
+    "presence": "calm",
+    "simplicity": "calm",
+    "reset": "recover",
+    "self_control": "focus",
+    "connection": "understand",
+    "consistency": "focus",
+    "habit_change": "focus",
+    "energy": "recover",
+    "discipline": "focus",
+}
+
+DIRECTION_TO_NEED: dict[str, str] = {
+    "downregulate": "calm",
+    "release": "calm",
+    "stabilize": "focus",
+    "reflect": "understand",
+    "focus": "focus",
+    "activate": "recover",
+    "open": "understand",
+    "connect": "understand",
+    "recover": "recover",
+    "prepare": "focus",
+}
+
+INPUT_STATE_TO_NEED: dict[str, str] = {
+    "scattered": "focus",
+    "stuck": "understand",
+    "overstimulated": "calm",
+    "disconnected": "understand",
+    "uncertain": "understand",
+    "restless": "calm",
+    "low_energy": "recover",
+    "tense": "body",
+    "emotionally_heavy": "understand",
+    "balanced": "calm",
+}
+
+CLASS_TO_CATEGORY: dict[str, str] = {
+    "affirmation": "affirmation",
+    "meditation": "meditation",
+    "practice": "meditation",
+    "discipline": "focus",
+}
+
+TYPE_TO_CATEGORY: dict[str, str] = {
+    "extended_exhale": "breathing",
+    "box_breathing": "breathing",
+    "energizing_breath": "breathing",
+    "breath_awareness": "breathing",
+    "digital_pause": "breathing",
+    "mobility": "focus",
+    "body_scan": "meditation",
+    "sensory_grounding": "meditation",
+    "grounding": "meditation",
+    "open_awareness": "meditation",
+    "letting_go": "meditation",
+    "mindfulness": "meditation",
+    "relaxation": "meditation",
+    "sleep": "meditation",
+    "sleep_discipline": "meditation",
+    "prompted_reflection": "reflection",
+    "journaling": "reflection",
+    "free_writing": "reflection",
+    "reflection_meditation": "reflection",
+    "self_check_in": "reflection",
+    "gratitude": "gratitude",
+    "creative_prompt": "reflection",
+    "priority_setting": "reflection",
+    "connection_action": "meditation",
+    "morning_ritual": "meditation",
+    "evening_ritual": "meditation",
+    "transition_ritual": "meditation",
+    "micro_action": "meditation",
+    "capability": "affirmation",
+    "agency": "affirmation",
+    "relationship": "affirmation",
+    "self_trust": "affirmation",
+    "body_release": "meditation",
+    "routine_commitment": "meditation",
+    "attention_discipline": "meditation",
+    "consistency_challenge": "meditation",
+    "reduction": "meditation",
+    "digital_limit": "meditation",
+    "consumption_limit": "meditation",
+    "intention_setting": "meditation",
+    "environment_reset": "meditation",
+    "abstinence": "meditation",
+    "focused_attention": "meditation",
+    "acceptance": "meditation",
+}
+
+CLASS_TO_FORMAT: dict[str, str] = {
+    "affirmation": "affirmation",
+    "meditation": "meditation",
+    "practice": "meditation",
+    "discipline": "meditation",
+}
+
+TYPE_TO_FORMAT: dict[str, str] = {
+    "extended_exhale": "breath",
+    "box_breathing": "breath",
+    "energizing_breath": "breath",
+    "breath_awareness": "breath",
+    "digital_pause": "breath",
+    "mobility": "stretch",
+    "body_scan": "meditation",
+    "sensory_grounding": "meditation",
+    "grounding": "meditation",
+    "open_awareness": "meditation",
+    "letting_go": "meditation",
+    "mindfulness": "meditation",
+    "relaxation": "meditation",
+    "sleep": "sleep",
+    "sleep_discipline": "sleep",
+    "prompted_reflection": "reflection",
+    "journaling": "reflection",
+    "free_writing": "reflection",
+    "reflection_meditation": "reflection",
+    "self_check_in": "reflection",
+    "gratitude": "reflection",
+    "creative_prompt": "reflection",
+    "priority_setting": "reflection",
+    "connection_action": "meditation",
+    "morning_ritual": "meditation",
+    "evening_ritual": "sleep",
+    "transition_ritual": "meditation",
+    "micro_action": "meditation",
+    "capability": "affirmation",
+    "agency": "affirmation",
+    "relationship": "affirmation",
+    "self_trust": "affirmation",
+    "body_release": "meditation",
+    "routine_commitment": "meditation",
+    "attention_discipline": "meditation",
+    "consistency_challenge": "meditation",
+    "reduction": "meditation",
+    "digital_limit": "meditation",
+    "consumption_limit": "meditation",
+    "intention_setting": "meditation",
+    "environment_reset": "meditation",
+    "abstinence": "meditation",
+    "focused_attention": "meditation",
+    "acceptance": "meditation",
+}
+
+
+# --- catalog loaders ----------------------------------------------------------
+
+
+@lru_cache(maxsize=1)
+def _load_content_library() -> dict[str, Any]:
+    with CONTENT_LIBRARY_PATH.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@lru_cache(maxsize=1)
+def _load_technique_canon() -> dict[str, Any]:
+    with TECHNIQUE_CANON_PATH.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@lru_cache(maxsize=1)
+def _accepted_technique_ids_cached() -> frozenset[str]:
+    canon = _load_technique_canon()
+    return frozenset(
+        t["technique_id"]
+        for t in canon.get("techniques", [])
+        if t.get("status") == "accepted"
+    )
+
+
+# --- mapping helpers ----------------------------------------------------------
+
+
+def _resolve_locale_text(locale: str, node: dict[str, Any]) -> dict[str, str]:
+    """Return the best available locale text dict."""
+    if locale in node:
+        return node[locale]
+    if LOCALE_FALLBACK in node:
+        return node[LOCALE_FALLBACK]
+    if node:
+        return next(iter(node.values()))
+    return {"title": "", "body": ""}
+
+
+def _derive_need_ids(retrieval: dict[str, Any]) -> list[str]:
+    """Map content-library retrieval tags to public STATE_CYCLE_NEED_IDS."""
+    need_ids: list[str] = []
+    seen: set[str] = set()
+
+    for purpose in retrieval.get("purpose", []):
+        need = PURPOSE_TO_NEED.get(purpose)
+        if need and need not in seen:
+            need_ids.append(need)
+            seen.add(need)
+
+    for direction in retrieval.get("direction", []):
+        need = DIRECTION_TO_NEED.get(direction)
+        if need and need not in seen:
+            need_ids.append(need)
+            seen.add(need)
+
+    for state in retrieval.get("input_state", []):
+        need = INPUT_STATE_TO_NEED.get(state)
+        if need and need not in seen:
+            need_ids.append(need)
+            seen.add(need)
+
+    # If no mapping produced a valid public need, default to "focus" so the item
+    # is still visible in the hub and filterable.
+    if not need_ids:
+        need_ids = ["focus"]
+
+    return need_ids
+
+
+def _derive_tags(retrieval: dict[str, Any]) -> list[str]:
+    """Build a small, stable tag list from retrieval dimensions."""
+    tags: list[str] = []
+    tags.extend(str(x) for x in retrieval.get("purpose", []))
+    tags.extend(str(x) for x in retrieval.get("direction", []))
+    tags.extend(str(x) for x in retrieval.get("input_state", []))
+    return tags[:6]
+
+
+def _content_item_to_practice(item: dict[str, Any], locale: str) -> dict[str, Any] | None:
+    """Map a single content-library item to the PracticeResponse dict shape."""
+    identity = item.get("identity", {})
+    if identity.get("status") != "active":
+        return None
+
+    technique_id = identity.get("technique_id")
+    if not technique_id or technique_id not in _accepted_technique_ids_cached():
+        return None
+
+    retrieval = item.get("retrieval", {})
+    payload = item.get("payload", {})
+
+    text = _resolve_locale_text(locale, payload.get("locales", {}))
+    title = (text.get("title") or "").strip() or identity.get("item_id", "")
+    body = (text.get("body") or "").strip()
+
+    presentation = payload.get("presentation", {})
+    outcome_node = presentation.get("outcome_label", {})
+    outcome_label = (outcome_node.get(locale) or outcome_node.get(LOCALE_FALLBACK) or "").strip() or None
+
+    content_class = identity.get("content_class", "practice")
+    item_type = identity.get("type", "")
+
+    category = TYPE_TO_CATEGORY.get(item_type) or CLASS_TO_CATEGORY.get(content_class, "meditation")
+    fmt = TYPE_TO_FORMAT.get(item_type) or CLASS_TO_FORMAT.get(content_class, "meditation")
+    if fmt not in STATE_CYCLE_FORMAT_IDS:
+        fmt = "meditation"
+
+    need_ids = _derive_need_ids(retrieval)
+
+    duration = None
+    if retrieval.get("duration_unit") == "minutes":
+        try:
+            duration = int(retrieval["duration"])
+        except (TypeError, ValueError):
+            duration = None
+
+    intensity = retrieval.get("intensity", "low")
+    difficulty = INTENSITY_TO_DIFFICULTY.get(intensity, "beginner")
+
+    return {
+        "id": identity.get("item_id"),
+        "title": title,
+        "description": body,
+        "category": category,
+        "practice_type": None,
+        "duration_minutes": duration,
+        "difficulty": difficulty,
+        "is_free": True,
+        "is_personalized": False,
+        "personalized_reason": None,
+        "access_level": "free",
+        "tags": _derive_tags(retrieval),
+        "need_ids": need_ids,
+        "format_id": fmt,
+        "outcome_label": outcome_label,
+        "instructions": [body] if body else [],
+        "target_axis": None,
+        "target_modulator": None,
+        "pattern_type": None,
+        "source_domain": None,
+        "target_domain": None,
+        "cycle_type": None,
+        "trigger_phase": None,
+        "sequence_id": None,
+        "step_number": None,
+        "total_steps": None,
+        "related_practices": [],
+        "audio_url": None,
+    }
+
+
+# --- public catalog API -------------------------------------------------------
+
+
+def all_content_library_practices(locale: str = "ru") -> list[dict[str, Any]]:
+    """Return all active/accepted content-library items as practice dicts."""
+    library = _load_content_library()
+    practices: list[dict[str, Any]] = []
+    for item in library.get("items", []):
+        mapped = _content_item_to_practice(item, locale)
+        if mapped is not None:
+            practices.append(mapped)
+    return practices
+
+
+def select_content_library_practices(
+    *,
+    locale: str = "ru",
+    need: str | None = None,
+    format_id: str | None = None,
+    limit: int | None = None,
+) -> list[dict[str, Any]]:
+    """Ranked/filtered slice of the content-library catalog for the hub."""
+    practices = all_content_library_practices(locale=locale)
+
+    need_key = (need or "").strip().lower() or None
+    if need_key and need_key in STATE_CYCLE_NEED_IDS:
+        practices = [p for p in practices if need_key in [str(x).lower() for x in p.get("need_ids", [])]]
+        practices = rank_practices_for_need(practices, need_key)
+
+    format_key = (format_id or "").strip().lower() or None
+    if format_key and format_key in STATE_CYCLE_FORMAT_IDS:
+        practices = [p for p in practices if str(p.get("format_id") or "").lower() == format_key]
+
+    if limit is not None and limit > 0:
+        practices = practices[:limit]
+
+    return practices
+
+
+def get_content_library_practice_by_id(practice_id: str, locale: str = "ru") -> dict[str, Any] | None:
+    """Return a single content-library practice by its `item_id`."""
+    for practice in all_content_library_practices(locale=locale):
+        if str(practice.get("id") or "") == practice_id:
+            return practice
+    return None

@@ -135,4 +135,5 @@ Response: `ContentItemSelectResponse` (item_id, title, body, outcome_label, reas
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-31 | v1.0 IMPLEMENTED — service deployed, wired to `GET /practices` and `GET /practices/{id}`; catalog adapter maps 111 active Content Library items to the hub. |
 | 2026-08-29 | v1.0 ACCEPTED — deterministic selection service, tests, canon. |
