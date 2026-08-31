@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Public entry: полный сценарий «Today» (продуктовый слой + данные)
+// MARK: - Public entry: полный сценарий «Today» (сценарный слой + данные)
 // RU/EN chrome: `TodayExperienceChromeCopy` ⇄ `TODAY_EXPERIENCE_CHROME_*` в `todayRitualCopy.ts`.
 // Kept in a dedicated file so TodayView can compose the product-level layout.
 

@@ -1,5 +1,13 @@
 import Foundation
 
+/// Backend contract values for compatibility dynamics (`compatibility.py`).
+/// Lives in Services (not a user-visible copy source) so views reference
+/// the constant instead of the raw wire literal.
+enum CompatibilityGenerationContract {
+    static let live = "llm"
+    static let template = "template"
+}
+
 struct TodayFlowAPIClient {
     static let shared = TodayFlowAPIClient()
 

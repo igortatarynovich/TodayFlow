@@ -66,7 +66,7 @@ struct TodayCycle: Codable {
         return Array(out.prefix(24))
     }
 
-    /// Паритет с веб `isDiscardableMorningFocus`: не слать сырой slug в LLM как «фокус».
+    /// Паритет с веб `isDiscardableMorningFocus`: не слать сырой slug в генерацию как «фокус».
     private static func isDiscardableMorningFocus(_ focus: String) -> Bool {
         let t = focus.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         if t.count < 2 { return true }

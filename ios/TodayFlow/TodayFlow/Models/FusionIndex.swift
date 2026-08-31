@@ -129,7 +129,7 @@ struct FusionDayHistoryV0: Codable {
     let yesterday: Yesterday
     let fusionScoreDeltaVsYesterday: AxisDelta
     let trailing7dSummary: Trailing7dSummary?
-    /// O7: `false`, если вчера не было отметок Flow под формулу fusion; `nil` — старые ответы API (считаем true).
+    /// O7: `false`, если вчера не было отметок Flow под расчёт fusion; `nil` — старые ответы API (считаем true).
     let fusionScoreDeltaTrustworthy: Bool?
     /// O7: `false` — неделя из дефолтных баллов без отметок; не показывать вторую строку.
     let trailing7dSummaryTrustworthy: Bool?

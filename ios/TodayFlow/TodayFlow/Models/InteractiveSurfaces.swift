@@ -1721,7 +1721,7 @@ struct CompatibilityFunnelTodayAlignment: Codable, Hashable {
     let syncNote: String
 }
 
-/// Первый шаг LLM-цепочки: структурный слой (`llm_base_model` в API).
+/// Первый шаг цепочки генерации: структурный слой (`llm_base_model` в API).
 struct CompatibilityLLMBaseModelFields: Codable, Hashable {
     let pullVsTension: String
     let attractionOrDependency: String

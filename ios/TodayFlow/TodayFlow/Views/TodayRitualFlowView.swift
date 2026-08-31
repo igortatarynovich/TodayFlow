@@ -2882,7 +2882,7 @@ private struct DayProtectionOption: Identifiable, Equatable {
     var id: String { key }
 }
 
-/// Четыре сферы: формулы, clamp и ключи нарратива должны совпадать с `frontend/src/components/today/todayFourAreas.ts`.
+/// Четыре сферы: расчёт, clamp и ключи нарратива должны совпадать с `frontend/src/components/today/todayFourAreas.ts`.
 private enum RitualFourAreaBuilder {
     static func rhythmTier(for score: Int) -> String {
         TodayRitualCopy.rhythmTierLabel(score: score)
