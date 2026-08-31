@@ -90,7 +90,7 @@ STATE_CYCLE_META: dict[str, dict[str, Any]] = {
     "deep-breathing-relaxation": {
         "need_ids": ["calm", "recover", "sleep"],
         "format_id": "breath",
-        "outcome_label": "Снять напряжение",
+        "outcome_label": "Дышать животом",
     },
 }
 
