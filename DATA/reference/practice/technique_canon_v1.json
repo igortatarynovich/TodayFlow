@@ -1434,6 +1434,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.walking",
+      "content_class": "practice",
+      "type": "walking",
+      "canonical_description": "Stand up and walk a short comfortable distance — a corridor loop, a few steps to another room, or around during a brief pause — then stop. Locomotion is the act. Distinct from mobility (in-place joint movement), mindful_movement (in-place movement with attention as the kernel), and walking_meditation (footsteps as the meditation object). Not a brisk-walk workout, step-count target, or treatment.",
+      "source_refs": [
+        {
+          "source": "NHS — Why we should sit less",
+          "url": "https://www.nhs.uk/live-well/exercise/why-sitting-too-much-is-bad-for-us/",
+          "locus": "Tips to reduce sitting time include: set a reminder to get up every 30 minutes; stand or walk around while on the phone; take a walk break every time you take a coffee or tea break; walk to a colleague's desk instead of emailing or calling.",
+          "note": "official_health. Method confirmation for a short walk-break as the act. Sitting-risk, 150-minute, and disease claims not imported."
+        },
+        {
+          "source": "NHS Better Health — How to be more active",
+          "url": "https://www.nhs.uk/better-health/get-active/how-to-be-more-active/",
+          "locus": "Set a reminder to get up and move every 30 minutes during the day; try pacing around the kitchen while the kettle is boiling. Some is good; start gradually.",
+          "note": "official_health. Method confirmation for a brief indoor walk/pace as a sit-break. Active 10, 150-minute, and mood/energy claims not imported."
+        },
+        {
+          "source": "NHS England — Movement matters",
+          "url": "https://www.england.nhs.uk/blog/movement-matters-why-supporting-physical-activity-in-nhs-staff-is-good-for-everyone/",
+          "locus": "Even a loop around the corridor can make a difference. Movement corners for stretching or a 2-minute walk. Micro-breaks: set a reminder to stand, stretch, or walk.",
+          "note": "official_health. Method confirmation for a short corridor/2-minute walk as the act. Staff-wellbeing and Active 10 claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Walk at a comfortable pace. Watch your surroundings. Stop if it hurts or you feel unsteady.",
+        "Not a treatment, not a workout, and not a step-count or brisk-walk prescription."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

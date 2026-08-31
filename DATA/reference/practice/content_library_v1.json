@@ -7920,6 +7920,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.walking.001",
+        "content_class": "practice",
+        "family": "movement",
+        "type": "walking",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.walking"
+      },
+      "retrieval": {
+        "purpose": [
+          "energy"
+        ],
+        "domain": [],
+        "input_state": [
+          "low_energy"
+        ],
+        "direction": [
+          "activate"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Короткая ходьба",
+            "body": "Встань и пройди коротко — по коридору, в другую комнату или просто вокруг. Иди в спокойном темпе, потом остановись. Это не зарядка, не подсчёт шагов и не медитация на стопах."
+          },
+          "en": {
+            "title": "Short walk",
+            "body": "Stand up and walk a short way — a corridor loop, another room, or just around. Keep a comfortable pace, then stop. This is not a workout, not a step count, and not a meditation on the feet."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "С места",
+            "en": "Off the chair"
+          }
+        }
+      }
     }
   ]
 }
