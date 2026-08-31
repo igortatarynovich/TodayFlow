@@ -96,6 +96,7 @@ def test_child_surface_user_json_includes_funnel_chain(db_session: Session, monk
         return None
 
     monkeypatch.setattr(today_narrative_service, "_openai_json", capture_openai)
+    monkeypatch.setattr(today_narrative_service, "is_llm_chat_configured", lambda: True)
     db_models.PromptVersion.__table__.create(bind=db_session.get_bind(), checkfirst=True)
     db_models.GenerationLog.__table__.create(bind=db_session.get_bind(), checkfirst=True)
 
