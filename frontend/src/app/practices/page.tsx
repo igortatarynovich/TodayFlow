@@ -17,6 +17,7 @@ import { isGuestPracticeAllowed } from "@/lib/guestAccessStore";
 import { getLocale } from "@/lib/i18n";
 import { buildPracticesV2LiveContext } from "@/lib/practicesPage/buildPracticesV2LiveContext";
 import {
+  dedupePracticesForHub,
   inferPracticeFormat,
   practiceCardTitle,
   practiceMatchesFormat,
@@ -75,7 +76,7 @@ function pickPoolForNeed(
   }
   const byNeed = list.filter((p) => practiceMatchesNeed(p, need));
   if (byNeed.length > 0) list = byNeed;
-  return rankPracticesForNeed(list, need);
+  return rankPracticesForNeed(dedupePracticesForHub(list), need);
 }
 
 function sortCatalog(pool: PracticeCatalogItem[], sortLocale: string): PracticeCatalogItem[] {

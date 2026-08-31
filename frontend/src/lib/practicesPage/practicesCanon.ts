@@ -82,6 +82,7 @@ export function practiceFormatLabel(locale: PracticeCanonLocale, id: PracticeFor
 }
 
 export type PracticeMatchable = {
+  id?: string;
   title: string;
   description?: string;
   category?: string;
@@ -158,6 +159,38 @@ export function rankPracticesForNeed<T extends PracticeMatchable>(
     const bPrimary = b.need_ids?.[0] === need ? 0 : practiceMatchesNeed(b, need) ? 1 : 2;
     return aPrimary - bPrimary;
   });
+}
+
+/**
+ * Content-library variants share a stem (`meditation.acceptance.001` / `.002` / `.003`).
+ * The hub shows one card per stem so the rail is different methods, not duration clones.
+ * Legacy kebab-case ids have no numeric suffix and stay unique.
+ */
+export function practiceHubStem(id: string): string {
+  return id.replace(/\.\d+$/, "");
+}
+
+function hubVariantIndex(id: string): number {
+  const match = id.match(/\.(\d+)$/);
+  return match ? Number.parseInt(match[1], 10) : 0;
+}
+
+export function dedupePracticesForHub<T extends PracticeMatchable & { id: string }>(
+  practices: T[],
+): T[] {
+  const byStem = new Map<string, T[]>();
+  for (const practice of practices) {
+    const stem = practiceHubStem(practice.id);
+    const group = byStem.get(stem);
+    if (group) group.push(practice);
+    else byStem.set(stem, [practice]);
+  }
+  const out: T[] = [];
+  for (const group of byStem.values()) {
+    group.sort((a, b) => hubVariantIndex(a.id) - hubVariantIndex(b.id));
+    out.push(group[0]);
+  }
+  return out;
 }
 
 /** Hub card title: outcome-first when API provides outcome_label. */

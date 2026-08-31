@@ -1,6 +1,7 @@
 import {
   PRACTICE_FORMAT_IDS,
   PRACTICE_NEED_IDS,
+  dedupePracticesForHub,
   inferPracticeFormat,
   practiceCardTitle,
   practiceFormatLabel,
@@ -94,5 +95,21 @@ describe("practicesCanon", () => {
     expect(practiceCardTitle({ title: "X", outcome_label: "  Снизить тревожность  " })).toBe(
       "Снизить тревожность",
     );
+  });
+
+  it("dedupes content-library duration variants by stem, keeps .001", () => {
+    const pool = [
+      { id: "meditation.acceptance.002", title: "Как есть" },
+      { id: "meditation.acceptance.001", title: "Место рядом" },
+      { id: "meditation.acceptance.003", title: "Вокруг трудного" },
+      { id: "safe-place-visual", title: "Безопасное место" },
+      { id: "breathing-4-7-8", title: "Дыхание 4-7-8" },
+    ];
+    const unique = dedupePracticesForHub(pool);
+    expect(unique.map((p) => p.id)).toEqual([
+      "meditation.acceptance.001",
+      "safe-place-visual",
+      "breathing-4-7-8",
+    ]);
   });
 });
