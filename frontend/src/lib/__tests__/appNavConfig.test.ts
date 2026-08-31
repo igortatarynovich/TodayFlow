@@ -10,23 +10,26 @@ import {
 } from "@/lib/appNavConfig";
 
 describe("appNavConfig", () => {
-  it("defines four primary nav items (practices is deep-link only, not a tab)", () => {
+  it("defines five primary nav items including practices", () => {
     const items = buildAppNavItems("ru", "authenticated");
     expect(items.map((i) => i.id)).toEqual(APP_NAV_PRIMARY_ORDER);
-    expect(items).toHaveLength(4);
+    expect(items).toHaveLength(5);
     expect(items.map((i) => i.id)).toEqual([
       "today",
       "profile",
       "compatibility",
       "tarot",
+      "practices",
     ]);
     expect(items[0].href).toBe("/today");
     expect(items[1].label).toBe("Моя карта");
-    expect(items.some((i) => i.id === "practices")).toBe(false);
+    expect(items[4].id).toBe("practices");
+    expect(items[4].label).toBe("Практики");
+    expect(items[4].href).toBe("/practices");
   });
 
   it("authenticated chrome exposes the launch nav set", () => {
-    const required = ["today", "profile", "compatibility", "tarot"] as const;
+    const required = ["today", "profile", "compatibility", "tarot", "practices"] as const;
     expect(APP_NAV_PRIMARY_ORDER).toEqual([...required]);
     const en = buildAppNavItems("en", "authenticated");
     expect(en.map((i) => i.id)).toEqual([...required]);

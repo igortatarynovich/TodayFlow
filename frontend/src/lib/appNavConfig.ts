@@ -75,6 +75,7 @@ export const APP_NAV_PRIMARY_ORDER: AppNavItemId[] = [
   "profile",
   "compatibility",
   "tarot",
+  "practices",
 ];
 
 /** Pre-auth: guest trials on landing, auth, marketing surfaces (anchors). */
