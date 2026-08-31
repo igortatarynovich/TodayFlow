@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { PLAYWRIGHT_API_BASE, E2E_USER_PASSWORD } from "./helpers";
 
+test.use({ timezoneId: "Europe/Moscow" });
+
 test.describe("My Day LLM-OFF", () => {
   test.describe.configure({ mode: "serial" });
 
@@ -51,8 +53,18 @@ test.describe("My Day LLM-OFF", () => {
       `core-setup ${email}: ${profile.status()} ${await profile.text()}`,
     ).toBeTruthy();
 
+    // Warm *today* (MSK). A hardcoded yesterday date left /today on an
+    // unbuilt contract whose interpretation_status=unavailable and empty
+    // day_personal painted My Day as «Не удалось загрузить.»
+    const today = new Intl.DateTimeFormat("sv-SE", {
+      timeZone: "Europe/Moscow",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date());
+
     const refresh = await request.post(`${PLAYWRIGHT_API_BASE}/today/story/refresh`, {
-      data: { target_date: "2026-08-30", timezone: "Europe/Moscow" },
+      data: { target_date: today, timezone: "Europe/Moscow" },
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -62,6 +74,32 @@ test.describe("My Day LLM-OFF", () => {
     expect(
       refresh.ok(),
       `story/refresh ${email}: ${refresh.status()} ${await refresh.text()}`,
+    ).toBeTruthy();
+
+    const contractRes = await request.get(
+      `${PLAYWRIGHT_API_BASE}/today/contract?target_date=${today}&timezone=Europe/Moscow`,
+      { headers: { Authorization: `Bearer ${token}`, Accept: "application/json" } },
+    );
+    expect(
+      contractRes.ok(),
+      `today/contract ${email}: ${contractRes.status()} ${await contractRes.text()}`,
+    ).toBeTruthy();
+    const contract = (await contractRes.json()) as {
+      day_story?: {
+        day_personal?: {
+          summary_ru?: string;
+          personal_astrology?: { beats?: unknown[]; summary_ru?: string };
+        };
+      };
+    };
+    const dayPersonal = contract.day_story?.day_personal;
+    const hasDeterministicPersonal =
+      Boolean(dayPersonal?.summary_ru?.trim()) ||
+      Boolean(dayPersonal?.personal_astrology?.summary_ru?.trim()) ||
+      Boolean(dayPersonal?.personal_astrology?.beats?.length);
+    expect(
+      hasDeterministicPersonal,
+      "LLM-off contract must carry deterministic day_personal (astro/IL), not an empty unavailable shell",
     ).toBeTruthy();
 
     await page.goto("/today");
@@ -82,9 +120,13 @@ test.describe("My Day LLM-OFF", () => {
 
     const myDaySection = page.locator("[data-testid='today-my-day']");
     await expect(myDaySection).toBeVisible({ timeout: 25_000 });
+    await expect(page.getByTestId("today-my-day-unavailable")).toHaveCount(0);
 
-    const sectionText = await myDaySection.textContent();
-    expect(sectionText).not.toContain("Не удалось загрузить");
-    expect(sectionText).toMatch(/[Сс]олнце|[Лл]уна|[Мм]еркурий|[Вв]енера|[Мм]арс/);
+    const signal = page
+      .getByTestId("today-my-day-headline")
+      .or(page.getByTestId("today-instruction-bridge"));
+    await expect(signal.first()).toBeVisible({ timeout: 10_000 });
+    const signalText = await signal.first().textContent();
+    expect(signalText).toMatch(/[Сс]олнце|[Лл]уна|[Мм]еркурий|[Вв]енера|[Мм]арс/);
   });
 });
