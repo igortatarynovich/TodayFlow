@@ -15,7 +15,9 @@ COPY --from=deps /app/frontend/node_modules ./frontend/node_modules
 COPY frontend ./frontend
 COPY CONTENT ./CONTENT
 WORKDIR /app/frontend
-RUN npm run build
+RUN echo "build NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}" \
+ && echo "build NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}" \
+ && npm run build
 
 FROM node:20-alpine AS runner
 WORKDIR /app/frontend
