@@ -188,7 +188,8 @@ export function dedupePracticesForHub<T extends PracticeMatchable & { id: string
   const out: T[] = [];
   for (const group of byStem.values()) {
     group.sort((a, b) => hubVariantIndex(a.id) - hubVariantIndex(b.id));
-    out.push(group[0]);
+    const canonical = group[0];
+    if (canonical) out.push(canonical);
   }
   return out;
 }
