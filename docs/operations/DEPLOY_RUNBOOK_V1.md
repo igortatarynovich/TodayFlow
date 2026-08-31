@@ -83,7 +83,9 @@ docker compose -f docker-compose.prod.yml up -d --build --force-recreate fronten
 
 ## 4. Post-deploy verification
 
-- [ ] `curl -fsS https://todayflow.today/api/health` (or local `http://localhost:8080/health`) returns 200.
+- [ ] `curl -fsS https://api.todayflow.today/health` (or local `http://localhost:8080/health`) returns 200.
+- [ ] Frontend JS is baked with `PUBLIC_API_URL`, not localhost: `docker exec todayflow-frontend-1 grep -oE 'https?://[^" ]+' /app/frontend/.next/static/chunks/common-*.js | sort -u` must include `https://api.todayflow.today` and must not include `http://localhost:8080`.
+- [ ] Backend CORS matches the public site: `docker exec todayflow-backend-1 printenv ALLOWED_ORIGINS` includes `https://todayflow.today`.
 - [ ] Frontend serves the landing page without 5xx.
 - [ ] `/today` contract endpoint returns a valid contract (may be `degraded` if LLM is tripped, but must not 500).
 - [ ] LLM spend latch path is writable and not falsely tripped: check `/DATA/ops/llm_spend.json`.
