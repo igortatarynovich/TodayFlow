@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.visualization`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 9/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.future_self`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 10/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-31 | **P1 `practice.visualization` sourced.** `technique.practice_visualization` accepted (UHD NHS Mental Practice + Feltz & Landers 1983 + Holmes & Collins 2001). Brief mental rehearsal of one upcoming action; not intention_setting/future_self/meditation.visualization. Not GMI/stroke rehab/manifestation. `practice.visualization.001` active. Coverage matrix: 143 items, 10/42 P1 sourced. Next: `practice.future_self`. |
 | 2026-08-31 | **P1 `practice.review` sourced.** `technique.review` accepted (NHS Transformation Partners End of Shift Wellbeing Checklist + UH Bristol reflective writing + NHS Borders look back). Brief two-pole look-back: one hard thing and one thing that went okay or helped; not journaling/prompted_reflection/gratitude/self_check_in/evening_ritual. Not Gibbs/AAR. `practice.review.001` active. Coverage matrix: 142 items, 9/42 P1 sourced. Next: `practice.visualization`. |
 | 2026-08-31 | **P1 `practice.gratitude` sourced.** `technique.practice_gratitude` accepted (NHS 10 stress busters + Every Mind Matters stress + Greater Good Three Good Things). Brief constrained list of three things that went well or that you are thankful for; not journaling/prompted_reflection/meditation.gratitude. `practice.gratitude.001` active. Coverage matrix: 141 items, 8/42 P1 sourced. Next: `practice.review`. |
 | 2026-08-31 | **P1 `practice.shaking_release` sourced.** `technique.shaking_release` accepted (Cardiff and Vale UHB NHS Wales sedentary-worker micro-pause + West Suffolk NHS loosening + UMass Memorial workstation arm shake). Brief voluntary shake-out, not body_release/mobility/stretch/TRE. `practice.shaking_release.001` active. Coverage matrix: 140 items, 7/42 P1 sourced. Next: `practice.gratitude`. |

@@ -1562,6 +1562,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.practice_visualization",
+      "content_class": "practice",
+      "type": "visualization",
+      "canonical_description": "Pick one upcoming action. Imagine doing it step by step without moving, then stop. The kernel is mental rehearsal of a concrete doing, not naming an intention, not a portrait of a future self, not a relaxation scene, and not picturing a wished-for result so that it arrives. Distinct from intention_setting, future_self, and meditation.visualization. Not Graded Motor Imagery, not stroke rehabilitation, and not manifestation.",
+      "source_refs": [
+        {
+          "source": "University Hospitals Dorset NHS — Mental Practice",
+          "url": "https://www.uhd.nhs.uk/uploads/about/docs/our_publications/patient_information_leaflets/stroke/Mental-Practice.pdf",
+          "locus": "Mental practice is also known as mental imagery or mental rehearsal. It is practicing a task without any actual movement. In other words, you imagine doing the task in your mind. Athletes and musicians have used mental practice for a long time.",
+          "note": "official_health. Method confirmation that mental rehearsal is imagining a task without moving. Stroke rehabilitation, NICE/RCP dose, neuroplasticity, and recovery claims not imported."
+        },
+        {
+          "source": "Feltz & Landers (1983) — The effects of mental practice on motor skill learning and performance: A meta-analysis, Journal of Sport Psychology",
+          "url": "https://doi.org/10.1123/jsp.5.1.25",
+          "locus": "Mental practice prior to performing a motor skill: the cognitive rehearsal of a task in the absence of overt physical movement.",
+          "note": "academic. Method confirmation for rehearsing a task in the mind without moving. Effect sizes and performance-enhancement claims not imported."
+        },
+        {
+          "source": "Holmes & Collins (2001) — The PETTLEP Approach to Motor Imagery, Journal of Applied Sport Psychology",
+          "url": "https://doi.org/10.1080/104132001753149885",
+          "locus": "Motor imagery is the mental rehearsal of a skill; imagery should be functionally equivalent to performing the task (same task details), not a generic wished-for scene.",
+          "note": "academic. Method confirmation for rehearsing the actual task in the mind. PETTLEP letter protocol, elite-sport training programmes, and performance guarantees not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if imagining the action makes you feel worse.",
+        "Not a treatment for stroke, pain, performance anxiety, or any health condition, and not a way to make an outcome happen."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

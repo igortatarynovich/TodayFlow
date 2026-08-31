@@ -8140,6 +8140,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.visualization.001",
+        "content_class": "practice",
+        "family": "intention",
+        "type": "visualization",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.practice_visualization"
+      },
+      "retrieval": {
+        "purpose": [
+          "confidence"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Пройти в уме",
+            "body": "Выбери одно дело, которое сделаешь следом. Сиди спокойно. Представь, как делаешь его от первого шага до последнего — без движения. Потом остановись. Не рисуй желаемый итог и не уходи в свободную сцену."
+          },
+          "en": {
+            "title": "Run it in your mind",
+            "body": "Pick one thing you will do next. Sit still. Imagine doing it from the first step to the last, without moving. Then stop. Do not picture a wished-for result, and do not wander into a free scene."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Пройти в уме",
+            "en": "Run it through"
+          }
+        }
+      }
     }
   ]
 }
