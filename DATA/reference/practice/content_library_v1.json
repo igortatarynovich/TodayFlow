@@ -8030,6 +8030,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.gratitude.001",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "gratitude",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.practice_gratitude"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Три хороших вещи",
+            "body": "Запиши три вещи, которые сегодня получились или за которые ты благодарен. Могут быть маленькими. Потом остановись. Не превращай это в свободное письмо и не разбирай весь день."
+          },
+          "en": {
+            "title": "Three things that went well",
+            "body": "Write down three things that went well today, or that you are grateful for. They can be small. Then stop. Do not turn this into a free write, and do not unpack the whole day."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Назвать три",
+            "en": "Name three"
+          }
+        }
+      }
     }
   ]
 }

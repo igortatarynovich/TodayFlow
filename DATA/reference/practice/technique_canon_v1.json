@@ -1498,6 +1498,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.practice_gratitude",
+      "content_class": "practice",
+      "type": "gratitude",
+      "canonical_description": "Write down three specific things from today that you notice or are thankful for — however small — then stop. The kernel is a short named list on paper or in notes, not free journaling, not answering an open prompt, and not sitting with gratitude as a meditation object. Distinct from journaling, prompted_reflection, free_writing, and meditation.gratitude. Not a week-long protocol, not a mood or happiness treatment.",
+      "source_refs": [
+        {
+          "source": "NHS — 10 stress busters",
+          "url": "https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/tips-to-reduce-stress/",
+          "locus": "Try to be positive: look for the positives in life and things you're grateful for. Try writing down 3 things that went well, or for which you're grateful, at the end of every day.",
+          "note": "official_health. Method confirmation for a short end-of-day list of three things that went well or that one is grateful for. Stress-management and positivity claims not imported."
+        },
+        {
+          "source": "NHS Every Mind Matters — Dealing with stress",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-health-issues/stress/",
+          "locus": "Try positive thinking: Each day, list 3 things you're thankful for, however small.",
+          "note": "official_health. Method confirmation for listing three small thankful things. Stress-relief, CBT, and mood claims not imported."
+        },
+        {
+          "source": "Greater Good in Action — Three Good Things",
+          "url": "https://ggia.berkeley.edu/practice/three-good-things",
+          "locus": "Write down three things that went well for you today. It is important to create a physical record by writing them down; items can be small, everyday events. Use whatever writing style you please.",
+          "note": "academic_description. Method confirmation for writing three specific things from the day. Seligman week-long protocol, happiness scores, and why-it-happened essay steps not imported as this product kernel."
+        }
+      ],
+      "safety_notes": [
+        "Stop if listing makes you feel worse. You do not have to find three if the day was hard — stop rather than force a list.",
+        "Not a treatment for low mood, stress, or any mental health condition, and not a happiness or sleep guarantee."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
