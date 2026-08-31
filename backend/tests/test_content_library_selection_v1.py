@@ -44,6 +44,15 @@ class TestCatalogAdapter:
         assert p["id"] == "meditation.body_scan.001"
         assert p["title"]
 
+    def test_multiline_body_splits_intro_from_steps(self) -> None:
+        p = get_content_library_practice_by_id("meditation.acceptance.002", locale="ru")
+        assert p is not None
+        assert "\n" not in p["description"]
+        assert "не улучшая" in p["description"]
+        assert len(p["instructions"]) >= 3
+        assert p["description"] not in p["instructions"]
+        assert any("закрой глаза" in step.lower() for step in p["instructions"])
+
     def test_get_by_id_missing(self) -> None:
         assert get_content_library_practice_by_id("no.such.item.001", locale="ru") is None
 

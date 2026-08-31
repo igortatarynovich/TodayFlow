@@ -54,7 +54,7 @@ function toCard(practice: PracticeCatalogItem, imageUrl?: string | null): StateC
   }
   return {
     id: practice.id,
-    href: `/practices/${practice.id}?run=1`,
+    href: `/practices/${practice.id}`,
     title: cardTitle,
     description,
     minutes: practice.duration_minutes ?? null,
@@ -123,7 +123,7 @@ export default function PracticesPage() {
       const total = Math.max(1, Math.round(draft.durationMinutes));
       const done = Math.min(total, Math.floor(draft.elapsedSeconds / 60));
       setContinueSession({
-        href: `/practices/${draft.practiceId}?run=1`,
+        href: `/practices/${draft.practiceId}`,
         title: draft.title,
         minutesDone: done,
         minutesTotal: total,

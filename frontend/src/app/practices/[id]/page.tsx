@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
   practicesExperienceChromeBundle,
   type FlowPracticesChromeLocale,
@@ -91,8 +91,6 @@ type PracticeDetail = {
 
 export default function PracticeDetailPage() {
   const params = useParams();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const { isAuthenticated } = useAuth();
   const { refetchToday } = useTodayCycle();
   const { trackMeaningEvent } = useMeaningRuntime();
@@ -209,19 +207,9 @@ export default function PracticeDetailPage() {
     return draft.elapsedSeconds;
   }, [practice, sessionOpen]);
 
-  useEffect(() => {
-    if (!practice) return;
-    if (searchParams.get("run") === "1") {
-      setSessionOpen(true);
-    }
-  }, [practice, searchParams]);
-
   const closeSession = useCallback(() => {
     setSessionOpen(false);
-    if (searchParams.get("run") === "1") {
-      router.replace(`/practices/${practice?.id ?? ""}`);
-    }
-  }, [router, searchParams, practice?.id]);
+  }, []);
 
   const handleSaveSessionToToday = useCallback(
     async (input: { stateAfter: PracticeStateAfter; elapsedSeconds: number }) => {
