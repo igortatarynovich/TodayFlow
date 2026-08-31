@@ -7975,6 +7975,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.shaking_release.001",
+        "content_class": "practice",
+        "family": "movement",
+        "type": "shaking_release",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.shaking_release"
+      },
+      "retrieval": {
+        "purpose": [
+          "release"
+        ],
+        "domain": [],
+        "input_state": [
+          "tense"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Встряхнуть руки",
+            "body": "Сядь или встань. Опусти руки вдоль тела. Направь кисти к полу и несколько секунд мягко встряхни запястья и кисти. Остановись. Не зажимай плечи специально и не превращай это в зарядку."
+          },
+          "en": {
+            "title": "Shake out the hands",
+            "body": "Sit or stand. Drop both arms to your sides. Point your hands toward the floor and gently shake your wrists and hands for a few seconds. Stop. Do not tense the shoulders deliberately, and do not turn this into a workout."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Сбросить",
+            "en": "Shake off"
+          }
+        }
+      }
     }
   ]
 }

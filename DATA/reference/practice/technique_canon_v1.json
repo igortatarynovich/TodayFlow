@@ -1466,6 +1466,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.shaking_release",
+      "content_class": "practice",
+      "type": "shaking_release",
+      "canonical_description": "Sit or stand, drop both arms to the sides, point the hands toward the floor, and gently shake the wrists and hands for a few seconds, then stop. The kernel is a brief voluntary shake-out, not a stretch hold, not controlled joint range-of-motion, and not a tense-then-release. Distinct from body_release (abbreviated PMR), mobility, stretching, mindful_movement, and from TRE / involuntary neurogenic tremor protocols, which are not this product version.",
+      "source_refs": [
+        {
+          "source": "Cardiff and Vale UHB NHS Wales — Sedentary Workers: Occupational Health Physiotherapy Information",
+          "url": "https://cavuhb.nhs.wales/files/occupational-health-physiotherapy1/3-sedentary-workers-health-and-wellbeing-info-leaflet-updated-30may18-pdf/",
+          "locus": "Micro-pauses of 10 to 20 seconds include: drop your arms to your sides, lean back and allow your shoulders to droop and relax; pointing the hands towards the floor and gently shaking the wrists. Do one of these, some or all, every 20–30 minutes.",
+          "note": "official_health. Method confirmation for a brief wrist/hand shake-out as a sit-break. MSD statistics, ischaemic-pain, and productivity claims not imported."
+        },
+        {
+          "source": "West Suffolk NHS Foundation Trust — Loosening movements (neck and shoulders)",
+          "url": "https://www.wsh.nhs.uk/covid-staff-zone/Your-wellbeing/docs/New-neck-and-shoulders-loosening.pdf",
+          "locus": "After shoulder shrug: repeat 5–6 times, then shake your arms and hands to loosen up.",
+          "note": "official_health. Method confirmation for shaking arms and hands to loosen. Voice-therapy sequence and hold times not imported as this kernel."
+        },
+        {
+          "source": "UMass Memorial Health — Exercises at Your Workstation: Hands and Feet",
+          "url": "https://www.ummhealth.org/health-library/exercises-at-your-workstation-hands-and-feet",
+          "locus": "Arm shake: while standing or sitting, drop your arms to your sides. Gently shake out your arms and hands for a few seconds. Relax. Repeat 3 times.",
+          "note": "clinical_medicine. Method confirmation for a seated or standing arm/hand shake-out. Tension-relief and alertness claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Shake gently. Stop if it hurts, tingles, makes you dizzy, or feels unsteady. Do not force the shoulders or wrists.",
+        "Not a treatment for RSI, trauma, anxiety, or any medical condition. Not a TRE or trauma-release protocol."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

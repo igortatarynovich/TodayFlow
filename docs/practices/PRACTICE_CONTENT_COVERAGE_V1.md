@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.shaking_release`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 6/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.gratitude`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 7/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-31 | **P1 `practice.shaking_release` sourced.** `technique.shaking_release` accepted (Cardiff and Vale UHB NHS Wales sedentary-worker micro-pause + West Suffolk NHS loosening + UMass Memorial workstation arm shake). Brief voluntary shake-out, not body_release/mobility/stretch/TRE. `practice.shaking_release.001` active. Coverage matrix: 140 items, 7/42 P1 sourced. Next: `practice.gratitude`. |
 | 2026-08-31 | **P1 `practice.walking` sourced.** `technique.walking` accepted (NHS sit less + Better Health get active + NHS England corridor/2-minute walk). Brief locomotion sit-break, not mobility/mindful_movement/walking_meditation. `practice.walking.001` active. Coverage matrix: 139 items, 6/42 P1 sourced. Next: `practice.shaking_release`. |
 | 2026-08-31 | **P1 `practice.mindful_movement` sourced.** `technique.mindful_movement` accepted (Sussex Mindfulness Centre NHS + UHDB NHS + RUH Bath PHY051). Brief movement-with-attention, not mobility/stretch/sit-mindfulness/walk. `practice.mindful_movement.001` active. Coverage matrix: 138 items, 5/42 P1 sourced. Next: `practice.walking`. |
 | 2026-08-31 | **P1 `practice.body_scan` skipped; `practice.stretching` sourced.** Sequential body observation already lives in meditation `technique.body_scan` — no distinct practice kernel. `technique.stretching` accepted (NHS Flexibility + Sitting exercises): brief hold-stretch, not mobility/PMR. `practice.stretching.001` active. Coverage matrix: 137 items, 4/42 P1 sourced. Next: `practice.mindful_movement`. |
