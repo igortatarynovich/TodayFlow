@@ -45,7 +45,8 @@
     "meditation.letting_go.001",
     "meditation.reflection_meditation.001",
     "affirmation.agency.001",
-    "affirmation.relationship.001"
+    "affirmation.relationship.001",
+    "discipline.digital_limit.001"
   ],
   "items": [
     {
@@ -2500,9 +2501,10 @@
         "item_id": "discipline.digital_limit.001",
         "content_class": "discipline",
         "type": "digital_limit",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.self_control.stabilize"
+        "seed_cell": "need.self_control.stabilize",
+        "technique_id": "technique.digital_limit"
       },
       "retrieval": {
         "purpose": [
@@ -4758,9 +4760,10 @@
         "item_id": "discipline.digital_limit.002",
         "content_class": "discipline",
         "type": "digital_limit",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.self_control.stabilize"
+        "seed_cell": "need.self_control.stabilize",
+        "technique_id": "technique.digital_limit"
       },
       "retrieval": {
         "purpose": [
@@ -7266,9 +7269,10 @@
         "item_id": "discipline.digital_limit.003",
         "content_class": "discipline",
         "type": "digital_limit",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.self_control.stabilize"
+        "seed_cell": "need.self_control.stabilize",
+        "technique_id": "technique.digital_limit"
       },
       "retrieval": {
         "purpose": [

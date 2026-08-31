@@ -228,6 +228,8 @@ SEED_38_ID = "affirmation.agency.001"
 SEED_38_CELL = "need.motivation.activate"
 SEED_39_ID = "affirmation.relationship.001"
 SEED_39_CELL = "need.connection.connect"
+SEED_40_ID = "discipline.digital_limit.001"
+SEED_40_CELL = "need.self_control.stabilize"
 
 SPINE_SPECS = (
     ("practice.mobility.001", "need.energy.activate", "practice", "mobility", "movement", ["energy"], ["activate"]),
@@ -374,6 +376,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         SEED_37_ID,
         SEED_38_ID,
         SEED_39_ID,
+        SEED_40_ID,
     ]
     item_ids = {item["identity"]["item_id"] for item in library["items"]}
     assert set(probes) <= item_ids
@@ -470,6 +473,9 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "affirmation.relationship.001": "technique.relationship",
         "affirmation.relationship.002": "technique.relationship",
         "affirmation.relationship.003": "technique.relationship",
+        "discipline.digital_limit.001": "technique.digital_limit",
+        "discipline.digital_limit.002": "technique.digital_limit",
+        "discipline.digital_limit.003": "technique.digital_limit",
         "practice.transition_ritual.001": "technique.transition_ritual",
         "practice.transition_ritual.002": "technique.transition_ritual",
         "practice.transition_ritual.003": "technique.transition_ritual",

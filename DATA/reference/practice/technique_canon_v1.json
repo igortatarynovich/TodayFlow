@@ -829,6 +829,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.digital_limit",
+      "content_class": "discipline",
+      "type": "digital_limit",
+      "canonical_description": "A short discipline rule in which the person sets a bounded, recurring daily period (for example, one hour) during which they do not open feeds or scroll social media, using a timer or device tool to mark the period. The rule is followed for a short streak (for example, seven or fourteen days), and a missed day does not restart the streak. It is not a treatment for screen addiction, anxiety, attention problems, or any mental or physical health condition, and it does not guarantee improved focus, well-being, or reduced screen time.",
+      "source_refs": [
+        {
+          "source": "NHS London Waiting Room — Screen Time",
+          "url": "https://londonwaitingroom.nhs.uk/screen-time",
+          "locus": "Spending too much time on devices can have negative consequences for physical and mental health. One way to look after mental health while being online is setting limits for yourself — many people use apps to limit their time spent on social media, which can help you be more intentional with what kind of content you engage with.",
+          "note": "official_health. Method confirmation for self-imposed screen/social-media time limits to support intentional use. Treatment/efficacy claims not imported."
+        },
+        {
+          "source": "Google Android Help — Manage how you spend time on your Android phone with Digital Wellbeing",
+          "url": "https://support.google.com/android/answer/9346420",
+          "locus": "App timers: choose how much time you can spend in an app; when you run out of time, the app closes and its icon dims. Focus mode: select distracting apps to pause until you turn off the mode or the scheduled time ends.",
+          "note": "official_tech. Method confirmation for using a timer or device tool to enforce a bounded app/feed-free period. Efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for screen addiction, anxiety, ADHD, or any mental or physical health condition.",
+        "If the restriction increases anxiety, restlessness, or conflict with responsibilities, reduce the period or stop the rule.",
+        "The rule does not guarantee improved focus, well-being, sleep, or reduced overall screen time.",
+        "If screen use feels uncontrollable or is causing significant distress, consider seeking professional support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.digital_pause",
       "content_class": "practice",
       "family": "behavioral",
