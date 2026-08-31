@@ -7697,6 +7697,62 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.physiological_sigh.001",
+        "content_class": "practice",
+        "family": "breathwork",
+        "type": "physiological_sigh",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.physiological_sigh"
+      },
+      "retrieval": {
+        "purpose": [
+          "calm"
+        ],
+        "domain": [],
+        "input_state": [
+          "overstimulated",
+          "tense"
+        ],
+        "direction": [
+          "downregulate"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Физиологический вздох",
+            "body": "Два коротких вдоха носом подряд (второй меньше), затем длинный выдох через рот. Повтори 3 раза в спокойном темпе. Не форсируй и не дыши слишком часто."
+          },
+          "en": {
+            "title": "Physiological sigh",
+            "body": "Two short inhales through the nose in a row (the second smaller), then a long exhale through the mouth. Repeat 3 times at a comfortable pace. Do not force or breathe too rapidly."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Сброс",
+            "en": "Reset"
+          }
+        }
+      }
     }
   ]
 }

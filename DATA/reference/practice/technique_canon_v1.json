@@ -1301,6 +1301,40 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.physiological_sigh",
+      "content_class": "practice",
+      "type": "physiological_sigh",
+      "canonical_description": "A short breath cycle: two consecutive inhales through the nose (the second is smaller, topping up the lungs), followed by a longer exhale through the mouth. Repeat only a few times. Do not force the breath or hyperventilate; the double inhale is a method cue, not a performance goal.",
+      "source_refs": [
+        {
+          "source": "Vlemincx et al. (2010) — Sigh rate and respiratory variability during mental load and sustained attention",
+          "url": "https://doi.org/10.1111/j.1469-8986.2010.01043.x",
+          "locus": "Sighing acts as a psychophysiological resetter: sigh rate increases when breathing becomes more random and may reset structured respiratory variability.",
+          "note": "academic_description. Method confirmation for sighing as a resetter of respiratory variability. Efficacy/mood/anxiety claims not imported."
+        },
+        {
+          "source": "Vlemincx, Van Diest, et al. — Respiratory variability preceding and following sighs: A resetter hypothesis",
+          "url": "https://lirias.kuleuven.be/retrieve/109476",
+          "locus": "After a spontaneous sigh, correlated (structured) respiratory variability increases; sighs reset the respiratory system when variability becomes too random.",
+          "note": "academic_description. Method confirmation for the resetter hypothesis and structured-variability restoration. Treatment claims not imported."
+        },
+        {
+          "source": "Vlemincx et al. — Take a deep breath: The relief effect of spontaneous and instructed sighs",
+          "url": "https://lirias.kuleuven.be/retrieve/fe5863ef-f6f9-4d29-9bf7-a2d5e992d1cb",
+          "locus": "Both spontaneous and instructed sighs produce relief; instructed sighs show stronger relief effects than spontaneous ones.",
+          "note": "academic_description. Method confirmation that a deliberate sigh pattern can be used as a practice. Relief/relaxation claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Do not force the breath or take bigger breaths.",
+        "Stop if dizzy, faint, or more anxious.",
+        "Do not hyperventilate; only a few repetitions at a comfortable pace.",
+        "Not a treatment for any medical or mental-health condition."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

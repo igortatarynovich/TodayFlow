@@ -7,7 +7,7 @@
   "next_pass": "library_fill_lightweight_provenance",
   "next_fill_cell": null,
   "skipped_types": ["box_breathing", "energizing_breath", "abstinence"],
-  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing, energizing_breath and abstinence skipped_for_now. All 26 P0 need cells sourced: calm (extended_exhale), focus (focused_attention), energy (mobility), grounding (sensory_grounding), clarity (prompted_reflection), confidence (capability), release (body_release), rest (relaxation), sleep (sleep), sleep discipline (sleep_discipline), motivation (micro_action), emotional awareness (self_check_in), self connection (journaling), connection (connection_action), creativity (creative_prompt), decision making (priority_setting), transition (transition_ritual), recovery (progressive_relaxation), discipline (routine_commitment), self control (attention_discipline), detachment (acceptance), consistency (consistency_challenge), simplicity (reduction), reset (digital_pause), presence (mindfulness), habit_change (consistency_challenge). P1 coverage started: 1/42 P1 types sourced (paced_breathing). Remaining items llm_provisional until rewritten. Next fill work: P1 type coverage (ledger order; next physiological_sigh) or skipped-type reassessment on product demand. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
+  "description": "Coverage-first ledger. Architecture coverage stands. Research escalation archived, non-blocking. Active fill: lightweight provenance. box_breathing, energizing_breath and abstinence skipped_for_now. All 26 P0 need cells sourced: calm (extended_exhale), focus (focused_attention), energy (mobility), grounding (sensory_grounding), clarity (prompted_reflection), confidence (capability), release (body_release), rest (relaxation), sleep (sleep), sleep discipline (sleep_discipline), motivation (micro_action), emotional awareness (self_check_in), self connection (journaling), connection (connection_action), creativity (creative_prompt), decision making (priority_setting), transition (transition_ritual), recovery (progressive_relaxation), discipline (routine_commitment), self control (attention_discipline), detachment (acceptance), consistency (consistency_challenge), simplicity (reduction), reset (digital_pause), presence (mindfulness), habit_change (consistency_challenge). P1 coverage: 2/42 P1 types sourced (paced_breathing, physiological_sigh). Remaining items llm_provisional until rewritten. Next fill work: P1 type coverage (ledger order; next practice.grounding) or skipped-type reassessment on product demand. Canon: docs/practices/PRACTICE_CONTENT_COVERAGE_V1.md · fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
   "rules": {
     "not_cartesian": true,
     "preferred_type_is_fill_target_not_meaning_output": true,
@@ -26,7 +26,7 @@
     "types_total": 86,
     "types_p0": 44,
     "types_p1": 42,
-    "library_items": 134
+    "library_items": 135
   },
   "screen_need_map": {
     "calm": "need.calm.downregulate",
@@ -869,7 +869,9 @@
       "content_class": "practice",
       "type": "physiological_sigh",
       "phase": "P1",
-      "item_ids": [],
+      "item_ids": [
+        "practice.physiological_sigh.001"
+      ],
       "family": "breathwork"
     },
     {

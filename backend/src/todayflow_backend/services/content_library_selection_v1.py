@@ -340,6 +340,7 @@ CLASS_TO_CATEGORY: dict[str, str] = {
 TYPE_TO_CATEGORY: dict[str, str] = {
     "extended_exhale": "breathing",
     "paced_breathing": "breathing",
+    "physiological_sigh": "breathing",
     "box_breathing": "breathing",
     "energizing_breath": "breathing",
     "breath_awareness": "breathing",
@@ -395,6 +396,7 @@ CLASS_TO_FORMAT: dict[str, str] = {
 TYPE_TO_FORMAT: dict[str, str] = {
     "extended_exhale": "breath",
     "paced_breathing": "breath",
+    "physiological_sigh": "breath",
     "box_breathing": "breath",
     "energizing_breath": "breath",
     "breath_awareness": "breath",
@@ -537,6 +539,12 @@ def _content_item_to_practice(item: dict[str, Any], locale: str) -> dict[str, An
     title = (text.get("title") or "").strip() or identity.get("item_id", "")
     body = (text.get("body") or "").strip()
 
+    # Multi-line bodies carry an intro line followed by step lines. The hub
+    # card / detail subtitle shows the intro; the detail page lists steps.
+    body_lines = [line.strip() for line in body.splitlines() if line.strip()]
+    description = body_lines[0] if body_lines else ""
+    steps = body_lines[1:] if len(body_lines) > 1 else ([body] if body else [])
+
     presentation = payload.get("presentation", {})
     outcome_node = presentation.get("outcome_label", {})
     outcome_label = (outcome_node.get(locale) or outcome_node.get(LOCALE_FALLBACK) or "").strip() or None
@@ -564,7 +572,7 @@ def _content_item_to_practice(item: dict[str, Any], locale: str) -> dict[str, An
     return {
         "id": identity.get("item_id"),
         "title": title,
-        "description": body,
+        "description": description,
         "category": category,
         "practice_type": None,
         "duration_minutes": duration,
@@ -577,7 +585,7 @@ def _content_item_to_practice(item: dict[str, Any], locale: str) -> dict[str, An
         "need_ids": need_ids,
         "format_id": fmt,
         "outcome_label": outcome_label,
-        "instructions": [body] if body else [],
+        "instructions": steps,
         "target_axis": None,
         "target_modulator": None,
         "pattern_type": None,
