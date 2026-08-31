@@ -38,7 +38,7 @@ class PracticeResponse(BaseModel):
     duration_minutes: Optional[int] = None
     difficulty: str  # "beginner", "intermediate", "advanced"
     is_free: bool
-    is_personalized: bool
+    is_personalized: bool = False  # Default for static practice dictionaries that predate the field
     personalized_reason: Optional[str] = None  # Почему эта практика рекомендована
     access_level: str  # "free", "lite", "pro"
     tags: List[str] = []
