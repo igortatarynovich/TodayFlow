@@ -8085,6 +8085,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.review.001",
+        "content_class": "practice",
+        "family": "reflection",
+        "type": "review",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.review"
+      },
+      "retrieval": {
+        "purpose": [
+          "clarity"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Взгляд на день",
+            "body": "Оглянись на сегодня или на одно событие. Назови одно, что было трудно, и одно, что получилось или помогло — даже мелкое. Потом остановись. Не разбирай весь день и не пиши свободное письмо."
+          },
+          "en": {
+            "title": "Look back at today",
+            "body": "Look back at today or one event. Name one thing that was hard and one thing that went okay or helped, even small. Then stop. Do not unpack the whole day, and do not write a free letter."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Два полюса",
+            "en": "Hard and okay"
+          }
+        }
+      }
     }
   ]
 }

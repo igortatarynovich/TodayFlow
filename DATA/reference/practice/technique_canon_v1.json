@@ -1530,6 +1530,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.review",
+      "content_class": "practice",
+      "type": "review",
+      "canonical_description": "Look back at today or one event. Name one thing that was hard and one thing that went okay or helped — they can be small — then stop. The kernel is a short two-pole look-back, not unconstrained private writing, not a one-question prompt, not a thankful-only list, and not a present-feeling check. Distinct from journaling, prompted_reflection, gratitude, self_check_in, and evening_ritual. Not Gibbs, not an after-action incident debrief, and not a professional reflective account.",
+      "source_refs": [
+        {
+          "source": "NHS Transformation Partners — End of Shift Wellbeing Checklist (Dr Julie Highfield)",
+          "url": "https://www.transformationpartners.nhs.uk/wp-content/uploads/2021/01/End-of-shift-wellbeing-checklist.pdf",
+          "locus": "Take a moment to think about today. Acknowledge three things that were difficult. Purposefully let each of them go. Consider three things you felt pleased about, however small.",
+          "note": "official_health. Method confirmation for a brief look-back at the day with both hard and okay poles. Uniform/key end-of-shift ritual and staff-wellbeing claims not imported."
+        },
+        {
+          "source": "University Hospitals Bristol NHS — Reflective writing",
+          "url": "https://uhbristol.nhs.uk/media/2568033/reflective_writing_-_uhb.pdf",
+          "locus": "Reflective writing typically involves describing an experience and your actions; reflecting on what went well and what did not.",
+          "note": "official_health. Method confirmation for a look-back that names what went well and what did not. Gibbs cycle, NMC revalidation form, and professional-development claims not imported."
+        },
+        {
+          "source": "NHS Borders — Staying Well Action Plan",
+          "url": "https://www.nhsborders.scot.nhs.uk/media/1004699/Staying-Well-Action-Plan.pdf",
+          "locus": "When a challenge is overcome, it can be useful to look back and think what helped to get past the challenge or what made it more difficult. Identifying the things that worked well and the things that made it more challenging.",
+          "note": "official_health. Method confirmation for looking back at an event with what helped and what made it harder. Recovery-plan, crisis, and capacity sections not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if looking back turns into rumination or makes you feel worse.",
+        "Not a treatment, not an incident debrief, and not a professional reflective account."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
