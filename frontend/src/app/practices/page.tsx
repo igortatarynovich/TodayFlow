@@ -97,7 +97,6 @@ export default function PracticesPage() {
   const [progress, setProgress] = useState<PracticeProgressResponse | null>(null);
   const [history, setHistory] = useState<PracticeHistoryResponse | null>(null);
   const [limits, setLimits] = useState<PracticeLimitsSnapshot | null>(null);
-  const [shortAlternativesRaw, setShortAlternativesRaw] = useState<PracticeCatalogItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [catalogStatus, setCatalogStatus] = useState<"pending" | "loaded" | "empty" | "failed">(
     () => (catalogMemory ? (catalogMemory.length === 0 ? "empty" : "loaded") : "pending"),
@@ -113,14 +112,6 @@ export default function PracticesPage() {
       : catalogRaw.filter((practice) => isGuestPracticeAllowed(practice));
     return sortCatalog(pool, sortLocale);
   }, [catalogRaw, isAuthenticated, sortLocale]);
-
-  const shortAlternatives = useMemo(
-    () =>
-      isAuthenticated
-        ? shortAlternativesRaw
-        : shortAlternativesRaw.filter((practice) => isGuestPracticeAllowed(practice)),
-    [shortAlternativesRaw, isAuthenticated],
-  );
 
   useEffect(() => {
     const syncDraft = () => {
@@ -144,22 +135,13 @@ export default function PracticesPage() {
   }, []);
 
   const loadCatalogExtras = useCallback(async () => {
-    const [currentResult, shortAltResult] = await Promise.all([
-      getJson<PracticeCatalogItem>("/practices/current")
-        .then((data) => data)
-        .catch((err) => {
-          console.error("Practices current failed", err);
-          return null as PracticeCatalogItem | null;
-        }),
-      getJson<PracticeCatalogItem[]>("/practices/short-alternatives")
-        .then((data) => data)
-        .catch((err) => {
-          console.error("Practices short-alternatives failed", err);
-          return [] as PracticeCatalogItem[];
-        }),
-    ]);
+    const currentResult = await getJson<PracticeCatalogItem>("/practices/current")
+      .then((data) => data)
+      .catch((err) => {
+        console.error("Practices current failed", err);
+        return null as PracticeCatalogItem | null;
+      });
     setCurrentPractice(currentResult);
-    setShortAlternativesRaw(shortAltResult);
   }, []);
 
   /** In-memory catalog only — do not wait on /current (lite report) or the spinner stays up. */
@@ -282,32 +264,40 @@ export default function PracticesPage() {
     return first ? toCard(first, RECOMMEND_IMAGE) : null;
   }, [currentPractice, filteredPool, practices, activeNeed, activeFormat]);
 
+  // Canon §3.3: moment rail = candidates for the active need from the catalog,
+  // not the /practices/short-alternatives fallback list (that endpoint serves
+  // the Today ritual slot; using it here collapsed the hub to ≤3 micro cards).
   const momentCards = useMemo((): StateCyclePracticeCard[] => {
     const exclude = new Set(recommended ? [recommended.id] : []);
-    const altPool =
-      shortAlternatives.length > 0
-        ? pickPoolForNeed(shortAlternatives, activeNeed, activeFormat)
-        : filteredPool;
-    return altPool
+    return filteredPool
       .filter((p) => !exclude.has(p.id))
       .slice(0, 8)
       .map((p) => toCard(p));
-  }, [shortAlternatives, filteredPool, recommended, activeNeed, activeFormat]);
+  }, [filteredPool, recommended]);
 
   const practiceOfDay = useMemo((): {
     card: StateCyclePracticeCard | null;
     source: "personalized" | "current" | "catalog_fallback" | null;
   } => {
+    let candidate: {
+      card: StateCyclePracticeCard;
+      source: "personalized" | "current" | "catalog_fallback";
+    } | null = null;
     if (currentPractice) {
-      return {
+      candidate = {
         card: toCard(currentPractice),
         source: currentPractice.is_personalized ? "personalized" : "current",
       };
+    } else {
+      const fallback = practices[0];
+      if (fallback) candidate = { card: toCard(fallback), source: "catalog_fallback" };
     }
-    const fallback = practices[0];
-    if (!fallback) return { card: null, source: null };
-    return { card: toCard(fallback), source: "catalog_fallback" };
-  }, [currentPractice, practices]);
+    // A second block showing the hero's card is not a separate recommendation.
+    if (candidate && recommended && candidate.card.id === recommended.id) {
+      return { card: null, source: null };
+    }
+    return candidate ?? { card: null, source: null };
+  }, [currentPractice, practices, recommended]);
 
   const myItems = useMemo((): StateCycleMyItem[] => {
     const rows = history?.history ?? [];
