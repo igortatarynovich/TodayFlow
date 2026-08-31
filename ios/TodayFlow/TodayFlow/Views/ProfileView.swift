@@ -3906,6 +3906,10 @@ private extension String {
         let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? nil : trimmed
     }
+
+    var nilIfEmpty: String? {
+        isEmpty ? nil : self
+    }
 }
 
 #Preview {

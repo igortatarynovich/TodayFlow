@@ -1060,13 +1060,13 @@ def _ensure_primary(db: Session, user: db_models.User, new_primary_id: Optional[
         return
     db.query(db_models.AstroProfile).filter(
         db_models.AstroProfile.user_id == user.id, db_models.AstroProfile.id != new_primary_id
-    ).update({db_models.AstroProfile.is_primary: False}, synchronize_session=False)
+    ).update({db_models.AstroProfile.is_primary: False}, synchronize_session="fetch")
     # «self» допустимо только у основного профиля; иначе в ответе API остаётся self.
     db.query(db_models.AstroProfile).filter(
         db_models.AstroProfile.user_id == user.id,
         db_models.AstroProfile.id != new_primary_id,
         func.lower(db_models.AstroProfile.relation) == "self",
-    ).update({db_models.AstroProfile.relation: "close_person"}, synchronize_session=False)
+    ).update({db_models.AstroProfile.relation: "close_person"}, synchronize_session="fetch")
 
 
 @router.get("/astro-data")

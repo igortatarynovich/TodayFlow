@@ -258,6 +258,7 @@ def test_today_narrative_non_guide_user_json_includes_day_logic_layers(db_sessio
         return None
 
     monkeypatch.setattr(today_narrative_service, "_openai_json", capture_openai)
+    monkeypatch.setattr(today_narrative_service, "is_llm_chat_configured", lambda: True)
     db_models.PromptVersion.__table__.create(bind=db_session.get_bind(), checkfirst=True)
     db_models.GenerationLog.__table__.create(bind=db_session.get_bind(), checkfirst=True)
 
