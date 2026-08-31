@@ -170,8 +170,8 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
       setNatalPreview(null);
       clearNatalPreviewCache(null);
 
-      if (!setupForm.first_name.trim() || !setupForm.birth_date || !setupForm.location_name.trim()) {
-        setSetupError("Заполни имя, дату рождения и место рождения.");
+      if (!setupForm.first_name.trim() || !setupForm.birth_date) {
+        setSetupError("Заполни имя и дату рождения.");
         return;
       }
 
@@ -182,7 +182,7 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
           first_name: setupForm.first_name.trim(),
           last_name: setupForm.last_name?.trim() || null,
           label: setupForm.label.trim() || "Я",
-          location_name: setupForm.location_name.trim(),
+          location_name: (setupForm.location_name || "").trim() || null,
           birth_time: setupForm.time_unknown ? null : setupForm.birth_time || null,
           latitude: setupForm.latitude ?? null,
           longitude: setupForm.longitude ?? null,

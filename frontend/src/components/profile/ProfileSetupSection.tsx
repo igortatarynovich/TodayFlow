@@ -254,7 +254,7 @@ export function ProfileSetupSection({
             Место рождения{" "}
             <span style={{ fontWeight: 500, color: "#8a7a66" }}>(откроет Асцендент вместе со временем)</span>
             <CityAutocompleteInput
-              value={setupForm.location_name}
+              value={setupForm.location_name || ""}
               onChange={(value) => {
                 onFieldChange("location_name", value);
                 onFieldChange("latitude", null);
