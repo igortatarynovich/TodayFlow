@@ -1,3 +1,5 @@
+import { todayDayKey } from "@/lib/onboardingContext";
+
 const FIRST_TODAY_STORAGE_KEY = "todayflow_first_today_v1";
 
 export type FirstTodayState = {
@@ -50,6 +52,20 @@ export function hasCompletedFirstToday(state = readFirstTodayState()): boolean {
   return Boolean(state.completed_at?.trim());
 }
 
+/**
+ * First Today is a same-day experience. Completion is marked the moment the
+ * composition becomes visible, so a same-day reload must NOT lock the guest
+ * out of their day (pitch + demo CTA) — only a different calendar day ends
+ * first-today mode. Legacy records without day_key count as a previous day.
+ */
+export function isFirstTodayCompleteForOtherDay(
+  dayKey: string,
+  state = readFirstTodayState(),
+): boolean {
+  if (!state.completed_at?.trim()) return false;
+  return state.day_key !== dayKey;
+}
+
 export function hasProfileDepthUnlocked(state = readFirstTodayState()): boolean {
   return Boolean(state.profile_depth_unlocked);
 }
@@ -70,5 +86,5 @@ export function resolveIsFirstDay(
   searchParams: URLSearchParams | null | undefined,
 ): boolean {
   if (searchParams?.get("first") !== "1") return false;
-  return !hasCompletedFirstToday();
+  return !isFirstTodayCompleteForOtherDay(todayDayKey());
 }
