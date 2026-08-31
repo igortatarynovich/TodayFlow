@@ -19,7 +19,7 @@ class TestPracticesSelectEndpoint:
         assert data["item_id"] == "meditation.sleep.001"
         assert data["content_class"] == "meditation"
         assert data["type"] == "sleep"
-        assert data["title"] == "Челюсть мягче"
+        assert data["title"] == "Отпустить челюсть"
         assert data["duration"] == 5
         assert "purpose=sleep" in data["reason"]
 
@@ -66,8 +66,8 @@ class TestPracticesSelectEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["matched"] is True
-        assert data["title"] == "Softer jaw"
-        assert "Close your eyes" in data["body"]
+        assert data["title"] == "Release the jaw"
+        assert "before-bed" in data["body"] or "lying down" in data["body"]
 
     def test_select_by_content_class(self, client: TestClient):
         response = client.get(

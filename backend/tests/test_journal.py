@@ -29,18 +29,18 @@ def test_get_journal_entries_empty(client, auth_token):
 
 
 def test_create_journal_entry_wish(client, auth_token):
-    """Test creating a wish journal entry."""
+    """Test creating a journal entry (canon types: observation/gratitude/insight)."""
     response = client.post(
         "/journal/entries",
         headers={"Authorization": f"Bearer {auth_token}"},
         json={
-            "type": "wish",
+            "type": "insight",
             "content": "Хочу научиться медитировать",
         },
     )
     assert response.status_code == 201
     data = response.json()
-    assert data["type"] == "wish"
+    assert data["type"] == "insight"
     assert data["content"] == "Хочу научиться медитировать"
     assert "id" in data
     assert "created_at" in data
@@ -94,8 +94,8 @@ def test_get_journal_entries_by_type(client, auth_token, db_session):
     user = db_session.query(User).filter(User.email == "test@example.com").first()
     entry1 = JournalEntry(
         user_id=user.id,
-        type="wish",
-        content="Wish 1",
+        type="insight",
+        content="Insight 1",
     )
     entry2 = JournalEntry(
         user_id=user.id,
@@ -106,15 +106,15 @@ def test_get_journal_entries_by_type(client, auth_token, db_session):
     db_session.add(entry2)
     db_session.commit()
 
-    # Get wishes
+    # Get insight entries
     response = client.get(
-        "/journal/entries?entry_type=wish",
+        "/journal/entries?entry_type=insight",
         headers={"Authorization": f"Bearer {auth_token}"},
     )
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 1
-    assert data[0]["type"] == "wish"
+    assert data[0]["type"] == "insight"
 
     # Get gratitude entries
     response = client.get(

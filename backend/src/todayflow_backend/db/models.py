@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from sqlalchemy import Column, DateTime, Date, ForeignKey, Integer, String, JSON, Boolean, UniqueConstraint, Text, Time, Float
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import backref, declarative_base, relationship
 
 Base = declarative_base()
 
@@ -885,7 +885,12 @@ class CachedNatalChart(Base):
     chart_metadata = Column(JSON, nullable=True)    # Метаданные (система домов, система координат и т.д.)
     computed_at = Column(DateTime, default=utc_naive_now)
 
-    astro_profile = relationship("AstroProfile", backref="cached_natal_chart")
+    astro_profile = relationship(
+        "AstroProfile",
+        backref=backref(
+            "cached_natal_chart", cascade="all, delete-orphan", uselist=False
+        ),
+    )
 
 
 class CachedForecast(Base):

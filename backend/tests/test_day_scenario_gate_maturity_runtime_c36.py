@@ -45,11 +45,13 @@ def _run_native(payload: dict[str, Any], *, max_attempts: int = 2, chat_side_eff
     call_count = {"n": 0}
 
     def _chat(*_a, **_k):
+        # Native module now calls chat_completion_plain_with_status:
+        # (text, failure_class, model_id).
         i = call_count["n"]
         call_count["n"] += 1
         if i >= len(responses):
-            return responses[-1]
-        return responses[i]
+            return responses[-1], None, "test-model"
+        return responses[i], None, "test-model"
 
     with (
         patch(
@@ -65,7 +67,7 @@ def _run_native(payload: dict[str, Any], *, max_attempts: int = 2, chat_side_eff
             return_value="test-model",
         ),
         patch(
-            "todayflow_backend.services.day_scenario_native_llm_c1.chat_completion_plain",
+            "todayflow_backend.services.day_scenario_native_llm_c1.chat_completion_plain_with_status",
             side_effect=_chat,
         ),
         patch(
@@ -106,14 +108,16 @@ def test_promoted_abstract_scene_retries_then_accepts_good():
             ],
         )
 
+    # I0 split: 2 Global attempts (bad → retry → good) + 1 Personal stage call.
     assert result is not None
-    assert calls == 2
+    assert calls == 3
     meta = result.get("editorial_meta") or {}
     assert "gate_maturity" not in meta  # still not a public-contract expansion
     assert CRITICAL_DEFECTS  # scoring vocabulary still exists
+    # Capture records the final merged i0-split attempt; the retry itself is
+    # proven by the call count above (2 Global + 1 Personal).
     statuses = [a.get("status") for a in (session.pack.get("attempts") or [])]
-    assert "editorial_quality_retry" in statuses
-    assert "accepted_native_c36" in statuses
+    assert "accepted_native_i0_split" in statuses
 
 
 def test_promoted_abstract_scene_exhausted_retries_unavailable():
@@ -165,7 +169,9 @@ def test_profile_fact_leak_rejects_without_retry_or_rewrite():
     leak = _valid_native()
     result, calls = _run_native_with_pers_patch(leak, max_attempts=2)
     assert result is None
-    assert calls == 1  # immediate reject, no rewrite attempt
+    # I0 split: Global succeeds (1), personalization gate rejects at the
+    # Personal stage (2) — no rewrite/retry loop beyond that.
+    assert calls == 2
 
 
 def _run_native_with_pers_patch(payload: dict[str, Any], *, max_attempts: int = 2):
@@ -178,7 +184,7 @@ def _run_native_with_pers_patch(payload: dict[str, Any], *, max_attempts: int = 
     def _chat(*_a, **_k):
         i = call_count["n"]
         call_count["n"] += 1
-        return responses[min(i, len(responses) - 1)]
+        return responses[min(i, len(responses) - 1)], None, "test-model"
 
     leak_defects = [
         {
@@ -203,7 +209,7 @@ def _run_native_with_pers_patch(payload: dict[str, Any], *, max_attempts: int = 
             return_value="test-model",
         ),
         patch(
-            "todayflow_backend.services.day_scenario_native_llm_c1.chat_completion_plain",
+            "todayflow_backend.services.day_scenario_native_llm_c1.chat_completion_plain_with_status",
             side_effect=_chat,
         ),
         patch(
@@ -251,8 +257,9 @@ def test_hard_schema_retries_then_unavailable():
             json.dumps(good, ensure_ascii=False),
         ],
     )
+    # I0 split: 2 Global attempts (broken → good) + 1 Personal stage call.
     assert result2 is not None
-    assert calls2 == 2
+    assert calls2 == 3
 
 
 def test_first_valid_kept_when_advisory_defects_present():
@@ -263,15 +270,16 @@ def test_first_valid_kept_when_advisory_defects_present():
     with day_story_capture_session(case_id="c36-advisory") as session:
         result, calls = _run_native(native, max_attempts=2)
 
+    # I0 split: 1 Global attempt (advisory defects don't retry) + 1 Personal call.
     assert result is not None
-    assert calls == 1
+    assert calls == 2
     assert result.get("conflict")
     meta = result["editorial_meta"]
     assert "gate_maturity" not in meta
     attempts = session.pack.get("attempts") or []
     assert attempts
     last = attempts[-1]
-    assert last.get("status") == "accepted_native_c36"
+    assert last.get("status") == "accepted_native_i0_split"
     after = last.get("after_normalize") or {}
     assert "gate_maturity" in after
 
@@ -310,7 +318,7 @@ def test_promoted_editorial_defect_forces_second_llm_call():
     def _chat(*_a, **_k):
         call_count["n"] += 1
         # Always return same native; gate patched to keep firing → exhausted reject.
-        return json.dumps(native, ensure_ascii=False)
+        return json.dumps(native, ensure_ascii=False), None, "test-model"
 
     with (
         patch(
@@ -326,7 +334,7 @@ def test_promoted_editorial_defect_forces_second_llm_call():
             return_value="test-model",
         ),
         patch(
-            "todayflow_backend.services.day_scenario_native_llm_c1.chat_completion_plain",
+            "todayflow_backend.services.day_scenario_native_llm_c1.chat_completion_plain_with_status",
             side_effect=_chat,
         ),
         patch(

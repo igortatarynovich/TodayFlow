@@ -20,10 +20,10 @@ def test_get_all_horoscopes_basic(client: TestClient):
     assert "zoroastrian" in data
     assert "tibetan" in data
     
-    # Check structure of each horoscope
-    assert "sign" in data["chinese"]
-    assert "sign" in data["zoroastrian"]
-    assert "sign" in data["tibetan"]
+    # Check structure of each horoscope (current public keys, not historical `sign`)
+    assert "animal" in data["chinese"]
+    assert "description" in data["zoroastrian"]
+    assert "animal" in data["tibetan"]
 
 
 def test_get_all_horoscopes_with_astrology(client: TestClient):

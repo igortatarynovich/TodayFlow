@@ -35,6 +35,10 @@ def _rewrite_sqlite_migration_sql(sql: str) -> str:
         flags=re.IGNORECASE,
     )
     sql = re.sub(r"\bJSONB\b", "TEXT", sql, flags=re.IGNORECASE)
+    # Postgres casts (`'{}'::jsonb`, `'{}'::TEXT` after the rewrite above) are invalid in SQLite.
+    sql = re.sub(r"::(?:jsonb|text|varchar|integer)\b", "", sql, flags=re.IGNORECASE)
+    sql = re.sub(r"\bTIMESTAMP\s+WITHOUT\s+TIME\s+ZONE\b", "TIMESTAMP", sql, flags=re.IGNORECASE)
+    sql = re.sub(r"\bDEFAULT\s+NOW\(\)", "DEFAULT CURRENT_TIMESTAMP", sql, flags=re.IGNORECASE)
     return sql
 
 

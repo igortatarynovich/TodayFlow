@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime, timezone
 
 from todayflow_backend.services.day_context import build_day_context_v0
 from todayflow_backend.services.day_model_v1_active_knowledge import (
@@ -79,7 +79,9 @@ def _active(**overrides):
         "source_pattern_id": "pat-test-001",
         "status": "active",
         "created_at": "2026-05-31T12:00:00Z",
-        "last_confirmed_at": "2026-05-31T12:00:00Z",
+        # Freshness decays vs now — keep confirmation current so the fact
+        # stays above MIN_SELECTION_SCORE regardless of wall-clock.
+        "last_confirmed_at": datetime.now(timezone.utc).isoformat(),
         "expires_at": None,
         "review_required": False,
         "profile_update_allowed": False,

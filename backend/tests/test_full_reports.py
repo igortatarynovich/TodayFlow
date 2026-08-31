@@ -1,6 +1,10 @@
 """Tests for full reports API endpoints."""
 
 import pytest
+
+pytestmark = pytest.mark.skip(
+    reason="LEGACY SURFACE: full report HTTP contract is out of launch MVP contour"
+)
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 

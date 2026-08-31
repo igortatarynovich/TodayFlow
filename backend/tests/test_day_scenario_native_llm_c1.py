@@ -134,7 +134,8 @@ def _valid_native(**overrides):
                 "trap": "Согласиться сразу, чтобы не тревожить.",
                 "recommended_action": "Написать черновик и отправить после паузы.",
                 "avoid_action": "Не сглаживать смысл ради мгновенного мира.",
-                "everyday_example": "Ответ на сообщение близкого: сначала смысл, потом скорость.",
+                # Lived moment per C3.6.2 contract: person + speech act + channel.
+                "everyday_example": "Партнёр пишет в чате «как дела?» — сначала смысл ответа, потом скорость.",
                 "evidence_refs": ["moon-pisces"],
                 "chorus_refs": ["conflict", "day_card", "day_number"],
             },
@@ -147,7 +148,7 @@ def _valid_native(**overrides):
                 "trap": "Откладывать, чтобы никого не задеть.",
                 "recommended_action": "Одно письмо с точной формулировкой.",
                 "avoid_action": "Не размывать ответ общими фразами.",
-                "everyday_example": "Письмо коллеге: один абзац, один запрос.",
+                "everyday_example": "Коллега спрашивает в почте про статус задачи — один абзац, один запрос в ответе.",
                 "evidence_refs": ["merc-direct"],
                 "chorus_refs": ["conflict", "astrology"],
             },

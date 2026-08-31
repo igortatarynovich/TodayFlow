@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import copy
-from datetime import date
+from datetime import UTC, date, datetime
+
+NOW = datetime(2026, 5, 31, 12, 0, tzinfo=UTC)
 
 import pytest
 
@@ -112,6 +114,7 @@ def _day_context_layers():
         core_profile=None,
         fusion_dump=fusion,
         active_knowledge_list=[_active()],
+        now=NOW,
     )
     return ctx["layers"]
 

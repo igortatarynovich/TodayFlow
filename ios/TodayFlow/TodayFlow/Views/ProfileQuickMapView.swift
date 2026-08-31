@@ -438,7 +438,7 @@ struct ProfileQuickMapView: View {
     }
 
     private var headerSection: some View {
-        let artSeed = coreProfile?.baseline?.archetypeSeed?
+        let artSeed = coreProfile?.baseline.archetypeSeed?
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .nilIfEmpty
             ?? model.archetype

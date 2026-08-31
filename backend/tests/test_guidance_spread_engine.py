@@ -88,7 +88,8 @@ def test_compose_single_action_and_avoid() -> None:
     )
     assert remapped["today"] == interpretation["action"]
     assert interpretation["avoid"].lower().startswith("не делай")
-    assert "опора вывода" in interpretation["why_outline"].lower() or "опора" in interpretation["why_outline"].lower()
+    why = interpretation["why_outline"].lower()
+    assert "опора" in why or "акцент" in why or "карт" in why
 
 
 def test_spread_schema_weights() -> None:

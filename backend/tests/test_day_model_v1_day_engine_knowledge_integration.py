@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
+
+NOW = datetime(2026, 5, 31, 12, 0, tzinfo=UTC)
+
 from todayflow_backend.services.day_model_v1_day_engine_knowledge_integration import (
     APPLICATION_MODE_BOOST,
     APPLICATION_MODE_INCLUDE,
@@ -69,6 +73,7 @@ def _context_slice(**overrides):
         [_active()],
         day_context={"content_keys": ["day.guidance"]},
         target_surface="day_guidance_card",
+        now=NOW,
     )
     base.update(overrides)
     return base

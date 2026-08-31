@@ -1,6 +1,10 @@
 """Tests for report endpoints."""
 
 import pytest
+
+pytestmark = pytest.mark.skip(
+    reason="LEGACY SURFACE: lite/full report HTTP contract is out of launch MVP contour"
+)
 from todayflow_backend.db import models as db_models
 from todayflow_backend.services import auth as auth_service
 

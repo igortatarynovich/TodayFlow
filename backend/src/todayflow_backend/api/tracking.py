@@ -15,7 +15,7 @@
 from collections import defaultdict
 from datetime import datetime, date, timedelta, timezone
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func, or_
@@ -1521,8 +1521,8 @@ class DailyReflectionResponse(BaseModel):
 @router.get("/reflection/daily/{date}", response_model=Optional[DailyReflectionResponse])
 def get_daily_reflection(
     date: str,
-    forecast_type: str,
-    layers: List[str],
+    forecast_type: str = Query(...),
+    layers: List[str] = Query(...),
     current_user: User = Depends(require_user),
     db: Session = Depends(get_session)
 ):

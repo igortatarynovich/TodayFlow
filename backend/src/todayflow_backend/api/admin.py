@@ -24,6 +24,12 @@ def list_paragraphs(admin=Depends(require_admin), db: Session = Depends(get_sess
     return admin_service.list_paragraphs(db)
 
 
+@router.get("/paragraphs/audit")
+def audit_logs(admin=Depends(require_admin), db: Session = Depends(get_session)) -> list[dict]:
+    _ = admin
+    return admin_service.list_audit_logs(db)
+
+
 @router.get("/paragraphs/{paragraph_id}")
 def get_paragraph(paragraph_id: str, request: Request, admin=Depends(require_admin), db: Session = Depends(get_session)) -> dict:
     _ = admin
@@ -95,12 +101,6 @@ def update_variant_text(
     except Exception as exc:
         message = translate("admin.errors.variantUpdateFailed", locale=request_locale(request))
         raise HTTPException(status_code=400, detail=f"{message}: {exc}") from exc
-
-
-@router.get("/paragraphs/audit")
-def audit_logs(admin=Depends(require_admin), db: Session = Depends(get_session)) -> list[dict]:
-    _ = admin
-    return admin_service.list_audit_logs(db)
 
 
 @router.get("/tarot/reminders/due")

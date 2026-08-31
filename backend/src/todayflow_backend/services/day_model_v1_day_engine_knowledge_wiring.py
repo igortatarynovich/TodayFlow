@@ -473,6 +473,7 @@ def wire_active_knowledge_into_day_context_layers(
     practices: list[dict[str, Any]] | None = None,
     evolution_stage: str | None = None,
     target_surface: str = "day_guidance_card",
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     """
     Run A1.1–A1.3 on existing DayContext layers; mutates layers in place.
@@ -492,6 +493,7 @@ def wire_active_knowledge_into_day_context_layers(
         practices=practices,
         evolution_stage=evolution_stage,
         target_surface=target_surface,
+        now=now,
     )
 
     pipeline = try_wire_day_engine_knowledge_from_context_v1(

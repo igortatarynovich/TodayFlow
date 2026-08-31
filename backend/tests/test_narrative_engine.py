@@ -49,7 +49,6 @@ def test_build_lite_preview(sample_internal_model, sample_chart_snapshot):
     """Test that Lite preview can be generated."""
     engine = narrative.NarrativeEngine()
     result = engine.build_lite_preview(
-        snapshot=sample_chart_snapshot,
         internal_model=sample_internal_model,
         locale="en",
     )
@@ -91,7 +90,6 @@ def test_selection_trace_completeness(sample_internal_model, sample_chart_snapsh
     """Test that all paragraphs have complete SelectionTrace."""
     engine = narrative.NarrativeEngine()
     lite_result = engine.build_lite_preview(
-        snapshot=sample_chart_snapshot,
         internal_model=sample_internal_model,
         locale="en",
     )
@@ -113,7 +111,6 @@ def test_lite_vs_full_difference(sample_internal_model, sample_chart_snapshot):
     engine = narrative.NarrativeEngine()
     
     lite_result = engine.build_lite_preview(
-        snapshot=sample_chart_snapshot,
         internal_model=sample_internal_model,
         locale="en",
     )
@@ -138,14 +135,12 @@ def test_i18n_integration(sample_internal_model, sample_chart_snapshot):
     
     # Test with English locale
     en_result = engine.build_lite_preview(
-        snapshot=sample_chart_snapshot,
         internal_model=sample_internal_model,
         locale="en",
     )
     
     # Test with Russian locale (should fallback to EN if not available)
     ru_result = engine.build_lite_preview(
-        snapshot=sample_chart_snapshot,
         internal_model=sample_internal_model,
         locale="ru",
     )
@@ -168,7 +163,6 @@ def test_variant_selection_diversity(sample_internal_model, sample_chart_snapsho
     results = []
     for _ in range(5):
         result = engine.build_lite_preview(
-            snapshot=sample_chart_snapshot,
             internal_model=sample_internal_model,
             locale="en",
         )

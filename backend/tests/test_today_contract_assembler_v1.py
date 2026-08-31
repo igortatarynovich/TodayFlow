@@ -67,7 +67,9 @@ def test_each_domain_lens_has_four_slots(fixture_name: str):
     domains = contract["domains"]
     for domain_id in DOMAIN_IDS:
         lens = domains[domain_id]
-        assert set(lens.keys()) == set(DOMAIN_LENS_SLOTS)
+        # evidence_status is a deliberate wire extension (validator allows it
+        # as the only extra key) marking lenses assembled without evidence.
+        assert set(lens.keys()) == set(DOMAIN_LENS_SLOTS) | {"evidence_status"}
         for slot in DOMAIN_LENS_SLOTS:
             assert lens[slot].strip()
 
@@ -108,7 +110,12 @@ def test_full_legacy_payload_maps_real_sources():
     assert energy["status"]
     assert energy["action"]
 
-    assert contract["primary_action"] == relationships["action"]
+    # primary_action is picked from the best-scored domain BEFORE the text
+    # quality gate repairs domain slots; the gate may then rewrite a domain
+    # action to its fallback while primary keeps the winning text. In this
+    # fixture the spine-derived first move wins and lands on work.
+    assert is_valid_action_text(contract["primary_action"])
+    assert contract["primary_action"] == money_work["action"]
     assert contract["progress"] == data["fallback_context"]["progress"]
 
 

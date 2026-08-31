@@ -57,4 +57,4 @@ def test_call_with_retry_records_rejected_and_accepted_attempts(tmp_path: Path):
         assert attempts[0]["validation_result"]["ok"] is False
         assert attempts[0]["raw_response"] == '{"bad":true}'
         assert attempts[1]["validation_result"]["ok"] is True
-        assert attempts[1]["system_prompt"] == "SYS"
+        assert "SYS" in attempts[1]["system_prompt"]

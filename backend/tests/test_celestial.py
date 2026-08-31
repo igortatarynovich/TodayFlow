@@ -101,10 +101,13 @@ def test_get_check_in_authenticated(client: TestClient, test_user: User, auth_to
     assert response.status_code == 200
     data = response.json()
     
+    # Contract: a single deterministic prompt object; reflection steps and
+    # cta live inside it (no top-level steps/cta).
     assert "prompt" in data
-    assert "steps" in data
-    assert "cta" in data
-    assert isinstance(data["steps"], list)
+    prompt = data["prompt"]
+    assert prompt["id"]
+    assert prompt["prompt"]
+    assert isinstance(prompt.get("reflection_steps"), list)
 
 
 def test_get_weekly_insight_requires_auth(client: TestClient):
@@ -147,6 +150,7 @@ def test_get_transit_feed_authenticated(client: TestClient, test_user: User, aut
     assert isinstance(data["highlights"], list)
     assert isinstance(data["events"], list)
     assert isinstance(data["windows"], list)
-    assert data["focus"]["id"] is not None
-    assert data["focus"]["name"] is not None
+    # focus is a MoonPhaseResponse: current snapshot carries id/name.
+    assert data["focus"]["current"]["id"] is not None
+    assert data["focus"]["current"]["name"] is not None
 

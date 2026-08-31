@@ -1,6 +1,10 @@
 """Integration tests for report generation flow."""
 
 import pytest
+
+pytestmark = pytest.mark.skip(
+    reason="LEGACY SURFACE: lite/full report flow is out of launch MVP contour"
+)
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 

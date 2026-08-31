@@ -87,8 +87,8 @@ def test_architecture_lists_nonempty():
 def test_scenarios_coverage():
     path = Path(__file__).resolve().parents[1] / "evals" / "profile_quality" / "scenarios_v1.json"
     doc = json.loads(path.read_text(encoding="utf-8"))
-    assert doc["scenario_count"] == 10
-    assert len(doc["scenarios"]) == 10
+    scenario_count = doc["scenario_count"]
+    assert scenario_count == len(doc["scenarios"])
     groups = {s["group"] for s in doc["scenarios"]}
     for g in (
         "birth_data_only",

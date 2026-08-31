@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import UTC, date, datetime
 from typing import Any
 
 from todayflow_backend.profile_engine.models import (
@@ -40,6 +40,7 @@ def build_day_context_v0(
     goals: list[dict[str, Any]] | None = None,
     practices: list[dict[str, Any]] | None = None,
     knowledge_target_surface: str = "day_guidance_card",
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     """
     Собирает объект, соответствующий docs/schemas/day_context_v0.schema.json.
@@ -233,6 +234,7 @@ def build_day_context_v0(
             practices=practices,
             evolution_stage=evolution_stage,
             target_surface=knowledge_target_surface,
+            now=now,
         )
 
         from todayflow_backend.services.day_model_v1_profile_knowledge_personalization import (

@@ -299,7 +299,7 @@ def test_publish_gate_blocks_invalid():
 def test_prompt_version_v11():
     from todayflow_backend.services.compatibility_content_v1.prompts_v1 import PROMPT_VERSION
 
-    assert PROMPT_VERSION == "compatibility_content_prompt_v1.1"
+    assert PROMPT_VERSION == "compatibility_content_prompt_v1.2"
     from todayflow_backend.services.compatibility_content_v1.prompts_v1 import (
         system_prompt_registered_v1,
         system_prompt_premium_v1,

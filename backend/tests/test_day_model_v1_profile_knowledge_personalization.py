@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import UTC, date, datetime
+
+NOW = datetime(2026, 5, 31, 12, 0, tzinfo=UTC)
 
 from todayflow_backend.services.day_context import build_day_context_v0
 from todayflow_backend.services.day_model_v1_active_knowledge import (
@@ -44,7 +46,9 @@ def _active(**overrides):
         "source_pattern_id": "pat-test-001",
         "status": "active",
         "created_at": "2026-05-31T12:00:00Z",
-        "last_confirmed_at": "2026-05-31T12:00:00Z",
+        # Freshness decays vs now — keep confirmation current so the fact
+        # stays above MIN_SELECTION_SCORE regardless of wall-clock.
+        "last_confirmed_at": datetime.now(UTC).isoformat(),
         "expires_at": None,
         "review_required": False,
         "profile_update_allowed": False,
@@ -60,6 +64,7 @@ def _context_slice(**overrides):
         [_active()],
         day_context={"content_keys": ["day.guidance"]},
         target_surface="day_guidance_card",
+        now=NOW,
     )
     base.update(overrides)
     return base
@@ -183,6 +188,7 @@ def test_day_context_profile_selector_has_safe_summary():
                 claim="responds_to_surface:short_action",
             )
         ],
+        now=NOW,
     )
     ps = ctx["layers"]["profile_selector"]
     assert isinstance(ps.get("safe_personalization_summary"), list)
@@ -207,6 +213,7 @@ def test_layers_summary_ready_for_llm_standard_depth():
         core_profile=None,
         fusion_dump=fusion,
         active_knowledge_list=[_active()],
+        now=NOW,
     )
     summary = get_safe_personalization_summary_from_layers(ctx["layers"])
     assert len(summary) >= 1

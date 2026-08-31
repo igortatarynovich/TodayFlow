@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
+
+NOW = datetime(2026, 5, 31, 12, 0, tzinfo=UTC)
 
 import pytest
 
@@ -206,7 +209,9 @@ def test_legacy_day_model_valid_read_model() -> None:
 
 
 def test_knowledge_summary_included_when_gate_allows() -> None:
-    context_slice = select_knowledge_context_v1([_active_knowledge()], target_surface="day_guidance_card")
+    context_slice = select_knowledge_context_v1(
+        [_active_knowledge()], target_surface="day_guidance_card", now=NOW
+    )
 
     read_model = build_today_intelligence_read_model_v1(
         user_id="user-s11",

@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import copy
+from datetime import UTC, datetime
+
+NOW = datetime(2026, 5, 31, 12, 0, tzinfo=UTC)
 
 import pytest
 
@@ -169,7 +172,9 @@ def _knowledge_input():
         "memory_update_allowed": False,
         "ranking_update_allowed": False,
     }
-    context_slice = select_knowledge_context_v1([active], target_surface="day_guidance_card")
+    context_slice = select_knowledge_context_v1(
+        [active], target_surface="day_guidance_card", now=NOW
+    )
     outcome = try_build_day_engine_knowledge_input_v1(
         context_slice,
         day_model_snapshot=extract_day_model_core_snapshot(_minimal_day_model()),

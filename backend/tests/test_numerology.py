@@ -50,7 +50,7 @@ def test_compute_name_profile_public(client: TestClient):
     assert "expression" in data
     assert "soul_urge" in data
     assert "personality" in data
-    assert data["life_path"]["number"] is not None
+    assert data["life_path"]["value"] is not None
 
 
 def test_compute_name_profile_authenticated(client: TestClient, test_user: User, auth_token: str):
@@ -87,7 +87,7 @@ def test_compute_name_profile_invalid_date(client: TestClient):
 
 
 def test_compute_name_profile_empty_name(client: TestClient):
-    """Test computing profile with empty name."""
+    """Empty name is allowed: birth-date-driven numbers still compute."""
     response = client.post(
         "/numerology/name",
         json={
@@ -95,19 +95,20 @@ def test_compute_name_profile_empty_name(client: TestClient):
             "birth_date": "1990-01-01"
         }
     )
-    # Should return validation error
-    assert response.status_code in [400, 422]
+    assert response.status_code == 200
+    data = response.json()
+    assert data["life_path"]["value"] is not None
 
 
 def test_numerology_daily_public(client: TestClient):
-    """Test getting daily numerology insight (no auth required)."""
+    """Daily number follows the unified day-symbol SoT: not selected until the ritual."""
     response = client.get("/numerology/daily")
     assert response.status_code == 200
     data = response.json()
-    
-    assert "number" in data
-    assert "description" in data
-    assert data["number"] is not None
+
+    assert "date" in data
+    assert "selection_status" in data
+    assert "number" in data  # None until the day ritual selects it
 
 
 def test_numerology_history_requires_auth(client: TestClient):

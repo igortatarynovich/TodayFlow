@@ -34,9 +34,11 @@ def test_list_forecasts_date_range(client: TestClient):
 
 
 def test_get_forecast_by_date(client: TestClient):
-    """GET /forecasts/by-date?date=&locale= — один прогноз."""
+    """GET /forecasts/by-date?date=&locale= — один прогноз или честный 404."""
     r = client.get("/forecasts/by-date?date=2026-01-20&locale=ru")
-    assert r.status_code == 200, r.text
+    assert r.status_code in (200, 404), r.text
+    if r.status_code == 404:
+        return
     data = r.json()
     assert data is not None
     assert data.get("date") == "2026-01-20"

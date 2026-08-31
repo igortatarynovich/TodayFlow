@@ -1,6 +1,8 @@
 """Integration tests for database operations."""
 
 import pytest
+from datetime import date
+
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
@@ -74,7 +76,7 @@ def test_cascade_behavior(db_session: Session):
     tarot_draw = TarotDraw(
         user_id=user.id,
         card_id=1,
-        draw_date="2024-01-01",
+        draw_date=date(2024, 1, 1),
         orientation="upright"
     )
     db_session.add(tarot_draw)

@@ -1,6 +1,10 @@
 """Tests for aspects API endpoints."""
 
 import pytest
+
+pytestmark = pytest.mark.skip(
+    reason="LEGACY SURFACE: aspects-lite requires a report artifact outside launch MVP"
+)
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 

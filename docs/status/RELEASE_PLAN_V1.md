@@ -16,6 +16,8 @@
 **Purpose:** one place for the path from today to soft launch, success criteria, phases, gates, and immediate next steps. Supersedes the stale `WEB_LAUNCH_EXECUTION_PLAN.md` for active execution.
 
 > **v1.1 course correction (2026-08-30).** Full semantic triage of 108 backend + 11 frontend failures showed that a hard CI-green gate must precede the ship gate. G0 (billing) is unresolved; G1 (CI green) is now a separate hardening phase before any end-to-end walkthrough. This plan inserts Phase 1 — Hardening and renumbers previous phases 1–4 to 2–5. Dual natal SoT remains a launch-blocker candidate until proven single-authoritative.
+>
+> **v1.1a budget decision (2026-08-31).** Owner decision: Token Factory top-up is deferred until the app is ~90% complete. All Phase 1 hardening and Phase 2 ship-gate work must proceed using deterministic fallbacks, mocked LLM, or local fixtures. G0 is no longer a prerequisite for G1; instead, G0 is deferred and G1 must be achievable without paid provider calls. Any launch-critical path that cannot run without live LLM must be identified as a blocker.
 
 ---
 
@@ -50,18 +52,18 @@ Launch v1 **does not require** iOS parity, full paywall, all JTBD packs, or full
 
 ## 3. Phases, Gates & Acceptance Criteria
 
-### Phase 0 — Unblock & Baseline (0–3 days)
+### Phase 0 — Defer Billing & Mock-Ready Baseline (0–3 days)
 
 | # | Task | Acceptance Criteria | Owner |
 |---|---|---|---|
 | 0.1 | Merge current practice fill changes | `test_content_library_v1.py` green; all 26 P0 need cells sourced | Backend + Content |
-| 0.2 | Fix Token Factory billing / top-up | `POST /chat/completions` = 200; `/models` 200 is not enough | Ops |
-| 0.3 | Fix `ops_reset_llm_latch.py` env path | Script reads repo-root `.env` and reaches provider smoke-test; reset only after 200 | Backend + Ops |
-| 0.4 | Reset `llm_spend.json` latch | `tripped=false`, `spent_usd=0` for current UTC date | Ops |
-| 0.5 | Run 4-step COGS clean baseline | 1 real profile × 30 Today opens + retries + 1 Tarot; USD total recorded in tracker | Backend + Ops |
-| 0.6 | Server check live `/today` | Global accepted = 1; Personal accepted = 2; reopen = 0 LLM; force rebuild works | Backend |
+| 0.2 | Hold Token Factory top-up until ~90% app completion | Document in tracker: no live provider calls until owner decides; G1 proceeds with mocks/fallbacks | Product + Ops |
+| 0.3 | Fix `ops_reset_llm_latch.py` env path | Script reads repo-root `.env` and reaches provider smoke-test; not run until top-up | Backend + Ops |
+| 0.4 | Mock or quarantine all launch-critical LLM paths | Day story, Tarot spread, Compatibility deep, Profile decode can produce valid contracts with mocked provider or deterministic fallback; CI passes without paid calls | Backend |
+| 0.5 | Run 4-step COGS clean baseline (mocked) | 1 profile × 30 Today opens + retries + 1 Tarot; simulated USD recorded in tracker; real run repeated after top-up | Backend + Ops |
+| 0.6 | Server check live `/today` (deterministic fallback) | Global accepted = 1; Personal accepted = 2; reopen = 0 LLM; force rebuild works via fallback | Backend |
 
-**Gate G0:** billing unblocked and baseline recorded. No G0 = no further work.
+**Gate G0:** billing unblocked and baseline recorded. **Deferred** until ~90% app completion; G1 and G2 are worked without paid provider calls. Any path that cannot be mocked becomes a G1 blocker.
 
 ---
 
@@ -154,12 +156,17 @@ Fix launch-critical product regressions and quarantine stale tests / legacy surf
 
 ## 5. Immediate Next Steps (today / tomorrow)
 
-1. Fix Token Factory billing / top-up; run fixed `ops_reset_llm_latch.py` only after `POST /chat/completions = 200`.
-2. Assign owner for Phase 1 Hardening: fix `MONEY_ACTION_FALLBACK`, day-engine knowledge wiring, and dual natal SoT decision.
-3. Run 4-step COGS baseline and record USD after billing is unblocked.
+1. Acknowledge G0 deferred: Token Factory top-up only after ~90% app completion; all work proceeds with mocks/deterministic fallback.
+2. Begin Phase 1 Hardening: fix launch-critical product regressions that do not require live LLM, in priority order:
+   - 1.4 Account delete cascade (1 test, DB fix).
+   - 1.1 Today contract assembler / text quality fallback (11 tests, copy gate fix).
+   - 1.5 Compatibility guest smoke blocks (1 test, surface contract fix).
+   - 1.2 Day-engine knowledge wiring (17 tests, threshold/wiring fix).
+3. Quarantine LLM-dependent infra/env tests (Tarot spread, Compatibility deep, forecasts) with mocks or xfail so they do not block G1.
 4. Quarantine stale tests and legacy surfaces (reports, forecasts, narrative engine, C3.6 mocks, CE-funnel tests) so CI can be green without restoring old behavior.
-5. Assign owner for end-to-end walkthrough Run 3 and fill the checklist in `BEHAVIOR_CHANGE_TEST_V0.md` only after G1.
-6. Freeze new features — no new surfaces, no JTBD packs, no iOS-as-blocker.
+5. Run mocked 4-step COGS baseline and record simulated USD; real run after top-up.
+6. Assign owner for end-to-end walkthrough Run 3 only after G1.
+7. Freeze new features — no new surfaces, no JTBD packs, no iOS-as-blocker.
 
 ---
 
@@ -167,6 +174,7 @@ Fix launch-critical product regressions and quarantine stale tests / legacy surf
 
 | Date | Change |
 |------|--------|
+| 2026-08-31 | **v1.1a budget decision** — G0 billing top-up deferred until ~90% app completion; Phase 0 renamed to "Defer Billing & Mock-Ready Baseline"; G1 and G2 proceed without paid provider calls; immediate next steps reordered to start Phase 1 product-regression fixes. |
 | 2026-08-30 | **v1.1 course correction** — inserted Phase 1 Hardening (CI green) between Phase 0 and previous Phase 1; renumbered previous phases 1–4 to 2–5; added G0 billing + dual natal SoT tasks to Phase 1; updated parallel tracks and immediate next steps. |
 | 2026-08-28 | v1.0 — Release Plan created; supersedes `WEB_LAUNCH_EXECUTION_PLAN.md` for active execution. |
 | 2026-08-28 | Task 2.4 Caller audit closed; `GET /tarot/daily/explain` no longer calls LLM; audit doc added. |

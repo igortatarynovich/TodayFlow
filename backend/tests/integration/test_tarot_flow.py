@@ -80,7 +80,7 @@ def test_tarot_spread_flow(client: TestClient, test_user: User, auth_token: str)
 
 
 def test_tarot_daily_deterministic(client: TestClient, test_user: User, auth_token: str):
-    """Same date → same card."""
+    """Same date → same payload. Card stays not_selected until the day ritual."""
     headers = {"Authorization": f"Bearer {auth_token}"}
 
     first_response = client.get("/tarot/daily", headers=headers)
@@ -92,4 +92,9 @@ def test_tarot_daily_deterministic(client: TestClient, test_user: User, auth_tok
     second_data = second_response.json()
 
     assert first_data["date"] == second_data["date"]
-    assert first_data["card"]["id"] == second_data["card"]["id"]
+    assert first_data.get("selection_status") == second_data.get("selection_status")
+    if first_data.get("selection_status") == "selected" and first_data.get("card"):
+        assert first_data["card"]["id"] == second_data["card"]["id"]
+    else:
+        assert first_data.get("card") is None
+        assert second_data.get("card") is None

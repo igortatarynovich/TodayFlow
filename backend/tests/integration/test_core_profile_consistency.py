@@ -16,7 +16,9 @@ def test_user(db_session: Session) -> User:
     user = User(
         email="core-profile@example.com",
         password_hash=hash_password("testpassword123"),
-        is_paid=False,
+        # Multi-profile contract under test needs a tier above the free
+        # 1-profile paywall (legacy paid → up to 5 profiles).
+        is_paid=True,
     )
     db_session.add(user)
     db_session.commit()
@@ -43,6 +45,18 @@ def _seed_profile_context(client: TestClient, headers: dict[str, str]) -> None:
     )
     assert profile_response.status_code == 200
 
+    # Numerology before the astro-data publish: the publish snapshot is keyed
+    # by profile_hash (settings + astro + numerology). Publishing last keeps
+    # the later GET on the read path snapshot-hit; otherwise the numerology
+    # save changes the hash and the read path serves a shell without
+    # interpretation until the next publish trigger.
+    numerology_response = client.post(
+        "/numerology/name",
+        json={"full_name": "Vika Flow", "birth_date": "1991-08-20"},
+        headers=headers,
+    )
+    assert numerology_response.status_code == 200
+
     astro_response = client.post(
         "/account/astro-data",
         json={
@@ -57,13 +71,6 @@ def _seed_profile_context(client: TestClient, headers: dict[str, str]) -> None:
         headers=headers,
     )
     assert astro_response.status_code == 200
-
-    numerology_response = client.post(
-        "/numerology/name",
-        json={"full_name": "Vika Flow", "birth_date": "1991-08-20"},
-        headers=headers,
-    )
-    assert numerology_response.status_code == 200
 
 
 def test_account_core_profile_contract(client: TestClient, auth_headers: dict[str, str]) -> None:
@@ -95,8 +102,11 @@ def test_account_core_profile_contract(client: TestClient, auth_headers: dict[st
     assert payload["baseline"]["archetype_seed"] is not None
     assert isinstance(payload["interpretation"], dict)
     assert "daily_lenses" not in payload["interpretation"]
+    # Post-CE-cutover contract: profile carries a deferred daily pointer;
+    # daily lenses are computed by the day flow, not stored on the profile.
     assert isinstance(payload["daily_interpretation"], dict)
-    assert isinstance(payload["daily_interpretation"].get("daily_lenses"), dict)
+    assert payload["daily_interpretation"].get("source") == "character_engine_v1"
+    assert payload["daily_interpretation"].get("deferred") is True
     assert payload["profiles"]["primary_profile_id"] == payload["astro"]["profile_id"]
     assert payload["profiles"]["has_multiple_profiles"] is True
     assert len(payload["profiles"]["items"]) == 2
@@ -119,6 +129,16 @@ def test_day_flow_returns_consistency_block(client: TestClient, auth_headers: di
 
 def test_numerology_explain_returns_consistency_block(client: TestClient, auth_headers: dict[str, str]) -> None:
     _seed_profile_context(client, auth_headers)
+
+    # Explain is gated on the ritual reveal (unified day symbol SoT):
+    # 409 number_not_revealed until the user reveals today's number, and the
+    # reveal itself is only allowed from the Today ritual surface.
+    reveal_response = client.post(
+        "/numerology/daily/reveal",
+        json={"reveal_source": "today_ritual"},
+        headers=auth_headers,
+    )
+    assert reveal_response.status_code == 200
 
     response = client.get("/numerology/daily/explain", headers=auth_headers)
     assert response.status_code == 200

@@ -17,7 +17,7 @@ def _user(db_session) -> User:
 
 def test_upsert_tap_and_accuracy_denominator(db_session):
     user = _user(db_session)
-    day = date(2026, 7, 29)
+    day = date.today()
     a = tap_svc.upsert_tap_event(
         db_session,
         user_id=user.id,
@@ -28,7 +28,7 @@ def test_upsert_tap_and_accuracy_denominator(db_session):
         domain="work",
     )
     assert a["schema_version"] == "tap_event_v1"
-    assert a["day_facts_id"] == f"{user.id}:2026-07-29"
+    assert a["day_facts_id"] == f"{user.id}:{day.isoformat()}"
     assert a["response"] == "avoided_trap"
 
     tap_svc.upsert_tap_event(

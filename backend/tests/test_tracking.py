@@ -211,7 +211,7 @@ class TestAutoInsights:
         # Генерируем инсайт
         response = client.post(
             "/tracking/insights/generate",
-            params={"target_date": date.today().isoformat()},
+            json={"date": date.today().isoformat()},
             headers=auth_headers
         )
         
@@ -253,10 +253,7 @@ class TestWeeklyIntegration:
         # Генерируем недельную интеграцию
         response = client.post(
             "/tracking/weekly/generate",
-            params={
-                "week_start": week_start.isoformat(),
-                "week_end": (week_start + timedelta(days=6)).isoformat()
-            },
+            json={"week_start": week_start.isoformat()},
             headers=auth_headers
         )
         

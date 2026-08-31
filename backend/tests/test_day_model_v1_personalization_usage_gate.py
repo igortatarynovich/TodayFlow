@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import UTC, date, datetime
+
+NOW = datetime(2026, 5, 31, 12, 0, tzinfo=UTC)
 
 from todayflow_backend.services.day_context import build_day_context_v0
 from todayflow_backend.services.day_model_v1_active_knowledge import (
@@ -91,6 +93,7 @@ def _day_context_layers():
         core_profile=None,
         fusion_dump=fusion,
         active_knowledge_list=[_active()],
+        now=NOW,
     )
     return ctx["layers"]
 
@@ -164,6 +167,7 @@ def test_denies_no_source_when_layers_have_no_personalization():
         core_profile=None,
         fusion_dump=fusion,
         active_knowledge_list=[],
+        now=NOW,
     )
     outcome = try_decide_personalization_usage_v1(
         surface="day_guidance_card",

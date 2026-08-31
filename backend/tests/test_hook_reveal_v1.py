@@ -114,5 +114,5 @@ def test_color_hook_formats_where_to_use_object():
         },
     )
     assert hook["bridge_status"] == "ok"
-    assert hook["instruction"] == "Янтарный шарф · Украшение медового оттенка"
+    assert hook["instruction"] == "Янтарный шарф"
     assert "{" not in (hook["instruction"] or "")

@@ -300,7 +300,8 @@ def test_get_tarot_reminder_default(client: TestClient, test_user: User, auth_to
     assert "timezone" in data
     assert "hour" in data
     assert "minute" in data
-    assert data["enabled"] is True
+    # Reminders are opt-in: no setting row → disabled by default.
+    assert data["enabled"] is False
     assert data["timezone"] == "UTC"
     assert data["hour"] == 9
     assert data["minute"] == 0
@@ -347,8 +348,14 @@ def test_update_tarot_reminder(client: TestClient, test_user: User, auth_token: 
     assert data["timezone"] == "Europe/Moscow"
 
 
-def test_tarot_spread_context_question_first_reading(client: TestClient, test_user: User, auth_token: str):
+def test_tarot_spread_context_question_first_reading(client: TestClient, test_user: User, auth_token: str, monkeypatch):
     """Question-first synthesis payload on POST /tarot/spread/context."""
+    # Full reading contract needs the interpretation pass; without it the
+    # endpoint honestly serves a thin fallback (no holding/shifting slots).
+    monkeypatch.setattr(
+        "todayflow_backend.services.tarot_interpretation_llm_v1.call_tarot_interpretation_llm_v1",
+        _fake_llm_interp,
+    )
     headers = {"Authorization": f"Bearer {auth_token}"}
     deck = client.post("/tarot/deck/draw", json={"count": 3}, headers=headers)
     assert deck.status_code == 200, deck.text
@@ -405,6 +412,8 @@ def _fake_llm_interp(pack, **_kwargs):
             f"сначала факты, потом решение."
         ),
         "next_step": "Запиши два критерия решения и сделай один разговор или одно действие на проверку сегодня.",
+        "holding": "Сейчас удерживает привычка откладывать разговор до «лучшего момента».",
+        "shifting": "Один проверяемый шаг смещает фокус с тревоги на факт.",
         "option_a_note": "Вариант A даёт движение, но требует проверки ожиданий." if pack.get("spread_kind") == "choice" else None,
         "option_b_note": "Вариант B даёт прояснение, но может затягивать." if pack.get("spread_kind") == "choice" else None,
         "confidence_note": "Это ориентир по картам, не приказ.",

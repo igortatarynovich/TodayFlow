@@ -123,10 +123,17 @@ def test_quality_rules_do_not_change_runtime_and_no_auto_promote():
     assert report["runtime_unchanged"] is True
     assert report["maturity_promotion_performed"] is False
     assert report["public_contract_unchanged"] is True
+    # Sealed C3.6.2 pilot evidence promoted three scene-quality rules to
+    # blocking/retry (commit "Promote scene quality gates"). Calibration
+    # itself still never auto-promotes; all other quality rules stay observe-only.
+    promoted = {"SCENE_ABSTRACT", "SCENE_CLONE", "SCENE_MISSING_EVERYDAY"}
     for row in report["per_code"]:
         assert row["promotion_allowed_from_this_report"] is False
         if row["family"] == FAMILY_QUALITY:
-            assert row["runtime_action"] == "score_only"
+            if row["code"] in promoted:
+                assert row["runtime_action"] in {"retry", "reject_story"}
+            else:
+                assert row["runtime_action"] == "score_only"
 
 
 def test_calibration_does_not_mutate_maturity_registry():
@@ -189,7 +196,11 @@ def test_shadow_semantics_distinguish_policy_from_quality():
     assert "would_retry_if_quality_promoted" in shadow
     assert "false_blocks_against_labels" in shadow
     assert "true_blocks_against_labels" in shadow
-    assert shadow["actual_runtime_blocked"] == 0
+    # Post-promotion (sealed C3.6.2): the three scene-quality rules are
+    # blocking at runtime, so 12 of the 14 synthetic golden cases with those
+    # defects count as actually blocked — this is the promotion working as
+    # intended, not shadow drift.
+    assert shadow["actual_runtime_blocked"] == 12
 
 
 def test_bootstrap_inventory():

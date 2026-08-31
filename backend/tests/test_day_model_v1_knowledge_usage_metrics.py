@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import copy
-from datetime import date
+from datetime import date, datetime, timezone
 
 import pytest
 
@@ -97,7 +97,9 @@ def _active(**overrides):
         "source_pattern_id": "pat-a17-001",
         "status": "active",
         "created_at": "2026-05-31T12:00:00Z",
-        "last_confirmed_at": "2026-05-31T12:00:00Z",
+        # Freshness decays vs now (today=1.0 … 90d=0.3); a fixed past date
+        # sinks final_score below MIN_SELECTION_SCORE as wall-clock moves on.
+        "last_confirmed_at": datetime.now(timezone.utc).isoformat(),
         "expires_at": None,
         "review_required": False,
         "profile_update_allowed": False,

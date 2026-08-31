@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+import pytest
+
 from todayflow_backend.core.config import settings
 from todayflow_backend.services import profile_disclosure_funnel_v0 as funnel
 from todayflow_backend.services.life_spheres_synthesis_run_v0 import SPHERES_SOURCE
@@ -12,6 +14,14 @@ from todayflow_backend.services.profile_contract_v1 import (
     _normalize_profile_contract,
     profile_contract_to_legacy_interpretation,
 )
+
+
+@pytest.fixture(autouse=True)
+def _legacy_funnel_mode(monkeypatch):
+    """These tests cover the legacy LLM funnel, which is killed as live SoT
+    when the Character Engine cutover flag is on (default True). Pin it off so
+    the legacy paths under test actually run."""
+    monkeypatch.setattr(settings, "character_engine_publish_ready", False)
 
 
 def _living_eligible() -> dict[str, Any]:

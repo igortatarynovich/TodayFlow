@@ -212,6 +212,7 @@ def runtime_is_not_wired(src_root: Path) -> bool:
         (src_root / "services" / "compatibility_llm.py").resolve(),
         (src_root / "services" / "compatibility_editorial.py").resolve(),
         (src_root / "services" / "generation_orchestrator.py").resolve(),
+        (src_root / "services" / "today_personal_day_signal_v1.py").resolve(),
     }
     consume_consumers = {
         (src_root / "services" / "day_scenario_native_llm_c1.py").resolve(),
