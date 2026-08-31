@@ -109,4 +109,41 @@ describe("PracticesStateCycleScreen", () => {
     expect(screen.getByRole("heading", { name: "Практики" })).toBeInTheDocument();
     expect(screen.queryByTestId("practices-recommended")).not.toBeInTheDocument();
   });
+
+  it("does not claim empty moment matches while the catalog is still loading", () => {
+    render(
+      <PracticesStateCycleScreen
+        locale="ru"
+        activeNeed="calm"
+        onNeedChange={() => {}}
+        activeFormat={null}
+        onFormatChange={() => {}}
+        recommended={null}
+        momentCards={[]}
+        practiceOfDay={null}
+        catalogReady={false}
+      />,
+    );
+
+    expect(screen.getByTestId("practices-moment")).toBeInTheDocument();
+    expect(screen.queryByText(/Пока нет совпадений/)).not.toBeInTheDocument();
+  });
+
+  it("shows the honest empty hint once the catalog is loaded and nothing matches", () => {
+    render(
+      <PracticesStateCycleScreen
+        locale="ru"
+        activeNeed="calm"
+        onNeedChange={() => {}}
+        activeFormat={null}
+        onFormatChange={() => {}}
+        recommended={null}
+        momentCards={[]}
+        practiceOfDay={null}
+        catalogReady
+      />,
+    );
+
+    expect(screen.getByText(/Пока нет совпадений/)).toBeInTheDocument();
+  });
 });

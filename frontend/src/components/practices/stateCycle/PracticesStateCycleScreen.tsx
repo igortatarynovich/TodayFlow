@@ -67,6 +67,8 @@ export type PracticesStateCycleScreenProps = {
   myItems?: StateCycleMyItem[];
   todayRail?: StateCycleTodayRail | null;
   catalogFailed?: boolean;
+  /** False while the catalog request is in flight — the empty-moment hint must not paint before load settles. */
+  catalogReady?: boolean;
   onRetryCatalog?: () => void;
   favoritesHref?: string;
 };
@@ -85,6 +87,7 @@ export function PracticesStateCycleScreen({
   myItems = [],
   todayRail = null,
   catalogFailed = false,
+  catalogReady = true,
   onRetryCatalog,
   favoritesHref = "#practices-my",
 }: PracticesStateCycleScreenProps) {
@@ -226,7 +229,7 @@ export function PracticesStateCycleScreen({
               </a>
             </div>
             {momentCards.length === 0 ? (
-              <p className={styles.emptyHint}>{copy.emptyMoment}</p>
+              catalogReady ? <p className={styles.emptyHint}>{copy.emptyMoment}</p> : null
             ) : (
               <div className={styles.momentRail}>
                 {momentCards.map((card, index) => (

@@ -376,6 +376,7 @@ export default function PracticesPage() {
         myItems={myItems}
         todayRail={todayRail}
         catalogFailed={catalogStatus === "failed"}
+        catalogReady={catalogStatus !== "pending"}
         onRetryCatalog={retryAll}
       />
     </PracticesWebScreen>
