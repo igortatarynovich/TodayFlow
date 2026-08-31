@@ -139,7 +139,7 @@ import {
 import { shiftDateISO } from "@/lib/moodMapModel";
 import { resolveTodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import { canOfferFocusDeepen, resolveFocusDeepenTarget } from "@/lib/todayFocusDeepen";
-import { formatRitualTarotPersonalToday, pickRitualPersonalLens } from "@/lib/ritualRevealCopy";
+import { pickRitualPersonalLens } from "@/lib/ritualRevealCopy";
 import { buildHandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 import { resolveWelcomeActivityTags } from "@/lib/todayWelcomeActivityTags";
 import {
@@ -1394,20 +1394,10 @@ export function TodayCompositionSurface(props: Props) {
     [props.cardMeaning, story.tarotImpact?.body, symbolHooksView?.card?.hook_reveal?.base?.meaning],
   );
 
-  const ritualTarotPersonalText = useMemo(() => {
-    const personalLine = pickRitualPersonalLens(symbolHooksView?.card?.hook_reveal, allowRitualLens);
-    return formatRitualTarotPersonalToday({
-      personalLine,
-      dayNumber: engagement.numberValue || props.numerologyValue,
-      dayNumberTitle: symbolHooksView?.number?.title ?? null,
-    });
-  }, [
-    allowRitualLens,
-    engagement.numberValue,
-    props.numerologyValue,
-    symbolHooksView?.card?.hook_reveal,
-    symbolHooksView?.number?.title,
-  ]);
+  const ritualTarotPersonalText = useMemo(
+    () => pickRitualPersonalLens(symbolHooksView?.card?.hook_reveal, allowRitualLens),
+    [allowRitualLens, symbolHooksView?.card?.hook_reveal],
+  );
 
   const ritualNumberMeaningText = useMemo(
     () =>
@@ -2186,15 +2176,9 @@ export function TodayCompositionSurface(props: Props) {
   });
   const myDayCautions = myDayMeaningUnavailable
     ? []
-    : (
-    dayBriefModel.avoidItems.length
-      ? dayBriefModel.avoidItems
-      : glanceDailyFocus?.avoid
-        ? [glanceDailyFocus.avoid]
-        : []
-  )
-    .filter((line) => !myDayPriorities.includes(line))
-    .slice(0, 2);
+    : dayBriefModel.avoidItems
+        .filter((line) => !myDayPriorities.includes(line))
+        .slice(0, 2);
 
   const myDayHeadline = myDayMeaningUnavailable ? null : dayBriefModel.personalLine;
   const myDayFocusTitle = myDayMeaningUnavailable

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useState, type ReactNode } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import type { TodayDayBriefModel, TodayDayTransitRow } from "@/lib/todayDayBrief";
+import { clipCompassProse, type TodayDayBriefModel, type TodayDayTransitRow } from "@/lib/todayDayBrief";
 import {
   DsActionCard,
   DsCallout,
@@ -164,9 +164,12 @@ function TodayDayDashboard({
 
   const line = atmosphereLine ?? vibe;
   const showMoon = typeof moonPhase === "number" && Number.isFinite(moonPhase);
-  const heroTitle = loading ? copy.loadingDay : modeLabel || "Сегодня";
-  const heroBody = line || expect || undefined;
-  const showPulse = energyPct !== null || Boolean(modeLabel);
+  const energyWord = modeLabel;
+  const heroTitle = loading ? copy.loadingDay : energyWord || "Сегодня";
+  const heroBody = clipCompassProse(line || expect, 160) || undefined;
+  // Inventory: mood is a distinct 8-set metric — omit when it would substitute energy_word.
+  const moodWord = modeLabel && energyWord && modeLabel !== energyWord ? modeLabel : null;
+  const showPulse = energyPct !== null || Boolean(moodWord);
   const firstDriverId = transitRows.find((item) => item.id !== "moon")?.id;
 
   const openHero = () =>
@@ -244,15 +247,15 @@ function TodayDayDashboard({
               }
             />
           ) : null}
-          {modeLabel ? (
+          {moodWord ? (
             <DsMetricCard
               tone="solid"
               testId="today-day-brief-mood"
-              value={modeLabel}
+              value={moodWord}
               label={copy.moodLabel}
               meter={
                 <DsChip variant="status" statusTone={moodStatusTone(visualMode)}>
-                  {modeLabel}
+                  {moodWord}
                 </DsChip>
               }
             />

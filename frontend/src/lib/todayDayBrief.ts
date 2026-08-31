@@ -778,7 +778,8 @@ function buildTransitRows(
   const drivers = contract.global_day?.drivers;
   if (!Array.isArray(drivers)) return out;
   for (let i = 0; i < drivers.length; i += 1) {
-    if (out.length >= 5) break;
+    const driverCount = out.filter((row) => row.id !== "moon").length;
+    if (driverCount >= 3) break;
     const transit = buildDriverTransit(contract, drivers[i], i, energyLabel);
     if (!transit) continue;
     const key = normalizeKey(transit.title);
@@ -937,9 +938,9 @@ export function buildTodayDayBriefModel(input: {
     energyPct: input.loading ? null : buildEnergyPct(input.contract),
     strengthChips: input.loading
       ? []
-      : buildActionChips(input.contract.global_day?.strength, 6, input.contract, "supports"),
+      : buildActionChips(input.contract.global_day?.strength, 4, input.contract, "supports"),
     riskChips: input.loading
       ? []
-      : buildActionChips(input.contract.global_day?.risk, 6, input.contract, "cautions"),
+      : buildActionChips(input.contract.global_day?.risk, 3, input.contract, "cautions"),
   };
 }

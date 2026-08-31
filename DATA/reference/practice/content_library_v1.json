@@ -7810,6 +7810,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.stretching.001",
+        "content_class": "practice",
+        "family": "movement",
+        "type": "stretching",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.stretching"
+      },
+      "retrieval": {
+        "purpose": [
+          "release"
+        ],
+        "domain": [],
+        "input_state": [
+          "tense"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Короткая растяжка",
+            "body": "Сядь прямо, плечи опусти. Медленно наклони ухо к одному плечу, пока не почувствуешь мягкое тянущее ощущение. Держи несколько секунд без пружины, затем смени сторону. Не форсируй и остановись, если больно."
+          },
+          "en": {
+            "title": "Short stretch",
+            "body": "Sit upright, shoulders down. Slowly tilt one ear toward the shoulder until you feel a gentle stretch. Hold a few seconds without bouncing, then switch sides. Do not force it; stop if it hurts."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Мягче",
+            "en": "Softer"
+          }
+        }
+      }
     }
   ]
 }

@@ -37,6 +37,15 @@
 - **Canon updated?** yes — this file §9 · Today Inventory §7 · tracker.
 - **Backward compatible?** yes for API. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
 
+## Architecture impact — Grammar §9 live projection frames (2026-08-31)
+
+- **SoT before:** Scanner judged a declared atom frame. Production UI could still paint a different set of slots than the fixtures.
+- **SoT after:** `emitTodayDisplayFrame` / `emitProfileDisplayFrame` project the **same pickers** the production path uses. Exit criterion for §9 on the locked path is `scanDisplayGrammar(live frame) = []`. Glance Daily Focus composition is still out (separate authority pass).
+- **Public contract changed?** no JSON.
+- **Migration required?** no. Emitters are audit-only; they do not become meaning SoT.
+- **Canon updated?** yes — this file §9 · Today Inventory §7 · Profile Inventory changelog · tracker.
+- **Backward compatible?** yes for API. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
+
 ---
 
 ## 1. Цепочка (LOCKED)
@@ -330,6 +339,8 @@ Scanner проверяет **законность происхождения и 
 
 Negative fixtures (обязательны): unknown filled VM field без slot → finding 2; новая содержательная строка прямо в path-component → finding 1.
 
+**Live frames:** `emitTodayDisplayFrame` / `emitProfileDisplayFrame` собирают кадр из тех же projection-хелперов, что рисует production UI. Критерий выхода §9 на locked path — `scanDisplayGrammar(live frame) = []`. Scanner по-прежнему не судит качество фразы.
+
 **Regression:** findings 7 / 12 / 15 / 17 / 18 остаются в `todayDisplayLockAudit.ts` и вливаются в `scanDisplayGrammar`.
 
 | # | Находка |
@@ -371,6 +382,7 @@ Negative fixtures (обязательны): unknown filled VM field без slot 
 
 | Date | Change |
 |------|--------|
+| 2026-08-31 | §9 live projection frames (`emitTodayDisplayFrame` / `emitProfileDisplayFrame`); exit = scan live path = [] |
 | 2026-08-30 | §9 full Inventory scanner (`displayGrammar`); findings 1–19; negative fixtures unknown-field / invented FE copy |
 | 2026-08-29 | §9 finding 7 (canned/CE invent) added to the same unit subset |
 | 2026-08-29 | §9 findings 12/15/17/18 unit-tested (`todayDisplayLockAudit`); full scanner later |

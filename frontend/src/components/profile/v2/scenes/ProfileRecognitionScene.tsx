@@ -40,11 +40,8 @@ export function ProfileRecognitionScene({
   const hasPortraitSlot = Boolean(resolveArchetypeIllustrationSlug(archetypeSeed));
   const copy = PROFILE_V2_COPY.zones.recognition;
   const core = identityCore?.trim() || "";
-  const lineText =
-    compactProfileCopy(line?.trim() || "", LINE_MAX) ||
-    compactProfileCopy(core, LINE_MAX) ||
-    null;
-  const deeper = core && lineText && !sameLine(core, lineText) ? core : null;
+  const lineText = compactProfileCopy(line?.trim() || "", LINE_MAX) || null;
+  const deeper = core && (!lineText || !sameLine(core, lineText)) ? core : null;
   const [open, setOpen] = useState(false);
   const showSignal = Boolean(deeper) || hasWhy;
 

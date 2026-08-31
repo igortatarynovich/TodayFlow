@@ -111,7 +111,7 @@ function WhyCardBody({
         </p>
       </div>
       {collapseMeaning ? (
-        <p className={styles.whyProofExpandHint}>Нажми — смысл за фактом</p>
+        <p className={styles.whyProofExpandHint}>Нажми — подробнее</p>
       ) : null}
     </>
   );

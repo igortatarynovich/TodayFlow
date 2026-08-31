@@ -1362,6 +1362,45 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.practice_body_scan",
+      "content_class": "practice",
+      "type": "body_scan",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "family_collapse",
+      "note": "Sequential observation of the body is already the accepted kernel of technique.body_scan (meditation). A short source-check did not find a distinct practice-class method that is not a posture/duration/delivery variant of that kernel, PMR (technique.progressive_relaxation), or mobility. P1 type practice.body_scan remains skipped_for_now. Return only if product requires a non-meditative sequential scan."
+    },
+    {
+      "technique_id": "technique.stretching",
+      "content_class": "practice",
+      "type": "stretching",
+      "canonical_description": "Take one comfortable stretch position and hold it without bouncing (for example, sit upright and slowly tilt the ear toward one shoulder, or open the arms and gently open the chest). Hold a few seconds, then release or switch sides. Stay in a pain-free range. Distinct from mobility (unforced joint movement without a hold) and from progressive_relaxation (tense then release). Not a workout or a treatment.",
+      "source_refs": [
+        {
+          "source": "NHS — Flexibility exercises",
+          "url": "https://www.nhs.uk/live-well/exercise/flexibility-exercises/",
+          "locus": "Neck stretch: sitting upright, look straight ahead and hold the left shoulder down with the right hand; slowly tilt the head to the right while holding the shoulder down; hold each stretch for 5 seconds and repeat 3 times on each side. Neck rotation: slowly turn the head toward one shoulder as far as is comfortable; hold for 5 seconds.",
+          "note": "official_health. Method confirmation for a brief held stretch. Mobility/fitness/treatment claims not imported."
+        },
+        {
+          "source": "NHS — Sitting exercises",
+          "url": "https://www.nhs.uk/live-well/exercise/sitting-exercises/",
+          "locus": "Chest stretch: sit upright and away from the back of the chair; pull shoulders back and down; extend arms out to the side; gently push the chest forward and up until you feel a stretch across the chest; hold for 5 to 10 seconds.",
+          "note": "official_health. Method confirmation for a seated hold-stretch. Exercise-prescription counts and disease claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stay in a comfortable, pain-free range. Stop if it hurts, tingles, or feels sharp.",
+        "Do not bounce or force the stretch.",
+        "Not a treatment for neck, back, or joint conditions, and not a workout."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

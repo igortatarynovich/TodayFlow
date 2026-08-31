@@ -763,7 +763,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 | First Today chips | **FIXED** | user record, не bind |
 | `T3.action` | OUT | drift если код ещё рисует |
 
-**Код-drift (остаток):** Grammar §9 scanner **landed** (`frontend/src/lib/displayGrammar`). Glance Daily Focus composition still out of this harness (separate authority pass). Dead `ProfileCharacterScene.tsx` unused after path cut.
+**Код-drift (остаток):** Grammar §9 live frames **landed** (`emitTodayDisplayFrame` / `emitProfileDisplayFrame`). Locked path: `scanDisplayGrammar(live frame) = []`. Glance Daily Focus composition still out of this harness (separate authority pass). Dead `ProfileCharacterScene.tsx` unused after path cut.
 
 ---
 
@@ -771,6 +771,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 
 | Date | Change |
 |------|--------|
+| 2026-08-31 | Grammar §9 live frames on the production path; Glance still out of harness |
 | 2026-08-30 | Grammar §9 scanner (findings 1–19); Glance composition still out of harness |
 | 2026-08-30 | T3.priority: glance `prioritize` fallback only if personal `today_move`, not Global |
 | 2026-08-29 | hero tagline: no CE / canned invent; Grammar §9 #7 unit subset |
