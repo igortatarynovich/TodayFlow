@@ -544,6 +544,7 @@ def generate_llm_product_surface(
     compatibility_learning: dict[str, Any] | None = None,
     chart1: Any | None = None,
     chart2: Any | None = None,
+    core_profile_snapshot_id: int | None = None,
 ) -> tuple[SignCompatibilityProductSurface, str, dict[str, Any] | None]:
     """Возвращает (surface, source, raw_llm_or_none). source — llm | template."""
 
@@ -680,6 +681,7 @@ def generate_llm_product_surface(
                     module="compatibility",
                     surface="dynamics_llm",
                     user_id=user_id,
+                    core_profile_snapshot_id=core_profile_snapshot_id,
                     model=model_id,
                     locale=loc,
                     input_payload={
@@ -720,6 +722,7 @@ def generate_llm_product_surface(
                     module="compatibility",
                     surface="dynamics_llm",
                     user_id=user_id,
+                    core_profile_snapshot_id=core_profile_snapshot_id,
                     model=model_id,
                     locale=loc,
                     input_payload={

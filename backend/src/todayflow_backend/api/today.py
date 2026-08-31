@@ -1005,24 +1005,9 @@ async def get_today_contract(
     except ValueError as exc:
         # Assemble-once: never build on user GET — wait for cron / show assembling.
         if "day_story_missing" in str(exc):
-            # Kick background catch-up for this opener (daemon; no LLM on this request).
-            try:
-                from todayflow_backend.services.day_prewarm_job_c5 import enqueue_day_prewarm
-
-                enqueue_day_prewarm(
-                    db,
-                    user_id=int(user.id),
-                    local_date=target_date_obj,
-                    locale=locale,
-                    timezone_name=tz_name,
-                )
-            except Exception as enqueue_exc:
-                logger.warning(
-                    "day_prewarm enqueue failed user=%s date=%s: %s",
-                    user.id,
-                    target_date_obj,
-                    enqueue_exc,
-                )
+            # GET miss is a read: assembling shell only. Do not enqueue
+            # regeneration/prewarm (Personal Day lifecycle). Cron assemble-window
+            # remains the product first-build path.
             shell = build_day_assembling_contract(lifecycle=day_lifecycle, locale=locale)
             return _finalize_contract(shell, morning_obj=morning)
         logger.error("GET /today/contract assembly failed: %s", exc)

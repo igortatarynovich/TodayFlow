@@ -2,8 +2,9 @@
 
 Включает:
 - Прогресс-трекер: записи по аскезам и аффирмациям (два отдельных сервиса).
-  Трекер аскез (/asceticisms/tracker) и трекер аффирмаций (/affirmations/tracker)
-  используют общий API /tracking/progress, но не смешивают выбор в одной форме.
+  Web UI surfaces are unified under `/maps/*` (`/maps/ascetic`, `/maps/wish`).
+  Legacy `/asceticisms/tracker` and `/affirmations/tracker` routes redirect to the
+  maps surfaces; the underlying API remains `/tracking/progress`.
 - Трекер привычек — отдельный сервис (/habits), не этот API.
 - Дневник наблюдений
 - Ритуал закрытия дня

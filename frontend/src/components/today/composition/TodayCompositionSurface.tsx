@@ -15,7 +15,7 @@ import { TodayDayBrief } from "@/components/today/composition/TodayDayBrief";
 import { buildTodayDayBriefModel } from "@/lib/todayDayBrief";
 import { TodayMyDayRhythm } from "@/components/today/composition/TodayMyDayRhythm";
 import { TodayRitualLensPair } from "@/components/today/composition/TodayRitualLensPair";
-import { buildTodayInstructionBridgeModel } from "@/lib/todayInstructionBridge";
+import { buildTodayInstructionBridgeModel, omitIfOverlapsHeadline } from "@/lib/todayInstructionBridge";
 import { TodayDayTasksBlock } from "@/components/today/composition/TodayDayTasksBlock";
 import { buildTodayDayTasks } from "@/lib/todayDayTasks";
 import { TodayProgressTracker } from "@/components/today/composition/TodayProgressTracker";
@@ -36,7 +36,7 @@ import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel }
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
 import { anchorTarotTags, RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
-import { isDayNotReady, isTodayInterpretationUnavailable, type TodayContractV1, type TodayDepthTopicId } from "@/lib/todayContract";
+import { contractHasDeterministicPersonalDayForMyDay, isDayNotReady, isTodayInterpretationUnavailable, type TodayContractV1, type TodayDepthTopicId } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
 import { tarotCardFacePicture, tarotCardFaceSrc, resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import {
@@ -76,6 +76,7 @@ import {
 } from "@/lib/todayCompositionZones";
 import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
 import { useAuth } from "@/lib/useAuth";
+import { getTimeOfDayByHour } from "@/lib/time-of-day";
 import {
   fetchDaySymbolState,
   revealDayCard,
@@ -100,6 +101,8 @@ import { StoryBlockCue, StoryNextAnchor } from "@/components/today/composition/T
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
 import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
+import { pickMyDayPriorityLines } from "@/lib/todayMyDayPriority";
+import { pickPersonalFocusAxisLabel } from "@/lib/todayPersonalFocusAxis";
 import { buildGlanceEnergyFromChorus } from "@/lib/todayGlanceEnergy";
 import { buildPlotConflictNarrative, buildPlotStoryBeats } from "@/lib/todayPlotNarrative";
 import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
@@ -136,7 +139,7 @@ import {
 import { shiftDateISO } from "@/lib/moodMapModel";
 import { resolveTodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import { canOfferFocusDeepen, resolveFocusDeepenTarget } from "@/lib/todayFocusDeepen";
-import { formatRitualTarotPersonalToday, pickRitualHookLine } from "@/lib/ritualRevealCopy";
+import { formatRitualTarotPersonalToday, pickRitualPersonalLens } from "@/lib/ritualRevealCopy";
 import { buildHandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 import { resolveWelcomeActivityTags } from "@/lib/todayWelcomeActivityTags";
 import {
@@ -147,6 +150,7 @@ import { syncDayPromiseToConnection } from "@/lib/todayPromiseSync";
 import { pickTodayDepthMenu } from "@/lib/todayDepthMenuToday";
 import {
   resolveTodayCapabilityFromProfile,
+  todayAllowsRitualLens,
   TODAY_SCREEN_FLOW_CAPABILITY,
 } from "@/lib/todayScreenFlowCapability";
 
@@ -230,6 +234,8 @@ export function TodayCompositionSurface(props: Props) {
   const reduceMotion = useReduceMotion();
 
   const [eveningMode, setEveningMode] = useState(false);
+  const isEveningTime = useMemo(() => getTimeOfDayByHour() === "evening", []);
+  const showEvening = eveningMode || isEveningTime;
   const [hydrated, setHydrated] = useState(false);
   const [reactionReady, setReactionReady] = useState(() =>
     typeof window === "undefined" ? !isFirstToday : !isFirstToday || firstTodayReactionComplete(),
@@ -403,10 +409,11 @@ export function TodayCompositionSurface(props: Props) {
   });
   const screenCapability = TODAY_SCREEN_FLOW_CAPABILITY[capabilityDepth];
   const showMyDayAct = useProductFoundation && screenCapability.myDay;
+  const allowRitualLens = todayAllowsRitualLens(capabilityDepth, props.contract);
   const showPersonalTimeline = showMyDayAct && screenCapability.personalTimeline;
   const screenFlowLayout = useMemo(
-    () => ({ showSymbols: showSymbolsAct, showMyDay: showMyDayAct }),
-    [showSymbolsAct, showMyDayAct],
+    () => ({ showSymbols: showSymbolsAct, showMyDay: showMyDayAct, showEvening }),
+    [showSymbolsAct, showMyDayAct, showEvening],
   );
 
   useEffect(() => {
@@ -417,9 +424,10 @@ export function TodayCompositionSurface(props: Props) {
     const stepCount = todayScreenFlowStepCount({
       showSymbols: showSymbolsAct,
       showMyDay: showMyDayAct,
+      showEvening,
     });
     setScreenFlowIndex(resolveScreenFlowEntryIndex({ searchParams: sp, stepCount }));
-  }, [useProductFoundation, showSymbolsAct, showMyDayAct]);
+  }, [useProductFoundation, showSymbolsAct, showMyDayAct, showEvening]);
 
   const onScreenFlowIndexChange = useCallback(
     (index: number, meta: { reason: ScreenFlowChangeReason }) => {
@@ -439,7 +447,7 @@ export function TodayCompositionSurface(props: Props) {
   const goToNextFromToday = useCallback(() => {
     const idx = todayHandoffIndices(screenFlowLayout);
     const next =
-      idx.ritual >= 0 ? idx.ritual : idx.myDay >= 0 ? idx.myDay : idx.evening;
+      idx.ritual >= 0 ? idx.ritual : idx.myDay >= 0 ? idx.myDay : idx.evening >= 0 ? idx.evening : 0;
     onScreenFlowIndexChange(next, { reason: "select" });
   }, [onScreenFlowIndexChange, screenFlowLayout]);
 
@@ -806,7 +814,7 @@ export function TodayCompositionSurface(props: Props) {
       mainFocusText ||
       continuityRecord?.mainFocus ||
       story.hero.themeShort ||
-      "Главная тема дня";
+      "";
     const draft: DayContinuityRecord = {
       dateISO,
       mainFocus: focus,
@@ -997,7 +1005,7 @@ export function TodayCompositionSurface(props: Props) {
       display,
       title: view.number?.title ?? null,
       meaning: view.number?.hook_reveal?.base?.meaning ?? view.number?.summary ?? props.numerologyMeaning ?? null,
-      support: pickRitualHookLine(view.number?.hook_reveal, story.numberImpact?.body ?? null),
+      support: pickRitualPersonalLens(view.number?.hook_reveal, allowRitualLens),
     };
   }, [
     dateISO,
@@ -1005,7 +1013,7 @@ export function TodayCompositionSurface(props: Props) {
     persistEngagement,
     props.numerologyMeaning,
     props.onSymbolRevealResult,
-    story.numberImpact?.body,
+    allowRitualLens,
   ]);
 
   const onInterpretationConfirm = useCallback(
@@ -1162,7 +1170,7 @@ export function TodayCompositionSurface(props: Props) {
         return;
       }
       if (useProductPersonalized) {
-        const practiceIndex = todayScreenFlowPracticeIndex(showSymbolsAct, showMyDayAct);
+        const practiceIndex = todayScreenFlowPracticeIndex(showSymbolsAct, showMyDayAct, showEvening);
         if (practiceIndex >= 0) setScreenFlowIndex(practiceIndex);
       }
     },
@@ -1172,6 +1180,7 @@ export function TodayCompositionSurface(props: Props) {
       recommendedPractice?.id,
       showSymbolsAct,
       showMyDayAct,
+      showEvening,
       trackMeaningEvent,
       useProductPersonalized,
     ],
@@ -1346,7 +1355,7 @@ export function TodayCompositionSurface(props: Props) {
     setPreferredDepthTopic(target.depthTopic);
     setAutoPickDepthTopic(Boolean(target.depthTopic));
     if (useProductPersonalized) {
-      const readingIndex = todayScreenFlowReadingIndex(showSymbolsAct, showMyDayAct);
+      const readingIndex = todayScreenFlowReadingIndex(showSymbolsAct, showMyDayAct, showEvening);
       if (readingIndex >= 0) setScreenFlowIndex(readingIndex);
     } else {
       document
@@ -1371,6 +1380,7 @@ export function TodayCompositionSurface(props: Props) {
     engagement.focusTopicId,
     showSymbolsAct,
     showMyDayAct,
+    showEvening,
     trackMeaningEvent,
     useProductPersonalized,
   ]);
@@ -1385,17 +1395,14 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const ritualTarotPersonalText = useMemo(() => {
-    const hook = symbolHooksView?.card?.hook_reveal;
-    const personalLine =
-      String(hook?.bridge_to_day ?? "").trim() ||
-      String(hook?.personal_angle ?? "").trim() ||
-      null;
+    const personalLine = pickRitualPersonalLens(symbolHooksView?.card?.hook_reveal, allowRitualLens);
     return formatRitualTarotPersonalToday({
       personalLine,
       dayNumber: engagement.numberValue || props.numerologyValue,
       dayNumberTitle: symbolHooksView?.number?.title ?? null,
     });
   }, [
+    allowRitualLens,
     engagement.numberValue,
     props.numerologyValue,
     symbolHooksView?.card?.hook_reveal,
@@ -1418,8 +1425,8 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const ritualNumberSupportText = useMemo(
-    () => pickRitualHookLine(symbolHooksView?.number?.hook_reveal, story.numberImpact?.body ?? null),
-    [story.numberImpact?.body, symbolHooksView?.number?.hook_reveal],
+    () => pickRitualPersonalLens(symbolHooksView?.number?.hook_reveal, allowRitualLens),
+    [allowRitualLens, symbolHooksView?.number?.hook_reveal],
   );
 
   const ritualNumberTitle = useMemo(
@@ -1476,7 +1483,11 @@ export function TodayCompositionSurface(props: Props) {
           strengthenToolCount={strengthenTools.length}
           activeHabit={activeHabit}
           activeAscetic={activeAscetic}
-          habitMarked={engagement.habitMarkedId != null && activeHabit != null && engagement.habitMarkedId === activeHabit.id}
+          habitMarked={
+            engagement.habitMarkedId != null &&
+            activeHabit != null &&
+            engagement.habitMarkedId === activeHabit.id
+          }
           asceticMarked={
             engagement.asceticMarkedId != null &&
             activeAscetic != null &&
@@ -2165,16 +2176,14 @@ export function TodayCompositionSurface(props: Props) {
     />
   );
 
-  const myDayMeaningUnavailable = isTodayInterpretationUnavailable(props.contract);
-  const myDayPriorities = myDayMeaningUnavailable
-    ? []
-    : (
-    dayBriefModel.doItems.length
-      ? dayBriefModel.doItems
-      : glanceDailyFocus?.prioritize
-        ? [glanceDailyFocus.prioritize]
-        : []
-  ).slice(0, 3);
+  const myDayMeaningUnavailable =
+    isTodayInterpretationUnavailable(props.contract) &&
+    !contractHasDeterministicPersonalDayForMyDay(props.contract);
+  const myDayPriorities = pickMyDayPriorityLines({
+    contract: props.contract,
+    doItems: dayBriefModel.doItems,
+    glancePrioritize: glanceDailyFocus?.prioritize,
+  });
   const myDayCautions = myDayMeaningUnavailable
     ? []
     : (
@@ -2187,12 +2196,20 @@ export function TodayCompositionSurface(props: Props) {
     .filter((line) => !myDayPriorities.includes(line))
     .slice(0, 2);
 
+  const myDayHeadline = myDayMeaningUnavailable ? null : dayBriefModel.personalLine;
+  const myDayFocusTitle = myDayMeaningUnavailable
+    ? null
+    : pickPersonalFocusAxisLabel(props.contract);
+  const myDayFocusBody = myDayMeaningUnavailable
+    ? null
+    : omitIfOverlapsHeadline(instructionBridge.lead, myDayHeadline);
+
   const myDayBody = (
     <TodayMyDayPane
       meaningUnavailable={myDayMeaningUnavailable}
-      headline={myDayMeaningUnavailable ? null : dayBriefModel.personalLine}
-      focusTitle={myDayMeaningUnavailable ? null : glanceDailyFocus?.title || null}
-      focusBody={myDayMeaningUnavailable ? null : instructionBridge.lead || null}
+      headline={myDayHeadline}
+      focusTitle={myDayFocusTitle}
+      focusBody={myDayFocusBody}
       priorities={myDayPriorities}
       cautions={myDayCautions}
       timeline={
@@ -2233,6 +2250,7 @@ export function TodayCompositionSurface(props: Props) {
       dayBody={dayStoryBrief}
       showSymbols={showSymbolsAct}
       showMyDay={showMyDayAct}
+      showEvening={showEvening}
       ritualCardOpen={ritualCardOpen}
       ritualNumberOpen={ritualNumberOpen}
       ritualResultBody={
@@ -2258,8 +2276,8 @@ export function TodayCompositionSurface(props: Props) {
       tapResponse={engagement.tapResponse}
       onTapRecorded={(response) => persistEngagement({ tapResponse: response })}
       onOpenEvening={onOpenEvening}
+      showEveningClose={!isFirstToday}
       dayPromise={engagement.dayGoal}
-      onCloseOutcome={(outcome) => onSubmitEveningClose(outcome, null, "")}
       activeIndex={screenFlowIndex}
       onIndexChange={onScreenFlowIndexChange}
       embeddedInWebDashboard={embeddedInWebDashboard}
@@ -2726,9 +2744,9 @@ export function TodayCompositionSurface(props: Props) {
               <p className={styles.eveningRecapLine}>
                 Обещание на сегодня ещё можно выбрать ниже — если хочется завершить день с маленьким шагом.
               </p>
-            ) : (
+            ) : story.hero.themeShort ? (
               <p className={styles.eveningRecapLine}>Главная тема: {story.hero.themeShort}</p>
-            )}
+            ) : null}
           </section>
         ) : null}
 

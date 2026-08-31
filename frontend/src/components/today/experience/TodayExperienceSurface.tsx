@@ -288,7 +288,7 @@ export function TodayExperienceSurface(props: Props) {
   }, [synthesisReady, mainFocusText, props.dateISO, dayClosed]);
 
   const onOpenEveningClose = useCallback(() => {
-    const focus = mainFocusText || continuityRecord?.mainFocus || "Главный фокус дня";
+    const focus = mainFocusText || continuityRecord?.mainFocus || "";
     const draft: DayContinuityRecord = {
       dateISO: props.dateISO,
       mainFocus: focus,
@@ -486,7 +486,7 @@ export function TodayExperienceSurface(props: Props) {
         ) : continuityEvening ? (
           <TodayDayContinuityEveningClose
             userPromise={null}
-            themeShort={continuityRecord?.mainFocus || mainFocusText || "Главный фокус дня"}
+            themeShort={continuityRecord?.mainFocus || mainFocusText || null}
             saving={continuitySaving}
             onSubmit={onSubmitEveningClose}
             onBack={() => setContinuityEvening(false)}

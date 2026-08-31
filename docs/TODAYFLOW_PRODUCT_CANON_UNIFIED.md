@@ -222,6 +222,8 @@ Today отвечает «что сегодня», Maps отвечают «как
 
 **Явное правило для launch:** монетизация — **не блокер** DoD запуска v1. Paywall + цена — отдельная волна. Checkout на Stripe можно подключать в wave 2; до этого `/pricing` остаётся draft в marketing shell.
 
+**Compute ladder (not checkout):** core subscription vs paid Tarot/deep compatibility vs engineering force-rebuild — [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](./COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md). Does not move paywall into v1 DoD.
+
 ---
 
 ## 8. Путь пользователя — не дублируется, только ссылка

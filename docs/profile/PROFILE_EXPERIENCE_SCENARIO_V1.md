@@ -6,6 +6,7 @@
 **Parents:** [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](../TODAYFLOW_PRODUCT_CANON_UNIFIED.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)  
 **Siblings (проекции / UI, не заменяют движок):**  
 - [PROFILE_PRODUCT_SURFACE_CANON.md](./PROFILE_PRODUCT_SURFACE_CANON.md) — *как* Profile-скролл раскрывает модель (Шаги 1–5)  
+- [PROFILE_DISPLAY_INVENTORY_V1.md](./PROFILE_DISPLAY_INVENTORY_V1.md) — *что именно* на экране (слоты · provenance · лимиты)  
 - [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) — pipeline, Snapshot, `source_depth`, eval  
 - [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) — visual / layout  
 

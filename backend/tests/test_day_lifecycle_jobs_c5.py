@@ -209,6 +209,23 @@ def test_candidate_user_ids_includes_astro_profile() -> None:
     assert 72 not in ids
 
 
+def test_candidate_user_ids_excludes_example_com() -> None:
+    db = _session()
+    db.add(User(id=91, email="p0compat@example.com", password_hash="x"))
+    db.add(
+        db_models.AstroProfile(
+            user_id=91,
+            label="self",
+            birth_date=date(1990, 1, 15),
+            relation="self",
+            is_primary=True,
+        )
+    )
+    db.commit()
+    ids = _candidate_user_ids(db)
+    assert 91 not in ids
+
+
 def test_enqueue_day_prewarm_schedules_runner() -> None:
     db = _session()
     db.add(User(id=81, email="catchup@test.local", password_hash="x"))

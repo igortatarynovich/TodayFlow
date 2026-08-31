@@ -396,16 +396,6 @@ export const RITUAL_COPY = {
   guideOpenSphereForDetailHint: "Чувствуешь блок? Открой сферу и посмотри подробный разбор.",
   guideWhatToDoTodayTitle: "Что сделать сегодня",
   guidePrimaryDoFallback: "Закрыть одну рабочую задачу",
-  /** Phase 3 · G1-surface — Core Loop Viability Test (`?core_loop=1` / `?first=1`). */
-  coreLoopViabilityExperimentEyebrow: "фокус дня",
-  coreLoopViabilityThemeEyebrow: "Главное сегодня",
-  coreLoopViabilityActionEyebrow: "Сделать сейчас",
-  coreLoopViabilityProgressEyebrow: "Что будет дальше",
-  coreLoopViabilityProgressDayOne: "День 1 · первый шаг",
-  coreLoopViabilityProgressAfterHint:
-    "После шага здесь появится отметка прогресса; вечером можно подвести итог дня.",
-  coreLoopViabilityThemeFallback: "Сегодня — один понятный фокус и один шаг.",
-  coreLoopViabilityOptionalRitualCta: "Символический слой (необязательно)",
 
   /** Today experience v0 — default compressed Today. */
   todayExperienceDayEyebrow: "День",

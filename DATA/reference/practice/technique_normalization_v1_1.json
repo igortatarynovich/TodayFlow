@@ -1,0 +1,104 @@
+{
+  "contract_version": "technique_normalization_v1_1",
+  "version": "1.1.0",
+  "status": "normalized_candidate",
+  "semantic_version": "practice-technique-normalization-v1.1",
+  "description": "Normalization V1.1 of equal_count_breath research thread after targeted ingest. Axes first. Overall normalize_one. Candidate is not canon. Canon: docs/practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md",
+  "family_id": "family.practice.equal_count_breath",
+  "family_id_is_ledger_key_not_identity_claim": true,
+  "candidate_family": "four-phase square / box breathing",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "normalize_one_is_not_canonical": true,
+  "does_not_erase_v1": true,
+  "boundary_held": "ingested_evidence_to_normalized_candidate_not_canonical",
+  "accessed": "2026-08-25",
+  "prior_decision": {
+    "pass": "technique_normalization_v1",
+    "decision": "insufficient_evidence"
+  },
+  "evidence_ids": [
+    "ev.equal_count.bhf.heart_matters.box",
+    "ev.equal_count.nhs_sfh.box_leaflet",
+    "ev.equal_count.nhs_newcastle.square",
+    "ev.equal_count.byu.marchant.2025.square",
+    "ev.equal_count.nhs_wales.cavuhb.square"
+  ],
+  "axes": {
+    "post_exhale_hold": {
+      "decision": "required",
+      "criterion": "N-H1",
+      "not_used": "locus count",
+      "definition_contrast": "BHF, SFH, Marchant square, and CAVUHB write a post-exhale hold inside a four-phase or four-side structure. Marchant names 5:5 without holds as a different experimental condition, not as square.",
+      "newcastle": "absent_but_unaddressed. Uses square without a written post-exhale hold. Does not claim that omission makes a different method, and does not claim the hold is optional.",
+      "why_not_unresolved": "Omission without an identity claim does not refute definition/contrast.",
+      "why_not_optional": "No preferred-class variant statement (N-H2) exists in the ingested corpus."
+    },
+    "equal_count": {
+      "decision": "common_parameter",
+      "criterion": "N-E2",
+      "not_used": "locus count",
+      "common": "BHF, SFH, and Marchant square use equal counts, typically four, without arguing that equality is the method.",
+      "not_necessary": "CAVUHB uses the same label square for 4-4-6-2.",
+      "why_not_identity_bearing": "A preferred-class source uses the method-label with unequal side counts. N-E1 is not met.",
+      "why_not_unresolved": "N-E2 is locked: common-but-not-necessary may be inferred from this pattern."
+    }
+  },
+  "decision": "normalize_one",
+  "why_normalize_one": [
+    "Both axes are resolved: post-exhale hold required; equal count a common parameter.",
+    "Landscape had glued four-phase structure to equal timing. That cut was premature.",
+    "One technique remains: four timed phases including the post-exhale hold."
+  ],
+  "why_not_insufficient_evidence": [
+    "Hold is resolved by N-H1. Clarity on equal_count is not the only reason this pass closes."
+  ],
+  "why_not_split_family": [
+    "Newcastle is a naming inconsistency, not a second identity-bearing method.",
+    "Marchant 5:5 is a different named condition in that study, not a second landscape family.",
+    "CAVUHB is the same four-phase square label with a different timing parameter."
+  ],
+  "landscape_remap": {
+    "family_id_unchanged": "family.practice.equal_count_breath",
+    "from_hypothesis": "four equal phases including pauses; ratio identity is the kernel",
+    "to_hypothesis": "four timed phases including a hold after inhale and after exhale; equal duration is a common parameter, not the kernel",
+    "from_label": "equal-count / square breathing",
+    "to_label": "four-phase square / box breathing",
+    "history_field": "mechanism_shape_at_landscape_v1"
+  },
+  "normalized_candidate": {
+    "status": "normalized_candidate",
+    "not_canonical": true,
+    "identity_kernel": {
+      "shape": "four_timed_phases",
+      "post_exhale_hold": "required",
+      "equal_count": "common_parameter"
+    },
+    "common_parameters": [
+      "count_length",
+      "whether_side_counts_are_equal",
+      "cycles",
+      "posture",
+      "square_trace"
+    ],
+    "not_in_kernel": [
+      "Marchant 5:5 remains a different named condition in that study.",
+      "Newcastle three-phase square remains a naming inconsistency, not a variant."
+    ]
+  },
+  "expression_hypothesis": {
+    "type": "box_breathing",
+    "probe_item_id": "practice.box_breathing.001",
+    "status": "not_attested",
+    "note": "Probe 4-4-4-4 is compatible with the four-phase kernel. Type is not attested until canonical."
+  },
+  "next_named_pass": "technique_safety_review_v1",
+  "not_next": [
+    "canonical",
+    "technique_id_on_probe",
+    "next_family_slice",
+    "write_technique_canon"
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
+}

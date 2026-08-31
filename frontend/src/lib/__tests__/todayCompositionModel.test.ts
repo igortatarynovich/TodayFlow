@@ -62,11 +62,14 @@ describe("buildTodayCompositionViewModel", () => {
     expect(vm.hero.themeShort).toBeTruthy();
     expect(vm.hero.themeHeadline).not.toMatch(/устойчивость через понятный ритм/i);
     expect(vm.hero.tagline).toBeTruthy();
+    expect(vm.hero.tagline).not.toMatch(/замедлиться и услышать/i);
+    expect(vm.hero.tagline).not.toMatch(/последовательно, чем быстро/i);
     expect(vm.influences.some((i) => i.kind === "tarot")).toBe(true);
     expect(vm.influences.some((i) => i.kind === "moon")).toBe(true);
     expect(vm.supported.length).toBeGreaterThan(0);
     // PR-3: no invent without day_story.practice_recommendation
     expect(vm.strengthen).toHaveLength(0);
+    expect(vm.focusTitle).toBe("");
     expect(vm.actions).toHaveLength(4);
     expect(vm.growthArc.length).toBeGreaterThan(0);
   });
@@ -201,6 +204,10 @@ describe("buildTodayCompositionViewModel", () => {
       },
     });
     expect(merged.hero.themeHeadline).toBe("Сегодня один приоритет в работе");
-    expect(merged.focusTitle).toBe("Закрой одну задачу до 13:00");
+    expect(merged.focusTitle).not.toMatch(/закрой одну задачу/i);
+    expect(merged.hero.tagline).not.toMatch(/замедлиться и услышать/i);
+    expect(String(merged.strengthen.find((t) => t.id === "intention")?.detail ?? "")).not.toMatch(
+      /один шаг на сегодня/i,
+    );
   });
 });

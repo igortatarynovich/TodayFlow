@@ -5,7 +5,7 @@ import {
   profileMotionStyles,
   useProfileMotionInView,
 } from "@/components/foundation/ProfileMotion";
-import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
+import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
 import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type ProfileCharacterSceneProps = {
@@ -22,10 +22,8 @@ export type ProfileCharacterSceneProps = {
   omitMaterialLists?: boolean;
 };
 
-const characterNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "character");
-
 /**
- * Portrait materials already in contract — main scroll, not buried in natal fold.
+ * Portrait warehouse — Explore fold only. Not a journey act (no slot_id on path).
  */
 export function ProfileCharacterScene({
   strengthens,
@@ -64,9 +62,7 @@ export function ProfileCharacterScene({
       <header className={styles.zoneHeader}>
         <div>
           <p className={styles.journeyStepIndex}>
-            <span className={styles.journeyStepBadge}>
-              {characterNav?.step.replace(/^0/, "") ?? "·"}
-            </span>
+            <span className={styles.journeyStepBadge}>·</span>
             <span id="profile-v2-character-title">{copy.title}</span>
           </p>
           <p className={styles.zoneLead}>

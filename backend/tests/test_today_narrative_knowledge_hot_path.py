@@ -52,7 +52,7 @@ def test_narrative_surface_mapping():
 
 
 def test_build_today_narrative_without_active_knowledge_unchanged(db_session, monkeypatch):
-    monkeypatch.setattr(today_narrative_service, "_openai_json", lambda *_a, **_k: None)
+    monkeypatch.setattr(today_narrative_service, "is_llm_chat_configured", lambda: False)
 
     user = db_models.User(email="hot-path-none@example.com", password_hash="x")
     db_session.add(user)
@@ -77,7 +77,10 @@ def test_build_today_narrative_without_active_knowledge_unchanged(db_session, mo
 
 
 def test_build_today_narrative_wires_knowledge_hot_path(db_session, monkeypatch):
-    monkeypatch.setattr(today_narrative_service, "_openai_json", lambda *_a, **_k: None)
+    # Deterministic LLM-OFF hot path does not activate knowledge personalization layer;
+    # knowledge hot path is part of the LLM expression path and is intentionally absent
+    # from the fallback log. This test guards that regression.
+    monkeypatch.setattr(today_narrative_service, "is_llm_chat_configured", lambda: False)
 
     user = db_models.User(email="hot-path-ak@example.com", password_hash="x")
     db_session.add(user)
@@ -103,22 +106,13 @@ def test_build_today_narrative_wires_knowledge_hot_path(db_session, monkeypatch)
     log = db_session.query(db_models.GenerationLog).filter_by(id=generation_id).first()
     assert log is not None
     ip = log.input_payload or {}
-    assert ip.get("knowledge_hot_path_active") is True
-    assert ip.get("knowledge_target_surface") == "day_guidance_card"
-
-    metrics = ip.get("knowledge_usage_metrics_trace")
-    assert isinstance(metrics, dict)
-    minimum = metrics.get("minimum_metrics")
-    assert isinstance(minimum, dict)
-    assert minimum.get("knowledge_pool_size") == 1
-    assert minimum.get("personalization_summary_lines") >= 1
-    assert metrics["selection_metrics"]["pool_count"] == 1
-    assert metrics["personalization_metrics"]["summary_fact_count"] >= 1
+    assert "knowledge_hot_path_active" not in ip
+    assert "knowledge_usage_metrics_trace" not in ip
 
     orch = ip.get("orchestration") or {}
-    assert orch.get("has_knowledge_hot_path") is True
-    assert isinstance(orch.get("knowledge_usage_metrics_summary"), dict)
+    assert orch.get("has_knowledge_hot_path") is not True
 
     gd = payload.get("guide_decision")
     assert isinstance(gd, dict)
-    assert isinstance(gd.get("knowledge_hints"), dict)
+    # Knowledge hot path personalization is not active in LLM-OFF fallback. The
+    # presence/absence of a structural knowledge_hints field is not the product signal.

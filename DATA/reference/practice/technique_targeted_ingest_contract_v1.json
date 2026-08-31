@@ -1,0 +1,60 @@
+{
+  "contract_version": "technique_targeted_ingest_contract_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-targeted-ingest-v1.0",
+  "description": "Provenance-preserving paraphrase of two targeted-shortlist selected loci. Author contrast is not a family definition. Unequal square is not a variant. Axes are not glued. Not Normalization V1.1. Not technique canon. Canon: docs/practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "does_not_normalize": true,
+  "does_not_glue_axes": true,
+  "does_not_replace_family_ingest": true,
+  "selected_means_still": "allowed_for_targeted_ingest; ingest does not attest a kernel",
+  "required_evidence_fields": [
+    "evidence_id",
+    "candidate_family",
+    "source_ref",
+    "locus",
+    "source_family",
+    "paraphrase",
+    "observed_mechanism",
+    "observed_steps",
+    "observed_bounds",
+    "observed_safety",
+    "observed_variants",
+    "claim_scope",
+    "conflict_tags",
+    "ingest_status"
+  ],
+  "ingest_status": ["ingested"],
+  "claim_scope": [
+    "experimental_named_conditions",
+    "method_sequence_and_label"
+  ],
+  "v1_1_identity_questions": [
+    {
+      "id": "post_exhale_hold",
+      "allowed": ["required", "optional", "unresolved"]
+    },
+    {
+      "id": "equal_count",
+      "allowed": ["identity_bearing", "common_parameter", "unresolved"]
+    }
+  ],
+  "v1_1_overall_verdict_unchanged": [
+    "normalize_one",
+    "split_family",
+    "insufficient_evidence"
+  ],
+  "invariants": [
+    "exactly the two selected resolution loci",
+    "one evidence record per selected locus",
+    "Marchant square and 5:5 stay separate named conditions",
+    "Marchant author contrast is not generalized to the family",
+    "CAVUHB 4-4-6-2 is not recorded as a variant",
+    "shape_phase_structure and timing_ratio are not glued",
+    "does not write technique_canon_v1",
+    "does not set technique_id",
+    "does not open safety review"
+  ]
+}

@@ -924,6 +924,63 @@ export function isTodayInterpretationUnavailable(
   return storyStatus === "unavailable" || progressStatus === "unavailable";
 }
 
+/**
+ * Deterministic personal day material exists independently of LLM interpretation status.
+ * When true, My Day may render an LLM-OFF skeleton from `day_story.day_personal`.
+ */
+export function contractHasDeterministicPersonalDayForMyDay(
+  contract: TodayContractV1 | null | undefined,
+): boolean {
+  if (!contract?.day_story?.day_personal) return false;
+  const dp = contract.day_story.day_personal;
+  if (String(dp.summary_ru || "").trim().length > 0) return true;
+  const subsystems = [
+    dp.personal_astrology,
+    dp.human_design,
+    dp.vedic_personal,
+    dp.bazi,
+    dp.kabbalah_letter,
+    dp.name_numbers,
+  ];
+  for (const sub of subsystems) {
+    if (!sub || typeof sub !== "object" || Array.isArray(sub)) continue;
+    const s = sub as Record<string, unknown>;
+    if (String(s.summary_ru || "").trim().length > 0) return true;
+    if (Array.isArray(s.beats) && s.beats.length > 0) return true;
+    if (Array.isArray(s.activations) && s.activations.length > 0) return true;
+  }
+  return false;
+}
+
+function recordHasPersistBody(value: unknown, skipKeys: ReadonlySet<string> = new Set()): boolean {
+  if (value == null) return false;
+  if (typeof value === "string") return value.trim().length > 0;
+  if (typeof value === "number" || typeof value === "boolean") return true;
+  if (Array.isArray(value)) return value.length > 0;
+  if (typeof value !== "object") return false;
+  return Object.entries(value as Record<string, unknown>).some(([key, nested]) => {
+    if (skipKeys.has(key)) return false;
+    return recordHasPersistBody(nested);
+  });
+}
+
+/**
+ * Personal Day artifact is on the contract (GET persist), not a capability wish.
+ * Numerology `personal_day` number is ritual identity — not this nest.
+ * Canon: TODAY_DISPLAY_INVENTORY_V1 T2.lens appear · Grammar §5.1
+ */
+export function contractHasPersistedPersonalDay(
+  contract: TodayContractV1 | null | undefined,
+): boolean {
+  if (!contract || isTodayInterpretationUnavailable(contract)) return false;
+  const overlay = contract.personal_day?.natal_overlay;
+  if (recordHasPersistBody(overlay)) return true;
+  const dayPersonal = contract.day_story?.day_personal;
+  if (recordHasPersistBody(dayPersonal, new Set(["contract_version"]))) return true;
+  const whyPersonal = String(contract.day_story?.day_scenario?.conflict?.why_personal ?? "").trim();
+  return Boolean(whyPersonal);
+}
+
 /** PR-3: domain is showable only with present evidence and non-empty copy. */
 export function isDomainLensPresent(lens: DomainLensV1 | null | undefined): boolean {
   if (!lens) return false;

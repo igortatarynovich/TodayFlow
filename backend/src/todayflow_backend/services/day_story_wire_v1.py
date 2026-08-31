@@ -115,7 +115,19 @@ def _load_cached_day_story(
     snapshot_id: int | None = None,
     any_for_date: bool = False,
 ) -> tuple[dict[str, Any], int, str | None] | None:
-    """Returns (story, generation_log_id, fingerprint) or None."""
+    """Returns (story, generation_log_id, fingerprint) or None.
+
+    Identity is PersonalDayKey (user × date × semantic_version). Prompt/expression
+    stamps do not invalidate. Failed/402/kept-prior rows are not reusable.
+    """
+    from todayflow_backend.services.personal_day_v1 import (
+        is_reusable_personal_row,
+        personal_day_key,
+        row_matches_personal_key,
+    )
+
+    _ = snapshot_id, ritual_fp
+    expected_key = personal_day_key(user_id=user_id, local_date=target_date)
     q = (
         db.query(db_models.GenerationLog)
         .filter(
@@ -126,25 +138,20 @@ def _load_cached_day_story(
         )
         .order_by(db_models.GenerationLog.created_at.desc())
     )
-    if snapshot_id is not None and not any_for_date:
-        q = q.filter(db_models.GenerationLog.core_profile_snapshot_id == snapshot_id)
-    fallback_hit: tuple[dict[str, Any], int, str | None] | None = None
     for row in q.limit(40):
+        if not is_reusable_personal_row(row):
+            continue
         ip = row.input_payload if isinstance(row.input_payload, dict) else {}
         if str(ip.get("target_date") or "") != target_date.isoformat():
             continue
-        stored_fp = str(ip.get("day_story_fingerprint") or "") or None
         if not any_for_date:
-            if day_story_fingerprint:
-                if stored_fp != day_story_fingerprint:
+            if day_story_fingerprint and str(ip.get("personal_day_key") or ""):
+                if not row_matches_personal_key(
+                    row, key=str(day_story_fingerprint), target_date=target_date
+                ):
                     continue
-            elif ritual_fp and str(ip.get("ritual_context_fingerprint") or "") != ritual_fp:
+            elif not row_matches_personal_key(row, key=expected_key, target_date=target_date):
                 continue
-        # Accept legacy day_story prompt OR native scenario prompt (C1+).
-        # Skipping native versions caused GET to resurrect old slogan fallbacks.
-        pv = str(ip.get("prompt_version") or "")
-        if pv != DAY_STORY_PROMPT_VER and not pv.startswith("day-scenario-native-"):
-            continue
         nr = row.normalized_response if isinstance(row.normalized_response, dict) else None
         if nr and nr.get("contract_version") == DAY_STORY_V1_CONTRACT:
             from todayflow_backend.services.day_story_phrase_gate_v1 import day_story_passes_phrase_gate
@@ -154,13 +161,9 @@ def _load_cached_day_story(
             ok_phrase, _hits = day_story_passes_phrase_gate(scrubbed)
             if not ok_phrase:
                 continue
-            hit = (scrubbed, int(row.id), stored_fp)
-            # Prefer successful native/LLM over fingerprint-matched fallbacks.
-            if not bool(getattr(row, "used_fallback", False)) and str(row.status) == "success":
-                return hit
-            if fallback_hit is None:
-                fallback_hit = hit
-    return fallback_hit
+            stored_fp = str(ip.get("personal_day_key") or ip.get("day_story_fingerprint") or "") or None
+            return (scrubbed, int(row.id), stored_fp)
+    return None
 
 
 def _load_prior_native_day_story_same_date(
@@ -349,6 +352,11 @@ def _build_day_story_record(
         ce = {**(ce if isinstance(ce, dict) else {}), "day_events_pack": pack_from_ctx}
 
     from todayflow_backend.services.day_story_capture_session_v0 import get_day_story_capture_session
+    from todayflow_backend.services.personal_day_v1 import (
+        PERSONAL_DAY_SEMANTIC_VERSION,
+        personal_day_key,
+        personal_day_ledger,
+    )
 
     capture = get_day_story_capture_session()
     if capture is not None:
@@ -370,22 +378,29 @@ def _build_day_story_record(
         )
 
     cached = None
+    ready_hit = _load_cached_day_story(
+        db,
+        user_id=user.id,
+        target_date=target_date,
+        day_story_fingerprint=expected_fingerprint,
+        ritual_fp=ritual_fp,
+        snapshot_id=snapshot_id,
+        any_for_date=False,
+    )
     if not force_rebuild:
-        cached = _load_cached_day_story(
-            db,
-            user_id=user.id,
-            target_date=target_date,
-            day_story_fingerprint=expected_fingerprint,
-            ritual_fp=ritual_fp,
-            snapshot_id=snapshot_id,
-            any_for_date=False,
-        )
+        cached = ready_hit
+    personal_ledger = personal_day_ledger(
+        force_rebuild=bool(force_rebuild),
+        had_ready_artifact=ready_hit is not None,
+    )
     used_fallback = False
     gen_id: int
+    return_gen_id: int
     started = perf_counter()
 
     if cached is not None:
         story, gen_id, _ = cached
+        return_gen_id = gen_id
         used_fallback = False
         # C1: old cache without generation_source marker → facts_only_unavailable
         # (do not reconstruct meaning from legacy expect/trap). Valid marker →
@@ -562,23 +577,30 @@ def _build_day_story_record(
         llm_attempted = bool(force_rebuild and is_llm_chat_configured())
         kept_prior_native = False
         generation_source = "deterministic_no_llm"
+        prior_native_gen_id: int | None = None
         if llm_attempted:
             from todayflow_backend.services.day_scenario_native_llm_c1 import (
                 call_day_scenario_native_llm_c1,
             )
 
-            with llm_call_context(
-                ensure_operation=True,
-                operation="today.generate",
-                feature="today.native_day_story",
-                user_id=getattr(user, "id", None),
-            ):
+            llm_ctx: dict[str, Any] = {
+                "ensure_operation": True,
+                "operation": "today.generate",
+                "feature": "today.native_day_story",
+                "user_id": getattr(user, "id", None),
+            }
+            if personal_ledger == "engineering":
+                llm_ctx["trigger"] = "engineering"
+            with llm_call_context(**llm_ctx):
                 native_scenario = call_day_scenario_native_llm_c1(
                     llm_input,
                     interpretation=interpretation,
                     ritual_context=safe_ritual,
                     celestial_events=ce or None,
                     meta_out=native_meta,
+                    db=db,
+                    local_date=target_date,
+                    locale=locale_value,
                 )
             used_fallback = native_scenario is None
             story = None
@@ -654,10 +676,10 @@ def _build_day_story_record(
                     db, user_id=int(user.id), target_date=target_date
                 )
                 if prior is not None:
-                    story, _prior_gen_id = prior
+                    story, prior_native_gen_id = prior
                     story = _mark_kept_prior_native(story)
                     kept_prior_native = True
-                    used_fallback = False
+                    used_fallback = True
                     generation_source = "kept_prior_native"
                 else:
                     story = _project_scenario(
@@ -689,10 +711,10 @@ def _build_day_story_record(
                         db, user_id=int(user.id), target_date=target_date
                     )
                     if prior is not None:
-                        story, _prior_gen_id = prior
+                        story, prior_native_gen_id = prior
                         story = _mark_kept_prior_native(story)
                         kept_prior_native = True
-                        used_fallback = False
+                        used_fallback = True
                         generation_source = "kept_prior_native"
                     else:
                         try:
@@ -753,6 +775,10 @@ def _build_day_story_record(
                 err_bits.append(str(native_meta["failure_class"]))
             if native_meta.get("reject_reason"):
                 err_bits.append(str(native_meta["reject_reason"])[:400])
+        reusable_personal = generation_source == "native_llm_c1" and native_ok
+        persist_fallback = not reusable_personal
+        used_fallback = persist_fallback
+        personal_key = personal_day_key(user_id=int(user.id), local_date=target_date)
         input_payload: dict[str, Any] = {
             "target_date": target_date.isoformat(),
             "locale": locale_value,
@@ -761,6 +787,11 @@ def _build_day_story_record(
             "intent_context_fingerprint": intent_fp,
             "day_story_fingerprint": expected_fingerprint,
             "day_story_fingerprint_payload": fingerprint_payload,
+            "personal_day_key": personal_key,
+            "semantic_version": PERSONAL_DAY_SEMANTIC_VERSION,
+            "expression_version": prompt_ver,
+            "ledger": personal_ledger,
+            "force_rebuild": bool(force_rebuild),
             "day_engine_brief_contract": day_engine_brief.get("contract_version"),
             "contract": DAY_STORY_V1_CONTRACT,
             "prompt_version": prompt_ver,
@@ -820,12 +851,15 @@ def _build_day_story_record(
             input_payload=input_payload,
             system_prompt=_DAY_STORY_SYS_RU[:2000],
             normalized_response=story,
-            status="success" if not used_fallback else "fallback",
-            used_fallback=used_fallback,
+            status="success" if reusable_personal else "fallback",
+            used_fallback=persist_fallback,
             error_message=(" | ".join(err_bits)[:500] if err_bits else None),
             duration_ms=int((perf_counter() - started) * 1000),
         )
         gen_id = gen.id
+        return_gen_id = int(gen_id)
+        if not reusable_personal and prior_native_gen_id:
+            return_gen_id = int(prior_native_gen_id)
         if commit_story_state:
             state = ensure_story_state(
                 db,
@@ -837,13 +871,18 @@ def _build_day_story_record(
             )
             state.fingerprint = expected_fingerprint
             state.expected_fingerprint = expected_fingerprint
-            # Keep-last-good: surface as stale / refresh_required until a fresh native lands.
-            state.stale = bool(kept_prior_native)
-            state.last_generation_log_id = gen_id
+            if reusable_personal:
+                state.stale = False
+                state.last_generation_log_id = int(gen_id)
+            elif prior_native_gen_id:
+                state.stale = True
+                state.last_generation_log_id = int(prior_native_gen_id)
+            else:
+                state.stale = True
             db.add(state)
             db.commit()
 
-    return story, gen_id, used_fallback
+    return story, return_gen_id, used_fallback
 
 
 def build_day_story_v1_wire(

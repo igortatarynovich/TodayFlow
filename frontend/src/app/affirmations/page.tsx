@@ -106,7 +106,7 @@ function buildAffirmationItem(item: Affirmation, isAuthenticated: boolean, fc: F
     support,
     tags,
     focus: detectFocus([title, body, support, tags.join(" ")].join(" ")),
-    href: isAuthenticated ? `/affirmations/tracker?affirmation=${encodeURIComponent(item.id)}` : `/auth?redirect=/affirmations`,
+    href: isAuthenticated ? `/maps/wish` : `/auth?redirect=/affirmations`,
     hrefLabel: isAuthenticated ? fc.affirmationsCtaOpenTracker : fc.affirmationsCtaSignInUse,
   };
 }
@@ -253,7 +253,7 @@ export default function AffirmationsPage() {
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       <div style={{ display: "flex", gap: "0.65rem", flexWrap: "wrap" }}>
-        <DsButton href="/affirmations/tracker" size="sm">
+        <DsButton href="/maps/wish" size="sm">
           {fc.affirmationsLibraryLinkTracker}
         </DsButton>
         <DsButton href="/today" variant="secondary" size="sm">

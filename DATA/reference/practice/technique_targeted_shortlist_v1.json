@@ -1,0 +1,826 @@
+{
+  "contract_version": "technique_targeted_shortlist_v1",
+  "version": "1.0.0",
+  "status": "closed",
+  "semantic_version": "practice-technique-targeted-shortlist-v1.0",
+  "description": "Targeted shortlist for equal_count_breath / post_exhale_hold_identity. Selected = targeted-ingest permission. Not technique canon. Canon: docs/practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md",
+  "parent_step": 9,
+  "unit_of_shortlist": "research_question",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "does_not_rewrite_landscape_kernel": true,
+  "selected_means": "allowed_for_targeted_ingest_pass",
+  "boundary_held": "research_question_to_resolution_loci_not_canonical",
+  "accessed": "2026-08-25",
+  "family_id": "family.practice.equal_count_breath",
+  "candidate_family": "equal-count / square breathing",
+  "research_question": "Is the post-exhale hold identity-bearing for the box/square/equal-count method, or do sources use those names for structurally different sequences?",
+  "not_in_scope": [
+    "box_breathing_in_general",
+    "efficacy",
+    "inventor_or_isbn_for_type",
+    "next_landscape_family"
+  ],
+  "landscape_kernel_unchanged": "four equal phases including pauses; ratio identity is the kernel",
+  "expression_hypothesis": {
+    "type": "box_breathing",
+    "probe_item_id": "practice.box_breathing.001",
+    "status": "not_attested",
+    "note": "Targeted shortlist does not attest the type. Probe payload remains an expression hypothesis."
+  },
+  "resolution_kinds_found": [
+    "definition",
+    "contrast"
+  ],
+  "variant_found_in_preferred_class": false,
+  "stop_reason": "resolution_candidates_found_for_targeted_ingest",
+  "repeat_insufficient_evidence_after_v1_1_is_allowed": true,
+  "if_retry_insufficient_product_option": "leave_box_breathing_type_without_production_item",
+  "next_named_pass": "targeted_ingest_post_exhale_hold_identity",
+  "not_next": [
+    "safety_review",
+    "canonical",
+    "next_family_slice",
+    "technique_id_on_probe",
+    "general_box_breathing_research"
+  ],
+  "already_ingested_loci": [
+    "src.bhf.heart_matters.box",
+    "src.nhs.sfh.box_leaflet",
+    "src.nhs.newcastle.square"
+  ],
+  "selected_loci": [
+    "src.byu.marchant.2025.square",
+    "src.nhs.wales.cavuhb.square"
+  ],
+  "candidate_loci": [
+    {
+      "source_id": "src.bhf.heart_matters.box",
+      "source_family": "official_health",
+      "bibliographic_identity": {
+        "publisher": "British Heart Foundation",
+        "series": "Heart Matters",
+        "title": "3 breathing exercises to relieve stress",
+        "url": "https://www.bhf.org.uk/informationsupport/heart-matters-magazine/wellbeing/breathing-exercises",
+        "section": "1. Box breathing"
+      },
+      "authority_provenance": "Already ingested in Ingest V1. Classified here only for the identity question.",
+      "locus": "Heart Matters wellbeing page, section '1. Box breathing' (ingested 2026-08-25).",
+      "access": "already_ingested",
+      "gates": {
+        "C1": {
+          "result": "pass",
+          "note": "Four timed phases."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named public URL."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Shape name; steps separable from tactical branding."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Count illustrated; hold contraindications bounds_unknown."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased; do not re-copy."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Method only; no new benefit ingest."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "official_health."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Conflict with Newcastle already recorded at ingest."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "equal-count cycle with inhale, hold, exhale, hold",
+        "kernel": "four phases of the same count, including a hold after exhale",
+        "bounds": "count commonly 4; session length unbounded on this page",
+        "safety": "bounds_unknown in this section",
+        "variants": "count length and posture; not hold-optionality"
+      },
+      "resolution_role": "replication",
+      "identity_statement": "unknown",
+      "conflicts_unknowns": "Writes both holds. Does not say the empty-lung hold is required vs optional vs a different method.",
+      "research_function": "already_ingested_four_phase",
+      "selection_decision": "already_ingested",
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src.nhs.sfh.box_leaflet",
+      "source_family": "clinical_psychology",
+      "bibliographic_identity": {
+        "publisher": "Sherwood Forest Hospitals NHS Foundation Trust",
+        "unit": "Clinical Psychology",
+        "title": "Breathing Exercises",
+        "url": "https://www.sfh-tr.nhs.uk/media/o3fpizwx/breathing-exercises-leaflet.pdf",
+        "section": "BOX BREATHING"
+      },
+      "authority_provenance": "Already ingested in Ingest V1. Classified here only for the identity question.",
+      "locus": "PDF leaflet, heading BOX BREATHING (ingested 2026-08-25).",
+      "access": "already_ingested",
+      "gates": {
+        "C1": {
+          "result": "pass",
+          "note": "Four equal counts around a box."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named NHS PDF."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Box/square visualization; steps separable."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Stop-rules recorded separately at ingest."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Method + stop-rules already split."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "clinical_psychology."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Conflict with Newcastle already recorded."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "equal-count four-phase box breathing",
+        "kernel": "inhale, hold, exhale, hold of equal count",
+        "bounds": "count of four illustrated",
+        "safety": "stop/safety lives in a separate leaflet section (already ingested)",
+        "variants": "none stated for dropping the post-exhale hold"
+      },
+      "resolution_role": "replication",
+      "identity_statement": "unknown",
+      "conflicts_unknowns": "Presents four phases. Does not argue requiredness of the empty-lung hold.",
+      "research_function": "already_ingested_four_phase",
+      "selection_decision": "already_ingested",
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src.nhs.newcastle.square",
+      "source_family": "clinical_psychology",
+      "bibliographic_identity": {
+        "publisher": "The Newcastle upon Tyne Hospitals NHS Foundation Trust",
+        "title": "Square breathing",
+        "url": "https://www.newcastle-hospitals.nhs.uk/services/cardiothoracic/cardiothoracic-patient-information/square-breathing/"
+      },
+      "authority_provenance": "Already ingested in Ingest V1 as conflicting_method_sequence, not as a variant.",
+      "locus": "Newcastle Hospitals square-breathing patient page (ingested 2026-08-25).",
+      "access": "already_ingested",
+      "gates": {
+        "C1": {
+          "result": "pass",
+          "note": "Timed inhale, hold, exhale."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named public URL."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Square as a count aid."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Count of four illustrated."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Already paraphrased."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Method sequence only."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "clinical_psychology / NHS."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Recorded as conflict, not variant."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "timed square breathing without a written hold after exhale",
+        "kernel": "inhale, hold, exhale, then repeat",
+        "bounds": "count of four illustrated",
+        "safety": "not the identity question",
+        "variants": "ingest recorded none; missing hold is conflict, not variant"
+      },
+      "resolution_role": "non_resolving",
+      "identity_statement": "absent_but_unaddressed",
+      "conflicts_unknowns": "Uses the name square for a three-phase sequence. Does not contrast that sequence with a four-phase method or rename it.",
+      "research_function": "already_ingested_three_phase_conflict",
+      "selection_decision": "already_ingested",
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src.byu.marchant.2025.square",
+      "source_family": "academic_description",
+      "bibliographic_identity": {
+        "author": "Joshua Marchant",
+        "institution": "Brigham Young University",
+        "title": "Comparing the Effects of Square, 4-7-8, and 6 Breaths-per-Minute Breathing Conditions on Heart Rate Variability, CO2 Levels, and Mood",
+        "year": 2025,
+        "url": "https://scholarsarchive.byu.edu/etd/10696",
+        "pdf": "https://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=11705&context=etd",
+        "section": "Methods / Procedures — breathing condition scripts"
+      },
+      "authority_provenance": "Master's thesis, Department of Psychology. Methods operationalize named breathing conditions. Not a clinical guideline. Efficacy results are out of scope for this pass.",
+      "locus": "BYU ScholarsArchive thesis PDF, Methods: Square breathing vs 5:5 vs 4:6 vs 4-7-8 (accessed 2026-08-25).",
+      "access": "body_read",
+      "gates": {
+        "C1": {
+          "result": "pass",
+          "note": "Methods list timed phases for each named condition."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named thesis URL and methods section."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Intro may mention popular tactical promotion; the methods script defines square independently of a brand protocol."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Four-second phases stated; dizziness instruction is experimental stop, not a general who-must-not-hold bound."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Paraphrase the operational definition; do not copy the training script."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "HRV, PETCO2, and mood findings must not be ingested. Extract definition/contrast only."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "academic_description."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Do not average this square definition with Newcastle three-phase square."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "named experimental conditions with timed breath phases",
+        "kernel": "square = inhale 4, hold 4, exhale 4, hold 4; 5:5 = inhale 5, exhale 5 with no holds",
+        "bounds": "phase length fixed for the protocol; experimental dizziness stop is not a method identity claim",
+        "safety": "experimental stop if dizzy; not a general contraindication list",
+        "variants": "none stated; 5:5 is a different condition, not a square variant"
+      },
+      "resolution_role": "contrast",
+      "identity_statement": "distinguishes_method",
+      "conflicts_unknowns": "Defines square as four equal timed phases including a hold after exhale. Treats equal inhale/exhale without holds (5:5) as a different named condition. Does not mention a three-phase square and does not say a hold can be dropped while remaining square.",
+      "research_function": "contrast_square_vs_no_hold_equal",
+      "selection_decision": "selected",
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src.nhs.wales.cavuhb.square",
+      "source_family": "official_health",
+      "bibliographic_identity": {
+        "publisher": "Cardiff and Vale University Health Board",
+        "unit": "Resilience Project",
+        "title": "An Anxiety Self-Help Workbook for Young People in Secondary School",
+        "url": "https://cavuhb.nhs.wales/files/resilience-project/rp-changes-18-8/anxiety-self-help-workbook/",
+        "section": "Square breathing"
+      },
+      "authority_provenance": "NHS Wales health-board youth workbook. Official_health patient education. Not a trial. Anxiety framing is out of scope except as context of the page.",
+      "locus": "CAVUHB anxiety self-help workbook, heading Square breathing (accessed 2026-08-25).",
+      "access": "body_read",
+      "gates": {
+        "C1": {
+          "result": "pass",
+          "note": "Lists four timed sides of a traced square."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named NHS Wales workbook URL and heading."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Square is a tracing visualization; steps are the counts, not a brand protocol."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Counts stated (4 / 4 / 6 / 2); who-must-not-hold bounds_unknown in this section."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Paraphrase the count structure; do not copy workbook prose."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Anxiety self-help claims stay out. Extract the square structure only."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "official_health."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Unequal counts under the name square conflict with equal-count 4-4-4-4; record, do not average."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "finger-trace square used as a four-side breath count",
+        "kernel": "in 4, hold 4, out 6, hold 2 — same label 'square', not equal-count",
+        "bounds": "youth workbook; three repeats illustrated in this section",
+        "safety": "bounds_unknown for breath-hold in this section",
+        "variants": "none stated for dropping the last hold; last side is still a hold"
+      },
+      "resolution_role": "definition",
+      "identity_statement": "unknown",
+      "conflicts_unknowns": "Defines square as a four-side count that is not 4-4-4-4 and not three-phase. Supports 'one name, several structures'. Does not say the post-exhale hold is optional, and does not contrast 3-phase vs 4-phase by name.",
+      "research_function": "definition_square_unequal_counts",
+      "selection_decision": "selected",
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src.iyengar.light_on_pranayama.ch18",
+      "source_family": "recognized_school",
+      "bibliographic_identity": {
+        "author": "B.K.S. Iyengar",
+        "title": "Light on Pranayama",
+        "year": 1981,
+        "isbn": "0-8264-0048-5",
+        "chapter": "18 Vrtti Pranayama"
+      },
+      "authority_provenance": "Named school locus. Body not legally readable in this pass. Wiki/Archive dumps are not the locus.",
+      "locus": "Iyengar 1981 ch.18 (NEED_OWNER). Not ingested.",
+      "access": "named_unread",
+      "gates": {
+        "C1": {
+          "result": "unknown",
+          "note": "Edition unread in this pass."
+        },
+        "C2": {
+          "result": "fail",
+          "note": "Named but not legally readable here; NEED_OWNER."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Unread."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Unread."
+        },
+        "C5": {
+          "result": "fail",
+          "note": "Do not ingest from Ayurwiki or Archive.org dumps."
+        },
+        "C6": {
+          "result": "n_a",
+          "note": "No efficacy extract attempted."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "recognized_school, unread."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Do not treat secondary reports of a beginner no-hold track as this edition."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "unread in this pass",
+        "kernel": "NEED_OWNER — do not fill from wiki paraphrase",
+        "bounds": "unread",
+        "safety": "unread",
+        "variants": "unread; staged-beginner reports are not this locus"
+      },
+      "resolution_role": "definition",
+      "identity_statement": "unknown",
+      "conflicts_unknowns": "May define samavrtti as four processes including bahya kumbhaka. Until a licensed copy is read, that is not ingestable identity evidence for box/square.",
+      "research_function": "tradition_need_owner",
+      "selection_decision": "supporting",
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src.balban.2023.box_protocol",
+      "source_family": "academic_description",
+      "bibliographic_identity": {
+        "authors": "Balban et al.",
+        "journal": "Cell Reports Medicine",
+        "year": 2023,
+        "pmcid": "PMC9873947",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9873947/",
+        "section": "box breathing protocol in Methods"
+      },
+      "authority_provenance": "Peer-reviewed methods describing a box-breathing study condition. Efficacy and Huberman-lab packaging are out of scope.",
+      "locus": "PMC9873947 methods: box = inhale, hold, exhale, hold of equal duration (accessed 2026-08-25).",
+      "access": "body_read",
+      "gates": {
+        "C1": {
+          "result": "pass",
+          "note": "Methods state the four-phase protocol."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Named PMC article."
+        },
+        "C3": {
+          "result": "pass",
+          "note": "Kernel separable from lab/media packaging for this classification; still not selected because it only replicates 4-hold box."
+        },
+        "C4": {
+          "result": "pass",
+          "note": "Equal-duration phases in the protocol."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Do not copy protocol prose."
+        },
+        "C6": {
+          "result": "pass",
+          "note": "Outcome claims out of scope."
+        },
+        "C7": {
+          "result": "preference_match",
+          "note": "academic_description."
+        },
+        "C8": {
+          "result": "pass",
+          "note": "Do not average with Newcastle."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "box breathing as inhale-hold-exhale-hold of equal duration",
+        "kernel": "four-phase equal holds",
+        "bounds": "study protocol duration",
+        "safety": "not extracted this pass",
+        "variants": "none stated for dropping post-exhale hold; contrast in the paper is with other breath protocols, not 3-phase square"
+      },
+      "resolution_role": "replication",
+      "identity_statement": "unknown",
+      "conflicts_unknowns": "Academic operationalization of 4-hold box. Does not answer whether a 3-phase 'square' is the same method.",
+      "research_function": "scanned_academic_replication",
+      "selection_decision": "supporting",
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src.healthline.box",
+      "source_family": "seo_health",
+      "bibliographic_identity": {
+        "publisher": "Healthline",
+        "title": "Box Breathing"
+      },
+      "authority_provenance": "Consumer SEO explainer. Not a preferred class.",
+      "locus": "Healthline box-breathing explainer (scanned, not ingested).",
+      "access": "scanned",
+      "gates": {
+        "C1": {
+          "result": "pass",
+          "note": "Repeats four equal phases."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Public URL exists; not used."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Often mixes tactical branding."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "fail",
+          "note": "Benefit-led health-ed; not resolution evidence."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "SEO, not official_health/academic."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "typical 4-4-4-4 explainer",
+        "kernel": "replication of already ingested four-phase pattern",
+        "bounds": "not extracted",
+        "safety": "not extracted",
+        "variants": "not extracted"
+      },
+      "resolution_role": "replication",
+      "identity_statement": "unknown",
+      "conflicts_unknowns": "Adds another 4-4-4-4 page. Stopping criterion: do not collect more of these.",
+      "research_function": "replication_stop_example",
+      "selection_decision": "rejected",
+      "rejection_reason": "replication_and_C6_C7_seo_health_ed"
+    },
+    {
+      "source_id": "src.usu.extension.box",
+      "source_family": "packaging_tactical",
+      "bibliographic_identity": {
+        "publisher": "Utah State University Extension",
+        "title": "Box Breathing"
+      },
+      "authority_provenance": "Extension how-to that packages box breathing with Navy SEAL identity.",
+      "locus": "USU Extension box-breathing page (scanned, not ingested).",
+      "access": "scanned",
+      "gates": {
+        "C1": {
+          "result": "pass",
+          "note": "Four phases."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Public page."
+        },
+        "C3": {
+          "result": "fail",
+          "note": "Tactical/SEAL packaging is the identity of the locus."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "Not a preferred provenance class."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "4-4-4-4 box",
+        "kernel": "replication plus tactical packaging",
+        "bounds": "not extracted",
+        "safety": "not extracted",
+        "variants": "not extracted"
+      },
+      "resolution_role": "replication",
+      "identity_statement": "unknown",
+      "conflicts_unknowns": "Does not resolve hold identity. C3 fail.",
+      "research_function": "replication_packaging_stop_example",
+      "selection_decision": "rejected",
+      "rejection_reason": "C3_tactical_packaging_and_replication"
+    },
+    {
+      "source_id": "src.growtherapy.square",
+      "source_family": "seo_therapy",
+      "bibliographic_identity": {
+        "publisher": "Grow Therapy",
+        "title": "Square breathing / box breathing explainer"
+      },
+      "authority_provenance": "Consumer therapy-marketing page. Not a preferred class.",
+      "locus": "Grow Therapy square/box explainer (scanned, not ingested).",
+      "access": "scanned",
+      "gates": {
+        "C1": {
+          "result": "pass",
+          "note": "Describes four-phase square/box and a no-hold panic version."
+        },
+        "C2": {
+          "result": "pass",
+          "note": "Public page."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Equates square with box as packaging."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "fail",
+          "note": "Benefit/panic framing; adaptation is not a method-identity statement we will ingest."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "SEO. Must not become identity SoT."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected — would look like optional-hold synthesis."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "four-phase square equated with box; mentions a no-hold version for panic",
+        "kernel": "not used; C7 fail",
+        "bounds": "not extracted",
+        "safety": "panic adaptation is not variant evidence for the family kernel",
+        "variants": "page-shaped optional hold — rejected as identity evidence"
+      },
+      "resolution_role": "variant",
+      "identity_statement": "optional",
+      "conflicts_unknowns": "Looks like variant evidence but fails C7. Do not treat as 'hold is optional while remaining the method'.",
+      "research_function": "rejected_weak_variant",
+      "selection_decision": "rejected",
+      "rejection_reason": "C7_seo_weak_variant_must_not_become_identity_sot"
+    },
+    {
+      "source_id": "src.yogaeasy.samavritti",
+      "source_family": "consumer_yoga",
+      "bibliographic_identity": {
+        "publisher": "YogaEasy",
+        "title": "Samavritti / equal breathing explainer"
+      },
+      "authority_provenance": "Consumer yoga site. Not a preferred class. Full fetch was not relied on.",
+      "locus": "YogaEasy samavritti explainer (scanned snippets only; not ingested).",
+      "access": "scanned",
+      "gates": {
+        "C1": {
+          "result": "unknown",
+          "note": "Snippet-level only."
+        },
+        "C2": {
+          "result": "unknown",
+          "note": "Public page; not used as locus."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Mixes samavrtti and box language."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C5": {
+          "result": "pass",
+          "note": "Not copied."
+        },
+        "C6": {
+          "result": "unknown",
+          "note": "Not extracted."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "Consumer yoga. Not identity SoT."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "equal breathing with optional retentions (snippet-level; unverified as ingest)",
+        "kernel": "not used",
+        "bounds": "not extracted",
+        "safety": "comfort drop of retentions is not a preferred-class identity statement",
+        "variants": "variant-shaped; rejected"
+      },
+      "resolution_role": "variant",
+      "identity_statement": "optional",
+      "conflicts_unknowns": "Would look like variant evidence for dropping retentions. C7 fail. Do not fill identity from this class.",
+      "research_function": "rejected_weak_variant",
+      "selection_decision": "rejected",
+      "rejection_reason": "C7_consumer_yoga_must_not_become_identity_sot"
+    },
+    {
+      "source_id": "src.ayurwiki.vritti",
+      "source_family": "wiki_derivative",
+      "bibliographic_identity": {
+        "publisher": "Ayurwiki",
+        "title": "Vritti Pranayama"
+      },
+      "authority_provenance": "Wiki derivative of Iyengar, not a legal locus.",
+      "locus": "Ayurwiki Vritti Pranayama (rejected C2/C5).",
+      "access": "rejected",
+      "gates": {
+        "C1": {
+          "result": "unknown",
+          "note": "Derivative text."
+        },
+        "C2": {
+          "result": "fail",
+          "note": "Not the named edition."
+        },
+        "C3": {
+          "result": "unknown",
+          "note": "Not used."
+        },
+        "C4": {
+          "result": "unknown",
+          "note": "Not used."
+        },
+        "C5": {
+          "result": "fail",
+          "note": "Do not ingest wiki as Iyengar."
+        },
+        "C6": {
+          "result": "n_a",
+          "note": "Not used."
+        },
+        "C7": {
+          "result": "preference_weak",
+          "note": "Wiki."
+        },
+        "C8": {
+          "result": "n_a",
+          "note": "Not selected."
+        },
+        "C9": {
+          "result": "n_a",
+          "note": "Not product_only."
+        }
+      },
+      "extractable": {
+        "mechanism": "not used",
+        "kernel": "not used",
+        "bounds": "not used",
+        "safety": "not used",
+        "variants": "not used"
+      },
+      "resolution_role": "non_resolving",
+      "identity_statement": "unknown",
+      "conflicts_unknowns": "Cannot stand in for Iyengar. Staged-beginner quotes on the wiki are not this pass's evidence.",
+      "research_function": "rejected_derivative",
+      "selection_decision": "rejected",
+      "rejection_reason": "C2_C5_wiki_not_legal_locus"
+    }
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
+}

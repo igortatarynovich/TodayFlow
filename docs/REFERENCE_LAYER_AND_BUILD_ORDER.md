@@ -1,7 +1,7 @@
 # Reference Layer и порядок построения TodayFlow
 
 **Статус:** принято (фундаментальный канон).  
-**Версия:** 1.0 (2026-05-31).  
+**Версия:** 1.1 (2026-08-25) — Practice/Ascetic category SoT = content taxonomy v1; fill items still P2.  
 **Владелец:** Product + Engineering.
 
 **Связь:** [ONTOLOGY_AND_FOUNDATION_PHASES.md](./ONTOLOGY_AND_FOUNDATION_PHASES.md) (**фаза 1** — этот документ), [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) (сквозной PIL — обязателен для всех генераций), [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md), [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md) (откуда данные, наполнение, lifecycle), [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) (полная карта 180 + C/D/Co/R), [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md).
@@ -140,7 +140,9 @@ Reference Layer → Profile → Daily Context → Personal Intelligence Layer
 **Machine:** duration_min, difficulty, target_states[], target_goals[], time_of_day.  
 **Content:** title, steps, expected outcome, when_best.
 
-**Текущее хранение:** `rituals.json`, `mantras.json`; unified model — **partial**.
+**Категории / типы (SoT):** [PRACTICE_CONTENT_TAXONOMY_V1.md](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md) + vocab `DATA/reference/practice/content_taxonomy_v1.json`. Четыре `content_class` (`practice` · `meditation` · `affirmation` · `discipline`). Purpose / domain / input_state / direction — атрибуты, не типы. C1.1 `practice_definition_registry_v1.json` остаётся evolution action types, не библиотека. Fill: [PRACTICE_LIBRARY_FILL_V1.md](./practices/PRACTICE_LIBRARY_FILL_V1.md) (lightweight provenance; coverage cells: [PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md)). Provenance: [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md). Research ladder (Landscape → Targeted Safety) = [archive](./practices/PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md), non-blocking.
+
+**Текущее хранение:** vocab **draft**; coverage ledger **provisional / fill unfrozen**; Content Items — **133 llm_provisional** (`content_library_v1.json`); technique canon **open** (`box_breathing` skipped_for_now; no accepted rows). Legacy: `CONTENT/practices/practices.json`, `rituals.json`, `mantras.json` — не SoT types.
 
 ### 2.6 Goal
 
@@ -173,7 +175,9 @@ Reference Layer → Profile → Daily Context → Personal Intelligence Layer
 **Machine:** rule set, completion criteria, max_duration, contraindication tags.  
 **Content:** meaning, support on slip, warning.
 
-**Текущее хранение:** user ascetics in tracking; type catalog — **missing**.
+**Типы (SoT):** `content_class = discipline` в [PRACTICE_CONTENT_TAXONOMY_V1.md](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md). Внутреннее имя `discipline`; user label «аскеза» где нужен этот язык. Extra fields: `duration_days`, `commitment_rule`, `failure_policy`, … Цель не внутри type.
+
+**Текущее хранение:** vocab types **draft**; Content Items — **missing**. C1.4 `ascetic_definition_registry_v1.json` и `CONTENT/practices/asceticisms.json` — кандидаты на remap, не параллельный type-канон. User instances — tracking DB.
 
 ### 2.9 Calendar Rhythm
 
@@ -483,12 +487,12 @@ Daily Context → DayModel → PIL (retrieval + refinement) → split Generation
 | Emotional State | MoodSlug | ritual + tracking slugs | slug, intensity, tempo_bias, veto_tags | display label, verdict line | Today check-in, DayModel, LLM | partial |
 | Emotional State | OperatingMode | `profile_engine/models.py` | enum, selector weights | — | Profile Selector, prompts | partial |
 | Emotional State | CheckInDimension | `check_ins.json` | dimension id, scale | prompts | Tracking, fusion | partial |
-| Practice | PracticeTemplate | `rituals.json`, `mantras.json` | category, duration, difficulty, state_tags | title, steps, outcome | Flow, Today recommendations | partial |
-| Practice | PracticeCategory | — | code, parent | label | Practice picker | missing |
+| Practice | PracticeTemplate | `DATA/reference/practice/content_library_v1.json` (133 items; all 26 P0 need cells sourced) + `technique_canon_v1.json` (25 accepted; box_breathing + energizing_breath + abstinence + self_trust skipped) + legacy `CONTENT/practices/practices.json` | identity + retrieval + payload; optional `technique_id` only if accepted | title, body | Flow, Today recommendations | fill unfrozen; next = finalize skipped types or non-P0 cells |
+| Practice | PracticeCategory | `DATA/reference/practice/content_taxonomy_v1.json` | `content_class` · `family` · `type` | labels in canon | Practice picker, retrieval | draft vocab; items provisional |
 | Goal | GoalCategory | — | code (money, relations, …) | label, typical blocks | Profile, Today actions | missing |
 | Goal | GoalType | — | cadence, difficulty | decomposition hints | Weekly goals, Calendar | missing |
 | Habit | HabitType | — | frequency, min/opt, streak rules | name, relapse copy | Today trackers, Calendar | missing |
-| Ascetic | AsceticType | — | rules, duration, contraindications | meaning, slip support | Today, Calendar | missing |
+| Ascetic | AsceticType | `content_taxonomy_v1.json` (`discipline` types) + C1.4 registry | rules, duration_days, failure_policy, contraindications | meaning, slip support | Today, Calendar | draft vocab (items missing) |
 | Calendar Rhythm | DayType | — | type_code, load_level, color_token | short label | Calendar month | missing |
 | Calendar Rhythm | DayColorStatus | — | color, filter_bit | — | Calendar UI | missing |
 | Calendar Rhythm | MonthRhythmPattern | — | pattern rules on aggregates | map copy | Calendar «карта месяца» | missing |

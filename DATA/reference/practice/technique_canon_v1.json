@@ -1,0 +1,1288 @@
+{
+  "contract_version": "technique_canon_v1",
+  "version": "1.1.0",
+  "status": "open",
+  "semantic_version": "practice-technique-v1.1",
+  "description": "Lightweight technique registry. Rows do not require Landscape/Shortlist/Ingest/Normalization. Fill: docs/practices/PRACTICE_LIBRARY_FILL_V1.md",
+  "fill_process": "library_fill_lightweight_provenance",
+  "research_ladder_required": false,
+  "techniques": [
+    {
+      "technique_id": "technique.box_breathing",
+      "content_class": "practice",
+      "type": "box_breathing",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "skipped_for_now",
+      "note": "Equal-count / four-phase hold research became a sunk-cost trap. Do not continue Safety Review V1.1 or targeted safety work on this type. Use another suitable type for the need. Existing library items stay provisional without technique_id."
+    },
+    {
+      "technique_id": "technique.extended_exhale",
+      "content_class": "practice",
+      "type": "extended_exhale",
+      "canonical_description": "A short unforced breath cycle: inhale gently through the nose, then exhale longer than the inhale, without a hold. Counting (for example two in / three out, or five in / seven out) is only a pace aid. Breath-holds are not part of this product version.",
+      "source_refs": [
+        {
+          "source": "Cambridge University Hospitals NHS — Breathing pattern disorders and physiotherapy",
+          "url": "https://www.cuh.nhs.uk/patient-information/breathing-pattern-disorders-and-physiotherapy/",
+          "locus": "Breathing control exercises, Step 2 Slow breathing (in for one-to-two-or-three, out for one-to-three-or-four; out-breath passive); during activity, out-breath longer than in-breath",
+          "note": "official_health. Method confirmation only. Not imported as a breathlessness-retraining protocol. Optional post-exhale pause in that page is not in this product version."
+        },
+        {
+          "source": "Berkshire Healthcare NHS Foundation Trust — How breathing can reduce stress and anxiety",
+          "url": "https://www.berkshirehealthcare.nhs.uk/breathingcanreducestress",
+          "locus": "Tip 1: rectangular breathing, inhale 5 seconds and exhale 7 seconds, then repeating",
+          "note": "official_health. Longer out-breath, no hold in this example."
+        }
+      ],
+      "safety_notes": [
+        "Do not force the out-breath or take bigger breaths.",
+        "Stop if dizzy or faint.",
+        "This product version has no breath-hold."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.focused_attention",
+      "content_class": "meditation",
+      "type": "focused_attention",
+      "canonical_description": "Sit with one chosen object of attention: a visual point, the breath, a sound, or a short phrase. Keep attention there. When the mind wanders, notice it and return. Wandering is part of the method. This product version is not a clinical mindfulness protocol and does not use breath-holds.",
+      "source_refs": [
+        {
+          "source": "NCCIH — Meditation and Mindfulness: Effectiveness and Safety",
+          "url": "https://www.nccih.nih.gov/health/meditation-and-mindfulness-effectiveness-and-safety",
+          "locus": "What are meditation and mindfulness?: some types maintain mental focus on a particular sensation such as breathing, a sound, a visual image, or a mantra",
+          "note": "official_health. Method confirmation. Efficacy claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Meditation: A simple, fast way to reduce stress",
+          "url": "https://www.mayoclinic.org/tests-procedures/meditation/in-depth/meditation/art-20045858",
+          "locus": "Parts of meditation / Focused attention: focus on an object, image, mantra, or breathing; when the mind wanders, slowly return",
+          "note": "official_health. Method confirmation. Benefit lists and illness claims not imported."
+        },
+        {
+          "source": "Harvard Health — Mindfulness practice for focus",
+          "url": "https://www.health.harvard.edu/healthbeat/mindfulness-practice-for-focus",
+          "locus": "Focused attention (FA) meditation: keep attention on a particular object or sensation; if the mind wanders, return to the focal point",
+          "note": "academic_description. Method confirmation. Productivity/efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if the practice makes you feel worse or more agitated.",
+        "Not a treatment for attention or mental-health conditions."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.energizing_breath",
+      "content_class": "practice",
+      "type": "energizing_breath",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "skipped_for_now",
+      "note": "The LLM probe (gentle shorter mouth exhale) is not a confirmed method. Real activating-breath techniques are forceful/pumping (bhastrika, kapalabhati, firebreath): no single safe product kernel, material safety. Do not map this type onto pranayama to save the preferred slot. Use another suitable type for the need."
+    },
+    {
+      "technique_id": "technique.mobility",
+      "content_class": "practice",
+      "type": "mobility",
+      "canonical_description": "A short unforced movement of a few joints, seated or standing: for example circle the wrists, then the shoulders, within a comfortable range. Stop if it hurts. This product version is not a stretch-hold protocol, not a workout, and not a treatment.",
+      "source_refs": [
+        {
+          "source": "NHS — Sitting exercises",
+          "url": "https://www.nhs.uk/live-well/exercise/sitting-exercises/",
+          "locus": "Gentle sitting exercises to improve mobility; move as far as is comfortable; examples include hip marching and joint/neck movement, not a gym workout",
+          "note": "official_health. Method confirmation. Exercise-prescription counts, clot/disease claims, and named stretch scripts not imported."
+        },
+        {
+          "source": "NHS — Why we should sit less",
+          "url": "https://www.nhs.uk/live-well/exercise/why-sitting-too-much-is-bad-for-us/",
+          "locus": "UK Chief Medical Officers' Physical Activity Guidelines: break up long periods of sitting with at least light activity",
+          "note": "official_health. Method confirmation for brief light movement. Illness/sitting-risk claims not imported."
+        },
+        {
+          "source": "Chartered Society of Physiotherapy — Desk-based exercises",
+          "url": "https://innovations.csp.org.uk/public-patient/keeping-active-healthy/staying-healthy-work/desk-based-exercises",
+          "locus": "Break up prolonged sitting with short bursts of activity; keep moving; stretches should not cause pain or tingling",
+          "note": "professional_body. Method confirmation. Named stretch-hold scripts and wall-press sets not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stay in a comfortable range. Stop if it hurts.",
+        "Not a treatment and not an exercise prescription."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.sensory_grounding",
+      "content_class": "practice",
+      "type": "sensory_grounding",
+      "canonical_description": "Briefly notice what is available to the senses in the present surroundings: name something you see, something you hear, something you touch. Do not explain. Count schemes such as 5-4-3-2-1 or 3-2-1 are pace aids, not the kernel. This product version is not a panic, trauma, or dissociation protocol.",
+      "source_refs": [
+        {
+          "source": "Oxford Health NHS CAMHS — Ground yourself",
+          "url": "https://oxfordhealth.nhs.uk/camhs/self-care/sleep/relaxation/ground-yourself/",
+          "locus": "Grounding: move attention to the present, the current environment, and the feel of being in that place; notice small sensory details; 5-4-3-2-1 is one way",
+          "note": "official_health. Method confirmation. Anxiety/sleep-treatment claims and the named 5-4-3-2-1 script not imported."
+        },
+        {
+          "source": "NHS inform — Grounding exercises",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/grounding-exercises/",
+          "locus": "Grounding as a technique to take the mind off uncomfortable symptoms or thoughts; 5,4,3,2,1 listed as one exercise among others",
+          "note": "official_health. Method confirmation. Symptom-reduction claims and the counted script not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if the practice makes you feel worse.",
+        "Not a treatment for anxiety, panic, trauma, or dissociation."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.prompted_reflection",
+      "content_class": "practice",
+      "type": "prompted_reflection",
+      "canonical_description": "Answer one specific question in your own words, briefly. A conclusion, lesson, or decision is not required. Spelling and length are not part of the method. Structured writing protocols (CBT thought records, Gibbs/Rolfe professional reflection, timed expressive writing) are not this product version.",
+      "source_refs": [
+        {
+          "source": "Best For You — Journalling for mental health (NHS-clinician approved)",
+          "url": "https://bestforyou.org.uk/guides/self-care-and-wellbeing/journalling/",
+          "locus": "Journal prompts: some are just one question or a title; others are more structured or linked to a therapy approach such as CBT; writing is for you, spelling and grammar do not matter",
+          "note": "official_health. Method confirmation. Benefit lists, thought-record templates, and therapy claims not imported."
+        },
+        {
+          "source": "VCU Writing Center — Reflective writing",
+          "url": "https://writing.vcu.edu/student-resources/reflective-writing/",
+          "locus": "Reflection is a personal response to a prompt; there is no right or wrong way to respond; start from the prompt",
+          "note": "academic_description. Method confirmation. Essay templates and learning-outcome claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if writing makes you feel worse.",
+        "Not a treatment and not a CBT thought record."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.relationship",
+      "content_class": "affirmation",
+      "type": "relationship",
+      "canonical_description": "A brief relationship-oriented affirmation in which the person states a simple, first-person statement that they can take one warm step toward another person (for example, 'I can take one warm step toward a person'). The statement may be spoken once or twice. It is not a guarantee that the person will connect, be accepted, or improve a relationship, and it is not a treatment for loneliness, social anxiety, or any mental or physical health condition.",
+      "source_refs": [
+        {
+          "source": "Stinson, Logel, Shepherd, Zanna (2011) — Rewriting the Self-Fulfilling Prophecy of Social Rejection",
+          "url": "https://doi.org/10.1177/0956797611417725",
+          "locus": "A self-affirmation intervention improved insecure participants' relational security and experimenter-rated social behavior, with more welcoming social behavior observed up to 4 and 8 weeks after the intervention. Self-affirmation was expected to buffer against social self-threats and improve social behavior in relationship contexts.",
+          "note": "academic_description. Method confirmation for using self-affirmation to support warmer, less defensive social behavior. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Cohen & Sherman (2014) — The Psychology of Change: Self-Affirmation and Social Psychological Intervention",
+          "url": "https://www.annualreviews.org/doi/10.1146/annurev-psych-010213-115137",
+          "locus": "Self-affirmation theory addresses interpersonal and intergroup relationships; affirmations can reduce defensive behavior in social encounters and promote trust, responsiveness, and more constructive relationship functioning. Self-affirmations are acts that demonstrate one's adequacy.",
+          "note": "academic_description. Method confirmation for relationship-domain self-affirmation. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for loneliness, social anxiety, relationship problems, or any mental or physical health condition.",
+        "If the statement increases pressure, guilt, or fear of rejection, stop using it.",
+        "The affirmation does not guarantee connection, acceptance, or improved relationships.",
+        "If persistent social or emotional difficulties are concerning, seek professional support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.agency",
+      "content_class": "affirmation",
+      "type": "agency",
+      "canonical_description": "A brief agency affirmation in which the person states a simple, first-person statement that they choose the next small step (for example, 'I choose the next small step'). The statement may be spoken once or twice, and the person may then begin the step immediately. It is not a prediction of success, a guarantee of motivation, or a treatment for low energy, stuckness, or any mental or physical health condition.",
+      "source_refs": [
+        {
+          "source": "Cohen & Sherman (2014) — The Psychology of Change: Self-Affirmation and Social Psychological Intervention",
+          "url": "https://www.annualreviews.org/doi/10.1146/annurev-psych-010213-115137",
+          "locus": "A self-affirmation is an act that demonstrates one's adequacy; small acts can affirm self-integrity and a sense of global efficacy. Self-integrity is a sense of being able to control important outcomes and of being capable of free choice. Timely affirmations at choice points can help people navigate difficulties.",
+          "note": "academic_description. Method confirmation for a brief, choice-point self-affirmation that asserts agency. Efficacy and treatment claims not imported."
+        },
+        {
+          "source": "Steele (1988) — The Psychology of Self-Affirmation",
+          "url": "https://doi.org/10.1016/S0065-2601(08)60229-4",
+          "locus": "Self-affirmation processes are triggered by threats to perceived adequacy or integrity of the self; self-integrity includes self-conceptions of being competent, capable of free choice, and able to control important outcomes.",
+          "note": "academic_description. Method confirmation for affirmations of choice and agency as part of self-integrity maintenance. Efficacy and treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for low motivation, low energy, depression, anxiety, or any mental or physical health condition.",
+        "If the statement increases self-pressure, guilt, or distress, stop using it.",
+        "The affirmation does not guarantee that the person will act, succeed, or feel more motivated.",
+        "If persistent difficulties with motivation or mood are concerning, seek professional support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.capability",
+      "content_class": "affirmation",
+      "type": "capability",
+      "canonical_description": "A short, realistic statement that names the present challenge and affirms the person's existing capacity to cope with it, based on lived experience or current resources. The statement is specific, believable, and phrased in the first person. It is not a prediction of success, a wish, or a guarantee of outcome. It is spoken once or a few times, then the person returns to the situation.",
+      "source_refs": [
+        {
+          "source": "College of Cognitive Behavioural Therapies — Rational coping statements: more than just 'live, laugh, love'",
+          "url": "https://www.cbttherapies.org.uk/2023/02/08/rational-coping-statements-more-than-just-live-laugh-love/",
+          "locus": "Rational coping statements are short, specific, reality-based phrases that challenge negative thoughts by acknowledging the difficulty of a situation and affirming the capacity to cope; example: 'I have handled difficult situations before, and I can handle this one too'",
+          "note": "clinical_psychology. Method confirmation. CBT/REBT model. Efficacy and treatment claims not imported."
+        },
+        {
+          "source": "NHS inform — Anxiety self-help guide",
+          "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/anxiety-self-help-guide/",
+          "locus": "CBT-based guide: reducing avoidance by continuing to confront situations helps prove to yourself that you can manage them; self-help techniques are tools, not a replacement for professional support if needed",
+          "note": "official_health. Method confirmation for realistic self-efficacy statements and behavioral management of anxiety. Diagnosis/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if the statement makes you feel worse or increases self-criticism.",
+        "Not a treatment for anxiety, depression, or any mental-health condition."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.body_release",
+      "content_class": "practice",
+      "type": "body_release",
+      "canonical_description": "A brief somatic exercise in which the person intentionally tenses a small, high-tension area of the body (shoulders lifted toward the ears), holds the tension for a few seconds, and then releases it, noticing the contrast between the tight and relaxed state. It is an abbreviated, single-area form of progressive muscle relaxation used to become aware of physical tension and to let it drop. It does not require a full-body sequence or a particular posture.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Progressive muscle relaxation",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/progressive-muscle-relaxation/",
+          "locus": "Tense and relax muscles one area at a time; list includes shoulders. Hold tension for a few seconds, release, let the muscle relax. Useful for reducing tension and becoming aware of early signs of anger or panic.",
+          "note": "official_health. Method confirmation for abbreviated single-area tension-release. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Relaxation techniques: Try these steps to lower stress",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/relaxation-technique/art-20045368",
+          "locus": "Progressive muscle relaxation: tense muscles for about five seconds and then relax for 30 seconds, repeating; focus on the difference between tension and relaxation.",
+          "note": "clinical_medicine. Method confirmation for tension-release contrast. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "StatPearls — Relaxation Techniques (NCBI Bookshelf)",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK513238/",
+          "locus": "Progressive Muscle Relaxation involves tensing and releasing muscles, focusing on the alleviation of tension and the experience of relaxation; targets the symptom of tension associated with anxiety.",
+          "note": "medical_literature. Method confirmation for tensing/releasing muscle groups to contrast tension and relaxation. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if the movement causes pain or sharp discomfort; do not force the shoulders upward.",
+        "Not a treatment for anxiety, chronic pain, or any medical condition."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.relaxation",
+      "content_class": "meditation",
+      "type": "relaxation",
+      "canonical_description": "A short, seated body-focused relaxation in which the person rests attention on a simple physical sensation (heaviness in the hands or arms) and links it to the out-breath. It is a brief fragment of systematic focusing or body-scan relaxation, not a full progressive muscle-relaxation sequence. The aim is to notice tension and allow the body to soften for a few breaths, then return to the situation.",
+      "source_refs": [
+        {
+          "source": "CUH NHS — Systematic focusing: relaxation technique",
+          "url": "https://www.cuh.nhs.uk/patient-information/systematic-focusing-relaxation-technique/",
+          "locus": "Get comfortable; focus on breathing; guide attention through body areas; aim for a soft, heavy feeling in the muscles; shoulders, arms, and hands become limp and heavy; tension is eased using the mind, not movement.",
+          "note": "official_health. Method confirmation for brief body-focused relaxation using heaviness as a relaxation signal. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Relaxation techniques: Try these steps to lower stress",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/relaxation-technique/art-20045368",
+          "locus": "Relaxation techniques include meditation, deep breathing, and autogenic training; person focuses on relaxing breathing or physical sensations, such as relaxing each arm or leg one by one; done in a quiet spot with eyes closed if comfortable.",
+          "note": "clinical_medicine. Method confirmation for meditation/body-focused relaxation and attention to physical sensations. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS inform — Progressive muscle relaxation",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/progressive-muscle-relaxation/",
+          "locus": "Tense and relax one area at a time, then focus on each body part and allow remaining tension to release on the out-breath; includes shoulders, arms, hands, and face.",
+          "note": "official_health. Context for releasing tension with breath and body attention; the item is a non-tensing fragment. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if focusing on the body increases anxiety or dizziness.",
+        "Not a treatment for anxiety, insomnia, or any medical condition."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.sleep",
+      "content_class": "meditation",
+      "type": "sleep",
+      "canonical_description": "A brief pre-sleep meditation in which the person lies down, closes the eyes, and directs attention to one small area of physical tension (for example the jaw) while breathing out slowly. The goal is to wind down and signal readiness for sleep, not to force sleep or perform a full body scan. It is used as a short, repeatable part of a relaxing bedtime routine.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Sleep hygiene",
+          "url": "https://www.nhsinform.scot/mind-to-mind/sleeping-better/sleep-hygiene/",
+          "locus": "Spend time winding down before bedtime; while meditation and mindfulness is not for everyone, find a way to relax that gives a sense of peace and calm; some people find a bath or shower before bed helps.",
+          "note": "official_health. Method confirmation for wind-down / relaxation as part of sleep preparation. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic Health System — 5 ways to get better sleep",
+          "url": "https://www.mayoclinichealthsystem.org/hometown-health/speaking-of-health/5-ways-to-get-better-sleep",
+          "locus": "Adults sleep better with a bedtime routine; do the same thing before bed each night to prepare the body for rest; stick to activities that promote relaxation, such as gentle stretching, reading, or meditation.",
+          "note": "clinical_medicine. Method confirmation for a bedtime relaxation routine. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS inform — Insomnia",
+          "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/insomnia/",
+          "locus": "Improve sleep hygiene by creating a relaxing bedtime routine; if you can't sleep, get up and do a relaxing activity, then return when sleepy.",
+          "note": "official_health. Method confirmation for relaxing activity before/during sleep attempts. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for insomnia or any sleep disorder.",
+        "If sleep problems persist, consult a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.sleep_discipline",
+      "content_class": "discipline",
+      "type": "sleep_discipline",
+      "canonical_description": "A short-period behavioral rule in which the person chooses a fixed latest bedtime and commits to lying down by that time for a set number of consecutive days. The rule is about schedule consistency, not about forcing sleep, changing sleep duration, or managing insomnia. It is a lightweight, self-administered discipline rather than a full sleep-hygiene or CBT-I protocol.",
+      "source_refs": [
+        {
+          "source": "Mayo Clinic — Sleep tips: 6 steps to better sleep",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/in-depth/sleep/art-20048379",
+          "locus": "Stick to a sleep schedule: go to bed and get up at the same time every day, including weekends; being consistent reinforces the body's sleep-wake cycle.",
+          "note": "clinical_medicine. Method confirmation for fixed bedtime consistency as a sleep discipline. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Insomnia treatment: Cognitive behavioral therapy instead of sleeping pills",
+          "url": "https://www.mayoclinic.org/diseases-conditions/insomnia/in-depth/insomnia-treatment/art-20046677",
+          "locus": "CBT-I includes changing routine: set a consistent bedtime and wake time; avoid naps; use the bed only for sleep and sex; if unable to fall asleep within 20 minutes, leave the bedroom and return when sleepy while maintaining the wake-up time.",
+          "note": "clinical_medicine. Method confirmation for consistent sleep schedule as a behavioral rule. Treatment claims not imported."
+        },
+        {
+          "source": "NHS inform — Sleep hygiene",
+          "url": "https://www.nhsinform.scot/mind-to-mind/sleeping-better/sleep-hygiene/",
+          "locus": "Regular sleep routine: go to bed and wake up at the same time every day; spend time winding down before bedtime; consistent habits improve the sleep routine.",
+          "note": "official_health. Method confirmation for regular bedtime routine. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for insomnia or any sleep disorder.",
+        "If sleep problems persist, consult a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.micro_action",
+      "content_class": "practice",
+      "type": "micro_action",
+      "canonical_description": "A brief behavioral-activation exercise in which the person names one concrete action that can be completed in about two minutes and does it immediately, then stops. The action is smaller than the task it is attached to and is chosen to break the inertia of stuckness or low energy without requiring motivation, planning, or a larger commitment. It is a single-step fragment, not a full activity schedule or CBT protocol.",
+      "source_refs": [
+        {
+          "source": "NHS East London Foundation Trust (ELFT) — Behavioural Activation",
+          "url": "https://www.elft.nhs.uk/sites/default/files/2022-05/behavioural-activation.pdf",
+          "locus": "Behavioural activation works by re-engaging with activities despite low mood; start with small, achievable, specific activities; plan what, when, where, and who; graded approach from easier to harder tasks.",
+          "note": "official_health. Method confirmation for starting with a small, specific, achievable activity when motivation is low. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic Anxiety Coach — Depression Treatment Behavioral Activation",
+          "url": "https://anxietycoach.mayoclinic.org/depression-treatment/",
+          "locus": "Break the cycle of inactivity and low mood by slowly doing more important or enjoyable activities; mood and energy improve as activity increases; activities include mastery, social, and healthy-habit categories.",
+          "note": "clinical_medicine. Method confirmation for re-engaging with a small activity despite low energy/mood. Treatment claims not imported."
+        },
+        {
+          "source": "Psychology Tools — How To Use Behavioral Activation To Overcome Depression",
+          "url": "https://www.psychologytools.com/self-help/behavioral-activation",
+          "locus": "Increase activity even if you do not feel like it; break activities down into smaller steps; start with low-difficulty activities; plan specific what/when/where/who details.",
+          "note": "professional_education. Method confirmation for small-step activation and immediate low-difficulty action. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for depression or any mental health condition.",
+        "If low mood or lack of motivation persists, consult a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.self_check_in",
+      "content_class": "practice",
+      "type": "self_check_in",
+      "canonical_description": "A brief self-check-in practice in which the person names one word for what they are feeling right now, notices one place in the body where that feeling lives, and stops. No explanation, no story, no attempt to fix or deepen the emotion. The practice is a momentary emotional-awareness and affect-labeling gesture, not a therapeutic exercise or diagnostic tool.",
+      "source_refs": [
+        {
+          "source": "Greater Good Science Center — Naming Your Emotions",
+          "url": "https://ggia.berkeley.edu/practice/naming_your_emotions",
+          "locus": "Naming an emotion can dampen the amygdala alarm response and reduce the severity of the emotional response in the moment; observe body and mind, name the feeling, do not hold it in or judge it.",
+          "note": "public_education. Method confirmation for a brief pause-name-body-noticing practice. Efficacy claims limited to momentary down-regulation of strong negative emotion."
+        },
+        {
+          "source": "NHS Lothian — Emotion Workbook",
+          "url": "https://policyonline.nhslothian.scot/wp-content/uploads/2025/10/Emotion-Workbook.pdf",
+          "locus": "Recognising and naming the emotion; noticing where it is felt in the body; saying the word out loud or writing it down; asking what else is felt.",
+          "note": "official_health. Method confirmation for recognising, naming, and locating an emotion in the body. Not imported as a treatment protocol."
+        },
+        {
+          "source": "Torre & Lieberman (2018) — Putting feelings into words: affect labeling as implicit emotion regulation",
+          "url": "https://www.thetemper.com/files/pdf/torre(2018)er.pdf",
+          "locus": "Affect labeling (putting feelings into words) can reduce self-reported distress and amygdala response to aversive stimuli; effects correlate with reappraisal benefits.",
+          "note": "academic_review. Mechanism support for labeling reducing emotional intensity in high-arousal aversive contexts. Not a universal or long-term effect claim."
+        },
+        {
+          "source": "Nook et al. (2022) — Affect labeling: the role of timing and intensity (PLOS ONE)",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0279303",
+          "locus": "Affect labeling reduced distress in high-intensity aversive conditions but increased distress in low-intensity conditions; use with caution and stop if it worsens feeling.",
+          "note": "academic_study. Safety boundary: do not present affect labeling as always helpful; it can backfire in low-intensity states."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, or any mental health condition.",
+        "If the feeling is overwhelming or worsens during the practice, stop and seek professional support.",
+        "Do not use this practice to process trauma or persistent emotional crises without a qualified professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.journaling",
+      "content_class": "practice",
+      "type": "journaling",
+      "canonical_description": "A brief private-writing practice in which the person writes a few short sentences from their own perspective without editing or revising. The aim is to put current thoughts or feelings into words as a moment of self-connection, not to analyse, solve, or process a difficult experience. It is a single, short fragment rather than a multi-day expressive-writing protocol or therapeutic intervention.",
+      "source_refs": [
+        {
+          "source": "NHS Lanarkshire — Writing for Wellbeing",
+          "url": "https://www.nhslanarkshire.scot.nhs.uk/pulse-writing-for-wellbeing/",
+          "locus": "Writing helps explore emotions, good and bad, and gain a better understanding of our own feelings; reflective writing is a place to express yourself, your thoughts, feelings and ideas; leave a notebook anywhere for a spare minute.",
+          "note": "official_health. Method confirmation for brief private writing as a self-expression / self-connection practice. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Cambridge University Hospitals NHS — Write Your Self",
+          "url": "https://www.cuh.nhs.uk/about-us/our-structure/other-departments/cuh-arts/our-programmes/live-and-participatory-arts/resources/write-your-self/",
+          "locus": "A resource to explore creative writing and encourage self-expression; includes journaling, expressive writing, reminiscence, and self-reflection activities.",
+          "note": "official_health. Method confirmation for journaling and self-expression writing. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Greater Good Science Center — Expressive Writing",
+          "url": "https://ggia.berkeley.edu/practice/expressive_writing",
+          "locus": "Write freely about your feelings and thoughts for an experience of hurt; try not to edit or judge what you write; your writing is for your eyes only and for your own well-being.",
+          "note": "public_education. Method confirmation for private, unedited writing as a self-expression practice. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for any mental health condition.",
+        "If writing brings up overwhelming feelings, stop and consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.connection_action",
+      "content_class": "practice",
+      "type": "connection_action",
+      "canonical_description": "A brief behavioral practice in which the person initiates one small, concrete act of connection with another person (for example, one short message, one honest question, or one brief check-in) and stops after that single step. The action is chosen to be small enough to complete without relying on mood or reciprocity, and is not a conversation script, relationship repair protocol, or social-skills training.",
+      "source_refs": [
+        {
+          "source": "NHS Essex ICB — Looking after your mental health",
+          "url": "https://www.essex.icb.nhs.uk/health/prevention/feel-well/looking-after-your-mental-health/",
+          "locus": "Start small; choose one realistic action such as speaking to someone you trust; boost mood through connection and routine; if symptoms persist, seek support.",
+          "note": "official_health. Method confirmation for a small, single social-connection action as part of self-care. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Liu et al. (2025) — Behavioral activation for social connection: A systematic review (Journal of Social and Personal Relationships)",
+          "url": "https://www.ovid.com/journals/jspr/fulltext/10.1177/02654075261435008~behavioral-activation-for-social-connection-a-systematic",
+          "locus": "Behavioral activation improves functional dimensions of social connection (loneliness, perceived support) by increasing small, structured social actions; strongest effects when delivered with coaching and scheduled.",
+          "note": "academic_review. Mechanism support for small, scheduled social actions improving perceived connection. Not a claim that a single action cures loneliness."
+        },
+        {
+          "source": "Laidlaw et al. (2020) — Improving Social Connectedness for Homebound Older Adults (PubMed)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32238297/",
+          "locus": "Tele-delivered behavioral activation increased social interaction and satisfaction with social support and decreased loneliness compared to friendly visits alone.",
+          "note": "academic_study. Support for structured small social interactions increasing connectedness outcomes. Not a universal or self-administered claim."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for social anxiety, loneliness disorder, or any mental health condition.",
+        "If the only available relationships are unsafe or harmful, choose a different action or speak with a professional.",
+        "If feelings of loneliness or disconnection persist, seek support from a healthcare professional or trusted service."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.creative_prompt",
+      "content_class": "practice",
+      "type": "creative_prompt",
+      "canonical_description": "A brief micro-creativity practice in which the person makes one tiny, low-stakes mark or gesture (for example, one line, one shape, one word) and stops without editing or judging the result. The aim is to shift attention away from rumination or stuckness onto a simple, immediate act of creation; it is not an art exercise, a skill-building session, or a creative-arts therapy protocol.",
+      "source_refs": [
+        {
+          "source": "Mayo Clinic Press — The intersection of art and health: How art can help promote well-being",
+          "url": "https://mcpress.mayoclinic.org/living-well/the-intersection-of-art-and-health-how-art-can-help-promote-well-being/",
+          "locus": "Creating visual art like drawings or paintings can provide enjoyment and distraction from pain and anxiety; artistic expression and appreciation can benefit physical and mental well-being; the process of creating can support well-being without requiring professional art skills.",
+          "note": "clinical_medicine. Method confirmation for a brief, low-stakes act of creating visual art as a well-being practice. Treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Stress relievers: Tips to tame stress",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/stress-relievers/art-20047257",
+          "locus": "If music is not your interest, turn attention to another hobby such as gardening, sewing, reading, or sketching; choose anything that makes you focus on what you are doing rather than what you think you should be doing.",
+          "note": "clinical_medicine. Method confirmation for a brief, focused creative action (sketching) as a distraction/stress-relief practice. Treatment claims not imported."
+        },
+        {
+          "source": "Greater Manchester Mental Health NHS Foundation Trust — Arts for Good Health",
+          "url": "https://www.gmmh.nhs.uk/arts-for-good-health",
+          "locus": "Being creative is good for mental health; Arts for Good Health courses are short, accessible, require no previous experience, and use creativity to boost health and wellbeing.",
+          "note": "official_health. Method confirmation for short, accessible creative activities supporting mental wellbeing. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, or any mental health condition.",
+        "If the practice brings up strong self-criticism or distress, stop and consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.priority_setting",
+      "content_class": "practice",
+      "type": "priority_setting",
+      "canonical_description": "A brief decision-making practice in which the person names one single task or priority that is most important right now and deliberately sets the rest aside. The aim is to reduce overwhelm and attention fragmentation by committing to one next step rather than creating a full plan or to-do list; it is not a productivity system, time-blocking method, or problem-solving protocol.",
+      "source_refs": [
+        {
+          "source": "NHS England — The expectations of line managers in relation to people management",
+          "url": "https://www.england.nhs.uk/wp-content/uploads/2023/11/PRN00772-expectations-of-line-managers-in-relation-to-people-management-ebooklet.pdf",
+          "locus": "Managers should set direction for individuals and teams; people need to be clear about what is expected of them and what their priorities should be; setting a clear direction helps enable people to deliver effectively and manage workload more effectively.",
+          "note": "official_health. Method confirmation for clarifying one priority to manage workload and focus. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS Elect — Time Management & Productivity Programme",
+          "url": "https://nhselect.nhs.uk/training-and-od/national-programmes/Time-management-and-personal-productivity-programme-",
+          "locus": "Evaluate competing demands using structured prioritisation frameworks such as urgent versus important and impact versus effort; make better decisions about what deserves your time and translate those decisions into a clear and manageable plan.",
+          "note": "official_health. Method confirmation for picking one priority from competing demands using simple prioritisation frameworks. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic Research — Mindful Breathing: Roberto P. Benzo, M.D.",
+          "url": "https://www.mayo.edu/research/labs/mindful-breathing/videos",
+          "locus": "When you do these exercises, have the sole intention to feel your body moving; just that. Single tasking. One thing. Pick a specific place and time to practice every day.",
+          "note": "clinical_medicine/research. Method confirmation for committing to a single, specific task or intention at a time. Treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, ADHD, or any mental health condition.",
+        "If choosing one priority feels impossible due to overwhelming demands, consider speaking with a manager, healthcare professional, or trusted support person."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.transition_ritual",
+      "content_class": "practice",
+      "type": "transition_ritual",
+      "canonical_description": "A brief transition practice that marks the boundary between two activities by cognitively closing the previous task, making a simple physical movement, and opening attention to the next task. The aim is to reduce attention residue and task-set inertia when switching contexts; it is not a rest break, a productivity planning session, or a task-completion ritual.",
+      "source_refs": [
+        {
+          "source": "Leroy, S. (2009). Why is it so hard to do my work? The challenge of attention residue when switching between work tasks. Organizational Behavior and Human Decision Processes, 109(2), 168-181",
+          "url": "https://doi.org/10.1016/j.obhdp.2009.04.002",
+          "locus": "Unfinished tasks leave attention residue that impairs performance on subsequent tasks; completing or cognitively closing the prior task before switching reduces this residue and helps attention move fully to the next task.",
+          "note": "academic. Method confirmation for a brief closure-and-switch practice between tasks. Treatment claims not imported."
+        },
+        {
+          "source": "Leroy, S., & Glomb, T. M. (2018). Tasks Interrupted: How Anticipating Time Pressure on Resumption of an Interrupted Task Causes Attention Residue and Low Performance on Interrupting Tasks and How a 'Ready-to-Resume' Plan Mitigates the Effects. Organization Science, 29(3), 380-397",
+          "url": "https://doi.org/10.1287/orsc.2017.1184",
+          "locus": "A brief ready-to-resume plan that documents where one stopped and what to do next reduces attention residue and improves performance on the interrupting task by creating cognitive closure.",
+          "note": "academic. Method confirmation for a short, structured transition plan that closes one task before moving to the next. Treatment claims not imported."
+        },
+        {
+          "source": "NHS Every Mind Matters — 6 tips to tackle working from home",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/simple-tips-to-tackle-working-from-home/",
+          "locus": "Making time for breaks and setting a boundary to stop work at the end of the day help manage stress and maintain focus; regular short breaks help you feel more focused when you return.",
+          "note": "official_health. Method confirmation for a brief pause and boundary between work periods. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, anxiety, or any neurological or mental health condition.",
+        "If difficulty switching attention is persistent, severe, or accompanied by distress, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.progressive_relaxation",
+      "content_class": "practice",
+      "type": "progressive_relaxation",
+      "canonical_description": "A brief somatic recovery practice in which the person deliberately tenses a small muscle group (for example, fists, shoulders, or jaw) while inhaling, then releases the tension while exhaling for a few repetitions. The aim is to use the contrast between tension and release to reduce bodily tension and support recovery; it is not a full-body progressive muscle relaxation protocol, a treatment for anxiety or pain, or a sleep induction technique.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Progressive muscle relaxation",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/progressive-muscle-relaxation/",
+          "locus": "Progressive muscle relaxation involves tensing and relaxing the muscles one area at a time; take a breath in and tense the muscles in one area, hold for a few seconds, breathe out and release the tension, let the muscles relax; repeat in different parts of the body; if an area is painful, miss it out.",
+          "note": "official_health. Method confirmation for a brief, localized tense-and-release practice. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mayo Clinic — Relaxation techniques: Try these steps to lower stress",
+          "url": "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/relaxation-technique/art-20045368",
+          "locus": "Progressive muscle relaxation: focus on slowly tensing and then relaxing each muscle group; tense muscles for about five seconds and then relax for 30 seconds, and repeat; can be done in a quiet area without interruptions.",
+          "note": "clinical_medicine. Method confirmation for a short, repeated tense-and-release cycle. Treatment claims not imported."
+        },
+        {
+          "source": "U.S. Department of Veterans Affairs — Whole Health Library: Progressive Muscle Relaxation",
+          "url": "https://www.va.gov/WHOLEHEALTHLIBRARY/docs/Progressive-Muscle-Relaxation.pdf",
+          "locus": "PMR is a two-step relaxation practice: create tension in a specific muscle group and notice what tension feels like, then release the tension and notice what a relaxed muscle feels like; hold tension for five seconds while breathing in, then release and relax all at once; do not strain or overly tense the muscle, and skip a body part if it causes discomfort.",
+          "note": "government_health. Method confirmation for a small, repeated tense-and-release practice. Treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, chronic pain, insomnia, or any medical or mental health condition.",
+        "Do not tense to the point of pain or cramping; if a muscle group is injured or painful, skip it.",
+        "If persistent tension, pain, or distress occurs, stop and consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.routine_commitment",
+      "content_class": "discipline",
+      "type": "routine_commitment",
+      "canonical_description": "A short-period commitment rule in which the person chooses one small, specific action and commits to performing it at the same time or after the same daily cue for a set number of consecutive days (for example, seven days). The aim is to create a stable context for repeated practice and reduce daily decision-making; it is not a guarantee of habit formation, a long-term behaviour-change programme, or a treatment for motivation or attention difficulties.",
+      "source_refs": [
+        {
+          "source": "NICE — Behaviour change: individual approaches (PH49), Recommendation 10",
+          "url": "https://www.nice.org.uk/guidance/ph49/chapter/recommendations",
+          "locus": "Help people to develop routines that support the new behaviour; note that small, manageable changes to daily routine are most likely to be maintained; ensure behaviour change is maintained for at least a year.",
+          "note": "official_health. Method confirmation for small, manageable routine changes as a behaviour-change support. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Lally & Gardner (2012) — Making health habitual: the psychology of ‘habit-formation’ and general practice, British Journal of General Practice",
+          "url": "https://doi.org/10.3399/bjgp12x659466",
+          "locus": "Advice for creating habits: repeat a chosen behaviour in the same context until it becomes automatic and effortless; the context can be an event or a time of day; a cue within an existing daily routine provides a convenient and stable starting point; patients should choose the target behaviour themselves and add a new behaviour rather than focus on stopping an existing one.",
+          "note": "academic. Method confirmation for a self-selected, repeated action anchored to a stable daily cue. Treatment claims not imported."
+        },
+        {
+          "source": "Keller et al. (2021) — Habit formation following routine-based versus time-based cue planning: A randomized controlled trial, British Journal of Health Psychology",
+          "url": "https://doi.org/10.1111/bjhp.12504",
+          "locus": "Linking a behaviour to a daily routine or a specific time was similarly effective for habit formation; interventions should encourage persons to repeatedly carry out their planned behaviour in response to the planned cue; plan enactment was a key predictor for automaticity.",
+          "note": "academic. Method confirmation for repeated enactment of a behaviour tied to a planned cue (time or routine). Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, executive dysfunction, procrastination, or any mental health condition.",
+        "A short consecutive streak does not guarantee automaticity or long-term habit formation; habits typically take longer and vary widely between individuals.",
+        "If the chosen action becomes painful, unsafe, or impossible to sustain, stop or revise it; if persistent difficulty with routine or self-regulation occurs, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.attention_discipline",
+      "content_class": "discipline",
+      "type": "attention_discipline",
+      "canonical_description": "A short-period discipline rule in which the person reduces attention-drawing inputs by keeping only one information stream or task open at a time and closing or disabling extra ones immediately. The aim is to lower task-switching and environmental distraction by simplifying the attention space; it is not a treatment for ADHD or any attention disorder, a productivity system, or a guarantee of focus.",
+      "source_refs": [
+        {
+          "source": "American Psychological Association — Multitasking: Switching costs",
+          "url": "https://www.apa.org/topics/research/multitasking",
+          "locus": "Multitasking creates switching costs: repeatedly shifting between tasks can take more time and involve more error; understanding these costs can help people choose strategies that boost efficiency by avoiding multitasking, especially with complex tasks.",
+          "note": "research/official_psychology. Method confirmation for reducing open tasks/inputs to limit switching costs. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Harvard Health Publishing — The art of monotasking",
+          "url": "https://www.health.harvard.edu/mind-and-mood/the-art-of-monotasking",
+          "locus": "Monotasking means focusing on only one job until it is completed; strategies include blocking distractions, turning off the phone or setting it to do not disturb, and creating a distraction-free environment; even a three-second interruption can double the risk of errors.",
+          "note": "clinical_medicine. Method confirmation for a single-open-input rule and closing distractions. Treatment claims not imported."
+        },
+        {
+          "source": "Leeds Teaching Hospitals NHS Trust — Digital Wellbeing: Making your tech work for you",
+          "url": "https://www.leedsth.nhs.uk/news/digital-wellbeing-making-your-tech-work-for-you/",
+          "locus": "Managing notifications using Do Not Disturb, time-blocking email and checking at designated times, and taking breaks away from screens can help reduce digital overwhelm and maintain focus.",
+          "note": "official_health. Method confirmation for limiting digital notifications and reducing open inputs. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, executive dysfunction, or any attention or neurological condition.",
+        "If persistent difficulty concentrating, impulsivity, or distress is present, consider speaking with a healthcare professional.",
+        "This rule is an environmental simplification; it does not guarantee focus or eliminate internal distractions."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.acceptance",
+      "content_class": "meditation",
+      "type": "acceptance",
+      "canonical_description": "A brief meditation practice in which the person notices an overstimulating or difficult inner experience (such as a sensation, emotion, or urge) and allows it to be present for a few breaths without trying to push it away, change it, or act on it. The aim is to change the relationship to the experience from struggle to observation; it is not a treatment for anxiety, trauma, chronic pain, or any mental or physical health condition, and not a substitute for professional care.",
+      "source_refs": [
+        {
+          "source": "NICE — Chronic pain (primary and secondary) in over 16s: assessment of all chronic pain and management of chronic primary pain (NG193)",
+          "url": "https://www.nice.org.uk/guidance/ng193/resources/chronic-pain-primary-and-secondary-in-over-16s-assessment-of-all-chronic-pain-and-management-of-chronic-primary-pain-pdf-66142080468421",
+          "locus": "Consider acceptance and commitment therapy (ACT) or cognitive behavioural therapy (CBT) for people aged 16 years and over with chronic primary pain; ACT helps people accept difficult thoughts and feelings rather than attempting to avoid or change them.",
+          "note": "official_health. Method confirmation for acceptance as a therapeutic process of noticing and allowing difficult inner experiences. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS Scotland The Matrix — Acceptance and Commitment Therapy (ACT)",
+          "url": "https://www.matrix.nhs.scot/explore-the-recommended-interventions-therapies/acceptance-and-commitment-therapy-act",
+          "locus": "ACT aims to increase psychological flexibility; acceptance involves accepting internal experiences or events without attempts to alter their frequency or form, and continuing engagement in meaningful activities even in the presence of pain or other unwanted internal events.",
+          "note": "official_health. Method confirmation for acceptance as noticing and allowing internal experiences without altering them. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Psychology Tools — What Is Acceptance & Commitment Therapy (ACT)?",
+          "url": "https://www.psychologytools.com/resource/what-is-acceptance-and-commitment-therapy-act",
+          "locus": "ACT is an evidence-based psychological intervention that helps people build a more flexible and values-guided life; the goal is not to get rid of difficult thoughts and feelings but to change how people respond to them, accepting them rather than trying to challenge or control them.",
+          "note": "clinical_psychology_education. Method confirmation for acceptance as noticing and allowing difficult inner experiences without control. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, chronic pain, or any mental or physical health condition.",
+        "If the practice brings up strong or overwhelming distress, or if there is a history of trauma, panic, or acute psychological difficulties, stop and consider speaking with a healthcare professional.",
+        "Allowing an experience does not mean suppressing it or acting on it; if urges feel unsafe, seek professional support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.abstinence",
+      "content_class": "discipline",
+      "type": "abstinence",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "source_gap",
+      "note": "No authoritative general short-term abstinence method that applies to any self-chosen behavior was found. Available evidence is substance-specific (e.g., alcohol drink-free days, smoking not-a-puff) and does not generalize to a generic 'thing you named' discipline. Cell need.detachment.release is covered by technique.acceptance. Existing discipline.abstinence.* items remain llm_provisional without technique_id."
+    },
+    {
+      "technique_id": "technique.consistency_challenge",
+      "content_class": "discipline",
+      "type": "consistency_challenge",
+      "canonical_description": "A short-period discipline rule in which the person chooses one small, specific action and marks it every day for a set number of consecutive days (for example, seven or fourteen), keeping a visible count of the streak. The aim is to use the structure of a short streak and visible progress to support daily repetition; a missed day resets the count but does not erase the underlying practice or the value of repetition. It is not a guarantee of habit formation, a treatment for motivation or attention difficulties, or a long-term behaviour-change programme.",
+      "source_refs": [
+        {
+          "source": "Lally et al. (2010) — How are habits formed: Modelling habit formation in the real world, European Journal of Social Psychology",
+          "url": "https://doi.org/10.1002/ejsp.674",
+          "locus": "Participants carried out a self-chosen behaviour daily in the same context for 84 days; automaticity increased with repetition in a consistent context; missing one opportunity to perform the behaviour did not materially affect the habit-formation process; performing the behaviour more consistently was associated with better model fit.",
+          "note": "academic. Method confirmation for daily repetition of a small, self-chosen action in a consistent context. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Lally & Gardner (2012) — Making health habitual: the psychology of ‘habit-formation’ and general practice, British Journal of General Practice",
+          "url": "https://bjgp.org/content/62/605/664",
+          "locus": "Patients should choose a new target behaviour themselves and repeat it daily in response to a once-daily cue; missing the occasional opportunity to perform the behaviour did not seriously impair the habit-formation process; automaticity gains soon resumed after one missed performance; simple behaviours plateau faster than elaborate ones.",
+          "note": "academic/clinical. Method confirmation for self-chosen, small daily repetition in a stable context. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Scientific American — Why Keeping a Streak Boosts Your Motivation",
+          "url": "https://www.scientificamerican.com/article/why-keeping-a-streak-boosts-your-motivation/",
+          "locus": "A streak adds a higher-level goal (keeping the streak alive) to a lower-level goal (completing the individual activity); streaks add structure to an activity, which can simplify thinking and decision making; a daily streak can be more appealing and lead to more commitment than a weekly streak because it adds structure and simplifies decisions.",
+          "note": "research/popular_science. Method confirmation for a visible daily streak as a motivational structure that simplifies decision making. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, executive dysfunction, depression, anxiety, or any mental or physical health condition.",
+        "A short streak (e.g., seven or fourteen days) does not guarantee automaticity or a lasting habit; habit formation typically takes longer and varies widely between individuals.",
+        "Missing one day is normal and does not erase the value of repeated practice; if the streak feels punitive, distressing, or impossible to maintain, stop or switch to a less rigid rule.",
+        "If the chosen action becomes unsafe, painful, or unsustainable, revise or stop it and consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.reduction",
+      "content_class": "discipline",
+      "type": "reduction",
+      "canonical_description": "A short-period discipline rule in which the person selects one unnecessary or attention-competing stimulus, obligation, or item from the day and removes it from the immediate environment or defers it for a set period (for example, seven or fourteen days). The aim is to reduce the number of simultaneous attention-capturing things by a concrete deletion or postponement action; it is not a general decluttering philosophy, a promise of reduced anxiety, a treatment for any mental or physical health condition, or a lifestyle transformation.",
+      "source_refs": [
+        {
+          "source": "Paas & van Merriënboer (2020) — Cognitive-Load Theory: Methods to Manage Working Memory Load in the Learning of Complex Tasks, Current Directions in Psychological Science",
+          "url": "https://journals.sagepub.com/doi/10.1177/0963721420922183",
+          "locus": "Environmental stimuli can impose a load on working memory; methods to manage this include helping the learner stop monitoring irrelevant stimuli in the environment (attention-capturing stimuli reduction) or suppress cognitive states caused by the environment; visual and auditory noise are typical irrelevant stimuli that take limited working-memory resources away from the task.",
+          "note": "academic. Method confirmation for reducing attention-capturing environmental stimuli to free working-memory resources. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "RACGP — What does clutter do to your brain and body?",
+          "url": "https://www1.racgp.org.au/newsgp/clinical/what-does-clutter-do-to-your-brain-and-body",
+          "locus": "Constant visual reminders of disorganisation drain cognitive resources and reduce the ability to focus; clearing clutter from the home and work environment can result in better ability to focus and process information.",
+          "note": "clinical_medicine. Method confirmation for removing visual clutter/unnecessary items from the environment to reduce attentional load. Treatment/wellness claims not imported."
+        },
+        {
+          "source": "Sweller et al. (2019) — Cognitive Load Theory and Instructional Design: A Review, Educational Psychology Review (cited in Paas & van Merriënboer 2020)",
+          "url": "https://doi.org/10.1007/s10648-019-09465-0",
+          "locus": "Extraneous cognitive load is induced when learners process elements in working memory not directly related to the activity’s learning intention; the learning environment can be altered to reduce extraneous attention-capturing stimuli, such as not over-decorating classrooms.",
+          "note": "academic. Method confirmation for altering the environment to reduce extraneous attention-capturing stimuli. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for ADHD, anxiety, depression, hoarding disorder, or any mental or physical health condition.",
+        "This rule is about removing one unnecessary or attention-competing item at a time; if the item is required for safety, work, caregiving, or daily functioning, do not remove it.",
+        "If difficulty discarding items is severe, distressing, or linked to hoarding or other concerns, stop and consider speaking with a healthcare professional.",
+        "Removing an item does not guarantee reduced stress, improved mood, or any psychological outcome."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.consumption_limit",
+      "content_class": "discipline",
+      "type": "consumption_limit",
+      "canonical_description": "A short discipline rule in which the person, for a set period (for example, seven days), defers any unplanned purchase that was not on their plan for the day. The rule is to put the item off and review it later rather than buying immediately. Essentials such as food, medicine, and necessary transport are excluded. The rule does not guarantee savings, reduced spending, or improved financial well-being, and it is not a treatment for compulsive spending, shopping addiction, or any mental or physical health condition.",
+      "source_refs": [
+        {
+          "source": "The Independent — The 48-hour rule: the simple hack that experts say can help you stop impulse spending",
+          "url": "https://www.independent.co.uk/money/stop-impulse-spending-48-hour-rule-b2990292.html",
+          "locus": "MoneySuperMarket expert Kara Gammell describes the 48-hour rule: wait, put it in your basket, give yourself 48 hours, and if you still want it, then make the purchase. It creates a buffer, slows you down, and helps you think.",
+          "note": "consumer_finance journalism. Method confirmation for a short delay/pause rule before unplanned purchases. Savings/efficacy claims not imported."
+        },
+        {
+          "source": "Shah et al. (2023) — Can planning prompt be a boon for impulsive customers? Moderating roles of product category and decisional procrastination",
+          "url": "https://doi.org/10.1002/mar.21490",
+          "locus": "Planning prompts are a form of implementation intention (Gollwitzer 1993, 1999) that help consumers plan purchases in advance and reduce impulse buying; e.g., sticking to the shopping plan made prior to entry.",
+          "note": "academic_description. Method confirmation for pre-planning purchases to reduce impulse buying. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for compulsive spending, shopping addiction, or any mental or physical health condition.",
+        "If delaying purchases causes anxiety, distress, or conflict with essential needs, stop or adjust the rule.",
+        "The rule does not guarantee savings, reduced spending, or improved financial well-being.",
+        "If spending feels uncontrollable or is causing significant distress, seek professional financial or mental-health support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.digital_limit",
+      "content_class": "discipline",
+      "type": "digital_limit",
+      "canonical_description": "A short discipline rule in which the person sets a bounded, recurring daily period (for example, one hour) during which they do not open feeds or scroll social media, using a timer or device tool to mark the period. The rule is followed for a short streak (for example, seven or fourteen days), and a missed day does not restart the streak. It is not a treatment for screen addiction, anxiety, attention problems, or any mental or physical health condition, and it does not guarantee improved focus, well-being, or reduced screen time.",
+      "source_refs": [
+        {
+          "source": "NHS London Waiting Room — Screen Time",
+          "url": "https://londonwaitingroom.nhs.uk/screen-time",
+          "locus": "Spending too much time on devices can have negative consequences for physical and mental health. One way to look after mental health while being online is setting limits for yourself — many people use apps to limit their time spent on social media, which can help you be more intentional with what kind of content you engage with.",
+          "note": "official_health. Method confirmation for self-imposed screen/social-media time limits to support intentional use. Treatment/efficacy claims not imported."
+        },
+        {
+          "source": "Google Android Help — Manage how you spend time on your Android phone with Digital Wellbeing",
+          "url": "https://support.google.com/android/answer/9346420",
+          "locus": "App timers: choose how much time you can spend in an app; when you run out of time, the app closes and its icon dims. Focus mode: select distracting apps to pause until you turn off the mode or the scheduled time ends.",
+          "note": "official_tech. Method confirmation for using a timer or device tool to enforce a bounded app/feed-free period. Efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for screen addiction, anxiety, ADHD, or any mental or physical health condition.",
+        "If the restriction increases anxiety, restlessness, or conflict with responsibilities, reduce the period or stop the rule.",
+        "The rule does not guarantee improved focus, well-being, sleep, or reduced overall screen time.",
+        "If screen use feels uncontrollable or is causing significant distress, consider seeking professional support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.digital_pause",
+      "content_class": "practice",
+      "family": "behavioral",
+      "type": "digital_pause",
+      "canonical_description": "A brief, time-bound action in which the person moves a digital device (e.g., phone) out of immediate reach or turns it face down, and refrains from interacting with it for a set short period (for example, two or five minutes). The aim is to interrupt the current digital context and reduce incoming stimuli; it is not a reset of the nervous system, a treatment for stress, attention difficulties, or any mental or physical health condition, or a guarantee of improved focus or mood.",
+      "source_refs": [
+        {
+          "source": "NHS Every Mind Matters — 6 tips to tackle working from home",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/simple-tips-to-tackle-working-from-home/",
+          "locus": "Try to take lunch and regular screen breaks, and give yourself time to concentrate on something else so you feel more focused when you return. Even just 5 to 10 minutes of short breaks each hour can really help your productivity.",
+          "note": "official_health/wellbeing. Method confirmation for regular short screen breaks and shifting attention away from the screen. Wellbeing/productivity claims not imported."
+        },
+        {
+          "source": "NHS Employers — Health, safety and wellbeing homeworking guidance (Display Screen Equipment)",
+          "url": "https://www.nhsemployers.org/articles/health-safety-and-wellbeing-homeworking-guidance",
+          "locus": "The Health and Safety (Display Screen Equipment) Regulations require employers to plan for breaks in activity to reduce the risk of eye strain or musculoskeletal problems; take short breaks often, e.g., five to ten minutes every hour, rather than longer ones less often; breaks should allow users to get up from their workstations and move around or at least stretch and change posture.",
+          "note": "official_health/safety. Method confirmation for short, frequent breaks away from display screen work as a change of activity. Risk-reduction claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for stress, anxiety, ADHD, attention difficulties, or any mental or physical health condition.",
+        "Do not use this practice if you need to remain reachable for safety, caregiving, or urgent work duties during the pause period.",
+        "Keep the pause short and bounded; do not rely on it as a long-term solution for chronic overload or burnout.",
+        "Pausing a device does not guarantee improved focus, mood, or productivity."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.mindfulness",
+      "content_class": "meditation",
+      "type": "mindfulness",
+      "canonical_description": "A brief meditation practice in which the person intentionally directs attention to present-moment experience—such as sounds, bodily sensations, or the breath—and notices whatever arises without trying to judge, change, or follow it. When attention wanders, the person gently returns attention to the chosen present-moment anchor. It is not a treatment for stress, anxiety, depression, or any mental or physical health condition, and not a way to empty the mind or achieve a special state.",
+      "source_refs": [
+        {
+          "source": "Oxford Mindfulness — What is Mindfulness?",
+          "url": "https://oxfordmindfulness.org/what-is-mindfulness",
+          "locus": "Mindfulness means paying close attention to things as they are right now, in the present moment; noticing our own thoughts, feelings and physical sensations, and the people and world around us, in a spirit of friendliness and curiosity; formal practices include sitting and paying attention to something like the breath, and informal ones include pausing to notice the feel of the wind, your feet on the floor, or the sounds and colours around you.",
+          "note": "academic/clinical. Method confirmation for brief attention to present-moment experience (sounds, sensations, breath) with curiosity and without judgment. Wellbeing/insight claims not imported."
+        },
+        {
+          "source": "NHS — Mindfulness",
+          "url": "https://www.nhs.uk/mental-health/self-help/tips-and-support/mindfulness/",
+          "locus": "Mindfulness involves paying attention to what is going on inside and outside ourselves, moment by moment; reconnecting with our bodies and the sensations they experience, including the sights, sounds, smells and tastes of the present moment; mindfulness meditation involves sitting silently and paying attention to thoughts, sounds, the sensations of breathing or parts of the body, bringing attention back whenever the mind starts to wander.",
+          "note": "official_health. Method confirmation for paying attention to present-moment sounds, sensations, or breath and returning attention when the mind wanders. Wellbeing claims not imported."
+        },
+        {
+          "source": "Bishop et al. (2004) — Mindfulness: A Proposed Operational Definition, Clinical Psychology: Science and Practice",
+          "url": "https://www.personal.kent.edu/~dfresco/mindfulness/Bishop_et_al.pdf",
+          "locus": "Mindfulness is described as a kind of nonelaborative, nonjudgmental, present-centered awareness in which each thought, feeling, or sensation that arises in the attentional field is acknowledged and accepted as it is; the self-regulation of attention is maintained on the immediate experience, fostering awareness of thoughts, feelings, and sensations as they arise.",
+          "note": "academic. Method confirmation for present-centered, nonjudgmental attention to thoughts, feelings, and sensations as they arise. Clinical claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, ADHD, or any mental or physical health condition.",
+        "If the practice brings up strong or overwhelming distress, or if there is a history of trauma, panic, or acute psychological difficulties, stop and consider speaking with a healthcare professional.",
+        "Mindfulness is not about emptying the mind or stopping thoughts; it is about noticing experience. Do not use it to suppress thoughts or emotions.",
+        "Brief practices are not a substitute for structured mindfulness-based therapy or professional care when needed."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.intention_setting",
+      "content_class": "practice",
+      "family": "intention",
+      "type": "intention_setting",
+      "canonical_description": "A brief practice in which the person formulates in advance a single, concrete aim or direction for a specific upcoming period or action (for example, the next hour or the next task). The aim is written or stated clearly so that the person has a pre-decided focus for that period; it is not a promise of outcome, a guarantee of behaviour change, a treatment for indecision, anxiety, or any mental or physical health condition, or a complex if-then implementation plan.",
+      "source_refs": [
+        {
+          "source": "Gollwitzer (1999) — Implementation intentions: Strong effects of simple plans, American Psychologist",
+          "url": "https://doi.org/10.1037/0003-066x.54.7.493",
+          "locus": "Goal intentions specify a certain end point or behavior one intends to reach; by forming a goal intention a person translates a noncommittal desire into a binding goal that obligates the individual to realize it. Implementation intentions are subordinate plans that specify the when, where, and how; the basic method of intention formation is pre-deciding a specific aim or response ahead of the situation.",
+          "note": "academic. Method confirmation for pre-deciding a concrete aim or direction as a binding goal. Efficacy / goal-attainment claims not imported."
+        },
+        {
+          "source": "Gollwitzer (1993) — Goal achievement: The role of intentions, European Review of Social Psychology",
+          "url": "https://doi.org/10.1080/14792779443000059",
+          "locus": "Intentions are the most immediate and important determinant of goal-directed behavior; goal intentions represent a commitment to a desired outcome or behavior, and implementation intentions represent the link of anticipated situations to goal-directed responses.",
+          "note": "academic. Method confirmation for forming a goal intention as a commitment to a specific aim or behavior. Efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, ADHD, indecision, or any mental or physical health condition.",
+        "The aim should be safe, legal, and realistically achievable in the chosen period; do not set intentions that involve harm, excessive risk, or impossible demands.",
+        "Forming an intention does not guarantee that the action will be performed or that a desired outcome will occur.",
+        "If persistent difficulty making decisions or taking action is distressing, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.environment_reset",
+      "content_class": "practice",
+      "family": "behavioral",
+      "type": "environment_reset",
+      "canonical_description": "A brief practice in which the person resets the immediate physical environment by removing, relocating, or tidying one object, or by quickly clearing a surface or workspace, before a new task or period. The action creates a visible boundary and reduces competing physical cues; it is not a treatment for stress, anxiety, ADHD, or any mental or physical health condition, and it is not a guarantee of improved focus, productivity, or wellbeing.",
+      "source_refs": [
+        {
+          "source": "Mind.org.uk — How to be mentally healthy at work: Work and stress",
+          "url": "https://www.mind.org.uk/information-support/tips-for-everyday-living/how-to-be-mentally-healthy-at-work/work-and-stress/",
+          "locus": "Develop end-of-day habits: Finish your working day by tidying your workspace or making a to-do list for tomorrow. This can help you switch off from work, especially if you're working from home.",
+          "note": "public mental-health guidance. Method confirmation for tidying workspace as a concrete end-of-day reset action. Wellness claims not imported."
+        },
+        {
+          "source": "Leicestershire Partnership NHS Trust — While You Wait: ADHD and work",
+          "url": "https://www.leicspart.nhs.uk/while-you-wait/adhd/work/",
+          "locus": "Keeping your desk and working environment clear of clutter – piles of papers, boxes, work materials, or tools boxes – helps to reduce visual noise, improves organisation and productivity, and reduces stress. Clutter can overwhelm the brain’s ability to organise and focus, providing visual cues of other projects or tasks to be completed.",
+          "note": "NHS trust guidance. Method confirmation for clearing clutter from the immediate workspace as a concrete reset action. Productivity/stress-reduction claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, ADHD, stress, or any mental or physical health condition.",
+        "The action should be safe and proportionate; do not move heavy objects, use hazardous cleaning substances, or take risks to tidy.",
+        "If the urge to clean or reset becomes compulsive or distressing, consider speaking with a healthcare professional.",
+        "A brief reset does not guarantee improved focus, productivity, or mood."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.free_writing",
+      "content_class": "practice",
+      "family": "creative",
+      "type": "free_writing",
+      "canonical_description": "A brief practice in which the person writes continuously for a set period (for example, two or five minutes) without stopping, editing, erasing, or correcting. The goal is to keep producing words for the duration, regardless of spelling, grammar, or coherence; it is not a therapeutic or clinical intervention, a creativity guarantee, a cure for writer's block, or a substitute for professional help.",
+      "source_refs": [
+        {
+          "source": "Elbow (1973) — Writing Without Teachers, Oxford University Press (excerpted in FREEWRITING by Peter Elbow)",
+          "url": "https://www.research.ucsb.edu/sites/default/files/RD/docs/FREEWRITING-by-Peter-Elbow.pdf",
+          "locus": "The idea is simply to write for ten minutes (later on, perhaps fifteen or twenty). Don't stop for anything. Go quickly without rushing. Never stop to look back, to cross something out, to wonder how to spell something, to wonder what word or thought to use, or to think about what you are doing. The main thing about freewriting is that it is nonediting. It is an exercise in bringing together the process of producing words and putting them down on the page.",
+          "note": "pedagogical origin. Method confirmation for continuous, non-editing writing for a set time. Claims about writing improvement or block reduction not imported."
+        },
+        {
+          "source": "MIT Writing Process — Freewriting",
+          "url": "https://writingprocess.mit.edu/process/step-1-generate-ideas/instructions/freewriting/",
+          "locus": "Freewriting, a writing strategy developed by Peter Elbow in 1973, is similar to brainstorming but is written in sentence and paragraph form without stopping. DO KEEP YOUR HANDS MOVING. If you can't think of anything, just keep repeating your subject or something like 'I'm waiting for ideas to come and they will' over and over until they do come.",
+          "note": "educational guidance. Method confirmation for continuous, unedited writing. Creativity/fluency claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, ADHD, or any mental or physical health condition.",
+        "If writing brings up distressing or overwhelming material, stop and consider speaking with a healthcare professional.",
+        "The practice does not guarantee improved writing, creativity, productivity, or wellbeing.",
+        "Keep the content private if you choose; do not share anything that could cause harm or breach confidentiality."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.morning_ritual",
+      "content_class": "practice",
+      "family": "ritual",
+      "type": "morning_ritual",
+      "canonical_description": "A brief sequence performed after waking or at the start of the day to transition from rest to the first task. The person does one or two simple physical actions (for example, drinking water, opening a window or stepping outside for light/air, or a short stretch), then names one task or direction for the day, and begins. It is not a sleep-hygiene protocol, a productivity system, a treatment for sleep or mental health problems, or a guarantee of improved mood or focus.",
+      "source_refs": [
+        {
+          "source": "NHS Every Mind Matters — Sleep problems",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-health-issues/sleep/",
+          "locus": "A regular routine can help your body get used to sleeping better. Try to go to bed and wake up at around the same time each day, and give yourself time to relax before bed. Simple things include making your bedroom more comfortable and avoiding caffeine late in the day.",
+          "note": "official_health. Method confirmation for a regular wake/bedtime routine as a simple behavioural transition. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "NHS Every Mind Matters — Be active for your mental health",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/be-active-for-your-mental-health/",
+          "locus": "Aim to go to bed and get up at the same time every day, including weekends, as this can help us sleep faster and sleep better. Just a few minutes of moving can make a big difference to your mental wellbeing. Being out in nature can boost our mental wellbeing, so get active outdoors.",
+          "note": "official_health. Method confirmation for consistent wake time and short movement/light exposure as a simple morning action. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Sonnentag, S., & Kühnel, J. (2016). How to benefit from your work-related resources? The role of deliberate reattachment at work in the morning. Journal of Vocational Behavior, 94, 1–10",
+          "url": "https://doi.org/10.1016/j.jvb.2016.02.001",
+          "locus": "Reattachment to work is rebuilding a mental connection to work before actually starting work, for instance by thinking about specific tasks or by mentally simulating the workday. It occurs during the transition from the nonwork to the work role and is under employees' control.",
+          "note": "academic. Method confirmation for naming a specific task or mentally simulating the workday as part of the morning transition. Efficacy/engagement claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for insomnia, sleep disorders, anxiety, depression, ADHD, or any mental or physical health condition.",
+        "Keep actions safe and proportionate; avoid extreme temperatures, unsafe heights, or any movement that causes pain or dizziness.",
+        "A brief morning ritual does not guarantee better sleep, focus, mood, or productivity.",
+        "If persistent sleep problems, distress, or difficulty starting the day are affecting daily life, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.evening_ritual",
+      "content_class": "practice",
+      "family": "ritual",
+      "type": "evening_ritual",
+      "canonical_description": "A brief wind-down sequence performed in the evening or before sleep to signal a transition from activity to rest. The person reduces ambient light, places the phone or device out of immediate reach, sits, and takes a few slow out-breaths. It is not a sleep induction technique, a treatment for insomnia, anxiety, or any mental or physical health condition, or a guarantee that sleep will follow.",
+      "source_refs": [
+        {
+          "source": "NHS Every Mind Matters — How to fall asleep faster and sleep better",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/how-to-fall-asleep-faster-and-sleep-better/",
+          "locus": "Try not to use phones, tablets or computers for an hour before bed. The blue light from screens can make it harder to fall asleep. You may find it easier to sleep in a room that is quiet, dark and cool. Try different things to find what works for you: putting your phone on silent, fully closing curtains, keeping clocks out of view and placing your phone face down to reduce light.",
+          "note": "official_health. Method confirmation for reducing light and moving devices away as a concrete wind-down action. Efficacy/sleep claims not imported."
+        },
+        {
+          "source": "Imperial College Healthcare NHS Trust — Sleep hygiene: a timetable for a better night's sleep",
+          "url": "https://www.imperial.nhs.uk/-/media/website/patient-information-leaflets/respiratory-medicine/sleep-services/a-timetable-for-a-better-nights-sleep.pdf",
+          "locus": "Avoid using electronic devices, for example, tablets or phones, within 1 hour of bedtime. Make sure the bedroom is quiet and dark. Turn off electronic devices and ensure any timepieces are not visible during the night. Establish a set of regular pre-sleep routines to signal that bedtime is approaching.",
+          "note": "NHS patient information. Method confirmation for dimming light and removing devices before sleep as a regular pre-sleep routine. Treatment claims not imported."
+        },
+        {
+          "source": "NHS Every Mind Matters — Sleep problems",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-health-issues/sleep/",
+          "locus": "A regular routine can help your body get used to sleeping better. Give yourself time to relax before bed. Simple things include making your bedroom more comfortable and putting your phone away before bed.",
+          "note": "official_health. Method confirmation for a regular pre-sleep routine and putting the phone away. Efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for insomnia, sleep disorders, anxiety, depression, or any mental or physical health condition.",
+        "If sleep problems persist or cause distress, consider speaking with a healthcare professional.",
+        "Do not perform this practice in unsafe situations (for example, while driving or operating machinery).",
+        "A brief wind-down routine does not guarantee that sleep will occur or improve."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.breath_awareness",
+      "content_class": "meditation",
+      "type": "breath_awareness",
+      "canonical_description": "A brief meditation in which the person sits and brings attention to the natural physical sensations of breathing (for example, at the nostrils, chest, or abdomen) without trying to control or change the breath. When the mind wanders, the person gently returns attention to the breath. It is not a breathing exercise, a relaxation technique, a treatment for anxiety, depression, trauma, ADHD, or any mental or physical health condition, or a guarantee of calm or focus.",
+      "source_refs": [
+        {
+          "source": "NHS — Mindfulness",
+          "url": "https://www.nhs.uk/mental-health/self-help/tips-and-support/mindfulness/",
+          "locus": "Mindfulness meditation involves sitting silently and paying attention to thoughts, sounds, the sensations of breathing or parts of your body, bringing your attention back whenever the mind starts to wander.",
+          "note": "official_health. Method confirmation for sitting silently and paying attention to breathing sensations, returning attention when the mind wanders. Treatment/wellbeing claims not imported."
+        },
+        {
+          "source": "Guy's and St Thomas' NHS Foundation Trust — MBSR exercises: Breath Awareness",
+          "url": "https://www.guysandstthomas.nhs.uk/health-information/mindfulness-based-stress-reduction-mbsr/mbsr-exercises",
+          "locus": "Feeling the sensations as the breath enters the body and as it leaves the body. Not controlling the breath, but instead allowing the breath to breathe itself. The purpose is to observe the mind wandering away from the breath and then gently bring the mind back to the breath.",
+          "note": "official_health. Method confirmation for attention to natural breath sensations without controlling the breath, and returning attention when the mind wanders. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, ADHD, panic disorder, or any mental or physical health condition.",
+        "If focusing on the breath triggers panic, breathlessness, dizziness, or discomfort, stop and try a different anchor (for example, sounds or bodily sensations) or speak with a healthcare professional.",
+        "This is a meditation practice, not a breathing exercise or a medical intervention; do not force or lengthen the breath.",
+        "If persistent distress or difficulty with attention is troubling, consider speaking with a healthcare professional."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.body_scan",
+      "content_class": "meditation",
+      "type": "body_scan",
+      "canonical_description": "A brief meditation in which the person sits and directs attention sequentially through a few body areas (for example, feet, hands, and face), noticing physical sensations in each area without moving or trying to change them. When the mind wanders, the person gently returns attention to the current body area. It is not a relaxation technique, a treatment for pain, trauma, anxiety, or any mental or physical health condition, or a guarantee of calm or focus.",
+      "source_refs": [
+        {
+          "source": "NHS Scotland Right Decisions — The Body Scan (MBSR Week 1 handout)",
+          "url": "https://www.rightdecisions.scot.nhs.uk/health-improvement-staff-mindfulness-programme/mbsr/mbsr-handouts/week-1/6-the-body-scan/",
+          "locus": "We move our attention around the different parts of our body, as a means of anchoring ourselves in the present moment of sensing and experiencing. We will notice how complex the body is – a whole universe of sensation! As we continue to practice the body scan, we will find that we can enhance the awareness of our bodies at different times during our day. We can bring awareness to our posture... noticing any areas of tension and allowing them to release.",
+          "note": "official_health. Method confirmation for moving attention through body areas and noticing sensations. Treatment/relaxation claims not imported."
+        },
+        {
+          "source": "Guy's and St Thomas' NHS Foundation Trust — MBSR exercises: Body scanning",
+          "url": "https://www.guysandstthomas.nhs.uk/health-information/mindfulness-based-stress-reduction-mbsr/mbsr-exercises",
+          "locus": "Body scanning is a mindfulness exercise, where you pay attention to the sensations in the different parts of your body. You can usually do the exercise lying down or sitting up. The purpose of this exercise is to observe the mind wandering away from something that you focus on, such as your breathing. You can then gently bring your mind back to the breath.",
+          "note": "official_health. Method confirmation for paying attention to sensations in different body parts; can be done sitting or lying. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, chronic pain, PTSD, or any mental or physical health condition.",
+        "If focusing on body sensations triggers discomfort, distress, flashbacks, or overwhelm, stop the practice and consider speaking with a healthcare professional.",
+        "The practice does not guarantee relaxation, calm, or improved body awareness.",
+        "If persistent physical or emotional symptoms are concerning, seek professional advice."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.open_awareness",
+      "content_class": "meditation",
+      "type": "open_awareness",
+      "canonical_description": "A brief meditation in which the person sits and lightly notices or names, in one word, whatever is present in the moment (for example, a thought, sensation, sound, or emotion) without explaining, analyzing, or judging it. The attention remains open and receptive to whatever arises; the person returns to open awareness when attention narrows or gets caught. It is not a treatment for anxiety, depression, trauma, or any mental or physical health condition, or a guarantee of calm, insight, or emotional regulation.",
+      "source_refs": [
+        {
+          "source": "Lutz, A., Slagter, H. A., Dunne, J. D., & Davidson, R. J. (2008). Attention regulation and monitoring in meditation. Trends in Cognitive Sciences, 12(4), 163-169",
+          "url": "https://doi.org/10.1016/j.tics.2008.01.005",
+          "locus": "Open Monitoring (OM) meditation involves non-reactive monitoring of the content of experience from moment to moment. The practitioner aims to remain in a monitoring state, attentive moment by moment to anything that occurs in experience without focusing on any explicit object.",
+          "note": "academic. Method confirmation for open, non-receptive monitoring of present-moment experience without a fixed object. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Mindful.net — Open Monitoring Meditation",
+          "url": "https://mindful.net/open-monitoring-meditation",
+          "locus": "Open monitoring meditation is a mindfulness practice where you notice thoughts, sounds, emotions, and body sensations as they arise instead of holding attention on one fixed anchor. Noting meditation is an optional labeled form that uses one-word labels such as thinking, hearing, feeling, or sensing as a small marker to recognize what is happening, then return to open awareness.",
+          "note": "secular mindfulness instruction. Method confirmation for open monitoring and optional one-word noting of present-moment experience. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, trauma, PTSD, or any mental or physical health condition.",
+        "If observing thoughts, emotions, or sensations becomes overwhelming, distressing, or destabilizing, stop and consider speaking with a healthcare professional.",
+        "The practice does not guarantee calm, insight, emotional regulation, or improved attention.",
+        "If persistent emotional or psychological difficulties are concerning, seek professional advice."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.reflection_meditation",
+      "content_class": "meditation",
+      "type": "reflection_meditation",
+      "canonical_description": "A brief reflective meditation in which the person sits, poses one open question about present experience (for example, 'What is my experience right now?'), and does not answer it immediately. The person stays with the question for a few breaths, then notes one word that captures what is present. The practice is not a treatment for anxiety, depression, indecision, or any mental or physical health condition, and it does not guarantee clarity, insight, or decision-making.",
+      "source_refs": [
+        {
+          "source": "NHS Scotland Right Decisions — MBSR 8 week programme (Three-Minute Breathing Space)",
+          "url": "https://www.rightdecisions.scot.nhs.uk/media/2112/ms-mbsr-manual-rebuilt-280120.pdf",
+          "locus": "The three minute breathing space: (1) What's here? — silently ask yourself: 'What is my experience right now ... in my thoughts ... my feelings ... and my bodily sensations?' Recognise and accept your experience. (2) Breathing — gather attention on the breath. (3) Expand — widen awareness to include body sensations and the situation.",
+          "note": "NHS MBSR curriculum. Method confirmation for a short reflective pause that begins with an open question about present experience, followed by breath awareness. Treatment/efficacy claims not imported."
+        },
+        {
+          "source": "Mindful.net — Three-Breath Mindfulness Practice",
+          "url": "https://mindful.net/mindfulness-exercises/three-breath-mindfulness-practice",
+          "locus": "Name, Breathe, Return: pause and choose a safe posture; notice what is happening in body and mind and name it lightly; feel three steady breaths; widen awareness and continue the next action.",
+          "note": "secular mindfulness instruction. Method confirmation for pausing, naming present experience, taking three breaths, and returning. Treatment/efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, depression, indecision, trauma, or any mental or physical health condition.",
+        "If asking about your experience intensifies distress or rumination, stop the practice and consider speaking with a healthcare professional.",
+        "The practice does not guarantee clarity, insight, or better decision-making.",
+        "It is not a substitute for professional support when facing persistent or overwhelming difficulties."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.letting_go",
+      "content_class": "meditation",
+      "type": "letting_go",
+      "canonical_description": "A brief somatic meditation in which the person notices a small area of held tension (for example, the shoulders) and, on each out-breath, deliberately allows that area to drop or soften a little. The person may first gently lift or tense the area on the in-breath, then release it on the out-breath. The practice is not a treatment for anxiety, stress, trauma, or any physical or mental health condition, and it does not guarantee relaxation, calm, or tension relief.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Tips for doing breathing and relaxation exercises",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/tips-for-doing-breathing-and-relaxation-exercises/",
+          "locus": "Cued relaxation: use a cue (for example, a coloured dot) to remind you to drop your shoulders, check your breathing, and relax the muscles in your body.",
+          "note": "official_health. Method confirmation for a brief shoulder-drop / muscle-relax cue tied to breathing. Treatment/efficacy claims not imported."
+        },
+        {
+          "source": "Allina Health — Progressive Relaxation / Shoulder Relaxation",
+          "url": "https://account.allinahealth.org/library/download?documentUID=cbc8df58-a697-4c9d-8826-840f5b8055cf&templateUID=39D9FBC3-FBCE-4D05-87D0-3FC666F7E5B3",
+          "locus": "Shoulder Relaxation: Tighten your shoulders by lifting them up toward your ears and breathe in through your nose. Slowly drop your shoulders with a sigh as you breathe out through your mouth. Imagine your muscles letting go. Repeat at least 3 times.",
+          "note": "official_health. Method confirmation for inhale-lift / exhale-drop shoulder release. Treatment/efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, stress, trauma, or any physical or mental health condition.",
+        "If moving or tensing the shoulders causes pain, discomfort, or injury, skip the movement or stop the practice.",
+        "The practice does not guarantee relaxation, calm, or relief from tension.",
+        "If persistent physical or psychological distress is concerning, seek professional advice."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.grounding",
+      "content_class": "meditation",
+      "type": "grounding",
+      "canonical_description": "A brief grounding meditation in which the person sits and brings attention to the physical contact points between the body and the surface it rests on (for example, the weight on the seat, the feet on the floor, or the back against the chair). The person notices the sensation of contact and support for a few breaths without trying to change the state or relax. It is not a treatment for anxiety, panic, trauma, dissociation, or any mental or physical health condition, and it is not a guarantee of calm, focus, or emotional regulation.",
+      "source_refs": [
+        {
+          "source": "NHS inform — Grounding exercises",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/grounding-exercises/",
+          "locus": "Grounding is a technique that can help reduce symptoms of anxiety and stress when they feel overwhelming. To start, sit in a comfortable position and take a deep breath. The 5,4,3,2,1 method includes focusing on things you can feel, such as the chair or floor.",
+          "note": "official_health. Method confirmation for sitting and using sensory/body contact as a grounding exercise. Treatment/efficacy claims not imported."
+        },
+        {
+          "source": "Royal Berkshire NHS Foundation Trust — Grounding techniques to help with anxiety",
+          "url": "https://www.royalberkshire.nhs.uk/media/0ptda3ym/grounding-techniques-to-help-with-anxiety_apr26.pdf",
+          "locus": "Grounding is a technique that aims to return you back from negative, challenging emotions to the present. The 5-4-3-2-1 technique includes noticing four things you can touch (it can be the floor, the chair you are sitting on, your clothes, bag and so on). Feel your feet on the ground and tense/release your fists: whether you're sitting or standing, press your feet firmly and feel the ground beneath you for an immediate connection to the present moment and the space you're in.",
+          "note": "NHS patient information. Method confirmation for feeling feet on the ground, chair contact, and body contact as grounding. Treatment/efficacy claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, panic, trauma, dissociation, PTSD, or any mental or physical health condition.",
+        "If focusing on body contact increases distress, flashbacks, or panic, stop the practice and consider speaking with a healthcare professional.",
+        "The practice does not guarantee calm, focus, or emotional regulation.",
+        "If persistent distress or dissociation is concerning, seek professional advice."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.self_trust",
+      "content_class": "affirmation",
+      "type": "self_trust",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "source_gap",
+      "note": "No authoritative clinical or educational source describing self-trust affirmation as a standalone technique was found in this pass. Cell need.confidence.open is covered by technique.capability. Existing draft items remain llm_provisional without technique_id."
+    }
+  ]
+}

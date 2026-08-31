@@ -32,7 +32,9 @@ from todayflow_backend.services.prose_clip_v1 import clip_prose
 
 logger = logging.getLogger(__name__)
 
-DECODE_VERSION = "natal_decode_depth_v0.3"
+DECODE_VERSION = "natal_decode_depth_v0.3"  # expression/polish stamp — not a cache key
+NATAL_DECODE_SEMANTIC_VERSION = "natal-decode-semantic.v1"
+_LEGACY_DECODE_VERSIONS = ("natal_decode_depth_v0.3", "natal_decode_depth_v0.2")
 PROMPT_ID = "profile.natal_decode_depth.v1"
 LAYER_KIND = "natal_decode_depth"
 _ALLOWED_SECTION_IDS = frozenset({"mind", "feelings", "will", "growth", "presence", "structure"})
@@ -147,10 +149,11 @@ def build_offer_payload(
     """GET-safe: ready artifact when cached, else one-shot offer — no LLM."""
     if isinstance(cached, dict) and str(cached.get("status") or "") == "grounded":
         out = dict(cached)
+        persisted = str(out.get("version") or "").strip()
         out.update(
             {
                 "layer": LAYER_KIND,
-                "version": DECODE_VERSION,
+                "version": persisted or DECODE_VERSION,
                 "access": "ready",
                 "can_generate": False,
                 "reason": None,
@@ -235,15 +238,22 @@ def _fingerprint(
     identity_core: dict[str, Any],
     natal_pack: dict[str, Any],
     numerology_pack: dict[str, Any] | None = None,
+    *,
+    decode_version: str | None = None,
 ) -> str:
+    """Semantic cache key: identity + natal facts. Expression/polish version is not a key."""
+    payload: dict[str, Any] = {
+        "thesis": identity_core.get("thesis_key"),
+        "surface": identity_core.get("surface_text"),
+        "natal": natal_pack,
+        "numerology": numerology_pack or {},
+        "semantic_version": NATAL_DECODE_SEMANTIC_VERSION,
+    }
+    if decode_version:
+        payload["decode_version"] = decode_version
+        payload.pop("semantic_version", None)
     raw = json.dumps(
-        {
-            "thesis": identity_core.get("thesis_key"),
-            "surface": identity_core.get("surface_text"),
-            "natal": natal_pack,
-            "numerology": numerology_pack or {},
-            "decode_version": DECODE_VERSION,
-        },
+        payload,
         ensure_ascii=False,
         sort_keys=True,
         default=str,
@@ -251,13 +261,38 @@ def _fingerprint(
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
 
 
+def _lookup_fingerprints(
+    identity_core: dict[str, Any],
+    natal_pack: dict[str, Any],
+    numerology_pack: dict[str, Any] | None = None,
+) -> set[str]:
+    fps = {_fingerprint(identity_core, natal_pack, numerology_pack)}
+    for ver in _LEGACY_DECODE_VERSIONS:
+        fps.add(
+            _fingerprint(
+                identity_core,
+                natal_pack,
+                numerology_pack,
+                decode_version=ver,
+            )
+        )
+    return fps
+
+
 def load_cached_natal_decode(
     db: Session,
     *,
     user_id: int,
     fingerprint: str,
+    identity_core: dict[str, Any] | None = None,
+    natal_pack: dict[str, Any] | None = None,
+    numerology_pack: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
-    """Return grounded decode for fingerprint from generation_logs, if any."""
+    """Return grounded decode for semantic fingerprint. Polish version is not a miss."""
+    wanted = {str(fingerprint or "")}
+    if identity_core is not None and natal_pack is not None:
+        wanted |= _lookup_fingerprints(identity_core, natal_pack, numerology_pack)
+    wanted.discard("")
     rows = (
         db.query(models.GenerationLog)
         .filter(
@@ -272,7 +307,7 @@ def load_cached_natal_decode(
     )
     for row in rows:
         inp = row.input_payload if isinstance(row.input_payload, dict) else {}
-        if str(inp.get("fingerprint") or "") != fingerprint:
+        if str(inp.get("fingerprint") or "") not in wanted:
             continue
         body = row.normalized_response if isinstance(row.normalized_response, dict) else None
         if not body:
@@ -284,6 +319,75 @@ def load_cached_natal_decode(
             continue
         return dict(body)
     return None
+
+
+def persisted_decode_version(
+    body: dict[str, Any] | None,
+    input_payload: dict[str, Any] | None = None,
+) -> str:
+    """Stored artifact version. Does not stamp the live DECODE_VERSION."""
+    if isinstance(body, dict):
+        stored = str(body.get("version") or "").strip()
+        if stored:
+            return stored
+    if isinstance(input_payload, dict):
+        return str(input_payload.get("decode_version") or "").strip()
+    return ""
+
+
+def decode_cache_state(
+    body: dict[str, Any] | None,
+    input_payload: dict[str, Any] | None = None,
+) -> str:
+    """current · stale · invalid — ops inventory only. Not a GET rebuild signal."""
+    if not isinstance(body, dict):
+        return "invalid"
+    if str(body.get("status") or "") != "grounded":
+        return "invalid"
+    sections = body.get("sections")
+    if not isinstance(sections, list) or not sections:
+        return "invalid"
+    if persisted_decode_version(body, input_payload) == DECODE_VERSION:
+        return "current"
+    return "stale"
+
+
+def list_latest_natal_decode_by_user(db: Session) -> list[dict[str, Any]]:
+    """Latest successful natal-decode log per user (inventory). GET still fingerprints."""
+    rows = (
+        db.query(models.GenerationLog)
+        .filter(
+            models.GenerationLog.module == "profile",
+            models.GenerationLog.surface == LAYER_KIND,
+            models.GenerationLog.status == "success",
+        )
+        .order_by(models.GenerationLog.id.desc())
+        .all()
+    )
+    latest: dict[int, models.GenerationLog] = {}
+    for row in rows:
+        uid = int(row.user_id or 0)
+        if uid and uid not in latest:
+            latest[uid] = row
+    out: list[dict[str, Any]] = []
+    for uid, row in sorted(latest.items()):
+        inp = row.input_payload if isinstance(row.input_payload, dict) else {}
+        body = row.normalized_response if isinstance(row.normalized_response, dict) else {}
+        identity = body.get("identity_core") if isinstance(body.get("identity_core"), dict) else {}
+        out.append(
+            {
+                "user_id": uid,
+                "gen_id": int(row.id),
+                "state": decode_cache_state(body, inp),
+                "body_version": persisted_decode_version(body, inp),
+                "prompt_version": str(inp.get("prompt_version") or ""),
+                "status": str(body.get("status") or ""),
+                "thesis_key": str(identity.get("thesis_key") or ""),
+                "writes_character_engine": bool(body.get("writes_character_engine")),
+                "sections": len(body.get("sections") or []) if isinstance(body.get("sections"), list) else 0,
+            }
+        )
+    return out
 
 
 def _parse_decode_json(raw: str) -> dict[str, Any] | None:
@@ -408,7 +512,14 @@ def resolve_natal_decode_get(
     )
     cached = None
     if identity and fingerprint:
-        cached = load_cached_natal_decode(db, user_id=user_id, fingerprint=fingerprint)
+        cached = load_cached_natal_decode(
+            db,
+            user_id=user_id,
+            fingerprint=fingerprint,
+            identity_core=identity,
+            natal_pack=natal_pack,
+            numerology_pack=numerology_pack,
+        )
     return build_offer_payload(
         identity_core=identity,
         natal_available=natal_available,
@@ -469,8 +580,9 @@ def generate_natal_decode_depth_v0(
     locale: str = "ru",
     force_refresh: bool = False,
     natal_chart: Any | None = None,
+    ops_force: bool = False,
 ) -> dict[str, Any]:
-    """Generate once per fingerprint. Client force_refresh is ignored (ops-only path uses ops_force)."""
+    """Generate once per fingerprint. Client force_refresh is ignored. ops_force is ops one-shot only."""
     # Product rule: not a spam button. Client cannot force re-LLM.
     del force_refresh
 
@@ -506,8 +618,15 @@ def generate_natal_decode_depth_v0(
             "can_generate": False,
         }
 
-    cached = load_cached_natal_decode(db, user_id=user_id, fingerprint=fingerprint)
-    if cached:
+    cached = load_cached_natal_decode(
+        db,
+        user_id=user_id,
+        fingerprint=fingerprint,
+        identity_core=identity,
+        natal_pack=natal_pack,
+        numerology_pack=numerology_pack,
+    )
+    if cached and not ops_force:
         out = dict(cached)
         out["access"] = "ready"
         out["can_generate"] = False
@@ -675,6 +794,7 @@ def generate_natal_decode_depth_v0(
                 "prompt_version": prompt_version,
                 "writes_character_engine": False,
                 "decode_version": DECODE_VERSION,
+                "ops_force": bool(ops_force),
             },
             normalized_response=result,
             status="success" if result.get("status") == "grounded" else "partial",

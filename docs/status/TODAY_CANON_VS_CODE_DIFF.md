@@ -1,16 +1,65 @@
 > ⚠️ STALE — не отражает Journey/Day Sources. См. [audits/FULL_USER_PATH_CANON_V1.md](../audits/FULL_USER_PATH_CANON_V1.md). Полная ревизия — отдельная задача.
+>
+> **2026-08-29 update:** Phase 2.1 cutover closed. The `?core_loop=1` experiment (`TodayCoreLoopViabilitySurface`) was removed; default `/today` already uses the 4-surface `TodayProductScreenFlow` via `TodayCompositionSurface`. See [audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md](../audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md).
+>
+> **2026-08-29 Phase 2.2 closure:** Theme / Action / Progress are first-class in the default path. See the new section below. This diff is now **CLOSED** for the launch cutover; remaining partial items (ContinuityRecall, Why expandable, trackers, bridges, etc.) are tracked as product polish, not as launch blockers.
 
 # Today · Step A — Canon vs Code Diff
 
 **Дата:** 2026-07-02  
-**Статус:** **Step A complete** — diff + **Day Story v3** block map  
-**Источники:** [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) v4.0 §11 · [TODAYFLOW_PRODUCT_BUILD_MAP.md](../TODAYFLOW_PRODUCT_BUILD_MAP.md) · `TodayCompositionSurface.tsx`
+**Статус:** **CLOSED — Phase 2.2 (2026-08-29)** — default path now Theme-first 4-surface ScreenFlow; historical sections below are pre-cutover.  
+**Источники:** [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) v4.0 §11 · [TODAYFLOW_PRODUCT_BUILD_MAP.md](../TODAYFLOW_PRODUCT_BUILD_MAP.md) · `TodayCompositionSurface.tsx` · [today/TODAY_DISPLAY_INVENTORY_V1.md](../today/TODAY_DISPLAY_INVENTORY_V1.md)
 
 **Prod route (2026-07-02):** `/today` default → **`TodayCompositionSurface`** (Day Story v3). Legacy: `?experience=1` → `TodayExperienceSurface` · `?full=1` → `TodayRitualFlow`.
 
 **Web launch v1 (2026-07-01):** diff для launch path — [WEB_LAUNCH_EXECUTION_PLAN.md](./WEB_LAUNCH_EXECUTION_PLAN.md).
 
 **Stack:** [PERSONAL_INTELLIGENCE_MODEL_V1.md](../pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) · Today canon **v4.0** §11 · Composition Today v1.
+
+---
+
+## Phase 2.2 closure — Theme / Action / Progress first-class (post cutover)
+
+After Phase 2.1 (4-surface cutover) and Phase 2.3 (evening time-gate) the default `/today` path is no longer the ritual-first funnel described in the historical sections below. The new product cycle is:
+
+```
+Default /today
+└─ TodayProductScreenFlow (4 surfaces)
+   ├─ TODAY      → Theme / Hero / Why (first-class, not post-ritual)
+   ├─ RITUAL     → Tarot + Number as a symbolic step, not the main gate
+   ├─ MY DAY     → Action / Focus / Practice / Progress
+   └─ EVENING    → Time-gated close + reflection (hidden before evening)
+```
+
+### What changed vs the pre-cutover findings
+
+| Pre-cutover finding (historical §Главный вывод) | Post-cutover state |
+|---------------------------------------------------|--------------------|
+| Ritual Entry Hero (72dvh) was the opening frame | Opening frame is the **TODAY** surface with day theme and greeting |
+| Tarot + Number were the main interactive before content | Tarot + Number moved to the **RITUAL** surface, after theme |
+| Action was hidden behind full ritual spine | Action is on the **MY DAY** surface, reachable from the today handoff |
+| Evening block appended to the same morning scroll | Evening is a separate **EVENING** surface, hidden until evening time or explicit toggle |
+| Progress had no dedicated strip | Progress is part of **MY DAY** (streak, daily goal, practice completion) |
+| `?core_loop=1` was the only near-canon preview | Default path is the canonical 4-surface flow; `?core_loop=1` experiment removed |
+
+### Remaining partial / non-launch items
+
+These are not blockers for the Theme → Action → Progress spine and are tracked as polish or later phases:
+
+- ContinuityRecall D2+ pill (block 0) — partial, needs yesterday outcome state.
+- «Почему так» — expandable toggle, currently always open.
+- Strengthen tools / practice CTA — needs `/practices/current` overlay wiring.
+- Daily goal / intent API — still local-only; CUM integration in backlog.
+- Trackers (mood/energy chips) — gap, `DailyTracking` slot 12 not implemented.
+- Explore bridges (Compat / Tarot / Profile) — gap, separate phase.
+- Evening close post-state list — partial.
+
+### Legacy overrides
+
+- `?experience=1` → `TodayExperienceSurface` (legacy compressed Today).
+- `?full=1` → `TodayRitualFlow` (legacy full-scroll ritual, no longer default).
+
+Both remain reachable as non-default query-param overrides; they are not part of the launch ship gate.
 
 ---
 

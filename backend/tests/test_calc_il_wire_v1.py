@@ -101,7 +101,12 @@ def test_calc_il_wire_v1():
     assert any(
         fact.construction == "transit_to_natal"
         and fact.parts
-        == ("astro.object.saturn", "astro.object.venus", "astro.aspect.square")
+        == (
+            "astro.object.saturn",
+            "astro.object.venus",
+            "astro.aspect.square",
+            "astro.house.04",
+        )
         for fact in facts
     )
     assert any(
@@ -278,7 +283,7 @@ def test_calc_il_wire_v1():
     assert "KC-C-WIRE" in inventory
 
     canon = IL.read_text(encoding="utf-8")
-    assert "**Версия:** 1.3.115" in canon
+    assert "**Версия:** 1.3.116" in canon
     assert "### 6.65" in canon
     assert canon.count("**Версия:**") == 1
 

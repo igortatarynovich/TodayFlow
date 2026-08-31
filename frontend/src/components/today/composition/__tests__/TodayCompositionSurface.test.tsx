@@ -43,6 +43,13 @@ jest.mock("@/lib/todayDayGreeting", () => ({
 
 import { resolveTodayDayPhase } from "@/lib/todayDayGreeting";
 
+jest.mock("@/lib/time-of-day", () => ({
+  ...jest.requireActual("@/lib/time-of-day"),
+  getTimeOfDayByHour: jest.fn(() => "evening"),
+}));
+
+import { getTimeOfDayByHour } from "@/lib/time-of-day";
+
 const sampleContract: TodayContractV1 = {
   contract_version: "today_contract_v1",
   global_context: { period: "День ясности — спокойный ритм и одна главная линия." },
@@ -445,6 +452,8 @@ describe("TodayCompositionSurface", () => {
     const myDayDot = screen.getByTestId("screen-flow-dot-2");
     await user.click(myDayDot);
     expect(screen.getByTestId("today-frame-my-day")).toBeInTheDocument();
+    expect(screen.queryByTestId("today-day-tasks-empty")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-day-tasks")).not.toBeInTheDocument();
   });
 
   it("does not mount morning dialogue as its own six-block step", () => {
@@ -543,6 +552,8 @@ describe("TodayCompositionSurface", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
     await user.click(screen.getByTestId("today-ritual-lens-number"));
     expect(await screen.findByTestId("today-ritual-lens-sheet")).toBeInTheDocument();
+    expect(screen.getByTestId("today-ritual-lens-catalog")).toBeInTheDocument();
+    expect(screen.queryByTestId("today-ritual-lens-today")).not.toBeInTheDocument();
   });
 
   it("shows kept card and number gate after tarot, before number", () => {
@@ -574,5 +585,13 @@ describe("TodayCompositionSurface", () => {
     expect(screen.queryByTestId("ritual-tarot-pick-grid")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-growth")).not.toBeInTheDocument();
     (resolveTodayDayPhase as jest.Mock).mockReturnValue("morning");
+  });
+
+  it("hides evening frame outside evening time and still shows today/day", () => {
+    (getTimeOfDayByHour as jest.Mock).mockReturnValue("morning");
+    render(<TodayCompositionSurface {...baseProps} variant="default" />);
+    expect(screen.queryByTestId("today-frame-evening")).not.toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
+    (getTimeOfDayByHour as jest.Mock).mockReturnValue("evening");
   });
 });

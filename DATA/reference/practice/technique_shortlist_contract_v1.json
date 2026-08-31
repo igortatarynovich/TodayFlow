@@ -1,0 +1,49 @@
+{
+  "contract_version": "technique_shortlist_contract_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-shortlist-v1.0",
+  "description": "Vertical shortlist slice of one candidate_family. Selected = allowed for next ingest-pass, not canonical, not efficacy. Canon: docs/practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md",
+  "parent_step": 9,
+  "unit_of_shortlist": "candidate_family",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "selected_means": "allowed_for_next_ingest_pass",
+  "selected_does_not_mean": [
+    "proved_the_technique",
+    "efficacy",
+    "canonical",
+    "attested_taxonomy_type"
+  ],
+  "required_family_fields": [
+    "family_id",
+    "candidate_family",
+    "candidate_sources",
+    "conflicts",
+    "selected_loci",
+    "expression_hypothesis"
+  ],
+  "required_source_fields": [
+    "source_id",
+    "source_family",
+    "bibliographic_identity",
+    "authority_provenance",
+    "locus",
+    "gates",
+    "extractable",
+    "conflicts_unknowns",
+    "research_function",
+    "selection_decision",
+    "rejection_reason"
+  ],
+  "selection_decision": ["selected", "supporting", "rejected"],
+  "gate_ids": ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9"],
+  "invariants": [
+    "exactly one family in V1 slice",
+    "other landscape families remain not_opened",
+    "does not write technique_canon_v1",
+    "selected loci may serve different research functions",
+    "conflicts are listed, not averaged",
+    "taxonomy type remains an expression hypothesis"
+  ]
+}

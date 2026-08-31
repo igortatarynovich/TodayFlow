@@ -1,0 +1,187 @@
+{
+  "contract_version": "technique_targeted_safety_ingest_v1",
+  "version": "1.0.0",
+  "status": "ingested_evidence",
+  "semantic_version": "practice-technique-targeted-safety-ingest-v1.0",
+  "description": "Targeted safety ingest of two who-must-not-hold loci. Source-faithful observations, not a product contraindication list. Not Safety Review V1.1. Not canon. Canon: docs/practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md",
+  "family_id": "family.practice.equal_count_breath",
+  "family_id_is_ledger_key_not_identity_claim": true,
+  "candidate_family": "four-phase square / box breathing",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "does_not_reopen_kernel": true,
+  "does_not_rewrite_safety_contract": true,
+  "does_not_write_who_must_not_hold": true,
+  "does_not_write_safety_rules": true,
+  "does_not_transfer_onto_four_phase_candidate": true,
+  "does_not_replace_family_ingest": true,
+  "does_not_replace_targeted_identity_ingest": true,
+  "boundary_held": "selected_safety_loci_to_source_faithful_observations_not_contraindication_list",
+  "accessed": "2026-08-26",
+  "identity_kernel_unchanged": {
+    "shape": "four_timed_phases",
+    "post_exhale_hold": "required",
+    "equal_count": "common_parameter"
+  },
+  "expression_hypothesis": {
+    "type": "box_breathing",
+    "probe_item_id": "practice.box_breathing.001",
+    "status": "not_attested",
+    "note": "Safety ingest does not attest the probe."
+  },
+  "v1_1_questions_not_decided": [
+    {
+      "id": "enough_for_may_release",
+      "status": "unanswered"
+    },
+    {
+      "id": "binary_who_must_not_hold_still_correct_model",
+      "status": "unanswered",
+      "later_structural_model_first_allowed_at": "technique_safety_review_v1_1",
+      "later_structural_model_allowed": [
+        "exclusion",
+        "precaution",
+        "stop_rule"
+      ]
+    }
+  ],
+  "next_named_pass": "technique_safety_review_v1_1",
+  "not_next": [
+    "canonical",
+    "rejected_canon_row",
+    "technique_id_on_probe",
+    "next_family_slice",
+    "reopen_kernel",
+    "optional_hold",
+    "write_who_must_not_hold",
+    "write_product_safety_rules",
+    "rewrite_safety_contract_inside_ingest",
+    "may_release"
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev.safety.wjm.joshi.2024.yoga_hypertension",
+      "candidate_family": "family.practice.equal_count_breath",
+      "source_ref": {
+        "source_id": "src.wjm.joshi.2024.yoga_hypertension",
+        "authors": "Joshi AM, Raveendran AV, Arumugam M",
+        "journal": "World Journal of Methodology",
+        "year": 2024,
+        "title": "Therapeutic role of yoga in hypertension",
+        "doi": "10.5662/wjm.v14.i1.90127",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10989416/",
+        "section": "PRECAUTIONS AND CONTRAINDICATIONS; Table 3 kumbhaka row"
+      },
+      "locus": "World J Methodol 2024;14(1):90127, precautions prose and Table 3 kumbhaka row (PMC10989416, accessed 2026-08-26).",
+      "source_family": "academic_description",
+      "paraphrase": "This medical review discusses yoga practices in hypertension. In the precautions section it writes that practicing kumbhaka (breath retention) during pranayama can raise systolic, diastolic, and mean arterial pressure, citing Nivethitha 2017, and that kumbhaka is contraindicated in hypertension, heart disease, and individuals recovering from an illness, surgery, or injury. Table 3's kumbhaka cell reports the blood-pressure rise; the prose writes 'contraindicated'. Those two speech acts stay unmerged in this record. The review does not name box breathing or square breathing. Yoga-as-treatment claims, ujjayi without retention, and the adjacent bandha / long-retention sentence are out of scope for this record. A general line that people with health problems should seek medical opinion before yoga is a general yoga precaution, not a hold-specific who-list for the four-phase candidate.",
+      "speech_type": "hold_exclusion",
+      "shortlist_speech": "hold_exclusion",
+      "named_practice": "kumbhaka (breath retention) during pranayama",
+      "practice_context": "kumbhaka",
+      "hold_phase": "unspecified_kumbhaka_class",
+      "dose_or_duration": "unspecified_in_this_locus",
+      "population": "stated as people with hypertension, heart disease, or recovering from illness, surgery, or injury, in a yoga-for-hypertension review; not a box/square clinical population",
+      "observed_exclusions": [
+        {
+          "condition": "hypertension",
+          "practice_context": "kumbhaka",
+          "as_source_writes": "contraindicated",
+          "is_not_product_who_must_not_hold": true
+        },
+        {
+          "condition": "heart disease",
+          "practice_context": "kumbhaka",
+          "as_source_writes": "contraindicated",
+          "is_not_product_who_must_not_hold": true
+        },
+        {
+          "condition": "recovering from an illness, surgery, or injury",
+          "practice_context": "kumbhaka",
+          "as_source_writes": "contraindicated",
+          "is_not_product_who_must_not_hold": true
+        }
+      ],
+      "observed_precautions": [],
+      "observed_physiology": [
+        {
+          "measure": "SBP, DBP, MAP",
+          "when": "during_kumbhaka_as_this_review_cites_it",
+          "direction": "increase",
+          "as_source_writes": "authors cite Nivethitha 2017 for an acute rise; this is a citation, not an independent measurement in this review",
+          "keep_distinct_from": "the prose contraindication sentence"
+        }
+      ],
+      "transfer_limits": [
+        "kumbhaka is not four-phase square breathing",
+        "unspecified or long retention is not a short timed hold",
+        "review exclusion of kumbhaka is not a who_must_not_hold list for the four-phase candidate",
+        "Table 3 physiology cell is not the same speech act as the prose contraindication",
+        "adjacent bandha or long-retention sentence is a different named practice",
+        "general yoga consult-first is not hold-specific"
+      ],
+      "source_claim_scope": "kumbhaka_exclusion_statements_in_yoga_hypertension_review",
+      "is_not_who_must_not_hold_candidate": true,
+      "ingest_status": "ingested"
+    },
+    {
+      "evidence_id": "ev.safety.nivethitha.2017.bahir_kumbhaka",
+      "candidate_family": "family.practice.equal_count_breath",
+      "source_ref": {
+        "source_id": "src.nivethitha.2017.bahir_kumbhaka",
+        "authors": "Nivethitha L, Mooventhan A, Manjunath NK",
+        "journal": "Advances in Integrative Medicine",
+        "year": 2017,
+        "title": "A pilot study on evaluating cardiovascular functions during the practice of Bahir Kumbhaka (external breath retention)",
+        "doi": "10.1016/j.aimed.2017.01.001",
+        "url": "https://doi.org/10.1016/j.aimed.2017.01.001",
+        "section": "abstract / publisher-visible methods and results"
+      },
+      "locus": "Adv Integr Med 2017;4:7–9, legally readable abstract and publisher-visible methods/results (accessed 2026-08-26). Full PDF not required for this record. Hold duration is not stated in this locus.",
+      "source_family": "academic_description",
+      "paraphrase": "This pilot reports cardiovascular measures during bahir kumbhaka, which the paper names as external breath retention after exhalation, distinct from antar kumbhaka. Nineteen healthy volunteers (mean age about 23.5 years) from a South Indian university were studied; people with systemic or mental illness, regular medication, or chronic smoking or alcoholism were excluded from the sample. During the practice the authors report a significant rise in systolic, diastolic, and mean arterial pressure. In this study systolic pressure reverted after the practice; diastolic pressure and mean arterial pressure did not. The authors attribute the systolic rise to higher heart rate / cardiac output together with higher total peripheral resistance. The paper does not list populations who must not hold the breath. It does not name box breathing or square breathing. Hold duration is not stated in this legally readable locus and is not imported from other papers by the same authors. Absence of serious adverse effects in this healthy sample is not a product clearance.",
+      "speech_type": "observed_physiological_response",
+      "shortlist_speech": "hold_precaution",
+      "named_practice": "bahir kumbhaka (external / empty-lung breath retention)",
+      "practice_context": "bahir_kumbhaka",
+      "hold_phase": "external_empty_lung_retention",
+      "dose_or_duration": "unspecified_in_this_legally_readable_locus",
+      "population": "nineteen healthy volunteers, mean age 23.53 (SD 3.08), university sample in South India; not a hypertensive or box/square clinical population",
+      "observed_exclusions": [],
+      "observed_precautions": [],
+      "observed_physiology": [
+        {
+          "measure": "SBP",
+          "when": "during_bahir_kumbhaka",
+          "direction": "increase",
+          "after": "reverted_in_this_study"
+        },
+        {
+          "measure": "DBP",
+          "when": "during_bahir_kumbhaka",
+          "direction": "increase",
+          "after": "did_not_revert_in_this_study"
+        },
+        {
+          "measure": "MAP",
+          "when": "during_bahir_kumbhaka",
+          "direction": "increase",
+          "after": "did_not_revert_in_this_study"
+        }
+      ],
+      "transfer_limits": [
+        "empty-lung retention is physiologically closer to a post-exhale hold but is not the product dose",
+        "unspecified retention in this locus is not a short timed hold",
+        "study response is not a contraindication",
+        "healthy-volunteer acute response is not a population exclusion list",
+        "do not import hold duration from other Nivethitha papers",
+        "no serious adverse effects in this sample is not product clearance"
+      ],
+      "source_claim_scope": "acute_cardiovascular_response_during_bahir_kumbhaka",
+      "is_not_who_must_not_hold_candidate": true,
+      "ingest_status": "ingested"
+    }
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
+}

@@ -15,7 +15,7 @@ Catalog **38 draft / 0 `active`**. Unchanged.
 - **SoT before:** Today polish 1.3.114 bound native `interpretive_chorus.astrology` to IL-4. Live Profile is Character Engine (`CHARACTER_ENGINE_PUBLISH_READY=1`); legacy `profile_contract_v1` oneshot with IL-4 never runs. Natal Decode Depth still asked the model to invent sky meaning from compact `natal_pack` facts (signs/houses/angles) with Identity Core fixed — parallel astrology beside IL-4, same defect Today had on the chorus.
 - **SoT after:** **Profile Meaning Polish V1** binds Natal Decode `pattern_thesis` / `section.thesis` to IL-4 lemmas when a pack is present (cached natal geometry → existing attach gateway, surface=`profile`). System adds `PROFILE_IL4_DECODE`; consume `IL4_MEANING` + reject-invalid; empty theses may fill from pack primary `text` only. Identity Core / `because_core` stay CE. `day_hooks` stay now-gestures. Public natal-decode JSON unchanged (no `il4_expression_pack` on the artifact). Consume 1.3.113 and Today polish 1.3.114 stand.
 - **Public contract changed?** no — polish is LLM input / editorial gate only
-- **Migration required?** no — next explicit POST after `natal_decode_depth_v0.3` fingerprint miss; cached v0.2 artifacts stay until that POST
+- **Migration required?** yes — ops cache refresh **1.3.124** (`ops_force` / script). Cached v0.2 stayed unread until that POST.
 - **Canon updated?** yes — this file · IL §6.71 · inventory KC-C-PROFILE-POLISH + step 45 · natal decode · handoff · tracker
 - **Backward compatible?** yes — missing geometry → previous decode path
 

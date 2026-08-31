@@ -365,9 +365,8 @@ export function buildTodayCompositionViewModel(input: {
   const themeShort = extractThemeShort(input.contract, themeHeadline);
   const tagline =
     registry.claim(narrative.mainThought.subline) ??
-    registry.claim(input.contract.personal_growth.development_point) ??
     registry.claim(narrative.manifestations[0]?.line) ??
-    "Сегодня лучше двигаться последовательно, чем быстро.";
+    "";
 
   const influences = buildInfluences(input);
   const whyInfluences = influences.filter((i) => i.detail || i.kind === "moon");
@@ -375,10 +374,8 @@ export function buildTodayCompositionViewModel(input: {
   const caution = buildCaution(input.contract, registry);
   const strengthen = buildStrengthen(input.contract);
 
-  const focusTitle =
-    registry.claim(input.contract.primary_action?.trim()) ??
-    supported[0]?.comment ??
-    tagline.replace(/[.!?]+$/, "");
+  /** Not T3.focus_title (overlay axis) and not T3.priority (do). Continuity may use user dayGoal later. */
+  const focusTitle = "";
 
   return {
     hero: { centralThought, themeShort, themeHeadline, tagline },
@@ -418,9 +415,7 @@ export function applyGuideNarrativeToCompositionViewModel(
     themeHeadline.length > 48 ? `${themeHeadline.slice(0, 45).trim()}…` : themeHeadline;
 
   const strengthen = vm.strengthen.map((tool) =>
-    tool.id === "intention"
-      ? { ...tool, title: primaryAction, detail: "Один шаг на сегодня." }
-      : tool,
+    tool.id === "intention" ? { ...tool, title: primaryAction } : tool,
   );
 
   return {
@@ -432,7 +427,7 @@ export function applyGuideNarrativeToCompositionViewModel(
       themeShort,
       tagline,
     },
-    focusTitle: primaryAction,
+    focusTitle: vm.focusTitle,
     strengthen,
   };
 }

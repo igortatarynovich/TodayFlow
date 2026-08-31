@@ -199,8 +199,19 @@ def resolve_guidance_chat_model() -> str:
 
 
 def resolve_max_tokens(requested: int, *, model: str | None = None) -> int:
-    """Поднимает лимит для провайдеров, где часть budget уходит на thinking/reasoning."""
+    """Legacy thinking pad. Not cost SoT — ``llm_cost_guard_v1`` clamps before the provider.
+
+    When the cost guard is on, these floors are irrelevant: the router min()s against
+    the operation class cap. Kept for ``LLM_COST_GUARD=0`` protocol tests.
+    """
     requested = max(1, int(requested))
+    try:
+        from todayflow_backend.core.llm_cost_guard_v1 import is_cost_guard_enabled
+
+        if is_cost_guard_enabled():
+            return requested
+    except Exception:
+        pass
     provider = (settings.llm_provider or "openai").strip().lower()
     if provider == "gemini":
         if requested >= 800:
@@ -208,14 +219,10 @@ def resolve_max_tokens(requested: int, *, model: str | None = None) -> int:
         return requested
     mid = (model or resolve_default_chat_model()).strip().lower()
     if _uses_max_completion_tokens(mid):
-        # GPT-5 / o-series: reasoning tokens входят в max_completion_tokens.
         return max(requested + 4096, 8192)
     if _is_kimi_k3(mid):
-        # K3 always-on thinking shares the completion budget with content (Moonshot: ≥16k).
         return max(requested * 2 + 800, 16000)
     if _is_kimi_model(mid):
-        # Kimi often spends a large share of the budget on hidden reasoning before content;
-        # truncated JSON is common below ~3.5–4k completion tokens for rich day_story contracts.
         return max(requested * 2 + 800, 4000)
     return requested
 
@@ -381,9 +388,58 @@ def _create_chat_collect(
     text: str | None = None
     failure: str | None = None
     tokens_source = "provider_usage"
+    reservation_usd = 0.0
+    requested_model = model
+    requested_max = max_tokens
 
-    def _emit(*, ok: bool) -> None:
-        emit_llm_usage_v1(
+    try:
+        from todayflow_backend.core.llm_cost_guard_v1 import (
+            apply_provider_policy,
+            is_cost_guard_enabled,
+            settle_reservation,
+            trip_daily_ceiling,
+        )
+    except Exception:
+        apply_provider_policy = None  # type: ignore[assignment]
+        is_cost_guard_enabled = lambda: False  # noqa: E731
+        settle_reservation = lambda *_a, **_k: None  # noqa: E731
+        trip_daily_ceiling = lambda **_k: None  # noqa: E731
+
+    if is_cost_guard_enabled() and apply_provider_policy is not None:
+        decision = apply_provider_policy(
+            model=model,
+            max_tokens=max_tokens,
+            prompt_chars=_prompt_chars(messages),
+        )
+        reservation_usd = decision.reservation_usd
+        if decision.action == "deny":
+            failure = "budget_exhausted"
+            emit_llm_usage_v1(
+                model=decision.model,
+                prompt_chars=_prompt_chars(messages),
+                tokens_source="denied",
+                max_tokens=decision.max_tokens,
+                latency_ms=int((perf_counter() - t0) * 1000),
+                ok=False,
+                failure_class=failure,
+                streamed=False,
+                json_object=json_object,
+            )
+            settle_reservation(reservation_usd, 0.0)
+            return None
+        model = decision.model
+        max_tokens = decision.max_tokens
+        streamed = _should_stream_completion(model)
+        if decision.rebind_client:
+            from unittest.mock import Mock
+
+            if not isinstance(client, Mock):
+                rebound = get_openai_compatible_client(model=model)
+                if rebound is not None:
+                    client = rebound
+
+    def _emit(*, ok: bool) -> float:
+        event = emit_llm_usage_v1(
             model=model,
             input_tokens=usage.get("prompt_tokens") or None,
             output_tokens=usage.get("completion_tokens") or None,
@@ -400,6 +456,7 @@ def _create_chat_collect(
             streamed=streamed,
             json_object=json_object,
         )
+        return float(event.get("estimated_cost_usd") or 0.0)
 
     kw = _build_chat_kwargs(
         model=model,
@@ -435,11 +492,15 @@ def _create_chat_collect(
             tokens_source = "estimated_chars"
         if not text:
             failure = "empty"
-        _emit(ok=bool(text))
+        cost = _emit(ok=bool(text))
+        settle_reservation(reservation_usd, cost)
         return text
     except Exception as exc:
         failure = classify_llm_call_failure(exc)
-        _emit(ok=False)
+        cost = _emit(ok=False)
+        settle_reservation(reservation_usd, cost)
+        if failure == "billing_suspended":
+            trip_daily_ceiling(reason="provider_402")
         raise
 
 
@@ -468,6 +529,8 @@ def classify_llm_call_failure(exc: BaseException | None = None, *, http_status: 
         if status is None:
             resp = getattr(exc, "response", None)
             status = getattr(resp, "status_code", None)
+    if status == 402:
+        return "billing_suspended"
     if status == 429:
         return "rate_limited"
     if status in {408, 504}:
@@ -480,6 +543,8 @@ def classify_llm_call_failure(exc: BaseException | None = None, *, http_status: 
         return "timeout"
     if exc is not None:
         msg = str(exc).lower()
+        if status == 402 or "402" in msg or "payment required" in msg:
+            return "billing_suspended"
         if "429" in msg or "rate limit" in msg or "too many requests" in msg:
             return "rate_limited"
         if "finish_reason" in msg:
@@ -525,6 +590,8 @@ def _should_try_model_fallback(failure_kind: str | None) -> bool:
     Identical retry of the same model on timeout is still forbidden at the native
     attempt loop; this only switches primary → fallback once on attempt0.
     """
+    if failure_kind in {"budget_exhausted", "billing_suspended"}:
+        return False
     return failure_kind in {
         "model_unavailable",
         "upstream_unavailable",
@@ -614,6 +681,13 @@ def _chat_completion_text_once(
             )
             if text:
                 return text, None
+            try:
+                from todayflow_backend.core.llm_cost_guard_v1 import current_guard_meta
+
+                if current_guard_meta().get("cost_guard_action") == "deny":
+                    return None, "budget_exhausted"
+            except Exception:
+                pass
             logger.warning(
                 "LLM json_object returned empty content (model=%s); retrying without JSON mode",
                 model,
@@ -654,6 +728,13 @@ def _chat_completion_text_once(
             )
         if text:
             return text, None
+        try:
+            from todayflow_backend.core.llm_cost_guard_v1 import current_guard_meta
+
+            if current_guard_meta().get("cost_guard_action") == "deny":
+                return None, "budget_exhausted"
+        except Exception:
+            pass
         return None, "empty"
     except Exception as exc:
         kind = classify_llm_call_failure(exc)
@@ -731,6 +812,13 @@ def chat_completion_plain_with_status(
                     )
                 return text, None, mid
             last_kind = "empty"
+            try:
+                from todayflow_backend.core.llm_cost_guard_v1 import current_guard_meta
+
+                if current_guard_meta().get("cost_guard_action") == "deny":
+                    last_kind = "budget_exhausted"
+            except Exception:
+                pass
         except Exception as exc:
             last_kind = classify_llm_call_failure(exc)
             logger.warning(

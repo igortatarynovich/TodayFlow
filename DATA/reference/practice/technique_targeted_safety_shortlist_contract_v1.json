@@ -1,0 +1,76 @@
+{
+  "contract_version": "technique_targeted_safety_shortlist_contract_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-targeted-safety-shortlist-v1.0",
+  "description": "Narrow safety shortlist on who_must_not_hold for a required-hold normalized candidate. Selected = targeted safety ingest permission, not a product who-list and not canon. Canon: docs/practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md",
+  "unit_of_shortlist": "research_question",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "does_not_reopen_kernel": true,
+  "does_not_rewrite_safety_contract": true,
+  "selected_means": "allowed_for_targeted_safety_ingest_pass",
+  "selected_does_not_mean": [
+    "closed_who_must_not_hold",
+    "product_contraindication_list",
+    "may_release",
+    "canonical",
+    "efficacy",
+    "optional_hold",
+    "box_breathing_in_general"
+  ],
+  "safety_speech": [
+    "hold_exclusion",
+    "hold_precaution",
+    "general_breathwork_precaution",
+    "experimental_script",
+    "none"
+  ],
+  "safety_speech_that_may_be_selected": [
+    "hold_exclusion",
+    "hold_precaution"
+  ],
+  "source_families_that_may_be_selected": [
+    "official_health",
+    "clinical_psychology",
+    "academic_description"
+  ],
+  "source_families_not_sufficient_for_who_must_not_hold": [
+    "tradition_primary",
+    "recognized_school"
+  ],
+  "selection_decision": [
+    "selected",
+    "supporting",
+    "rejected",
+    "already_ingested"
+  ],
+  "stop_when": [
+    "preferred_class_hold_evidence_found_for_targeted_safety_ingest",
+    "unresolved_only_general_breathwork_precautions",
+    "structural_finding_universal_who_list_incorrect"
+  ],
+  "next_after_close": [
+    "targeted_safety_ingest_of_selected_loci",
+    "safety_review_v1_1"
+  ],
+  "not_next": [
+    "canonical",
+    "technique_id_on_probe",
+    "next_family_slice",
+    "reopen_kernel",
+    "safety_review_v1_1_before_ingest",
+    "rewrite_safety_contract_inside_shortlist"
+  ],
+  "invariants": [
+    "scope is who_must_not_hold for required holds, not box/square identity",
+    "general_breathwork_precaution is not selected and does not auto-transfer onto holds",
+    "wellness, popularizer, and tradition sources are not sufficient SoT for medical contraindications",
+    "locus must speak of breath holding or a close hold mechanism",
+    "does not invent a product who-list",
+    "does not rewrite Safety Review V1 contract; structural finding returns exclude/precaution/stop_rule to owner",
+    "does not write technique_canon_v1",
+    "does not set technique_id",
+    "does not declare an optional hold"
+  ]
+}

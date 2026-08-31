@@ -1,3 +1,5 @@
+> **SUPERSEDED for active execution.** See [RELEASE_PLAN_V1.md](./RELEASE_PLAN_V1.md) for the current path to soft launch. This file is kept as a historical decision log and old launch tasks.
+>
 > ⚠️ STALE — не отражает Journey/Day Sources. См. [audits/FULL_USER_PATH_CANON_V1.md](../audits/FULL_USER_PATH_CANON_V1.md). Полная ревизия — отдельная задача.
 
 # Web Launch v1 — Execution Plan

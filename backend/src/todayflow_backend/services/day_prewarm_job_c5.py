@@ -1,6 +1,7 @@
 """Day Lifecycle C5 — background prewarm job (no LLM on GET).
 
-Enqueued when GET /today/contract returns assembling, or by cron catch-up.
+Enqueued by cron assemble-window catch-up (`run_day_lifecycle_due`).
+GET /today/contract miss must not enqueue this job (Personal Day lifecycle).
 Uses generation_jobs_v0 daemon threads; request path only schedules.
 
 Concurrency: at most MAX_CONCURRENT_PREWARMS LLM assemblies hold a DB session.
@@ -139,6 +140,13 @@ def enqueue_day_prewarm(
     timezone_name: str = "UTC",
 ) -> Any:
     """Idempotent background assemble for one user/day. Safe to call from GET."""
+    from todayflow_backend.core.llm_cost_guard_v1 import is_synthetic_production_email
+    from todayflow_backend.db.models import User as UserModel
+
+    row = db.query(UserModel).filter(UserModel.id == int(user_id)).first()
+    if row is not None and is_synthetic_production_email(str(row.email or "")):
+        logger.info("enqueue_day_prewarm skipped synthetic email user_id=%s", user_id)
+        return None
     day_iso = local_date.isoformat()
     idem = f"day_prewarm:{int(user_id)}:{day_iso}"
     fingerprint = make_fingerprint("day_prewarm_c5", user_id, day_iso)

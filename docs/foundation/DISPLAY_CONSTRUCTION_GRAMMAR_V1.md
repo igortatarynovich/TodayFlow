@@ -1,0 +1,377 @@
+# Display Construction Grammar v1
+
+**Status:** ACTIVE — **закон конструкции** Profile и Today  
+**Date:** 2026-08-29  
+**Version:** 1.1  
+**Роль:** одинаковые правила для любых поверхностей. Не каталог слотов — каталоги: [PROFILE_DISPLAY_INVENTORY_V1](../profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [TODAY_DISPLAY_INVENTORY_V1](../today/TODAY_DISPLAY_INVENTORY_V1.md).  
+**Верхний продуктовый путь (закрыт):** §5. Не Meaning SoT.
+
+**Не заменяет:** Character Engine · TODAY_CONTENT_PIPELINE · Product Flow · ScreenFlow mechanics · visual SoT.
+
+---
+
+## Architecture impact
+
+- **SoT before:** Display Inventories named slots and budgets, but the chain, five constraint types, generated-input lock, and anti-dupe-by-question lived as prose. FE powers were implied.
+- **SoT after:** this file is the construction law. Inventory is the **last authority before UI** for *which* slots exist. This file is the law for *how* a slot is specified and what FE may do. Same grammar on Profile and Today; different slot sets.
+- **Public contract changed?** no JSON.
+- **Migration required?** no. UI cutover waits until both inventories fill this record for every visible atom.
+- **Canon updated?** yes — this file · foundation `_INDEX` · README · both inventories §0 · tracker.
+- **Backward compatible?** yes for API. FE that chooses meaning, fills empty, or adds a block not in Inventory is out of frame.
+
+## Architecture impact — journey lock + compute≠display (2026-08-29)
+
+- **SoT before:** compute chain and ScreenFlow path were listed together; a reader could think Personal Day exists only after the MY DAY surface. `natal/CE context` could be read as a Today input. `T3.focus_title` was a short thesis. `T3.action` duplicated Priority.
+- **SoT after:** §5 is the closed product journey. Compute order ≠ display order. Personal Day = Global × Natal Overlay (no CE until a named projection + Architecture impact). Journey acceptance (§5.2) is a second audit layer above slot correctness.
+- **Public contract changed?** no JSON fields. Display roles: `T3.focus_title` is axis not thesis; `T3.action` is out of frame.
+- **Migration required?** no runtime key bump. Code that feeds CE prose into Personal Day, generates lens without persisted Personal Day, or paints `T3.action` is drift.
+- **Canon updated?** yes — this file · TODAY_CONTENT_PIPELINE_V1 · TODAY_PRODUCT_FLOW_V1 · TODAY_DISPLAY_INVENTORY_V1 · tracker.
+- **Backward compatible?** yes for API. Guest ritual stays catalog-only.
+
+## Architecture impact — Grammar §9 Inventory scanner (2026-08-30)
+
+- **SoT before:** §9 listed 19 findings; only 7/12/15/17/18 were unit-tested. FE copy and VM fields could appear without a machine check against Inventory.
+- **SoT after:** `scanDisplayGrammar` is the harness for all 19 findings. Inventory markdown remains last authority before UI. `displayGrammar/inventoryCatalog.ts` is a derived index (sync-tested against §2). JSON may keep legacy fields; without a projection `slot_id` they must not render. Chrome copy files are not screen authority. Glance Daily Focus composition is out of this pass.
+- **Public contract changed?** no JSON.
+- **Migration required?** no. New path UI without an Inventory row fails finding 1 or 2.
+- **Canon updated?** yes — this file §9 · Today Inventory §7 · tracker.
+- **Backward compatible?** yes for API. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
+
+---
+
+## 1. Цепочка (LOCKED)
+
+```text
+расчёт
+    → semantic authority          (кто решает смысл)
+    → composition                 (какие атомы входят в кадр)
+    → named slot                  (один id, один вопрос)
+    → Display Inventory           (последний authority перед UI)
+    → projection                  (view-model без новой семантики)
+    → UI                          (показать / omit / clip)
+```
+
+**Запрещено:**
+
+```text
+JSON → frontend → «что-нибудь красиво покажем»
+```
+
+Frontend **не** решает: что важно · какой смысл вывести · какую мысль добавить · чем заполнить пустое · стоит ли показать дополнительный блок.
+
+Frontend получает **разрешённые слоты** из Inventory и отображает их. Clip — защита длины. Hide — только по `empty_behavior` / capability / time gate, уже записанным в слоте.
+
+Projector / ScreenFlow / FE **не** semantic authority. Pipeline Ownership остаётся для смысла дня; Character Engine — для личности. Inventory не invent смысла — раскладывает уже решённое.
+
+---
+
+## 2. Пять ограничений + omit
+
+Слот **не существует**, пока заполнены все пять. Пустой шестой пункт (`empty_behavior`) обязателен.
+
+| # | Ограничение | Вопрос |
+|---|-------------|--------|
+| 1 | **Existence** | Есть ли `slot_id` в Inventory этой поверхности? Нет → продукта нет. |
+| 2 | **Authority** | Кто имеет право определить смысл? (не кто формулирует) |
+| 3 | **Inputs** | Какие данные разрешено использовать? Всё остальное = forbidden inference. |
+| 4 | **Semantic role** | На какой **ровно один** вопрос отвечает слот? |
+| 5 | **Presentation budget** | Предложения / слова / символы / число элементов. |
+
+**Empty → omit.** Нет заполнения пустоты шаблоном, calm-строкой, соседним слотом или «для любого».
+
+Транспорт / throw → chrome `TF.no_connection` («Нет соединения.»).  
+Сервер flagged unavailable → chrome `TF.unavailable` («Не удалось загрузить.»).  
+Не invent product content.
+
+---
+
+## 3. Запись слота (обязательные поля)
+
+Каждый видимый атом — одна запись. Трасса от слова на экране:
+
+```text
+visible text
+  → slot_id
+  → text_class
+  → display_source          (поле / copy key / projection)
+  → semantic_source         (кто решил смысл)
+  → allowed_inputs
+  → authority
+  → persist_key / version
+  → rendering_rule          (clip · omit · map label)
+```
+
+И отдельно:
+
+```text
+slot_id
+  → one_question
+  → budget
+  → empty_behavior
+  → interaction
+  → forbidden
+```
+
+### 3.1 Поля записи
+
+| Поле | Обязательно | Смысл |
+|------|-------------|--------|
+| `slot_id` | да | стабильный id (`T1-hero.human_line`, `P1.recognition_line`) |
+| `surface` | да | `profile` · `today` · `ritual` · `my_day` · `evening` · `chrome-shared` |
+| `role` | да | зачем элемент существует (не вопрос пользователя) |
+| `one_question` | да для meaning | ровно один вопрос, на который отвечает слот |
+| `text_class` | да | см. §4 |
+| `authority` | да | semantic authority |
+| `semantic_source` | да | где живёт решение (Engine nest, Snapshot field, copy file) |
+| `display_source` | да | что читает UI (projection path / copy key) |
+| `allowed_inputs` | да для generated / projected | разрешённые семантические входы |
+| `forbidden_inference` | да для generated / projected | что нельзя вывести, даже «осторожно» |
+| `output` | да | форма выхода (1 предложение, chip, visual) |
+| `budget` | да | sentences / words / chars / count |
+| `required` | да | да / нет / conditional |
+| `empty_behavior` | да | почти всегда `omit` |
+| `may_fe_transform` | да | `none` \| `clip` \| `map_label` \| `hide_by_gate` |
+| `may_llm_add_meaning` | да | **нет**, кроме формулировки уже решённого входа |
+| `interaction` | да | none / tap→sheet того же слота / navigate / disclose |
+| `forbidden` | да | чужие слои, дубли ролей, kitchen |
+| `why_here` | да | место в пути (Recognition дня, Шаг 3 Profile, …) |
+| `persist_key` | да для meaning | ключ повторяемости |
+| `anti_dupe_group` | да для meaning | id группы, внутри которой один proposition ≠ два слота |
+
+Chrome-лейблы могут делить одну запись-семейство (`P.chrome.step_title`) со списком `members[]`, если все поля кроме copy key совпадают.
+
+---
+
+## 4. Классы текста
+
+| `text_class` | Кто пишет смысл | Кто формулирует | FE |
+|--------------|-----------------|-----------------|-----|
+| `chrome` | продукт (Inventory / copy lock) | copy file | только этот ключ |
+| `calc` | Engine / mapping | детерминированный факт или closed-set label | показать / omit / map_label |
+| `generated` | **не LLM** — authority слота | LLM формулирует **уже решённое** | clip only |
+| `projected` | тот же, что у исходного слота | детерминированная проекция (effort из help, bridge pack) | clip; no LLM |
+| `catalog` | справочник символа | catalog copy | as-is |
+| `user` | человек | человек | persist; не переписывать meaning дня/профиля |
+
+**LLM не шестой источник смысла.**  
+`generated` = формулировка. Если вывода нет в `allowed_inputs`, его нет в слоте — даже если фраза «хорошо звучит».
+
+Пример:
+
+```text
+primary_energy = grounded          ← Engine
+T1-hero.human_line                 ← LLM может сказать, каково grounded-день
+НЕ может сам решить
+  «сегодня лучше избегать важных разговоров»
+  если этого нет во входах ЭТОГО слота
+  (а у human_line входов на do/avoid нет — это T1-risk / T3-caution)
+```
+
+---
+
+## 5. Одна грамматика, разные поверхности (путь закрыт)
+
+Одинаковые правила. Не одинаковые блоки. Дальше не пересобирать общую композицию — только слот vs этот путь.
+
+```text
+Profile path:  Recognition → Why → Insight → Effort → Bridge
+Today path:    TODAY → RITUAL → MY DAY → EVENING
+```
+
+**Explore** существует рядом как глубина и склад. **Не** шестой акт пути.
+
+Внутри каждой поверхности — **закрытый** набор `slot_id`.
+
+| Profile | Вопрос пути |
+|---------|-------------|
+| Recognition | Кто я? |
+| Why | Почему это про меня? |
+| Insight | Что я раньше не замечал? |
+| Effort | Куда направить усилие? |
+| Bridge | Почему имеет смысл посмотреть сегодняшний контекст? |
+
+| Today | Вопрос пути |
+|-------|-------------|
+| TODAY | Каков сегодняшний день? |
+| RITUAL | Через какие дополнительные символические линзы на него посмотреть? |
+| MY DAY | Что этот день значит лично для меня? |
+| EVENING | Что я забираю из уже прожитого дня? |
+
+New-value: следующий meaning-слот не перефразирует предыдущий proposition. Это **anti_dupe_group**, не «похожая длина».
+
+### 5.1 Вычисление ≠ показ (LOCKED)
+
+Два порядка. Их нельзя сливать в одну стрелку.
+
+**Display (ScreenFlow / Inventory):**
+
+```text
+TODAY → RITUAL → MY DAY → EVENING
+```
+
+**Compute / persist (Pipeline):**
+
+```text
+Небо → Global Day
+Небо × натал → Personal Day          (persist; может быть до кадра MY DAY)
+Personal Day × карта → Card Lens
+Personal Day × число → Number Lens
+```
+
+Personal Day **может быть рассчитан и сохранён**, до того как пользователь физически дошёл до поверхности MY DAY.
+
+RITUAL **не считает** Personal Day. RITUAL читает уже существующий Personal Day только как основу Card Lens и Number Lens. MY DAY затем **показывает** сам Personal Day.
+
+Ответ на «если MY DAY ещё не открыт, откуда RITUAL взял Personal Day?»: из persist по `PersonalDayKey`, не из факта визита на кадр.
+
+**Guest:**
+
+| | |
+|--|--|
+| RITUAL Catalog | доступен (карта/число как учебник + universal number) |
+| RITUAL Personal Lens (`T2.lens_*`) | **отсутствует** — нет Personal Day, не относительно чего строить линзу |
+| MY DAY meaning (`T3.*`) | omit |
+
+### 5.2 Journey correctness (acceptance, не UI)
+
+Два уровня проверки. Оба обязательны.
+
+1. **Slot correctness** — каждое видимое предложение законно: `slot_id`, authority, inputs, one_question, budget, persist, anti-dupe.
+2. **Journey correctness** — последовательность законных предложений выполняет job шага.
+
+После каждого шага пользователь должен **потенциально** суметь закончить одну фразу. Если слоты заполнены, а фраза невозможна — акт сломан.
+
+| Поверхность | Что пользователь должен уметь сказать |
+|-------------|--------------------------------------|
+| Recognition | «Я человек, который…» |
+| Why | «Это похоже на меня потому, что…» |
+| Insight | «Я раньше не замечал, что…» |
+| Effort | «Мне полезно направлять усилие на…» |
+| Bridge | «Сегодня стоит открыть, потому что…» |
+| TODAY | «Сегодня в целом день…» |
+| RITUAL | «Карта или число предлагают посмотреть на него через…» |
+| MY DAY | «Для меня сегодня главное…» |
+| EVENING | «Сегодня я благодарен за…» |
+
+Guest на RITUAL заканчивает фразу **каталогом** («карта значит…»), не персональной линзой.
+
+---
+
+## 6. Semantic role ≠ длина
+
+Недостаточно: «headline — 1 предложение, focus — 1–2».
+
+Нужна **разная функция**. Тогда тест ловит две перефразировки одного тезиса.
+
+| Поверхность | Слот | `one_question` (замок) |
+|-------------|------|------------------------|
+| Profile | `P1.recognition_line` | Кто я как наблюдаемый механизм? |
+| Profile | `P3.insight` | Какую закономерность / ловушку я раньше не называл? |
+| Profile | `P4.effort_vector` | Куда прикладывать усилие в поведении? |
+| Profile | `P5.bridge_line` | Почему сейчас открыть Today? |
+| Today | `T1-hero.human_line` | Каков уже выбранный общий день на человеческом языке? |
+| Today | `T3.headline` | Каков главный персональный **тезис** дня? |
+| Today | `T3.focus_title` | В какой **области / оси** этот тезис проявляется сильнее всего? |
+| Today | `T3.focus_body` | Как именно он там проявляется и куда направить внимание? |
+| Today | `T3.priority` | Что конкретно сделать относительно сегодняшней ситуации? |
+| Today | `T3.caution` | Где персональный риск, не копия Global chips? |
+| Today | `T2.catalog` | Что символ значит в каталоге? |
+| Today | `T2.lens` | Как символ окрашивает *уже посчитанный* Personal Day? |
+
+Один semantic source **не** может незаконно обслуживать две роли. Пример дефекта: `why_personal` → и `T3.headline`, и `T3.focus_body`. Второй дефект: свободный `T3.focus_title` как короткий перефраз headline.
+
+`P1.identity_core` — **раскрытие той же оси**, что `recognition_line` (не новая роль). Anti-dupe: не равен `P3.insight` / `P4` / `P5`.
+
+---
+
+## 7. Rendering (единственные права FE)
+
+| Правило | Да | Нет |
+|---------|----|-----|
+| `clip` | обрезать по budget на границе предложения/слова | дописать смысл |
+| `map_label` | closed-set → RU chrome (`grounded` → «Заземление») | свободный синоним |
+| `hide_by_gate` | capability, time gate, `required=no` + empty | спрятать, потому что «некрасиво» |
+| `omit` | нет payload | заполнить соседним полем |
+| sheet / disclose | тот же `slot_id` / тот же вопрос | новый смысл в overlay |
+
+---
+
+## 8. Persist / воспроизводимость
+
+| Слой | Ключ |
+|------|------|
+| Chrome | ключ copy + версия Inventory |
+| Profile meaning | `(user_id, profile_hash)` Snapshot + prompt/projection version |
+| Global Day | `GlobalDayKey = local_date + locale + semantic_version` |
+| Personal Day | `PersonalDayKey = user_identity + local_date + semantic_version` — **не** CE/`profile_hash`, **не** card id, **не** number |
+| Ritual identity | `(owner, local_date)` — не пересчитывает день |
+| Gratitude | user record + `manifest`; **не** мутирует день |
+
+Одинаковые ключи + версия правил → одинаковый **набор слотов**. Generated текст стабилен после persist (GET = 0 LLM на слое).
+
+---
+
+## 9. Audit (harness)
+
+Scanner проверяет **законность происхождения и размещения**, не качество фразы. Semantic quality остаётся у authority / slot contract.
+
+**SoT слотов:** [TODAY_DISPLAY_INVENTORY_V1](../today/TODAY_DISPLAY_INVENTORY_V1.md) · [PROFILE_DISPLAY_INVENTORY_V1](../profile/PROFILE_DISPLAY_INVENTORY_V1.md).  
+Код `frontend/src/lib/displayGrammar/` — производный индекс + scanner. **Не** Meaning SoT и не пятый канон.
+
+Цепочка проверки: source → composition → `slot_id` → Inventory → projection → UI.
+
+| Слой | Правило |
+|------|---------|
+| Meaning atom | есть `slot_id` этой поверхности; class допустим; origin ∈ allowed; forbidden не протёк; FE только clip / map_label / hide_by_gate; empty → omit; anti-dupe |
+| Chrome | пользовательский label имеет chrome-запись Inventory. Строка в copy-файле **сама по себе** права на экран не даёт |
+| JSON → UI | legacy field может жить в payload; без разрешённого `slot_id` он **невидим** |
+| T1 Global | ни natal, ни CE, ни Personal Day, ни ritual identity / карта / число, ни goals/behavior |
+| T3 Personal | natal overlay персонализирует день; Character warehouse / CE prose **не** вход |
+
+Negative fixtures (обязательны): unknown filled VM field без slot → finding 2; новая содержательная строка прямо в path-component → finding 1.
+
+**Regression:** findings 7 / 12 / 15 / 17 / 18 остаются в `todayDisplayLockAudit.ts` и вливаются в `scanDisplayGrammar`.
+
+| # | Находка |
+|---|---------|
+| 1 | FE label / copy key не в Inventory |
+| 2 | JSON field рисуется без `slot_id` |
+| 3 | generated длиннее budget |
+| 4 | personal / natal / CE source на Global `today` |
+| 5 | ritual symbol во входах Global Day |
+| 6 | один semantic source в двух `anti_dupe_group` ролях |
+| 7 | fallback, придумавший смысл |
+| 8 | неизвестный `text_class` |
+| 9 | >3 ranked drivers на T1 |
+| 10 | >4 support chips / >3 risk chips |
+| 11 | Evening в скролле до time gate |
+| 12 | guest с MY DAY meaning slots **или** `T2.lens_*` |
+| 13 | `may_fe_transform` шире clip/map/hide_by_gate |
+| 14 | generated слот без `allowed_inputs` + `forbidden_inference` |
+| 15 | `T2.lens_*` без persisted Personal Day |
+| 16 | Character Engine field во входах Personal Day |
+| 17 | `T3.action` / второй слот на вопрос Priority |
+| 18 | `T3.focus_title` = перефраз `T3.headline` (не ось) |
+| 19 | slot correctness PASS, journey sentence (§5.2) FAIL |
+
+---
+
+## 10. Новый слот
+
+1. Запись §3 в нужном Inventory.  
+2. Architecture impact.  
+3. Anti-dupe: новый `one_question` или явно «disclosure той же оси».  
+4. Код projection **после** записи, не наоборот.
+
+Нет записи → нет UI.
+
+---
+
+## Changelog
+
+| Date | Change |
+|------|--------|
+| 2026-08-30 | §9 full Inventory scanner (`displayGrammar`); findings 1–19; negative fixtures unknown-field / invented FE copy |
+| 2026-08-29 | §9 finding 7 (canned/CE invent) added to the same unit subset |
+| 2026-08-29 | §9 findings 12/15/17/18 unit-tested (`todayDisplayLockAudit`); full scanner later |
+| 2026-08-29 | v1.0 — цепочка; пять ограничений; generated ≠ authority; anti-dupe by question; FE powers |

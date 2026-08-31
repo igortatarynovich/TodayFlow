@@ -41,6 +41,8 @@ Services:
 
 ### Public deployment
 
+Full runbook: `docs/operations/DEPLOY_RUNBOOK_V1.md`. Short form:
+
 1. Copy `.env.production.example` → `.env` on the server and set `PUBLIC_WEB_URL`, `PUBLIC_API_URL`, `AUTH_JWT_SECRET`, `POSTGRES_PASSWORD`, SMTP.
 2. Build and run:
 
@@ -53,7 +55,7 @@ docker compose -f docker-compose.prod.yml up -d --build
    - `PUBLIC_API_URL` → `backend:8080` (must match `NEXT_PUBLIC_API_BASE_URL` baked at frontend build time)
 4. **Launch walkthrough** (smoke test): `/` → onboarding → First Today → evening → save email → magic link → D2 `/today`.
 
-Adjust `.env` / environment variables per service before adding real credentials (Stripe, Supabase, etc.). Payments default to a mock mode (`PAYMENTS_MODE=mock`) so local testing auto-upgrades accounts; set `PAYMENTS_MODE=stripe` + Stripe secrets when you are ready for live checkout.
+GitHub Actions validates tests, frontend build, and the production compose file on every push to `main`; it does **not** auto-deploy to the live host. See the runbook for manual deploy steps, rollback, and post-deploy checks. Adjust `.env` / environment variables per service before adding real credentials (Stripe, Supabase, etc.). Payments default to a mock mode (`PAYMENTS_MODE=mock`) so local testing auto-upgrades accounts; set `PAYMENTS_MODE=stripe` + Stripe secrets when you are ready for live checkout.
 
 ## Development Guidelines
 

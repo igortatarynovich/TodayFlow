@@ -14,7 +14,6 @@ from todayflow_backend.services.profile_contract_quality_v1 import (
 )
 from todayflow_backend.services.profile_contract_v1 import (
     FORMING_MESSAGE_RU,
-    PROFILE_CONTRACT_PROMPT_VER,
     PROFILE_STATUS_FORMING,
     build_profile_contract_forming_v1,
     build_profile_contract_fallback_v1,
@@ -25,7 +24,6 @@ from todayflow_backend.services.profile_disclosure_funnel_v0 import (
     SPHERE_IDS,
     SPHERE_FIELDS,
     _identity_ok,
-    profile_prompt_versions,
 )
 
 
@@ -92,23 +90,22 @@ def test_fallback_is_forming_not_fake_scaffold() -> None:
     assert "Устойчивость" not in blob
 
 
-def test_prompt_version_change_invalidates_hash() -> None:
-    svc = CoreProfileService()
-    h1 = svc._build_profile_hash(None, {"birth_date": "1990-01-01", "sun_sign": "Leo"}, {"life_path": 7})
-    versions = profile_prompt_versions()
-    # Mutate registry version via monkeypatch on profile_prompt_versions
-    bumped = {**versions, "profile.spheres.synthesis.v1": "9.9.9"}
-
+def test_expression_versions_do_not_invalidate_profile_hash(monkeypatch) -> None:
+    """Polish/prompt bumps must not orphan the portrait snapshot."""
     import todayflow_backend.services.core_profile as cp
 
-    original = cp.profile_prompt_versions
-    cp.profile_prompt_versions = lambda: bumped
-    try:
-        h2 = svc._build_profile_hash(None, {"birth_date": "1990-01-01", "sun_sign": "Leo"}, {"life_path": 7})
-    finally:
-        cp.profile_prompt_versions = original
-    assert h1 != h2
-    assert PROFILE_CONTRACT_PROMPT_VER
+    svc = CoreProfileService()
+    facts = {"birth_date": "1990-01-01", "sun_sign": "Leo"}
+    nums = {"life_path": 7}
+    h1 = svc._build_profile_hash(None, facts, nums)
+    monkeypatch.setattr(cp, "PROFILE_CONTRACT_PROMPT_VER", "profile-contract-v99")
+    monkeypatch.setattr(cp, "profile_prompt_versions", lambda: {"profile.spheres.synthesis.v1": "9.9.9"})
+    h2 = svc._build_profile_hash(None, facts, nums)
+    assert h1 == h2
+    h3 = svc._build_profile_hash(None, {**facts, "birth_date": "1991-01-01"}, nums)
+    assert h1 != h3
+    bumped = CoreProfileService(semantic_version="semantic.v2")
+    assert bumped._build_profile_hash(None, facts, nums) != h1
 
 
 def test_parallel_opens_do_not_multiply_generation(monkeypatch) -> None:
@@ -123,12 +120,6 @@ def test_parallel_opens_do_not_multiply_generation(monkeypatch) -> None:
         calls["n"] += 1
         time.sleep(0.08)
         return ready_contract, {"identity": ready_contract["identity_core"]}, {}, False
-
-    # Patch inside the lock path: snapshot miss + portrait once.
-    monkeypatch.setattr(
-        "todayflow_backend.services.core_profile.build_profile_portrait_v1",
-        fake_build_portrait,
-    )
 
     class _Dummy:
         id = 1

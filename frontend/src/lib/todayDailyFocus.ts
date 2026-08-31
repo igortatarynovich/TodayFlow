@@ -132,12 +132,6 @@ function buildDailyFocusFromDayStory(contract: TodayContractV1): DailyFocusModel
   if (lines.length === 0 && direction && direction !== title.replace(/\.$/, "")) {
     lines = filterDailyFocusLines([direction.endsWith(".") ? direction : `${direction}.`]);
   }
-  if (lines.length === 0 && contract.personal_growth?.development_point) {
-    const dev = contract.personal_growth.development_point.trim();
-    if (dev && !isDailyFocusReject(dev)) {
-      lines = filterDailyFocusLines([dev]);
-    }
-  }
 
   return {
     dailyFocusId: "day_story_v1",
@@ -175,13 +169,6 @@ export function buildDailyFocusModel(
     const brief = parseDayEngineBriefFromGuide(guidePayload);
     if (brief?.anchor) {
       lines = descriptiveSentences(brief.anchor).slice(0, 2);
-    }
-  }
-
-  if (lines.length === 0 && contract.personal_growth?.development_point) {
-    const dev = contract.personal_growth.development_point.trim();
-    if (dev && !isDailyFocusReject(dev)) {
-      lines = filterDailyFocusLines([dev]);
     }
   }
 

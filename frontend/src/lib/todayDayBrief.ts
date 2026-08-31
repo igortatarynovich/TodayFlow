@@ -11,7 +11,6 @@ import type { DayVisualMode } from "@/lib/dayAtmosphere";
 import { DAY_MODE_LABELS_RU, DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 import { resolveCelestialMoonPhase } from "@/lib/celestialMoonPhase";
 import type { TodayContractGlobalDayWindowV1, TodayContractV1 } from "@/lib/todayContract";
-import { isTodayInterpretationUnavailable } from "@/lib/todayContract";
 import type { HandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 import { buildTodaySkyStripModel, inSign, type TodaySkyStripModel } from "@/lib/todaySkyToday";
 import { isHonestUnavailableCopy } from "@/lib/todaySlotAvailability";
@@ -812,6 +811,23 @@ function buildMainDriver(contract: TodayContractV1, energyLabel: string | null):
   };
 }
 
+const GENERIC_PERSONAL_SIGNAL_PLACEHOLDER =
+  /активирует\s+личную\s+тему\s+из\s+натальной\s+карты/i;
+
+function pickPersonalDaySignalHeadline(
+  dayPersonal: NonNullable<TodayContractV1["day_story"]>["day_personal"] | null | undefined,
+): string | null {
+  if (!dayPersonal) return null;
+  const beats = dayPersonal.personal_astrology?.beats;
+  if (!Array.isArray(beats)) return null;
+  for (const beat of beats) {
+    if (String(beat?.kind || "") !== "natal_transit") continue;
+    const title = cleanAmbassadorWhy(beat?.title);
+    if (title) return title;
+  }
+  return null;
+}
+
 export function buildTodayDayBriefModel(input: {
   contract: TodayContractV1;
   dateLabel: string;
@@ -861,13 +877,14 @@ export function buildTodayDayBriefModel(input: {
     cleanAmbassadorWhy(story?.advantage) ||
     (doItems.length > 1 ? doItems.slice(1).join(" · ") : null);
 
-  const personalLine = isTodayInterpretationUnavailable(input.contract)
-    ? null
-    : clipCompassProse(
-        cleanAmbassadorWhy(story?.day_scenario?.conflict?.why_personal) ||
-          cleanAmbassadorWhy(input.contract.personal_growth?.development_point),
-        180,
-      ) || null;
+  /** T3.headline — thesis only. Not why_personal (focus_body) and not CE development_point. */
+  const rawSummary = cleanAmbassadorWhy(story?.day_personal?.summary_ru);
+  const summaryHeadline =
+    rawSummary && !GENERIC_PERSONAL_SIGNAL_PLACEHOLDER.test(rawSummary) ? rawSummary : null;
+  const personalLine =
+    clipCompassProse(summaryHeadline, 180) ||
+    clipCompassProse(pickPersonalDaySignalHeadline(story?.day_personal), 180) ||
+    null;
 
   const skyStrip = input.loading ? null : buildTodaySkyStripModel(input.contract, null);
   const lunarCaption = input.loading

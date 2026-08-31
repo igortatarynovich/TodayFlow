@@ -1,3 +1,6 @@
+import type { TodayContractV1 } from "@/lib/todayContract";
+import { contractHasPersistedPersonalDay } from "@/lib/todayContract";
+
 /**
  * ScreenFlow capability matrix (Today).
  * Canon: docs/today/TODAY_PRODUCT_FLOW_V1.md · SCREEN_FLOW_V1 §4.1
@@ -108,6 +111,15 @@ export function todayCapabilityAllowsPersonal(
   depth: TodayCapabilityDepth,
 ): boolean {
   return TODAY_SCREEN_FLOW_CAPABILITY[depth].myDay;
+}
+
+/** T2.lens_* — capability can have Personal Day AND the nest is already persisted. */
+export function todayAllowsRitualLens(
+  depth: TodayCapabilityDepth,
+  contract: TodayContractV1 | null | undefined,
+): boolean {
+  if (!todayCapabilityAllowsPersonal(depth)) return false;
+  return contractHasPersistedPersonalDay(contract);
 }
 
 export function todayCapabilityShowsTimelineOnToday(): false {

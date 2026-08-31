@@ -169,6 +169,22 @@ def _agg_operations(events: list[dict[str, Any]], *, limit: int = 20) -> list[di
     return out[: max(1, int(limit))]
 
 
+def _agg_classes(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    buckets: dict[str, dict[str, Any]] = defaultdict(
+        lambda: {"calls": 0, "cost": 0.0, "output": 0, "denied": 0}
+    )
+    for ev in events:
+        cls = _blank(ev.get("cost_class"), "unlabeled")
+        buckets[cls]["calls"] += 1
+        buckets[cls]["cost"] += float(ev.get("estimated_cost_usd") or 0.0)
+        buckets[cls]["output"] += int(ev.get("output_tokens") or 0)
+        if ev.get("cost_guard_action") == "deny" or ev.get("failure_class") == "budget_exhausted":
+            buckets[cls]["denied"] += 1
+    out = [{"cost_class": k, **v} for k, v in buckets.items()]
+    out.sort(key=lambda r: r["cost"], reverse=True)
+    return out
+
+
 def _agg_triggers(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
     buckets: dict[str, dict[str, Any]] = defaultdict(
         lambda: {"calls": 0, "cost": 0.0, "output": 0}
@@ -206,6 +222,7 @@ def main() -> int:
     matrix = _agg_matrix(events)
     ops = _agg_operations(events, limit=args.top_ops)
     triggers = _agg_triggers(events)
+    classes = _agg_classes(events)
     total_cost = sum(r["cost"] for r in matrix)
     total_out = sum(r["output"] for r in matrix)
     summary = {
@@ -213,6 +230,7 @@ def main() -> int:
         "output_tokens": total_out,
         "estimated_cost_usd": round(total_cost, 4),
         "by_trigger": triggers,
+        "by_cost_class": classes,
         "matrix": matrix,
         "top_operations": ops,
     }
@@ -228,6 +246,14 @@ def main() -> int:
     print(f"{'Trigger':<12} {'Calls':>8} {'Output':>12} {'Cost':>10}")
     for r in triggers:
         print(f"{r['trigger']:<12} {r['calls']:>8} {r['output']:>12} ${r['cost']:>9.4f}")
+
+    print("\n== cost_class ==")
+    print(f"{'Class':<16} {'Calls':>8} {'Denied':>8} {'Output':>12} {'Cost':>10}")
+    for r in classes:
+        print(
+            f"{r['cost_class']:<16} {r['calls']:>8} {r['denied']:>8} "
+            f"{r['output']:>12} ${r['cost']:>9.4f}"
+        )
 
     print("\n== feature × trigger × model × retry_reason ==")
     print(

@@ -30,7 +30,7 @@ LLM_USAGE_EVENT_V1 = "llm_usage_v1"
 DEFAULT_FEATURE = "unlabeled"
 
 # Product vs infra. Outer trigger wins once set; emit infers eval/script if still empty.
-ALLOWED_TRIGGERS = frozenset({"user", "prewarm", "eval", "script", "background"})
+ALLOWED_TRIGGERS = frozenset({"user", "prewarm", "eval", "script", "background", "engineering"})
 RETRY_REASONS = frozenset(
     {
         "empty_content",
@@ -41,6 +41,7 @@ RETRY_REASONS = frozenset(
         "schema_retry",
         "quality_retry",
         "timeout",
+        "budget_downgrade",
     }
 )
 
@@ -255,6 +256,12 @@ def emit_llm_usage_v1(
     operation_id: str | None = None,
     attempt: int | None = None,
     retry_reason: str | None = None,
+    cost_guard_action: str | None = None,
+    cost_class: str | None = None,
+    requested_model: str | None = None,
+    requested_max_tokens: int | None = None,
+    daily_spent_usd: float | None = None,
+    daily_ceiling_usd: float | None = None,
 ) -> dict[str, Any]:
     ctx = current_llm_call_context()
     feat = (feature or ctx.get("feature") or DEFAULT_FEATURE).strip() or DEFAULT_FEATURE
@@ -275,7 +282,12 @@ def emit_llm_usage_v1(
     reason_tok = int(reasoning_tokens or 0) if reasoning_tokens is not None else 0
     cache_tok = int(cached_tokens or 0)
 
-    if not has_provider_out:
+    if src == "denied":
+        in_tok = 0
+        out_tok = 0
+        reason_tok = 0
+        cost = 0.0
+    elif not has_provider_out:
         # Estimate billed completion as content+reasoning; do not add reasoning again at cost time.
         content_est = estimate_tokens_from_chars(content_chars)
         reason_est = estimate_tokens_from_chars(reasoning_chars)
@@ -291,13 +303,13 @@ def emit_llm_usage_v1(
         reason_tok = out_tok
 
     content_tok = max(0, out_tok - reason_tok) if reason_tok else out_tok
-    # Cost uses billed output only. reasoning_tokens is a slice of output_tokens.
-    cost = estimate_cost_usd(
-        model=model,
-        input_tokens=in_tok,
-        output_tokens=out_tok,
-        reasoning_tokens=reason_tok,
-    )
+    if src != "denied":
+        cost = estimate_cost_usd(
+            model=model,
+            input_tokens=in_tok,
+            output_tokens=out_tok,
+            reasoning_tokens=reason_tok,
+        )
     empty_content = retry == "empty_content"
     parse_failed = retry == "parse_failed"
     gate_retry = retry == "gate_retry"
@@ -334,6 +346,21 @@ def emit_llm_usage_v1(
         "streamed": bool(streamed),
         "json_object": bool(json_object),
     }
+    try:
+        from todayflow_backend.core.llm_cost_guard_v1 import current_guard_meta
+
+        guard = current_guard_meta()
+    except Exception:
+        guard = {}
+    event["cost_guard_action"] = (cost_guard_action or guard.get("cost_guard_action") or "").strip() or None
+    event["cost_class"] = (cost_class or guard.get("cost_class") or "").strip() or None
+    event["requested_model"] = (requested_model or guard.get("requested_model") or "").strip() or None
+    req_max = requested_max_tokens if requested_max_tokens is not None else guard.get("requested_max_tokens")
+    event["requested_max_tokens"] = int(req_max) if req_max else None
+    spent = daily_spent_usd if daily_spent_usd is not None else guard.get("daily_spent_usd")
+    event["daily_spent_usd"] = float(spent) if spent is not None else None
+    ceil = daily_ceiling_usd if daily_ceiling_usd is not None else guard.get("daily_ceiling_usd")
+    event["daily_ceiling_usd"] = float(ceil) if ceil is not None else None
     _store_event(event)
     return event
 

@@ -11,7 +11,6 @@ import {
 import { ProfileDeepThemesChooser } from "@/components/profile/v2/ProfileDeepThemesChooser";
 import { ProfileNatalDecodePanel } from "@/components/profile/v2/ProfileNatalDecodePanel";
 import { ProfileBridgeScene } from "@/components/profile/v2/scenes/ProfileBridgeScene";
-import { ProfileCharacterScene } from "@/components/profile/v2/scenes/ProfileCharacterScene";
 import { ProfileEffortScene } from "@/components/profile/v2/scenes/ProfileEffortScene";
 import { ProfileExploreSection } from "@/components/profile/v2/scenes/ProfileExploreSection";
 import { ProfileInsightScene } from "@/components/profile/v2/scenes/ProfileInsightScene";
@@ -90,7 +89,18 @@ export function ProfileV2SystemScreen({
       model.frameworkLead,
   );
   const hasDirection = Boolean(model.lifeMission || lifeSpheres?.length);
-  const hasExploreBody = Boolean(deep || journey.progressiveDetails.length || lifeSpheres?.length);
+  const pathSpheres = (lifeSpheres ?? []).slice(0, 2);
+  const exploreSpheres = (lifeSpheres ?? []).slice(2);
+  const hasExploreBody = Boolean(
+    deep ||
+      journey.progressiveDetails.length ||
+      exploreSpheres.length ||
+      model.decisionStyle ||
+      model.relationshipStyle ||
+      model.moneyStyle ||
+      model.lifeMission ||
+      model.frameworkLead,
+  );
 
   const first = buildProfileFirstScreenProjection(coreProfile, {
     hasDeepSources: Boolean(deep),
@@ -110,12 +120,7 @@ export function ProfileV2SystemScreen({
     return node;
   })();
 
-  const progressiveForExplore = journey.progressiveDetails.filter((item) => {
-    if (item.id === "relationship_style" && model.relationshipStyle) return false;
-    if (item.id === "money_patterns" && model.moneyStyle) return false;
-    if (item.id === "decision_style" && model.decisionStyle) return false;
-    return true;
-  });
+  const progressiveForExplore = journey.progressiveDetails;
 
   return (
     <div className={styles.pageRoot} data-testid="profile-v2-system">
@@ -169,25 +174,10 @@ export function ProfileV2SystemScreen({
 
             {insightForScroll ? <ProfileInsightScene node={insightForScroll} /> : null}
 
-            {showCharacterMore ? (
-              <ProfileCharacterScene
-                strengthens={model.strengthens}
-                drains={model.drains}
-                helps={helps}
-                decisionStyle={model.decisionStyle}
-                patterns={model.perceivedAs}
-                lifeMission={model.lifeMission}
-                relationshipStyle={model.relationshipStyle}
-                moneyStyle={model.moneyStyle}
-                livingChanges={model.frameworkLead}
-                omitMaterialLists={Boolean(insightForScroll)}
-              />
-            ) : null}
-
             {journey.effortVector ? (
               <ProfileEffortScene
                 effortVector={journey.effortVector}
-                lifeSpheres={lifeSpheres}
+                lifeSpheres={pathSpheres}
               />
             ) : live.helpsAccessGated && l3Message ? (
               <section className={styles.zone} data-testid="profile-v2-helps-gated" aria-label="Глубина профиля">
@@ -214,10 +204,9 @@ export function ProfileV2SystemScreen({
                 onToggle={() => setExploreOpen((v) => !v)}
                 progressiveDetails={progressiveForExplore}
                 model={model}
-                lifeSpheres={lifeSpheres}
+                lifeSpheres={exploreSpheres}
                 deep={deep}
                 deepExpanded={deepExpanded}
-                hideMission
               />
             ) : null}
 

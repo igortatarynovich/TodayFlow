@@ -2,7 +2,8 @@
 
 **Status:** CANON LOCKED · **2026-08-15**  
 **Роль:** **единственный канон продуктового цикла Today** — какие экраны видит пользователь, какой вопрос у каждого, что открывается тапом, что вечером сохраняется.  
-**Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md). Этот файл **не** считает energy, drivers, windows, Personal Day.
+**Meaning SoT:** только [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md). Этот файл **не** считает energy, drivers, windows, Personal Day.  
+**Display contract (последний authority перед UI):** [TODAY_DISPLAY_INVENTORY_V1](./TODAY_DISPLAY_INVENTORY_V1.md) · закон: [DISPLAY_CONSTRUCTION_GRAMMAR_V1](../foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md).
 
 **Не:** Figma · Character Engine · north star · энциклопедия аспектов.
 
@@ -23,6 +24,8 @@ Today — не гороскоп по сферам. Пользователь не
 2. Почему система это показала?  
 3. Получим ли тот же результат при тех же входах и той же версии правил?
 
+**Вычисление ≠ показ.** Стрелки смысла (Pipeline) и ScreenFlow — разные порядки. Personal Day persist **до** кадра MY DAY — норма. См. [DISPLAY_CONSTRUCTION_GRAMMAR_V1](../foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) §5.1.
+
 ---
 
 ## Четыре поверхности (LOCKED)
@@ -36,7 +39,7 @@ Today — не гороскоп по сферам. Пользователь не
 | 3 | `my_day` | Что это значит *для меня*? | **Personal Day** |
 | 4 | `evening` | За что я благодарен этому дню? | User response → Gratitude History |
 
-Guest: `today` + `ritual` (universal number + card base) + `evening`. `my_day` — honest omit.
+Guest: `today` + `ritual` **catalog** (universal number + card base) + `evening`. `my_day` — honest omit. Ritual **personal lens** — omit (нет Personal Day).
 
 ### Code now vs target
 
@@ -45,7 +48,7 @@ Guest: `today` + `ritual` (universal number + card base) + `evening`. `my_day` �
 | Шаги | **4** (`today` · `ritual` · `my_day` · `evening`) | 4 |
 | Timeline | **TODAY:** Global clock. **MY DAY:** natal clocks если есть, иначе `windows[]` × `fact_ru` как «Ритм дня» | Global clock ≠ «мой» natal timeline |
 | Вечер | благодарность (persist); 5 категорий + «Написать своё» | **благодарность** |
-| Color / practice / action | карточки **внутри** `my_day`, omit если пусто | внутри `my_day` |
+| Color / practice / affirmation | карточки **внутри** `my_day`, omit если пусто | внутри `my_day` |
 | Ritual A/B | **A:** закрытая карта (`DsRitualGate`); pick в overlay. **B:** открытая карта + number gate | закрытая карта → открытая + число |
 | Ritual C | compact card + number; tap → catalog then lens | оба остаются на экране |
 | First Today | reaction gate → те же 4 поверхности (capability) | не отдельный conversation-цикл |
@@ -98,11 +101,13 @@ Chips / иконки из Global `strength[]` / `risk[]` (типы действ�
 
 Один ScreenFlow-шаг, три состояния. Reveal не пересобирает день.
 
-Карта и число **ничего не определяют** в Global Day и Personal Day. Это линзы поверх уже посчитанного Personal Day.
+Карта и число **ничего не определяют** в Global Day и Personal Day. Это линзы поверх **уже persisted** Personal Day.
+
+Personal Day считается и сохраняется **независимо** от того, открыл ли пользователь кадр MY DAY. RITUAL читает этот persist только для Card Lens / Number Lens. Затем MY DAY показывает сам Personal Day.
 
 ```text
-PERSONAL DAY × CARD  → Card Lens
-PERSONAL DAY × NUMBER → Number Lens
+PERSONAL DAY × CARD  → Card Lens     (omit, если Personal Day нет — guest)
+PERSONAL DAY × NUMBER → Number Lens  (omit, если Personal Day нет)
 ```
 
 Стрелка только вперёд. Карта/число не идут назад в Personal / Global.
@@ -124,18 +129,19 @@ Lens не говорит, каким является день.
 Global Day × Natal Overlay → Personal Day
 ```
 
-Карта и число в расчёт **не входят**.
+Character Engine **не** вход. Карта и число в расчёт **не входят**.
 
 Нет отдельного блока «почему день важен для тебя»: сам экран = «это про тебя».
 
 | Слот | Правило |
 |------|---------|
-| Personal headline | одно резюме |
-| Мой фокус | одна тема + 1–2 предложения |
-| В приоритете | ≤2–3 конкретных пункта |
+| Personal headline | главный персональный **тезис** дня |
+| Мой фокус — title | **ось / область**, где тезис проявляется сильнее (projected / map_label; не второй тезис) |
+| Мой фокус — body | как именно проявляется и куда внимание |
+| В приоритете | ≤2–3 конкретных пункта относительно сегодняшней ситуации |
 | Осторожнее | 1–2 персональных риска — **не** копия Global Risks |
 | Personal Timeline | см. ниже |
-| Color / practice / affirmation / action | опциональные карточки; не источники смысла |
+| Color / practice / affirmation | опциональные карточки; не источники смысла; **отдельного step нет** |
 | Trackers / streaks | показать релевантное; **не** участвуют в Global / Personal / energy / drivers / timeline |
 
 ### Personal Timeline / ритм дня
@@ -155,7 +161,7 @@ Global Day × Natal Overlay → Personal Day
 - **Цвет** — один, scoring после energy + risk + personal focus. LLM не выбирает. **Omit**, если Personal Day interpretation unavailable. Catalog / morning `daily_symbols.color` **не** подмена.
 - **Практика** — максимум одна, из Personal Focus или компенсации Personal Risk. Иначе omit.  
 - **Аффирмация** — отдельный тип, не `practice_recommendation` bucket. Из Personal Day.  
-- **Действие** — один выполнимый шаг (application Personal Day).  
+- **Отдельного «шага» нет** — конкретное действие = `T3.priority`.  
 - Привычки/цели — жизнь пользователя рядом, не meaning.
 
 ---
@@ -211,12 +217,12 @@ USER RESPONSE           →  GRATITUDE HISTORY
 
 ## Capability (кто какой экран видит)
 
-| Depth | Evidence | `today` | `ritual` | `my_day` | `evening` | Personal Timeline |
-|-------|----------|---------|----------|----------|-----------|-------------------|
-| guest | shared sky | да | card + universal number | omit | да | omit |
-| general | account, thin natal | да | да | omit | да | omit |
-| light | DOB | да | да | да (без домов/ASC) | да | natal omit; **Global «Ритм дня»** если есть windows |
-| deep | DOB + time + place | да | да | да | да | natal если есть активации; иначе Global clock |
+| Depth | Evidence | `today` | ritual catalog | ritual lens | `my_day` | `evening` | Personal Timeline |
+|-------|----------|---------|----------------|-------------|----------|-----------|-------------------|
+| guest | shared sky | да | card + universal number | **omit** | omit | да | omit |
+| general | account, thin natal | да | да | **omit** (нет Personal Day) | omit | да | omit |
+| light | DOB | да | да | да (если Personal persisted) | да (без домов/ASC) | да | natal omit; **Global «Ритм дня»** если есть windows |
+| deep | DOB + time + place | да | да | да | да | да | natal если есть активации; иначе Global clock |
 
 Пустые персональные слоты, притворяющиеся «твоим днём», запрещены. Global `windows[]` на `my_day` — часы неба, не «мой натал».
 
@@ -235,6 +241,15 @@ USER RESPONSE           →  GRATITUDE HISTORY
 6. Gratitude History → Month → Map (отдельный поезд).
 
 ---
+
+## Architecture impact — compute≠display · no CE · no action card (2026-08-29)
+
+- **SoT before:** four surfaces listed without stating that Personal Day persist can precede the MY DAY visit. Guest ritual did not split catalog vs personal lens. Optional MY DAY cards included a duplicate «действие».
+- **SoT after:** display order remains TODAY → RITUAL → MY DAY → EVENING. Compute: Personal Day = Global × Natal Overlay, persist before MY DAY UI; RITUAL lens consumes that persist. Guest/general: catalog yes, lens no. Support cards = color · practice · affirmation. Priority owns «что сделать».
+- **Public contract changed?** no JSON.
+- **Migration required?** no. FE that still shows a separate action card or a personal lens for guest is drift.
+- **Canon updated?** yes — this file · Grammar §5 · Pipeline · Today Inventory v1.2 · tracker.
+- **Backward compatible?** yes API.
 
 ## Architecture impact (2026-08-15)
 

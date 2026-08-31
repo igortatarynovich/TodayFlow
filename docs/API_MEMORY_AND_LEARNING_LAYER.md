@@ -26,6 +26,8 @@ LLM API — **дорогой генератор кандидатов**.
 
 **Главная цель AMLL:** каждый API-вызов должен становиться **активом**, а не расходом.
 
+When to call at all: [COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md](./COMPUTE_LIFECYCLE_AND_ARTIFACT_ECONOMICS_V1.md) (persist/reuse before generate). Router floors: [LLM_QUALITY_AND_PROMPT_EVOLUTION.md](./LLM_QUALITY_AND_PROMPT_EVOLUTION.md).
+
 API должен использоваться **всё меньше**, потому что система учится:
 
 - переиспользовать хорошие ответы;
@@ -429,7 +431,7 @@ flowchart LR
 | Context hash | 🟡 | `day_context_sha256` in `input_payload` |
 | Event ↔ generation link | 🟡 | `generation_id` in meaning events |
 | LLM Call Gate artifact | ⬜ | backlog |
-| Token/cost fields | 🟡 | `llm_usage_v1` log + optional JSONL; not yet `generation_logs` columns |
+| Token/cost fields | 🟢 | `llm_usage_v1` + JSONL + spend ledger; router cost guard (not `generation_logs` columns) |
 | Similarity reuse | ⬜ | backlog |
 | Training examples table | ⬜ | backlog |
 | Dataset status workflow | ⬜ | backlog |
@@ -452,6 +454,7 @@ flowchart LR
 
 ## 16. Changelog
 
+- **1.3 (2026-08-25)** — Cost guard at LLM router (K3 allowlist, class caps, tenant USD ceiling, downgrade/deny). Usage on deny/retry/thinking. Token/cost 🟢 as ops SoT; still not Request Record columns.
 - **1.2 (2026-08-18)** — Live per-request AI COGS: `llm_usage_v1` (feature/model/tokens/cost). Does not yet persist Request Record rows.
 - **1.1 (2026-05-31)** — Gate v1 **after** UKM-3; decisions on Knowledge slice, not raw events.
 - **1.0 (2026-05-31)** — первый канон AMLL: Gate, Request/Response/Reaction records, Learning Signals, cache/reuse, dataset policy, token ROI, PIL integration.

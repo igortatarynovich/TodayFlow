@@ -75,7 +75,6 @@ export const APP_NAV_PRIMARY_ORDER: AppNavItemId[] = [
   "profile",
   "compatibility",
   "tarot",
-  "practices",
 ];
 
 /** Pre-auth: guest trials on landing, auth, marketing surfaces (anchors). */
@@ -83,7 +82,7 @@ export const APP_NAV_GUEST_ORDER: AppNavItemId[] = ["compatibility", "tarot"];
 
 /**
  * Pre-auth in-app shell — core loop + Compatibility (L1) primary;
- * Tarot / Practices secondary (tools by occasion).
+ * Tarot secondary (tool by occasion). Practices stays deep-link only.
  */
 export const APP_NAV_GUEST_PRODUCT_PRIMARY: AppNavItemId[] = [
   "today",
@@ -91,7 +90,7 @@ export const APP_NAV_GUEST_PRODUCT_PRIMARY: AppNavItemId[] = [
   "compatibility",
 ];
 
-export const APP_NAV_GUEST_PRODUCT_SECONDARY: AppNavItemId[] = ["tarot", "practices"];
+export const APP_NAV_GUEST_PRODUCT_SECONDARY: AppNavItemId[] = ["tarot"];
 
 export const APP_NAV_GUEST_PRODUCT_ORDER: AppNavItemId[] = [
   ...APP_NAV_GUEST_PRODUCT_PRIMARY,

@@ -3,9 +3,8 @@ export const PROFILE_V2_DEPTH_NAV = [
   { id: "recognition", step: "01", title: "Твоя суть", hint: "Узнавание" },
   { id: "why", step: "02", title: "Почему именно так", hint: "Опоры" },
   { id: "insight", step: "03", title: "Что важно понять", hint: "Узел" },
-  { id: "character", step: "04", title: "Портрет", hint: "Силы" },
-  { id: "effort", step: "05", title: "Куда усилия", hint: "Вектор" },
-  { id: "bridge", step: "06", title: "Мост в день", hint: "В день" },
+  { id: "effort", step: "04", title: "Куда усилия", hint: "Вектор" },
+  { id: "bridge", step: "05", title: "Мост в день", hint: "В день" },
 ] as const;
 
 export const PROFILE_V2_EXPLORE_NAV = [
@@ -73,7 +72,7 @@ export const PROFILE_V2_COPY = {
       hide: "Свернуть детали",
       exploreHint: "Дома, аспекты и полная карта — внутри разбора.",
       updatedNote: "Карта строится один раз и обновляется только при изменении данных рождения.",
-      stepBadge: "7",
+      stepBadge: "6",
       benefits: [
         "Потенциалы и таланты",
         "Уроки жизни и зоны роста",

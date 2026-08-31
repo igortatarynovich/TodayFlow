@@ -63,17 +63,16 @@ describe("pickInstructionPersonalBridge", () => {
     expect(lead).toContain("осознанного выбора");
   });
 
-  it("omits when only kitchen dump is available", () => {
-    const lead = pickInstructionPersonalBridge({
-      ...base,
-      personal_growth: { development_point: "" },
-      day_story: {
-        contract_version: "day_story_v1",
-        day_personal: {
-          summary_ru: "Профекция года (возраст 36): управитель Сатурн. 1.1°.",
+  it("does not fill from development_point or day_personal.summary_ru", () => {
+    expect(
+      pickInstructionPersonalBridge({
+        ...base,
+        personal_growth: { development_point: "Оставлять темп ровным." },
+        day_story: {
+          contract_version: "day_story_v1",
+          day_personal: { summary_ru: "Сегодня твоя ось — одно обещание без лишнего шума." },
         },
-      },
-    });
-    expect(lead).toBeNull();
+      }),
+    ).toBeNull();
   });
 });

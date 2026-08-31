@@ -283,7 +283,7 @@ export default function AsceticismsPage() {
                   </DsBody>
                 </div>
                 <div style={{ marginTop: "1.25rem" }}>
-                  <DsButton href={`/asceticisms/tracker?asceticism=${selectedAsceticism}`}>
+                  <DsButton href="/maps/ascetic">
                     Открыть карту аскез →
                   </DsButton>
                 </div>

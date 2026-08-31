@@ -1,0 +1,139 @@
+{
+  "contract_version": "technique_ingest_v1",
+  "version": "1.0.0",
+  "status": "ingested_evidence",
+  "semantic_version": "practice-technique-ingest-v1.0",
+  "description": "Parent step 10 ingest for equal_count_breath selected loci only. Paraphrase per locus. Not a kernel. Not canon. Canon: docs/practices/PRACTICE_TECHNIQUE_INGEST_V1.md",
+  "parent_step": 10,
+  "family_id": "family.practice.equal_count_breath",
+  "candidate_family": "equal-count / square breathing",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "does_not_normalize": true,
+  "boundary_held": "selected_loci_to_ingested_evidence_not_canonical_kernel",
+  "accessed": "2026-08-25",
+  "next_named_pass": "technique_normalization_v1_done",
+  "evidence": [
+    {
+      "evidence_id": "ev.equal_count.bhf.heart_matters.box",
+      "candidate_family": "family.practice.equal_count_breath",
+      "source_ref": {
+        "source_id": "src.bhf.heart_matters.box",
+        "publisher": "British Heart Foundation",
+        "title": "3 breathing exercises to relieve stress",
+        "url": "https://www.bhf.org.uk/informationsupport/heart-matters-magazine/wellbeing/breathing-exercises",
+        "section": "1. Box breathing"
+      },
+      "locus": "Heart Matters wellbeing page, section '1. Box breathing' (public URL, 2026-08-25).",
+      "source_family": "official_health",
+      "paraphrase": "This section describes a four-part timed breath. The reader sits or stands upright, or lies down. After settling, they breathe in on a count of four, pause on a count of four, breathe out through the mouth on a count of four, pause again on a count of four, then return to the inhale. The cycle may continue for as long as the reader wants. Resting the hands on the belly during the inhale is offered on this page as an option. Surrounding copy about stress and sleep is not part of this record.",
+      "observed_mechanism": "A repeating equal-count cycle with a pause after the inhale and a pause after the exhale, as this section writes it.",
+      "observed_steps": [
+        "Take a sitting or standing posture with a straight back, or lie down.",
+        "Settle the shoulders and jaw; closing the eyes is offered if it feels right.",
+        "Breathe in on a count of four; hands on the belly during this inhale are optional on this page.",
+        "Pause the breath on a count of four.",
+        "Breathe out through the mouth on a count of four.",
+        "Pause the breath again on a count of four.",
+        "Return to the inhale and continue for as long as the reader wants."
+      ],
+      "observed_bounds": [
+        "The illustrated count on this page is four.",
+        "How long to continue is left to the reader.",
+        "This section does not state who should avoid pausing the breath."
+      ],
+      "observed_safety": [],
+      "observed_variants": [
+        "Posture: sit, stand, or lie, as this page allows.",
+        "Hands on the belly during the inhale, if the reader wants."
+      ],
+      "claim_scope": "method_sequence_only",
+      "conflict_tags": [
+        "conflict.phase_count"
+      ],
+      "ingest_status": "ingested",
+      "not_ingested": "Page-level stress, heart-rate, and sleep benefit framing."
+    },
+    {
+      "evidence_id": "ev.equal_count.nhs_sfh.box_leaflet",
+      "candidate_family": "family.practice.equal_count_breath",
+      "source_ref": {
+        "source_id": "src.nhs.sfh.box_leaflet",
+        "publisher": "Sherwood Forest Hospitals NHS Foundation Trust",
+        "unit": "Clinical Psychology",
+        "title": "Breathing Exercises",
+        "url": "https://www.sfh-tr.nhs.uk/media/o3fpizwx/breathing-exercises-leaflet.pdf",
+        "section": "BOX BREATHING"
+      },
+      "locus": "PDF leaflet heading BOX BREATHING for the sequence; heading WHAT IF BREATHING EXERCISES DON'T WORK FOR ME? for stop/safety (2026-08-25). Those headings are two observations, not one merged method.",
+      "source_family": "clinical_psychology",
+      "paraphrase": "Sequence observation (BOX BREATHING): the leaflet times the breath around a square. The reader inhales for a count of four on one side, pauses for a count of four on the next, exhales for a count of four on the next, and pauses for a count of four on the last side, and may trace a phone or notepad as the square. It says to repeat up to four times if comfortable. Stop/safety observation (later heading, not mixed into the square steps): a person new to the exercises may feel light-headed; sitting or lying can help until they are used to it. If focusing on the breath is uncomfortable because of breathing-related issues, the leaflet points to grounding exercises instead.",
+      "observed_mechanism": "A four-side equal-count breath timed around a square, as the BOX BREATHING heading writes it.",
+      "observed_steps": [
+        "Picture a box or square, or trace a phone or notepad edge.",
+        "Inhale for a count of four along one side.",
+        "Pause for a count of four along the next side.",
+        "Exhale for a count of four along the next side.",
+        "Pause for a count of four along the last side.",
+        "Repeat the circuit up to four times if comfortable."
+      ],
+      "observed_bounds": [
+        "Repeat up to four times if comfortable, as this leaflet states."
+      ],
+      "observed_safety": [
+        "A later heading says the exercises can bring on light-headedness when someone is breathing more deeply; sitting or lying may help until they are accustomed.",
+        "The same heading says that if attending to the breath is uncomfortable because of breathing-related issues, grounding exercises may be more useful than this breathing leaflet."
+      ],
+      "observed_variants": [
+        "Tracing a phone or notepad as the square is offered on this leaflet."
+      ],
+      "claim_scope": "method_sequence_and_stop_rules",
+      "conflict_tags": [
+        "conflict.phase_count"
+      ],
+      "ingest_status": "ingested",
+      "not_ingested": "Leaflet overview claims about heart rate, oxygen, anxiety, or thinking more clearly. Finger-trace breathing on the same PDF is a different exercise and is not this record."
+    },
+    {
+      "evidence_id": "ev.equal_count.nhs_newcastle.square",
+      "candidate_family": "family.practice.equal_count_breath",
+      "source_ref": {
+        "source_id": "src.nhs.newcastle.square",
+        "publisher": "Newcastle Hospitals NHS Foundation Trust",
+        "unit": "Great North Children's Hospital, Children's Health Psychology",
+        "title": "Coping with panic attacks: Information for children and young people",
+        "url": "https://www.newcastle-hospitals.nhs.uk/services/great-north-childrens-hospital/childrens-health-psychology/resources/panic-attacks-children-young-people/",
+        "section": "Square breathing"
+      },
+      "locus": "Section 'Square breathing', numbered steps (2026-08-25). Recorded as a conflicting description of what this Trust writes under that heading, not as a variant of the four-phase pages.",
+      "source_family": "clinical_psychology",
+      "paraphrase": "This page's square-breathing section tells the reader to sit, lie, or stand comfortably, notice ordinary breathing, then breathe in through the nose while counting to four, hold the breath for four seconds, breathe out through the mouth for four seconds, and repeat those three timed actions until breathing is slower. The written steps do not include a pause after the exhale. That mismatch with the four-phase pages is left standing. This record does not treat the missing pause as optional, and it does not recast the page as a four-phase family member.",
+      "observed_mechanism": "Three timed actions of equal count — inhale, hold, exhale — then repeat, as this section writes it.",
+      "observed_steps": [
+        "Sit, lie, or stand somewhere comfortable.",
+        "Notice ordinary breathing, then deeper breaths, as this page instructs before the timed cycle.",
+        "Breathe in slowly through the nose while counting to four.",
+        "Hold the breath for four seconds.",
+        "Breathe out slowly through the mouth for four seconds.",
+        "Repeat those three timed actions until breathing is slower.",
+        "This locus does not write a hold after the exhale."
+      ],
+      "observed_bounds": [
+        "The illustrated count on this page is four.",
+        "Repeat until breathing is slower, as this page states.",
+        "This section does not state who should avoid holding the breath."
+      ],
+      "observed_safety": [],
+      "observed_variants": [],
+      "claim_scope": "conflicting_method_sequence",
+      "conflict_tags": [
+        "conflict.phase_count",
+        "recorded_as_conflicting_description_not_variant"
+      ],
+      "ingest_status": "ingested",
+      "not_ingested": "Panic-attack psychoeducation as a treatment claim. Other Trust pages that reprint the same three-phase steps are not additional kernels."
+    }
+  ],
+  "workflow_status": "research_archive",
+  "blocks_fill": false
+}

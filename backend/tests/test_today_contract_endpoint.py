@@ -12,6 +12,13 @@ from todayflow_backend.api.morning_ritual import MorningRitualResponse
 from todayflow_backend.services.today_contract_assembler_v1 import DOMAIN_IDS, DOMAIN_LENS_SLOTS
 
 from .conftest import login_bearer_token
+from datetime import date
+
+from todayflow_backend.db.models import User
+from todayflow_backend.services.day_scenario_native_llm_c1 import native_llm_to_day_scenario_v1
+from todayflow_backend.services.day_scenario_project_v1 import project_day_scenario_onto_day_story_v1
+from tests.test_native_c1_i0_generation_split_v1 import _global_native
+from tests.test_personal_day_v1 import _insert_personal, _ready_story
 
 _FORBIDDEN_TOP_KEYS = frozenset(
     {
@@ -38,6 +45,14 @@ def _auth_headers(client: TestClient) -> dict[str, str]:
     assert signup.status_code in (200, 201), signup.text
     token = login_bearer_token(client, email, password)
     return {"Authorization": f"Bearer {token}"}
+
+
+def _seed_ready_personal(db, *, email: str, local_date: date = date(2026, 8, 25)) -> None:
+    user = db.query(User).filter(User.email == email).one()
+    scenario = native_llm_to_day_scenario_v1(_global_native())
+    story = project_day_scenario_onto_day_story_v1(_ready_story(), scenario)
+    story["symbolic_note"] = str(story.get("symbolic_note") or "")
+    _insert_personal(db, user_id=int(user.id), local_date=local_date, story=story)
 
 
 def _collect_json_keys(obj: object, prefix: str = "") -> set[str]:
@@ -79,9 +94,14 @@ def _morning_response_no_family() -> MorningRitualResponse:
     )
 
 
-def test_get_today_contract_returns_model_b_structure(client: TestClient):
+def test_get_today_contract_returns_model_b_structure(client: TestClient, db_session):
     headers = _auth_headers(client)
-    response = client.get("/today/contract", headers=headers)
+    _seed_ready_personal(db_session, email="today-contract@example.com")
+    response = client.get(
+        "/today/contract",
+        params={"target_date": "2026-08-25"},
+        headers=headers,
+    )
     assert response.status_code == 200, response.text
     body = response.json()
 
@@ -97,8 +117,8 @@ def test_get_today_contract_returns_model_b_structure(client: TestClient):
         assert domain_id in domains
         lens = domains[domain_id]
         assert set(DOMAIN_LENS_SLOTS).issubset(set(lens.keys()))
-        for slot in DOMAIN_LENS_SLOTS:
-            assert str(lens[slot]).strip()
+    rel = domains["relationships"]
+    assert all(str(rel[slot]).strip() for slot in DOMAIN_LENS_SLOTS)
 
     depth = body.get("depth_layer")
     assert isinstance(depth, dict)
@@ -160,8 +180,11 @@ def test_get_today_contract_rejects_invalid_target_date(client: TestClient):
     assert response.json().get("detail") == "invalid target_date"
 
 
-def test_get_today_contract_missing_family_scenario_still_returns_family_lens(client: TestClient):
+def test_get_today_contract_missing_family_scenario_does_not_invent_family_domain(
+    client: TestClient, db_session
+):
     headers = _auth_headers(client)
+    _seed_ready_personal(db_session, email="today-contract@example.com")
     morning = _morning_response_no_family()
 
     with patch(
@@ -169,12 +192,17 @@ def test_get_today_contract_missing_family_scenario_still_returns_family_lens(cl
         new_callable=AsyncMock,
         return_value=morning,
     ):
-        response = client.get("/today/contract", headers=headers)
+        response = client.get(
+            "/today/contract",
+            params={"target_date": "2026-08-25"},
+            headers=headers,
+        )
 
     assert response.status_code == 200, response.text
-    family = response.json()["domains"]["family"]
-    assert all(family[slot].strip() for slot in DOMAIN_LENS_SLOTS)
-    assert "семь" in family["status"].lower() or "дом" in family["status"].lower()
+    domains = response.json()["domains"]
+    assert "family" not in domains
+    rel = domains["relationships"]
+    assert all(rel[slot].strip() for slot in DOMAIN_LENS_SLOTS)
 
 
 @pytest.mark.parametrize("path", ["/today/contract"])

@@ -1,0 +1,43 @@
+{
+  "contract_version": "technique_canon_contract_v1",
+  "version": "1.1.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-v1.1",
+  "description": "Lightweight technique row. No Landscape/Shortlist/Ingest/Normalization required. Canon: docs/practices/PRACTICE_LIBRARY_FILL_V1.md · docs/practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md",
+  "required": [
+    "technique_id",
+    "content_class",
+    "type",
+    "canonical_description",
+    "source_refs",
+    "safety_notes",
+    "allowed_claims",
+    "status"
+  ],
+  "required_if_skipped": [
+    "technique_id",
+    "content_class",
+    "type",
+    "status",
+    "skip_reason"
+  ],
+  "fields": {
+    "technique_id": "technique.{slug}; never emitted by Meaning",
+    "content_class": "practice | meditation | affirmation | discipline",
+    "type": "taxonomy type code",
+    "canonical_description": "own words; required if accepted; empty allowed if skipped",
+    "source_refs": "list of {source, url?, locus?, note?}; required non-empty if accepted",
+    "safety_notes": "string list; empty unless a material safety question exists",
+    "allowed_claims": "string list; default empty",
+    "status": "accepted | skipped",
+    "skip_reason": "required if skipped, e.g. skipped_for_now"
+  },
+  "invariants": [
+    "LLM is not the field source of the method",
+    "research ladder is not required to write a row",
+    "skipped rows must not be attached to Content Items",
+    "Meaning never stores technique_id",
+    "empty registry is valid",
+    "skipped_for_now is valid and non-blocking"
+  ]
+}

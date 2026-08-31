@@ -67,7 +67,7 @@ export function TodayDayContinuityEveningClose({
           </p>
         ) : skippedPromise ? (
           <p className="orbit-body-sm" style={{ margin: "0.55rem 0 0", lineHeight: 1.55, color: "#3d3228" }}>
-            Как прошёл день — в духе темы «{themeShort ?? "сегодня"}»?
+            {themeShort ? `Как прошёл день — в духе темы «${themeShort}»?` : "Как прошёл день?"}
           </p>
         ) : (
           <p className="orbit-body-sm" style={{ margin: "0.55rem 0 0", lineHeight: 1.55, color: "#3d3228" }}>

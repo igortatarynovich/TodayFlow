@@ -10,6 +10,7 @@ from typing import Any, Mapping
 
 from todayflow_backend.knowledge.calc_il_wire_v1 import PLANET_BODIES, wire_calc_to_il
 from todayflow_backend.knowledge.il4_expression_v1 import ExpressionPack, SURFACES
+from todayflow_backend.services.il4_selection_v1 import select_themes
 
 _BODY_ALIASES: dict[str, str] = {
     "sun": "sun",
@@ -172,7 +173,9 @@ def attach_il4_expression_pack(
     pack = wire_calc_to_il(natal_chart, transit=transit_chart, surface=surface)
     if not pack.lines and not pack.dropped:
         return None
-    return expression_pack_to_dict(pack)
+    pack_dict = expression_pack_to_dict(pack)
+    selected = select_themes(pack_dict, surface=surface)
+    return selected if selected is not None else pack_dict
 
 
 def attach_from_celestial_ephemeris(

@@ -33,6 +33,8 @@ class VoiceLine:
     subject_jobs: tuple[str, ...]
     modifier_jobs: tuple[str, ...]
     text: str
+    transiting_object_id: str | None = None
+    natal_object_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -62,12 +64,21 @@ def _roles(frame: ComposedFrame) -> tuple[tuple[str, ...], tuple[str, ...]]:
     return subjects, modifiers
 
 
-def _text(jobs: Mapping[str, tuple[str, ...]]) -> str:
+def _text(jobs: Mapping[str, tuple[str, ...]], *, construction: str | None = None) -> str:
     parts = []
     for name in JOB_ORDER:
         lemmas = jobs.get(name)
-        if lemmas:
-            parts.append(f"{name}={' · '.join(lemmas)}")
+        if not lemmas:
+            continue
+        label = name
+        if construction == "transit_to_natal":
+            if name == "what_a":
+                label = "transiting"
+            elif name == "what_b":
+                label = "target"
+            elif name == "where":
+                label = "context"
+        parts.append(f"{label}={' · '.join(lemmas)}")
     return "; ".join(parts)
 
 
@@ -82,7 +93,9 @@ def _line(theme: RankedTheme) -> VoiceLine:
         jobs=jobs,
         subject_jobs=subjects,
         modifier_jobs=modifiers,
-        text=_text(jobs),
+        text=_text(jobs, construction=theme.frame.construction),
+        transiting_object_id=theme.frame.transiting_object_id,
+        natal_object_id=theme.frame.natal_object_id,
     )
 
 

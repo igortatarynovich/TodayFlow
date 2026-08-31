@@ -7,12 +7,21 @@ SoT: docs/astrology/IL2_COMPOSITION_RULES_V1.md
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping
 
 ROOT = Path(__file__).resolve().parents[4]
-OBJECTS = ROOT / "DATA" / "reference" / "astrology" / "interpretation_v1" / "objects_v1.json"
+
+
+def objects_path() -> Path:
+    """Catalog lives under TODAYFLOW_DATA_DIR in the API image (`/DATA`), not site-packages parents."""
+    data_root = Path(os.getenv("TODAYFLOW_DATA_DIR", str(ROOT / "DATA")))
+    return data_root / "reference" / "astrology" / "interpretation_v1" / "objects_v1.json"
+
+
+OBJECTS = objects_path()
 
 JOBS = ("what", "how", "where", "relation", "orientation")
 
@@ -35,9 +44,6 @@ ROLE_WEIGHTS: dict[str, dict[str, float]] = {
 
 MISSING_ATOM_IDS = frozenset(
     {
-        "astro.object.uranus",
-        "astro.object.neptune",
-        "astro.object.pluto",
         "astro.object.dsc",
         "astro.object.ic",
     }
@@ -121,11 +127,22 @@ class ComposedFrame:
     temporal_class: str | None = None
     essay: None = None
     source: str = "stored_canon"
+    transiting_object_id: str | None = None
+    natal_object_id: str | None = None
 
 
 def load_objects(path: Path | None = None) -> dict[str, dict[str, Any]]:
-    payload = json.loads((path or OBJECTS).read_text(encoding="utf-8"))
-    return {obj["object_id"]: obj for obj in payload["objects"]}
+    if path is not None:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        return {obj["object_id"]: obj for obj in payload["objects"]}
+    payload = json.loads(objects_path().read_text(encoding="utf-8"))
+    catalog = {obj["object_id"]: obj for obj in payload["objects"]}
+    outer_path = objects_path().with_name("objects_v1_outers.json")
+    if outer_path.exists():
+        outers = json.loads(outer_path.read_text(encoding="utf-8"))
+        for obj in outers["objects"]:
+            catalog[obj["object_id"]] = obj
+    return catalog
 
 
 def _lemmas(obj: dict[str, Any]) -> tuple[str, ...]:
@@ -145,9 +162,9 @@ def _job(obj: dict[str, Any]) -> JobPayload:
     )
 
 
-def _missing(*object_ids: str) -> str | None:
+def _missing(catalog: Mapping[str, dict[str, Any]], *object_ids: str) -> str | None:
     for object_id in object_ids:
-        if object_id in MISSING_ATOM_IDS:
+        if object_id in MISSING_ATOM_IDS or object_id not in catalog:
             return object_id
     return None
 
@@ -167,7 +184,7 @@ def _refused(construction: str, reason: str, temporal_class: str | None = None) 
 def compose_planet_in_sign(
     catalog: Mapping[str, dict[str, Any]], planet_id: str, sign_id: str
 ) -> ComposedFrame:
-    missing = _missing(planet_id, sign_id)
+    missing = _missing(catalog, planet_id, sign_id)
     if missing:
         return _refused("planet_in_sign", f"missing_atom:{missing}")
     planet, sign = catalog[planet_id], catalog[sign_id]
@@ -183,7 +200,7 @@ def compose_planet_in_sign(
 def compose_planet_in_house(
     catalog: Mapping[str, dict[str, Any]], planet_id: str, house_id: str
 ) -> ComposedFrame:
-    missing = _missing(planet_id)
+    missing = _missing(catalog, planet_id)
     if missing:
         return _refused("planet_in_house", f"missing_atom:{missing}")
     planet, house = catalog[planet_id], catalog[house_id]
@@ -199,7 +216,7 @@ def compose_planet_in_house(
 def compose_planet_at_angle(
     catalog: Mapping[str, dict[str, Any]], planet_id: str, angle_id: str
 ) -> ComposedFrame:
-    missing = _missing(planet_id, angle_id)
+    missing = _missing(catalog, planet_id, angle_id)
     if missing:
         return _refused("planet_at_angle", f"missing_atom:{missing}")
     planet, angle = catalog[planet_id], catalog[angle_id]
@@ -221,7 +238,7 @@ def compose_aspect_pair(
     construction: str = "aspect_pair",
     temporal_class: str = "natal",
 ) -> ComposedFrame:
-    missing = _missing(planet_a_id, planet_b_id)
+    missing = _missing(catalog, planet_a_id, planet_b_id)
     if missing:
         return _refused(construction, f"missing_atom:{missing}", temporal_class)
     planet_a, planet_b, aspect = (
@@ -247,21 +264,40 @@ def compose_transit_to_natal(
     transiting_id: str,
     natal_id: str,
     aspect_id: str,
+    natal_house_id: str | None = None,
 ) -> ComposedFrame:
-    return compose_aspect_pair(
-        catalog,
-        transiting_id,
-        natal_id,
-        aspect_id,
+    missing = _missing(catalog, transiting_id, natal_id)
+    if missing:
+        return _refused("transit_to_natal", f"missing_atom:{missing}", "transit")
+    if natal_house_id is not None and natal_house_id not in catalog:
+        return _refused("transit_to_natal", f"missing_atom:{natal_house_id}", "transit")
+    transiting = catalog[transiting_id]
+    natal = catalog[natal_id]
+    aspect = catalog[aspect_id]
+    jobs: dict[str, JobPayload] = {
+        "what_a": _job(transiting),
+        "what_b": _job(natal),
+        "relation": _job(aspect),
+    }
+    weights: dict[str, float] = {"what_a": 0.50, "what_b": 0.50}
+    if natal_house_id is not None:
+        jobs["where"] = _job(catalog[natal_house_id])
+        weights["where"] = 0.35
+    return ComposedFrame(
         construction="transit_to_natal",
+        jobs=jobs,
+        weights=weights,
+        status="composed",
         temporal_class="transit",
+        transiting_object_id=transiting_id,
+        natal_object_id=natal_id,
     )
 
 
 def compose_transit_through_house(
     catalog: Mapping[str, dict[str, Any]], planet_id: str, house_id: str
 ) -> ComposedFrame:
-    missing = _missing(planet_id)
+    missing = _missing(catalog, planet_id)
     if missing:
         return _refused("transit_through_house", f"missing_atom:{missing}", "transit")
     planet, house = catalog[planet_id], catalog[house_id]

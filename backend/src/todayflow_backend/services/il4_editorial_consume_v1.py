@@ -36,7 +36,13 @@ def pack_present(pack: Any) -> bool:
 
 
 def compact_meaning(pack: Mapping[str, Any] | None) -> dict[str, Any] | None:
-    """Lemma-preserving compact for protected LLM prefix. Not user copy."""
+    """Lemma-preserving compact for protected LLM prefix. Not user copy.
+
+    Dropped constructions are intentionally omitted from the LLM-facing payload:
+    the system instruction already forbids voicing them, and serializing refusals
+    leaks unused atoms and consumes tokens. Validation still uses the full pack
+    via `reject_invalid_output`.
+    """
     if not pack_present(pack):
         return None
     assert pack is not None
@@ -54,23 +60,11 @@ def compact_meaning(pack: Mapping[str, Any] | None) -> dict[str, Any] | None:
                 "text": line.get("text"),
             }
         )
-    dropped_out: list[dict[str, Any]] = []
-    for frame in pack.get("dropped") or []:
-        if not isinstance(frame, Mapping):
-            continue
-        dropped_out.append(
-            {
-                "construction": frame.get("construction"),
-                "status": frame.get("status"),
-                "reason": frame.get("reason"),
-            }
-        )
     return {
         "surface": pack.get("surface"),
         "tone": pack.get("tone"),
         "meaning_source": pack.get("meaning_source") or "il3_themes",
         "lines": lines_out,
-        "dropped": dropped_out,
     }
 
 

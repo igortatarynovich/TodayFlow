@@ -1985,7 +1985,17 @@ Natal Decode Depth binds `pattern_thesis` / `section.thesis` to IL-4 packs when 
 
 **Not this pass:** public JSON · set `active` · CE / personality_v1 inject · Today polish reopen · deploy.
 
-**Next named:** owner-directed (deploy frontend or new prod Native C1 reject). Not `active`. Not Relevance.
+**Next named:** Natal Decode cache refresh — **done 1.3.124.** Not `active`. Not Relevance.
+
+### 6.72 Natal Decode cache refresh (1.3.124)
+
+Full lock: [PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md](../profile/PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md). Inventory step 46 · KC-C-DECODE-CACHE-REFRESH.
+
+Ops one-shot moves persisted Natal Decode onto fingerprint `natal_decode_depth_v0.3` so 1.3.123 polish actually runs. GET never rebuilds. Client `force_refresh` ignored. `ops_force` + `backend/scripts/natal_decode_cache_refresh_v1.py`. Prompt **1.1.0** unchanged. Identity Core stays CE. Catalog 38 draft / 0 `active`. Profile polish 1.3.123, I0, Today polish, consume, attach stand. Runtime catalog load honors `TODAYFLOW_DATA_DIR` (not a lemma change).
+
+**Not this pass:** public JSON · set `active` · prompt/gate · CE inject · IL lemma · quality pass · scroller named pass.
+
+**Next named:** owner-directed (Profile quality glance after refresh, or new prod Native C1 reject). Not `active`. Not Relevance.
 
 ---
 
@@ -2013,6 +2023,7 @@ Natal Decode Depth binds `pattern_thesis` / `section.thesis` to IL-4 packs when 
 | **polish** | Today native chorus binds to IL-4 | **done 1.3.114**; astrology voice only; prompt c4.2 |
 | **compat editorial** | Synastry editorial phrases IL-4 | **done 1.3.115**; charts supplied; prompt v1.1 |
 | **profile polish** | Natal Decode sky theses bind to IL-4 | **done 1.3.123**; Identity Core stays CE; prompt 1.1.0 |
+| **decode cache refresh** | Ops one-shot onto v0.3 fingerprint | **done 1.3.124**; GET never rebuilds; polish 1.3.123 stands |
 
 Масштаб библиотеки — **done 1.3.110.** Wire calc → IL — **done 1.3.111.** Attach IL-4 to surfaces — **done 1.3.112.** Consume in editorial generation — **done 1.3.113.** Если модель не выдерживает источники — чинить ontology, не плодить объекты и не трогать Today-прозу.
 
@@ -2063,6 +2074,7 @@ Natal Decode Depth binds `pattern_thesis` / `section.thesis` to IL-4 packs when 
 
 ## 10. Changelog
 
+- **1.3.124 (2026-08-25)** — Natal Decode cache refresh: ops one-shot onto `natal_decode_depth_v0.3`. GET never rebuilds. Prompt 1.1.0 / polish 1.3.123 unchanged. Catalog 38 draft / 0 `active`. STOP Angles. STOP Aspects. STOP Houses. STOP Signs.
 - **1.3.123 (2026-08-25)** — Profile meaning polish: Natal Decode sky theses bind to IL-4 packs. Identity Core stays CE. Prompt 1.1.0. Public JSON unchanged. Today polish 1.3.114 / consume / attach stand. Catalog 38 draft / 0 `active`. STOP Angles. STOP Aspects. STOP Houses. STOP Signs.
 - **1.3.115 (2026-08-23)** — Compatibility synastry editorial IL-4 when charts supplied. Public JSON unchanged. Polish / consume / attach stand.
 - **1.3.114 (2026-08-23)** — Today meaning polish: native astrology chorus binds to IL-4 packs. Prompt c4.2. Public JSON unchanged. Consume 1.3.113 stands. Catalog 38 draft / 0 `active`. STOP Angles. STOP Aspects. STOP Houses. STOP Signs.

@@ -108,6 +108,9 @@ def build_day_context_v0(
     from todayflow_backend.services.character_engine_day_angle_v0 import (
         build_character_continuity_v0,
     )
+    from todayflow_backend.services.today_personal_day_signal_v1 import (
+        select_personal_day_signal,
+    )
 
     continuity = build_character_continuity_v0(
         target_date=target_date,
@@ -166,6 +169,9 @@ def build_day_context_v0(
         user_core=user_core,
         fusion_scores=fusion.get("scores") if isinstance(fusion.get("scores"), dict) else {},
         locale=loc,
+    )
+    layers["personal_day_signal"] = select_personal_day_signal(
+        daily_foundation if isinstance(daily_foundation, dict) else None
     )
 
     # Evidence nest: celestial day_events_pack is NOT a second day SoT.

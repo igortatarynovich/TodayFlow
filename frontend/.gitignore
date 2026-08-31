@@ -3,3 +3,6 @@
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# E2E audit diagnostic output
+/e2e-audit-output/

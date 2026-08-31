@@ -7,7 +7,8 @@
 | Document | Purpose |
 |----------|---------|
 | [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) | **Visual SoT** — Hero System, Symbol System, Surfaces, Motion, Mood, Day-Phase Atmosphere, Guest showcase (v0.3) |
-| [SCREEN_FLOW_V1.md](./SCREEN_FLOW_V1.md) | **ScreenFlow V1 canon** — Discrete product steps via transform (viewport lock + swipe + keyboard + a11y). Today mapping: Glance → Plot → Symbols → Reading → Move → Response. Landing excluded. |
+| [SCREEN_FLOW_V1.md](./SCREEN_FLOW_V1.md) | **ScreenFlow V1** — pager mechanics (viewport lock + swipe). Today **jobs**: [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md). Landing excluded. |
+| [DISPLAY_CONSTRUCTION_GRAMMAR_V1.md](./DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) | **Закон конструкции** Profile/Today — цепочка · 5 ограничений · generated ≠ authority · anti-dupe. Слоты: Display Inventories. |
 
 ---
 

@@ -35,6 +35,16 @@ const nextConfig = {
         destination: "/tarot",
         permanent: false,
       },
+      {
+        source: "/affirmations/tracker",
+        destination: "/maps/wish",
+        permanent: false,
+      },
+      {
+        source: "/asceticisms/tracker",
+        destination: "/maps/ascetic",
+        permanent: false,
+      },
     ];
   },
   experimental: {

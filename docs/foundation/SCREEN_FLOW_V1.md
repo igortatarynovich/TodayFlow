@@ -161,7 +161,7 @@ Meaning events: см. [TODAY_PERSONALIZATION_CORE.md](../TODAY_PERSONALIZATION_C
 | 2 | `my_day` | Что это значит для меня? (omit guest) |
 | 3 | `evening` | За что я благодарен? |
 
-Детали — тап / sheet, не новые шаги. Timeline **не** на `today`. Color / practice / action — карточки внутри `my_day`.
+Детали — тап / sheet, не новые шаги. Timeline **не** на `today`. Color / practice / affirmation — карточки внутри `my_day`. Конкретное действие = priority, не отдельный step.
 
 **Code (2026-08-15):** `TodayProductScreenFlow.tsx` mounts these four ids. Guest/general omit `my_day`. [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md) remains a historical six-block map.
 

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import copy
 import json
+import logging
 import re
 from time import perf_counter
 from typing import Any, Callable
@@ -19,6 +20,8 @@ from todayflow_backend.services.day_scenario_personalization_c33 import (
     DEPTH_GENERAL,
     DEPTH_LIGHT,
 )
+
+logger = logging.getLogger(__name__)
 
 PERSONAL_SCHEMA_VERSION = "native_c1_i0_personal_v1"
 STAGE_GLOBAL = "global"
@@ -432,10 +435,13 @@ def orchestrate_i0_split_generation(
     resolve_attempt_model: Callable[[int], str],
     process_global_normalized: Callable[[dict[str, Any]], tuple[dict[str, Any] | None, str | None]],
     meta_out: dict[str, Any] | None = None,
+    cached_global_norm: dict[str, Any] | None = None,
+    on_global_accepted: Callable[[dict[str, Any]], None] | None = None,
 ) -> tuple[dict[str, Any] | None, list[dict[str, Any]], dict[str, Any]]:
     """
     Run I0 split stages. Returns (normalized_merged, attempt_rows, split_meta).
-    split_meta: stages_run, personal_skipped, personal_degraded.
+    split_meta: stages_run, personal_skipped, personal_degraded, shared_global_hit.
+    cached_global_norm skips the Global LLM (same identity; force rebuild is a caller flag).
     """
     attempt_rows: list[dict[str, Any]] = []
     stages = generation_stages(pers_pack)
@@ -444,88 +450,107 @@ def orchestrate_i0_split_generation(
         "stages_run": list(stages),
         "personal_skipped": STAGE_PERSONAL not in stages,
         "personal_degraded": False,
+        "shared_global_hit": False,
     }
 
     global_norm: dict[str, Any] | None = None
     retry_feedback = ""
     pending_retry_reason: str | None = None
 
-    for attempt_idx in range(max_attempts):
-        user_sent = user_base
-        if retry_feedback:
-            user_sent = f"{user_base}\n\n---\n{retry_feedback}"[:18000]
-        attempt_t0 = perf_counter()
-        attempt_model = resolve_attempt_model(attempt_idx)
-        content, provider_kind, used_model = llm_call(
-            attempt_idx=attempt_idx,
-            attempt_model=attempt_model,
-            system=global_system,
-            user=user_sent,
-            allow_model_fallback=attempt_idx == 0,
+    if isinstance(cached_global_norm, dict) and cached_global_norm:
+        global_norm = enforce_global_only(cached_global_norm)
+        split_meta["shared_global_hit"] = True
+        attempt_rows.append(
+            {
+                "attempt_index": 0,
+                "stage": STAGE_GLOBAL,
+                "status": "shared_hit",
+                "attempt_duration_ms": 0,
+            }
         )
-        attempt_ms = int((perf_counter() - attempt_t0) * 1000)
-        if not content:
-            failure_class = "timeout" if provider_kind == "timeout" else "empty"
+
+    if global_norm is None:
+        for attempt_idx in range(max_attempts):
+            user_sent = user_base
+            if retry_feedback:
+                user_sent = f"{user_base}\n\n---\n{retry_feedback}"[:18000]
+            attempt_t0 = perf_counter()
+            attempt_model = resolve_attempt_model(attempt_idx)
+            content, provider_kind, used_model = llm_call(
+                attempt_idx=attempt_idx,
+                attempt_model=attempt_model,
+                system=global_system,
+                user=user_sent,
+                allow_model_fallback=attempt_idx == 0,
+            )
+            attempt_ms = int((perf_counter() - attempt_t0) * 1000)
+            if not content:
+                failure_class = "timeout" if provider_kind == "timeout" else "empty"
+                attempt_rows.append(
+                    {
+                        "attempt_index": attempt_idx,
+                        "stage": STAGE_GLOBAL,
+                        "attempt_duration_ms": attempt_ms,
+                        "failure_class": failure_class,
+                        "reject_reason": f"empty_llm_content:{provider_kind or 'unknown'}",
+                        "provider_kind": provider_kind,
+                    }
+                )
+                if meta_out is not None:
+                    meta_out["i0_split"] = split_meta
+                return None, attempt_rows, split_meta
+
+            parsed = _parse_json_content(content)
+            if not parsed:
+                attempt_rows.append(
+                    {
+                        "attempt_index": attempt_idx,
+                        "stage": STAGE_GLOBAL,
+                        "attempt_duration_ms": attempt_ms,
+                        "failure_class": "parse",
+                        "reject_reason": "json_parse_failed",
+                        "raw_chars": len(content),
+                    }
+                )
+                retry_feedback = "Исправь JSON schema global stage."
+                pending_retry_reason = "parse_failed"
+                continue
+
+            normalized, reject = process_global_normalized(parsed)
+            if reject or normalized is None:
+                attempt_rows.append(
+                    {
+                        "attempt_index": attempt_idx,
+                        "stage": STAGE_GLOBAL,
+                        "attempt_duration_ms": attempt_ms,
+                        "failure_class": "gate",
+                        "reject_reason": reject or "global_stage_reject",
+                    }
+                )
+                retry_feedback = (reject or "").strip() or "I0 global stage: reject"
+                pending_retry_reason = "gate_retry"
+                continue
+
+            global_norm = enforce_global_only(normalized)
             attempt_rows.append(
                 {
                     "attempt_index": attempt_idx,
                     "stage": STAGE_GLOBAL,
                     "attempt_duration_ms": attempt_ms,
-                    "failure_class": failure_class,
-                    "reject_reason": f"empty_llm_content:{provider_kind or 'unknown'}",
-                    "provider_kind": provider_kind,
+                    "status": "accepted_global",
+                    "model": used_model,
                 }
             )
+            if on_global_accepted is not None:
+                try:
+                    on_global_accepted(global_norm)
+                except Exception:
+                    logger.exception("shared global persist failed")
+            break
+        else:
             if meta_out is not None:
                 meta_out["i0_split"] = split_meta
             return None, attempt_rows, split_meta
-
-        parsed = _parse_json_content(content)
-        if not parsed:
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "stage": STAGE_GLOBAL,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": "parse",
-                    "reject_reason": "json_parse_failed",
-                    "raw_chars": len(content),
-                }
-            )
-            retry_feedback = "Исправь JSON schema global stage."
-            pending_retry_reason = "parse_failed"
-            continue
-
-        normalized, reject = process_global_normalized(parsed)
-        if reject or normalized is None:
-            attempt_rows.append(
-                {
-                    "attempt_index": attempt_idx,
-                    "stage": STAGE_GLOBAL,
-                    "attempt_duration_ms": attempt_ms,
-                    "failure_class": "gate",
-                    "reject_reason": reject or "global_stage_reject",
-                }
-            )
-            retry_feedback = (reject or "").strip() or "I0 global stage: reject"
-            pending_retry_reason = "gate_retry"
-            continue
-
-        global_norm = enforce_global_only(normalized)
-        attempt_rows.append(
-            {
-                "attempt_index": attempt_idx,
-                "stage": STAGE_GLOBAL,
-                "attempt_duration_ms": attempt_ms,
-                "status": "accepted_global",
-                "model": used_model,
-            }
-        )
-        break
-    else:
-        if meta_out is not None:
-            meta_out["i0_split"] = split_meta
-        return None, attempt_rows, split_meta
 
     if STAGE_PERSONAL not in stages:
         if meta_out is not None:

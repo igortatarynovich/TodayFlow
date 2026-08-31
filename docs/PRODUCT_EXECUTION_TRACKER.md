@@ -1,8 +1,394 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-24
+Last updated: 2026-08-30
 Owner: Product + Engineering
 Status: Active working document
+
+**NOW (LAUNCH SURFACE CUT, 2026-08-30):** MVP-контур зафиксирован: primary nav = Сегодня · Моя карта · Совместимость · Таро. Practices убран из `APP_NAV_PRIMARY_ORDER` (deep-link `/practices` и guest-trial secondary не тронуты). Legacy Today (`?full=1` → `TodayRitualFlow`, `?experience=1` → `TodayExperienceSurface`) и Profile `?view=v0` переведены в dev-only (`NODE_ENV === "development"`); production всегда отдаёт 4-surface `TodayCompositionSurface` и Profile v2. Таро-хаб сведён к одному launch-flow: «Задать вопрос» → `/tarot/question` (выбор расклада живёт внутри question-flow); сцена «Направление» со списком раскладов убрана с хаба. Evening приведён к канону (`TODAY_PRODUCT_FLOW_V1` §4): только благодарность (`TodayEveningGratitudeBlock` — категории + свой текст + контекст дня); из `TodayCompositionSurface` убраны early-return экраны closure-драматургии (`TodayEveningProductClose` / `TodayDayContinuityEveningClose` / `TodayDayContinuityClosed`: оценка фокуса, выбор обещания, привычка/аскеза, итог дня) и остановлен fetch `surface: "evening"` нарратива вне dev. Откачен некоммиченный хук в `TodayProductScreenFlow`, добавлявший CTA «Закрыть день» в вечерний шаг (конфликтовал с канон-тестом). Тесты `appNavConfig` + `guestShellContract` обновлены под контракт из 4 пунктов; полный jest: 911 passed / 11 failed — сет падений идентичен базовому (10 suites, все pre-existing). `next build` зелёный (140 routes). Legacy-компоненты (`TodayRitualFlow`, `TodayExperienceSurface`, ritual-layout `TodayWebDashboard`, `TodayEveningProductClose`, `TodayContractSurface`) остаются в репо, недостижимы в production — физическое удаление post-MVP. Next: UI-walkthrough Landing → Onboarding → First Today → Profile → Today 4 steps → Compatibility → Tarot; Evening отдельно; проверка D+1 continuity.
+
+**NOW (PROJECT AUDIT & PLAN CORRECTION v1.1, 2026-08-30):** Full-project audit completed. End goal confirmed: personal daily guide that remembers yesterday via Personal Model → Profile → Today 4-surface flow. Critical gaps found: (1) `DATA/ops/llm_spend.json` tripped at $5.006865 with HTTP 402 — blocks G0, Personal Day live acceptance, K3 audit, COGS baseline; (2) 108 backend tests and 10 frontend suites failing — CI not green; (3) production build was broken by new `displayGrammar/scanDisplayGrammar.ts` (fixed: `Array.from(new Set(...))` instead of spread); (4) Practice Library 17/26 P0 cells; (5) Ship gate Run 3 not completed; (6) UI/UX: `TodayDomainLens` unmounted, legacy `?full=1`/`?experience=1` reachable, dead `TodayContractSurface`, open Form Kit zones, visual SoT violations. Corrected plan: Phase 0 unblock billing/COGS; Phase 1 Hardening (CI green); Phase 2 Ship Gate; Phase 3 Content & UI cutover; Phase 4 Launch readiness. Key correction: G1 (CI green) is now a hard prerequisite for Phase 2 ship gate. `docs/status/RELEASE_PLAN_V1.md` needs v1.1 update. Next: execute G0 or assign Phase 1 owner; update release plan doc on owner approval.
+
+**NOW (CONTENT LIBRARY SELECTION v1, 2026-08-29):** Deterministic runtime selector implemented and exposed via `GET /practices/select`. Code: `backend/src/todayflow_backend/services/content_library_selection_v1.py` + `backend/src/todayflow_backend/api/practices_selection_v1.py`. Given a product need (purpose + direction + soft state/context), it returns the best `active` Content Item whose `technique_id` is `accepted` in the technique canon. No LLM, no randomness, stable sort by overlap/duration/item_id. Tests green: `test_content_library_selection_v1.py` (12) + `test_practices_selection_v1.py` (5). Router included before legacy `/practices` so `/practices/select` is not shadowed by `/{practice_id}`. Canon doc: `docs/practices/CONTENT_LIBRARY_SELECTION_V1.md`. Meaning still does not emit `item_id`/`technique_id`. Next: wire endpoint into Today/Practices fallback surfaces, or continue another non-LLM foundation task.
+
+**NOW (PRACTICE LIBRARY FILL, 2026-08-30):** P0 cells `need.emotional_awareness.reflect` (via `technique.self_check_in`), `need.self_connection.reflect` (via `technique.journaling`), `need.connection.connect` (via `technique.connection_action`), `need.creativity.open` (via `technique.creative_prompt`), `need.decision_making.focus` (via `technique.priority_setting`), `need.transition.prepare` (via `technique.transition_ritual`), `need.recovery.recover` (via `technique.progressive_relaxation`), `need.discipline.prepare` (via `technique.routine_commitment`), `need.self_control.stabilize` (via `technique.attention_discipline`), `need.detachment.release` (via `technique.acceptance`; primary `abstinence` skipped), `need.consistency.prepare` (via `technique.consistency_challenge`), and `need.simplicity.release` (via `technique.reduction`) are sourced. Sources: Greater Good Science Center Naming Your Emotions + NHS Lothian Emotion Workbook + Torre & Lieberman (2018) affect labeling + Nook et al. (2022) timing/intensity caution for `self_check_in`; NHS Lanarkshire Writing for Wellbeing + CUH NHS Write Your Self + Greater Good Science Center Expressive Writing for `journaling`; NHS Essex ICB Looking after your mental health + Liu et al. (2025) systematic review on behavioral activation for social connection + Laidlaw et al. (2020) tele-delivered behavioral activation for connectedness for `connection_action`; Mayo Clinic Press art and health + Mayo Clinic stress relievers sketching + Greater Manchester Mental Health NHS Arts for Good Health for `creative_prompt`; NHS England line managers expectations + NHS Elect Time Management & Productivity Programme + Mayo Clinic Research mindful single-tasking for `priority_setting`; Leroy (2009) attention residue + Leroy & Glomb (2018) ready-to-resume plan + NHS Every Mind Matters working-from-home breaks for `transition_ritual`; NHS inform progressive muscle relaxation + Mayo Clinic relaxation techniques + VA Whole Health Library PMR for `progressive_relaxation`; NICE PH49 small routine changes + Lally & Gardner (2012) making health habitual + Keller et al. (2021) routine/time cue planning for `routine_commitment`; APA multitasking switching costs + Harvard Health monotasking + Leeds Teaching Hospitals NHS Trust digital wellbeing for `attention_discipline`; NICE NG193 ACT + NHS Scotland The Matrix ACT + Psychology Tools ACT overview for `acceptance`; Lally et al. (2010) daily repetition in context + Lally & Gardner (2012) making health habitual + Scientific American streak motivation for `consistency_challenge`; Paas & van Merriënboer (2020) cognitive-load theory stimuli reduction + RACGP clutter/cognitive resources + Sweller et al. (2019) extraneous attention-capturing stimuli for `reduction`. `practice.self_check_in.*`, `practice.journaling.*`, `practice.connection_action.*`, `practice.creative_prompt.*`, `practice.priority_setting.*`, `practice.transition_ritual.*`, `practice.progressive_relaxation.*`, `discipline.routine_commitment.*`, `discipline.attention_discipline.*`, `meditation.acceptance.*`, `discipline.consistency_challenge.*`, and `discipline.reduction.*` items are `active` with `technique_id`. Coverage matrix: 23/26 covered, 0 empty, 3 seed; next cell `need.reset.release`. Technique canon: 23 accepted, 4 skipped (`box_breathing`, `energizing_breath`, `abstinence`, `self_trust`). Tests green: `test_content_library_v1.py` (51). Canon docs updated: `PRACTICE_LIBRARY_FILL_V1`, `PRACTICE_TECHNIQUE_PROVENANCE_V1`, `PRACTICE_CONTENT_COVERAGE_V1`, `PRACTICE_CONTENT_TAXONOMY_V1`. Next: source `need.reset.release` (digital_pause), or another non-LLM foundation task.
+
+**NOW (DISPLAY LOCK LEFTOVERS, 2026-08-30):** Persist lens + leftover invent **done**. T3.priority no longer fills from Glance Global `expect` / strength chips; glance fallback only if the line is personal `today_move` and Personal Day is on GET. Next: full Grammar §9 scanner (1–6, 8–11, 13–14, 16, 19) or drop dead `ProfileCharacterScene` — **not** another composition pass.
+
+**NOW (JOURNEY LOCK CUTOVER, 2026-08-29):** Named code drift vs lock is cut on the FE path. Profile: Recognition → Why → Insight → Effort → Bridge; Character warehouse off the scroll; leftover styles/mission in Explore; P4 spheres 0–2. Today: `T3.headline` = `day_personal.summary_ru` (not `why_personal`); `T3.focus_title` = overlay closed-set map_label or omit; `T3.focus_body` = why_personal → natal transit → astrology summary (no `development_point`); guest/general ritual = catalog, no personal lens. Persist lens + leftover invent: **done** (see DISPLAY LOCK LEFTOVERS).
+
+**NOW (INVENTORY AUDIT vs JOURNEY LOCK, 2026-08-29):** Line-by-line pass closed. Profile Inventory v1.2: `path_new_value` is only recognition · insight · effort · bridge; help/title were wrongly in that group. Today Inventory: `development_point` out of `T3.focus_body`; lens omit unless Personal Day persisted (guest **and** general); affirmation/practice ≠ Priority; tasks_empty ≠ empty Priority. Named code drift **cut** (see JOURNEY LOCK CUTOVER).
+
+**NOW (JOURNEY LOCK v1.1, 2026-08-29):** Upper product path is closed. Compute ≠ display. Personal Day = Global × Natal Overlay (no CE until a named projection + Architecture impact). Guest ritual = catalog only, no personal lens. `T3.headline` = thesis, `T3.focus_title` = overlay axis (projected), `T3.focus_body` = how it shows. `T3.action` removed (Priority owns «что сделать»). Grammar §5.2 = journey acceptance sentences. Inventory audit vs this lock: **done** (see NOW above).
+
+**NOW (DISPLAY INVENTORY v1.1, 2026-08-29):** Display construction is now a five-constraint contract, not a field list. Shared law: `docs/foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md`. Both Inventories v1.1 give every visible atom `slot_id`. UI cutover of named drift: **done** (see JOURNEY LOCK CUTOVER).
+
+**NOW (MAPS SURFACES CLEANUP, 2026-08-29):** Phase 3.4 closed. Orphan routes `/affirmations/tracker` and `/asceticisms/tracker` are removed. `next.config.mjs` redirects them to `/maps/wish` and `/maps/ascetic` respectively. All internal links are updated: `/affirmations` library CTA → `/maps/wish`; `/asceticisms` catalog CTA → `/maps/ascetic`; `/tracking/progress` hub no longer lists the classic tracker cards. iOS `ContentView.swift` deep-link routing now maps the legacy tracker paths to the `.profile` tab with the corresponding map navigation. Backend `tracking.py` docstring updated to describe the new maps surfaces. Next: Practice Library fill, or billing top-up to unblock LLM-dependent audits.
+
+**NOW (THEME / ACTION / PROGRESS FIRST-CLASS, 2026-08-29):** Phase 2.2 closed. `docs/status/TODAY_CANON_VS_CODE_DIFF.md` is updated to **CLOSED** with a new Phase 2.2 closure section. The pre-cutover finding "ritual-first funnel" no longer applies to the default path: `/today` now opens on the **TODAY** surface (Theme / Hero / Why), continues to **RITUAL** (Tarot + Number), then **MY DAY** (Action / Focus / Progress), and finally **EVENING** (time-gated close). The `?core_loop=1` experiment that previously offered the only near-canon preview is removed. Remaining partial items (ContinuityRecall D2+ pill, Why expandable, trackers, explore bridges, etc.) are documented as polish, not launch blockers. Next: Practice Library fill, or billing top-up to unblock LLM-dependent audits.
+
+**NOW (DISPLAY INVENTORY, 2026-08-29):** Construction SoT for Profile and Today is locked. `docs/profile/PROFILE_DISPLAY_INVENTORY_V1.md` and `docs/today/TODAY_DISPLAY_INVENTORY_V1.md` list every on-screen slot: text class (chrome / calc / generated / projected / catalog / user), source field, word/line/sentence budget, appear/omit, out-of-frame. A new UI slot requires an Inventory row + Architecture impact. Documented code drift (Profile Character warehouse as a journey act; MY DAY headline sharing `why_personal` with focus) is **not** product. Next UI: cut those drifts to the lock. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
+
+**NOW (TODAY 4-SURFACE CUTOVER, 2026-08-29):** Phase 2.1 closed. Default `/today` now uses the 4-surface `TodayProductScreenFlow` (Today → Ritual → My Day → Evening). The `?core_loop=1` experiment and its `TodayCoreLoopViabilitySurface` preview are removed from `page.tsx` and `TodayRitualFlow.tsx`; related copy keys are removed from `todayRitualCopy.ts`. `?core_loop=1` URLs are now served by the default composition path. Legacy `?full=1` and `?experience=1` paths remain as non-default overrides. Tests updated and green; frontend production build passes. Audit doc: `docs/audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md`. Next: Phase 3.4 Maps cleanup, Practice Library fill, or billing top-up to unblock LLM-dependent audits.
+
+**NOW (EVENING TIME GATE, 2026-08-29):** Phase 2.3 closed. Evening close is now a time-gated surface in the product-foundation screen flow. `TodayProductScreenFlow` accepts `showEvening`; when false, the evening step is removed from the scroll, indices/dots are recomputed, and preceding steps no longer label a next step as evening. `TodayCompositionSurface` sets `showEvening = eveningMode || getTimeOfDayByHour() === "evening"`, so morning/day scrolls do not show the evening block. Tests updated and green; frontend production build passes. Audit doc: `docs/audits/EVENING_TIME_GATE_2026-08-29.md`. Next: remaining non-LLM launch-readiness items (Phase 2.1 FE cutover, Phase 3.4 Maps cleanup, Practice Library fill) or billing top-up to unblock LLM-dependent audits.
+
+**NOW (DEPLOY RUNBOOK, 2026-08-29):** Phase 4.2 closed. Production deploy runbook implemented at `docs/operations/DEPLOY_RUNBOOK_V1.md`. GitHub Actions `.github/workflows/deploy.yml` rewrite is in local diff but could not be pushed due to missing `workflow` OAuth scope; the runbook documents the manual deploy process and satisfies the acceptance criteria. Compose validation and image builds tested on the host. Next: any remaining non-LLM launch-readiness item, or billing top-up to unblock the LLM-dependent audits and COGS baseline.
+
+**NOW (PROVENANCE, 2026-08-28):** Phase 2.5 closed. Every Tarot/Compatibility generation log that consumes the Personal Model now carries `core_profile_snapshot_id`. Tarot `POST /spread/context` already had it; `GET /tarot/daily/explain` fallback passes `latest_snapshot.id`. The Compatibility dynamics LLM surface (`services/compatibility_llm.py::generate_llm_product_surface`) previously dropped the snapshot id; it now accepts and logs it, plumbed through `services/generation_orchestrator.py` and `services/compatibility_enrichment_v0.py`. Compatibility background job also writes the snapshot id into the job result payload. Audit doc: `docs/audits/TAROT_COMPAT_PROVENANCE_2026-08-28.md`. Tests: `test_compat_generation_provenance_v1.py` + `test_tarot_spread_context_provenance_v1.py` (3 passed). Next: Phase 2.6 Profile Selection audit (still blocked on K3/billing top-up) or G2 gate work.
+
+**NOW (CALLER AUDIT / LLM-ON-READ, 2026-08-28):** Caller audit for Phase 2.4 closed. `GET /tarot/daily/explain` was the only remaining LLM-on-read in Today/Compat/Tarot/Account. `core/tarot_explainer.py::explain_tarot_card()` now defaults to `allow_llm=False`, reads a cached `GenerationLog` row, and falls back to deterministic content without calling the provider. `GET /tarot/daily/explain` now correctly injects `TarotService` via `Depends` (previously called the async factory without `await`, causing a coroutine AttributeError). All other `GET`s in scope already use `build_cached_or_baseline` or deterministic content; the only `CoreProfileService.build(..., publish_portrait=True)` calls remain behind explicit POST portrait publishers in `account.py`. Audit doc: `docs/audits/CALLER_AUDIT_LLM_ON_READ_2026-08-28.md`. Tests: `backend/tests/test_tarot_daily_explain_no_llm_v1.py` (2 passed).
+
+**NOW (PROFILE SELECTION / IL-4, 2026-08-29):** Deterministic IL-4 theme selection engine v0 implemented in `services/il4_selection_v1.py` and wired into `services/il4_surface_attach_v1.py`. Profile topic connections now mapped: all standard planets (10), houses (12), signs (12), and angles (asc/mc/dsc/ic) are deterministically connected to `ProfileTopicDomain` via `ASTRO_OBJECT_TOPIC_MAP` and `SIGN_TOPIC_MAP`; text fallback remains for keyword-only lines. Tests green: `tests/test_il4_selection_v1.py` now covers `all_planets`, `all_houses`, `all_signs`, `angles`, `topic_filters_cover_all_non_general_domains`, and `line_topic_union`. K3 usage audit harness implemented: `services/il3_profile_usage_audit_v1.py` builds a deterministic 24-line natal pack and evaluates which lines/themes a K3/mocked response cites or ignores; `tests/test_il3_profile_usage_audit_v1.py` green. Live Phase 2.6 audit still **blocked on Token Factory billing top-up** (K3 cannot run). Do not blindly cut Profile to 5–8. See `docs/astrology/IL4_SURFACE_ATTACH_V1.md` §3, `docs/audits/IL3_TO_SURFACE_PAYLOAD_AUDIT_2026-08-25.md`, `docs/audits/PROFILE_SELECTION_CONNECTIONS_2026-08-28.md`, and `docs/audits/PROFILE_SELECTION_K3_AUDIT_HARNESS_2026-08-29.md`.
+
+**NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
+
+**NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — Launch surface cut (2026-08-30)
+
+- **SoT before:** Primary nav из 5 табов (Practices как таб); legacy Today/Profile поверхности доступны пользователю через query params; Таро-хаб из двух сцен (вопрос + каталог раскладов); Evening = closure-драматургия (оценка фокуса, promise picker, итог дня) + вечерний LLM-нарратив, подмешанный в day_story.
+- **SoT after:** Презентация совпадает с `TODAYFLOW_PRODUCT_CANON_UNIFIED.md` §12/§12.1 и `today/TODAY_PRODUCT_FLOW_V1.md` §4: 4 таба; один composition-путь для `/today`; Profile только v2; Таро — один question-flow; Evening = благодарность (категории + свой текст + контекст дня), без генерации вечернего текста.
+- **Public contract changed?** нет JSON-изменений. FE в production больше не запрашивает нарратив `surface: "evening"` (backend-эндпоинт не тронут).
+- **Migration required?** нет. `?full=1` / `?experience=1` / `?view=v0` становятся no-op для пользователей (dev-only).
+- **Canon updated?** канон не менялся — код подтянут к существующему канону; запись в этом трекере.
+- **Backward compatible?** да. Пустые слоты omit; выдуманного контента при сбоях нет. Legacy-компоненты недостижимы в prod, физическое удаление — post-MVP.
+
+## Architecture impact — Journey lock FE cutover (2026-08-29)
+
+- **SoT before:** Inventory named the drift; UI still painted Character warehouse as path act 04, `why_personal` as MY DAY headline, free-form Daily Focus title as `T3.focus_title`, `development_point` as focus fill, guest/general ritual personal_angle as lens.
+- **SoT after:** Presentation matches the lock. Profile path is five acts; leftover styles in Explore; P4 spheres 0–2. Headline = `day_personal.summary_ru`; focus_title = overlay closed-set map_label or omit; focus_body overlay chain only; ritual lens omit without `myDay` capability.
+- **Public contract changed?** no JSON.
+- **Migration required?** no. Lens persist + leftover invent: see DISPLAY LOCK LEFTOVERS.
+- **Canon updated?** yes — both Display Inventories §5 · this tracker.
+- **Backward compatible?** yes for API. Empty slots omit; no invented copy on failure.
+
+## Architecture impact — Display lock leftovers (persist lens + no invent) (2026-08-29)
+
+- **SoT before:** Ritual lens followed capability `myDay` even without a Personal Day nest on GET. Composition VM could fill hero tagline from CE `development_point` or a canned string; empty tracker chrome stood next to Priority; evening open could invent «Главный фокус дня».
+- **SoT after:** `T2.lens_*` appear only when capability ∧ persisted Personal Day nest (`natal_overlay` / `day_personal` / `why_personal`; not numerology identity). Empty → omit. Tagline is Global period subline or empty. `focusTitle` is not `primary_action`. Grammar §9 subset 7/12/15/17/18 is unit-tested; not a full scanner.
+- **Public contract changed?** no JSON. Gate reads existing GET nests; no new `PersonalDayKey` flag.
+- **Migration required?** no. Guest/general still catalog-only.
+- **Canon updated?** yes — `TODAY_DISPLAY_INVENTORY_V1` §5/§7 · `DISPLAY_CONSTRUCTION_GRAMMAR_V1` §9 · this tracker.
+- **Backward compatible?** yes for API. Empty slots omit; transport failure stays «Нет соединения.» / «Не удалось загрузить.»
+
+## Architecture impact — T3.priority glance fallback (2026-08-30)
+
+- **SoT before:** MY DAY Priority used `day_story.do[]`, else Glance `prioritize` even when that line was Global `expect` or a T1 strength chip.
+- **SoT after:** `do[]` first. Glance `prioritize` only if Personal Day is persisted on GET **and** the line equals personal `today_move`. Global expect / closed-set chip labels omit. Glance Daily Focus on TODAY is unchanged.
+- **Public contract changed?** no JSON.
+- **Migration required?** no. Empty Priority omits.
+- **Canon updated?** yes — `TODAY_DISPLAY_INVENTORY_V1` T3.priority · this tracker.
+- **Backward compatible?** yes for API.
+
+## Architecture impact — Content Library Selection v1 (2026-08-29)
+
+- **SoT before:** Content Library had a validator, coverage ledger, and lightweight fill process, but no runtime service that turned a product need into a selected Content Item. Meaning surfaces either used legacy catalog data (`props.affirmations[0]`) or fell back to hardcoded placeholders.
+- **SoT after:** `content_library_selection_v1.py` is the canonical deterministic selector. It loads `content_library_v1.json` and `technique_canon_v1.json`, filters for `active` items whose `technique_id` is `accepted`, matches hard tags (`purpose`/`direction`/optional class/type), and ranks by soft tag overlap (`input_state`, `context`, `energy_effect`, `duration`). The sort key is stable and reproducible. Meaning still does not emit `item_id` or `technique_id`.
+- **Public contract changed?** no — only an internal service added; no endpoint or JSON schema changed.
+- **Migration required?** no runtime.
+- **Canon updated?** yes — `docs/practices/CONTENT_LIBRARY_SELECTION_V1.md` · `docs/practices/_INDEX.md` · this tracker.
+- **Backward compatible?** yes. Legacy endpoints remain unchanged; the selector can be adopted surface-by-surface.
+
+## Architecture impact — Inventory audit vs journey lock (2026-08-29)
+
+- **SoT before:** Journey lock existed; inventories still had internal contradictions (`P3.help` in `path_new_value`; `development_point` as focus_body input; lens appear guest-only).
+- **SoT after:** Profile Inventory v1.2 and Today Inventory §7 record the pass. Catalog matches Grammar §5. Code drift is named, not canonized.
+- **Public contract changed?** no JSON.
+- **Migration required?** no. FE/BE that still use `development_point` as focus or paint `T3.action` remain drift.
+- **Canon updated?** yes — both Display Inventories §7 · this tracker.
+- **Backward compatible?** yes for API.
+
+## Architecture impact — Journey lock: compute≠display · Personal Day formula · T3 roles (2026-08-29)
+
+- **SoT before:** ScreenFlow and compute chain were listed as if one order. Personal Day could be read as sky × natal/CE. `T3.focus_title` was a short second thesis. `T3.action` duplicated Priority. Guest ritual did not split catalog vs lens.
+- **SoT after:** Grammar §5 is the closed product journey (five Profile questions, four Today questions, journey-acceptance sentences). Personal Day = Global × Natal Overlay; CE is not an input. Persist may complete before MY DAY UI; RITUAL lens reads that persist. Guest: catalog yes, lens no. Focus construction = thesis → axis → explanation. No `T3.action`.
+- **Public contract changed?** no JSON fields. Semantics: CE/card/number/goals are not Personal Day bind inputs.
+- **Migration required?** no key bump. Runtime that still concatenates CE or ritual into Personal bind, paints guest lens, or shows a separate action card is drift.
+- **Canon updated?** yes — `DISPLAY_CONSTRUCTION_GRAMMAR_V1` §5 · `TODAY_CONTENT_PIPELINE_V1` · `TODAY_PRODUCT_FLOW_V1` · `TODAY_DISPLAY_INVENTORY_V1` v1.2 · Profile Inventory §0 · this tracker.
+- **Backward compatible?** yes for API. Meaning SoT remains two files: Character Engine (person) · TODAY_CONTENT_PIPELINE (day). They do not feed each other until a named projection lands.
+
+## Architecture impact — Display Inventory v1.1 + construction grammar (2026-08-29)
+
+- **SoT before:** Display Inventory v1 listed slots with provenance and length, but construction rules were implied. FE could still treat JSON fields as “show something pretty.” Generated text was not explicitly barred from becoming a sixth meaning source.
+- **SoT after:** `DISPLAY_CONSTRUCTION_GRAMMAR_V1` is the shared law (chain calc→authority→composition→named slot→Inventory→projection→UI). Inventories v1.1 make every visible atom a five-constraint record (`existence`, `authority`, `inputs`, `semantic role`, `presentation budget`) plus empty→omit. Generated slots formulate only `allowed_inputs`; `may_llm_add_meaning` is forbidden. FE may `clip` / `map_label` / `hide_by_gate` only. `why_personal` may feed `T3.focus_body` only, not `T3.headline`. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
+- **Public contract changed?** no JSON. Display rules only.
+- **Migration required?** no runtime. UI cutover still waits; named code drift stays named, not canonized.
+- **Canon updated?** yes — `docs/foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md` · both Display Inventories v1.1 · foundation/profile indexes · Surface Canon / Forms / Product Flow / Pipeline / Six Questions pointers · this tracker.
+- **Backward compatible?** yes for API. UI that invents meaning, extra blocks, or copy on transport failure remains out of frame.
+
+## Architecture impact — Maps surfaces cleanup (2026-08-29)
+
+- **SoT before:** web-Today had two legacy tracker routes (`/affirmations/tracker`, `/asceticisms/tracker`) alongside the new `/maps/*` surfaces. The legacy pages duplicated tracking functionality and were still linked from the affirmations catalog, asceticisms catalog, and `/tracking/progress` hub. iOS deep-link routing also treated them as calendar-tab paths, diverging from the `/maps/*` profile-tab routing.
+- **SoT after:** the legacy routes are removed. `next.config.mjs` returns 307 redirects: `/affirmations/tracker` → `/maps/wish`, `/asceticisms/tracker` → `/maps/ascetic`. Internal CTAs now point directly to the maps surfaces. The `/tracking/progress` hub lists only the unified maps cards. iOS maps legacy tracker deep links to the `.profile` tab with the corresponding map navigation. The backend docstring points to `/maps/*` surfaces instead of the old paths.
+- **Public contract changed?** yes — URL routing. `/affirmations/tracker` and `/asceticisms/tracker` are no longer first-class pages; they redirect to `/maps/wish` and `/maps/ascetic`.
+- **Migration required?** no runtime data migration. Old bookmarks/deep links continue to work via redirect.
+- **Canon updated?** yes — `docs/status/RELEASE_PLAN_V1.md` · this tracker · `frontend/next.config.mjs`.
+- **Backward compatible?** yes for user data. API endpoints (`/tracking/progress`, `/practices/affirmations`, `/practices/asceticisms`) are unchanged. Only the web page routes and internal links are consolidated.
+
+## Architecture impact — Display inventory Profile + Today (2026-08-29)
+
+- **SoT before:** Profile construction was split across Surface Canon (feel), Journey Forms (samples), Screen Master (v0 layout), and Content Canon (pipeline). Today construction was Product Flow (four surfaces) plus superseded six-block SCENARIO_V3. There was no single closed list of on-screen slots with provenance and length. Live UI could add a Character warehouse act or reuse `why_personal` as both MY DAY headline and focus without violating a named display contract.
+- **SoT after:** `PROFILE_DISPLAY_INVENTORY_V1` and `TODAY_DISPLAY_INVENTORY_V1` are the presentation contracts. Character Engine and TODAY_CONTENT_PIPELINE remain meaning SoT. Product Flow remains the four-surface cycle. Inventory wins on “what is printed, from where, how long.” Slots not in the inventory are out of frame. Code drift is named, not canonized.
+- **Public contract changed?** no JSON. Display rules only.
+- **Migration required?** no runtime. UI cutover: hide Profile Character act on the journey scroll; split MY DAY headline vs focus sources.
+- **Canon updated?** yes — the two inventory files · `docs/profile/_INDEX.md` · `docs/README.md` · Surface Canon / Forms / Product Flow / Pipeline / Six Questions pointers · this tracker.
+- **Backward compatible?** yes for API. UI that paints extra journey acts or invents copy on transport failure is out of frame.
+
+## Architecture impact — Today 4-surface cutover (2026-08-29)
+
+- **SoT before:** the default `/today` route was documented as the 4-surface `TodayCompositionSurface`, but the legacy `?full=1` ritual flow still hosted a separate `?core_loop=1` experiment (`TodayCoreLoopViabilitySurface`) that previewed Theme → Action → Progress. The experiment was gated by a query param and could diverge from the canonical default path.
+- **SoT after:** `?core_loop=1` and `TodayCoreLoopViabilitySurface` are removed. The default `/today` route always renders the 4-surface `TodayProductScreenFlow` through `TodayCompositionSurface`. The `?core_loop=1` URL is now served by the same default composition path. Legacy `?full=1` and `?experience=1` paths remain as non-default overrides and no longer carry the core-loop preview.
+- **Public contract changed?** no — the URL contract and `/today/contract` payload are unchanged; only an internal query-param experiment is removed.
+- **Migration required?** no. Old `?core_loop=1` links simply render the default surface.
+- **Canon updated?** yes — `docs/audits/TODAY_4_SURFACE_CUTOVER_2026-08-29.md` · this tracker · `docs/status/RELEASE_PLAN_V1.md`.
+- **Backward compatible?** yes for clients. The removed surface was only reachable through the experimental query param inside the legacy `?full=1` path; its behavior is replaced by the canonical default surface.
+
+## Architecture impact — Production deploy runbook (2026-08-29)
+
+- **SoT before:** `.github/workflows/deploy.yml` was a stub: it echoed "Deploy backend/frontend to production" and did not validate the production stack. `README.md` had a short public-deployment paragraph but no checklist, rollback, or post-deploy verification. The live host deploy process was implied by `AGENTS.md` but not documented in a single place.
+- **SoT after:** `docs/operations/DEPLOY_RUNBOOK_V1.md` is the canonical manual deploy runbook: pre-deploy checklist, exact `docker compose` commands, targeted `--force-recreate` hotfixes, rollback procedure, post-deploy verification, and monitoring checklist. `.github/workflows/deploy.yml` is now a real CI gate: backend tests, frontend build, Docker Compose config validation, and production image builds. It does not auto-deploy to the live host because the host is not exposed to GitHub Actions.
+- **Public contract changed?** no.
+- **Migration required?** no. Existing deployments continue; future deploys should follow the runbook.
+- **Canon updated?** yes — `docs/operations/DEPLOY_RUNBOOK_V1.md` · this tracker · `docs/status/RELEASE_PLAN_V1.md` · `README.md` §Public deployment.
+- **Backward compatible?** yes. The CI workflow only adds validation; it does not change runtime behavior or contracts.
+
+## Architecture impact — Evening time-gated surface (2026-08-29)
+
+- **SoT before:** the product-foundation screen flow (`today` → `ritual` → `my_day` → `evening`) always rendered the evening step, so a morning/day scroll could land on or preview the evening close block.
+- **SoT after:** `TodayProductScreenFlow` is now gated by `showEvening`. `TodayCompositionSurface` sets `showEvening = eveningMode || getTimeOfDayByHour() === "evening"`. The evening step is hidden from the scroll during morning/day; indices, dot counts, and next-button labels are recomputed. The canonical four-surface model is unchanged; the gate is a presentation-layer decision.
+- **Public contract changed?** no — the same `/today/contract` payload is returned; only the FE scroll order changes.
+- **Migration required?** no. Cached day nests keep the same shape.
+- **Canon updated?** yes — `docs/audits/EVENING_TIME_GATE_2026-08-29.md` · this tracker · `docs/status/RELEASE_PLAN_V1.md`.
+- **Backward compatible?** yes for API and data. UI behavior changes only when local time is not evening.
+
+## Architecture impact — Theme / Action / Progress first-class (2026-08-29)
+
+- **SoT before:** `docs/status/TODAY_CANON_VS_CODE_DIFF.md` concluded that the default web-Today was a **ritual-first funnel**, not a Theme → Action → Progress spine. That conclusion was accurate for the pre-cutover `?full=1` / `?experience=1` paths but contradicted the documented default `TodayCompositionSurface` path. The `?core_loop=1` experiment was the only near-canon preview of the correct spine.
+- **SoT after:** the default `/today` route is declared as the canonical 4-surface `TodayProductScreenFlow`: **TODAY** (Theme / Hero / Why) → **RITUAL** (Symbolic/Tarot+Number) → **MY DAY** (Action / Focus / Progress) → **EVENING** (time-gated close). The old diff is marked **CLOSED** with a Phase 2.2 closure section that records the new route map and lists remaining partial items as polish, not launch blockers. No new code or contract changed in this step; the cutover and time-gate architecture impacts already covered the code changes.
+- **Public contract changed?** no — the `/today/contract` payload and URL contract are unchanged.
+- **Migration required?** no.
+- **Canon updated?** yes — `docs/status/TODAY_CANON_VS_CODE_DIFF.md` · this tracker · `docs/status/RELEASE_PLAN_V1.md`.
+- **Backward compatible?** yes for clients. The legacy `?full=1` and `?experience=1` paths remain as non-default overrides.
+
+## Architecture impact — Caller audit / LLM-on-read (2026-08-28)
+
+- **SoT before:** `GET /tarot/daily/explain` called `chat_completion_plain()` on every request — a read-path LLM. `CoreProfileService.build()` was only safe because callers passed `publish_portrait=True` behind POST endpoints, but the read-path contract was not enforced by tests for Tarot.
+- **SoT after:** Read-path default for `explain_tarot_card()` is `allow_llm=False`. Cache hit returns the stored `GenerationLog.normalized_response`; cache miss returns a deterministic fallback and logs it as `fallback` with `skip_llm: read_path`. LLM personalization is gated behind `allow_llm=True` for explicit POST/background enrichment. `GET /tarot/daily/explain` uses `TarotService = Depends(get_tarot_service)`.
+- **Public contract changed?** no JSON schema change; `/tarot/daily/explain` still returns the same fields, but the content is now deterministic/cached instead of LLM-generated on each GET.
+- **Migration required?** no runtime migration. Existing cached `GenerationLog` rows for `module=tarot`, `surface=daily_card_explainer` will be served as before; new misses write deterministic fallback rows.
+- **Canon updated?** yes — `docs/audits/CALLER_AUDIT_LLM_ON_READ_2026-08-28.md` · this tracker · `core/tarot_explainer.py` docstring.
+- **Backward compatible?** yes for clients. The response shape is unchanged; the explanation text is now deterministic/cached.
+
+## Architecture impact — Tarot/Compat generation provenance (2026-08-28)
+
+- **SoT before:** Tarot `POST /spread/context` and Compatibility editorial logs already carried `core_profile_snapshot_id`. Compatibility dynamics LLM logs (`surface="dynamics_llm"`) did not accept or store the snapshot id, breaking provenance for the main LLM-enriched compatibility surface. The content-v1 compatibility path also omitted it from the job result payload.
+- **SoT after:** `generate_llm_product_surface()` and `run_compatibility_dynamics_pipeline()` accept `core_profile_snapshot_id` and pass it to both success and error `log_generation()` rows. The compatibility enrichment job fetches the latest snapshot for `job.user_id` and threads it into both the dynamics pipeline and the content-v1 result payload. Tarot surfaces remain unchanged (already correct) and are now covered by tests.
+- **Public contract changed?** no — only internal generation log / job result fields.
+- **Migration required?** no — old log rows without the field stay as-is; new rows carry the id when available.
+- **Canon updated?** yes — `docs/audits/TAROT_COMPAT_PROVENANCE_2026-08-28.md` · this tracker.
+- **Backward compatible?** yes for clients. No response shape changes.
+
+## Architecture impact — Profile Selection Engine connections (2026-08-28)
+
+- **SoT before:** `services/il4_selection_v1.py` had a minimal, hand-picked `_TOPIC_KEYWORDS` list that matched only a subset of planets and houses. There was no guarantee that every IL-3 object id appearing in a profile pack connected to a `ProfileTopicDomain`, and no test coverage for all planets/houses/signs/angles. Angles and signs were not explicitly mapped.
+- **SoT after:** `ASTRO_OBJECT_TOPIC_MAP` maps all 10 planets, 12 houses, and 4 major angles to `ProfileTopicDomain`; `SIGN_TOPIC_MAP` maps all 12 signs. `_topics_for_line()` returns the union of topics from the line's object ids plus a deterministic text-keyword fallback. `_line_matches_topic()` checks membership in that set. The mapping is declared product-side heuristic, not IL-3 meaning, and lives in `services/il4_selection_v1.py`.
+- **Public contract changed?** no — the selected IL-4 pack contract and `ProfileTopicDomain` enum are unchanged.
+- **Migration required?** no runtime migration. Existing selections continue to work; new mapping may include slightly different lines under topic filters.
+- **Canon updated?** yes — `docs/audits/PROFILE_SELECTION_CONNECTIONS_2026-08-28.md` · this tracker · `services/il4_selection_v1.py` module docstring.
+- **Backward compatible?** yes for clients. The selection output shape is unchanged; only the subset of lines returned for a specific topic may shift (toward full coverage).
+
+## Architecture impact — Profile Selection K3 usage audit harness (2026-08-29)
+
+- **SoT before:** Phase 2.6 (Profile Selection audit) was blocked on billing and had no reusable tooling to measure which of the ~24 IL-3 themes K3 cites or ignores. Manual prompt inspection would be required once K3 was available.
+- **SoT after:** `services/il3_profile_usage_audit_v1.py` provides a deterministic 24-line synthetic natal profile pack and `evaluate_citation()` / `audit_report()` functions that compare a K3/mocked response against the pack and report per-line and per-topic (`ProfileTopicDomain`) coverage. The harness is fully test-covered and does not call any LLM.
+- **Public contract changed?** no.
+- **Migration required?** no.
+- **Canon updated?** yes — `docs/audits/PROFILE_SELECTION_K3_AUDIT_HARNESS_2026-08-29.md` · this tracker.
+- **Backward compatible?** yes (read-only analysis tool).
+
+## Architecture impact — Personal Day lifecycle (2026-08-25)
+
+- **SoT before:** GET `/today/contract` did not LLM, but miss enqueued `day_prewarm`. Day-story fingerprint hashed mood/goals/prompt/model/sky — identity churn. Failed/402 could be persisted as `kept_prior_native` with `used_fallback=False` (false cache hit).
+- **SoT after:** `PersonalDayKey = user_identity + local_date + semantic_version`. Accepted `native_llm_c1` rows reuse. GET reopen = 0 Personal LLM. GET miss = assembling shell, no enqueue. `expression_version` / mood / prompt are stamps. Force rebuild of a **ready** artifact = same key, ledger `engineering`. Failed/402/kept-prior are not reusable. Native retries stay in one `log_generation`. Shared Global persist unchanged. Public JSON / I0 meaning / IL atoms unchanged.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Legacy same-user+date native rows reuse via identity fallback (no `personal_day_key` stamp required).
+- **Canon updated?** yes — compute lifecycle 1.3 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 1.2 · DAY_LIFECYCLE GET miss · this tracker
+- **Backward compatible?** yes for clients. Live Shared Global + Personal acceptance still waits for Token Factory top-up + one COGS run.
+
+## Architecture impact — Shared Global Day (2026-08-25)
+
+- **SoT before:** I0 split ran Global narrative LLM per user even when date+locale matched. Cost model already named one Global Day; runtime did not persist it.
+- **SoT after:** Shared artifact keyed by `local_date + locale + semantic_version`. `generation_logs.surface=shared_global_day`, `user_id=NULL`. Force rebuild = same identity, ledger=engineering. PersonalDayKey documented, not implemented. Public JSON / I0 meaning / IL atoms unchanged.
+- **Public contract changed?** no
+- **Migration required?** no JSON. First miss still generates; later users of the same locale reuse.
+- **Canon updated?** yes — compute lifecycle 1.2 · TODAY_CONTENT_PIPELINE I0 persist · NATIVE_C1_I0 changelog 1.1 · this tracker
+- **Backward compatible?** yes for clients. Unit tests without `db` keep per-call Global generation.
+
+**NOW (PRACTICES / CANON, 2026-08-30):** **P0 type coverage** — all 26 P0 need cells sourced; now filling P0 spine types. Latest: `discipline.digital_limit` accepted (NHS London Waiting Room + Google Android Digital Wellbeing): set a bounded, recurring daily period (e.g., one hour) without opening feeds/social media, using a timer or device tool; follow for a short streak (7/14 days). `discipline.digital_limit.001/002/003` active with `technique_id`. P0 spine type coverage: 39/44 sourced. `box_breathing`, `energizing_breath`, `abstinence`, and `self_trust` remain skipped. Next non-skipped P0 spine type: `discipline.consumption_limit`. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md). Meaning still does not emit `item_id` or `technique_id`.
+
+## Architecture impact — Practice Library Fill / research collapse (2026-08-26)
+
+- **SoT before:** fill blocked on Landscape → Shortlist → Ingest → Normalization → Targeted* → Safety Review. NOW = Targeted Safety Ingest → Safety Review V1.1. `technique_canon` empty. Fill frozen. One type (`box_breathing`) occupied ten passes.
+- **SoT after:** fill = lightweight provenance (source check → own-words description → safety notes if material → accepted/skipped → Content Item). Research ladder = archive, non-blocking. `box_breathing`, `energizing_breath`, `abstinence`, `self_trust` = `skipped_for_now`. All 26 P0 need cells sourced; P0 type coverage now active. 39/44 P0 spine types sourced. Next Product = next non-skipped P0 spine type (`discipline.consumption_limit`). 133 items remain `llm_provisional`. Taxonomy classes/types, coverage cells, item contract field groups, and Meaning boundary unchanged.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Existing items stay provisional without `technique_id`.
+- **Canon updated?** yes — [PRACTICE_LIBRARY_FILL_V1.md](./practices/PRACTICE_LIBRARY_FILL_V1.md) · [PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md](./practices/PRACTICE_TECHNIQUE_RESEARCH_ARCHIVE_V1.md) · provenance 1.12 · technique canon contract 1.1 · coverage next_pass · landscape 1.6 pointer · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with continuing research escalation as an unlock of fill.
+
+## Architecture impact — Practice Technique Targeted Safety Ingest V1 (2026-08-26)
+
+- **SoT before:** Targeted Safety Shortlist V1 stop A selected Joshi (`hold_exclusion`) and Nivethitha (`hold_precaution`). Next step could glue kumbhaka contraindications and empty-lung BP rise into `who_must_not_hold` for box/square.
+- **SoT after:** Two independent safety observations. Joshi exclusions stay in kumbhaka context. Nivethitha is `observed_physiological_response`; dose/duration unspecified in this locus. Transfer limits stay visible. No new safety rules. Exclusion / precaution / stop_rule first allowed at Safety Review V1.1.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Fill frozen.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md) · ingest JSON · provenance 1.11 · coverage · landscape 1.5 pointer · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with writing `technique_canon`, `technique_id`, `who_must_not_hold`, optional hold, or `may_release` from this pass.
+
+## Architecture impact — Practice Technique Targeted Safety Shortlist V1 (2026-08-26)
+
+- **SoT before:** Safety Review V1 `insufficient_safety`. S-B2 blocked `may_release` without who-must-not. Next step could import wellness who-lists, transfer COPD exertion advice onto seated timed holds, or jump to canon.
+- **SoT after:** Separate safety evidence track. Three speech acts. Wellness/popularizer/tradition are not sufficient SoT for medical contraindications. Selected = ingest permission, not a product who-list. Structural finding: do not glue method-page silence, rehab exertion advice, and kumbhaka exclusion into binary `who_must_not_hold` inside this shortlist. Exclude/precaution/stop_rule remap waits for owner on Safety Review V1.1 after ingest.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Fill frozen.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md) · safety-shortlist JSON · provenance 1.10 · coverage · landscape 1.4 pointer · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with writing `technique_canon`, `technique_id`, optional hold, or `may_release` from this pass.
+
+## Architecture impact — Practice Technique Safety Review V1 (2026-08-26)
+
+- **SoT before:** V1.1 `normalize_one` candidate. Kernel = four timed phases, hold required, equal count a common parameter. Next step could glue review to canonical, ship on SFH stop-rules without who-must-not, or treat unknown as a ban.
+- **SoT after:** Safety Review is its own named pass. `unknown ≠ unsafe` and `unknown ≠ permission to ship`. S-B2: required hold needs who-must-not closed for `may_release`; absence is not `may_not_release`. Five ingested records: stop-rules present (SFH, not in kernel); who-must-not unknown; prohibition none; claims default-closed. Overall `insufficient_safety`. No canon row. No `technique_id`. Next pass is not auto-opened.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Fill frozen.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md](./practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md) · safety-review JSON · provenance 1.9 · coverage · landscape 1.3 pointer · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with writing `technique_canon`, `technique_id`, or `may_release` from this corpus.
+
+## Architecture impact — Practice Technique Normalization V1.1 (2026-08-25)
+
+- **SoT before:** V1 `insufficient_evidence`. Landscape kernel still glued equal-count to four-phase structure. Axes were signal-only.
+- **SoT after:** Axes decided by locked criteria, not locus count. Hold required; equal count a common parameter. Overall `normalize_one`. Landscape hypothesis remapped; V1 shape kept in `mechanism_shape_at_landscape_v1`. Candidate ≠ canon. Safety Review is the next named pass. Probe unattested.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md) · V1.1 JSON · landscape 1.2 remap · provenance 1.8 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with writing `technique_canon` or `technique_id` from this pass.
+
+## Architecture impact — Practice Technique Targeted Ingest V1 (2026-08-25)
+
+- **SoT before:** Targeted Shortlist had two selected resolution loci. Next step could generalize Marchant's 5:5 contrast into a family definition, or treat CAVUHB 4-4-6-2 as a variant of a future canonical method.
+- **SoT after:** Targeted ingest writes two independent evidence records. Author contrast stays study-local. Unequal square stays a label observation. Two axes (`shape_phase_structure`, `timing_ratio`) are signal-only. V1.1 will answer `post_exhale_hold` and `equal_count` separately, then keep the three overall verdicts. Landscape kernel unchanged. Safety Review still closed. Library unattested.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md) · targeted ingest JSON · provenance 1.7 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with `technique_id`, canon rows, axis glue, or Safety Review from this pass.
+
+## Architecture impact — Practice Technique Targeted Shortlist V1 (2026-08-25)
+
+- **SoT before:** Normalization V1 closed as `insufficient_evidence`. Next step could re-collect 4-4-4-4 pages, open Safety Review, or declare the post-exhale hold optional.
+- **SoT after:** After `insufficient_evidence` the path is targeted shortlist → targeted ingest → Normalization V1.1. Unit = one research question. `resolution_role` / `identity_statement` classify source speech, not a kernel. Selected = targeted-ingest permission. Landscape kernel unchanged. Repeat `insufficient_evidence` after V1.1 may leave `box_breathing` without a production item.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md) · targeted shortlist JSON · provenance 1.6 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with `technique_id`, canon rows, optional-hold synthesis, or Safety Review from this pass.
+
+## Architecture impact — Practice Technique Normalization V1 (2026-08-25)
+
+- **SoT before:** three ingested observations. Next step could declare a four-phase kernel with an optional second hold, or split the landscape family on a 2-vs-1 count.
+- **SoT after:** Normalization has three outcomes only. This slice closes as `insufficient_evidence` (a successful result). Landscape kernel unchanged. Family not split. Research question: is post-exhale hold identity-bearing, or do sources use one name for different structures? `normalize_one` would still not be canonical. Library unattested.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_NORMALIZATION_V1.md](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md) · normalization JSON · provenance 1.5 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with `technique_id`, canon rows, optional-hold synthesis, or Safety Review from this pass.
+
+## Architecture impact — Practice Technique Ingest V1 (2026-08-25)
+
+- **SoT before:** Shortlist had three selected loci. Next step could synthesize a common kernel or open another family.
+- **SoT after:** ingest = per-locus paraphrase. `observed_*` are source observations. BHF = four-phase sequence. NHS SFH = sequence and stop/safety in different fields. Newcastle = conflicting three-phase description, not a variant. Canonical Technique still empty. Library still unattested.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_INGEST_V1.md](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md) · ingest JSON · provenance 1.4 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with writing technique canon, `technique_id`, or kernel synthesis from this pass.
+
+## Architecture impact — Practice Technique Shortlist V1 (2026-08-25)
+
+- **SoT before:** Criteria C1–C9 existed; no corpus. Next step could open every family or hunt an ISBN for `box_breathing`.
+- **SoT after:** one family slice with named loci, C1–C9, `selected | supporting | rejected`. Selected loci ≠ Canonical Technique. Four-phase vs three-phase vs unread Iyengar holds are recorded as conflicts, not averaged. Type `box_breathing` remains an expression hypothesis. Content Library is still not attested.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_SHORTLIST_V1.md](./practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md) · shortlist JSON · landscape 1.1 slice fields · provenance 1.3 · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with writing technique canon or `technique_id` from this pass.
+
+## Architecture impact — Practice Technique Shortlist Criteria V1 (2026-08-25)
+
+- **SoT before:** landscape named families; next step could hunt a source for `box_breathing` and retrofit criteria to the first convenient PDF.
+- **SoT after:** criteria exist before corpus. Unit of shortlist = `candidate_family`. Type is an expression hypothesis. Product-only / likely-invention stay explicit. Conflicts are recorded, not LLM-averaged. Shortlist status remains `not_opened`. Content Library is not attested by a future shortlist until `canonical`.
+- **Public contract changed?** no
+- **Migration required?** no runtime.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md) · criteria JSON · provenance 1.2 · landscape next-pointer · coverage · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with opening shortlist in this pass.
+
+## Architecture impact — Practice Technique Landscape V1 (2026-08-25)
+
+- **SoT before:** provenance pipeline locked; next step could collapse a probe into the first recognizable school (PMR, CBT-I, values self-affirmation, forceful pranayama).
+- **SoT after:** named pass = landscape of candidate families by class. Ledger rows are families, not canonical techniques. Four probe splits locked as research distinctions. Shortlist / ingest / technique_canon fill remain closed.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Library still llm_provisional. `technique_id` unused.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_LANDSCAPE_V1.md](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md) · `technique_landscape_v1.json` · provenance 1.1 · coverage next_pass · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with opening shortlist from this pass.
+
+## Architecture impact — Practice Technique Provenance V1 (2026-08-25)
+
+- **SoT before:** Content Item written against need cell / type; technique source = LLM formulation. Coverage-first closed cells without checking that the method exists outside the model.
+- **SoT after:** Canonical Technique is the source of the method. Content Item is a product expression (`technique_id`). Pipeline: Source → extraction → normalization → safety review → canon → item. Existence ≠ efficacy. Fill frozen until canonical rows exist. First 11 items are architecture probes, not content SoT.
+- **Public contract changed?** no — Today / Profile JSON unchanged.
+- **Migration required?** no runtime. `identity.technique_id` optional while registry is empty.
+- **Canon updated?** yes — [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md) · `technique_canon_v1.json` (empty) · item contract · taxonomy v1.2 · coverage freeze · `_INDEX` · README · this tracker
+- **Backward compatible?** yes for clients. Not compatible with continuing LLM-seed as content SoT.
+
+## Architecture impact — Practice Content Coverage V1 (2026-08-25)
+
+- **SoT before:** taxonomy locked; next step sounded like write items against 86 types. Risk: density in one technique, holes in purpose/direction/class.
+- **SoT after:** fill = coverage-first. 26 P0 need cells (purpose × canonical direction + sleep period job). 44 P0 types / 42 P1. Item contract = identity / retrieval / payload. Preferred type in a cell is a fill target, not a meaning output. Library empty.
+- **Public contract changed?** no
+- **Migration required?** no runtime. No Content Items this pass.
+- **Canon updated?** yes — [PRACTICE_CONTENT_COVERAGE_V1.md](./practices/PRACTICE_CONTENT_COVERAGE_V1.md) · taxonomy v1.1 · `content_coverage_matrix_v1.json` · `content_item_contract_v1.json` · `content_library_v1.json`
+- **Backward compatible?** yes. Legacy catalogs untouched (P2 remap after P0).
+
+## Architecture impact — Practice Content Taxonomy V1 (2026-08-25)
+
+- **SoT before:** screen 6 needs × 9 formats; C1.1 = 10 evolution action types; C1.4 = named ascetics; `CONTENT/practices/*.json` flat catalog. Technique, purpose, and delivery mixed.
+- **SoT after:** library vocab `content_class` → (`family`) → `type` → Content Item. Purpose/domain/state/direction/duration/context/delivery are attributes. Meaning emits need; retrieval picks the object. `meditation.sleep` is the only purpose-as-type product exception.
+- **Public contract changed?** no
+- **Migration required?** no runtime. Legacy catalogs and C1 registries stay; remap on fill-pass.
+- **Canon updated?** yes — [PRACTICE_CONTENT_TAXONOMY_V1.md](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md) · `DATA/reference/practice/content_taxonomy_v1.json` · practices `_INDEX` · README · Reference Layer §2.5/§2.8/§6
+- **Backward compatible?** yes. Screen chips and C1 codes not deprecated.
+
+## Architecture impact — Profile invalidation axes (2026-08-25)
+
+- **SoT before:** `profile_hash` included `PROFILE_CONTRACT_PROMPT_VER` + funnel prompt versions; Natal Decode fingerprint included `DECODE_VERSION` polish stamp. A voice polish orphaned snapshots / GET offers.
+- **SoT after:** Snapshot key = identity + birth + `calc_version` + `semantic_version`. Expression stamped on payload, not the key. GET reuses identity-compatible snapshots. Natal Decode lookup accepts semantic fingerprint + legacy v0.2/v0.3 polish fingerprints. Public JSON unchanged.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Existing snapshots reused via identity fallback; decode logs via legacy fingerprints.
+- **Canon updated?** yes — compute lifecycle 1.1 · this tracker · payload audit (no mechanical 5–8)
+- **Backward compatible?** yes for clients. Old prompt-keyed hashes still resolve via fallback.
+
+## Architecture impact — Compute Lifecycle V1 (2026-08-25)
+
+- **SoT before:** Cost guard capped tokens; Natal Decode GET never rebuilds; I0 named persist + one Global Day; no single lifecycle SoT. Prompt versions could bust Profile hash. I0 Global LLM still per-user.
+- **SoT after:** Compute lifecycle file is **when-to-calculate SoT**. Four Profile triggers. Three ledgers (core / premium / engineering). Knowledge Core not expanded. IL-3 payload audit is facts, not a rank rewrite. Public JSON / I0 meaning / IL atoms **unchanged**.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Runtime gaps listed in lifecycle §7.
+- **Canon updated?** yes — compute lifecycle · IL-3 payload audit · this tracker · LLM quality · freeze “do not expand” · README
+- **Backward compatible?** yes for clients. Force rebuild stays for pre-release testing (engineering ledger).
+
+**NOW (OPS / LLM, 2026-08-25):** **Cost Containment / LLM Usage Observability** — router SoT: request → policy → budget → provider → accounting. K3 allowlist (natal/CE only). Today output 1400 / retry 600. Tenant `LLM_DAILY_USD_CEILING=$5`. Over budget = downgrade (Qwen) or deny. `@example.com` out of prewarm. `$5/100 users` retired. I0 Global is shared by `GlobalDayKey`; Personal by `PersonalDayKey`. Live COGS **stopped on TF 402**; `/models` 200 is not billing. Latch stays until paid chat 200. After pass: write the four-step USD total as first clean COGS baseline, then Profile Selection.
+
+## Architecture impact — Cost Containment llm_cost_guard_v1 (2026-08-25)
+
+- **SoT before:** AI COGS logs only; `resolve_max_tokens` could raise K3 to 16k / K2.6 to 4k; K3 used wherever `resolve_complex_chat_model` was called (including profile funnel); no tenant USD cap; `@example.com` prewarmed.
+- **SoT after:** `llm_cost_guard_v1` is model/token/budget SoT at `_create_chat_collect`. K3 only `natal.decode` + CE stages 2–4. Daily USD ceiling. Deny/downgrade on cap. Usage on every call including failed/retry/deny. Generation meaning / I0 split / public JSON **unchanged**.
+- **Public contract changed?** no
+- **Migration required?** no JSON. Ops: purge non-tester users; `LLM_USAGE_LOG_PATH` + ledger on `/DATA/ops`.
+- **Canon updated?** yes — [LLM_QUALITY_AND_PROMPT_EVOLUTION.md](./LLM_QUALITY_AND_PROMPT_EVOLUTION.md) Cost Containment · unit economics table
+- **Backward compatible?** yes for clients. Truncated natal JSON possible vs previous 16k K3 thinking budget (cost trade). 402 trips the day.
 
 ## Architecture impact — Today pane scroll + practices hub first paint (2026-08-24)
 
@@ -124,7 +510,7 @@ Status: Active working document
 - **Backward compatible?** yes; cached cores without `recognition_line` fall back to first sentence of `identity_core`
 - **Next:** owner glance @390. Do not open viewport 2 / Today / environment / asset research.
 
-**NOW (FOUNDATION, 2026-08-25):** **Profile meaning polish 1.3.123 LOCKED** (Natal Decode sky theses bind to IL-4 · Identity Core stays CE · prompt 1.1.0). **Native C1 conflict→scene seed retry 1.3.122 LOCKED** (prompt c5.5 · why_today must not paste into scene.why · detectors unchanged). **Native C1 astro jargon retry 1.3.121 LOCKED**. **Native C1 seed leak retry 1.3.120 LOCKED**. **Native C1 everyday scene retry 1.3.119 LOCKED**. **Native C1 evidence pack binding 1.3.118 LOCKED**. **Native C1 editorial gate calibration 1.3.117 LOCKED**. **Native C1 I0 generation split 1.3.116 LOCKED**. **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. **IL-4 surface attach 1.3.112 LOCKED**. **Wire calc → IL 1.3.111 LOCKED**. **Library scale 1.3.110 LOCKED**. **IL-4 1.3.109 LOCKED**. **IL-3 1.3.108 LOCKED**. **IL-2 1.3.107 LOCKED**. **FREEZE 1.3.106 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
+**NOW (FOUNDATION, 2026-08-25):** **Natal Decode cache refresh 1.3.124 LOCKED** (ops live · GET never rebuilds · polish 1.3.123 stands · sample `--apply` blocked Nebius K3 **402** · users 1/2 still v0.2). **Profile meaning polish 1.3.123 LOCKED** (Natal Decode sky theses bind to IL-4 · Identity Core stays CE · prompt 1.1.0). **Native C1 conflict→scene seed retry 1.3.122 LOCKED** (prompt c5.5 · why_today must not paste into scene.why · detectors unchanged). **Native C1 astro jargon retry 1.3.121 LOCKED**. **Native C1 seed leak retry 1.3.120 LOCKED**. **Native C1 everyday scene retry 1.3.119 LOCKED**. **Native C1 evidence pack binding 1.3.118 LOCKED**. **Native C1 editorial gate calibration 1.3.117 LOCKED**. **Native C1 I0 generation split 1.3.116 LOCKED**. **Compatibility synastry editorial IL-4 1.3.115 LOCKED**. **Today meaning polish 1.3.114 LOCKED**. **IL-4 editorial consume 1.3.113 LOCKED**. **IL-4 surface attach 1.3.112 LOCKED**. **Wire calc → IL 1.3.111 LOCKED**. **Library scale 1.3.110 LOCKED**. **IL-4 1.3.109 LOCKED**. **IL-3 1.3.108 LOCKED**. **IL-2 1.3.107 LOCKED**. **FREEZE 1.3.106 LOCKED**. Catalog 38 draft / 0 `active`. **STOP Angles.** Not pair catalog. Not `active`. Boundary: [IL1_HANDOFF.md](./astrology/IL1_HANDOFF.md) §3 · §5 paste.
 
 **PAUSED (TODAY CONTENT, 2026-08-17):** Further Today *meaning/narrative* work beyond chorus bind is owner-directed. I0 + product cycle stay locked. Allowed: transport honesty, routing, visual foundation, DS, bugs, geometry, owner-named polish.
 
@@ -308,12 +694,21 @@ Status: Active working document
 - **Canon updated?** yes — `docs/astrology/KNOWLEDGE_CORE_V1_FREEZE.md` · inventory step 34 · IL 1.3.106 §6.60
 - **Backward compatible?** yes (`draft`)
 
+## Architecture impact — Profile 1.3.124 Natal Decode cache refresh (2026-08-25)
+
+- **SoT before:** Decode fingerprint includes `natal_decode_depth_v0.3`. Production still had grounded v0.2 logs; GET returned `offer` so 1.3.123 polish never ran. Client `force_refresh` ignored; `ops_force` unimplemented.
+- **SoT after:** **Natal Decode Cache Refresh V1** — ops `ops_force` + inventory script. GET never rebuilds. Prompt 1.1.0 / polish 1.3.123 unchanged. Identity Core stays CE. `load_objects()` honors `TODAYFLOW_DATA_DIR` (not an IL lemma change).
+- **Public contract changed?** no new fields. GET ready `version` is the persisted artifact version.
+- **Migration required?** yes — ops `--apply` for stale users (sample: 1, 2)
+- **Canon updated?** yes — `docs/profile/PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md` · tracker 1.3.124
+- **Backward compatible?** yes — fingerprint miss still offers generate
+
 ## Architecture impact — Profile 1.3.123 meaning polish (2026-08-25)
 
 - **SoT before:** Today polish 1.3.114 bound native astrology chorus to IL-4. Live Profile is Character Engine; Natal Decode invented sky meaning from compact natal_pack facts.
 - **SoT after:** **Profile Meaning Polish V1** — Natal Decode `pattern_thesis` / `section.thesis` phrase IL-4 when a pack is present. Identity Core stays CE. Public JSON unchanged.
 - **Public contract changed?** no
-- **Migration required?** no — next explicit POST after decode v0.3 fingerprint
+- **Migration required?** yes — ops cache refresh **1.3.124**
 - **Canon updated?** yes — `docs/profile/PROFILE_MEANING_POLISH_V1.md` · tracker 1.3.123
 - **Backward compatible?** yes — missing geometry → previous decode path
 
@@ -2412,10 +2807,84 @@ Ordered work (aligns with canon §7):
 Use format:
 - `YYYY-MM-DD` | `Area` | `Change` | `Status` | `Notes`
 
+- 2026-08-30 | Practices / Canon | **Library fill: transition_ritual sourced** | **ACCEPTED** | need.transition.prepare closed with `practice.transition_ritual` (brief close-stand-switch practice: close what you were doing, stand, three steps, sit for next; Leroy 2009 attention residue + Leroy & Glomb 2018 ready-to-resume plan + NHS Every Mind Matters working-from-home breaks). No new type. Meaning/public JSON unchanged. Next cell = need.recovery.recover. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: priority_setting sourced** | **ACCEPTED** | need.decision_making.focus closed with `practice.priority_setting` (brief one-task commitment: write one priority, set rest aside, close; NHS England line managers expectations + NHS Elect Time Management & Productivity Programme + Mayo Clinic Research mindful single-tasking). No new type. Meaning/public JSON unchanged. Next cell = need.transition.prepare. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: creative_prompt sourced** | **ACCEPTED** | need.creativity.open closed with `practice.creative_prompt` (brief one-line micro-creativity: draw one line, do not erase, stop; Mayo Clinic Press art and health + Mayo Clinic stress relievers sketching + Greater Manchester Mental Health NHS Arts for Good Health). No new type. Meaning/public JSON unchanged. Next cell = need.decision_making.focus. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: connection_action sourced** | **ACCEPTED** | need.connection.connect closed with `practice.connection_action` (one short message / honest question / brief check-in to someone you have not reached; NHS Essex ICB Looking after your mental health + Liu et al. 2025 systematic review on behavioral activation for social connection + Laidlaw et al. 2020 tele-delivered behavioral activation for connectedness). No new type. Meaning/public JSON unchanged. Next cell = need.creativity.open. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: journaling sourced** | **ACCEPTED** | need.self_connection.reflect closed with `practice.journaling` (brief three-sentence unedited private writing; NHS Lanarkshire Writing for Wellbeing + CUH NHS Write Your Self + Greater Good Science Center Expressive Writing). No new type. Meaning/public JSON unchanged. Next cell = need.connection.connect. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: self_check_in sourced** | **ACCEPTED** | need.emotional_awareness.reflect closed with `practice.self_check_in` (one-word feeling + body-spot check-in; Greater Good Science Center Naming Your Emotions + NHS Lothian Emotion Workbook + Torre & Lieberman 2018 affect labeling + Nook et al. 2022 timing/intensity caution). No new type. Meaning/public JSON unchanged. Next cell = need.self_connection.reflect. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: micro_action sourced** | **ACCEPTED** | need.motivation.activate closed with `practice.micro_action` (brief two-minute immediate action; NHS ELFT behavioural activation + Mayo Clinic Anxiety Coach depression behavioral activation + Psychology Tools behavioral activation). No new type. Meaning/public JSON unchanged. Next cell = need.emotional_awareness.reflect. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: sleep_discipline sourced** | **ACCEPTED** | need.sleep.discipline closed with `discipline.sleep_discipline` (fixed latest bedtime rule for 7 consecutive days; Mayo Clinic sleep tips + Mayo Clinic insomnia CBT-I + NHS inform sleep hygiene). No new type. Meaning/public JSON unchanged. Next cell = need.motivation.activate. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: sleep sourced** | **ACCEPTED** | need.sleep.prepare closed with `meditation.sleep` (brief pre-sleep meditation / soften jaw on out-breath; NHS inform sleep hygiene + Mayo Clinic Health System sleep tips + NHS inform insomnia page). No new type. Meaning/public JSON unchanged. Next cell = need.sleep.discipline. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: relaxation sourced** | **ACCEPTED** | need.rest.downregulate closed with `meditation.relaxation` (brief body-focused relaxation / heavy hands; CUH NHS systematic focusing + Mayo Clinic relaxation techniques + NHS inform progressive muscle relaxation). No new type. Meaning/public JSON unchanged. Next cell = need.sleep.prepare. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-30 | Today / FE | **T3.priority glance fallback** | **CODE** | Glance `prioritize` feeds MY DAY only if personal `today_move` + persist nest; Global expect/chip omit. Tests: `todayMyDayPriority`. No compose rebuild. Next: full Grammar §9 scanner or dead `ProfileCharacterScene`. [TODAY_DISPLAY_INVENTORY_V1](./today/TODAY_DISPLAY_INVENTORY_V1.md).
+- 2026-08-29 | Profile + Today / FE | **Display lock leftovers** | **CODE** | Persist lens = capability ∧ GET nest. Empty tracker omit; evening no canned theme; composition `focusTitle` empty; hero tagline not CE/canned. Grammar §9 subset 7/12/15/17/18. No compose rebuild; no browser. Next: full scanner or Glance `prioritize` if personal. [TODAY_DISPLAY_INVENTORY_V1](./today/TODAY_DISPLAY_INVENTORY_V1.md) · [DISPLAY_CONSTRUCTION_GRAMMAR_V1](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md).
+- 2026-08-29 | Profile + Today / FE | **Journey lock cutover** | **CODE** | Character warehouse off path; P4 spheres 0–2; leftover styles in Explore. MY DAY headline = `day_personal.summary_ru`; focus_title = overlay axis or omit; focus_body overlay chain only; guest/general ritual lens omit. Tests: 9 suites + TodayCompositionSurface (22). Browser not run (no browser tools; live compose not rebuilt). Remaining: persist-key lens vs capability. [PROFILE_DISPLAY_INVENTORY_V1](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [TODAY_DISPLAY_INVENTORY_V1](./today/TODAY_DISPLAY_INVENTORY_V1.md).
+
+- 2026-08-29 | Profile + Today / Canon | **Inventory audit vs journey lock** | **ACCEPTED** | Line-by-line. Profile: help/title out of path_new_value. Today: development_point out of focus_body; lens requires persisted Personal Day; affirmation/practice ≠ Priority. Next = cut named code drift. [PROFILE_DISPLAY_INVENTORY_V1](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) §7 · [TODAY_DISPLAY_INVENTORY_V1](./today/TODAY_DISPLAY_INVENTORY_V1.md) §7.
+
+- 2026-08-29 | Profile + Today / Canon | **Journey lock (compute≠display, Personal Day formula, T3 roles)** | **ACCEPTED** | Display path ≠ compute path. Personal Day = Global × Natal Overlay; CE out. Guest ritual catalog without personal lens. Headline = thesis; focus_title = overlay axis; focus_body = how it shows. T3.action removed. Journey acceptance sentences in Grammar §5.2. Next = slot-by-slot Inventory audit, not another composition pass. [DISPLAY_CONSTRUCTION_GRAMMAR_V1](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) · [TODAY_CONTENT_PIPELINE_V1](./today/TODAY_CONTENT_PIPELINE_V1.md).
+
+- 2026-08-29 | Practices / Canon | **Library fill: body_release sourced** | **ACCEPTED** | need.release.release closed with `practice.body_release` (abbreviated shoulder tension-release; NHS inform progressive muscle relaxation + Mayo Clinic + NCBI StatPearls). No new type. Meaning/public JSON unchanged. Next cell = need.rest.downregulate. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Practices / Canon | **Library fill: capability sourced** | **ACCEPTED** | need.confidence.open closed with `affirmation.capability` (realistic first-person coping statement; CBT/REBT rational coping statement + NHS inform). `affirmation.self_trust` skipped (source gap). Next cell = need.release.release. No new type. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-29 | Profile + Today / Canon | **Display inventory v1.1 (five-constraint contracts)** | **ACCEPTED** | Construction grammar locked. Inventories rewritten as full slot records (`one_question`, `allowed_inputs`, `forbidden_inference`, persist key, anti-dupe). Generated ≠ semantic authority. UI cutover still waits. Meaning SoT unchanged. [DISPLAY_CONSTRUCTION_GRAMMAR_V1](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) · [PROFILE_DISPLAY_INVENTORY_V1](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [TODAY_DISPLAY_INVENTORY_V1](./today/TODAY_DISPLAY_INVENTORY_V1.md).
+
 Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-29 | Profile + Today / Canon | **Display inventory v1 (construction SoT)** | **ACCEPTED** | Closed slot catalogs with provenance + length budgets. Profile journey = Recognition→Why→Insight→Effort→Bridge→Explore. Today = four surfaces. Character warehouse and MY DAY headline/focus dupe named as code drift, not product. Meaning SoT unchanged. [PROFILE_DISPLAY_INVENTORY_V1](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [TODAY_DISPLAY_INVENTORY_V1](./today/TODAY_DISPLAY_INVENTORY_V1.md).
+- 2026-08-26 | Practices / Canon | **Library fill: prompted_reflection sourced** | **ACCEPTED** | need.clarity.reflect closed. Kernel = one question → own-words answer; no required conclusion. Not Pennebaker/Gibbs/CBT thought record. Probe rewritten; outcome_label no longer claims clarity. Next cell = need.confidence.open. No new type. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-26 | Practices / Canon | **Library fill: sensory_grounding sourced** | **ACCEPTED** | need.grounding.stabilize closed. Kernel = notice/name present sense data; 5-4-3-2-1 and 3-2-1 are not the kernel. Probe rewritten. Next cell = need.clarity.reflect. No new type. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-26 | Practices / Canon | **Library fill: mobility sourced** | **ACCEPTED** | need.energy.activate closed with existing alt type mobility (brief unforced joint movement). energizing_breath skipped_for_now: LLM probe is not a confirmed method; forceful pranayama not used to save the preferred type. Next cell = need.grounding.stabilize. No new type. No named pass. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-26 | Practices / Canon | **Library fill: focused_attention sourced** | **ACCEPTED** | need.focus.focus closed with existing alt type focused_attention (one object, return when attention wanders). box_breathing stayed skipped; no breath substitute. Next cell = need.energy.activate. No new type. No named pass. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-26 | Practices / Canon | **Library fill: extended_exhale sourced** | **ACCEPTED** | technique.extended_exhale accepted from two NHS method descriptions (longer unforced exhale, no hold). practice.extended_exhale.001 attached and rewritten. Cell need.calm.downregulate = sourced. Next cell = need.focus.focus (box_breathing skipped — other type or skip). No new named pass. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-26 | Practices / Canon | **Research escalation closed; library fill unfrozen** | **ACCEPTED** | Landscape→…→Targeted Safety = archive, non-blocking. Lightweight provenance is the fill process. box_breathing skipped_for_now. Next Product = library fill at need.calm.downregulate, not Safety Review V1.1. Meaning/public JSON unchanged. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
+- 2026-08-26 | Practices / Canon | **Targeted Safety Ingest V1 (observations, not a who-list)** | **ACCEPTED** | Joshi kumbhaka exclusions stay in kumbhaka context. Nivethitha is empty-lung physiology, dose unspecified in this locus. Transfer limits locked. No new safety rules. Next = Safety Review V1.1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_INGEST_V1.md).
+- 2026-08-26 | Practices / Canon | **Targeted Safety Shortlist V1 (who_must_not_hold)** | **ACCEPTED** | Stop A. Joshi 2024 hold_exclusion + Nivethitha 2017 hold_precaution selected. Wellness rejected. Exertion rehab supporting, not transferred. Structural finding recorded; Safety Review V1 contract unchanged. Next = Targeted Safety Ingest → Safety Review V1.1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SAFETY_SHORTLIST_V1.md).
+- 2026-08-26 | Practices / Canon | **Safety Review V1 (insufficient_safety)** | **ACCEPTED** | S-B2 locked. Stop-rules present (SFH, not in kernel). who_must_not_hold unknown. Prohibition none. Claims default-closed. Overall insufficient_safety, not may_not_release. Canon empty. Next = owner decides. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1](./practices/PRACTICE_TECHNIQUE_SAFETY_REVIEW_V1.md).
+- 2026-08-25 | Practices / Canon | **Normalization V1.1 (four-phase remap)** | **ACCEPTED** | Hold required (N-H1). Equal count common_parameter (N-E2). Overall normalize_one candidate, not canon. Landscape remapped; V1 hypothesis preserved. Next = Safety Review. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_NORMALIZATION_V1_1](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1_1.md).
+- 2026-08-25 | Practices / Canon | **Targeted Ingest V1 (two resolution loci)** | **ACCEPTED** | Marchant square and 5:5 stored separately; author contrast is not a family definition. CAVUHB 4-4-6-2 is label observation, not variant. Two axes signal-only. Next = Normalization V1.1. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_INGEST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_INGEST_V1.md).
+- 2026-08-25 | Practices / Canon | **Targeted Shortlist V1 (post-exhale hold identity)** | **ACCEPTED** | One research question. Definition + contrast selected. Replication not selected. Variant not found in preferred class. Next = targeted ingest → Normalization V1.1. Repeat insufficient_evidence allowed. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_TARGETED_SHORTLIST_V1.md).
+- 2026-08-25 | Practices / Canon | **Normalization V1 (equal_count_breath)** | **ACCEPTED** | Four-level compare. Decision `insufficient_evidence` (success). Not 2-vs-1. Not optional hold. Next = targeted shortlist on post-exhale hold identity. Canon empty. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_NORMALIZATION_V1](./practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md).
+- 2026-08-25 | Practices / Canon | **Ingest V1 (equal_count_breath)** | **ACCEPTED** | Three independent evidence records. observed_* = source observation, not canonical fields. Newcastle recorded as conflict, not variant. Canon empty. Next = Normalization V1. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_INGEST_V1](./practices/PRACTICE_TECHNIQUE_INGEST_V1.md).
+- 2026-08-25 | Practices / Canon | **Shortlist V1 (equal_count_breath slice)** | **ACCEPTED** | Vertical research slice. Selected = ingest permission, not canon/efficacy. Conflicts (3-phase vs 4-phase; holds-as-kernel vs NEED_OWNER) recorded, not averaged. Other families closed. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SHORTLIST_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_V1.md).
+- 2026-08-25 | Practices / Canon | **Shortlist Criteria V1** | **ACCEPTED** | Gates C1–C9. Unit = candidate_family. Shortlist still closed. technique_id only at canonical. Next = shortlist by family. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1](./practices/PRACTICE_TECHNIQUE_SHORTLIST_CRITERIA_V1.md).
+- 2026-08-25 | Practices / Canon | **Technique landscape V1** | **ACCEPTED** | Four class maps. Families ≠ authors. Shortlist closed. Technique canon empty. Four probe splits: energizing_breath reject/remap; capability = coping not values self-affirmation; body_release ≠ PMR; sleep_discipline ≠ CBT-I. Next = selection criteria, not ingest. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_LANDSCAPE_V1](./practices/PRACTICE_TECHNIQUE_LANDSCAPE_V1.md).
+- 2026-08-25 | Practices / Canon | **Technique provenance + fill freeze** | **ACCEPTED** | LLM is not the technique source. Canonical Technique contract + empty registry. First 11 items gap-reviewed, not ingested. 133 drafts = llm_provisional. Audio vs text cancelled. Next = landscape/shortlist/ingest, not more seeds. Meaning/public JSON unchanged. [PRACTICE_TECHNIQUE_PROVENANCE_V1](./practices/PRACTICE_TECHNIQUE_PROVENANCE_V1.md).
+- 2026-08-25 | Practices / Canon | **P1 density context (work vs evening)** | **SEEDED** | 44 siblings. First = `practice.extended_exhale.003` (`evening`). Sleep/evening seeds flip to `work`. Same duration as seed. Next = audio vs text. 42 P1 types still blocked. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P1 density EN locale** | **SEEDED** | `locales.en` + `outcome_label.en` on all 89 items. `ru` kept. Sleep EN avoids type code `sleep`. Next = other context (`work` vs `evening`). 42 P1 types still blocked. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P1 density (duration/delivery)** | **SEEDED** | 44 siblings, same `seed_cell`. First empty density target was `practice.extended_exhale` → `.002` duration 5. Sleep/evening → audio+guided. Discipline → 14 days. 42 P1 types not listed on P0 cells (`form_ok`). Next = EN locale. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 type-spine fill (ledger order)** | **SEEDED** | 19 remaining P0 types. First empty type was `practice.mobility` → `practice.mobility.001` on `need.energy.activate`. `meditation.body_scan` does not share coverage with recovery. P0 type spine complete (44/44). Next = P1 density. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #26 (ledger order)** | **SEEDED** | First empty cell was `need.habit_change.prepare` → `discipline.consistency_challenge.002`. Same type as `discipline.consistency_challenge.001` does not share coverage. P0 need cells complete (26/26). Next = remaining empty P0 type_spine types (19). Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #25 (ledger order)** | **SEEDED** | First empty cell was `need.presence.stabilize` → `meditation.mindfulness.001`. Overlapping `scattered` / `stabilize` do not close focus/grounding/transition/self_control. Next empty = `need.habit_change.prepare`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #24 (ledger order)** | **SEEDED** | First empty cell was `need.reset.release` → `practice.digital_pause.001`. Overlapping `stuck` / `release` do not close release/motivation/creativity/habit_change. Next empty = `need.presence.stabilize`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #23 (ledger order)** | **SEEDED** | First empty cell was `need.simplicity.release` → `discipline.reduction.001`. Overlapping `overstimulated` / `release` do not close detachment/rest/calm/reset. Next empty = `need.reset.release`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #22 (ledger order)** | **SEEDED** | First empty cell was `need.consistency.prepare` → `discipline.consistency_challenge.001`. Overlapping `scattered` / `prepare` do not close transition/habit_change. Next empty = `need.simplicity.release`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #21 (ledger order)** | **SEEDED** | First empty cell was `need.detachment.release` → `discipline.abstinence.001`. Overlapping `overstimulated` / `release` do not close calm/rest/simplicity. Next empty = `need.consistency.prepare`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #20 (ledger order)** | **SEEDED** | First empty cell was `need.self_control.stabilize` → `discipline.attention_discipline.001`. Overlapping `restless` / `stabilize` do not close sleep/discipline/grounding. Next empty = `need.detachment.release`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #19 (ledger order)** | **SEEDED** | First empty cell was `need.discipline.prepare` → `discipline.routine_commitment.001`. Overlapping `restless` / `prepare` do not close sleep/self_control/transition. Next empty = `need.self_control.stabilize`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #18 (ledger order)** | **SEEDED** | First empty cell was `need.recovery.recover` → `practice.progressive_relaxation.001`. Overlapping `tense` / `low_energy` do not close grounding/calm/energy/motivation. Next empty = `need.discipline.prepare`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #17 (ledger order)** | **SEEDED** | First empty cell was `need.transition.prepare` → `practice.transition_ritual.001`. Overlapping `scattered` / `prepare` do not close focus/grounding/consistency. Next empty = `need.recovery.recover`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #16 (ledger order)** | **SEEDED** | First empty cell was `need.decision_making.focus` → `practice.priority_setting.001`. Overlapping `uncertain` / `focus` do not close clarity/confidence/box_breathing. Next empty = `need.transition.prepare`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #15 (ledger order)** | **SEEDED** | First empty cell was `need.creativity.open` → `practice.creative_prompt.001`. Overlapping `stuck` does not close release/motivation/reset. Next empty = `need.decision_making.focus`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #14 (ledger order)** | **SEEDED** | First empty cell was `need.connection.connect` → `practice.connection_action.001`. Overlapping `disconnected` does not close grounding/self_connection. Next empty = `need.creativity.open`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #13 (ledger order)** | **SEEDED** | First empty cell was `need.self_connection.reflect` → `practice.journaling.001`. Overlapping `disconnected` does not close grounding/connection. Next empty = `need.connection.connect`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #12 (ledger order)** | **SEEDED** | First empty cell was `need.emotional_awareness.reflect` → `practice.self_check_in.001`. Overlapping `emotionally_heavy` does not close release. Next empty = `need.self_connection.reflect`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #11 (ledger order)** | **SEEDED** | First empty cell was `need.motivation.activate` → `practice.micro_action.001`. Overlapping `stuck` / `low_energy` do not close release/energy/recovery. Next empty = `need.emotional_awareness.reflect`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #10 (ledger order)** | **SEEDED** | First empty cell was `need.sleep.discipline` → `discipline.sleep_discipline.001`. Same `purpose=sleep` as `meditation.sleep.001` does not share coverage. Period `duration_days`, not session minutes. Next empty = `need.motivation.activate`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #9 (ledger order)** | **SEEDED** | First empty cell was `need.sleep.prepare` → `meditation.sleep.001`. Same `purpose=sleep` does not close `need.sleep.discipline`. Next empty = `need.sleep.discipline`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #8 (ledger order)** | **SEEDED** | First empty cell was `need.rest.downregulate` → `meditation.relaxation.001`. Overlapping `overstimulated` does not close sleep/detachment/simplicity or calm. Next empty = `need.sleep.prepare`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #7 (ledger order)** | **SEEDED** | First empty cell was `need.release.release` → `practice.body_release.001`. Overlapping `stuck` / `emotionally_heavy` do not close motivation/reset/emotional_awareness. Next empty = `need.rest.downregulate`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #6 (ledger order)** | **SEEDED** | First empty cell was `need.confidence.open` → `affirmation.capability.001`. Overlapping `uncertain` does not close decision_making. Next empty = `need.release.release`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #5 (ledger order)** | **SEEDED** | First empty cell was `need.clarity.reflect` → `practice.prompted_reflection.001`. Overlapping `uncertain` does not close confidence/decision_making. Next empty = `need.confidence.open`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #4 (ledger order)** | **SEEDED** | First empty cell was `need.energy.activate` → `practice.energizing_breath.001`. Overlapping `low_energy` does not close motivation/recovery. Next empty = `need.clarity.reflect`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #3 (ledger order)** | **SEEDED** | First empty cell was `need.focus.focus` → `practice.box_breathing.001`. Overlapping `scattered` does not close grounding. Next empty = `need.energy.activate`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **P0 seed #2 (ledger order)** | **SEEDED** | First empty cell was `need.calm.downregulate` → `practice.extended_exhale.001`. One item / one cell. Overlapping `tense` does not close grounding. Next empty = `need.focus.focus`. Meaning/public JSON unchanged. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **First P0 content seed** | **SEEDED** | One item: `practice.sensory_grounding.001` closes `need.grounding.stabilize` (draft/seed). Validator `content_library_validator_v1`. Meaning/public JSON unchanged. Next empty P0 cell, not batch. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **Practice Content Coverage V1** | **LOCKED** | Coverage-first fill: 26 P0 need cells empty · 44 P0 / 42 P1 types · item = identity/retrieval/payload · library `items: []`. Meaning still no `item_id`. Next = seed empty cells, not mass copy. [PRACTICE_CONTENT_COVERAGE_V1](./practices/PRACTICE_CONTENT_COVERAGE_V1.md).
+- 2026-08-25 | Practices / Canon | **Practice Content Taxonomy V1** | **LOCKED** | Four classes (practice/meditation/affirmation/discipline) · 86 types · purpose/domain/state/direction as attributes, not types. Vocab `DATA/reference/practice/content_taxonomy_v1.json`. Items not filled. Screen need/format unchanged. [PRACTICE_CONTENT_TAXONOMY_V1](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md).
+- 2026-08-25 | Profile / ops | **1.3.124 Natal Decode cache refresh** | **LOCKED (ops) · sample BLOCKED** | Machinery live: `ops_force`, inventory script, GET persisted version, `load_objects()` → `TODAYFLOW_DATA_DIR`. Inventory: users **1** (gen 595) and **2** (gen 1076) still `v0.2` / prompt 1.0.1. `--apply` hit Nebius K3 **402 budget exhausted**; no new success log; GET still `offer`. Retry apply when K3 has budget. [PROFILE_NATAL_DECODE_CACHE_REFRESH_V1](./profile/PROFILE_NATAL_DECODE_CACHE_REFRESH_V1.md).
 - 2026-08-25 | Profile / IL-4 | **1.3.123 Profile meaning polish** | **LOCKED** | Natal Decode sky theses bind to IL-4. Identity Core stays CE. Prompt 1.1.0. Public JSON unchanged. [PROFILE_MEANING_POLISH_V1](./profile/PROFILE_MEANING_POLISH_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.122 conflict→scene seed retry** | **LOCKED** | Name `why_today`/`why_arose` paste into `scenes[].why` so retry does not trade it for `ASTRO_JARGON_BARE` on `astrology[2]`. Prompt c5.5. Detectors unchanged. Live user **2** gen **1122** PASS (Global first try). [NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1](./today/NATIVE_C1_CONFLICT_SCENE_SEED_RETRY_V1.md).
 - 2026-08-24 | Today / Native C1 | **1.3.121 astro jargon retry** | **LOCKED** | Cross-gate retry: don't trade `ASTRO_JARGON_BARE` on `astrology[i]` for why_today paste (`verbatim_seed_leak`). Prompt c5.4. Detectors unchanged. Live user **15** gen **1118** PASS (3 Global). [NATIVE_C1_ASTRO_JARGON_RETRY_V1](./today/NATIVE_C1_ASTRO_JARGON_RETRY_V1.md).

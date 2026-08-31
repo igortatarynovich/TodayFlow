@@ -60,4 +60,35 @@ describe("todayScreenFlow four surfaces", () => {
     expect(todayScreenFlowPracticeIndex(false)).toBe(1);
     expect(todayScreenFlowCloseIndex(true, false)).toBe(2);
   });
+
+  it("hides evening surface when showEvening is false", () => {
+    expect(
+      todayScreenFlowStepCount({ showSymbols: true, showMyDay: true, showEvening: false }),
+    ).toBe(3);
+    const idx = todayHandoffIndices({ showSymbols: true, showMyDay: true, showEvening: false });
+    expect(idx.today).toBe(0);
+    expect(idx.ritual).toBe(1);
+    expect(idx.myDay).toBe(2);
+    expect(idx.evening).toBe(-1);
+    expect(idx.loop).toBe(-1);
+    expect(idx.close).toBe(-1);
+  });
+
+  it("helpers respect showEvening false", () => {
+    expect(todayScreenFlowReadingIndex(true, true, false)).toBe(2);
+    expect(todayScreenFlowPracticeIndex(true, true, false)).toBe(2);
+    expect(todayScreenFlowInsightIndex(true, true, false)).toBe(-1);
+    expect(todayScreenFlowCloseIndex(true, true, false)).toBe(-1);
+    expect(todayScreenFlowAttributesIndex(true, true, false)).toBe(2);
+  });
+
+  it("hides evening without myDay when showEvening is false", () => {
+    expect(
+      todayScreenFlowStepCount({ showSymbols: true, showMyDay: false, showEvening: false }),
+    ).toBe(2);
+    const idx = todayHandoffIndices({ showSymbols: true, showMyDay: false, showEvening: false });
+    expect(idx.today).toBe(0);
+    expect(idx.ritual).toBe(1);
+    expect(idx.evening).toBe(-1);
+  });
 });

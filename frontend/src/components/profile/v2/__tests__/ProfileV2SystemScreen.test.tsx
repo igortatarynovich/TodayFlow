@@ -203,22 +203,16 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-insight-node")).toHaveTextContent("Ясность vs скорость");
     expect(screen.getByTestId("profile-v2-insight-living")).toHaveTextContent("поторопился");
     expect(screen.getByTestId("profile-v2-insight-living-note")).toHaveTextContent(/не доказательство/i);
-    expect(screen.getByTestId("profile-v2-character")).toBeInTheDocument();
-    // Act 3 owns strength/growth/pattern materials — no warehouse triad on scroll.
-    expect(screen.queryByTestId("profile-v2-character-strengthens")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("profile-v2-character-drains")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("profile-v2-character-helps")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("profile-v2-character-patterns")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-character")).not.toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-effort")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-effort-vector")).toHaveTextContent("тихий проход");
 
-    // Bridge after effort — natal after bridge; character before effort
+    // Five path acts — warehouse styles live in Explore, not a Portrait step
     const root = screen.getByTestId("profile-v2-system");
     const order = [
       "profile-v2-recognition",
       "profile-v2-why",
       "profile-v2-insight",
-      "profile-v2-character",
       "profile-v2-effort",
       "profile-v2-bridge",
     ];
@@ -273,11 +267,15 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-identity-core")).toHaveTextContent(/ясный фокус/i);
   });
 
-  it("surfaces relationship and money styles on character scroll", () => {
+  it("keeps relationship and money styles in Explore, not on the path", async () => {
+    const user = userEvent.setup();
     renderJourney();
-    expect(screen.getByTestId("profile-v2-character-relationship")).toHaveTextContent(/доверие/i);
-    expect(screen.getByTestId("profile-v2-character-money")).toHaveTextContent(/Деньги/i);
-    expect(screen.getByTestId("profile-v2-character-mission")).toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-character")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-character-relationship")).not.toBeInTheDocument();
+    await user.click(screen.getByTestId("profile-v2-open-explore"));
+    expect(await screen.findByTestId("profile-v2-explore-relationship")).toHaveTextContent(/доверие/i);
+    expect(screen.getByTestId("profile-v2-explore-money")).toHaveTextContent(/Деньги/i);
+    expect(screen.getByTestId("profile-v2-explore-mission")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-effort-sphere-mission")).toHaveTextContent(/Миссия/i);
   });
 
@@ -406,13 +404,12 @@ describe("PROFILE_V2_COPY lexicon gate", () => {
     }
   });
 
-  it("depth nav is six journey steps without natal", () => {
-    expect(PROFILE_V2_DEPTH_NAV).toHaveLength(6);
+  it("depth nav is five journey steps without a Portrait warehouse act", () => {
+    expect(PROFILE_V2_DEPTH_NAV).toHaveLength(5);
     expect(PROFILE_V2_DEPTH_NAV.map((s) => s.id)).toEqual([
       "recognition",
       "why",
       "insight",
-      "character",
       "effort",
       "bridge",
     ]);

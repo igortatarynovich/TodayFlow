@@ -7,7 +7,7 @@ import { buildOnboardingRitualContext, readOnboardingContext, todayDayKey } from
 import { GuestFirstTodayScreen } from "@/components/onboarding/valueFirst/GuestFirstTodayScreen";
 import { hasGuestPreview, readGuestProfileDraft } from "@/lib/guestProfileDraft";
 import { hasAuthSessionEnded } from "@/lib/authSession";
-import { hasCompletedFirstToday, markFirstTodayCompleted, resolveIsFirstDay } from "@/lib/firstTodayState";
+import { isFirstTodayCompleteForOtherDay, markFirstTodayCompleted, resolveIsFirstDay } from "@/lib/firstTodayState";
 import { ApiError, getJson, isTransportFailure, postJson, putJson } from "@/lib/api";
 import { TODAY_NO_CONNECTION_COPY, TODAY_UNAVAILABLE_COPY } from "@/lib/todaySlotAvailability";
 import {
@@ -118,14 +118,16 @@ export default function TodayPage() {
   const searchParams = useSearchParams();
   const firstQuery = searchParams.get("first") === "1";
   // Returning login must not keep the First Today chip gate just because the URL still has ?first=1.
-  const firstTodayMode = firstQuery && !hasCompletedFirstToday();
+  // Completion is day-keyed: a same-day reload re-enters the composition instead of the pitch.
+  const firstTodayMode = firstQuery && !isFirstTodayCompleteForOtherDay(todayDayKey());
   // Mood/atmosphere first-day signal (FOUNDATION_UI §8) — same resolver as
   // SectionAtmosphereBridge, so shell + dashboard don't diverge from html.
   const isFirstDayMood = resolveIsFirstDay("/today", searchParams);
-  const coreLoopViabilityMode =
-    searchParams.get("core_loop") === "1" || firstTodayMode;
-  const todayExperienceMode = searchParams.get("full") !== "1";
-  const ritualExperienceMode = searchParams.get("experience") === "1";
+  // Launch surface cut: legacy ritual (?full=1) / experience (?experience=1) surfaces
+  // are reachable only in local development; users always get the composition path.
+  const allowLegacyTodaySurfaces = process.env.NODE_ENV === "development";
+  const todayExperienceMode = allowLegacyTodaySurfaces ? searchParams.get("full") !== "1" : true;
+  const ritualExperienceMode = allowLegacyTodaySurfaces ? searchParams.get("experience") === "1" : false;
   const toast = useToast();
   const { trackMeaningEvent } = useMeaningRuntime();
   const { refetchToday, cycle, todayHeavyLayersPending } = useTodayCycle();
@@ -152,7 +154,6 @@ export default function TodayPage() {
     if (!firstQuery || firstTodayMode) return;
     const next = new URLSearchParams(searchParams.toString());
     next.delete("first");
-    next.delete("core_loop");
     const q = next.toString();
     router.replace(q ? `/today?${q}` : "/today", { scroll: false });
   }, [firstQuery, firstTodayMode, searchParams, router]);
@@ -438,7 +439,7 @@ export default function TodayPage() {
             setDayRevealDone(true);
           }
 
-          const experienceMode = searchParams.get("full") !== "1";
+          const experienceMode = allowLegacyTodaySurfaces ? searchParams.get("full") !== "1" : true;
           // First paint must not wait on morning-ritual LLM (can be 30s+ on timeout).
           // Use fast_mode; apply ritual when ready without blocking contract/cycle paint.
           const ritualUrl =
@@ -922,6 +923,9 @@ export default function TodayPage() {
   }, [isAuthenticated, todayData?.date, guideNarrativeLoading, guideGenerationId, dayStorySingleVoice, narrativeDepthForRequest]);
 
   useEffect(() => {
+    // Launch cut: Evening = gratitude only (TODAY_PRODUCT_FLOW_V1 §4) — no evening
+    // narrative generation in the product path; kept for the dev-only legacy surface.
+    if (!allowLegacyTodaySurfaces) return;
     if (!isAuthenticated || !todayData?.date) return;
     if (dayStorySingleVoice) return;
     if (guideNarrativeLoading) return;
@@ -954,7 +958,7 @@ export default function TodayPage() {
     return () => {
       cancelled = true;
     };
-  }, [isAuthenticated, todayData?.date, guideNarrativeLoading, guideGenerationId, dayStorySingleVoice, narrativeDepthForRequest]);
+  }, [allowLegacyTodaySurfaces, isAuthenticated, todayData?.date, guideNarrativeLoading, guideGenerationId, dayStorySingleVoice, narrativeDepthForRequest]);
 
   useEffect(() => {
     if (!todayData) return;
@@ -1629,7 +1633,6 @@ export default function TodayPage() {
             onRefreshToday={() => void loadToday({ force: true })}
             onEveningPhaseSaved={() => void loadToday({ force: true })}
             onRitualSpineComplete={onRitualSpineComplete}
-            coreLoopViabilityMode={coreLoopViabilityMode}
             todayContract={todayContract}
             dayStoryUpdating={dayStoryUpdating}
             onSymbolRevealResult={onSymbolRevealResult}

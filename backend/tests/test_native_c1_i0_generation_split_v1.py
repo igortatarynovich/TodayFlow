@@ -249,6 +249,43 @@ def test_native_c1_i0_generation_split_v1():
     assert merged_deep["conflict"]["title"] == "Прояснение против сглаживания"
 
 
+def test_shared_global_cache_hit_skips_global_llm():
+    calls: list[str] = []
+    persisted: list[dict[str, Any]] = []
+
+    def fake_llm(**kwargs: Any) -> tuple[str | None, str | None, str | None]:
+        stage = "global" if GLOBAL_STAGE_INSTRUCTION_RU in kwargs.get("system", "") else "personal"
+        calls.append(stage)
+        if stage == "global":
+            return json.dumps(_global_native(), ensure_ascii=False), None, "test-model"
+        return json.dumps(_personal_overlay(), ensure_ascii=False), None, "test-model"
+
+    def accept_global(parsed: dict[str, Any]) -> tuple[dict[str, Any] | None, str | None]:
+        return enforce_global_only(normalize_native_scenario_llm_c1(parsed)), None
+
+    cached = enforce_global_only(normalize_native_scenario_llm_c1(_global_native()))
+    merged, attempts, split_meta = orchestrate_i0_split_generation(
+        global_system=GLOBAL_STAGE_INSTRUCTION_RU,
+        personal_system=PERSONAL_STAGE_INSTRUCTION_RU,
+        user_base="DRAMATURGY",
+        pers_pack={"evidence_depth": DEPTH_DEEP},
+        il4_pack=None,
+        allowed_evidence_ids=set(),
+        max_attempts=2,
+        llm_call=lambda **kw: fake_llm(**kw),
+        resolve_attempt_model=lambda i: "test-model",
+        process_global_normalized=accept_global,
+        cached_global_norm=cached,
+        on_global_accepted=persisted.append,
+    )
+    assert calls == ["personal"]
+    assert split_meta["shared_global_hit"] is True
+    assert persisted == []
+    assert attempts[0]["status"] == "shared_hit"
+    assert merged is not None
+    assert merged["conflict"]["title"] == cached["conflict"]["title"]
+
+
 def test_call_native_uses_i0_split_orchestrator():
     with (
         patch(
@@ -312,3 +349,75 @@ def test_call_native_uses_i0_split_orchestrator():
         assert result.get("generation_source") == "native_llm_c1"
         assert result["editorial_meta"]["prompt_version"] == "day-scenario-native-c5.5"
         assert result["editorial_meta"]["i0_split"]["i0_split"]
+
+
+def test_native_meta_out_keeps_i0_split_after_write():
+    with (
+        patch(
+            "todayflow_backend.services.day_scenario_native_llm_c1.is_llm_chat_configured",
+            return_value=True,
+        ),
+        patch(
+            "todayflow_backend.services.day_scenario_native_llm_c1.get_openai_compatible_client",
+            return_value=object(),
+        ),
+        patch(
+            "todayflow_backend.services.native_c1_i0_generation_split_v1.orchestrate_i0_split_generation",
+        ) as orch,
+        patch(
+            "todayflow_backend.services.day_story_capture_session_v0.get_day_story_capture_session",
+            return_value=None,
+        ),
+    ):
+        from todayflow_backend.services.day_scenario_native_llm_c1 import call_day_scenario_native_llm_c1
+
+        global_norm = enforce_global_only(normalize_native_scenario_llm_c1(_global_native()))
+        split = {
+            "i0_split": True,
+            "stages_run": ["global"],
+            "personal_skipped": True,
+            "personal_degraded": False,
+            "shared_global_hit": True,
+        }
+
+        def fake_orch(**kwargs):
+            meta = kwargs.get("meta_out")
+            if isinstance(meta, dict):
+                meta["i0_split"] = split
+            return (
+                global_norm,
+                [{"stage": "global", "status": "shared_hit"}],
+                split,
+            )
+
+        orch.side_effect = fake_orch
+        meta_out: dict[str, Any] = {}
+        result = call_day_scenario_native_llm_c1(
+            {
+                "interpretation": {
+                    "day_thesis": {
+                        "family": "momentum",
+                        "variant": "steady",
+                        "mode": "stability",
+                        "label_ru": "Ось",
+                        "driver_ids": ["moon-pisces"],
+                    },
+                    "day_events_pack": {"ranked_drivers": [{"id": "moon-pisces"}]},
+                }
+            },
+            interpretation={
+                "day_thesis": {
+                    "family": "momentum",
+                    "variant": "steady",
+                    "mode": "stability",
+                    "label_ru": "Ось",
+                    "driver_ids": ["moon-pisces"],
+                },
+                "day_events_pack": {"ranked_drivers": [{"id": "moon-pisces"}]},
+            },
+            ritual_context={"tarot_name_ru": "Отшельник", "numerology_value": 7},
+            max_attempts=1,
+            meta_out=meta_out,
+        )
+        assert result is not None
+        assert meta_out.get("i0_split", {}).get("shared_global_hit") is True

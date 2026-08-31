@@ -1,0 +1,29 @@
+{
+  "contract_version": "technique_normalization_contract_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-normalization-v1.0",
+  "description": "Analytical compare of ingested evidence. Three decisions only: normalize_one | split_family | insufficient_evidence. Not canonical. Not technique_id. Canon: docs/practices/PRACTICE_TECHNIQUE_NORMALIZATION_V1.md",
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "normalize_one_is_not_canonical": true,
+  "allowed_decisions": [
+    "normalize_one",
+    "split_family",
+    "insufficient_evidence"
+  ],
+  "comparison_levels": [
+    "mechanism",
+    "identity_bearing_steps",
+    "bounds",
+    "variants_vs_conflicts"
+  ],
+  "invariants": [
+    "locus count does not decide the kernel",
+    "insufficient_evidence is a successful close of this pass",
+    "does not write technique_canon_v1",
+    "does not set technique_id",
+    "does not declare an optional hold the ingest did not give",
+    "safety review follows only normalize_one, not this V1 decision"
+  ]
+}

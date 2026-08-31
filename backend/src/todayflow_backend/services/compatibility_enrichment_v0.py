@@ -17,6 +17,7 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from todayflow_backend.data.astrology import lookup_sign_metadata
+from todayflow_backend.db import models as db_models
 from todayflow_backend.services.compatibility_access_v0 import (
     apply_paragraph_gate,
     resolve_compat_access_tier,
@@ -38,6 +39,18 @@ from todayflow_backend.services.sign_compatibility_product import (
 )
 
 logger = logging.getLogger("todayflow.compatibility.enrichment")
+
+
+def _latest_core_profile_snapshot_id(db: Session, user_id: int | None) -> int | None:
+    if user_id is None:
+        return None
+    snap = (
+        db.query(db_models.CoreProfileSnapshot)
+        .filter(db_models.CoreProfileSnapshot.user_id == user_id)
+        .order_by(db_models.CoreProfileSnapshot.updated_at.desc())
+        .first()
+    )
+    return snap.id if snap is not None else None
 
 
 def _rebuild_template_surface(payload: dict[str, Any], *, locale: str):
@@ -109,6 +122,7 @@ def _enrich_with_content_v1(
     locale: str,
     fingerprint: str,
     tier: str,
+    core_profile_snapshot_id: int | None = None,
 ) -> None:
     """Registered content v1.1 path with production publish gate."""
     from todayflow_backend.services.compatibility_content_v1.contracts import RegisteredContentV1
@@ -228,6 +242,7 @@ def _enrich_with_content_v1(
     result = {
         "generation_source": "content_v1",
         "prompt_version": gen.get("prompt_version"),
+        "core_profile_snapshot_id": core_profile_snapshot_id,
         "score": int(model.score),
         "summary": model.summary,
         "quick_reading": static_payload.get("quick_reading"),
@@ -299,6 +314,8 @@ def run_compatibility_enrichment_job(job_id: int) -> None:
                 if user is not None:
                     tier = resolve_compat_access_tier(user, db)
 
+            snapshot_id = _latest_core_profile_snapshot_id(db, job.user_id)
+
             # --- Content v1.1 path (guest is sync baseline; registered/paid enrich here) ---
             # Premium question pack stays on compatibility_premium_enrichment_v0 (not enabled widely).
             if content_v1_enabled() and tier in ("registered", "paid"):
@@ -316,6 +333,7 @@ def run_compatibility_enrichment_job(job_id: int) -> None:
                     locale=locale,
                     fingerprint=fingerprint,
                     tier=tier,
+                    core_profile_snapshot_id=snapshot_id,
                 )
                 return
 
@@ -352,6 +370,7 @@ def run_compatibility_enrichment_job(job_id: int) -> None:
                     scenario_tone=None,
                     scenario_context=None,
                     compatibility_learning=None,
+                    core_profile_snapshot_id=snapshot_id,
                 )
             # Re-check freshness before write.
             fresh = get_job(db, job_id)
@@ -374,6 +393,7 @@ def run_compatibility_enrichment_job(job_id: int) -> None:
             )
             result = {
                 "generation_source": gen_src,
+                "core_profile_snapshot_id": snapshot_id,
                 "score": int(static_payload["score"]),
                 "summary": static_payload.get("summary"),
                 "quick_reading": static_payload.get("quick_reading"),

@@ -40,11 +40,16 @@ export function ProfileExploreSection({
   deepExpanded = false,
   hideMission = false,
 }: ProfileExploreSectionProps) {
+  const warehouse = PROFILE_V2_COPY.zones.characterMore;
+  const hasWarehouseStyles = Boolean(
+    model.decisionStyle || model.relationshipStyle || model.moneyStyle || model.frameworkLead,
+  );
   const hasNatal = Boolean(deep);
   const hasExtraDetails =
     progressiveDetails.length > 0 ||
     Boolean(lifeSpheres?.length) ||
-    (Boolean(model.lifeMission) && !hideMission);
+    (Boolean(model.lifeMission) && !hideMission) ||
+    hasWarehouseStyles;
   const motion = useProfileMotionInView<HTMLElement>(60);
   if (!hasNatal && !hasExtraDetails) return null;
 
@@ -132,6 +137,34 @@ export function ProfileExploreSection({
                 <article className={styles.missionCard} data-testid="profile-v2-explore-mission">
                   <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.direction.missionLabel}</p>
                   <p className={styles.missionText}>{model.lifeMission}</p>
+                </article>
+              ) : null}
+
+              {model.decisionStyle ? (
+                <article className={styles.decisionBlock} data-testid="profile-v2-explore-decisions">
+                  <p className={styles.characterPanelTitle}>{warehouse.decisions}</p>
+                  <p className={styles.factHint}>{model.decisionStyle}</p>
+                </article>
+              ) : null}
+
+              {model.relationshipStyle ? (
+                <article className={styles.decisionBlock} data-testid="profile-v2-explore-relationship">
+                  <p className={styles.characterPanelTitle}>{warehouse.intimacy}</p>
+                  <p className={styles.factHint}>{model.relationshipStyle}</p>
+                </article>
+              ) : null}
+
+              {model.moneyStyle ? (
+                <article className={styles.decisionBlock} data-testid="profile-v2-explore-money">
+                  <p className={styles.characterPanelTitle}>{warehouse.money}</p>
+                  <p className={styles.factHint}>{model.moneyStyle}</p>
+                </article>
+              ) : null}
+
+              {model.frameworkLead ? (
+                <article className={styles.decisionBlock} data-testid="profile-v2-explore-living">
+                  <p className={styles.characterPanelTitle}>{warehouse.living}</p>
+                  <p className={styles.factHint}>{model.frameworkLead}</p>
                 </article>
               ) : null}
 

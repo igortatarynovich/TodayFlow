@@ -1,4 +1,5 @@
 import {
+  contractHasDeterministicPersonalDayForMyDay,
   isDayNotReady,
   isTodayInterpretationUnavailable,
   localCalendarDateISO,
@@ -41,6 +42,30 @@ describe("day lifecycle C5 helpers", () => {
         day_story: { contract_version: "day_story_v1", interpretation_status: "ok" },
       } as TodayContractV1),
     ).toBe(false);
+  });
+
+  it("detects deterministic personal day material regardless of interpretation_status", () => {
+    const unavailableButPersonal = {
+      generation_id: "1",
+      day_story: {
+        contract_version: "day_story_v1",
+        interpretation_status: "unavailable",
+        day_personal: {
+          contract_version: "day_personal_v1",
+          summary_ru: "Транзит Солнца активирует натальную Венеру.",
+        },
+      },
+    } as TodayContractV1;
+    expect(contractHasDeterministicPersonalDayForMyDay(unavailableButPersonal)).toBe(true);
+
+    const noPersonal = {
+      generation_id: "1",
+      day_story: {
+        contract_version: "day_story_v1",
+        interpretation_status: "unavailable",
+      },
+    } as TodayContractV1;
+    expect(contractHasDeterministicPersonalDayForMyDay(noPersonal)).toBe(false);
   });
 
   it("localCalendarDateISO matches local Y-M-D", () => {

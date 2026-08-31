@@ -1,0 +1,44 @@
+{
+  "contract_version": "technique_ingest_contract_v1",
+  "version": "1.0.0",
+  "status": "accepted",
+  "semantic_version": "practice-technique-ingest-v1.0",
+  "description": "Provenance-preserving paraphrase of selected loci. observed_* are source observations, not canonical fields. Not normalization. Not technique canon. Canon: docs/practices/PRACTICE_TECHNIQUE_INGEST_V1.md",
+  "parent_step": 10,
+  "writes_technique_canon": false,
+  "technique_id_allowed": false,
+  "does_not_normalize": true,
+  "selected_means_still": "allowed_for_ingest; ingest does not attest a kernel",
+  "required_evidence_fields": [
+    "evidence_id",
+    "candidate_family",
+    "source_ref",
+    "locus",
+    "source_family",
+    "paraphrase",
+    "observed_mechanism",
+    "observed_steps",
+    "observed_bounds",
+    "observed_safety",
+    "observed_variants",
+    "claim_scope",
+    "conflict_tags",
+    "ingest_status"
+  ],
+  "ingest_status": ["ingested"],
+  "claim_scope": [
+    "method_sequence_only",
+    "method_sequence_and_stop_rules",
+    "conflicting_method_sequence"
+  ],
+  "invariants": [
+    "exactly the selected loci of the open family slice",
+    "one evidence record per selected locus",
+    "observed_* record what that locus asserts, including mismatches",
+    "Sherwood Forest sequence and stop/safety stay in different fields",
+    "Newcastle three-phase is a conflicting description, not a variant",
+    "no common-kernel synthesis",
+    "does not write technique_canon_v1",
+    "does not set technique_id"
+  ]
+}

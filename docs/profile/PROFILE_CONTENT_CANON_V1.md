@@ -51,8 +51,9 @@ Character Engine = **история / путь человека**, не набо
 - Generation logs / prompt versions
 
 ### 1.5 Что видит пользователь
-- Profile V2 (PR-4): Identity · Interpretation · Evidence · Deep Sources (collapsed natal) — **без** day symbols / Living Maps на скролле
-- Контракт: `identity_core`, strengths, growth_zones, styles, patterns, life_spheres, …
+- **Display contract:** [PROFILE_DISPLAY_INVENTORY_V1](./PROFILE_DISPLAY_INVENTORY_V1.md) — закрытый список блоков и лимитов. Не Identity·Interpretation·Evidence как IA скролла.
+- Production journey: Recognition · Why · Insight · Effort · Bridge · Explore (natal fold).
+- Контракт-склад: `identity_core`, strengths, growth_zones, styles, patterns, life_spheres — **материалы**, не обязательные секции экрана.
 
 ### 1.6 Что читают другие модули
 

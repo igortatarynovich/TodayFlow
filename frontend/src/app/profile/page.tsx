@@ -112,7 +112,9 @@ function ProfileHubPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeSection = parseProfileSection(searchParams.get("section"));
-  const profileView = parseProfileView(searchParams.get("view"));
+  // Launch surface cut: legacy v0 portrait view is a dev-only surface.
+  const profileView =
+    process.env.NODE_ENV === "development" ? parseProfileView(searchParams.get("view")) : "quickMap";
   const profileDepthRequested = searchParams.get("depth") === "1";
   const [profileDepthUnlocked, setProfileDepthUnlocked] = useState(false);
   const [journeyChecked, setJourneyChecked] = useState(false);

@@ -26,6 +26,7 @@ from todayflow_backend.api import (
     journal,
     challenges,
     practices,
+    practices_selection_v1,
     promo_codes,
     oauth,
     thematic_reports,
@@ -70,6 +71,7 @@ router.include_router(horoscopes.router)
 router.include_router(compatibility.router)
 router.include_router(journal.router)
 router.include_router(challenges.router)
+router.include_router(practices_selection_v1.router)
 router.include_router(practices.router)
 router.include_router(promo_codes.router)
 router.include_router(oauth.router)

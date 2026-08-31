@@ -1,6 +1,6 @@
 # Profile taxonomy audit · Igor / Sage / 7 / Aquarius
 
-**Generated:** 2026-07-25
+**Generated:** 2026-08-30
 
 ## Summary
 
