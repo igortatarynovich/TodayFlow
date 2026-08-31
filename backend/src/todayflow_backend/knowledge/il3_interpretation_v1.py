@@ -57,6 +57,8 @@ def _compose(catalog: Mapping[str, dict], fact: SkyFact) -> ComposedFrame:
     if construction == "aspect_pair":
         return compose_aspect_pair(catalog, parts[0], parts[1], parts[2])
     if construction == "transit_to_natal":
+        if len(parts) == 4:
+            return compose_transit_to_natal(catalog, parts[0], parts[1], parts[2], parts[3])
         return compose_transit_to_natal(catalog, parts[0], parts[1], parts[2])
     if construction == "transit_through_house":
         return compose_transit_through_house(catalog, parts[0], parts[1])

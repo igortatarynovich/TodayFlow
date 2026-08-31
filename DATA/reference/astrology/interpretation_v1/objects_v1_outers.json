@@ -1,0 +1,123 @@
+{
+  "contract_version": "astrology_interpretation_v1",
+  "locale_lemmas": ["en"],
+  "objects": [
+    {
+      "object_id": "astro.object.uranus",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Uranus",
+      "machine_entity_code": "astrology.planet.uranus",
+      "theme_clusters": ["change"],
+      "polarity": ["constructive", "challenging"],
+      "temporal_class": "slow",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "canon": {
+        "core_function": ["disrupt", "liberate", "sudden-change"],
+        "drive": ["freedom", "originality"],
+        "needs": ["autonomy", "space"],
+        "constructive": ["innovation", "breakthrough", "authenticity"],
+        "distorted": ["chaos", "rebellion", "unpredictability"],
+        "domains": ["change", "innovation", "individuality", "freedom"]
+      },
+      "provenance": [
+        {
+          "concept_id": "claim.uranus.disrupt_function",
+          "source_id": "src.internal.astrology_proof_v2",
+          "source_class": "internal_normalization",
+          "author": "TodayFlow",
+          "edition": "Personal Day Semantic Proof v2",
+          "locus": "directionality+outer-planets+natal-house proof",
+          "school": "modern_general_practical",
+          "original_claim": "Uranus represents disruption, liberation, and sudden change from conventional patterns.",
+          "normalized_claim": "Uranus core function: disrupt, liberate, sudden-change.",
+          "evidence_tier": "editorial",
+          "review_status": "schema_example",
+          "field": "core_function"
+        }
+      ]
+    },
+    {
+      "object_id": "astro.object.neptune",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Neptune",
+      "machine_entity_code": "astrology.planet.neptune",
+      "theme_clusters": ["emotions"],
+      "polarity": ["supportive", "challenging"],
+      "temporal_class": "slow",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "canon": {
+        "core_function": ["dissolve", "imagine", "transcend"],
+        "drive": ["unity", "meaning"],
+        "needs": ["escape", "inspiration"],
+        "constructive": ["compassion", "imagination", "spirituality"],
+        "distorted": ["confusion", "illusion", "addiction"],
+        "domains": ["imagination", "spirituality", "empathy", "dreams"]
+      },
+      "provenance": [
+        {
+          "concept_id": "claim.neptune.dissolve_function",
+          "source_id": "src.internal.astrology_proof_v2",
+          "source_class": "internal_normalization",
+          "author": "TodayFlow",
+          "edition": "Personal Day Semantic Proof v2",
+          "locus": "directionality+outer-planets+natal-house proof",
+          "school": "modern_general_practical",
+          "original_claim": "Neptune represents dissolution of boundaries, imagination, and transcendence of ordinary perception.",
+          "normalized_claim": "Neptune core function: dissolve, imagine, transcend.",
+          "evidence_tier": "editorial",
+          "review_status": "schema_example",
+          "field": "core_function"
+        }
+      ]
+    },
+    {
+      "object_id": "astro.object.pluto",
+      "layer": 1,
+      "type": "celestial_object",
+      "status": "draft",
+      "version": "0.1.0",
+      "phenomenon": "Pluto",
+      "machine_entity_code": "astrology.planet.pluto",
+      "theme_clusters": ["power"],
+      "polarity": ["challenging", "constructive"],
+      "temporal_class": "slow",
+      "confidence": null,
+      "composed_from": [],
+      "curation_reason": null,
+      "canon": {
+        "core_function": ["transform", "intensify", "eliminate"],
+        "drive": ["power", "depth"],
+        "needs": ["control", "truth"],
+        "constructive": ["regeneration", "empowerment", "resilience"],
+        "distorted": ["obsession", "manipulation", "destruction"],
+        "domains": ["transformation", "power", "depth", "shadow"]
+      },
+      "provenance": [
+        {
+          "concept_id": "claim.pluto.transform_function",
+          "source_id": "src.internal.astrology_proof_v2",
+          "source_class": "internal_normalization",
+          "author": "TodayFlow",
+          "edition": "Personal Day Semantic Proof v2",
+          "locus": "directionality+outer-planets+natal-house proof",
+          "school": "modern_general_practical",
+          "original_claim": "Pluto represents transformation, intensification, and elimination of what has outlived its purpose.",
+          "normalized_claim": "Pluto core function: transform, intensify, eliminate.",
+          "evidence_tier": "editorial",
+          "review_status": "schema_example",
+          "field": "core_function"
+        }
+      ]
+    }
+  ]
+}

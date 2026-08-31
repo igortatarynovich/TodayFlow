@@ -23,7 +23,8 @@ import httpx
 
 def _load_env() -> dict[str, str]:
     """Read repo-root .env as key=value pairs (no quoting expansion)."""
-    repo_root = Path(__file__).resolve().parents[3]
+    # script is at backend/scripts/; repo root is two levels up.
+    repo_root = Path(__file__).resolve().parents[2]
     env_path = repo_root / ".env"
     env: dict[str, str] = {}
     if env_path.is_file():

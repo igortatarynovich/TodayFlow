@@ -252,6 +252,16 @@ def _natal_facts(chart: Any) -> list[SkyFact]:
     return facts
 
 
+def _house_for_body(body: str, position: Any, cusps: list[float] | None) -> str | None:
+    house = _get(position, "house")
+    if house is not None:
+        return _house_id(house)
+    lon = _float(_get(position, "longitude"))
+    if lon is None or cusps is None:
+        return None
+    return _house_id(_house_for_longitude(lon, cusps))
+
+
 def _transit_facts(natal: Any, transit: Any) -> list[SkyFact]:
     facts: list[SkyFact] = []
     natal_planets = _indexed_planets(natal)
@@ -259,6 +269,9 @@ def _transit_facts(natal: Any, transit: Any) -> list[SkyFact]:
         body: _float(_get(position, "longitude")) for body, position in natal_planets
     }
     cusps = _cusps(_houses(natal))
+    natal_houses = {
+        body: _house_for_body(body, position, cusps) for body, position in natal_planets
+    }
     for body, position in _indexed_planets(transit):
         planet_id = _planet_id(body)
         longitude = _float(_get(position, "longitude"))
@@ -269,10 +282,15 @@ def _transit_facts(natal: Any, transit: Any) -> list[SkyFact]:
                 continue
             name = _aspect_name(_sep(longitude, natal_lon))
             if name:
+                natal_house_id = natal_houses.get(natal_body)
+                if natal_house_id:
+                    parts = (planet_id, _planet_id(natal_body), _aspect_id(name), natal_house_id)
+                else:
+                    parts = (planet_id, _planet_id(natal_body), _aspect_id(name))
                 facts.append(
                     SkyFact(
                         "transit_to_natal",
-                        (planet_id, _planet_id(natal_body), _aspect_id(name)),
+                        parts,
                     )
                 )
         if cusps is not None:

@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { TAROT_HUB_SPREADS } from "@/components/shell/tarotShellStepper";
+import { useMemo } from "react";
 import s from "@/components/shell/tarotShell.module.css";
 import { ProductJourneyScene } from "@/components/product-ui/ProductJourneyScene";
 import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
@@ -12,20 +10,14 @@ import {
   composeTarotQuestion,
   TAROT_SPREAD_OFFERS,
 } from "@/lib/tarotQuestionFlowCanon";
-import {
-  createTarotQuestionSession,
-  patchTarotQuestionSession,
-  readTarotQuestionSession,
-} from "@/lib/tarotQuestionSession";
+import { readTarotQuestionSession } from "@/lib/tarotQuestionSession";
 
 /**
- * Таро — вопрос и формат расклада.
+ * Таро — один launch-flow: вопрос → расклад → чтение.
+ * Выбор формата живёт внутри /tarot/question; отдельной сцены «Направление» на хабе нет.
  * Карта / число дня живут в ритуале «Сегодня», не здесь.
  */
 export function TarotHubMain() {
-  const router = useRouter();
-  const [selectedSpreadId, setSelectedSpreadId] = useState<string | null>(null);
-
   const continueHref = useMemo(() => {
     const session = readTarotQuestionSession();
     if (!session) return null;
@@ -48,13 +40,6 @@ export function TarotHubMain() {
       refinementId: session.refinementId,
     });
   }, []);
-
-  const handleSpreadPick = (spreadId: string) => {
-    setSelectedSpreadId(spreadId);
-    const base = readTarotQuestionSession() ?? createTarotQuestionSession();
-    patchTarotQuestionSession({ ...base, spreadId, step: "spread" });
-    router.push("/tarot/question");
-  };
 
   const recommended = TAROT_SPREAD_OFFERS.find((o) => o.spreadId === "three_cards");
 
@@ -86,43 +71,6 @@ export function TarotHubMain() {
             </Link>
           ) : null}
         </div>
-      </ProductJourneyScene>
-
-      <ProductJourneyScene
-        variant="flat" step={2}
-        title="Направление"
-        lead="Выберите формат расклада: сколько карт и на чём фокус."
-        motif="tarot"
-        plate="tarot_quiet"
-        testId="tarot-hub-main-direction"
-      >
-        <ol className={s.hubSpreadStepList} aria-label="Расклады для решения">
-          {TAROT_HUB_SPREADS.map((spread, index) => {
-            const active = selectedSpreadId === spread.spreadId;
-            return (
-              <li key={spread.spreadId}>
-                <button
-                  type="button"
-                  className={`${s.hubSpreadStep} ${active ? s.hubSpreadStepActive : ""}`.trim()}
-                  onClick={() => handleSpreadPick(spread.spreadId)}
-                >
-                  <span className={s.hubSpreadStepIndex}>{index + 1}</span>
-                  <span className={s.hubSpreadStepBody}>
-                    <span className={s.hubSpreadStepTitle}>
-                      {spread.title}
-                      <span className={s.hubSpreadStepMeta}>
-                        {" "}
-                        · {spread.count}{" "}
-                        {spread.count === 1 ? "карта" : spread.count >= 2 && spread.count <= 4 ? "карты" : "карт"}
-                      </span>
-                    </span>
-                    <span className={s.hubSpreadStepDesc}>{spread.description}</span>
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ol>
       </ProductJourneyScene>
     </div>
   );

@@ -101,7 +101,12 @@ def test_calc_il_wire_v1():
     assert any(
         fact.construction == "transit_to_natal"
         and fact.parts
-        == ("astro.object.saturn", "astro.object.venus", "astro.aspect.square")
+        == (
+            "astro.object.saturn",
+            "astro.object.venus",
+            "astro.aspect.square",
+            "astro.house.04",
+        )
         for fact in facts
     )
     assert any(

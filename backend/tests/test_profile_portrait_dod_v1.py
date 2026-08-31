@@ -121,12 +121,6 @@ def test_parallel_opens_do_not_multiply_generation(monkeypatch) -> None:
         time.sleep(0.08)
         return ready_contract, {"identity": ready_contract["identity_core"]}, {}, False
 
-    # Patch inside the lock path: snapshot miss + portrait once.
-    monkeypatch.setattr(
-        "todayflow_backend.services.core_profile.build_profile_portrait_v1",
-        fake_build_portrait,
-    )
-
     class _Dummy:
         id = 1
         email = "a@b.c"

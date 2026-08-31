@@ -17,14 +17,13 @@ describe("guest product shell contract", () => {
     expect(items.map((i) => i.id).slice(0, 3)).toEqual(["today", "profile", "compatibility"]);
   });
 
-  it("authenticated nav keeps the five primary items", () => {
+  it("authenticated nav keeps the four launch primary items", () => {
     const items = buildAppNavItems("ru", "authenticated");
     expect(items.map((i) => i.id)).toEqual([
       "today",
       "profile",
       "compatibility",
       "tarot",
-      "practices",
     ]);
   });
 });

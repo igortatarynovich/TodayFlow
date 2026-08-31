@@ -5,7 +5,6 @@
  */
 
 import type { TodayContractV1 } from "@/lib/todayContract";
-import { isTodayInterpretationUnavailable } from "@/lib/todayContract";
 import { cleanAmbassadorWhy, clipCompassProse } from "@/lib/todayDayBrief";
 
 export type TodayInstructionBridgeModel = {
@@ -20,8 +19,11 @@ function firstNatalTransitSoft(
   if (!Array.isArray(beats)) return null;
   for (const beat of beats) {
     if (String(beat?.kind || "") !== "natal_transit") continue;
-    const line = cleanAmbassadorWhy(beat?.story_ru || beat?.title);
-    if (line) return line;
+    const title = cleanAmbassadorWhy(beat?.title);
+    const story = cleanAmbassadorWhy(beat?.story_ru);
+    if (title && story) return title;
+    if (title) return title;
+    if (story) return story;
   }
   return null;
 }
@@ -56,7 +58,6 @@ export function pickInstructionPersonalBridge(
   contract: TodayContractV1 | null | undefined,
 ): string | null {
   if (!contract?.day_story) return null;
-  if (isTodayInterpretationUnavailable(contract)) return null;
   const story = contract.day_story;
   const conflict = story.day_scenario?.conflict;
 

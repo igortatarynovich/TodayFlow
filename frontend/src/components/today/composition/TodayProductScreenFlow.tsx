@@ -2,7 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
-import { DsCaption, DsEyebrow, DsHeadline } from "@/design-system";
+import { DsButton, DsCaption, DsEyebrow, DsHeadline } from "@/design-system";
 import { joinClass } from "@/design-system/utils/joinClass";
 import layout from "@/design-system/compositions/dsCompositions.module.css";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
@@ -99,6 +99,7 @@ export type TodayProductScreenFlowProps = {
   onOpenEvening: () => void;
   dayPromise?: string | null;
   onCloseOutcome?: (outcome: "done" | "partial" | "not_done") => void;
+  showEveningClose?: boolean;
   activeIndex: number;
   onIndexChange: (index: number, meta: { reason: ScreenFlowChangeReason }) => void;
   embeddedInWebDashboard?: boolean;
@@ -272,6 +273,8 @@ export function TodayProductScreenFlow({
   embeddedInWebDashboard = false,
   topRowSection = null,
   greetingSection = null,
+  onOpenEvening,
+  showEveningClose = true,
 }: TodayProductScreenFlowProps) {
   const go = (index: number) => onIndexChange(index, { reason: "select" });
   const flowLayout = { showSymbols, showMyDay, showEvening };
@@ -419,6 +422,16 @@ export function TodayProductScreenFlow({
                 <DsEyebrow>{copy.storyNext.evening}</DsEyebrow>
                 <DsHeadline as="h2">{copy.eveningGratitudeTitle}</DsHeadline>
                 <div className={sfStyles.slotBody}>{eveningSlot}</div>
+                {showEveningClose && onOpenEvening ? (
+                  <DsButton
+                    type="button"
+                    variant="primary"
+                    data-testid="today-evening-open"
+                    onClick={onOpenEvening}
+                  >
+                    {copy.eveningCta}
+                  </DsButton>
+                ) : null}
               </div>
             </div>
           </ScreenFlowStep>

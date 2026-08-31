@@ -182,7 +182,7 @@ def test_source_corpus_candidate_only():
 def test_no_active_meaning_catalog_yet():
     """IL-1 may hold draft objects; nothing is product-active yet."""
     json_files = sorted(p.name for p in RUNTIME.glob("*.json"))
-    assert json_files == ["objects_v1.json", "source_corpus_v1.json"], (
+    assert json_files == ["objects_v1.json", "objects_v1_outers.json", "source_corpus_v1.json"], (
         f"unexpected runtime IL files: {json_files}"
     )
     payload = json.loads(OBJECTS.read_text(encoding="utf-8"))

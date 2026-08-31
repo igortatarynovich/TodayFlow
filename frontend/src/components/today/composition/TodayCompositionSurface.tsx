@@ -36,7 +36,7 @@ import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel }
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
 import { anchorTarotTags, RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
-import { isDayNotReady, isTodayInterpretationUnavailable, type TodayContractV1, type TodayDepthTopicId } from "@/lib/todayContract";
+import { contractHasDeterministicPersonalDayForMyDay, isDayNotReady, isTodayInterpretationUnavailable, type TodayContractV1, type TodayDepthTopicId } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
 import { tarotCardFacePicture, tarotCardFaceSrc, resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import {
@@ -1483,7 +1483,11 @@ export function TodayCompositionSurface(props: Props) {
           strengthenToolCount={strengthenTools.length}
           activeHabit={activeHabit}
           activeAscetic={activeAscetic}
-          habitMarked={engagement.habitMarkedId != null && activeHabit != null && engagement.habitMarkedId === activeHabit.id}
+          habitMarked={
+            engagement.habitMarkedId != null &&
+            activeHabit != null &&
+            engagement.habitMarkedId === activeHabit.id
+          }
           asceticMarked={
             engagement.asceticMarkedId != null &&
             activeAscetic != null &&
@@ -2172,7 +2176,9 @@ export function TodayCompositionSurface(props: Props) {
     />
   );
 
-  const myDayMeaningUnavailable = isTodayInterpretationUnavailable(props.contract);
+  const myDayMeaningUnavailable =
+    isTodayInterpretationUnavailable(props.contract) &&
+    !contractHasDeterministicPersonalDayForMyDay(props.contract);
   const myDayPriorities = pickMyDayPriorityLines({
     contract: props.contract,
     doItems: dayBriefModel.doItems,
@@ -2270,8 +2276,8 @@ export function TodayCompositionSurface(props: Props) {
       tapResponse={engagement.tapResponse}
       onTapRecorded={(response) => persistEngagement({ tapResponse: response })}
       onOpenEvening={onOpenEvening}
+      showEveningClose={!isFirstToday}
       dayPromise={engagement.dayGoal}
-      onCloseOutcome={(outcome) => onSubmitEveningClose(outcome, null, "")}
       activeIndex={screenFlowIndex}
       onIndexChange={onScreenFlowIndexChange}
       embeddedInWebDashboard={embeddedInWebDashboard}

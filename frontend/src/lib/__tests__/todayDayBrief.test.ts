@@ -463,4 +463,33 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.transits[0]?.time).toBe("11:00");
     expect(model.transits[0]?.planets).toEqual(expect.arrayContaining(["mars", "venus"]));
   });
+
+  it("renders My Day headline from deterministic personal day even when interpretation is unavailable", () => {
+    const model = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        day_story: {
+          contract_version: "day_story_v1",
+          interpretation_status: "unavailable",
+          day_personal: {
+            contract_version: "day_personal_v1",
+            summary_ru: "Активирует личную тему из натальной карты.",
+            personal_astrology: {
+              beats: [
+                {
+                  id: "pt-sun-biquintile-venus",
+                  kind: "natal_transit",
+                  title: "Солнце — biquintile — Венера",
+                  story_ru: "Активирует личную тему из натальной карты.",
+                },
+              ],
+            },
+          },
+        },
+      },
+      dateLabel: "15 августа",
+      salutation: "Привет",
+    });
+    expect(model.personalLine).toBe("Солнце — biquintile — Венера");
+  });
 });
