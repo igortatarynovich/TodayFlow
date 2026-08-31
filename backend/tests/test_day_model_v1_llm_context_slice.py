@@ -204,9 +204,7 @@ def test_no_call_and_blocked_do_not_create_slice():
     interpretation = interpret_day_model_v1(dm)
     mapping = map_day_model_interpretation_to_content_keys(interpretation)
     resolution = resolve_content_entries_from_mapping(mapping)
-    package = assemble_day_model_v1 if False else assemble_day_content_package_v1(
-        interpretation, mapping, resolution
-    )
+    package = assemble_day_content_package_v1(interpretation, mapping, resolution)
     evaluation = evaluate_day_content_package_v1(package)
     render = render_day_content_package_v1(package, evaluation)
 

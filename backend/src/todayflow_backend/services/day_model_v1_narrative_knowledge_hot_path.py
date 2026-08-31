@@ -9,6 +9,9 @@ from sqlalchemy.orm import Session
 from todayflow_backend.services.day_model_v1_active_knowledge_loader import (
     load_user_active_knowledge_list_v1,
 )
+from todayflow_backend.services.day_model_v1_knowledge_usage_metrics import (
+    build_minimum_metrics_v1,
+)
 
 NARRATIVE_SURFACE_TO_KNOWLEDGE_TARGET: dict[str, str] = {
     "guide": "day_guidance_card",

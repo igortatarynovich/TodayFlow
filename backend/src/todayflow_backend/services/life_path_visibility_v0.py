@@ -325,10 +325,6 @@ def life_path_co_voice_hint(life_path: Any) -> dict[str, Any] | None:
             "опираться на themes_ru / core_ru — так, чтобы другой life_path изменил это поле."
         ),
     }
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return None
 
 
 def themes_shift(a: dict[str, Any], b: dict[str, Any], *, fields: Iterable[str]) -> bool:

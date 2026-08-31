@@ -19,4 +19,8 @@ def test_compatibility_signs_public_pair(client: TestClient) -> None:
     surface = data.get("product_surface")
     assert isinstance(surface, dict)
     assert "subscores" in surface and "overview_paragraphs" in surface
-    assert isinstance(surface.get("blocks"), list) and len(surface["blocks"]) >= 4
+    # Public (guest) tier is a teaser by design (compat access v0): exactly one
+    # emotions block with detail/risk/action stripped; full shape is gated and
+    # covered in test_compatibility_access_v0.py.
+    assert isinstance(surface.get("blocks"), list) and len(surface["blocks"]) >= 1
+    assert all(not b.get("detail") and not b.get("action") for b in surface["blocks"])
