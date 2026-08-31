@@ -71,8 +71,18 @@ test.describe("Evening close and D+1 continuity", () => {
       `core-setup ${email}: ${profile.status()} ${await profile.text()}`,
     ).toBeTruthy();
 
-    const today = "2026-08-30";
-    const tomorrow = "2026-08-31";
+    // Dates must follow the real clock (server cycle date = real MSK date);
+    // hardcoded dates skew the continuity record key one day off.
+    const mskFmt = (d: Date) =>
+      new Intl.DateTimeFormat("sv-SE", {
+        timeZone: "Europe/Moscow",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(d);
+    const nowReal = new Date();
+    const today = mskFmt(nowReal);
+    const tomorrow = mskFmt(new Date(nowReal.getTime() + 86_400_000));
 
     const warmToday = await request.post(`${PLAYWRIGHT_API_BASE}/today/story/refresh`, {
       data: { target_date: today, timezone: "Europe/Moscow" },
@@ -197,38 +207,30 @@ test.describe("Evening close and D+1 continuity", () => {
 
     // Serve the captured, non-assembling contract and a minimal tomorrow cycle.
     // 404 on progressive endpoints forces the provider to fall back to /today.
-    await page.route(`${PLAYWRIGHT_API_BASE}/today/opening`, async (route) => {
+    // The frontend build may point at a different API host than
+    // PLAYWRIGHT_API_BASE (localhost vs 127.0.0.1), and a bare `**/today`
+    // glob would also swallow the frontend's own /today document — so match
+    // API calls by "any port except the web server's".
+    const webPort = new URL(page.url()).port;
+    const isApi = (url: URL) => url.port !== webPort;
+    await page.route((url) => isApi(url) && url.pathname === "/today/opening", async (route) => {
       await route.fulfill({ status: 404, body: "not used in test" });
     });
-    await page.route(`${PLAYWRIGHT_API_BASE}/today/bundle`, async (route) => {
+    await page.route((url) => isApi(url) && url.pathname === "/today/bundle", async (route) => {
       await route.fulfill({ status: 404, body: "not used in test" });
     });
-    await page.route(`${PLAYWRIGHT_API_BASE}/today`, async (route) => {
+    await page.route((url) => isApi(url) && url.pathname === "/today", async (route) => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
         body: JSON.stringify({
           date: tomorrow,
           morning: null,
-          morning_completed: true,
-          day_connection: {
-            id: 1,
-            date: tomorrow,
-            morning_intention: null,
-            morning_focus: null,
-            evening_reflection: null,
-            evening_observations: null,
-            connection_thread: null,
-            ritual_feedback: null,
-            quick_decision_answer: null,
-            question_of_day_answer: null,
-            morning_completed: true,
-            day_completed: true,
-            evening_completed: false,
-          },
+          morning_completed: false,
+          day_connection: null,
           day_trackers: [],
           day_journal_entries: [],
-          day_completed: true,
+          day_completed: false,
           evening: null,
           evening_completed: false,
           morning_available: true,
@@ -237,7 +239,7 @@ test.describe("Evening close and D+1 continuity", () => {
         }),
       });
     });
-    await page.route(`${PLAYWRIGHT_API_BASE}/today/contract*`, async (route) => {
+    await page.route((url) => isApi(url) && url.pathname === "/today/contract", async (route) => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
