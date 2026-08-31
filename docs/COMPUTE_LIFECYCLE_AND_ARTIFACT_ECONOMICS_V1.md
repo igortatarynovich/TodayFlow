@@ -145,7 +145,7 @@ Re-open 20 times → **0 LLM** on Global after the first success; **0 Personal L
 `PersonalDayKey = user_identity + local_date + semantic_version`. Runtime: `services/personal_day_v1.py`; persist stamps on `generation_logs` (`module=day_story_v1`, `surface=day_story`).
 
 1. Ordinary re-open of Today = **0 Personal LLM** (same persisted Personal artifact).
-2. GET / cache read **must not** enqueue a regeneration/prewarm job. Miss → assembling shell. Product first-build remains cron assemble-window.
+2. GET / cache read **must not** enqueue a regeneration/prewarm job and **must not** call LLM. ~~Miss → assembling shell~~ **(2026-08-31, LLM-off launch):** Miss → inline **deterministic** first-build (`force_rebuild=False` ⇒ `llm_attempted=False` by construction; `generation_source=facts_only_no_llm`). The deterministic day (Global/Ritual/My Day facts skeleton/Evening) renders immediately; the empty assembling shell is defense-only when even the deterministic build fails. Cron assemble-window remains the owner of the **native LLM upgrade** — `facts_only_no_llm` is not product-ready (`READY_SOURCES`), so the cron rebuilds it in place when the LLM is back.
 3. `expression_version` **must not** auto-invalidate an existing Personal Day (stamp only).
 4. Force rebuild recreates the **same** `PersonalDayKey` and is ledger **engineering** only when a ready artifact already existed. First product/prewarm generate is ledger **product**.
 5. Failed / 402 / kept-prior / facts-only is **not** a ready artifact and must not create a false cache hit.
@@ -209,7 +209,7 @@ Practices are an **intervention/action catalog** (goal, duration, intensity, con
 | Prompt not a Profile rebuild | **Landed:** `profile_hash` is identity+calc+semantic; snapshot fallback across old prompt-keyed rows; Natal Decode GET matches semantic + legacy polish fingerprints |
 | Global Day 1× date × locale × semantic_version | **This pass:** `shared_global_day_v1` persist; I0 Global LLM skipped on cache hit. Product rebuild does not change the key. Ops `force_global_rebuild` regenerates the same key (engineering ledger) |
 | Personal key = semantic_version | **This pass:** `PersonalDayKey`; fingerprint hash is identity only; mood/prompt/expression are stamps |
-| GET miss → 0 LLM | GET does not LLM and **does not enqueue** prewarm. Assembling shell only. Cron assemble-window remains product first-build |
+| GET miss → 0 LLM | GET does not LLM and **does not enqueue** prewarm. **(2026-08-31)** Miss → inline deterministic first-build (0 LLM), assembling shell defense-only. Cron assemble-window owns the native LLM upgrade |
 | Production prewarm off until release | cron still prewarms real testers (budgeted; `@example.com` excluded) |
 | Behavioral-delta gate | `living` refreshes on GET; no “enough new signal → LLM” gate |
 | Profile selection | full IL-3 bag until **usage audit**; not a 5–8 cut |

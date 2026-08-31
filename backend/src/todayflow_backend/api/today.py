@@ -1000,14 +1000,18 @@ async def get_today_contract(
             fusion_dump=fusion_dump,
             core_profile=core_profile,
             timezone_name=tz_name,
-            allow_rebuild_on_miss=False,
+            # LLM-off launch: a GET miss builds the deterministic day package
+            # inline (0 LLM — force_rebuild stays False on this path, so
+            # llm_attempted is never set). The cron assemble-window still owns
+            # the native LLM upgrade; facts_only stories are not product-ready,
+            # so the cron rebuilds them when the LLM is back. The empty
+            # assembling shell is kept below only as defense if even the
+            # deterministic build fails.
+            allow_rebuild_on_miss=True,
         )
     except ValueError as exc:
-        # Assemble-once: never build on user GET — wait for cron / show assembling.
+        # Defense: deterministic build declined — beautiful wait, no invent.
         if "day_story_missing" in str(exc):
-            # GET miss is a read: assembling shell only. Do not enqueue
-            # regeneration/prewarm (Personal Day lifecycle). Cron assemble-window
-            # remains the product first-build path.
             shell = build_day_assembling_contract(lifecycle=day_lifecycle, locale=locale)
             return _finalize_contract(shell, morning_obj=morning)
         logger.error("GET /today/contract assembly failed: %s", exc)

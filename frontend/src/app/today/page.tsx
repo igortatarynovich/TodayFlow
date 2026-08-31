@@ -1223,7 +1223,10 @@ export default function TodayPage() {
   const dayReady = Boolean(isAuthenticated && todayData && todayContract && !error);
   const showDayReveal = Boolean(isAuthenticated && !authLoading && !dayRevealDone);
   const dayNotReady = isDayNotReady(todayContract);
-  const dayAssembling = isDayAssembling(todayContract);
+  // LLM-off launch: a served deterministic day_story renders immediately.
+  // The reveal curtain (+ polling) is only for a true empty shell — no
+  // deterministic package at all. An LLM upgrade is picked up on next open.
+  const dayAssembling = isDayAssembling(todayContract) && !todayContract?.day_story;
 
   useEffect(() => {
     if (!isAuthenticated || !dayAssembling) return;
