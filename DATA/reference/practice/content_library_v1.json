@@ -92,18 +92,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Здесь",
-            "body": "Остановись. Назови, что видишь прямо сейчас. Затем что слышишь. Затем чего касаешься. Не объясняй."
+            "title": "Три чувства",
+            "body": "Короткое заземление через чувства: назвать то, что есть вокруг, не объясняя.\nОстановись на месте.\nНазови вслух или про себя одно, что видишь прямо сейчас.\nЗатем одно, что слышишь.\nЗатем одно, чего касаешься телом.\nНе комментируй и не оценивай — только называй."
           },
           "en": {
-            "title": "Here",
-            "body": "Stop. Name what you see right now. Then what you hear. Then what you touch. Do not explain."
+            "title": "Three senses",
+            "body": "A short grounding through the senses: name what is around you without explaining.\nStop where you are.\nName, aloud or silently, one thing you see right now.\nThen one thing you hear.\nThen one thing your body is touching.\nDo not comment or judge — only name."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Здесь",
-            "en": "Here"
+            "ru": "Вернуться в комнату",
+            "en": "Back in the room"
           }
         }
       }
@@ -150,17 +150,17 @@
         "locales": {
           "ru": {
             "title": "Длинный выдох",
-            "body": "Вдох через нос. Выдох длиннее вдоха, без усилия. Повтори четыре раза. Не ускоряй и не задерживай."
+            "body": "Дыхание с выдохом длиннее вдоха — простой способ снизить напряжение за две минуты.\nСядь или встань удобно.\nВдохни через нос спокойно, без усилия.\nВыдохни чуть дольше, чем вдыхал — через нос или рот.\nПовтори четыре раза. Не задерживай дыхание и не форсируй."
           },
           "en": {
-            "title": "Long out-breath",
-            "body": "In through the nose. Out longer than in, without pushing. Four times. Do not speed up or hold."
+            "title": "Longer out-breath",
+            "body": "Breathing with an out-breath longer than the inhale — a simple way to lower tension in two minutes.\nSit or stand comfortably.\nInhale through the nose, calmly, without effort.\nExhale a little longer than you inhaled — through nose or mouth.\nRepeat four times. Do not hold the breath or force it."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Тише",
-            "en": "Quieter"
+            "ru": "Снять напряжение",
+            "en": "Lower the tension"
           }
         }
       }
@@ -315,18 +315,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Вопрос",
-            "body": "Что сейчас неясно? Запиши ответ своими словами. Вывод не нужен. Не правь."
+            "title": "Один вопрос",
+            "body": "Короткая рефлексия: ответить на один вопрос своими словами, без вывода.\nВозьми лист или заметки.\nЗапиши вопрос: «Что сейчас неясно?»\nОтветь одним-двумя предложениями своими словами.\nНе правь и не ищи мораль. Закрой."
           },
           "en": {
-            "title": "A question",
-            "body": "What is unclear now? Write the answer in your own words. No conclusion needed. Do not edit."
+            "title": "One question",
+            "body": "A short reflection: answer one question in your own words, without a conclusion.\nTake a sheet or a note.\nWrite the question: \"What is unclear right now?\"\nAnswer in one or two sentences in your own words.\nDo not edit and do not look for a moral. Close."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Записано",
-            "en": "Written"
+            "ru": "Прояснить мысль",
+            "en": "Clear a thought"
           }
         }
       }
@@ -370,18 +370,18 @@
         "body_kind": "affirmation_text",
         "locales": {
           "ru": {
-            "title": "Следующий шаг",
-            "body": "Я справлюсь с тем, что прямо сейчас. Скажи это один раз."
+            "title": "Я справлюсь",
+            "body": "Короткая фраза про способность справиться с тем, что прямо сейчас.\nСкажи вслух один раз: «Я справлюсь с тем, что прямо сейчас».\nЕсли звучит фальшиво — сузь до конкретного дела, которое уже умеешь."
           },
           "en": {
-            "title": "Next step",
-            "body": "I can handle what is in front of me now. Say it once."
+            "title": "I can handle this",
+            "body": "A short phrase about the capacity to handle what is in front of you now.\nSay out loud once: \"I can handle what is in front of me now.\"\nIf it sounds false — narrow it to a concrete task you already know how to do."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Могу",
-            "en": "I can"
+            "ru": "Опереться на своё",
+            "en": "Lean on what you can"
           }
         }
       }
@@ -427,18 +427,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Плечи вниз",
-            "body": "Подними плечи к ушам. Удержи два счёта. Отпусти. Ещё два раза."
+            "title": "Плечи вверх-вниз",
+            "body": "Короткий телесный сброс: напрячь плечи, удержать, отпустить.\nСядь или встань удобно.\nПодними плечи к ушам и удержи два счёта.\nРезко отпусти — пусть упадут сами.\nПовтори ещё два раза. Заметь разницу до и после."
           },
           "en": {
-            "title": "Shoulders down",
-            "body": "Lift your shoulders to your ears. Hold two counts. Drop them. Two more times."
+            "title": "Shoulders up and down",
+            "body": "A short body release: tense the shoulders, hold, let go.\nSit or stand comfortably.\nLift your shoulders to your ears and hold for two counts.\nDrop them sharply — let them fall on their own.\nRepeat two more times. Notice the difference before and after."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Сброс",
-            "en": "Drop"
+            "ru": "Сбросить плечи",
+            "en": "Drop the shoulders"
           }
         }
       }
@@ -482,18 +482,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Тяжесть в руках",
-            "body": "Сядь. Положи руки на колени. На выдохе дай им стать тяжелее. Три дыхания."
+            "title": "Тяжёлые руки",
+            "body": "Короткое телесное расслабление через ощущение тяжести в руках. Помогает снять общее напряжение за пару минут.\nСядь удобно, положи руки на колени ладонями вниз.\nСделай спокойный вдох через нос.\nНа выдохе позволь кистям стать чуть тяжелее — не заставляй, просто позволь.\nС каждым следующим выдохом замечай, как тяжесть растёт сама.\nЧерез несколько дыханий шевельни пальцами и вернись."
           },
           "en": {
             "title": "Heavy hands",
-            "body": "Sit. Hands on your knees. On the out-breath, let them grow heavy. Three breaths."
+            "body": "A short body practice that eases overall tension through the feeling of heaviness in the hands.\nSit comfortably, place your hands on your knees, palms down.\nTake a calm inhale through the nose.\nOn the out-breath, let your hands grow slightly heavier — do not force it, just allow it.\nWith each next out-breath, notice the heaviness growing on its own.\nAfter a few breaths, move your fingers and come back."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Мягче",
-            "en": "Softer"
+            "ru": "Отпустить напряжение",
+            "en": "Ease tension"
           }
         }
       }
@@ -538,18 +538,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Челюсть мягче",
-            "body": "Ляг. Закрой глаза. На выдохе отпусти челюсть. Ещё четыре дыхания."
+            "title": "Отпустить челюсть",
+            "body": "Короткая практика перед сном: лёжа, с вниманием к одному зажатому месту и медленному выдоху.\nЛяг, закрой глаза, руки вдоль тела.\nСделай медленный выдох через рот.\nНаправь внимание на челюсть — позволь ей чуть отвиснуть.\nС каждым выдохом отпускай её ещё немного.\nПришла мысль — вернись к ощущению в челюсти.\nПродолжай, пока тело не начнёт тяжелеть."
           },
           "en": {
-            "title": "Softer jaw",
-            "body": "Lie down. Close your eyes. On the out-breath, ease the jaw. Four more breaths."
+            "title": "Release the jaw",
+            "body": "A short before-bed practice: lying down, attention on one tense spot and a slow out-breath.\nLie down, close your eyes, arms along your body.\nTake a slow out-breath through the mouth.\nBring attention to your jaw — let it hang slightly loose.\nWith each out-breath, release it a little more.\nIf a thought comes, return to the feeling in the jaw.\nContinue until the body begins to grow heavy."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Ко сну",
-            "en": "Toward bed"
+            "ru": "Подготовиться ко сну",
+            "en": "Wind down for bed"
           }
         }
       }
@@ -597,11 +597,11 @@
         "locales": {
           "ru": {
             "title": "Один и тот же час",
-            "body": "Семь дней ложись не позже выбранного часа. Не переноси на завтра."
+            "body": "Правило на семь дней: ложиться не позже выбранного часа.\nВыбери самый поздний час, в который будешь ложиться.\nСемь дней ложись не позже него. Не переноси на завтра."
           },
           "en": {
             "title": "The same hour",
-            "body": "For seven days, lie down no later than the hour you chose. Do not push it to tomorrow."
+            "body": "A seven-day rule: lie down no later than a chosen hour.\nPick the latest hour you will lie down.\nFor seven days, lie down no later than that. Do not push it to tomorrow."
           }
         },
         "commitment_rule": "Ложись не позже выбранного часа каждый вечер.",
@@ -611,8 +611,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Режим",
-            "en": "Same hour"
+            "ru": "Зафиксировать отбой",
+            "en": "Fix bedtime"
           }
         }
       }
@@ -659,17 +659,17 @@
         "locales": {
           "ru": {
             "title": "Две минуты",
-            "body": "Назови одно действие короче двух минут. Сделай его сейчас. Остановись."
+            "body": "Микро-действие: выбрать одно дело короче двух минут и сделать его сейчас.\nНазови одно конкретное действие, которое можно закрыть за две минуты.\nСделай его сразу, не откладывая.\nОстановись. Не бери следующее."
           },
           "en": {
             "title": "Two minutes",
-            "body": "Name one action shorter than two minutes. Do it now. Stop."
+            "body": "A micro-action: pick one task shorter than two minutes and do it now.\nName one concrete action you can finish in two minutes.\nDo it immediately, without putting it off.\nStop. Do not take the next one."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Сдвиг",
-            "en": "Shift"
+            "ru": "Сдвинуть дело",
+            "en": "Move one thing"
           }
         }
       }
@@ -715,17 +715,17 @@
         "locales": {
           "ru": {
             "title": "Одно слово",
-            "body": "Назови одним словом, что чувствуешь. Не объясняй. Не правь."
+            "body": "Короткая сверка с собой: назвать чувство одним словом и найти его в теле.\nОстановись на секунду.\nНазови одним словом, что чувствуешь сейчас.\nНайди, где в теле это живёт.\nНе объясняй и не правь. Остановись."
           },
           "en": {
             "title": "One word",
-            "body": "Name in one word what you feel. Do not explain. Do not edit."
+            "body": "A short check-in with yourself: name the feeling in one word and find it in the body.\nPause for a second.\nName in one word what you feel right now.\nFind where in the body it lives.\nDo not explain and do not edit. Stop."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Заметить",
-            "en": "Notice"
+            "ru": "Заметить себя",
+            "en": "Notice yourself"
           }
         }
       }
@@ -770,18 +770,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Три строки",
-            "body": "Напиши три предложения от себя. Не правь. Закрой."
+            "title": "Три предложения",
+            "body": "Короткое письмо себе: три предложения своими словами, без правки.\nОткрой заметки или лист.\nНапиши три предложения о том, что сейчас с тобой.\nНе правь и не стирай. Закрой."
           },
           "en": {
-            "title": "Three lines",
-            "body": "Write three sentences from you. Do not edit. Close."
+            "title": "Three sentences",
+            "body": "A short letter to yourself: three sentences in your own words, without editing.\nOpen a note or a sheet.\nWrite three sentences about what is with you right now.\nDo not edit and do not erase. Close."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Своё",
-            "en": "Mine"
+            "ru": "Выложить мысли",
+            "en": "Put thoughts down"
           }
         }
       }
@@ -827,17 +827,17 @@
         "locales": {
           "ru": {
             "title": "Одно сообщение",
-            "body": "Напиши одно короткое сообщение человеку, которого давно не касался. Отправь. Не объясняй."
+            "body": "Один маленький шаг к человеку: короткое сообщение, без объяснений.\nВыбери человека, с которым давно не связывался.\nНапиши одно короткое сообщение — привет, вопрос, благодарность.\nОтправь. Не пиши второе и не объясняй, почему сейчас."
           },
           "en": {
             "title": "One message",
-            "body": "Write one short message to a person you have not reached in a while. Send it. Do not write a second."
+            "body": "One small step toward a person: a short message, without explanations.\nPick someone you have not reached in a while.\nWrite one short message — a hello, a question, a thank-you.\nSend it. Do not write a second and do not explain why now."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "К другому",
-            "en": "Toward them"
+            "ru": "Связаться с человеком",
+            "en": "Reach a person"
           }
         }
       }
@@ -883,17 +883,17 @@
         "locales": {
           "ru": {
             "title": "Одна линия",
-            "body": "Нарисуй одну линию. Не стирай. Остановись."
+            "body": "Микро-творчество: одна линия без оценки и правки.\nВозьми лист или заметки.\nНарисуй одну линию — любую.\nНе стирай и не оценивай. Остановись."
           },
           "en": {
             "title": "One line",
-            "body": "Draw one line. Do not erase. Stop."
+            "body": "Micro-creativity: one line without judging or editing.\nTake a sheet or a note.\nDraw one line — any line.\nDo not erase and do not judge. Stop."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Иначе",
-            "en": "Otherwise"
+            "ru": "Сделать метку",
+            "en": "Make a mark"
           }
         }
       }
@@ -939,17 +939,17 @@
         "locales": {
           "ru": {
             "title": "Одно дело",
-            "body": "Напиши одно дело, которое сейчас важнее остальных. Остальное отложи. Закрой."
+            "body": "Выбрать одно самое важное дело сейчас и остальное отложить.\nПосмотри на список или на то, что крутится в голове.\nНапиши одно дело, которое сейчас важнее остальных.\nОстальное отложи. Закрой список."
           },
           "en": {
             "title": "One task",
-            "body": "Write the one task that matters more than the rest right now. Put the rest aside. Close."
+            "body": "Pick the one most important task right now and set the rest aside.\nLook at the list or at what is spinning in your head.\nWrite the one task that matters more than the rest right now.\nSet the rest aside. Close the list."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Выбрать",
-            "en": "Pick"
+            "ru": "Выбрать главное",
+            "en": "Pick the main one"
           }
         }
       }
@@ -994,18 +994,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Между",
-            "body": "Закрой то, что делал. Встань. Три шага. Сядь к следующему."
+            "title": "Между делами",
+            "body": "Короткий ритуал перехода: закрыть предыдущее, сделать шаг, открыть следующее.\nМысленно закрой то, что только что делал.\nВстань и сделай три шага.\nСядь к следующему делу."
           },
           "en": {
-            "title": "Between",
-            "body": "Close what you were doing. Stand. Three steps. Sit for the next thing."
+            "title": "Between tasks",
+            "body": "A short transition ritual: close the previous, take a step, open the next.\nMentally close what you were just doing.\nStand and take three steps.\nSit down for the next task."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Смена",
-            "en": "Switch"
+            "ru": "Сменить контекст",
+            "en": "Switch context"
           }
         }
       }
@@ -1051,18 +1051,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Кулак",
-            "body": "Сожми кулаки на вдохе. На выдохе разожми. Повтори три раза."
+            "title": "Кулаки",
+            "body": "Короткая прогрессивная релаксация: напрячь кулаки на вдохе, отпустить на выдохе.\nСядь удобно.\nНа вдохе сожми кулаки.\nНа выдохе разожми и заметь тепло в ладонях.\nПовтори три раза."
           },
           "en": {
             "title": "Fists",
-            "body": "Make fists on the in-breath. Open them on the out-breath. Three times."
+            "body": "A short progressive relaxation: tense the fists on the inhale, release on the out-breath.\nSit comfortably.\nOn the inhale, make fists.\nOn the out-breath, open them and notice warmth in the palms.\nRepeat three times."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Снять",
-            "en": "Unclench"
+            "ru": "Разжать напряжение",
+            "en": "Unclench the tension"
           }
         }
       }
@@ -1109,11 +1109,11 @@
         "locales": {
           "ru": {
             "title": "Одно время",
-            "body": "Семь дней делай одно выбранное действие в одно и то же время. Действие не меняй."
+            "body": "Семь дней одно выбранное действие в одно и то же время.\nВыбери одно короткое действие и время для него.\nСемь дней делай его в это время. Действие не меняй."
           },
           "en": {
             "title": "The same time",
-            "body": "For seven days, do one chosen action at the same time. Do not change the action."
+            "body": "For seven days, one chosen action at the same time.\nPick one short action and a time for it.\nFor seven days, do it at that time. Do not change the action."
           }
         },
         "commitment_rule": "Каждый день одно выбранное действие в одно время.",
@@ -1123,8 +1123,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Режим",
-            "en": "Same time"
+            "ru": "Закрепить привычку",
+            "en": "Lock a habit"
           }
         }
       }
@@ -1172,11 +1172,11 @@
         "locales": {
           "ru": {
             "title": "Одна лента",
-            "body": "Семь дней не держи больше одной ленты открытой. Лишнее закрой сразу."
+            "body": "Семь дней: не держать больше одной ленты или вкладки открытой.\nВыбери одну ленту или одну задачу.\nЛишнее закрой сразу. Семь дней не открывай вторую параллельно."
           },
           "en": {
             "title": "One feed",
-            "body": "For seven days, do not keep more than one feed open. Close the extra at once."
+            "body": "For seven days: do not keep more than one feed or tab open.\nPick one feed or one task.\nClose the extra at once. For seven days, do not open a second in parallel."
           }
         },
         "commitment_rule": "Не больше одной ленты на экране.",
@@ -1186,8 +1186,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Узже",
-            "en": "Narrower"
+            "ru": "Сузить внимание",
+            "en": "Narrow attention"
           }
         }
       }
@@ -1294,12 +1294,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Семь подряд",
-            "body": "Семь дней подряд отмечай одно короткое действие. Пропуск обнуляет счёт."
+            "title": "Семь дней подряд",
+            "body": "Семь дней подряд отмечать одно короткое действие. Пропуск обнуляет счёт.\nВыбери одно короткое действие.\nКаждый день отмечай его. Пропустил день — счёт с нуля."
           },
           "en": {
-            "title": "Seven in a row",
-            "body": "For seven days in a row, mark one short action. A miss resets the count."
+            "title": "Seven days in a row",
+            "body": "For seven days in a row, mark one short action. A miss resets the count.\nPick one short action.\nMark it every day. Missed a day — the count starts from zero."
           }
         },
         "commitment_rule": "Каждый день одно короткое действие без пропуска.",
@@ -1309,8 +1309,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Ряд",
-            "en": "Streak"
+            "ru": "Собрать серию",
+            "en": "Build a streak"
           }
         }
       }
@@ -1356,12 +1356,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Меньше",
-            "body": "Семь дней убери одну лишнюю вещь из дня. Не возвращай её раньше срока."
+            "title": "Убрать одно",
+            "body": "Семь дней убрать одну лишнюю вещь из дня и не возвращать раньше срока.\nВыбери одну лишнюю вещь, обязательство или стимул.\nУбери её из дня на семь дней. Не возвращай раньше."
           },
           "en": {
-            "title": "Less",
-            "body": "For seven days, drop one extra thing from the day. Do not bring it back early."
+            "title": "Drop one thing",
+            "body": "For seven days, drop one extra thing from the day and do not bring it back early.\nPick one extra thing, obligation, or stimulus.\nRemove it from the day for seven days. Do not bring it back early."
           }
         },
         "commitment_rule": "Каждый день без одной выбранной лишней вещи.",
@@ -1371,8 +1371,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Проще",
-            "en": "Simpler"
+            "ru": "Облегчить день",
+            "en": "Lighten the day"
           }
         }
       }
@@ -1418,17 +1418,17 @@
         "locales": {
           "ru": {
             "title": "Экран вниз",
-            "body": "Положи телефон экраном вниз. Не бери две минуты. Смотри в окно."
+            "body": "Двухминутная пауза от экрана: телефон лицом вниз, взгляд в окно.\nПоложи телефон экраном вниз, вне зоны досягаемости руки.\nДве минуты не бери его.\nСмотри в окно или на стену — куда угодно, только не в экран."
           },
           "en": {
             "title": "Screen down",
-            "body": "Put the phone face down. Do not pick it up for two minutes. Look out the window."
+            "body": "A two-minute pause from the screen: phone face down, gaze out the window.\nPut the phone face down, out of easy reach.\nDo not pick it up for two minutes.\nLook out the window or at the wall — anywhere except a screen."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Пауза",
-            "en": "Face down"
+            "ru": "Оторваться от экрана",
+            "en": "Leave the screen"
           }
         }
       }
@@ -1474,17 +1474,17 @@
         "locales": {
           "ru": {
             "title": "Три звука",
-            "body": "Сядь. Назови три звука, которые слышишь. Не оценивай. Ещё одно дыхание."
+            "body": "Короткая практика присутствия через слух: три звука, без оценки.\nСядь и сделай один спокойный вдох.\nНайди первый звук — ближний.\nНайди второй — подальше.\nНайди третий — самый тихий.\nНе решай, нравится он или нет. Просто слушай."
           },
           "en": {
             "title": "Three sounds",
-            "body": "Sit. Name three sounds you hear. Do not judge. One more breath."
+            "body": "A short presence practice through hearing: three sounds, without judging them.\nSit and take one calm inhale.\nFind the first sound — a near one.\nFind a second — farther away.\nFind a third — the quietest.\nDo not decide whether you like it. Just listen."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Здесь",
-            "en": "Here"
+            "ru": "Вернуться в момент",
+            "en": "Back to the moment"
           }
         }
       }
@@ -1530,12 +1530,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Вместо",
-            "body": "Семь дней, когда тянет к старому, сделай одно новое короткое действие вместо него."
+            "title": "Вместо старого",
+            "body": "Семь дней: когда тянет к старому, делать одно новое короткое действие вместо него.\nВыбери старое действие, от которого хочешь отойти, и новое короткое вместо него.\nСемь дней, когда тянет к старому, делай новое."
           },
           "en": {
-            "title": "Instead",
-            "body": "For seven days, when the old pull comes, do one new short action in its place."
+            "title": "Instead of the old",
+            "body": "For seven days: when the old pull comes, do one new short action in its place.\nPick the old action you want to leave and a new short one in its place.\nFor seven days, when the old pull comes, do the new one."
           }
         },
         "commitment_rule": "При тяге к старому — одно новое короткое действие.",
@@ -1545,8 +1545,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Замена",
-            "en": "Swap"
+            "ru": "Заменить привычку",
+            "en": "Replace the habit"
           }
         }
       }
@@ -1591,18 +1591,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Движение",
-            "body": "Покрути кистями в удобном диапазоне. Потом плечами. Если больно — остановись."
+            "title": "Кисти и плечи",
+            "body": "Короткое свободное движение суставов — без растяжки и удержания.\nСядь или встань.\nПокрути кистями в удобном диапазоне.\nЗатем плечами — круги назад, затем вперёд.\nЕсли больно — остановись сразу."
           },
           "en": {
-            "title": "Move",
-            "body": "Circle your wrists in a comfortable range. Then your shoulders. Stop if it hurts."
+            "title": "Wrists and shoulders",
+            "body": "A short free movement of the joints — no stretch-hold.\nSit or stand.\nCircle your wrists in a comfortable range.\nThen the shoulders — circles back, then forward.\nIf it hurts — stop at once."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Движение",
-            "en": "Move"
+            "ru": "Размять суставы",
+            "en": "Loosen the joints"
           }
         }
       }
@@ -1647,18 +1647,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "На час",
-            "body": "Напиши одно намерение на ближайший час. Остальное не трогай."
+            "title": "Намерение на час",
+            "body": "Одно намерение на ближайший час — без списка и без остального.\nНапиши одно конкретное намерение на ближайший час.\nОстальное не трогай. Закрой."
           },
           "en": {
-            "title": "For an hour",
-            "body": "Write one aim for the next hour. Leave the rest. Do not touch it."
+            "title": "An aim for the hour",
+            "body": "One aim for the next hour — no list and no rest of it.\nWrite one concrete aim for the next hour.\nLeave the rest. Close."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Курс",
-            "en": "Aim"
+            "ru": "Задать курс",
+            "en": "Set a course"
           }
         }
       }
@@ -1704,17 +1704,17 @@
         "locales": {
           "ru": {
             "title": "Один предмет",
-            "body": "Убери один предмет со стола. Поставь его туда, где ему место. Сядь."
+            "body": "Сброс пространства: убрать один предмет на его место перед новым делом.\nВозьми один предмет со стола.\nПоставь его туда, где ему место.\nСядь к новому делу."
           },
           "en": {
             "title": "One object",
-            "body": "Take one object off the desk. Put it where it belongs. Sit."
+            "body": "A space reset: put one object where it belongs before a new task.\nTake one object off the desk.\nPut it where it belongs.\nSit down for the new task."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Место",
-            "en": "Place"
+            "ru": "Очистить стол",
+            "en": "Clear the desk"
           }
         }
       }
@@ -1759,18 +1759,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Без правки",
-            "body": "Пиши две минуты не останавливаясь. Не стирай. Точка."
+            "title": "Две минуты без правки",
+            "body": "Свободное письмо: две минуты без остановки, стирания и правок.\nОткрой чистый лист.\nПиши две минуты, не останавливаясь.\nНе стирай и не исправляй. Поставь точку и закрой."
           },
           "en": {
-            "title": "No edits",
-            "body": "Write for two minutes without stopping. Do not erase. Period."
+            "title": "Two minutes, no edits",
+            "body": "Free writing: two minutes without stopping, erasing, or editing.\nOpen a blank page.\nWrite for two minutes without stopping.\nDo not erase and do not correct. Put a period and close."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Текст",
-            "en": "Words"
+            "ru": "Выпустить слова",
+            "en": "Let the words out"
           }
         }
       }
@@ -1815,18 +1815,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Стакан",
-            "body": "Выпей воду. Открой окно. Назови одно дело. Начни."
+            "title": "Утренний вход",
+            "body": "Короткий вход в день: вода, воздух, одно дело.\nВыпей стакан воды.\nОткрой окно или выйди на минуту.\nНазови одно дело, с которого начнёшь. Начни его."
           },
           "en": {
-            "title": "A glass",
-            "body": "Drink water. Open the window. Name one task. Begin."
+            "title": "Morning entry",
+            "body": "A short entry into the day: water, air, one task.\nDrink a glass of water.\nOpen a window or step out for a minute.\nName the one task you will start with. Begin it."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Утро",
-            "en": "Morning"
+            "ru": "Войти в день",
+            "en": "Enter the day"
           }
         }
       }
@@ -1873,17 +1873,17 @@
         "locales": {
           "ru": {
             "title": "Свет ниже",
-            "body": "Приглуши свет. Положи телефон дальше. Сядь. Три выдоха."
+            "body": "Вечерний выход из дня: приглушить свет, убрать телефон, три выдоха.\nПриглуши свет в комнате.\nПоложи телефон дальше, чем рука достаёт лёжа.\nСядь и сделай три медленных выдоха."
           },
           "en": {
-            "title": "Lower light",
-            "body": "Dim the light. Put the phone farther away. Sit. Three out-breaths."
+            "title": "Lower the light",
+            "body": "An evening exit from the day: dim the light, put the phone away, three out-breaths.\nDim the light in the room.\nPut the phone farther than your hand can reach while lying down.\nSit and take three slow out-breaths."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "К ночи",
-            "en": "Toward night"
+            "ru": "Закрыть день",
+            "en": "Close the day"
           }
         }
       }
@@ -1928,18 +1928,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Вдох как есть",
-            "body": "Сядь. Следи за вдохом. Не меняй его. Пять циклов."
+            "title": "Дыхание как есть",
+            "body": "Базовая практика внимания к дыханию: ничего не менять, просто наблюдать.\nСядь удобно, спина с опорой.\nЗаметь, где дыхание ощущается ярче: ноздри, грудь или живот.\nСледи за естественным вдохом и выдохом, не углубляя их.\nВнимание ушло — спокойно верни. Это и есть практика.\nПродолжай несколько циклов."
           },
           "en": {
-            "title": "The in-breath as it is",
-            "body": "Sit. Watch the in-breath. Do not change it. Five cycles."
+            "title": "The breath as it is",
+            "body": "The basic breath-attention practice: change nothing, simply observe.\nSit comfortably, back supported.\nNotice where the breath is felt most clearly: nostrils, chest, or belly.\nFollow the natural inhale and exhale without deepening them.\nAttention wandered — calmly return. That return is the practice.\nContinue for a few cycles."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Дыхание",
-            "en": "Breath"
+            "ru": "Наблюдать дыхание",
+            "en": "Watch the breath"
           }
         }
       }
@@ -1983,18 +1983,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Стопы",
-            "body": "Сядь. Заметь стопы. Потом кисти. Не двигай. Одно дыхание."
+            "title": "Три зоны",
+            "body": "Короткое сканирование тела: внимание по очереди — стопы, кисти, лицо.\nСядь удобно и не двигайся.\nПереведи внимание в стопы: что там чувствуется?\nТеперь в кисти рук: тепло, покалывание, давление.\nТеперь лицо: лоб, глаза, челюсть.\nНичего не меняй — только замечай."
           },
           "en": {
-            "title": "Feet",
-            "body": "Sit. Notice your feet. Then your hands. Do not move. One breath."
+            "title": "Three zones",
+            "body": "A short body scan: attention in sequence — feet, hands, face.\nSit comfortably and stay still.\nMove attention into your feet: what is felt there?\nNow into your hands: warmth, tingling, pressure.\nNow the face: forehead, eyes, jaw.\nChange nothing — only notice."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Тело",
-            "en": "Body"
+            "ru": "Почувствовать тело",
+            "en": "Feel the body"
           }
         }
       }
@@ -2038,18 +2038,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Что есть",
-            "body": "Сядь. Назови, что есть сейчас, одним словом. Не объясняй. Ещё одно дыхание."
+            "title": "Одно слово",
+            "body": "Открытое внимание: называть происходящее одним словом, не разбирая и не оценивая.\nСядь и закрой глаза.\nЧто сейчас есть? Звук, ощущение, мысль, чувство.\nНазови это одним словом: «звук», «тепло», «мысль».\nОтпусти и жди следующего.\nНе объясняй — только называй."
           },
           "en": {
-            "title": "What is here",
-            "body": "Sit. Name what is here now in one word. Do not explain. One more breath."
+            "title": "One word",
+            "body": "Open attention: naming whatever happens in one word, without analysing or judging.\nSit and close your eyes.\nWhat is here right now? A sound, a sensation, a thought, a feeling.\nName it in one word: \"sound\", \"warmth\", \"thought\".\nLet it go and wait for the next.\nDo not explain — only name."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Заметить",
-            "en": "Notice"
+            "ru": "Заметить происходящее",
+            "en": "Notice what is"
           }
         }
       }
@@ -2093,18 +2093,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Точка",
-            "body": "Выбери одну точку перед собой. Смотри на неё. Если внимание ушло — вернись. Три дыхания."
+            "title": "Одна точка",
+            "body": "Тренировка удержания внимания на одном объекте. Блуждание — часть метода, а не провал.\nВыбери точку перед собой: пятно на стене, угол предмета.\nСмотри на неё мягко, не напрягая глаза.\nВнимание ушло — заметь и верни.\nКаждое возвращение — как одно повторение в зале.\nПродолжай несколько дыханий."
           },
           "en": {
-            "title": "A point",
-            "body": "Pick one point in front of you. Look at it. If attention leaves, return. Three breaths."
+            "title": "One point",
+            "body": "Training for holding attention on one object. Wandering is part of the method, not a failure.\nPick a point in front of you: a spot on the wall, the corner of an object.\nLook at it softly, without straining your eyes.\nAttention left — notice and return.\nEach return is like one rep at the gym.\nContinue for a few breaths."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Одно",
-            "en": "One"
+            "ru": "Собрать внимание",
+            "en": "Gather attention"
           }
         }
       }
@@ -2150,18 +2150,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Вес",
-            "body": "Сядь. Почувствуй вес на сиденье. Не вставай. Три дыхания."
+            "title": "Точки опоры",
+            "body": "Короткая практика возвращения в настоящее через ощущение опоры тела. Помогает, когда мысли разлетаются или нарастает напряжение.\nСядь удобно и поставь стопы на пол.\nПочувствуй, как стопы касаются пола: давление, температура, фактура.\nПереведи внимание на сиденье — заметь вес тела на нём.\nПочувствуй спинку, которая держит спину.\nНе нужно расслабляться — просто замечай контакт и опору несколько спокойных дыханий."
           },
           "en": {
-            "title": "Weight",
-            "body": "Sit. Feel the weight on the seat. Do not stand. Three breaths."
+            "title": "Points of support",
+            "body": "A short practice that brings you back to the present through the body's contact points. Useful when your mind is scattered or tension builds.\nSit comfortably with your feet on the floor.\nFeel how your feet touch the floor: pressure, temperature, texture.\nMove your attention to the seat — notice the weight of your body on it.\nFeel the backrest holding your back.\nNo need to relax — simply notice contact and support for a few calm breaths."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Здесь",
-            "en": "Here"
+            "ru": "Почувствовать опору",
+            "en": "Feel supported"
           }
         }
       }
@@ -2205,18 +2205,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Как есть",
-            "body": "Сядь. Заметь, что сейчас слишком. Не убирай. Три дыхания рядом."
+            "title": "Место рядом",
+            "body": "Практика принятия: не бороться с трудным чувством, а дать ему место рядом с собой.\nСядь и сделай два спокойных вдоха.\nЗаметь, что сейчас трудно: тяжесть, тревога, раздражение — назови это одним словом.\nНе пытайся убрать или изменить это.\nПредставь, что чувство сидит рядом с тобой, а не внутри.\nПодыши несколько раз рядом с ним, ничего не требуя."
           },
           "en": {
-            "title": "As it is",
-            "body": "Sit. Notice what feels like too much. Do not push it away. Three breaths beside it."
+            "title": "Room beside",
+            "body": "A practice of allowing: instead of fighting a difficult feeling, give it a place next to you.\nSit and take two calm inhales.\nNotice what is hard right now: heaviness, worry, irritation — name it in one word.\nDo not try to remove or change it.\nImagine the feeling sitting next to you, not inside you.\nBreathe next to it for a few breaths, asking nothing of it."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Рядом",
-            "en": "Beside"
+            "ru": "Дать чувству место",
+            "en": "Make room for it"
           }
         }
       }
@@ -2261,18 +2261,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "На выдохе",
-            "body": "Вдох. На выдохе отпусти плечи. Не держи. Ещё два раза."
+            "title": "Отпустить плечи",
+            "body": "Короткая телесная практика: на каждом выдохе отпускать зажатое место чуть глубже.\nСядь и найди, где тело держит напряжение — чаще всего это плечи.\nСделай вдох и заметь это место.\nНа выдохе позволь плечам опуститься чуть ниже.\nНе тяни их силой — просто разреши опускаться.\nПовтори несколько дыханий, каждый раз отпуская чуть больше."
           },
           "en": {
-            "title": "On the out-breath",
-            "body": "In. On the out-breath, drop the shoulders. Do not hold. Two more times."
+            "title": "Let the shoulders drop",
+            "body": "A short body practice: on each out-breath, release a held spot a little deeper.\nSit and find where your body holds tension — most often the shoulders.\nTake an inhale and notice that spot.\nOn the out-breath, let the shoulders drop slightly lower.\nDo not pull them down — simply allow them to fall.\nRepeat for a few breaths, releasing a little more each time."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Отпустить",
-            "en": "Drop"
+            "ru": "Опустить плечи",
+            "en": "Drop the shoulders"
           }
         }
       }
@@ -2316,18 +2316,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Один вопрос",
-            "body": "Сядь. Задай себе один вопрос. Не отвечай сразу. Три дыхания. Потом одно слово."
+            "title": "Вопрос без ответа",
+            "body": "Тихая рефлексия: задать себе один вопрос и не спешить с ответом.\nСядь и закрой глаза.\nСпроси себя: «Что для меня сейчас самое важное?»\nНе отвечай сразу — просто держи вопрос.\nНесколько дыханий побудь с ним.\nВ конце запиши одно слово, которое пришло."
           },
           "en": {
-            "title": "One question",
-            "body": "Sit. Ask yourself one question. Do not answer yet. Three breaths. Then one word."
+            "title": "A question without an answer",
+            "body": "A quiet reflection: ask yourself one question and do not hurry to answer.\nSit and close your eyes.\nAsk yourself: \"What matters most to me right now?\"\nDo not answer at once — simply hold the question.\nStay with it for a few breaths.\nAt the end, write down one word that came."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Яснее",
-            "en": "Clearer"
+            "ru": "Услышать себя",
+            "en": "Hear yourself"
           }
         }
       }
@@ -2426,18 +2426,18 @@
         "body_kind": "affirmation_text",
         "locales": {
           "ru": {
-            "title": "Я выбираю",
-            "body": "Я выбираю следующий маленький шаг. Скажи это и сделай его."
+            "title": "Я выбираю шаг",
+            "body": "Фраза про выбор следующего маленького шага — и сам шаг сразу после неё.\nСкажи: «Я выбираю следующий маленький шаг».\nНазови этот шаг вслух и сделай его."
           },
           "en": {
-            "title": "I choose",
-            "body": "I choose the next small step. Say it and do it."
+            "title": "I choose the step",
+            "body": "A phrase about choosing the next small step — and the step itself right after it.\nSay: \"I choose the next small step.\"\nName that step out loud and do it."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Выбор",
-            "en": "Choose"
+            "ru": "Взять выбор",
+            "en": "Take the choice"
           }
         }
       }
@@ -2481,18 +2481,18 @@
         "body_kind": "affirmation_text",
         "locales": {
           "ru": {
-            "title": "К человеку",
-            "body": "Я могу сделать один тёплый шаг к человеку. Скажи это один раз."
+            "title": "Тёплый шаг",
+            "body": "Фраза про один тёплый шаг к человеку.\nСкажи один раз: «Я могу сделать один тёплый шаг к человеку».\nЕсли готов — сделай этот шаг сразу (сообщение, вопрос, благодарность)."
           },
           "en": {
-            "title": "Toward a person",
-            "body": "I can take one warm step toward a person. Say it once."
+            "title": "A warm step",
+            "body": "A phrase about one warm step toward a person.\nSay once: \"I can take one warm step toward a person.\"\nIf you are ready — take that step now (a message, a question, a thank-you)."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "К ним",
-            "en": "Toward them"
+            "ru": "Повернуться к людям",
+            "en": "Turn toward people"
           }
         }
       }
@@ -2540,11 +2540,11 @@
         "locales": {
           "ru": {
             "title": "Час без ленты",
-            "body": "Семь дней один час в день без лент. Поставь таймер. Не открывай."
+            "body": "Семь дней: один час в день без лент, с таймером.\nВыбери час, когда ленты закрыты.\nПоставь таймер. Семь дней не открывай ленты в этот час."
           },
           "en": {
-            "title": "An hour off feeds",
-            "body": "For seven days, one hour a day with no feeds. Set a timer. Do not open them."
+            "title": "An hour off the feed",
+            "body": "For seven days: one hour a day without feeds, with a timer.\nPick an hour when feeds stay closed.\nSet a timer. For seven days, do not open feeds in that hour."
           }
         },
         "commitment_rule": "Один час в день без лент.",
@@ -2554,8 +2554,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Лимит",
-            "en": "Cap"
+            "ru": "Ограничить ленту",
+            "en": "Limit the feed"
           }
         }
       }
@@ -2602,11 +2602,11 @@
         "locales": {
           "ru": {
             "title": "Не сейчас",
-            "body": "Семь дней не покупай то, что не планировал утром. Отложи."
+            "body": "Семь дней не покупать то, что не планировал утром.\nУтром составь короткий список нужного.\nВсё остальное, что захочется купить, отложи. Семь дней."
           },
           "en": {
             "title": "Not now",
-            "body": "For seven days, do not buy what you did not plan this morning. Put it off."
+            "body": "For seven days, do not buy what you did not plan in the morning.\nIn the morning, write a short list of planned purchases.\nAnything else you want to buy — put it off. Seven days."
           }
         },
         "commitment_rule": "Не покупать незапланированное.",
@@ -2616,8 +2616,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Отложить",
-            "en": "Later"
+            "ru": "Отложить покупку",
+            "en": "Defer the buy"
           }
         }
       }
@@ -2830,18 +2830,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Плечи вниз",
-            "body": "Подними плечи к ушам. Удержи два счёта. Отпусти. Ещё шесть раз."
+            "title": "Плечи, шесть раз",
+            "body": "Более длинный сброс плеч: шесть повторений с паузой между ними.\nСядь или встань.\nПодними плечи к ушам, удержи два счёта, отпусти.\nСделай паузу на одно дыхание.\nПовтори шесть раз. Если больно — остановись раньше."
           },
           "en": {
-            "title": "Shoulders down",
-            "body": "Lift your shoulders to your ears. Hold two counts. Drop them. Six more times."
+            "title": "Shoulders, six times",
+            "body": "A longer shoulder release: six repetitions with a pause between them.\nSit or stand.\nLift your shoulders to your ears, hold two counts, drop.\nPause for one breath.\nRepeat six times. If it hurts — stop earlier."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Сброс",
-            "en": "Drop"
+            "ru": "Снять зажим",
+            "en": "Release the hold"
           }
         }
       }
@@ -2887,18 +2887,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Кулак",
-            "body": "Сожми кулаки на вдохе. На выдохе разожми. Повтори восемь раз."
+            "title": "Кулаки, восемь раз",
+            "body": "Длинная версия: восемь циклов напряжения и отпускания.\nСядь.\nНа вдохе сожми кулаки, на выдохе разожми.\nПовтори восемь раз, не торопясь. Если больно — остановись."
           },
           "en": {
-            "title": "Fists",
-            "body": "Make fists on the in-breath. Open them on the out-breath. Eight times."
+            "title": "Fists, eight times",
+            "body": "A longer version: eight cycles of tensing and releasing.\nSit.\nOn the inhale, make fists; on the out-breath, open them.\nRepeat eight times, unhurried. If it hurts — stop."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Снять",
-            "en": "Unclench"
+            "ru": "Снять зажим рук",
+            "en": "Release the hands"
           }
         }
       }
@@ -3057,18 +3057,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Три строки",
-            "body": "Напиши три предложения от себя. Не правь. Посиди с ними. Закрой."
+            "title": "Три предложения и пауза",
+            "body": "Три предложения плюс минута тишины после них.\nНапиши три предложения от себя, не правь.\nЗакрой текст и посиди с ним минуту, ничего не добавляя."
           },
           "en": {
-            "title": "Three lines",
-            "body": "Write three sentences from you. Do not edit. Sit with them. Close."
+            "title": "Three sentences and a pause",
+            "body": "Three sentences plus a minute of silence after them.\nWrite three sentences from you, without editing.\nClose the text and sit with it for a minute, adding nothing."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Своё",
-            "en": "Mine"
+            "ru": "Услышать написанное",
+            "en": "Hear what you wrote"
           }
         }
       }
@@ -3169,18 +3169,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Одно слово",
-            "body": "Назови одним словом, что чувствуешь. Не объясняй. Не правь. Подыши два раза."
+            "title": "Слово и дыхание",
+            "body": "Расширенная сверка: слово, место в теле, два спокойных дыхания.\nНазови одним словом, что чувствуешь.\nНайди это место в теле.\nСделай два спокойных дыхания, держа внимание там.\nНе правь и не объясняй."
           },
           "en": {
-            "title": "One word",
-            "body": "Name in one word what you feel. Do not explain. Do not edit. Take two breaths."
+            "title": "A word and a breath",
+            "body": "A longer check-in: a word, a place in the body, two calm breaths.\nName in one word what you feel.\nFind that place in the body.\nTake two calm breaths, keeping attention there.\nDo not edit and do not explain."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Заметить",
-            "en": "Notice"
+            "ru": "Услышать тело",
+            "en": "Hear the body"
           }
         }
       }
@@ -3225,18 +3225,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "На час",
-            "body": "Напиши одно намерение на ближайший час. Остальное не трогай. Прочитай его ещё раз."
+            "title": "Намерение и повтор",
+            "body": "Намерение плюс повторное прочтение — чтобы оно не растворилось.\nНапиши одно намерение на ближайший час.\nОстальное не трогай.\nПрочитай его ещё раз вслух или про себя."
           },
           "en": {
-            "title": "For an hour",
-            "body": "Write one aim for the next hour. Leave the rest. Read it once more."
+            "title": "An aim and a reread",
+            "body": "An aim plus a reread — so it does not dissolve.\nWrite one aim for the next hour.\nLeave the rest.\nRead it once more, aloud or silently."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Курс",
-            "en": "Aim"
+            "ru": "Удержать курс",
+            "en": "Hold the course"
           }
         }
       }
@@ -3281,18 +3281,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Одно дело",
-            "body": "Напиши одно дело, которое сейчас важнее остальных. Остальное отложи. Закрой. Проверь список."
+            "title": "Одно дело и проверка",
+            "body": "То же, плюс быстрая сверка: действительно ли выбранное важнее.\nНапиши одно дело, которое сейчас важнее остальных.\nОстальное отложи.\nПеречитай список ещё раз. Если выбор не сдвинулся — закрой."
           },
           "en": {
-            "title": "One task",
-            "body": "Write the one task that matters more than the rest right now. Put the rest aside. Close. Check the list."
+            "title": "One task and a check",
+            "body": "The same, plus a quick check: is the chosen one really more important.\nWrite the one task that matters more than the rest right now.\nSet the rest aside.\nRead the list once more. If the choice did not move — close."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Выбрать",
-            "en": "Pick"
+            "ru": "Удержать приоритет",
+            "en": "Hold the priority"
           }
         }
       }
@@ -3338,18 +3338,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Две минуты",
-            "body": "Назови одно действие короче двух минут. Сделай его сейчас. Затем ещё одно такое же короткое. Остановись."
+            "title": "Два коротких шага",
+            "body": "Два микро-действия подряд — когда нужно разогнать застой, но не утонуть в списке.\nНазови первое действие короче двух минут и сделай его.\nНазови второе такое же короткое и сделай его.\nОстановись. Третье не начинай."
           },
           "en": {
-            "title": "Two minutes",
-            "body": "Name one action shorter than two minutes. Do it now. Then one more that short. Stop."
+            "title": "Two short steps",
+            "body": "Two micro-actions in a row — when you need to break a stall without drowning in a list.\nName a first action shorter than two minutes and do it.\nName a second equally short one and do it.\nStop. Do not start a third."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Сдвиг",
-            "en": "Shift"
+            "ru": "Разогнать застой",
+            "en": "Break the stall"
           }
         }
       }
@@ -3394,18 +3394,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Один предмет",
-            "body": "Убери один предмет со стола. Поставь его туда, где ему место. Убери второй. Сядь."
+            "title": "Два предмета",
+            "body": "Чуть шире: два предмета на место.\nУбери один предмет со стола на его место.\nУбери второй.\nСядь."
           },
           "en": {
-            "title": "One object",
-            "body": "Take one object off the desk. Put it where it belongs. Take a second. Sit."
+            "title": "Two objects",
+            "body": "A little wider: two objects back in place.\nTake one object off the desk and put it where it belongs.\nTake a second.\nSit."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Место",
-            "en": "Place"
+            "ru": "Освободить место",
+            "en": "Free the space"
           }
         }
       }
@@ -3450,18 +3450,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Экран вниз",
-            "body": "Положи телефон экраном вниз. Не бери пять минут. Смотри в окно."
+            "title": "Пять минут без экрана",
+            "body": "Та же пауза на пять минут — когда двух не хватает, чтобы отпустить ленту.\nПоложи телефон экраном вниз.\nПять минут не бери его.\nСмотри в окно. Если рука тянется — заметь и верни."
           },
           "en": {
-            "title": "Screen down",
-            "body": "Put the phone face down. Do not pick it up for five minutes. Look out the window."
+            "title": "Five minutes off-screen",
+            "body": "The same pause for five minutes — when two are not enough to let the feed go.\nPut the phone face down.\nDo not pick it up for five minutes.\nLook out the window. If the hand reaches — notice and put it back."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Пауза",
-            "en": "Face down"
+            "ru": "Выйти из ленты",
+            "en": "Leave the feed"
           }
         }
       }
@@ -3506,18 +3506,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Одно сообщение",
-            "body": "Напиши одно короткое сообщение человеку, которого давно не касался. Отправь. Не пиши второе."
+            "title": "Одно сообщение, без второго",
+            "body": "То же действие с жёстким стопом: одно сообщение и закрыть чат.\nНапиши одно короткое сообщение человеку, которого давно не касался.\nОтправь.\nЗакрой чат. Не пиши второе."
           },
           "en": {
-            "title": "One message",
-            "body": "Write one short message to a person you have not reached in a while. Send it. Do not write a second."
+            "title": "One message, no second",
+            "body": "The same action with a hard stop: one message and close the chat.\nWrite one short message to a person you have not reached in a while.\nSend it.\nClose the chat. Do not write a second."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "К другому",
-            "en": "Toward them"
+            "ru": "Сделать шаг к людям",
+            "en": "Take a step toward people"
           }
         }
       }
@@ -3562,18 +3562,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Без правки",
-            "body": "Пиши пять минут не останавливаясь. Не стирай. Точка."
+            "title": "Пять минут без правки",
+            "body": "Длинная версия: пять минут непрерывного письма.\nПиши пять минут не останавливаясь.\nНе стирай. Поставь точку."
           },
           "en": {
-            "title": "No edits",
-            "body": "Write for five minutes without stopping. Do not erase. Period."
+            "title": "Five minutes, no edits",
+            "body": "A longer version: five minutes of continuous writing.\nWrite for five minutes without stopping.\nDo not erase. Put a period."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Текст",
-            "en": "Words"
+            "ru": "Опустошить голову",
+            "en": "Empty the head"
           }
         }
       }
@@ -3618,18 +3618,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Одна линия",
-            "body": "Нарисуй одну линию. Не стирай. Рядом ещё одну. Остановись."
+            "title": "Две линии",
+            "body": "Две линии рядом — чуть больше движения, всё равно без оценки.\nНарисуй одну линию. Не стирай.\nРядом нарисуй ещё одну.\nОстановись. Не сравнивай их."
           },
           "en": {
-            "title": "One line",
-            "body": "Draw one line. Do not erase. Draw one more beside it. Stop."
+            "title": "Two lines",
+            "body": "Two lines side by side — a little more movement, still without judging.\nDraw one line. Do not erase.\nDraw one more beside it.\nStop. Do not compare them."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Иначе",
-            "en": "Otherwise"
+            "ru": "Сдвинуть руку",
+            "en": "Move the hand"
           }
         }
       }
@@ -3674,18 +3674,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Стакан",
-            "body": "Выпей воду. Открой окно. Назови одно дело. Потянись. Начни."
+            "title": "Утро с движением",
+            "body": "Утренний вход плюс одно движение тела.\nВыпей воду. Открой окно.\nПотянись или сделай круг плечами.\nНазови одно дело и начни."
           },
           "en": {
-            "title": "A glass",
-            "body": "Drink water. Open the window. Name one task. Stretch. Begin."
+            "title": "Morning with movement",
+            "body": "A morning entry plus one body movement.\nDrink water. Open a window.\nStretch or circle your shoulders.\nName one task and begin."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Утро",
-            "en": "Morning"
+            "ru": "Разбудить тело",
+            "en": "Wake the body"
           }
         }
       }
@@ -3731,18 +3731,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Свет ниже",
-            "body": "Приглуши свет. Положи телефон дальше. Сядь. Закрой глаза. Три выдоха. Ещё три."
+            "title": "К ночи, шесть выдохов",
+            "body": "Расширенный вечерний выход: свет, телефон, глаза закрыты, шесть выдохов.\nПриглуши свет. Положи телефон дальше.\nСядь, закрой глаза.\nТри медленных выдоха. Ещё три."
           },
           "en": {
-            "title": "Lower light",
-            "body": "Dim the light. Put the phone farther away. Sit. Close your eyes. Three out-breaths. Three more."
+            "title": "Toward night, six out-breaths",
+            "body": "A longer evening exit: light, phone, eyes closed, six out-breaths.\nDim the light. Put the phone farther away.\nSit, close your eyes.\nThree slow out-breaths. Three more."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "К ночи",
-            "en": "Toward night"
+            "ru": "Перейти к ночи",
+            "en": "Move toward night"
           }
         }
       }
@@ -3787,18 +3787,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Между",
-            "body": "Закрой то, что делал. Встань. Три шага. Сядь к следующему. Назови его вслух."
+            "title": "Между и вслух",
+            "body": "Переход с названием следующего дела вслух — чтобы ум не тащил старое.\nЗакрой то, что делал.\nВстань, три шага.\nСядь к следующему и назови его вслух."
           },
           "en": {
-            "title": "Between",
-            "body": "Close what you were doing. Stand. Three steps. Sit for the next thing. Say its name out loud."
+            "title": "Between, out loud",
+            "body": "A transition with the next task named out loud — so the mind does not drag the old one.\nClose what you were doing.\nStand, three steps.\nSit for the next and name it out loud."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Смена",
-            "en": "Switch"
+            "ru": "Войти в новое",
+            "en": "Enter the new"
           }
         }
       }
@@ -3843,18 +3843,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Вдох как есть",
-            "body": "Сядь. Следи за вдохом. Не меняй его. Десять циклов."
+            "title": "Пять минут с дыханием",
+            "body": "Более длинная версия: пять минут спокойного наблюдения за дыханием без контроля.\nСядь и закрой глаза.\nНайди точку, где дыхание ощущается ярче всего.\nДержи внимание там, как будто смотришь на волны.\nПришла мысль — заметь «мысль» и вернись к дыханию.\nНе считай успехом «пустую голову»: каждое возвращение и есть успех."
           },
           "en": {
-            "title": "The in-breath as it is",
-            "body": "Sit. Watch the in-breath. Do not change it. Ten cycles."
+            "title": "Five minutes with the breath",
+            "body": "A longer version: five minutes of calmly watching the breath without controlling it.\nSit and close your eyes.\nFind the spot where the breath is felt most clearly.\nKeep your attention there, as if watching waves.\nA thought arrives — note \"thought\" and return to the breath.\nDo not count an \"empty head\" as success: each return is the success."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Дыхание",
-            "en": "Breath"
+            "ru": "Успокоить ум",
+            "en": "Settle the mind"
           }
         }
       }
@@ -3898,18 +3898,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Стопы",
-            "body": "Сядь. Заметь стопы. Потом кисти. Потом лицо. Не двигай. Одно дыхание на каждое."
+            "title": "Снизу вверх",
+            "body": "Пятиминутное сканирование: медленно поднимаем внимание от стоп к макушке.\nСядь или ляг, закрой глаза.\nСтопы и пальцы ног — что там?\nГолени и колени.\nЖивот и грудь — движение дыхания.\nРуки от кистей к плечам.\nЛицо и макушка. Заверши общим ощущением всего тела разом."
           },
           "en": {
-            "title": "Feet",
-            "body": "Sit. Notice your feet. Then your hands. Then your face. Do not move. One breath on each."
+            "title": "Bottom to top",
+            "body": "A five-minute scan: slowly move attention from the feet to the crown.\nSit or lie down, close your eyes.\nFeet and toes — what is there?\nCalves and knees.\nBelly and chest — the movement of breathing.\nArms from hands to shoulders.\nFace and crown. Finish with the feeling of the whole body at once."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Тело",
-            "en": "Body"
+            "ru": "Собрать тело целиком",
+            "en": "Gather the whole body"
           }
         }
       }
@@ -3953,18 +3953,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Что есть",
-            "body": "Сядь. Назови, что есть сейчас, одним словом. Не объясняй. Ещё три дыхания."
+            "title": "Открытое пространство",
+            "body": "Пять минут открытого внимания: всё, что появляется, получает короткое имя и уходит.\nСядь удобно, закрой глаза.\nПозволь звукам, ощущениям и мыслям приходить.\nКаждое явление мягко называй одним словом.\nНе задерживайся ни на чём.\nУвлёкся — назови и это: «увлёкся» — и вернись."
           },
           "en": {
-            "title": "What is here",
-            "body": "Sit. Name what is here now in one word. Do not explain. Three more breaths."
+            "title": "Open space",
+            "body": "Five minutes of open attention: whatever appears gets a short name and leaves.\nSit comfortably, close your eyes.\nLet sounds, sensations, and thoughts come.\nGently name each one in a single word.\nDo not dwell on anything.\nCarried away — name that too: \"carried away\" — and return."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Заметить",
-            "en": "Notice"
+            "ru": "Расширить внимание",
+            "en": "Widen attention"
           }
         }
       }
@@ -4064,18 +4064,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Три звука",
-            "body": "Сядь. Назови три звука, которые слышишь. Не оценивай. Ещё пять дыханий."
+            "title": "Все чувства по очереди",
+            "body": "Пять минут присутствия: по очереди — звуки, тело, запахи, вкус, зрение.\nСядь удобно.\nОколо минуты слушай звуки вокруг.\nМинуту чувствуй тело и его контакт с опорой.\nЗаметь запахи и вкус во рту.\nОткрой глаза и медленно огляди пространство, как будто видишь его впервые."
           },
           "en": {
-            "title": "Three sounds",
-            "body": "Sit. Name three sounds you hear. Do not judge. Five more breaths."
+            "title": "All senses in turn",
+            "body": "Five minutes of presence: in turn — sounds, body, smells, taste, sight.\nSit comfortably.\nFor about a minute, listen to the sounds around you.\nFor a minute, feel the body and its contact with support.\nNotice smells and the taste in your mouth.\nOpen your eyes and slowly look around the space as if seeing it for the first time."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Здесь",
-            "en": "Here"
+            "ru": "Проснуться в сейчас",
+            "en": "Wake into now"
           }
         }
       }
@@ -4121,18 +4121,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Вес",
-            "body": "Сядь. Почувствуй вес на сиденье. Не вставай. Восемь дыханий."
+            "title": "Опора под телом",
+            "body": "Более спокойная, длинная версия практики на опору — пять минут внимания к тому, что держит тело.\nСядь удобно, стопы на полу, руки на коленях.\nОколо минуты наблюдай, как стопы касаются пола.\nЗатем почувствуй вес тела на сиденье.\nДобавь ощущение рук на коленях: тепло, давление, ткань.\nОставайся с этими тремя точками опоры, дыша в своём темпе.\nЗаверши одним медленным вдохом и выдохом."
           },
           "en": {
-            "title": "Weight",
-            "body": "Sit. Feel the weight on the seat. Do not stand. Eight breaths."
+            "title": "Support under the body",
+            "body": "A slower, longer version of the support practice — five minutes of attention to what holds your body.\nSit comfortably, feet on the floor, hands on your knees.\nFor about a minute, notice how your feet touch the floor.\nThen feel the weight of your body on the seat.\nAdd the feeling of your hands on your knees: warmth, pressure, fabric.\nStay with these three points of support, breathing at your own pace.\nFinish with one slow inhale and exhale."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Здесь",
-            "en": "Here"
+            "ru": "Собрать себя",
+            "en": "Feel gathered"
           }
         }
       }
@@ -4176,18 +4176,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Тяжесть в руках",
-            "body": "Сядь. Положи руки на колени. На выдохе дай им стать тяжелее. Восемь дыханий."
+            "title": "Тяжесть по телу",
+            "body": "Пятиминутная версия: ощущение тяжести постепенно распространяется от кистей ко всему телу.\nСядь, руки на коленях.\nНа выдохе позволь кистям стать тяжелее.\nЧерез несколько дыханий добавь предплечья.\nЗатем плечи — пусть опустятся под собственным весом.\nВ конце почувствуй вес всего тела на сиденье и побудь в нём."
           },
           "en": {
-            "title": "Heavy hands",
-            "body": "Sit. Hands on your knees. On the out-breath, let them grow heavy. Eight breaths."
+            "title": "Heaviness through the body",
+            "body": "A five-minute version: the feeling of heaviness gradually spreads from the hands through the whole body.\nSit with your hands on your knees.\nOn the out-breath, let your hands grow heavier.\nAfter a few breaths, add the forearms.\nThen the shoulders — let them drop under their own weight.\nFinally, feel the weight of your whole body on the seat and rest in it."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Мягче",
-            "en": "Softer"
+            "ru": "Размягчить тело",
+            "en": "Soften the body"
           }
         }
       }
@@ -4232,17 +4232,17 @@
         "locales": {
           "ru": {
             "title": "Как есть",
-            "body": "Сядь. Заметь, что сейчас слишком. Не убирай. Восемь дыханий рядом."
+            "body": "Пять минут практики «как есть»: позволить происходящему быть, не улучшая и не отталкивая.\nСядь удобно, закрой глаза.\nЗаметь своё состояние прямо сейчас — какое оно?\nНайди, где в теле оно ощущается сильнее всего.\nСкажи про себя: «Это уже здесь. Можно не бороться».\nДыши, позволяя ощущению быть ровно таким, какое оно.\nЗаверши, открыв глаза и медленно оглядев комнату."
           },
           "en": {
             "title": "As it is",
-            "body": "Sit. Notice what feels like too much. Do not push it away. Eight breaths beside it."
+            "body": "Five minutes of the \"as it is\" practice: letting what is happening be, without improving or pushing it away.\nSit comfortably, close your eyes.\nNotice your state right now — what is it like?\nFind where in the body it is felt most.\nSay to yourself: \"It is already here. I can stop fighting.\"\nBreathe, allowing the feeling to be exactly as it is.\nFinish by opening your eyes and slowly looking around the room."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Рядом",
-            "en": "Beside"
+            "ru": "Перестать бороться",
+            "en": "Stop fighting it"
           }
         }
       }
@@ -4287,18 +4287,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "На выдохе",
-            "body": "Вдох. На выдохе отпусти плечи. Не держи. Ещё шесть раз."
+            "title": "Отпускание по цепочке",
+            "body": "Пятиминутная версия: отпускаем напряжение по очереди — плечи, челюсть, кисти.\nСядь и закрой глаза.\nНа первом выдохе отпусти плечи.\nНа следующем — разожми челюсть, язык свободно.\nЗатем разожми кулаки, если они сжаты.\nОстаток времени дыши и замечай, как тело держит всё меньше."
           },
           "en": {
-            "title": "On the out-breath",
-            "body": "In. On the out-breath, drop the shoulders. Do not hold. Six more times."
+            "title": "Release in a chain",
+            "body": "A five-minute version: release tension in sequence — shoulders, jaw, hands.\nSit and close your eyes.\nOn the first out-breath, release the shoulders.\nOn the next — unclench the jaw, tongue loose.\nThen open your fists if they are clenched.\nFor the rest of the time, breathe and notice the body holding less and less."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Отпустить",
-            "en": "Drop"
+            "ru": "Освободить тело",
+            "en": "Unhold the body"
           }
         }
       }
@@ -4343,18 +4343,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Челюсть мягче",
-            "body": "Ляг. Закрой глаза. На выдохе отпусти челюсть. Слушай выдох до конца. Ещё шесть дыханий."
+            "title": "Тяжёлое одеяло",
+            "body": "Версия на тяжесть всего тела: представь, что тебя укрывает тёплое тяжёлое одеяло.\nЛяг и закрой глаза.\nПочувствуй вес одеяла на ногах.\nМысленно поднимай этот вес выше: живот, грудь, плечи.\nНа каждом выдохе позволь телу стать тяжелее.\nОстанься в этой тяжести, ни к чему не стремясь."
           },
           "en": {
-            "title": "Softer jaw",
-            "body": "Lie down. Close your eyes. On the out-breath, ease the jaw. Follow the out-breath to the end. Six more breaths."
+            "title": "Heavy blanket",
+            "body": "A whole-body heaviness version: imagine a warm, heavy blanket covering you.\nLie down and close your eyes.\nFeel the weight of the blanket on your legs.\nMentally move that weight upward: belly, chest, shoulders.\nOn each out-breath, let the body grow heavier.\nStay in this heaviness, aiming at nothing."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Ко сну",
-            "en": "Toward bed"
+            "ru": "Утонуть в кровати",
+            "en": "Sink into bed"
           }
         }
       }
@@ -4398,18 +4398,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Один вопрос",
-            "body": "Сядь. Задай себе один вопрос. Не отвечай сразу. Восемь дыханий. Потом одно слово."
+            "title": "Пять минут с вопросом",
+            "body": "Длинная версия: вопрос держится дольше, ответу дают созреть.\nСядь, закрой глаза, сделай три спокойных дыхания.\nСпроси: «Что я сейчас чувствую на самом деле?»\nНе ищи ответ головой — жди, что всплывёт.\nЗамечай образы и слова, не цепляясь за них.\nВ конце — одно слово или фраза вслух или на бумагу."
           },
           "en": {
-            "title": "One question",
-            "body": "Sit. Ask yourself one question. Do not answer yet. Eight breaths. Then one word."
+            "title": "Five minutes with a question",
+            "body": "A longer version: the question is held longer, letting the answer ripen.\nSit, close your eyes, take three calm breaths.\nAsk: \"What am I actually feeling right now?\"\nDo not look for the answer in your head — wait for what surfaces.\nNotice images and words without clinging to them.\nAt the end — one word or phrase, spoken or written."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Яснее",
-            "en": "Clearer"
+            "ru": "Прояснить внутреннее",
+            "en": "Clarify inside"
           }
         }
       }
@@ -4507,18 +4507,18 @@
         "body_kind": "affirmation_text",
         "locales": {
           "ru": {
-            "title": "Следующий шаг",
-            "body": "Я справлюсь с тем, что прямо сейчас. Скажи это два раза."
+            "title": "Я справлюсь — дважды",
+            "body": "Та же фраза, сказанная два раза — чтобы она успела осесть.\nСкажи: «Я справлюсь с тем, что прямо сейчас».\nПодыши. Скажи ещё раз."
           },
           "en": {
-            "title": "Next step",
-            "body": "I can handle what is in front of me now. Say it twice."
+            "title": "I can handle this — twice",
+            "body": "The same phrase, said twice — so it has time to settle.\nSay: \"I can handle what is in front of me now.\"\nBreathe. Say it once more."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Могу",
-            "en": "I can"
+            "ru": "Укрепить опору",
+            "en": "Strengthen the hold"
           }
         }
       }
@@ -4563,18 +4563,18 @@
         "body_kind": "affirmation_text",
         "locales": {
           "ru": {
-            "title": "Я выбираю",
-            "body": "Я выбираю следующий маленький шаг. Скажи это два раза и сделай его."
+            "title": "Выбор дважды",
+            "body": "Та же фраза два раза, затем действие.\nСкажи два раза: «Я выбираю следующий маленький шаг».\nСделай этот шаг."
           },
           "en": {
-            "title": "I choose",
-            "body": "I choose the next small step. Say it twice and do it."
+            "title": "The choice twice",
+            "body": "The same phrase twice, then the action.\nSay twice: \"I choose the next small step.\"\nDo that step."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Выбор",
-            "en": "Choose"
+            "ru": "Закрепить выбор",
+            "en": "Lock the choice"
           }
         }
       }
@@ -4618,18 +4618,18 @@
         "body_kind": "affirmation_text",
         "locales": {
           "ru": {
-            "title": "К человеку",
-            "body": "Я могу сделать один тёплый шаг к человеку. Скажи это два раза."
+            "title": "Тёплый шаг дважды",
+            "body": "Та же фраза два раза.\nСкажи два раза: «Я могу сделать один тёплый шаг к человеку»."
           },
           "en": {
-            "title": "Toward a person",
-            "body": "I can take one warm step toward a person. Say it twice."
+            "title": "A warm step twice",
+            "body": "The same phrase twice.\nSay twice: \"I can take one warm step toward a person.\""
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "К ним",
-            "en": "Toward them"
+            "ru": "Напомнить о близости",
+            "en": "Remember closeness"
           }
         }
       }
@@ -4736,12 +4736,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Меньше",
-            "body": "Четырнадцать дней убери одну лишнюю вещь из дня. Не возвращай её раньше срока."
+            "title": "Четырнадцать дней без лишнего",
+            "body": "То же на четырнадцать дней.\nУбери одну лишнюю вещь из дня. Не возвращай её раньше срока."
           },
           "en": {
-            "title": "Less",
-            "body": "For fourteen days, drop one extra thing from the day. Do not bring it back early."
+            "title": "Fourteen days without the extra",
+            "body": "The same for fourteen days.\nDrop one extra thing from the day. Do not bring it back early."
           }
         },
         "commitment_rule": "Каждый день без одной выбранной лишней вещи.",
@@ -4751,8 +4751,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Проще",
-            "en": "Simpler"
+            "ru": "Удержать простоту",
+            "en": "Hold the simplicity"
           }
         }
       }
@@ -4799,12 +4799,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Час без ленты",
-            "body": "Четырнадцать дней один час в день без лент. Поставь таймер. Не открывай."
+            "title": "Четырнадцать дней без ленты",
+            "body": "То же правило на четырнадцать дней.\nОдин час в день без лент. Поставь таймер. Не открывай."
           },
           "en": {
-            "title": "An hour off feeds",
-            "body": "For fourteen days, one hour a day with no feeds. Set a timer. Do not open them."
+            "title": "Fourteen days off the feed",
+            "body": "The same rule for fourteen days.\nOne hour a day without feeds. Set a timer. Do not open them."
           }
         },
         "commitment_rule": "Один час в день без лент.",
@@ -4814,8 +4814,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Лимит",
-            "en": "Cap"
+            "ru": "Удержать лимит",
+            "en": "Hold the limit"
           }
         }
       }
@@ -4861,12 +4861,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Не сейчас",
-            "body": "Четырнадцать дней не покупай то, что не планировал утром. Отложи."
+            "title": "Четырнадцать дней без импульса",
+            "body": "То же правило на четырнадцать дней.\nНе покупай то, что не планировал утром. Отложи."
           },
           "en": {
-            "title": "Not now",
-            "body": "For fourteen days, do not buy what you did not plan this morning. Put it off."
+            "title": "Fourteen days without impulse",
+            "body": "The same rule for fourteen days.\nDo not buy what you did not plan in the morning. Put it off."
           }
         },
         "commitment_rule": "Не покупать незапланированное.",
@@ -4876,8 +4876,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Отложить",
-            "en": "Later"
+            "ru": "Удержать паузу",
+            "en": "Hold the pause"
           }
         }
       }
@@ -4924,12 +4924,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Одна лента",
-            "body": "Четырнадцать дней не держи больше одной ленты открытой. Лишнее закрой сразу."
+            "title": "Четырнадцать дней одной ленты",
+            "body": "То же правило на четырнадцать дней.\nНе держи больше одной ленты открытой. Лишнее закрой сразу."
           },
           "en": {
-            "title": "One feed",
-            "body": "For fourteen days, do not keep more than one feed open. Close the extra at once."
+            "title": "Fourteen days of one feed",
+            "body": "The same rule for fourteen days.\nDo not keep more than one feed open. Close the extra at once."
           }
         },
         "commitment_rule": "Не больше одной ленты на экране.",
@@ -4939,8 +4939,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Узже",
-            "en": "Narrower"
+            "ru": "Удержать фокус",
+            "en": "Hold the focus"
           }
         }
       }
@@ -4986,12 +4986,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Одно время",
-            "body": "Четырнадцать дней делай одно выбранное действие в одно и то же время. Действие не меняй."
+            "title": "Четырнадцать дней в одно время",
+            "body": "То же правило на четырнадцать дней.\nОдно действие, одно время, четырнадцать дней. Действие не меняй."
           },
           "en": {
-            "title": "The same time",
-            "body": "For fourteen days, do one chosen action at the same time. Do not change the action."
+            "title": "Fourteen days at the same time",
+            "body": "The same rule for fourteen days.\nOne action, one time, fourteen days. Do not change the action."
           }
         },
         "commitment_rule": "Каждый день одно выбранное действие в одно время.",
@@ -5001,8 +5001,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Режим",
-            "en": "Same time"
+            "ru": "Удержать привычку",
+            "en": "Hold the habit"
           }
         }
       }
@@ -5049,12 +5049,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Один и тот же час",
-            "body": "Четырнадцать дней ложись не позже выбранного часа. Не переноси на завтра."
+            "title": "Четырнадцать дней отбоя",
+            "body": "То же правило на четырнадцать дней.\nВыбери час отбоя.\nЧетырнадцать дней ложись не позже. Не переноси на завтра."
           },
           "en": {
-            "title": "The same hour",
-            "body": "For fourteen days, lie down no later than the hour you chose. Do not push it to tomorrow."
+            "title": "Fourteen days of bedtime",
+            "body": "The same rule for fourteen days.\nPick a bedtime hour.\nFor fourteen days, lie down no later. Do not push it to tomorrow."
           }
         },
         "commitment_rule": "Ложись не позже выбранного часа каждый вечер.",
@@ -5064,8 +5064,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Режим",
-            "en": "Same hour"
+            "ru": "Удержать отбой",
+            "en": "Hold bedtime"
           }
         }
       }
@@ -5111,12 +5111,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Семь подряд",
-            "body": "Четырнадцать дней подряд отмечай одно короткое действие. Пропуск обнуляет счёт."
+            "title": "Четырнадцать дней подряд",
+            "body": "Четырнадцать дней подряд отмечать одно короткое действие. Пропуск обнуляет счёт.\nВыбери действие.\nКаждый день отмечай. Пропуск — счёт с нуля."
           },
           "en": {
-            "title": "Seven in a row",
-            "body": "For fourteen days in a row, mark one short action. A miss resets the count."
+            "title": "Fourteen days in a row",
+            "body": "For fourteen days in a row, mark one short action. A miss resets the count.\nPick an action.\nMark it every day. A miss — the count starts from zero."
           }
         },
         "commitment_rule": "Каждый день одно короткое действие без пропуска.",
@@ -5126,8 +5126,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Ряд",
-            "en": "Streak"
+            "ru": "Удержать серию",
+            "en": "Hold the streak"
           }
         }
       }
@@ -5340,18 +5340,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Плечи вниз",
-            "body": "Подними плечи к ушам. Удержи два счёта. Отпусти. Ещё два раза."
+            "title": "Плечи за минуту",
+            "body": "Самый короткий вариант: два повторения, когда нет времени.\nПодними плечи к ушам.\nУдержи два счёта.\nОтпусти. Повтори ещё раз."
           },
           "en": {
-            "title": "Shoulders down",
-            "body": "Lift your shoulders to your ears. Hold two counts. Drop them. Two more times."
+            "title": "Shoulders in a minute",
+            "body": "The shortest version: two repetitions when there is no time.\nLift your shoulders to your ears.\nHold two counts.\nDrop. Repeat once more."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Сброс",
-            "en": "Drop"
+            "ru": "Быстрый сброс",
+            "en": "A quick drop"
           }
         }
       }
@@ -5397,18 +5397,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Кулак",
-            "body": "Сожми кулаки на вдохе. На выдохе разожми. Повтори три раза."
+            "title": "Три сжатия",
+            "body": "Самый короткий вариант: три цикла.\nНа вдохе сожми кулаки.\nНа выдохе разожми. Повтори три раза."
           },
           "en": {
-            "title": "Fists",
-            "body": "Make fists on the in-breath. Open them on the out-breath. Three times."
+            "title": "Three squeezes",
+            "body": "The shortest version: three cycles.\nOn the inhale, make fists.\nOn the out-breath, open them. Repeat three times."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Снять",
-            "en": "Unclench"
+            "ru": "Отпустить кисти",
+            "en": "Let the hands go"
           }
         }
       }
@@ -5568,17 +5568,17 @@
         "locales": {
           "ru": {
             "title": "Три строки",
-            "body": "Напиши три предложения от себя. Не правь. Закрой."
+            "body": "Самый короткий вариант: три предложения и закрыть.\nНапиши три предложения от себя.\nНе правь. Закрой."
           },
           "en": {
             "title": "Three lines",
-            "body": "Write three sentences from you. Do not edit. Close."
+            "body": "The shortest version: three sentences and close.\nWrite three sentences from you.\nDo not edit. Close."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Своё",
-            "en": "Mine"
+            "ru": "Записать своё",
+            "en": "Write what is yours"
           }
         }
       }
@@ -5679,18 +5679,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Одно слово",
-            "body": "Назови одним словом, что чувствуешь. Не объясняй. Не правь."
+            "title": "Тихая сверка",
+            "body": "Самый короткий вариант сверки — одно слово, без тела.\nНазови одним словом, что чувствуешь прямо сейчас.\nНе объясняй. Не правь."
           },
           "en": {
-            "title": "One word",
-            "body": "Name in one word what you feel. Do not explain. Do not edit."
+            "title": "A quiet check-in",
+            "body": "The shortest check-in — one word, without the body.\nName in one word what you feel right now.\nDo not explain. Do not edit."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Заметить",
-            "en": "Notice"
+            "ru": "Назвать чувство",
+            "en": "Name the feeling"
           }
         }
       }
@@ -5735,18 +5735,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "На час",
-            "body": "Напиши одно намерение на ближайший час. Остальное не трогай."
+            "title": "Одно намерение",
+            "body": "Самый короткий вариант.\nНапиши одно намерение на ближайший час.\nОстальное не трогай."
           },
           "en": {
-            "title": "For an hour",
-            "body": "Write one aim for the next hour. Leave the rest. Do not touch it."
+            "title": "One aim",
+            "body": "The shortest version.\nWrite one aim for the next hour.\nLeave the rest."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Курс",
-            "en": "Aim"
+            "ru": "Направить час",
+            "en": "Aim the hour"
           }
         }
       }
@@ -5791,18 +5791,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Одно дело",
-            "body": "Напиши одно дело, которое сейчас важнее остальных. Остальное отложи. Закрой."
+            "title": "Главное сейчас",
+            "body": "Самый короткий выбор приоритета.\nНапиши одно дело, которое сейчас важнее остальных.\nОстальное отложи. Закрой."
           },
           "en": {
-            "title": "One task",
-            "body": "Write the one task that matters more than the rest right now. Put the rest aside. Close."
+            "title": "What matters now",
+            "body": "The shortest priority choice.\nWrite the one task that matters more than the rest right now.\nSet the rest aside. Close."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Выбрать",
-            "en": "Pick"
+            "ru": "Отсечь лишнее",
+            "en": "Cut the rest"
           }
         }
       }
@@ -5848,18 +5848,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Две минуты",
-            "body": "Назови одно действие короче двух минут. Сделай его сейчас. Остановись."
+            "title": "Одно действие",
+            "body": "Самый короткий вариант: одно дело, две минуты, стоп.\nВыбери одно действие короче двух минут.\nСделай его сейчас.\nОстановись."
           },
           "en": {
-            "title": "Two minutes",
-            "body": "Name one action shorter than two minutes. Do it now. Stop."
+            "title": "One action",
+            "body": "The shortest version: one task, two minutes, stop.\nPick one action shorter than two minutes.\nDo it now.\nStop."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Сдвиг",
-            "en": "Shift"
+            "ru": "Сделать хоть что-то",
+            "en": "Do at least one"
           }
         }
       }
@@ -5904,18 +5904,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Один предмет",
-            "body": "Убери один предмет со стола. Поставь его туда, где ему место. Сядь."
+            "title": "Предмет на место",
+            "body": "Самый короткий сброс стола.\nУбери один предмет со стола. Поставь его туда, где ему место. Сядь."
           },
           "en": {
-            "title": "One object",
-            "body": "Take one object off the desk. Put it where it belongs. Sit."
+            "title": "An object in place",
+            "body": "The shortest desk reset.\nTake one object off the desk. Put it where it belongs. Sit."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Место",
-            "en": "Place"
+            "ru": "Убрать лишнее",
+            "en": "Clear one thing"
           }
         }
       }
@@ -5960,18 +5960,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Экран вниз",
-            "body": "Положи телефон экраном вниз. Не бери две минуты. Смотри в окно."
+            "title": "Две минуты окна",
+            "body": "Самый короткий цифровой стоп.\nПоложи телефон экраном вниз.\nНе бери две минуты. Смотри в окно."
           },
           "en": {
-            "title": "Screen down",
-            "body": "Put the phone face down. Do not pick it up for two minutes. Look out the window."
+            "title": "Two minutes of window",
+            "body": "The shortest digital stop.\nPut the phone face down.\nDo not pick it up for two minutes. Look out the window."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Пауза",
-            "en": "Face down"
+            "ru": "Сделать паузу",
+            "en": "Take a pause"
           }
         }
       }
@@ -6016,18 +6016,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Одно сообщение",
-            "body": "Напиши одно короткое сообщение человеку, которого давно не касался. Отправь. Не объясняй."
+            "title": "Короткий привет",
+            "body": "Самый короткий вариант: одно сообщение без предисловий.\nНапиши одно короткое сообщение человеку, которого давно не касался.\nОтправь. Не объясняй."
           },
           "en": {
-            "title": "One message",
-            "body": "Write one short message to a person you have not reached in a while. Send it. Do not write a second."
+            "title": "A short hello",
+            "body": "The shortest version: one message without a preamble.\nWrite one short message to a person you have not reached in a while.\nSend it. Do not explain."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "К другому",
-            "en": "Toward them"
+            "ru": "Напомнить о себе",
+            "en": "Remind them of you"
           }
         }
       }
@@ -6072,18 +6072,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Без правки",
-            "body": "Пиши две минуты не останавливаясь. Не стирай. Точка."
+            "title": "Пиши и точка",
+            "body": "Самый короткий вариант.\nПиши две минуты не останавливаясь.\nНе стирай. Точка."
           },
           "en": {
-            "title": "No edits",
-            "body": "Write for two minutes without stopping. Do not erase. Period."
+            "title": "Write and stop",
+            "body": "The shortest version.\nWrite for two minutes without stopping.\nDo not erase. Period."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Текст",
-            "en": "Words"
+            "ru": "Написать без фильтра",
+            "en": "Write unfiltered"
           }
         }
       }
@@ -6128,18 +6128,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Одна линия",
-            "body": "Нарисуй одну линию. Не стирай. Остановись."
+            "title": "Линия и стоп",
+            "body": "Самый короткий вариант: одна линия и закрыть.\nНарисуй одну линию.\nНе стирай. Остановись."
           },
           "en": {
-            "title": "One line",
-            "body": "Draw one line. Do not erase. Stop."
+            "title": "A line and a stop",
+            "body": "The shortest version: one line and close.\nDraw one line.\nDo not erase. Stop."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Иначе",
-            "en": "Otherwise"
+            "ru": "Начать иначе",
+            "en": "Start otherwise"
           }
         }
       }
@@ -6184,18 +6184,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Стакан",
-            "body": "Выпей воду. Открой окно. Назови одно дело. Начни."
+            "title": "Вода и дело",
+            "body": "Самый короткий утренний вход.\nВыпей воду. Открой окно. Назови одно дело. Начни."
           },
           "en": {
-            "title": "A glass",
-            "body": "Drink water. Open the window. Name one task. Begin."
+            "title": "Water and a task",
+            "body": "The shortest morning entry.\nDrink water. Open a window. Name one task. Begin."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Утро",
-            "en": "Morning"
+            "ru": "Начать утро",
+            "en": "Start the morning"
           }
         }
       }
@@ -6241,18 +6241,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Свет ниже",
-            "body": "Приглуши свет. Положи телефон дальше. Сядь. Три выдоха."
+            "title": "Три выдоха вечером",
+            "body": "Самый короткий вечерний выход.\nПриглуши свет. Положи телефон дальше. Сядь. Три выдоха."
           },
           "en": {
-            "title": "Lower light",
-            "body": "Dim the light. Put the phone farther away. Sit. Three out-breaths."
+            "title": "Three evening out-breaths",
+            "body": "The shortest evening exit.\nDim the light. Put the phone farther away. Sit. Three out-breaths."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "К ночи",
-            "en": "Toward night"
+            "ru": "Приглушить день",
+            "en": "Dim the day"
           }
         }
       }
@@ -6297,18 +6297,18 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Между",
-            "body": "Закрой то, что делал. Встань. Три шага. Сядь к следующему."
+            "title": "Три шага",
+            "body": "Самый короткий переход.\nЗакрой то, что делал.\nВстань. Три шага. Сядь к следующему."
           },
           "en": {
-            "title": "Between",
-            "body": "Close what you were doing. Stand. Three steps. Sit for the next thing."
+            "title": "Three steps",
+            "body": "The shortest transition.\nClose what you were doing.\nStand. Three steps. Sit for the next."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Смена",
-            "en": "Switch"
+            "ru": "Переключиться",
+            "en": "Switch over"
           }
         }
       }
@@ -6353,18 +6353,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Вдох как есть",
-            "body": "Сядь. Следи за вдохом. Не меняй его. Пять циклов."
+            "title": "Прохлада и тепло",
+            "body": "Вариант с ощущениями в ноздрях: прохладный вдох, тёплый выдох.\nСядь и направь внимание к ноздрям.\nЗаметь прохладу воздуха на вдохе.\nЗаметь тепло на выдохе.\nДержись этой простой пары ощущений несколько минут."
           },
           "en": {
-            "title": "The in-breath as it is",
-            "body": "Sit. Watch the in-breath. Do not change it. Five cycles."
+            "title": "Cool and warm",
+            "body": "A version focused on the nostrils: cool inhale, warm exhale.\nSit and bring attention to your nostrils.\nNotice the coolness of the air on the inhale.\nNotice the warmth on the exhale.\nStay with this simple pair of sensations for a few minutes."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Дыхание",
-            "en": "Breath"
+            "ru": "Вернуть фокус",
+            "en": "Return to focus"
           }
         }
       }
@@ -6408,18 +6408,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Стопы",
-            "body": "Сядь. Заметь стопы. Потом кисти. Не двигай. Одно дыхание."
+            "title": "Тепло и прохлада",
+            "body": "Вариант сканирования по температуре: где в теле тепло, где прохладно.\nСядь и закрой глаза.\nНайди самое тёплое место в теле.\nНайди самое прохладное.\nПереводи внимание между ними несколько раз.\nЗаметь, что ощущения меняются сами, без твоих усилий."
           },
           "en": {
-            "title": "Feet",
-            "body": "Sit. Notice your feet. Then your hands. Do not move. One breath."
+            "title": "Warm and cool",
+            "body": "A temperature-based scan: where the body is warm, where it is cool.\nSit and close your eyes.\nFind the warmest place in your body.\nFind the coolest.\nMove attention between them a few times.\nNotice that the sensations change on their own, without your effort."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Тело",
-            "en": "Body"
+            "ru": "Услышать тело",
+            "en": "Hear the body"
           }
         }
       }
@@ -6463,18 +6463,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Что есть",
-            "body": "Сядь. Назови, что есть сейчас, одним словом. Не объясняй. Ещё одно дыхание."
+            "title": "Просто звуки",
+            "body": "Вариант только со звуками: принимать их все, не выбирая и не называя источники.\nСядь и закрой глаза.\nСлушай ближние звуки — в комнате.\nТеперь дальние — за окном, за стеной.\nНе решай, что это и нравится ли оно.\nПару минут будь просто слухом."
           },
           "en": {
-            "title": "What is here",
-            "body": "Sit. Name what is here now in one word. Do not explain. One more breath."
+            "title": "Just sounds",
+            "body": "A sounds-only version: receive them all without choosing or naming sources.\nSit and close your eyes.\nListen to near sounds — in the room.\nThen far ones — outside the window, beyond the wall.\nDo not decide what they are or whether you like them.\nFor a couple of minutes, be simply hearing."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Заметить",
-            "en": "Notice"
+            "ru": "Услышать мир",
+            "en": "Hear the world"
           }
         }
       }
@@ -6574,18 +6574,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Три звука",
-            "body": "Сядь. Назови три звука, которые слышишь. Не оценивай. Ещё одно дыхание."
+            "title": "Один предмет",
+            "body": "Вариант с предметом: две минуты смотреть на одну вещь всем вниманием.\nВыбери любой предмет перед собой.\nРассмотри его цвет, форму, фактуру.\nЗаметь детали, которых раньше не видел.\nМысль увела — вернись к предмету."
           },
           "en": {
-            "title": "Three sounds",
-            "body": "Sit. Name three sounds you hear. Do not judge. One more breath."
+            "title": "One object",
+            "body": "An object version: for two minutes, look at one thing with your full attention.\nPick any object in front of you.\nTake in its colour, shape, texture.\nNotice details you had not seen before.\nA thought pulled you away — return to the object."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Здесь",
-            "en": "Here"
+            "ru": "Очистить внимание",
+            "en": "Clear the attention"
           }
         }
       }
@@ -6631,18 +6631,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Вес",
-            "body": "Сядь. Почувствуй вес на сиденье. Не вставай. Три дыхания."
+            "title": "Опора стоя",
+            "body": "Вариант практики опоры, который можно сделать стоя — например, в очереди или перед трудным разговором.\nВстань ровно, стопы примерно на ширине плеч.\nПочувствуй вес на обеих стопах: пятки и подушечки.\nСлегка покачайся и найди точку равновесия.\nЗаметь, что пол держит тебя. Сделай несколько спокойных дыханий."
           },
           "en": {
-            "title": "Weight",
-            "body": "Sit. Feel the weight on the seat. Do not stand. Three breaths."
+            "title": "Standing support",
+            "body": "A standing version of the support practice — useful in a queue or before a hard conversation.\nStand evenly, feet about shoulder-width apart.\nFeel the weight on both feet: heels and the balls of the feet.\nSway slightly and find your balance point.\nNotice that the floor holds you. Take a few calm breaths."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Здесь",
-            "en": "Here"
+            "ru": "Устоять на ногах",
+            "en": "Stand steady"
           }
         }
       }
@@ -6686,18 +6686,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Тяжесть в руках",
-            "body": "Сядь. Положи руки на колени. На выдохе дай им стать тяжелее. Три дыхания."
+            "title": "Тёплые ладони",
+            "body": "Вариант с вниманием к теплу в ладонях — мягкий способ снизить напряжение.\nСядь и положи ладони на колени вверх.\nНа выдохе заметь тепло в центре ладоней.\nС каждым выдохом позволяй теплу чуть расти.\nЧерез несколько дыханий сожми ладони на секунду и отпусти."
           },
           "en": {
-            "title": "Heavy hands",
-            "body": "Sit. Hands on your knees. On the out-breath, let them grow heavy. Three breaths."
+            "title": "Warm palms",
+            "body": "A version focused on warmth in the palms — a gentle way to lower tension.\nSit and rest your palms on your knees, facing up.\nOn the out-breath, notice warmth in the centre of your palms.\nWith each out-breath, let the warmth grow a little.\nAfter a few breaths, squeeze your palms for a second and release."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Мягче",
-            "en": "Softer"
+            "ru": "Согреть руки",
+            "en": "Warm the hands"
           }
         }
       }
@@ -6741,18 +6741,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Как есть",
-            "body": "Сядь. Заметь, что сейчас слишком. Не убирай. Три дыхания рядом."
+            "title": "Вокруг трудного",
+            "body": "Короткий вариант: дыхание вокруг трудного ощущения, а не сквозь него.\nСядь и заметь, что сейчас давит или болит.\nНе ныряй внутрь ощущения — держись чуть сбоку.\nДыши «вокруг» него: вдох — заметил, выдох — позволил быть.\nЧерез несколько дыханий верни внимание в комнату."
           },
           "en": {
-            "title": "As it is",
-            "body": "Sit. Notice what feels like too much. Do not push it away. Three breaths beside it."
+            "title": "Around the difficult",
+            "body": "A short version: breathing around a difficult sensation rather than through it.\nSit and notice what is pressing or aching right now.\nDo not dive into the sensation — stay slightly to its side.\nBreathe \"around\" it: inhale — noticed, exhale — allowed it to be.\nAfter a few breaths, bring your attention back to the room."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Рядом",
-            "en": "Beside"
+            "ru": "Побыть рядом",
+            "en": "Stay beside it"
           }
         }
       }
@@ -6797,18 +6797,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "На выдохе",
-            "body": "Вдох. На выдохе отпусти плечи. Не держи. Ещё два раза."
+            "title": "Слово на выдохе",
+            "body": "Вариант с короткой фразой: на каждом выдохе мысленно говоришь «отпускаю».\nСядь и найди зажатое место в теле.\nВдох — заметь его.\nВыдох — мысленно скажи «отпускаю» и позволь месту смягчиться.\nПовтори несколько раз, не торопясь."
           },
           "en": {
-            "title": "On the out-breath",
-            "body": "In. On the out-breath, drop the shoulders. Do not hold. Two more times."
+            "title": "A word on the out-breath",
+            "body": "A version with a short phrase: on each out-breath, silently say \"release\".\nSit and find a tense spot in your body.\nInhale — notice it.\nExhale — silently say \"release\" and let the spot soften.\nRepeat a few times, unhurried."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Отпустить",
-            "en": "Drop"
+            "ru": "Выдохнуть лишнее",
+            "en": "Breathe it out"
           }
         }
       }
@@ -6853,18 +6853,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Челюсть мягче",
-            "body": "Ляг. Закрой глаза. На выдохе отпусти челюсть. Ещё четыре дыхания."
+            "title": "Счёт выдохам",
+            "body": "Если мысли не дают уснуть: считай только выдохи, от десяти к одному.\nЛяг и закрой глаза.\nСделай медленный выдох и мысленно скажи «десять».\nСледующий выдох — «девять». И так до одного.\nСбился — спокойно начни снова с десяти.\nДыши медленно, выдох чуть длиннее вдоха."
           },
           "en": {
-            "title": "Softer jaw",
-            "body": "Lie down. Close your eyes. On the out-breath, ease the jaw. Four more breaths."
+            "title": "Counting out-breaths",
+            "body": "If thoughts keep you awake: count only the out-breaths, from ten down to one.\nLie down and close your eyes.\nTake a slow out-breath and silently say \"ten\".\nNext out-breath — \"nine\". And so on down to one.\nLost count — calmly start again from ten.\nBreathe slowly, the out-breath slightly longer than the inhale."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Ко сну",
-            "en": "Toward bed"
+            "ru": "Уснуть спокойно",
+            "en": "Drift off calmly"
           }
         }
       }
@@ -6908,18 +6908,18 @@
         "body_kind": "script",
         "locales": {
           "ru": {
-            "title": "Один вопрос",
-            "body": "Сядь. Задай себе один вопрос. Не отвечай сразу. Три дыхания. Потом одно слово."
+            "title": "Вопрос вечера",
+            "body": "Вечерний вариант: один вопрос о прошедшем дне.\nСядь вечером и закрой глаза.\nСпроси: «Что сегодня было по-настоящему моим?»\nНе отвечай сразу.\nПобудь с вопросом несколько дыханий.\nЗапиши одно слово итога."
           },
           "en": {
-            "title": "One question",
-            "body": "Sit. Ask yourself one question. Do not answer yet. Three breaths. Then one word."
+            "title": "An evening question",
+            "body": "An evening version: one question about the day that passed.\nSit in the evening and close your eyes.\nAsk: \"What today was truly mine?\"\nDo not answer at once.\nStay with the question for a few breaths.\nWrite down one closing word."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Яснее",
-            "en": "Clearer"
+            "ru": "Собрать день",
+            "en": "Gather the day"
           }
         }
       }
@@ -7017,18 +7017,18 @@
         "body_kind": "affirmation_text",
         "locales": {
           "ru": {
-            "title": "Следующий шаг",
-            "body": "Я справлюсь с тем, что прямо сейчас. Скажи это один раз."
+            "title": "Один раз",
+            "body": "Самый короткий вариант.\nСкажи один раз: «Я справлюсь с тем, что прямо сейчас»."
           },
           "en": {
-            "title": "Next step",
-            "body": "I can handle what is in front of me now. Say it once."
+            "title": "Once",
+            "body": "The shortest version.\nSay once: \"I can handle what is in front of me now.\""
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Могу",
-            "en": "I can"
+            "ru": "Напомнить себе",
+            "en": "Remind yourself"
           }
         }
       }
@@ -7073,18 +7073,18 @@
         "body_kind": "affirmation_text",
         "locales": {
           "ru": {
-            "title": "Я выбираю",
-            "body": "Я выбираю следующий маленький шаг. Скажи это и сделай его."
+            "title": "Шаг сейчас",
+            "body": "Самый короткий вариант.\nСкажи: «Я выбираю следующий маленький шаг» — и сделай его."
           },
           "en": {
-            "title": "I choose",
-            "body": "I choose the next small step. Say it and do it."
+            "title": "The step now",
+            "body": "The shortest version.\nSay: \"I choose the next small step\" — and do it."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Выбор",
-            "en": "Choose"
+            "ru": "Сделать выбор",
+            "en": "Make the choice"
           }
         }
       }
@@ -7128,18 +7128,18 @@
         "body_kind": "affirmation_text",
         "locales": {
           "ru": {
-            "title": "К человеку",
-            "body": "Я могу сделать один тёплый шаг к человеку. Скажи это один раз."
+            "title": "Один шаг к человеку",
+            "body": "Самый короткий вариант.\nСкажи один раз: «Я могу сделать один тёплый шаг к человеку»."
           },
           "en": {
-            "title": "Toward a person",
-            "body": "I can take one warm step toward a person. Say it once."
+            "title": "One step toward a person",
+            "body": "The shortest version.\nSay once: \"I can take one warm step toward a person.\""
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "К ним",
-            "en": "Toward them"
+            "ru": "Сделать шаг к людям",
+            "en": "Take a step toward people"
           }
         }
       }
@@ -7246,12 +7246,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Меньше",
-            "body": "Семь дней убери одну лишнюю вещь из дня. Не возвращай её раньше срока."
+            "title": "Семь дней без лишнего",
+            "body": "Короткий повтор.\nСемь дней убери одну лишнюю вещь из дня. Не возвращай её раньше срока."
           },
           "en": {
-            "title": "Less",
-            "body": "For seven days, drop one extra thing from the day. Do not bring it back early."
+            "title": "Seven days without the extra",
+            "body": "A short repeat.\nFor seven days, drop one extra thing from the day. Do not bring it back early."
           }
         },
         "commitment_rule": "Каждый день без одной выбранной лишней вещи.",
@@ -7261,8 +7261,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Проще",
-            "en": "Simpler"
+            "ru": "Вернуть простоту",
+            "en": "Restore simplicity"
           }
         }
       }
@@ -7309,12 +7309,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Час без ленты",
-            "body": "Семь дней один час в день без лент. Поставь таймер. Не открывай."
+            "title": "Семь дней, час без ленты",
+            "body": "Короткий повтор.\nСемь дней один час в день без лент. Поставь таймер. Не открывай."
           },
           "en": {
-            "title": "An hour off feeds",
-            "body": "For seven days, one hour a day with no feeds. Set a timer. Do not open them."
+            "title": "Seven days, an hour off the feed",
+            "body": "A short repeat.\nFor seven days, one hour a day without feeds. Set a timer. Do not open them."
           }
         },
         "commitment_rule": "Один час в день без лент.",
@@ -7324,8 +7324,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Лимит",
-            "en": "Cap"
+            "ru": "Вернуть лимит",
+            "en": "Restore the limit"
           }
         }
       }
@@ -7371,12 +7371,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Не сейчас",
-            "body": "Семь дней не покупай то, что не планировал утром. Отложи."
+            "title": "Семь дней без импульса",
+            "body": "Короткий повтор.\nСемь дней не покупай то, что не планировал утром. Отложи."
           },
           "en": {
-            "title": "Not now",
-            "body": "For seven days, do not buy what you did not plan this morning. Put it off."
+            "title": "Seven days without impulse",
+            "body": "A short repeat.\nFor seven days, do not buy what you did not plan in the morning. Put it off."
           }
         },
         "commitment_rule": "Не покупать незапланированное.",
@@ -7386,8 +7386,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Отложить",
-            "en": "Later"
+            "ru": "Вернуть паузу",
+            "en": "Restore the pause"
           }
         }
       }
@@ -7434,12 +7434,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Одна лента",
-            "body": "Семь дней не держи больше одной ленты открытой. Лишнее закрой сразу."
+            "title": "Семь дней одной ленты",
+            "body": "Короткий повтор.\nСемь дней не держи больше одной ленты открытой. Лишнее закрой сразу."
           },
           "en": {
-            "title": "One feed",
-            "body": "For seven days, do not keep more than one feed open. Close the extra at once."
+            "title": "Seven days of one feed",
+            "body": "A short repeat.\nFor seven days, do not keep more than one feed open. Close the extra at once."
           }
         },
         "commitment_rule": "Не больше одной ленты на экране.",
@@ -7449,8 +7449,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Узже",
-            "en": "Narrower"
+            "ru": "Вернуть фокус",
+            "en": "Restore focus"
           }
         }
       }
@@ -7496,12 +7496,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Одно время",
-            "body": "Семь дней делай одно выбранное действие в одно и то же время. Действие не меняй."
+            "title": "Семь дней в одно время",
+            "body": "Короткий повтор.\nСемь дней делай одно выбранное действие в одно и то же время. Действие не меняй."
           },
           "en": {
-            "title": "The same time",
-            "body": "For seven days, do one chosen action at the same time. Do not change the action."
+            "title": "Seven days at the same time",
+            "body": "A short repeat.\nFor seven days, do one chosen action at the same time. Do not change the action."
           }
         },
         "commitment_rule": "Каждый день одно выбранное действие в одно время.",
@@ -7511,8 +7511,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Режим",
-            "en": "Same time"
+            "ru": "Вернуть ритм",
+            "en": "Restore the rhythm"
           }
         }
       }
@@ -7559,12 +7559,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Один и тот же час",
-            "body": "Семь дней ложись не позже выбранного часа. Не переноси на завтра."
+            "title": "Семь дней отбоя",
+            "body": "Короткий повтор правила.\nСемь дней ложись не позже выбранного часа. Не переноси на завтра."
           },
           "en": {
-            "title": "The same hour",
-            "body": "For seven days, lie down no later than the hour you chose. Do not push it to tomorrow."
+            "title": "Seven days of bedtime",
+            "body": "A short repeat of the rule.\nFor seven days, lie down no later than the hour you chose. Do not push it to tomorrow."
           }
         },
         "commitment_rule": "Ложись не позже выбранного часа каждый вечер.",
@@ -7574,8 +7574,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Режим",
-            "en": "Same hour"
+            "ru": "Вернуть режим",
+            "en": "Restore the hour"
           }
         }
       }
@@ -7621,12 +7621,12 @@
         "body_kind": "commitment_rule",
         "locales": {
           "ru": {
-            "title": "Семь подряд",
-            "body": "Семь дней подряд отмечай одно короткое действие. Пропуск обнуляет счёт."
+            "title": "Семь дней, коротко",
+            "body": "Короткий повтор семидневной серии.\nСемь дней подряд отмечай одно короткое действие. Пропуск обнуляет счёт."
           },
           "en": {
-            "title": "Seven in a row",
-            "body": "For seven days in a row, mark one short action. A miss resets the count."
+            "title": "Seven days, short",
+            "body": "A short repeat of the seven-day streak.\nFor seven days in a row, mark one short action. A miss resets the count."
           }
         },
         "commitment_rule": "Каждый день одно короткое действие без пропуска.",
@@ -7636,8 +7636,8 @@
         "allowed_exceptions": [],
         "presentation": {
           "outcome_label": {
-            "ru": "Ряд",
-            "en": "Streak"
+            "ru": "Начать серию",
+            "en": "Start a streak"
           }
         }
       }
@@ -7683,17 +7683,17 @@
         "locales": {
           "ru": {
             "title": "Медленный ритм",
-            "body": "Дыши носом в спокойном темпе: вдох примерно 5 секунд, выдох чуть длиннее, без задержек. Не форсируй и не делай глубже обычного. Продолжай 2 минуты."
+            "body": "Дыхание в спокойном темпе: около пяти-шести циклов в минуту, без задержек.\nСядь удобно.\nВдохни носом примерно на пять секунд.\nВыдохни чуть длиннее, без паузы.\nПродолжай две минуты. Не форсируй и не дыши глубже обычного."
           },
           "en": {
-            "title": "Paced breathing",
-            "body": "Breathe through your nose at a steady pace: in for about 5 seconds, out a little longer, with no holds. Do not force or deepen the breath. Continue for 2 minutes."
+            "title": "A slow rhythm",
+            "body": "Breathing at a calm pace: about five to six cycles a minute, with no holds.\nSit comfortably.\nInhale through the nose for about five seconds.\nExhale a little longer, without a pause.\nContinue for two minutes. Do not force and do not breathe deeper than usual."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Тише",
-            "en": "Quieter"
+            "ru": "Замедлить ритм",
+            "en": "Slow the rhythm"
           }
         }
       }
@@ -7738,18 +7738,75 @@
         "body_kind": "instruction",
         "locales": {
           "ru": {
-            "title": "Физиологический вздох",
-            "body": "Два коротких вдоха носом подряд (второй меньше), затем длинный выдох через рот. Повтори 3 раза в спокойном темпе. Не форсируй и не дыши слишком часто."
+            "title": "Двойной вдох",
+            "body": "Физиологический вздох: два коротких вдоха носом и длинный выдох ртом. Три раза.\nСядь удобно.\nСделай короткий вдох носом, затем ещё один, чуть меньше.\nВыдохни длинно через рот.\nПовтори три раза в спокойном темпе. Не форсируй."
           },
           "en": {
-            "title": "Physiological sigh",
-            "body": "Two short inhales through the nose in a row (the second smaller), then a long exhale through the mouth. Repeat 3 times at a comfortable pace. Do not force or breathe too rapidly."
+            "title": "A double inhale",
+            "body": "A physiological sigh: two short inhales through the nose and a long exhale through the mouth. Three times.\nSit comfortably.\nTake a short inhale through the nose, then another, slightly smaller.\nExhale long through the mouth.\nRepeat three times at a calm pace. Do not force."
           }
         },
         "presentation": {
           "outcome_label": {
-            "ru": "Сброс",
-            "en": "Reset"
+            "ru": "Сбросить давление",
+            "en": "Release the pressure"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "practice.grounding.001",
+        "content_class": "practice",
+        "family": "somatic",
+        "type": "grounding",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.practice_grounding"
+      },
+      "retrieval": {
+        "purpose": [
+          "grounding"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered",
+          "disconnected",
+          "tense"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Стопы в пол",
+            "body": "Сядь или встань. Прижми обе стопы к полу и держи давление несколько секунд. Заметь вес и контакт в подошвах. Не называй предметы вокруг и не сканируй всё тело."
+          },
+          "en": {
+            "title": "Feet on the floor",
+            "body": "Sit or stand. Press both feet firmly into the floor and hold the pressure for a few seconds. Notice weight and contact in the soles. Do not name objects around you and do not scan the whole body."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Опора",
+            "en": "Contact"
           }
         }
       }

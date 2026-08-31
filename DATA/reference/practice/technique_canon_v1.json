@@ -1335,6 +1335,33 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.practice_grounding",
+      "content_class": "practice",
+      "type": "grounding",
+      "canonical_description": "A brief somatic action: sit or stand and press both feet firmly into the floor, then notice the pressure, weight, and contact in the soles. Do not name outer objects and do not scan the whole body. Distinct from sensory_grounding (naming sense data) and from meditation.grounding (sitting to notice contact without the press). Not a treatment for anxiety, panic, trauma, or dissociation.",
+      "source_refs": [
+        {
+          "source": "Royal Berkshire NHS Foundation Trust — Grounding techniques to help with anxiety",
+          "url": "https://www.royalberkshire.nhs.uk/media/0ptda3ym/grounding-techniques-to-help-with-anxiety_apr26.pdf",
+          "locus": "Feel your feet on the ground: whether sitting or standing, press your feet firmly and feel the ground beneath you for an immediate connection to the present moment and the space you are in.",
+          "note": "official_health. Method confirmation for a brief feet-press / body-contact action. Treatment/efficacy claims not imported."
+        },
+        {
+          "source": "Singh, Wahler, Adkins & Myers (2003) — Soles of the Feet: a mindfulness-based self-control intervention",
+          "url": "https://doi.org/10.1016/S0891-4222(03)00026-X",
+          "locus": "A simple technique that shifts attention and awareness to a neutral body point, the soles of the feet.",
+          "note": "academic_description. Method confirmation for directing attention into sole-of-foot contact. Aggression/clinical-population claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for anxiety, panic, trauma, dissociation, PTSD, or any mental or physical health condition.",
+        "If pressing into the body or focusing on the feet increases distress, flashbacks, or panic, stop.",
+        "The practice does not guarantee calm, focus, or emotional regulation."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.grounding`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 2/42 P1 types sourced (`practice.paced_breathing`, `practice.physiological_sigh`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.body_scan`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 3/42 P1 types sourced (`practice.paced_breathing`, `practice.physiological_sigh`, `practice.grounding`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-31 | **P1 type `practice.grounding` sourced.** `technique.practice_grounding` accepted (Royal Berkshire NHS + Singh et al. 2003 Soles of the Feet). Brief feet-press / sole-contact action; distinct from sensory_grounding and meditation.grounding. `practice.grounding.001` active. Coverage matrix: 136 items, 3/42 P1 types sourced. Next P1 type: `practice.body_scan`. |
 | 2026-08-31 | **P1 type `physiological_sigh` sourced.** `practice.physiological_sigh` sourced via `technique.physiological_sigh` (Vlemincx et al. 2010 + KU Leuven resetter hypothesis + instructed-sigh relief). Two consecutive nasal inhales (second smaller), long exhale through mouth; a few comfortable repetitions. `practice.physiological_sigh.001` active. Coverage matrix: 135 items, 2/42 P1 types sourced. Next P1 type: `practice.grounding`. |
 | 2026-08-31 | **P1 type coverage starts.** `practice.paced_breathing` sourced via `technique.paced_breathing` (NHS Bradford District Care Trust Ready to Relate + Harvard Health). Slow, steady breath (~5–6/min), nose inhale, exhale slightly longer, no hold. `practice.paced_breathing.001` active. Coverage matrix: 134 items, 1/42 P1 types sourced. Next P1 type: `practice.physiological_sigh`. |
 | 2026-08-30 | **All 26 P0 need cells sourced.** `need.habit_change.prepare` closed via existing `technique.consistency_challenge` (seven-day replacement rule: when old pull comes, do one new short action in its place). Skipped types remain `box_breathing`, `energizing_breath`, `abstinence`. Next: P1 type coverage or skipped-type reassessment. |
