@@ -829,6 +829,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.consumption_limit",
+      "content_class": "discipline",
+      "type": "consumption_limit",
+      "canonical_description": "A short discipline rule in which the person, for a set period (for example, seven days), defers any unplanned purchase that was not on their plan for the day. The rule is to put the item off and review it later rather than buying immediately. Essentials such as food, medicine, and necessary transport are excluded. The rule does not guarantee savings, reduced spending, or improved financial well-being, and it is not a treatment for compulsive spending, shopping addiction, or any mental or physical health condition.",
+      "source_refs": [
+        {
+          "source": "The Independent — The 48-hour rule: the simple hack that experts say can help you stop impulse spending",
+          "url": "https://www.independent.co.uk/money/stop-impulse-spending-48-hour-rule-b2990292.html",
+          "locus": "MoneySuperMarket expert Kara Gammell describes the 48-hour rule: wait, put it in your basket, give yourself 48 hours, and if you still want it, then make the purchase. It creates a buffer, slows you down, and helps you think.",
+          "note": "consumer_finance journalism. Method confirmation for a short delay/pause rule before unplanned purchases. Savings/efficacy claims not imported."
+        },
+        {
+          "source": "Shah et al. (2023) — Can planning prompt be a boon for impulsive customers? Moderating roles of product category and decisional procrastination",
+          "url": "https://doi.org/10.1002/mar.21490",
+          "locus": "Planning prompts are a form of implementation intention (Gollwitzer 1993, 1999) that help consumers plan purchases in advance and reduce impulse buying; e.g., sticking to the shopping plan made prior to entry.",
+          "note": "academic_description. Method confirmation for pre-planning purchases to reduce impulse buying. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for compulsive spending, shopping addiction, or any mental or physical health condition.",
+        "If delaying purchases causes anxiety, distress, or conflict with essential needs, stop or adjust the rule.",
+        "The rule does not guarantee savings, reduced spending, or improved financial well-being.",
+        "If spending feels uncontrollable or is causing significant distress, seek professional financial or mental-health support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.digital_limit",
       "content_class": "discipline",
       "type": "digital_limit",

@@ -46,7 +46,8 @@
     "meditation.reflection_meditation.001",
     "affirmation.agency.001",
     "affirmation.relationship.001",
-    "discipline.digital_limit.001"
+    "discipline.digital_limit.001",
+    "discipline.consumption_limit.001"
   ],
   "items": [
     {
@@ -2564,9 +2565,10 @@
         "item_id": "discipline.consumption_limit.001",
         "content_class": "discipline",
         "type": "consumption_limit",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.simplicity.release"
+        "seed_cell": "need.simplicity.release",
+        "technique_id": "technique.consumption_limit"
       },
       "retrieval": {
         "purpose": [
@@ -4823,9 +4825,10 @@
         "item_id": "discipline.consumption_limit.002",
         "content_class": "discipline",
         "type": "consumption_limit",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.simplicity.release"
+        "seed_cell": "need.simplicity.release",
+        "technique_id": "technique.consumption_limit"
       },
       "retrieval": {
         "purpose": [
@@ -7332,9 +7335,10 @@
         "item_id": "discipline.consumption_limit.003",
         "content_class": "discipline",
         "type": "consumption_limit",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.simplicity.release"
+        "seed_cell": "need.simplicity.release",
+        "technique_id": "technique.consumption_limit"
       },
       "retrieval": {
         "purpose": [
