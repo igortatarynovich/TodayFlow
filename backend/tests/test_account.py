@@ -339,7 +339,7 @@ def test_create_astro_profile(client: TestClient, test_user: User, auth_token: s
     assert data["location_name"] == "New York"
     assert data.get("birth_facts_corrections_remaining") == 3
     assert "core_profile" in data
-    assert data["core_profile"].get("profile_version") == "core-v2"
+    assert data["core_profile"].get("profile_version") == "core-v3"
     assert isinstance(data["core_profile"].get("missing_fields"), list)
 
 
@@ -509,7 +509,7 @@ def test_update_astro_profile(client: TestClient, test_user: User, auth_token: s
     assert data["relation"] == "child"
     assert data["location_name"] == "Moscow"
     assert "core_profile" in data
-    assert data["core_profile"].get("profile_version") == "core-v2"
+    assert data["core_profile"].get("profile_version") == "core-v3"
 
 
 def test_delete_astro_profile_requires_auth(client: TestClient):
@@ -599,7 +599,7 @@ def test_set_primary_astro_profile(
     data = set_primary_response.json()
     assert data["is_primary"] is True
     assert "core_profile" in data
-    assert data["core_profile"].get("profile_version") == "core-v2"
+    assert data["core_profile"].get("profile_version") == "core-v3"
     assert data["core_profile"].get("astro", {}).get("profile_id") == profile2_id
 
     # Verify profile1 is no longer primary

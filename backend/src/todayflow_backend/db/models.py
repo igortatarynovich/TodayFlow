@@ -196,6 +196,7 @@ class TarotReminderSetting(Base):
     hour = Column(Integer, nullable=False, default=9)
     minute = Column(Integer, nullable=False, default=0)
     enabled = Column(Boolean, default=True)
+    next_run_at = Column(DateTime, nullable=True)
     last_sent_at = Column(DateTime, nullable=True)
 
 

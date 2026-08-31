@@ -85,7 +85,7 @@ def test_account_core_profile_contract(client: TestClient, auth_headers: dict[st
     assert response.status_code == 200
     payload = response.json()
 
-    assert payload["profile_version"] == "core-v2"
+    assert payload["profile_version"] == "core-v3"
     assert isinstance(payload["profile_hash"], str) and len(payload["profile_hash"]) == 40
     assert payload["is_ready"] is True
     assert payload["person"]["first_name"] == "Vika"
@@ -110,7 +110,7 @@ def test_day_flow_returns_consistency_block(client: TestClient, auth_headers: di
     assert response.status_code == 200
     payload = response.json()
 
-    assert payload["core_profile"]["profile_version"] == "core-v2"
+    assert payload["core_profile"]["profile_version"] == "core-v3"
     assert "consistency" in payload and isinstance(payload["consistency"], dict)
     assert isinstance(payload["consistency"].get("rules_applied"), list)
     assert payload["consistency"].get("do_focus")
@@ -124,7 +124,7 @@ def test_numerology_explain_returns_consistency_block(client: TestClient, auth_h
     assert response.status_code == 200
     payload = response.json()
 
-    assert payload["core_profile"]["profile_version"] == "core-v2"
+    assert payload["core_profile"]["profile_version"] == "core-v3"
     assert isinstance(payload.get("consistency"), dict)
     assert isinstance(payload["consistency"].get("rules_applied"), list)
     assert payload["number"]["reduced_value"] is not None
