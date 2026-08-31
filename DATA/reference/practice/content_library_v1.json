@@ -7865,6 +7865,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.mindful_movement.001",
+        "content_class": "practice",
+        "family": "movement",
+        "type": "mindful_movement",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.mindful_movement"
+      },
+      "retrieval": {
+        "purpose": [
+          "presence"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Движение с вниманием",
+            "body": "Сядь или встань удобно. Медленно подними обе руки и так же медленно опусти — или перенеси вес с одной стопы на другую. Следи за ощущением в теле, пока оно движется. Если внимание ушло, верни его к движению. Не растягивайся до упора и не превращай это в зарядку."
+          },
+          "en": {
+            "title": "Movement with attention",
+            "body": "Sit or stand comfortably. Slowly raise both arms and lower them, or shift your weight from one foot to the other. Keep attention on the sensation of the body as it moves. If attention leaves, return it to the movement. Do not stretch to a hold, and do not turn this into a workout."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "В теле",
+            "en": "In the body"
+          }
+        }
+      }
     }
   ]
 }

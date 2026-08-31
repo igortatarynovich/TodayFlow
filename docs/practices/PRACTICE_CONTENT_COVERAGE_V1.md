@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.mindful_movement`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 4/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.walking`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 5/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-31 | **P1 `practice.mindful_movement` sourced.** `technique.mindful_movement` accepted (Sussex Mindfulness Centre NHS + UHDB NHS + RUH Bath PHY051). Brief movement-with-attention, not mobility/stretch/sit-mindfulness/walk. `practice.mindful_movement.001` active. Coverage matrix: 138 items, 5/42 P1 sourced. Next: `practice.walking`. |
 | 2026-08-31 | **P1 `practice.body_scan` skipped; `practice.stretching` sourced.** Sequential body observation already lives in meditation `technique.body_scan` — no distinct practice kernel. `technique.stretching` accepted (NHS Flexibility + Sitting exercises): brief hold-stretch, not mobility/PMR. `practice.stretching.001` active. Coverage matrix: 137 items, 4/42 P1 sourced. Next: `practice.mindful_movement`. |
 | 2026-08-31 | **P1 type `practice.grounding` sourced.** `technique.practice_grounding` accepted (Royal Berkshire NHS + Singh et al. 2003 Soles of the Feet). Brief feet-press / sole-contact action; distinct from sensory_grounding and meditation.grounding. `practice.grounding.001` active. Coverage matrix: 136 items, 3/42 P1 types sourced. Next P1 type: `practice.body_scan`. |
 | 2026-08-31 | **P1 type `physiological_sigh` sourced.** `practice.physiological_sigh` sourced via `technique.physiological_sigh` (Vlemincx et al. 2010 + KU Leuven resetter hypothesis + instructed-sigh relief). Two consecutive nasal inhales (second smaller), long exhale through mouth; a few comfortable repetitions. `practice.physiological_sigh.001` active. Coverage matrix: 135 items, 2/42 P1 types sourced. Next P1 type: `practice.grounding`. |

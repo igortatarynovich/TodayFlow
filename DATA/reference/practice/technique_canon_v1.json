@@ -1401,6 +1401,39 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.mindful_movement",
+      "content_class": "practice",
+      "type": "mindful_movement",
+      "canonical_description": "Stand or sit. Make one slow, comfortable movement — for example raise both arms and lower them, or shift weight from one foot to the other — and keep attention on the sensations of the moving body. When attention leaves the movement, return. Distinct from mobility (joint movement without attention as the kernel), stretching (a held stretch), sitting mindfulness (still attention), and walking (locomotion as the form). Not a workout, yoga class, or treatment.",
+      "source_refs": [
+        {
+          "source": "Sussex Mindfulness Centre NHS — Guided mindfulness and meditation practices",
+          "url": "https://sussexmindfulnesscentre.nhs.uk/learn-mindfulness/guided-mindfulness-and-meditation-practices-and-resources/",
+          "locus": "Lists Mindful Movement as a distinct practice from sitting, body scan, and Mindful walking. Notes that if starting alone, the safest practices are usually the short ones (less than about ten minutes) and ones involving walking or movement; stop if a practice feels uncomfortable.",
+          "note": "official_health. Method confirmation that mindful movement is a named practice separate from walking and sitting. Course-length / Chi-Kung scripts and wellbeing claims not imported."
+        },
+        {
+          "source": "University Hospitals of Derby and Burton NHS — Audio resources for mindfulness",
+          "url": "https://www.uhdb.nhs.uk/audio-resources-for-mindfulness",
+          "locus": "Clinical psychology audio set lists Mindful movement practice as a separate track from Mindful walking meditation (and from sitting / relaxation tracks).",
+          "note": "official_health. Method confirmation that movement-with-attention is not the same item as walking meditation. Cancer-course and mood/insomnia claims not imported."
+        },
+        {
+          "source": "Royal United Hospitals Bath NHS — Mindfulness and Relaxation (PHY051)",
+          "url": "https://www.ruh.nhs.uk/patients/patient_information/PHY051_Mindfulness_and_relaxation.pdf",
+          "locus": "How to be mindful, tip 3 Move: whether running, walking, or even stretching at your desk, become aware of your body's sensations. How are you feeling? Do you have any muscular tension?",
+          "note": "official_health. Method confirmation for attending to bodily sensation during movement. Stress/anxiety/depression claims and the separate mindful-walking script not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stay in a comfortable, pain-free range. Stop if it hurts or the practice feels overwhelming.",
+        "Not a treatment for pain, anxiety, trauma, or any mental or physical health condition, and not a workout or yoga class.",
+        "If strong distress arises, stop. Brief movement-with-attention is not a substitute for a taught mindfulness course when one is needed."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
