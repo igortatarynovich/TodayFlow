@@ -44,7 +44,8 @@
     "meditation.grounding.001",
     "meditation.letting_go.001",
     "meditation.reflection_meditation.001",
-    "affirmation.agency.001"
+    "affirmation.agency.001",
+    "affirmation.relationship.001"
   ],
   "items": [
     {
@@ -2444,9 +2445,10 @@
         "item_id": "affirmation.relationship.001",
         "content_class": "affirmation",
         "type": "relationship",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.connection.connect"
+        "seed_cell": "need.connection.connect",
+        "technique_id": "technique.relationship"
       },
       "retrieval": {
         "purpose": [
@@ -4578,9 +4580,10 @@
         "item_id": "affirmation.relationship.002",
         "content_class": "affirmation",
         "type": "relationship",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.connection.connect"
+        "seed_cell": "need.connection.connect",
+        "technique_id": "technique.relationship"
       },
       "retrieval": {
         "purpose": [
@@ -7085,9 +7088,10 @@
         "item_id": "affirmation.relationship.003",
         "content_class": "affirmation",
         "type": "relationship",
-        "status": "draft",
+        "status": "active",
         "semantic_version": "content-taxonomy-v1.1",
-        "seed_cell": "need.connection.connect"
+        "seed_cell": "need.connection.connect",
+        "technique_id": "technique.relationship"
       },
       "retrieval": {
         "purpose": [

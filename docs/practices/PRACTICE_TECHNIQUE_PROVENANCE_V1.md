@@ -1,7 +1,7 @@
 # Practice Technique Provenance v1
 
 **Статус:** `ACCEPTED` — SoT происхождения техник библиотеки.  
-**Версия:** 1.45 (2026-08-30) — lightweight fill; all 26 P0 need cells sourced; agency accepted; reflection_meditation accepted; letting_go accepted; grounding accepted; open_awareness accepted; body_scan accepted; breath_awareness accepted; evening_ritual accepted; morning_ritual accepted; free_writing accepted; environment_reset accepted; intention_setting accepted; mindfulness accepted; digital_pause accepted; reduction accepted; consistency_challenge accepted; acceptance accepted; abstinence skipped_for_now; attention_discipline accepted; routine_commitment accepted; progressive_relaxation accepted; transition_ritual accepted; priority_setting accepted; creative_prompt accepted; connection_action accepted; journaling accepted; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
+**Версия:** 1.46 (2026-08-30) — lightweight fill; all 26 P0 need cells sourced; relationship accepted; agency accepted; reflection_meditation accepted; letting_go accepted; grounding accepted; open_awareness accepted; body_scan accepted; breath_awareness accepted; evening_ritual accepted; morning_ritual accepted; free_writing accepted; environment_reset accepted; intention_setting accepted; mindfulness accepted; digital_pause accepted; reduction accepted; consistency_challenge accepted; acceptance accepted; abstinence skipped_for_now; attention_discipline accepted; routine_commitment accepted; progressive_relaxation accepted; transition_ritual accepted; priority_setting accepted; creative_prompt accepted; connection_action accepted; journaling accepted; self_check_in accepted; micro_action accepted; sleep_discipline accepted; sleep accepted; relaxation accepted; body_release accepted; capability accepted; self_trust skipped; research ladder archived, non-blocking.  
 **Владелец:** Product + Research.  
 **Parent:** [KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md](../KNOWLEDGE_CORE_RESEARCH_ORDER_V1.md) (иерархия доказательности, не обязательная лестница fill).  
 **Аналог provenance (не копировать астрологию):** [INTERPRETATION_LIBRARY_V1.md](../astrology/INTERPRETATION_LIBRARY_V1.md) §6.8.  
@@ -276,8 +276,8 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 ## 11. Что дальше
 
 1. Research escalation **закрыта как archive**. Safety Review V1.1 **не** открывается.
-2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness`, `intention_setting`, `environment_reset`, `free_writing`, `morning_ritual`, `evening_ritual`, `breath_awareness`, `body_scan`, `open_awareness`, `grounding`, `letting_go`, `reflection_meditation`, `agency` = `accepted`. All 26 P0 need cells sourced. P0 type coverage: 37/44 P0 spine types sourced. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`.
-3. Следующий Product: **P0 type coverage** — следующий non-skipped P0 spine type по ledger order (`affirmation.relationship`) — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md).
+2. `extended_exhale`, `focused_attention`, `mobility`, `sensory_grounding`, `prompted_reflection`, `capability`, `body_release`, `relaxation`, `sleep`, `sleep_discipline`, `micro_action`, `self_check_in`, `journaling`, `connection_action`, `creative_prompt`, `priority_setting`, `transition_ritual`, `progressive_relaxation`, `routine_commitment`, `attention_discipline`, `acceptance`, `consistency_challenge`, `reduction`, `digital_pause`, `mindfulness`, `intention_setting`, `environment_reset`, `free_writing`, `morning_ritual`, `evening_ritual`, `breath_awareness`, `body_scan`, `open_awareness`, `grounding`, `letting_go`, `reflection_meditation`, `agency`, `relationship` = `accepted`. All 26 P0 need cells sourced. P0 type coverage: 38/44 P0 spine types sourced. `box_breathing`, `energizing_breath`, `abstinence` и `self_trust` = `skipped_for_now`.
+3. Следующий Product: **P0 type coverage** — следующий non-skipped P0 spine type по ledger order (`discipline.digital_limit`) — [PRACTICE_LIBRARY_FILL_V1](./PRACTICE_LIBRARY_FILL_V1.md).
 4. Остальные items остаются `llm_provisional`, пока fill не перепишет ячейку.
 
 ---
@@ -286,6 +286,7 @@ Items #13–#133 (остальные P0 cells, type-spine, duration/EN/context s
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-08-30 | v1.46 — `technique.relationship` accepted (Stinson et al. 2011 + Cohen & Sherman 2014); P0 type coverage: 38/44 P0 spine types sourced; next = `discipline.digital_limit` |
 | 2026-08-30 | v1.45 — `technique.agency` accepted (Cohen & Sherman 2014 + Steele 1988); P0 type coverage: 37/44 P0 spine types sourced; next = `affirmation.relationship` |
 | 2026-08-30 | v1.44 — `technique.reflection_meditation` accepted (NHS Scotland MBSR + Mindful.net); P0 type coverage: 36/44 P0 spine types sourced; next = `affirmation.agency` |
 | 2026-08-30 | v1.43 — `technique.letting_go` accepted (NHS inform + Allina Health); P0 type coverage: 35/44 P0 spine types sourced; next = `meditation.reflection_meditation` |

@@ -175,6 +175,34 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.relationship",
+      "content_class": "affirmation",
+      "type": "relationship",
+      "canonical_description": "A brief relationship-oriented affirmation in which the person states a simple, first-person statement that they can take one warm step toward another person (for example, 'I can take one warm step toward a person'). The statement may be spoken once or twice. It is not a guarantee that the person will connect, be accepted, or improve a relationship, and it is not a treatment for loneliness, social anxiety, or any mental or physical health condition.",
+      "source_refs": [
+        {
+          "source": "Stinson, Logel, Shepherd, Zanna (2011) — Rewriting the Self-Fulfilling Prophecy of Social Rejection",
+          "url": "https://doi.org/10.1177/0956797611417725",
+          "locus": "A self-affirmation intervention improved insecure participants' relational security and experimenter-rated social behavior, with more welcoming social behavior observed up to 4 and 8 weeks after the intervention. Self-affirmation was expected to buffer against social self-threats and improve social behavior in relationship contexts.",
+          "note": "academic_description. Method confirmation for using self-affirmation to support warmer, less defensive social behavior. Efficacy/treatment claims not imported."
+        },
+        {
+          "source": "Cohen & Sherman (2014) — The Psychology of Change: Self-Affirmation and Social Psychological Intervention",
+          "url": "https://www.annualreviews.org/doi/10.1146/annurev-psych-010213-115137",
+          "locus": "Self-affirmation theory addresses interpersonal and intergroup relationships; affirmations can reduce defensive behavior in social encounters and promote trust, responsiveness, and more constructive relationship functioning. Self-affirmations are acts that demonstrate one's adequacy.",
+          "note": "academic_description. Method confirmation for relationship-domain self-affirmation. Efficacy/treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Not a treatment for loneliness, social anxiety, relationship problems, or any mental or physical health condition.",
+        "If the statement increases pressure, guilt, or fear of rejection, stop using it.",
+        "The affirmation does not guarantee connection, acceptance, or improved relationships.",
+        "If persistent social or emotional difficulties are concerning, seek professional support."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.agency",
       "content_class": "affirmation",
       "type": "agency",
