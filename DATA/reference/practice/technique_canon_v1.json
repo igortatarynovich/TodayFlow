@@ -1594,6 +1594,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.future_self",
+      "content_class": "practice",
+      "type": "future_self",
+      "canonical_description": "Pick a later time — a year from now is enough. Picture who you would be then, in ordinary detail, then stop. The kernel is a short image of a later self, not naming an intention, not rehearsing a next action, not a free letter, and not treating the picture as a promised outcome. Distinct from intention_setting, visualization, and journaling. Not Best Possible Self as a timed writing protocol, not a letter-to-self programme, and not manifestation.",
+      "source_refs": [
+        {
+          "source": "University of Edinburgh — Reflection Toolkit: Writing letters to your future and past selves",
+          "url": "https://reflection.ed.ac.uk/reflectors-toolkit/self-awareness/writing-letters",
+          "locus": "This activity is about imagining where you are and who you are going to be sometime in the future. Five years is often used as the point in the future to envision. This letter focuses on who you want to be.",
+          "note": "official_education. Method confirmation for picturing a later self (who you would be). Full letter protocol, past-self letter, and 'am I on track' assessment not imported."
+        },
+        {
+          "source": "Greater Good Science Center — Best Possible Self (King 2001)",
+          "url": "https://ggia.berkeley.edu/practice/best_possible_self",
+          "locus": "Take a moment to imagine your life in the future. Imagine a brighter future in which you are your best self.",
+          "note": "academic / educational. Method confirmation for imagining yourself later as a later self. 15-minute continuous writing, two-week protocol, and happiness/optimism claims not imported."
+        },
+        {
+          "source": "Hershfield (2011) — Future self-continuity: how conceptions of the future self transform intertemporal choice, Annals of the New York Academy of Sciences",
+          "url": "https://doi.org/10.1111/j.1749-6632.2011.06201.x",
+          "locus": "When the future self shares similarities with the present self, when it is viewed in vivid and realistic terms, and when it is seen in a positive light.",
+          "note": "academic. Method confirmation for vividly picturing a later self. Saving, VR age-progression, and behavioral-outcome claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if picturing a later you makes you feel worse or turns into rumination about a gap you cannot close today.",
+        "Not a treatment, not a guaranteed future, and not a way to make an outcome arrive."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

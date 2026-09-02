@@ -1,10 +1,10 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-31
+Last updated: 2026-09-02
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (P1 VISUALIZATION, 2026-08-31):** P1 type `practice.visualization` sourced via `technique.practice_visualization` (UHD NHS Mental Practice + Feltz & Landers 1983 + Holmes & Collins 2001): pick one upcoming action, imagine doing it step by step without moving, stop. Distinct from intention_setting, future_self, and meditation.visualization. Not GMI/stroke rehab/manifestation. `practice.visualization.001` active. Coverage 143 items, 10/42 P1 sourced. Next: `practice.future_self`.
+**NOW (P1 FUTURE SELF, 2026-09-02):** P1 type `practice.future_self` sourced via `technique.future_self` (University of Edinburgh Reflection Toolkit + Greater Good Best Possible Self / King 2001 + Hershfield 2011): pick a later time, picture who you would be then in ordinary detail, stop. Distinct from intention_setting, visualization, and journaling. Not BPS writing protocol, letter programme, or manifestation. `practice.future_self.001` active. Coverage 144 items, 11/42 P1 sourced. Next: `practice.boundary_action`.
 
 **NOW (GLANCE AUTHORITY, 2026-08-31):** Glance Daily Focus is not a fifth Today act and not an importance layer. Production `T3.priority` = Personal `do[]`, else persisted `today_move` (not Global expect/chips, not `buildGlanceDailyFocus`). Synthesizer stays on legacy `?experience=1` only. `TodayGlanceAct` remains unmounted. Dead `ProfileCharacterScene.tsx` deleted. Tests: `todayMyDayPriority` + live frames. Leftover Glance files stay post-MVP like other launch-cut surfaces.
 
@@ -2835,6 +2835,7 @@ Ordered work (aligns with canon §7):
 Use format:
 - `YYYY-MM-DD` | `Area` | `Change` | `Status` | `Notes`
 
+- 2026-09-02 | Practices / Canon | **Library fill: future_self sourced** | **ACCEPTED** | P1 type `practice.future_self` via `technique.future_self` (University of Edinburgh Reflection Toolkit + Greater Good Best Possible Self / King 2001 + Hershfield 2011). Brief later-self image; not intention_setting/visualization/journaling. Not BPS writing protocol, letter programme, or manifestation. `practice.future_self.001` active. Next = practice.boundary_action. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-08-31 | Practices / Canon | **Library fill: visualization sourced** | **ACCEPTED** | P1 type `practice.visualization` via `technique.practice_visualization` (UHD NHS Mental Practice + Feltz & Landers 1983 + Holmes & Collins 2001). Brief mental rehearsal of one upcoming action; not intention_setting/future_self/meditation.visualization. Not GMI/stroke rehab/manifestation. `practice.visualization.001` active. Next = practice.future_self. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-08-31 | Practices / Canon | **Library fill: review sourced** | **ACCEPTED** | P1 type `practice.review` via `technique.review` (NHS Transformation Partners End of Shift Wellbeing Checklist + UH Bristol reflective writing + NHS Borders look back). Brief two-pole look-back; not journaling/prompted_reflection/gratitude/self_check_in/evening_ritual. Not Gibbs/AAR. `practice.review.001` active. Next = practice.visualization. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-08-31 | Practices / Canon | **Library fill: gratitude sourced** | **ACCEPTED** | P1 type `practice.gratitude` via `technique.practice_gratitude` (NHS 10 stress busters + Every Mind Matters stress + Greater Good Three Good Things). Brief constrained list of three things that went well or that you are thankful for; not journaling/prompted_reflection/meditation.gratitude. `practice.gratitude.001` active. Next = practice.review. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).

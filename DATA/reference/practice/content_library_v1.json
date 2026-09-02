@@ -8195,6 +8195,60 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.future_self.001",
+        "content_class": "practice",
+        "family": "intention",
+        "type": "future_self",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.future_self"
+      },
+      "retrieval": {
+        "purpose": [
+          "confidence"
+        ],
+        "domain": [],
+        "input_state": [
+          "uncertain"
+        ],
+        "direction": [
+          "prepare"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Ты позже",
+            "body": "Выбери более позднее время — хватит года. Сиди спокойно. Представь, кто ты тогда будешь — обычными деталями. Потом остановись. Не репетируй следующее дело и не считай картинку обещанным итогом."
+          },
+          "en": {
+            "title": "A later you",
+            "body": "Pick a later time — a year from now is enough. Sit still. Picture who you would be then, in ordinary detail. Then stop. Do not rehearse a next action, and do not treat the picture as a promised outcome."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Увидеть позже",
+            "en": "See later you"
+          }
+        }
+      }
     }
   ]
 }

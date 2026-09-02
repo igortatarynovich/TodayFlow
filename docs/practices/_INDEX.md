@@ -5,7 +5,7 @@
 | Документ | Роль |
 |----------|------|
 | [PRACTICE_CONTENT_TAXONOMY_V1.md](./PRACTICE_CONTENT_TAXONOMY_V1.md) | **SoT библиотеки** (v1.2): class → type → attributes · Canonical Technique → Item expression · pipeline Meaning→Retrieval→Library. Vocab: `DATA/reference/practice/content_taxonomy_v1.json` |
-| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Coverage** (v1.22): 26/26 P0 cells · type spine. Architecture stands. All 26 P0 need cells sourced. P1: 10/42. Next = `practice.future_self` |
+| [PRACTICE_CONTENT_COVERAGE_V1.md](./PRACTICE_CONTENT_COVERAGE_V1.md) | **Coverage** (v1.22): 26/26 P0 cells · type spine. Architecture stands. All 26 P0 need cells sourced. P1: 11/42. Next = `practice.boundary_action` |
 | [PRACTICE_LIBRARY_FILL_V1.md](./PRACTICE_LIBRARY_FILL_V1.md) | **Active fill:** lightweight provenance → accepted/skipped → Content Item. Не research ladder |
 | [PRACTICE_TECHNIQUE_PROVENANCE_V1.md](./PRACTICE_TECHNIQUE_PROVENANCE_V1.md) | **SoT происхождения техники** (v1.33): одна запись на технику. LLM не источник метода. Meaning не знает `item_id` / `technique_id` |
 | [CONTENT_LIBRARY_SELECTION_V1.md](./CONTENT_LIBRARY_SELECTION_V1.md) | **Runtime selector** (v1.0): deterministic selection of active Content Item by need (purpose/direction/state/context). No LLM, no randomness. Code: `services/content_library_selection_v1.py` |
