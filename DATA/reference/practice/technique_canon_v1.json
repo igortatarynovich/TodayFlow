@@ -1690,6 +1690,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.music",
+      "content_class": "practice",
+      "type": "music",
+      "canonical_description": "Pick one short track you already know. Play it once and listen only to that — do not scroll for another — then stop when it ends or after about two minutes. The kernel is a single deliberate listen, not sketching, not a creative prompt mark, and not a background layer under another practice. Distinct from drawing, creative_prompt, and session accompaniment. Not music therapy, not a playlist-building programme, and not a sleep protocol.",
+      "source_refs": [
+        {
+          "source": "NHS Every Mind Matters — Low mood and depression",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-health-issues/low-mood/",
+          "locus": "Boost your mood with music. Music can be a powerful way to change our feelings. See if you can create a playlist to listen to when feeling low – start with slower choices and gradually move to faster, uplifting songs.",
+          "note": "official_health. Method confirmation for deliberate listening as a wellbeing act. Full playlist programme, mood-lift efficacy claims, and treatment guidance not imported."
+        },
+        {
+          "source": "NHS Every Mind Matters — Fall asleep faster and sleep better",
+          "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/how-to-fall-asleep-faster-and-sleep-better/",
+          "locus": "Some things you could try to help you relax: reading something you enjoy; meditation; breathing exercises; listening to calming music; listening to a podcast. Try a relaxing activity like gentle yoga, reading a book or listening to quiet music.",
+          "note": "official_health. Method confirmation for listening to calming or quiet music as a short relax act. Bedtime routine packaging and sleep-treatment claims not imported."
+        },
+        {
+          "source": "Mind — Relaxation",
+          "url": "https://www.mind.org.uk/information-support/tips-for-everyday-living/relaxation/",
+          "locus": "Listen to music. Music can connect us to our emotions and distract us from worrying thoughts. Listening to your favourite songs could help you relax. You could dance or sing along, or just close your eyes and enjoy. Try to really listen to the music. Focus on the music, and let other thoughts fade away.",
+          "note": "official_health. Method confirmation for attentive listening to a favourite song. Dance/sing options, instrument-spotting curriculum, and treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Keep volume comfortable; stop if listening hurts your ears or if a track brings up strong distress.",
+        "Not a treatment for anxiety, depression, insomnia, or any mental health condition, and not music therapy."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

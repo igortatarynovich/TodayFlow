@@ -8359,6 +8359,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.music.001",
+        "content_class": "practice",
+        "family": "creative",
+        "type": "music",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.music"
+      },
+      "retrieval": {
+        "purpose": [
+          "creativity"
+        ],
+        "domain": [],
+        "input_state": [
+          "tense"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime",
+          "evening"
+        ],
+        "delivery": [
+          "audio",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Один трек",
+            "body": "Выбери один короткий трек, который уже знаешь. Включи один раз и слушай только его — не листай дальше. Когда закончится или через пару минут — остановись."
+          },
+          "en": {
+            "title": "One track",
+            "body": "Pick one short track you already know. Play it once and listen only to that — do not scroll for another. When it ends, or after about two minutes, stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Послушать",
+            "en": "Listen once"
+          }
+        }
+      }
     }
   ]
 }
