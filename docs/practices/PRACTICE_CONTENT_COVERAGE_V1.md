@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.boundary_action`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 11/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.drawing`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 12/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-09-17 | **P1 `practice.boundary_action` sourced.** `technique.boundary_action` accepted (NHS Every Mind Matters work-related stress + Mind Practise saying no + Leicestershire Partnership NHS Assertiveness). Brief one decline; not micro_action/connection_action/digital_pause/digital_limit. Not assertiveness curriculum/broken-record/rights lists/treatment. `practice.boundary_action.001` active. Coverage matrix: 145 items, 12/42 P1 sourced. Next: `practice.drawing`. |
 | 2026-09-02 | **P1 `practice.future_self` sourced.** `technique.future_self` accepted (University of Edinburgh Reflection Toolkit + Greater Good Best Possible Self / King 2001 + Hershfield 2011). Brief later-self image; not intention_setting/visualization/journaling. Not BPS writing protocol, letter programme, or manifestation. `practice.future_self.001` active. Coverage matrix: 144 items, 11/42 P1 sourced. Next: `practice.boundary_action`. |
 | 2026-08-31 | **P1 `practice.visualization` sourced.** `technique.practice_visualization` accepted (UHD NHS Mental Practice + Feltz & Landers 1983 + Holmes & Collins 2001). Brief mental rehearsal of one upcoming action; not intention_setting/future_self/meditation.visualization. Not GMI/stroke rehab/manifestation. `practice.visualization.001` active. Coverage matrix: 143 items, 10/42 P1 sourced. Next: `practice.future_self`. |
 | 2026-08-31 | **P1 `practice.review` sourced.** `technique.review` accepted (NHS Transformation Partners End of Shift Wellbeing Checklist + UH Bristol reflective writing + NHS Borders look back). Brief two-pole look-back: one hard thing and one thing that went okay or helped; not journaling/prompted_reflection/gratitude/self_check_in/evening_ritual. Not Gibbs/AAR. `practice.review.001` active. Coverage matrix: 142 items, 9/42 P1 sourced. Next: `practice.visualization`. |

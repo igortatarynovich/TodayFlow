@@ -8249,6 +8249,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.boundary_action.001",
+        "content_class": "practice",
+        "family": "behavioral",
+        "type": "boundary_action",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.boundary_action"
+      },
+      "retrieval": {
+        "purpose": [
+          "self_control"
+        ],
+        "domain": [],
+        "input_state": [
+          "tense"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Один отказ",
+            "body": "Выбери одну просьбу, на которую нет места. Откажи в одной короткой фразе — нет, не сейчас или не это. Потом остановись. Не объясняй долго и не разбирай все свои пределы."
+          },
+          "en": {
+            "title": "One decline",
+            "body": "Pick one request you do not have room for. Decline it in one short line — no, not now, or not this. Then stop. Do not explain at length, and do not unpack all your limits."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Сказать нет",
+            "en": "Say no once"
+          }
+        }
+      }
     }
   ]
 }

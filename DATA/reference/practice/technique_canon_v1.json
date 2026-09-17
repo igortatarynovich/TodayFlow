@@ -1626,6 +1626,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.boundary_action",
+      "content_class": "practice",
+      "type": "boundary_action",
+      "canonical_description": "Pick one request you do not have room for. Decline it in one short line — no, not now, or not this — then stop. The kernel is a single limit-act, not any small task, not reaching out to someone, not a device pause, and not a period rule. Distinct from micro_action, connection_action, digital_pause, and digital_limit. Not an assertiveness curriculum, not a rights list, and not a treatment.",
+      "source_refs": [
+        {
+          "source": "NHS Every Mind Matters — Work-related stress",
+          "url": "https://www.nhs.uk/every-mind-matters/lifes-challenges/work-related-stress/",
+          "locus": "Boundaries are limits you set to protect your time, energy and wellbeing. You could: take breaks; finish work on time; say no when you already have too much to do.",
+          "note": "official_health. Method confirmation for saying no as a concrete limit when you already have too much to do. Work-from-home workspace advice and rights/redundancy guidance not imported."
+        },
+        {
+          "source": "Mind — How to improve self-esteem",
+          "url": "https://www.mind.org.uk/information-support/types-of-mental-health-problems/self-esteem/tips-to-improve-your-self-esteem/",
+          "locus": "Practise saying no. Being assertive can be difficult if you're not used to it. But agreeing to too many things to please others can be draining. It could help to pause, take a breath and think about how you feel before agreeing to do something you don't want to.",
+          "note": "official_health. Method confirmation for pausing and saying no to a request rather than agreeing by default. Self-esteem treatment, therapy, and app recommendations not imported."
+        },
+        {
+          "source": "Leicestershire Partnership NHS — Assertiveness",
+          "url": "https://www.leicspart.nhs.uk/wp-content/uploads/2022/07/492-Assertiveness-2.pdf",
+          "locus": "Being assertive means we can say no to the requests of others. Examples of saying no: No, I'm sorry but I really can't take on anything else at the moment.",
+          "note": "official_health. Method confirmation for a short spoken no to a request. Assertiveness training, broken-record, fogging, rights lists, and body-language curriculum not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if saying no puts you at immediate risk, or if the request is one you must meet (safety, care, legal duty).",
+        "Not a treatment for anxiety, people-pleasing, or any mental health condition, and not a way to control other people."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
