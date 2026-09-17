@@ -8304,6 +8304,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.drawing.001",
+        "content_class": "practice",
+        "family": "creative",
+        "type": "drawing",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.drawing"
+      },
+      "retrieval": {
+        "purpose": [
+          "creativity"
+        ],
+        "domain": [],
+        "input_state": [
+          "stuck"
+        ],
+        "direction": [
+          "open"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "up",
+        "context": [
+          "work",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Короткий набросок",
+            "body": "Возьми ручку и бумагу. Около двух минут рисуй от руки что-то обычное рядом или заполни небольшой участок простыми формами. Не стирай ради красоты. Потом остановись."
+          },
+          "en": {
+            "title": "Short sketch",
+            "body": "Take a pen and paper. For about two minutes, freehand-sketch something ordinary nearby, or fill a small area with simple shapes. Do not erase to improve it. Then stop."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Нарисовать",
+            "en": "Sketch a bit"
+          }
+        }
+      }
     }
   ]
 }

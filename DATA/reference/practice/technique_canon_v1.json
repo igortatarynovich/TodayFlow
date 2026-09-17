@@ -1658,6 +1658,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.drawing",
+      "content_class": "practice",
+      "type": "drawing",
+      "canonical_description": "Take a pen and paper. For about two minutes, freehand-sketch something ordinary nearby, or fill a small area with simple shapes, then stop. The kernel is a short freehand sketch session, not a one-mark assignment, not free writing, and not listening to music. Distinct from creative_prompt, free_writing, and music. Not an art class, not Zentangle curriculum, not art therapy, and not a finished picture.",
+      "source_refs": [
+        {
+          "source": "Cambridge University Hospitals NHS — Sketch Appeal's Self-Care Challenge",
+          "url": "https://www.cuh.nhs.uk/about-us/our-structure/other-departments/cuh-arts/our-programmes/live-and-participatory-arts/resources/sketch-appeals-self-care-challenge/",
+          "locus": "A drawing activity to encourage self-expression and self-care. The process of doing so is intended to help you slow down. Drawing is a form of active meditation and self-care.",
+          "note": "official_health. Method confirmation for a short drawing session as self-care. Self-portrait challenge, skill-building curriculum, and treatment claims not imported."
+        },
+        {
+          "source": "Calderdale and Kirklees Recovery College (South West Yorkshire Partnership NHS) — Mindful Mondays: Zentangle Art",
+          "url": "https://www.calderdalekirkleesrc.nhs.uk/courses/discover-tools/mindful-mondays-zentangle-art/",
+          "locus": "Join us for an absorbing and engaging mindful drawing workshop which will help us to focus on the now. Create repetitive patterns simply using pen and paper.",
+          "note": "official_health. Method confirmation for brief mindful freehand marks with pen and paper. Zentangle brand curriculum, workshop structure, and efficacy slogans not imported."
+        },
+        {
+          "source": "Greater Good in Education — Drawing as a Way to Manage Emotions",
+          "url": "https://ggie.berkeley.edu/wp-content/uploads/generated-pdfs/Drawing-as-a-Way-to-Manage-Emotions.pdf",
+          "locus": "Students take a few minutes to draw anything they like. We can draw about something that makes us happy, something or someone we love, something we like to do, a place we like to go, or anything we want.",
+          "note": "academic / educational. Method confirmation for a short freehand session of drawing anything you like. Classroom SEL protocol, emotion-regulation claims, and treatment framing not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if sketching brings up strong self-criticism or distress.",
+        "Not a treatment for anxiety, depression, or any mental health condition, and not art therapy."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
