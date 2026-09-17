@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `practice.release_ritual`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 14/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `meditation.visualization`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 15/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-09-17 | **P1 `practice.release_ritual` sourced.** `technique.release_ritual` accepted (ELFT NHS Dealing with Worry + MindWell Leeds Taking control of stress + University of Exeter CEDAR Problem Solving). Brief write-and-aside close; not transition_ritual/evening_ritual/meditation.letting_go. Not full worry-time protocol/fire rites/treatment. `practice.release_ritual.001` active. Coverage matrix: 148 items, 15/42 P1 sourced. Next: `meditation.visualization`. |
 | 2026-09-17 | **P1 `practice.music` sourced.** `technique.music` accepted (NHS Every Mind Matters low mood + sleep tips + Mind Relaxation Listen to music). Brief one-track listen; not drawing/creative_prompt/session accompaniment. Not music therapy/playlist programme/sleep protocol. `practice.music.001` active. Coverage matrix: 147 items, 14/42 P1 sourced. Next: `practice.release_ritual`. |
 | 2026-09-17 | **P1 `practice.drawing` sourced.** `technique.drawing` accepted (CUH NHS Sketch Appeal + Calderdale and Kirklees Recovery College mindful drawing + Greater Good in Education Drawing as a Way to Manage Emotions). Brief freehand sketch; not creative_prompt/free_writing/music. Not art class/Zentangle curriculum/art therapy. `practice.drawing.001` active. Coverage matrix: 146 items, 13/42 P1 sourced. Next: `practice.music`. |
 | 2026-09-17 | **P1 `practice.boundary_action` sourced.** `technique.boundary_action` accepted (NHS Every Mind Matters work-related stress + Mind Practise saying no + Leicestershire Partnership NHS Assertiveness). Brief one decline; not micro_action/connection_action/digital_pause/digital_limit. Not assertiveness curriculum/broken-record/rights lists/treatment. `practice.boundary_action.001` active. Coverage matrix: 145 items, 12/42 P1 sourced. Next: `practice.drawing`. |

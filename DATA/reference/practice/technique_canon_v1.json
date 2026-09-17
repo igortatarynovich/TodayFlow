@@ -1722,6 +1722,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.release_ritual",
+      "content_class": "practice",
+      "type": "release_ritual",
+      "canonical_description": "Write one thing you are done carrying for now — a single line is enough. Put a line through it, or fold or crumple the paper and set it aside or in the bin, then stop. The kernel is a short symbolic close on paper, not a task-to-task switch, not a bedtime wind-down, and not softening a body area on the out-breath. Distinct from transition_ritual, evening_ritual, and meditation.letting_go. Not a full worry-time protocol, not burning or fire rites, not magic, and not a treatment.",
+      "source_refs": [
+        {
+          "source": "East London NHS Foundation Trust — Dealing with Worry",
+          "url": "https://www.elft.nhs.uk/sites/default/files/2022-05/dealing-with-worry.pdf",
+          "locus": "If some of the worries that you wrote down are no longer a problem for you, then put a line through them and let them go. To help you to do this some people like to throwaway their worry list after their worry time, or screw up the papers and put them into the bin afterwards to help them let them go.",
+          "note": "official_health. Method confirmation for a brief write-and-discard or strike-through close. Full worry-time schedule, CBT worry programme, and treatment claims not imported."
+        },
+        {
+          "source": "MindWell Leeds — Taking control of stress",
+          "url": "https://www.mindwell-leeds.org.uk/myself/exploring-your-mental-health/stress/taking-control-of-stress/",
+          "locus": "You can use the Worry tree diagram to decide whether your worries are practical problems which need to be tackled or anxious thoughts which you need to let go of. Be determined to stop thinking about these worries after the 15 minutes is over.",
+          "note": "official_health / local NHS wellbeing. Method confirmation for deliberately letting go of thoughts that are not for action now, then stopping. Full worry-time programme and efficacy claims not imported."
+        },
+        {
+          "source": "University of Exeter CEDAR — Problem Solving (carer resource)",
+          "url": "https://cedar.exeter.ac.uk/v8media/facultysites/hls/cedar/resources/CEDArS_ProblemSolving_44pp.pdf",
+          "locus": "When it is your scheduled worry time read through the worries that you have written down during the day. Sometimes you might find they are no longer a worry for you now it is later in the day. If this is the case put a line through the worry.",
+          "note": "academic / NHS-linked education. Method confirmation for striking through a written item as a close when it is no longer being carried. Full carer problem-solving curriculum not imported."
+        }
+      ],
+      "safety_notes": [
+        "Do not burn paper or use fire. Stop if writing the item makes distress worse.",
+        "Not a treatment for anxiety, OCD, trauma, or any mental health condition, and not a way to erase real duties or safety needs."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

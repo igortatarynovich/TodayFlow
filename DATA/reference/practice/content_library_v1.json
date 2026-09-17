@@ -8414,6 +8414,61 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "practice.release_ritual.001",
+        "content_class": "practice",
+        "family": "ritual",
+        "type": "release_ritual",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.release_ritual"
+      },
+      "retrieval": {
+        "purpose": [
+          "release"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy"
+        ],
+        "direction": [
+          "release"
+        ],
+        "duration": 2,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "evening",
+          "anytime"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Строка в сторону",
+            "body": "Напиши одну вещь, которую сейчас можно не нести — достаточно строки. Зачеркни её или сложи / сомни бумагу и отложи или выбрось. Потом остановись. Не разбирай весь день."
+          },
+          "en": {
+            "title": "One line aside",
+            "body": "Write one thing you are done carrying for now — a single line is enough. Put a line through it, or fold or crumple the paper and set it aside or in the bin. Then stop. Do not unpack the whole day."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Отпустить",
+            "en": "Set it aside"
+          }
+        }
+      }
     }
   ]
 }
