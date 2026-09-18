@@ -312,7 +312,7 @@ export function TodayProductScreenFlow({
       : copy.storyNext.eveningHint;
   const nextFromRitualTitle = showMyDay ? copy.storyNext.myDay : copy.storyNext.evening;
   const nextFromRitualHint = showMyDay ? copy.storyNext.myDayHint : copy.storyNext.eveningHint;
-  const nextFromMyDayTitle = showEvening ? copy.storyNext.evening : copy.storyNext.evening;
+  const nextFromMyDayTitle = copy.storyNext.evening;
   const nextFromMyDayHint = showEvening ? copy.storyNext.eveningHint : undefined;
   const ritualComplete = Boolean(ritualCardOpen && ritualNumberOpen && ritualResultBody);
   const ritualState = ritualNumberOpen ? "open" : ritualCardOpen ? "card" : "closed";
@@ -390,11 +390,13 @@ export function TodayProductScreenFlow({
                     </>
                   )}
                 </div>
-                <StoryNextAnchor
-                  title={nextFromRitualTitle}
-                  hint={nextFromRitualHint}
-                  onNext={() => go(afterRitual)}
-                />
+                {afterRitual >= 0 ? (
+                  <StoryNextAnchor
+                    title={nextFromRitualTitle}
+                    hint={nextFromRitualHint}
+                    onNext={() => go(afterRitual)}
+                  />
+                ) : null}
               </div>
             </div>
           </ScreenFlowStep>

@@ -595,4 +595,14 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
     (getTimeOfDayByHour as jest.Mock).mockReturnValue("evening");
   });
+
+  it("does not promise evening after ritual when the evening step is time-gated off", () => {
+    (getTimeOfDayByHour as jest.Mock).mockReturnValue("morning");
+    seedFirstTodayReaction();
+    render(<TodayCompositionSurface {...baseProps} variant="firstToday" />);
+    expect(screen.queryByTestId("today-frame-evening")).not.toBeInTheDocument();
+    const ritual = screen.getByTestId("today-frame-rituals");
+    expect(within(ritual).queryByTestId("today-story-next-anchor")).not.toBeInTheDocument();
+    (getTimeOfDayByHour as jest.Mock).mockReturnValue("evening");
+  });
 });
