@@ -143,6 +143,24 @@ describe("live Today frames", () => {
     expect(scanDisplayGrammar(frame)).toEqual([]);
   });
 
+  it("emits T1.continuity from yesterday gratitude and omits when empty", () => {
+    const filled = emitTodayDisplayFrame({
+      contract: persistContract,
+      capability: "light",
+      continuityBody: "Вчера ты отметил(а) благодарность: за спокойный момент.",
+    });
+    const slot = filled.atoms?.find((a) => a.slot_id === "T1.continuity");
+    expect(slot?.text_class).toBe("user");
+    expect(slot?.text).toMatch(/благодарност/i);
+    expect(scanDisplayGrammar(filled)).toEqual([]);
+
+    const empty = emitTodayDisplayFrame({
+      contract: persistContract,
+      capability: "light",
+    });
+    expect(empty.atoms?.some((a) => a.slot_id === "T1.continuity")).toBe(false);
+  });
+
   it("unknown filled would_render field on a live frame is still finding 2", () => {
     const frame = emitTodayDisplayFrame({
       contract: baseContract,
