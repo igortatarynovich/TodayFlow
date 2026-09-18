@@ -1,5 +1,6 @@
 import type { TodayContractV1 } from "@/lib/todayContract";
 import {
+  applyCatalogPracticeSelection,
   applyEngagementToViewModel,
   applyGuideNarrativeToCompositionViewModel,
   applyRecommendedPracticeToStrengthen,
@@ -167,6 +168,26 @@ describe("buildTodayCompositionViewModel", () => {
     const practice = merged.find((t) => t.id === "practice");
     expect(practice?.title).toBe("Дыхание 4-7-8");
     expect(practice?.duration).toBe("5 мин");
+  });
+
+  it("fills T3.practice from a matched catalog selection when day_story has no practice tool", () => {
+    const empty = buildTodayCompositionViewModel({
+      contract: sampleContract,
+      cardName: "Сила",
+      cardMeaning: null,
+      numerologyValue: "4",
+      numerologyMeaning: null,
+      morningRitualData: null,
+    });
+    const filled = applyCatalogPracticeSelection(empty.strengthen, {
+      id: "practice.extended_exhale.001",
+      title: "Выдох длиннее вдоха",
+      description: "Снять напряжение перед следующим шагом.",
+      duration_minutes: 3,
+    });
+    expect(filled).toHaveLength(1);
+    expect(filled[0]?.id).toBe("practice");
+    expect(filled[0]?.title).toBe("Выдох длиннее вдоха");
   });
 
   it("replaces generic rhythm cliché in hero headline", () => {

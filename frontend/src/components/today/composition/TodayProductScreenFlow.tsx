@@ -274,7 +274,7 @@ export function TodayProductScreenFlow({
   topRowSection = null,
   greetingSection = null,
   onOpenEvening,
-  showEveningClose = true,
+  showEveningClose = false,
 }: TodayProductScreenFlowProps) {
   const go = (index: number) => onIndexChange(index, { reason: "select" });
   const flowLayout = { showSymbols, showMyDay, showEvening };

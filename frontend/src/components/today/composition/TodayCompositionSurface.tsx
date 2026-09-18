@@ -8,7 +8,6 @@ import { RitualTarotPickExperience } from "@/components/today/ritual/RitualTarot
 import type { PracticeResponse } from "@/components/today/todayPageUtils";
 import { TodayDayContinuityClosed } from "@/components/today/experience/TodayDayContinuityClosed";
 import { TodayDayContinuityEveningClose } from "@/components/today/experience/TodayDayContinuityEveningClose";
-import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayDayBrief } from "@/components/today/composition/TodayDayBrief";
@@ -40,7 +39,6 @@ import { contractHasDeterministicPersonalDayForMyDay, isDayNotReady, isTodayInte
 import type { CoreProfile } from "@/lib/types";
 import { tarotCardFacePicture, tarotCardFaceSrc, resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import {
-  buildMemorySlotCopy,
   isDayContinuityClosed,
   loadDayContinuity,
   loadPreviousDayContinuity,
@@ -49,9 +47,16 @@ import {
   type DayFocusOutcome,
 } from "@/lib/todayDayContinuity";
 import {
+  buildGratitudeMemorySlot,
+  loadLocalYesterdayEveningClose,
+  loadYesterdayEveningClose,
+  type EveningCloseSnapshot,
+} from "@/lib/todayEveningGratitude";
+import { fetchCatalogPracticeForEnergy } from "@/lib/todayPracticeSelect";
+import {
   applyEngagementToViewModel,
   applyGuideNarrativeToCompositionViewModel,
-  applyRecommendedPracticeToStrengthen,
+  applyCatalogPracticeSelection,
   buildTodayCompositionViewModel,
 } from "@/lib/todayCompositionModel";
 import { buildTodayDayStoryViewModel, applySupplementaryNarrativesToDayStory } from "@/lib/todayDayStoryModel";
@@ -126,7 +131,7 @@ import { DsButton, DsCard, DsListPanel, DsListRow, DsRitualGate, DsTarotFace } f
 import { DsTextField } from "@/design-system/primitives/DsForm";
 import { joinClass } from "@/design-system/utils/joinClass";
 import ds from "@/design-system/primitives/dsPrimitives.module.css";
-import { getJson, postJson } from "@/lib/api";
+import { postJson } from "@/lib/api";
 import { PersonalizationDegradedBadge } from "@/components/product-ui/PersonalizationDegradedBadge";
 import { buildDayEventsForNarrative } from "@/components/today/todayPageUtils";
 import type { TodayRitualNarrativePayload } from "@/lib/todayNarrativeApi";
@@ -242,6 +247,7 @@ export function TodayCompositionSurface(props: Props) {
   );
   const [continuityRecord, setContinuityRecord] = useState<DayContinuityRecord | null>(null);
   const [continuitySaving, setContinuitySaving] = useState(false);
+  const [serverYesterdayEvening, setServerYesterdayEvening] = useState<EveningCloseSnapshot | null>(null);
   const [engagement, setEngagement] = useState(createEmptyDayEngagement);
   const [symbolHooksView, setSymbolHooksView] = useState<DaySymbolPublicView | null>(null);
   const [tarotPendingId, setTarotPendingId] = useState<number | null>(null);
@@ -329,11 +335,12 @@ export function TodayCompositionSurface(props: Props) {
 
   const engagedModel = useMemo(() => applyEngagementToViewModel(baseModel, engagement), [baseModel, engagement]);
 
-  const prevContinuityForStory = useMemo(() => {
-    if (!hydrated) return null;
-    return loadPreviousDayContinuity(dateISO);
-  }, [hydrated, dateISO]);
-  const yesterdayClosed = Boolean(prevContinuityForStory && isDayContinuityClosed(prevContinuityForStory));
+  const localYesterdayEvening = useMemo(() => {
+    if (!hydrated || isFirstToday) return null;
+    return loadLocalYesterdayEveningClose(dateISO);
+  }, [hydrated, dateISO, isFirstToday]);
+  const yesterdayEvening = serverYesterdayEvening ?? localYesterdayEvening;
+  const yesterdayClosed = Boolean(yesterdayEvening?.eveningCompleted);
 
   const story = useMemo(() => {
     const base = buildTodayDayStoryViewModel({
@@ -538,7 +545,7 @@ export function TodayCompositionSurface(props: Props) {
 
   const strengthenTools = useMemo(
     () =>
-      applyRecommendedPracticeToStrengthen(
+      applyCatalogPracticeSelection(
         dayReadingReady ? story.strengthenLinked : story.strengthenPreview,
         dayReadingReady ? recommendedPractice : null,
         {
@@ -616,7 +623,7 @@ export function TodayCompositionSurface(props: Props) {
     if (!hydrated) return null;
     return loadPreviousDayContinuity(dateISO);
   }, [hydrated, dateISO]);
-  const memorySlot = useMemo(() => buildMemorySlotCopy(prevContinuity), [prevContinuity]);
+  const memorySlot = useMemo(() => buildGratitudeMemorySlot(yesterdayEvening), [yesterdayEvening]);
     /** Only filled yesterday recall — never ship developer stub copy. */
   const showMemorySlot = hydrated && !isFirstToday && memorySlot.state === "filled";
 
@@ -727,21 +734,37 @@ export function TodayCompositionSurface(props: Props) {
   }, [dateISO, engagementProfileKey]);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || isFirstToday) {
+      setServerYesterdayEvening(null);
+      return;
+    }
     let cancelled = false;
-    void getJson<PracticeResponse>("/practices/current")
-      .catch(async () => {
-        const fallback = await getJson<PracticeResponse[]>("/practices?limit=1").catch(() => []);
-        return fallback.length ? fallback[0] : null;
-      })
+    void loadYesterdayEveningClose(dateISO, { authenticated: isAuthenticated }).then((snap) => {
+      if (!cancelled) setServerYesterdayEvening(snap);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [hydrated, dateISO, isAuthenticated, isFirstToday]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (!isAuthenticated) {
+      setRecommendedPractice(null);
+      return;
+    }
+    let cancelled = false;
+    const energy = props.contract.global_day?.primary_energy ?? null;
+    void fetchCatalogPracticeForEnergy(energy)
+      .catch(() => null)
       .then((practice) => {
-        if (cancelled || !practice?.id) return;
+        if (cancelled) return;
         setRecommendedPractice(practice);
       });
     return () => {
       cancelled = true;
     };
-  }, [hydrated, dateISO]);
+  }, [hydrated, dateISO, isAuthenticated, props.contract.global_day?.primary_energy]);
 
   const refreshGrowthTrackers = useCallback(async () => {
     if (!isAuthenticated) {
@@ -1460,53 +1483,7 @@ export function TodayCompositionSurface(props: Props) {
 
   // Priority step removed in v3.4 six blocks — no auto-advance from dialogue.
 
-  if (eveningMode && continuityRecord && !dayClosed) {
-    if (useProductFoundation) {
-      return (
-        <TodayEveningProductClose
-          userName={resolveUserName(props.coreProfile)}
-          userPromise={engagement.dayGoal}
-          themeShort={story.hero.themeShort}
-          practiceCompleted={engagement.practiceCompleted}
-          practiceStarted={engagement.practiceStarted}
-          affirmationRead={engagement.affirmationRead}
-          strengthenToolCount={strengthenTools.length}
-          activeHabit={activeHabit}
-          activeAscetic={activeAscetic}
-          habitMarked={
-            engagement.habitMarkedId != null &&
-            activeHabit != null &&
-            engagement.habitMarkedId === activeHabit.id
-          }
-          asceticMarked={
-            engagement.asceticMarkedId != null &&
-            activeAscetic != null &&
-            engagement.asceticMarkedId === activeAscetic.id
-          }
-          onHabitEveningDone={() => void onHabitMark()}
-          onAsceticEveningDone={() => void onAsceticMark()}
-          promiseSuggestions={promiseSuggestions}
-          onPickPromise={(text) => {
-            persistEngagement({ dayGoal: text });
-            trackMeaningEvent({
-              event_type: "action_option_selected",
-              event_source: "today",
-              local_date: dateISO,
-              payload: {
-                action: "day_promise_set",
-                promise_text: text.slice(0, 200),
-                surface: "today_evening_close",
-              },
-              refreshRings: false,
-            });
-          }}
-          saving={continuitySaving}
-          onSubmit={onSubmitEveningClose}
-          onBack={() => setEveningMode(false)}
-        />
-      );
-    }
-
+  if (!useProductFoundation && eveningMode && continuityRecord && !dayClosed) {
     return (
       <div className={styles.shellEvening} data-testid="today-composition-evening">
         <TodayDayContinuityEveningClose
@@ -1535,7 +1512,7 @@ export function TodayCompositionSurface(props: Props) {
     );
   }
 
-  if (dayClosed && continuityRecord) {
+  if (!useProductFoundation && dayClosed && continuityRecord) {
     return (
       <div className={styles.shellEvening} data-testid="today-composition-closed">
         <TodayDayContinuityClosed record={continuityRecord} />
@@ -1832,6 +1809,13 @@ export function TodayCompositionSurface(props: Props) {
   const handoffEveningBody = (
     <TodayEveningGratitudeBlock
       dateISO={dateISO}
+      dayFocus={
+        (typeof props.contract.day_story?.today_move === "string"
+          ? props.contract.day_story.today_move.trim()
+          : "") ||
+        story.hero.themeShort ||
+        null
+      }
       manifestVersion={
         typeof props.contract.day_package_manifest?.today_contract_version === "string"
           ? props.contract.day_package_manifest.today_contract_version
@@ -2260,7 +2244,7 @@ export function TodayCompositionSurface(props: Props) {
       tapResponse={engagement.tapResponse}
       onTapRecorded={(response) => persistEngagement({ tapResponse: response })}
       onOpenEvening={onOpenEvening}
-      showEveningClose={!isFirstToday}
+      showEveningClose={false}
       dayPromise={engagement.dayGoal}
       activeIndex={screenFlowIndex}
       onIndexChange={onScreenFlowIndexChange}

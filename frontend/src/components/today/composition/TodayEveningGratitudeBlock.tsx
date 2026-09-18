@@ -21,10 +21,17 @@ import layout from "@/design-system/compositions/dsCompositions.module.css";
 type Props = {
   dateISO: string;
   manifestVersion?: string | null;
+  /** Already-shown day thesis snapshot. Gratitude never rewrites the day. */
+  dayFocus?: string | null;
   onSaved?: () => void;
 };
 
-export function TodayEveningGratitudeBlock({ dateISO, manifestVersion = null, onSaved }: Props) {
+export function TodayEveningGratitudeBlock({
+  dateISO,
+  manifestVersion = null,
+  dayFocus = null,
+  onSaved,
+}: Props) {
   const existing = useMemo(() => loadEveningGratitude(dateISO), [dateISO]);
   const [categories, setCategories] = useState<string[]>(existing?.categories ?? []);
   const [text, setText] = useState(existing?.text ?? "");
@@ -49,6 +56,7 @@ export function TodayEveningGratitudeBlock({ dateISO, manifestVersion = null, on
       categories,
       text,
       manifestVersion,
+      dayFocus,
     });
     setSaving(false);
     if (!result.ok) {

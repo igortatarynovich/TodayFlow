@@ -4,6 +4,8 @@ Last updated: 2026-09-18
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (CLOSED LOOP v0, 2026-09-18):** Production evening is gratitude only (no leftover «Закрыть день» on ScreenFlow). Yesterday close persists on `POST /day-connection/{date}` (`evening_completed` + `evening_observations.kind=gratitude`); D+1 TODAY reads `GET` yesterday (`T1.continuity`) with same-device local fallback. MY DAY practice uses `GET /practices/select` from Global `primary_energy` → need cell; unmatched omits (no `/practices?limit=1` invent). Next: ship-gate Run 3 on this path, then G1/G0.
+
 **NOW (P1 MEDITATION VISUALIZATION, 2026-09-18):** P1 type `meditation.visualization` sourced via `technique.visualization` (NHS Inform Visualisation exercise + CUH NHS guided imagery + Oxford Health CAMHS Visualisation): sit or lie still, picture an ordinary calm place, notice a few sensory details, stop. Distinct from practice.visualization (mental rehearsal), future_self, and intention_setting. Not full clinical guided-imagery protocol, manifestation, or treatment. `meditation.visualization.001` active. Coverage 149 items, 16/42 P1 sourced. Next: `meditation.loving_kindness`.
 
 **NOW (GLANCE AUTHORITY, 2026-08-31):** Glance Daily Focus is not a fifth Today act and not an importance layer. Production `T3.priority` = Personal `do[]`, else persisted `today_move` (not Global expect/chips, not `buildGlanceDailyFocus`). Synthesizer stays on legacy `?experience=1` only. `TodayGlanceAct` remains unmounted. Dead `ProfileCharacterScene.tsx` deleted. Tests: `todayMyDayPriority` + live frames. Leftover Glance files stay post-MVP like other launch-cut surfaces.
@@ -59,6 +61,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — Closed loop v0: gratitude D+1 + catalog practice select (2026-09-18)
+
+- **SoT before:** Evening ScreenFlow still offered leftover «Закрыть день» (outcome dramaturgy). D+1 memory read `DayContinuityRecord` in localStorage, which gratitude never wrote. MY DAY practice overlay used `/practices/current` then `/practices?limit=1`.
+- **SoT after:** Evening job remains Product Flow §4 gratitude. Persist structured `evening_observations.kind=gratitude` on existing `DayConnection`. D+1 TODAY may show one user line (`T1.continuity`) from yesterday's GET. Catalog `GET /practices/select` fills `T3.practice` from Global `primary_energy` → need; miss omits.
+- **Public contract changed?** no new JSON fields. Additive use of existing `evening_observations` / `morning_focus` on `POST /day-connection/{date}`.
+- **Migration required?** no. Old localStorage outcome records are ignored on the production ScreenFlow.
+- **Canon updated?** yes — `today/TODAY_PRODUCT_FLOW_V1.md` §4 D+1 · `today/TODAY_DISPLAY_INVENTORY_V1.md` v1.3 `T1.continuity` · this tracker.
+- **Backward compatible?** yes for API. Clients that still POST outcome close are unused on production ScreenFlow.
 
 ## Architecture impact — Glance Daily Focus authority (2026-08-31)
 

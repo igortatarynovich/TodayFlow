@@ -1,7 +1,7 @@
 # Today Display Inventory v1
 
 **Status:** ACTIVE — **последний authority перед UI** на Сегодня  
-**Version:** 1.2 (2026-08-29)  
+**Version:** 1.3 (2026-09-18)  
 **Грамматика (закон):** [DISPLAY_CONSTRUCTION_GRAMMAR_V1](../foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md)  
 **Meaning SoT:** [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md)  
 **Cycle SoT:** [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md)  
@@ -16,7 +16,7 @@
 ## Architecture impact
 
 - **SoT before:** v1.1 named Grammar records; headline vs focus anti-dupe existed; `T3.focus_title` was a short theme; `T3.action` duplicated Priority; compute vs display was implied.
-- **SoT after:** v1.2 — compute ≠ display; guest catalog without personal lens; `T3.headline` = thesis, `T3.focus_title` = overlay axis (projected), `T3.focus_body` = how it shows; `T3.action` **removed**. Personal Day inputs exclude CE. Audit pass: `development_point` out of focus_body; lens omit for general; affirmation/practice ≠ Priority; tasks_empty ≠ empty Priority.
+- **SoT after:** v1.2 journey lock stands (compute ≠ display; `T3.headline` / `T3.focus_title` / `T3.focus_body`; `T3.action` removed). v1.3 — D+1 TODAY may print `T1.continuity` from yesterday gratitude (`evening_completed`); empty omit. Evening job unchanged (gratitude). `T3.practice` catalog retrieval via `GET /practices/select`.
 - **Public contract changed?** no JSON.
 - **Migration required?** no. UI cutover: Profile Character warehouse off path; MY DAY headline ≠ `why_personal`; focus_title = overlay axis or omit; ritual lens omit unless Personal Day **persisted** (capability alone is not enough).
 - **Canon updated?** yes — this file · Grammar · Pipeline · Product Flow · tracker.
@@ -81,6 +81,7 @@ Proposition test: тот же, что Profile (Jaccard / substring).
 |---------|---------------------|-------|-----------|
 | `T1-date.eyebrow` | chrome | chrome | product |
 | `T1-date.title` | Какая календарная дата? | calc | local_date |
+| `T1.continuity` | С чего продолжить после вчерашнего вечера? | user | yesterday gratitude |
 | `T1-hero.moon` | Фаза как объект неба | calc | moon illumination |
 | `T1-hero.eyebrow` | chrome | chrome | product |
 | `T1-hero.energy_word` | Какая главная энергия дня (8-set)? | calc | Global Day Engine |
@@ -169,6 +170,23 @@ Capability: все глубины, включая guest.
 #### `T1-date.eyebrow` / `T1-date.title`
 
 Chrome «Сегодня» · calc formatted local date. one_question title: какая дата. budget 1 строка. `may_fe_transform`: locale format only.
+
+#### `T1.continuity`
+
+| | |
+|---|---|
+| one_question | Что вчерашний вечер оставил сегодняшнему утру? |
+| text_class | user |
+| authority | yesterday Gratitude History (`DayConnection.evening_completed`) |
+| allowed_inputs | yesterday categories + text; optional `morning_focus` snapshot of the already-shown thesis |
+| forbidden_inference | promise outcome; «получилось / частично / не получилось»; new day meaning; invent when GET fails |
+| output | 1–2 предложения |
+| budget | ≤220 chars |
+| required | нет |
+| empty_behavior | omit (no stub copy) |
+| appear | D2+ · not firstToday · yesterday evening closed |
+| persist_key | `day_connections(user, yesterday)` |
+| anti_dupe_group | `gratitude` |
 
 #### `T1-hero.moon`
 

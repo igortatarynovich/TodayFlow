@@ -2,28 +2,21 @@ import { test, expect } from "@playwright/test";
 import { PLAYWRIGHT_API_BASE, E2E_USER_PASSWORD } from "./helpers";
 
 /**
- * Evening close + D+1 continuity — LLM-OFF regression.
+ * Evening gratitude + D+1 continuity — LLM-OFF regression.
  *
  * Verifies the actual user path:
  * 1. New user completes onboarding and pre-warms today's deterministic story.
- * 2. At evening time, the Today screen shows the evening step and the
- *    "Закрыть день" button.
- * 3. Closing the day stores the outcome/reflection locally and renders the
- *    closed-day state from the morning focus (deterministic theme short).
+ * 2. At evening time, the Today screen shows the evening gratitude step.
+ * 3. Saving gratitude persists journal + day-connection (not a promise outcome).
  * 4. When the calendar advances to the next day, Today picks up yesterday's
- *    closed focus/outcome via the continuity recall slot.
- *
- * This test uses Playwright's context clock to simulate evening and the next
- * morning, and the real localStorage continuity build-path (no injected fake
- * records). It is a single serial test because the evening close must happen
- * before the next-day continuity assertion.
+ *    gratitude close via the continuity recall slot (server, else same-device).
  */
 test.use({ timezoneId: "Europe/Moscow" });
 
 test.describe("Evening close and D+1 continuity", () => {
   test.describe.configure({ mode: "serial" });
 
-  test("закрывает день и на следующий день видит continuity", async ({
+  test("сохраняет благодарность и на следующий день видит continuity", async ({
     page,
     request,
     context,
@@ -134,44 +127,34 @@ test.describe("Evening close and D+1 continuity", () => {
       "evening screen-flow step should be visible",
     ).toBeVisible({ timeout: 10_000 });
 
-    // The legacy stacked path has a hidden button with the same test id; use the last visible one.
-    const closeBtn = page.locator('[data-testid="today-evening-open"]').last();
     await expect(
-      closeBtn,
-      "close-day button should be offered in the evening step",
+      page.getByTestId("today-evening-gratitude"),
+      "evening slot should be gratitude, not close-day dramaturgy",
     ).toBeVisible({ timeout: 10_000 });
-    await closeBtn.click({ force: true });
+    await expect(page.getByTestId("today-evening-open")).toHaveCount(0);
 
-    // The existing close form renders with the deterministic morning focus.
-    await expect(
-      page.getByTestId("today-composition-evening"),
-      "close form should open",
-    ).toBeVisible({ timeout: 10_000 });
+    await page.getByTestId("today-evening-gratitude-quiet").click();
+    await page.getByTestId("today-evening-gratitude-save").click();
+    await expect(page.getByTestId("today-evening-gratitude-saved")).toBeVisible({
+      timeout: 15_000,
+    });
 
-    // Promise suggestions may be unavailable in LLM-OFF; skip the picker and
-    // fall back to the deterministic theme short as the day's main focus.
-    const skipPromise = page.getByTestId("evening-promise-skip");
-    if (await skipPromise.isVisible().catch(() => false)) {
-      await skipPromise.click();
-    }
-
-    await page.getByTestId("day-continuity-outcome-done").click();
-    await page.getByTestId("day-continuity-submit").click();
-
-    await expect(
-      page.getByTestId("today-day-continuity-closed"),
-      "closed-day state should be shown after submit",
-    ).toBeVisible({ timeout: 10_000 });
-
-    const closedText = await page.getByTestId("today-day-continuity-closed").textContent();
-    expect(closedText).toContain("День закрыт");
-    expect(closedText).toContain("Получилось");
-    expect(closedText).not.toContain("Не удалось загрузить");
-
-    const focusText = await page
-      .locator("[data-testid='today-day-continuity-closed'] h2")
-      .textContent();
-    expect(focusText).toBeTruthy();
+    const connectionCheck = await request.get(
+      `${PLAYWRIGHT_API_BASE}/day-connection/${today}`,
+      {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      },
+    );
+    expect(
+      connectionCheck.ok(),
+      `day-connection ${today}: ${connectionCheck.status()} ${await connectionCheck.text()}`,
+    ).toBeTruthy();
+    const savedConnection = (await connectionCheck.json()) as {
+      evening_completed?: boolean;
+      evening_observations?: { kind?: string; text?: string };
+    };
+    expect(savedConnection.evening_completed).toBe(true);
+    expect(savedConnection.evening_observations?.kind).toBe("gratitude");
 
     // --- D+1 continuity ---
 
@@ -208,11 +191,11 @@ test.describe("Evening close and D+1 continuity", () => {
     // Serve the captured, non-assembling contract and a minimal tomorrow cycle.
     // 404 on progressive endpoints forces the provider to fall back to /today.
     // The frontend build may point at a different API host than
-    // PLAYWRIGHT_API_BASE (localhost vs 127.0.0.1), and a bare `**/today`
-    // glob would also swallow the frontend's own /today document — so match
-    // API calls by "any port except the web server's".
-    const webPort = new URL(page.url()).port;
-    const isApi = (url: URL) => url.port !== webPort;
+    // PLAYWRIGHT_API_BASE (localhost vs 127.0.0.1, or api.todayflow.today).
+    // A bare `**/today` glob would also swallow the frontend's own /today
+    // document — match API calls by origin, not port (HTTPS 443 has empty port).
+    const webOrigin = new URL(page.url()).origin;
+    const isApi = (url: URL) => url.origin !== webOrigin;
     await page.route((url) => isApi(url) && url.pathname === "/today/opening", async (route) => {
       await route.fulfill({ status: 404, body: "not used in test" });
     });
@@ -265,8 +248,9 @@ test.describe("Evening close and D+1 continuity", () => {
     ).toBeVisible({ timeout: 25_000 });
 
     const recallText = await page.getByTestId("today-entity-continuity-recall").textContent();
-    expect(recallText).toContain("Вчера главным было");
-    expect(recallText).toContain("получилось");
-    expect(recallText).toContain(focusText!);
+    expect(recallText).toMatch(/благодарност/i);
+    expect(recallText).toMatch(/спокойный момент/i);
+    expect(recallText).not.toContain("Не удалось загрузить");
+    expect(recallText).not.toMatch(/получилось|частично|не получилось/i);
   });
 });
