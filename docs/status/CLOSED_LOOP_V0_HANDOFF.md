@@ -59,34 +59,21 @@
 
 ---
 
-## 4. Blocker — PR not merge-ready
+## 4. Blocker — PR not merge-ready until iOS Smoke green
 
-**iOS XCTest Smoke** red on this PR **and on `main`**: `.github/workflows/ci.yml` uses `rg` to pick an iPhone simulator; `rg` is not on `macos-latest`. Job never reaches `xcodebuild`.
+**Was:** iOS XCTest Smoke red because `ci.yml` used `rg` (not on `macos-latest`). Same fail on `main`. No `cancel-in-progress` (four pushes = four full suites).
 
-All other checks on `8f9558de`: green (Frontend Tests, Backend Tests, iOS Build, schemas, lint, smoke, i18n, iOS Copy Policy). `mergeable: MERGEABLE`, `mergeStateStatus: UNSTABLE`.
+**Fix on this branch:** `ci.yml` now `grep -E` + `concurrency.cancel-in-progress` + timeouts 12/15/12/12. Pushed after `workflow` scope. Do not claim green until GitHub checks on the SHA.
 
-**CI delay cause:** no `concurrency.cancel-in-progress`. Four pushes = four full 12-job runs (~5.5 min `Backend Tests` each). Frontend Tests job is sequential Jest+coverage+`next build`+Playwright (~4 min).
-
-**Fix is ready, cannot push from this host’s OAuth token** (`gist`, `read:org`, `repo` — no `workflow` scope). HTTPS origin. No SSH key.
-
-Local artifacts (do not lose):
-
-- Branch `ci/cancel-and-grep` (commit `1ab77486`)
-- Patch: agent store `ci-cancel-and-grep.patch` and `/tmp/0001-fix-ci-cancel-stacked-runs-cap-job-time-pick-iOS-sim.patch`
-
-Patch contents: `concurrency` group on `github.ref` + `cancel-in-progress`; `timeout-minutes` 12/15/12/12 on backend/frontend/ios-build/ios-test; `rg` → `grep -E`.
-
-**Unblock:** GitHub UI edit of `ci.yml` on the PR branch, **or** `gh auth refresh -s workflow` then cherry-pick/push `ci/cancel-and-grep` onto `loop/gratitude-d1-practice-select`. Do not stack more product pushes until that lands.
-
-Cloud autopilot [Autopilot PR 21](bc-19910920-872e-4e3d-a7f0-458f66d6630f) confirmed the same blocker and did not change product code (session rule: no workflow edits just to go green).
+Cloud autopilot [Autopilot PR 21](bc-19910920-872e-4e3d-a7f0-458f66d6630f) had confirmed the same blocker and did not change product code.
 
 ---
 
 ## 5. Next (ordered)
 
-1. Land `ci.yml` (grep + cancel-in-progress) from an account that can push workflows. Re-run CI. Merge PR #21 only after iOS Smoke green (owner merges). Still blocked on this host (`gist`/`read:org`/`repo`, no `workflow`).
-2. Run 3 gratitude leftovers: magic-link claim in UI; optional wall-clock evening ≥ 18:00 MSK (Playwright clock already green); second person D+D+1.
-3. G1 leftover is this same `rg` fail on `main`. G0 (Token Factory / LLM latch ~$5) stays deferred.
+1. **`ci.yml` landed on this PR** (`grep -E` + `cancel-in-progress` + job timeouts). Re-run CI. Merge PR #21 only after iOS Smoke green (owner merges).
+2. Run 3 leftovers remaining: wall-clock evening ≥ 18:00 MSK (Playwright clock already green); team 2 calendar days. Magic-link claim in UI done 2026-09-18 (SMTP unset on live → JWT fallback; refine skip → authenticated Today). Second account calendar D+1 OK.
+3. G1 leftover was this same `rg` fail on `main`. After merge, `main` inherits the grep pick. G0 stays deferred.
 
 ---
 
