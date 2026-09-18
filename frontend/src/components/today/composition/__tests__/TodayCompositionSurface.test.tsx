@@ -2,10 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TodayCompositionSurface } from "@/components/today/composition/TodayCompositionSurface";
 import type { TodayContractV1 } from "@/lib/todayContract";
-import {
-  dayContinuityStorageKey,
-  type DayContinuityRecord,
-} from "@/lib/todayDayContinuity";
+import { eveningGratitudeStorageKey } from "@/lib/todayEveningGratitude";
 
 jest.mock("@/hooks/useMeaningRuntime", () => ({
   useMeaningRuntime: () => ({ trackMeaningEvent: jest.fn() }),
@@ -101,8 +98,16 @@ const baseProps = {
   stoneLine: "янтарь",
 };
 
-function seedPreviousDayContinuity(record: DayContinuityRecord) {
-  window.localStorage.setItem(dayContinuityStorageKey(record.dateISO), JSON.stringify(record));
+function seedPreviousEveningGratitude(dateISO: string, text: string) {
+  window.localStorage.setItem(
+    eveningGratitudeStorageKey(dateISO),
+    JSON.stringify({
+      dateISO,
+      categories: ["people"],
+      text,
+      savedAt: `${dateISO}T20:00:00.000Z`,
+    }),
+  );
 }
 
 /** Intent/Reality for today — required before First Today ritual/reveal (placement C). */
@@ -122,12 +127,7 @@ describe("TodayCompositionSurface", () => {
   });
 
   it("renders continuity recall before hero on default variant", () => {
-    seedPreviousDayContinuity({
-      dateISO: "2026-06-22",
-      mainFocus: "Разговор с командой",
-      outcome: "partial",
-      closedAt: "2026-06-22T20:00:00.000Z",
-    });
+    seedPreviousEveningGratitude("2026-06-22", "Разговор с командой");
 
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
@@ -217,12 +217,7 @@ describe("TodayCompositionSurface", () => {
 
   it("hides continuity on firstToday variant", () => {
     seedFirstTodayReaction();
-    seedPreviousDayContinuity({
-      dateISO: "2026-06-22",
-      mainFocus: "Разговор с командой",
-      outcome: "done",
-      closedAt: "2026-06-22T20:00:00.000Z",
-    });
+    seedPreviousEveningGratitude("2026-06-22", "Разговор с командой");
 
     render(<TodayCompositionSurface {...baseProps} variant="firstToday" />);
 
@@ -247,6 +242,12 @@ describe("TodayCompositionSurface", () => {
     render(<TodayCompositionSurface {...baseProps} variant="firstToday" />);
 
     expect(screen.getByTestId("today-frame-evening")).toBeInTheDocument();
+    expect(screen.getByTestId("today-evening-gratitude")).toBeInTheDocument();
+    expect(screen.queryByTestId("today-evening-open")).not.toBeInTheDocument();
+  });
+
+  it("does not offer close-day CTA on the production evening slot", () => {
+    render(<TodayCompositionSurface {...baseProps} variant="default" />);
     expect(screen.getByTestId("today-evening-gratitude")).toBeInTheDocument();
     expect(screen.queryByTestId("today-evening-open")).not.toBeInTheDocument();
   });
@@ -592,6 +593,16 @@ describe("TodayCompositionSurface", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
     expect(screen.queryByTestId("today-frame-evening")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-frame-day")).toBeInTheDocument();
+    (getTimeOfDayByHour as jest.Mock).mockReturnValue("evening");
+  });
+
+  it("does not promise evening after ritual when the evening step is time-gated off", () => {
+    (getTimeOfDayByHour as jest.Mock).mockReturnValue("morning");
+    seedFirstTodayReaction();
+    render(<TodayCompositionSurface {...baseProps} variant="firstToday" />);
+    expect(screen.queryByTestId("today-frame-evening")).not.toBeInTheDocument();
+    const ritual = screen.getByTestId("today-frame-rituals");
+    expect(within(ritual).queryByTestId("today-story-next-anchor")).not.toBeInTheDocument();
     (getTimeOfDayByHour as jest.Mock).mockReturnValue("evening");
   });
 });

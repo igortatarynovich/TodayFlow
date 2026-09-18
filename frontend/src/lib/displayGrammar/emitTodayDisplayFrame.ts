@@ -59,6 +59,8 @@ export type EmitTodayDisplayFrameInput = {
   eveningTimeOk?: boolean;
   ritual?: EmitTodayRitualInput;
   gratitudeText?: string | null;
+  /** Yesterday gratitude recall on TODAY. Empty omit — never invent. */
+  continuityBody?: string | null;
   glancePrioritize?: string | null;
 };
 
@@ -442,6 +444,20 @@ function emitMyDay(
   return { headline, focusTitle, focusBody, priorities };
 }
 
+function emitContinuity(input: EmitTodayDisplayFrameInput, atoms: DisplayAtom[]): void {
+  const text = trim(input.continuityBody);
+  if (!text) return;
+  pushAtom(atoms, {
+    slot_id: "T1.continuity",
+    surface: "today",
+    text: text.length > 220 ? `${text.slice(0, 217)}…` : text,
+    origins: ["user"],
+    text_class: "user",
+    fe_transform: "clip",
+    json_field: "day_connection.evening_observations",
+  });
+}
+
 function emitEvening(input: EmitTodayDisplayFrameInput, atoms: DisplayAtom[]): void {
   if (!input.eveningInScroll) return;
   pushAtom(atoms, {
@@ -479,6 +495,7 @@ export function emitTodayDisplayFrame(input: EmitTodayDisplayFrameInput): Displa
   const vm_fields: ExposedVmField[] = [];
 
   const humanLine = emitTodaySurface(model, atoms);
+  emitContinuity(input, atoms);
   const { cardLens, numberLens } = emitRitual(input, atoms);
   const myDay = emitMyDay(input, model, atoms);
   emitEvening(input, atoms);

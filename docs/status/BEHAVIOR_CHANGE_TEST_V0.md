@@ -1,7 +1,7 @@
 # Minimum Day Cycle + Behavior Test (operational, not canon)
 
 **Дата:** 2026-06-23  
-**Статус:** **IN_PROGRESS** — ship gate **до** первых 5–10 людей · behavior test **BLOCKED**  
+**Статус:** **IN_PROGRESS** — ship gate **до** первых 5–10 людей · behavior test **BLOCKED** · Run 3 gratitude 2026-09-18: calendar D+1 OK, magic-link claim + 2nd person still open  
 **Не канон:** продуктовый минимум и протокол поля; не новые AR · не PR2 scope.
 
 ---
@@ -139,6 +139,8 @@ CORS `:3001` · demo 404 на `:3000` · onboarding → `FirstTodaySurface`.
 
 ### Run 3 — чеклист *(заполнять по факту)*
 
+⚠️ **Dead path (не выполнять, не возвращать в код):** шаги 7–8 ниже — June Close Day (Сделал · Частично · Не сделал). Канон вечера: `TODAY_PRODUCT_FLOW_V1` §4 gratitude. Живой прогон 2026-09-18 — таблица **Run 3 gratitude** сразу под этой.
+
 **Дата D (сегодня):** __________ · **аккаунт (email):** __________ · **кто проходил:** __________
 
 | # | Шаг | OK / BROKEN | Заметка |
@@ -149,17 +151,36 @@ CORS `:3001` · demo 404 на `:3000` · onboarding → `FirstTodaySurface`.
 | 4 | `/onboarding/intent` — выбор chip | | |
 | 5 | `/onboarding/reality` — выбор chip → **`/today`** (не `?first=1`) | | |
 | 6 | Ritual → S5 → **main focus** зафиксирован | | |
-| 7 | «Закрыть день» → outcome + note → **day_closed** | | |
-| 8 | Tomorrow hook на экране закрытия | | |
+| 7 | «Закрыть день» → outcome + note → **day_closed** | DEAD | Launch cut 2026-08-30. Не реализовывать. |
+| 8 | Tomorrow hook на экране закрытия | DEAD | Заменено `T1.continuity` с GET вчерашней gratitude. |
 
 **Дата D+1 (завтра, тот же аккаунт):**
 
 | # | Шаг | OK / BROKEN | Заметка |
 |---|-----|-------------|---------|
-| 9 | `/today` → S0 **continuity line** *(без ручного localStorage)* | | |
-| 10 | Фокус дня + закрытие второго дня | | |
+| 9 | `/today` → S0 **continuity line** *(без ручного localStorage)* | | Живой слот: `T1.continuity` |
+| 10 | Фокус дня + закрытие второго дня | | Вечер = gratitude, не outcome |
 
 **Run 3 — второй человек:** повторить D + D+1 · имя: __________
+
+### Run 3 gratitude *(2026-09-18 · live `todayflow.today` · не June Close Day)*
+
+**Дата D:** 2026-09-18 · **D−1 seed:** 2026-09-17 · **кто:** agent walkthrough · **аккаунт D+1:** `run3-gratitude-*@example.com` (API signup + core-setup; JWT в UI, не magic-link)
+
+Живой путь, не таблица June:
+
+| # | Шаг | OK / BROKEN | Заметка |
+|---|-----|-------------|--------|
+| 1 | `/` → CTA в продукт | **OK** | CTA = «Собрать мой Today» → `/onboarding/invite`. «Начать бесплатно» / `/auth?mode=signup` на лендинге нет. |
+| 2 | Invite → welcome имя | **OK** | «Построить мой Profile» → `/onboarding/welcome?fresh=1`. Имя «Анна» в UI. |
+| 3 | Birth → preview | **PARTIAL** | Preview открылся с Тельцом без свежего ввода даты в этом прогоне (guest draft уже был committed — `beginGuestOnboardingSession` не стирает). Intent/reality chips = First Today `?first=1`, не `/onboarding/intent`. |
+| 4 | `/today?first=1` guest | **OK** | Composition + pitch. «Закрыть день» нет. До 18:00 MSK evening frame нет. На ритуале `Далее` disabled (последний шаг; next-anchor не обещает «Вечер»). |
+| 5 | `/onboarding/save` | **OK (claim)** | 2026-09-18 later pass: fresh guest «Мария» → birth 1990-05-15 → preview → First Today chips (фокус/состояние) → save email. Live `smtp_host` empty → JWT fallback, not inbox. Refine `?after=save` → «Пока достаточно этого» → authenticated `/today?first=1` (Мария, Путь 3). |
+| 6 | Authenticated `/today` (реальный календарь 18.09) | **OK** | После retry. `T1.continuity` с GET `/day-connection/2026-09-17` (без route-mock, без подстановки localStorage): «С чего продолжить» / «Вчера в фокусе было: «держать одно главное». Вечер сохранён благодарностью: тихий вечер у окна.» Нет «Закрыть день». MY DAY: «Дыхание 4-7-8» (`GET /practices/select`). На MY DAY `Далее` disabled — evening time-gated. |
+| 7 | Evening gratitude persist | **OK (Playwright clock)** | `frontend/e2e/evening-d1-continuity.spec.ts` vs live: **1 passed (8.7s)**. Стена 18:00 MSK в этом прогоне не ждали (~15:40 MSK). `evening_observations.kind=gratitude`. |
+| 8 | Второй человек D+1 | **OK (calendar GET)** | Второй аккаунт (Мария, UI signup). POST gratitude на 2026-09-17, `/today` 18.09 без `?first=1`: `T1.continuity` «ясность без спешки» / «тёплый разговор вечером». Нет «Закрыть день». Стена 2 календарных дней одним человеком — не ждали. |
+
+Canon opened: `today/TODAY_PRODUCT_FLOW_V1.md` §4 · `today/TODAY_DISPLAY_INVENTORY_V1.md` v1.3 `T1.continuity`.
 
 ---
 
@@ -179,11 +200,11 @@ CORS `:3001` · demo 404 на `:3000` · onboarding → `FirstTodaySurface`.
 
 ## DoD — ship gate passed
 
-- [ ] Новый пользователь: landing → demo → signup → onboarding → **полный** today *(UI signup/onboarding не пройдены целиком)*
-- [x] Утром зафиксирован **main focus** *(walkthrough run 2)*
-- [x] Вечером: outcome 3-way + один ответ «помогло/помешало» · **ощущение закрытия** *(run 2)*
-- [x] После вечера: **tomorrow hook** виден *(run 2)*
-- [ ] На следующее утро: **continuity line** *(механизм OK run 2 · **календарный D+1 после close — pending**)*
+- [x] Новый пользователь: landing → invite → welcome → birth → preview → First Today chips → save → refine skip → **authenticated Today** *(2026-09-18 UI «Мария»; live SMTP unset so save is JWT fallback, not inbox magic)*
+- [x] Утром зафиксирован **main focus** *(walkthrough run 2; live 2026-09-18 authenticated Today shows thesis)*
+- [x] Вечером: **благодарность** persist (`evening_completed` + `kind=gratitude`) · не 3-way outcome *(run 2 был Close Day — dead; live 2026-09-18 = Playwright clock + API D−1 seed)*
+- [x] После вечера: **tomorrow hook** / `T1.continuity` виден *(run 2 localStorage; **календарный D+1 2026-09-18 = GET yesterday, no route mock**)*
+- [x] На следующее утро: **continuity line** *(календарный D+1 2026-09-18 на `todayflow.today`)*
 - [ ] Команда прошла путь сама 2 дня подряд без legacy scroll-trap
 
 → разблокировать behavior test · **остановиться** на новых фичах до day-14 интервью.

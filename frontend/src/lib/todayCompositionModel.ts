@@ -325,7 +325,21 @@ export function applyEngagementToViewModel(
   };
 }
 
-/** Overlay catalog practice only onto an existing day_story practice tool — never invent the slot. */
+function catalogPracticeTool(
+  practice: { title: string; description: string; duration_minutes?: number },
+  options?: { lowEnergy?: boolean },
+): TodayStrengthenTool {
+  const detail = practice.description?.trim() || "";
+  return {
+    id: "practice",
+    label: "Практика дня",
+    title: practice.title.trim(),
+    detail: options?.lowEnergy && detail ? `${detail} Сегодня — мягкий темп.` : detail,
+    duration: practice.duration_minutes ? `${practice.duration_minutes} мин` : undefined,
+  };
+}
+
+/** Overlay catalog practice onto an existing day_story practice tool — never invent from a random hub item. */
 export function applyRecommendedPracticeToStrengthen(
   tools: TodayStrengthenTool[],
   practice: { id: string; title: string; description: string; duration_minutes?: number } | null | undefined,
@@ -336,14 +350,31 @@ export function applyRecommendedPracticeToStrengthen(
 
   return tools.map((tool) => {
     if (tool.id !== "practice") return tool;
-    const detail = practice.description?.trim() || tool.detail;
-    return {
-      ...tool,
-      title: practice.title.trim(),
-      detail: options?.lowEnergy ? `${detail} Сегодня — мягкий темп.` : detail,
-      duration: practice.duration_minutes ? `${practice.duration_minutes} мин` : tool.duration,
-    };
+    return catalogPracticeTool(
+      {
+        title: practice.title,
+        description: practice.description?.trim() || tool.detail || "",
+        duration_minutes: practice.duration_minutes,
+      },
+      options,
+    );
   });
+}
+
+/**
+ * T3.practice catalog retrieval: matched Content Library item may fill the slot
+ * when day_story has no practice tool. Unmatched select → omit, not hub fallback.
+ */
+export function applyCatalogPracticeSelection(
+  tools: TodayStrengthenTool[],
+  practice: { id: string; title: string; description: string; duration_minutes?: number } | null | undefined,
+  options?: { lowEnergy?: boolean },
+): TodayStrengthenTool[] {
+  if (!practice?.title?.trim()) return tools;
+  if (tools.some((tool) => tool.id === "practice")) {
+    return applyRecommendedPracticeToStrengthen(tools, practice, options);
+  }
+  return [...tools, catalogPracticeTool(practice, options)];
 }
 
 export function buildTodayCompositionViewModel(input: {

@@ -84,6 +84,9 @@ export const INVENTORY_SLOTS: InventorySlotRecord[] = [
 
   chrome("T1-date.eyebrow", "today"),
   slot("T1-date.title", "today", "calc", [], GLOBAL_OK, T1_NO, NONE),
+  slot("T1.continuity", "today", "user", ["gratitude"], ["user"], T1_NO, CLIP, {
+    budget_chars: 220,
+  }),
   slot("T1-hero.moon", "today", "calc", ["global_sky"], GLOBAL_OK, T1_NO, NONE),
   chrome("T1-hero.eyebrow", "today", ["day_kind"]),
   slot("T1-hero.energy_word", "today", "calc", ["day_kind"], GLOBAL_OK, T1_NO, MAP),

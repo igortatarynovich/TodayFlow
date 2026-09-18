@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main, develop]
 
+# A new push on the same branch must cancel the previous suite.
+# Without this, four loop-PR commits queued four full 12-job runs
+# (macos iOS + pytest cov + Playwright) and the PR looked hung.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   today-contract-schema:
     name: Today day JSON Schema (today_day_v1)
@@ -112,6 +119,7 @@ jobs:
   backend-tests:
     name: Backend Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     
     services:
       postgres:
@@ -181,6 +189,7 @@ jobs:
   frontend-tests:
     name: Frontend Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     
     steps:
       - uses: actions/checkout@v4
@@ -294,6 +303,7 @@ jobs:
   ios-build:
     name: iOS Build
     runs-on: macos-latest
+    timeout-minutes: 12
 
     steps:
       - uses: actions/checkout@v4
@@ -314,6 +324,7 @@ jobs:
   ios-test:
     name: iOS XCTest Smoke
     runs-on: macos-latest
+    timeout-minutes: 12
 
     steps:
       - uses: actions/checkout@v4
@@ -324,7 +335,7 @@ jobs:
       - name: Run iOS smoke tests
         working-directory: ./ios/TodayFlow
         run: |
-          SIMULATOR_NAME=$(xcrun simctl list devices available | rg "iPhone" | sed -E 's/^[[:space:]]*([^()]+)[[:space:]]+\(.*/\1/' | awk 'NR==1 { print; exit }')
+          SIMULATOR_NAME=$(xcrun simctl list devices available | grep -E "iPhone" | sed -E 's/^[[:space:]]*([^()]+)[[:space:]]+\(.*/\1/' | awk 'NR==1 { print; exit }')
           if [ -z "$SIMULATOR_NAME" ]; then
             echo "No available iPhone simulator found"
             exit 1
