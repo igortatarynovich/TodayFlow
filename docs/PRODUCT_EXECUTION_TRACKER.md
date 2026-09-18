@@ -1,10 +1,10 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-09-17
+Last updated: 2026-09-18
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (P1 RELEASE RITUAL, 2026-09-17):** P1 type `practice.release_ritual` sourced via `technique.release_ritual` (ELFT NHS Dealing with Worry + MindWell Leeds Taking control of stress + University of Exeter CEDAR Problem Solving): write one line you are done carrying, strike through or fold/crumple and set aside or bin, stop. Distinct from transition_ritual, evening_ritual, and meditation.letting_go. Not full worry-time protocol, fire rites, or treatment. `practice.release_ritual.001` active. Coverage 148 items, 15/42 P1 sourced. Next: `meditation.visualization`.
+**NOW (P1 MEDITATION VISUALIZATION, 2026-09-18):** P1 type `meditation.visualization` sourced via `technique.visualization` (NHS Inform Visualisation exercise + CUH NHS guided imagery + Oxford Health CAMHS Visualisation): sit or lie still, picture an ordinary calm place, notice a few sensory details, stop. Distinct from practice.visualization (mental rehearsal), future_self, and intention_setting. Not full clinical guided-imagery protocol, manifestation, or treatment. `meditation.visualization.001` active. Coverage 149 items, 16/42 P1 sourced. Next: `meditation.loving_kindness`.
 
 **NOW (GLANCE AUTHORITY, 2026-08-31):** Glance Daily Focus is not a fifth Today act and not an importance layer. Production `T3.priority` = Personal `do[]`, else persisted `today_move` (not Global expect/chips, not `buildGlanceDailyFocus`). Synthesizer stays on legacy `?experience=1` only. `TodayGlanceAct` remains unmounted. Dead `ProfileCharacterScene.tsx` deleted. Tests: `todayMyDayPriority` + live frames. Leftover Glance files stay post-MVP like other launch-cut surfaces.
 
@@ -2835,6 +2835,7 @@ Ordered work (aligns with canon §7):
 Use format:
 - `YYYY-MM-DD` | `Area` | `Change` | `Status` | `Notes`
 
+- 2026-09-18 | Practices / Canon | **Library fill: meditation.visualization sourced** | **ACCEPTED** | P1 type `meditation.visualization` via `technique.visualization` (NHS Inform Visualisation exercise + CUH NHS guided imagery + Oxford Health CAMHS Visualisation). Brief calm-place image; not practice.visualization/future_self/intention_setting. Not full clinical guided-imagery protocol, manifestation, or treatment. `meditation.visualization.001` active. Next = meditation.loving_kindness. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-09-17 | Practices / Canon | **Library fill: release_ritual sourced** | **ACCEPTED** | P1 type `practice.release_ritual` via `technique.release_ritual` (ELFT NHS Dealing with Worry + MindWell Leeds Taking control of stress + University of Exeter CEDAR Problem Solving). Brief write-and-aside close; not transition_ritual/evening_ritual/meditation.letting_go. Not full worry-time protocol, fire rites, or treatment. `practice.release_ritual.001` active. Next = meditation.visualization. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-09-17 | Practices / Canon | **Library fill: music sourced** | **ACCEPTED** | P1 type `practice.music` via `technique.music` (NHS Every Mind Matters low mood + sleep tips + Mind Relaxation Listen to music). Brief one-track listen; not drawing/creative_prompt/session accompaniment. Not music therapy, playlist programme, or sleep protocol. `practice.music.001` active. Next = practice.release_ritual. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-09-17 | Practices / Canon | **Library fill: drawing sourced** | **ACCEPTED** | P1 type `practice.drawing` via `technique.drawing` (CUH NHS Sketch Appeal + Calderdale and Kirklees Recovery College mindful drawing + Greater Good in Education Drawing as a Way to Manage Emotions). Brief freehand sketch; not creative_prompt/free_writing/music. Not art class, Zentangle curriculum, or art therapy. `practice.drawing.001` active. Next = practice.music. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).

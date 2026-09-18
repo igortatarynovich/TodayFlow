@@ -1754,6 +1754,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.visualization",
+      "content_class": "meditation",
+      "type": "visualization",
+      "canonical_description": "Sit or lie still. Picture a calm place you know or invent — somewhere ordinary and restful. Notice a few sensory details, stay with that place briefly, then stop. The kernel is a short calm-place image, not rehearsing an upcoming action, not a portrait of a later self, and not picturing a wished-for outcome so that it arrives. Distinct from practice.visualization, future_self, and intention_setting. Not a full guided-imagery clinical protocol, not manifestation, and not a treatment.",
+      "source_refs": [
+        {
+          "source": "NHS Inform — Visualisation exercise",
+          "url": "https://www.nhsinform.scot/healthy-living/mental-wellbeing/breathing-and-relaxation-exercises/visualisation-exercise/",
+          "locus": "A visualisation exercise involves using an image as a way to focus your mind. In your mind, picture an ideal spot to relax. It can be real or imaginary; somewhere you find restful, calming, safe and happy; a place you've been to that helps you feel relaxed. Imagine the place in as much detail as you can. You can use your senses to make it as real as possible.",
+          "note": "official_health. Method confirmation for picturing a calm place with sensory detail. 10–20 minute dose, Public Health Scotland packaging, and treatment claims not imported."
+        },
+        {
+          "source": "Cambridge University Hospitals NHS — A brief guide to guided imagery",
+          "url": "https://www.cuh.nhs.uk/patient-information/a-brief-guide-to-guided-imagery/",
+          "locus": "Guided imagery usually involves imagining yourself in a place where you feel safe, happy, comfortable and relaxed. Start to explore this place, focusing on each of your senses in turn.",
+          "note": "official_health. Method confirmation for a short safe/calm place image with senses. Path-and-gate script, procedure-distraction use, and clinical treatment framing not imported."
+        },
+        {
+          "source": "Oxford Health NHS Foundation Trust CAMHS — Visualisation",
+          "url": "https://oxfordhealth.nhs.uk/camhs/self-care/sleep/relaxation/visualisation/",
+          "locus": "Think about a place that makes you feel calm, relaxed, safe and protected. Imagine you are there. Imagine looking around you. Notice the colours and shapes. Allow yourself to take in all the senses, feeling calm, safe and peaceful.",
+          "note": "official_health. Method confirmation for a calm/safe place image with sensory notice. Sleep packaging, naming the place as a cue protocol, and treatment claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if the image makes you feel worse or brings up strong distress; open your eyes and return to the room.",
+        "Not a treatment for anxiety, trauma, insomnia, pain, or any mental or physical health condition."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

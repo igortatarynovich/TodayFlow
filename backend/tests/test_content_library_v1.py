@@ -525,6 +525,7 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.drawing.001": "technique.drawing",
         "practice.music.001": "technique.music",
         "practice.release_ritual.001": "technique.release_ritual",
+        "meditation.visualization.001": "technique.visualization",
     }
     assert any(r.get("status") == "accepted" for r in techniques["techniques"])
 
@@ -1778,7 +1779,7 @@ def test_p1_density_one_axis_per_p0_type() -> None:
         for r in coverage["type_spine"]
         if r.get("phase") == "P1" and not (r.get("item_ids") or [])
     ]
-    assert len(p1_empty) == 27
+    assert len(p1_empty) == 26
     first = items["practice.extended_exhale.002"]
     assert first["identity"]["seed_cell"] == SEED_2_CELL
     assert first["retrieval"]["duration"] == 5
@@ -1816,7 +1817,7 @@ def test_p1_density_en_locale_on_all_items() -> None:
         r for r in coverage["type_spine"]
         if r.get("phase") == "P1" and not (r.get("item_ids") or [])
     ]
-    assert len(p1_empty) == 27
+    assert len(p1_empty) == 26
 
 
 def test_p1_density_context_work_vs_evening() -> None:
@@ -1842,7 +1843,7 @@ def test_p1_density_context_work_vs_evening() -> None:
         r for r in coverage["type_spine"]
         if r.get("phase") == "P1" and not (r.get("item_ids") or [])
     ]
-    assert len(p1_empty) == 27
+    assert len(p1_empty) == 26
     _vocab, _library, coverage = _load()
     recovery = next(c for c in coverage["need_cells"] if c["id"] == SEED_18_CELL)
     self_connection = next(c for c in coverage["need_cells"] if c["id"] == SEED_13_CELL)
@@ -1994,13 +1995,13 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
 
 def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
-    assert coverage["counts"]["library_items"] == 148
+    assert coverage["counts"]["library_items"] == 149
     assert coverage["counts"]["need_cells_empty"] == 0
     assert coverage["counts"]["need_cells_seed"] == 0
     assert coverage["counts"]["need_cells_covered"] == 26
     assert library["status"] == "provisional"
     assert library["fill_frozen"] is False
-    assert len(library["items"]) == 148
+    assert len(library["items"]) == 149
 
 
 def test_p1_paced_breathing_sourced() -> None:
@@ -2305,6 +2306,26 @@ def test_p1_practice_release_ritual_sourced() -> None:
     row = next(r for r in coverage["type_spine"] if r["content_class"] == "practice" and r["type"] == "release_ritual")
     assert row["phase"] == "P1"
     assert "practice.release_ritual.001" in row["item_ids"]
+
+
+def test_p1_meditation_visualization_sourced() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == "meditation.visualization.001")
+    assert item["identity"]["content_class"] == "meditation"
+    assert item["identity"]["type"] == "visualization"
+    assert item["identity"]["status"] == "active"
+    assert item["identity"]["technique_id"] == "technique.visualization"
+    assert "seed_cell" not in item["identity"]
+    assert item["retrieval"]["purpose"] == ["calm"]
+    assert item["retrieval"]["direction"] == ["downregulate"]
+    assert item["retrieval"]["intensity"] == "low"
+    assert item["payload"]["body_kind"] == "instruction"
+    assert str(item["payload"]["locales"]["en"]["title"]).strip()
+    assert str(item["payload"]["locales"]["ru"]["title"]).strip()
+    assert "visualization" not in str(item["payload"]).lower()
+    row = next(r for r in coverage["type_spine"] if r["content_class"] == "meditation" and r["type"] == "visualization")
+    assert row["phase"] == "P1"
+    assert "meditation.visualization.001" in row["item_ids"]
 
 
 def test_repo_paths_exist() -> None:

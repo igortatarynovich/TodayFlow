@@ -8469,6 +8469,60 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.visualization.001",
+        "content_class": "meditation",
+        "type": "visualization",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.visualization"
+      },
+      "retrieval": {
+        "purpose": [
+          "calm"
+        ],
+        "domain": [],
+        "input_state": [
+          "tense"
+        ],
+        "direction": [
+          "downregulate"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "down",
+        "context": [
+          "anytime",
+          "evening"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Спокойное место",
+            "body": "Сядь или ляг спокойно. Представь спокойное место — знакомое или вымышленное, обычное и тихое. Заметь несколько деталей: что видно, слышно или ощущается. Побудь там коротко, потом открой глаза и остановись. Не репетируй дело и не рисуй желаемый итог."
+          },
+          "en": {
+            "title": "Calm place",
+            "body": "Sit or lie still. Picture a calm place you know or invent — somewhere ordinary and restful. Notice a few details: what you see, hear, or feel there. Stay with it briefly, then open your eyes and stop. Do not rehearse a next action, and do not picture a wished-for result."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Представить место",
+            "en": "Picture a place"
+          }
+        }
+      }
     }
   ]
 }
