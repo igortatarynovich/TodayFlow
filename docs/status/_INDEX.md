@@ -5,7 +5,8 @@ Active status, execution, and audit documents for TodayFlow.
 | Document | Role | Status |
 |----------|------|--------|
 | [RELEASE_PLAN_V1.md](./RELEASE_PLAN_V1.md) | Path to soft launch, gates, success criteria | **ACTIVE** |
-| [CLOSED_LOOP_V0_HANDOFF.md](./CLOSED_LOOP_V0_HANDOFF.md) | Closed loop v0 (gratitude D+1 + practice select) — next agent | **ACTIVE** |
+| [P1_LIBRARY_FILL_HANDOFF.md](./P1_LIBRARY_FILL_HANDOFF.md) | P1 library fill — next agent (`meditation.walking_meditation`) | **ACTIVE** |
+| [CLOSED_LOOP_V0_HANDOFF.md](./CLOSED_LOOP_V0_HANDOFF.md) | Closed loop v0 (gratitude D+1 + practice select) | **LOCKED** |
 | [BEHAVIOR_CHANGE_TEST_V0.md](./BEHAVIOR_CHANGE_TEST_V0.md) | Minimum Day Cycle ship gate + behavior test protocol | IN_PROGRESS / BLOCKED until ship gate |
 | [IOS_TODAYFLOW_STATUS.md](./IOS_TODAYFLOW_STATUS.md) | iOS parity snapshot | IN_PROGRESS |
 | [TODAY_CANON_VS_CODE_DIFF.md](./TODAY_CANON_VS_CODE_DIFF.md) | Today canon vs code diff | STALE |

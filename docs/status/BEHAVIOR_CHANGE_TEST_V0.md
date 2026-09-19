@@ -1,7 +1,7 @@
 # Minimum Day Cycle + Behavior Test (operational, not canon)
 
 **Дата:** 2026-06-23  
-**Статус:** **IN_PROGRESS** — ship gate **до** первых 5–10 людей · behavior test **BLOCKED** · Run 3: Мария 18→19.09 D+1 · второй человек **Елена** Day 1 19.09 (evening 18:00 ещё впереди)  
+**Статус:** **IN_PROGRESS** — ship gate **до** первых 5–10 людей · behavior test **BLOCKED** · Run 3: Мария 18→19.09 D+1 · второй человек **Елена** Day 1 + **clock-sim** evening/D+1 (не ждать 18:00)  
 **Не канон:** продуктовый минимум и протокол поля; не новые AR · не PR2 scope.
 
 ---

@@ -4,7 +4,7 @@ Last updated: 2026-09-19
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (CLOSED LOOP v0, 2026-09-19):** Same-person 2-day (Мария 18→19.09 wall-clock) closed. Second teammate **Елена** Day 1 live + **simulated evening/D+1** (Playwright clock hour=20 → 08:00 next day): gratitude `kind=gratitude` chip quiet on GET `/day-connection/2026-09-19`; D+1 slot «за спокойный момент». Existing e2e vs live 1/1 (7.0s). G0 deferred. Handoff: `docs/status/CLOSED_LOOP_V0_HANDOFF.md`.
+**NOW (P1 LIBRARY FILL, 2026-09-19):** Continue fill on `cursor/p1-self-compassion-loop-notes` (`46dba113`). Coverage 152 items, 19/42 P1. Next type: `meditation.walking_meditation` (footsteps as object — not `practice.walking` sit-break). Handoff: `docs/status/P1_LIBRARY_FILL_HANDOFF.md`. G0 deferred. Closed loop LOCKED: `docs/status/CLOSED_LOOP_V0_HANDOFF.md`.
 
 **NOW (P1 MEDITATION GRATITUDE, 2026-09-19):** P1 type `meditation.gratitude` sourced via `technique.gratitude` (GGIA Kemper / Ohio State Gratitude Meditation + OSU Wexner Heart-Centered Gratitude + Sussex Mindfulness Centre NHS): sit still, bring to mind one ordinary thankful fact, stay a few breaths, stop. Distinct from practice.gratitude, loving_kindness, and mindfulness. Not Three Good Things, journal, or treatment. `meditation.gratitude.001` active. Coverage 152 items, 19/42 P1 sourced. Next: `meditation.walking_meditation`.
 
