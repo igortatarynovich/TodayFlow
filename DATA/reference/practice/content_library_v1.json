@@ -8523,6 +8523,114 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.loving_kindness.001",
+        "content_class": "meditation",
+        "type": "loving_kindness",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.loving_kindness"
+      },
+      "retrieval": {
+        "purpose": [
+          "connection"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "connect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime",
+          "evening"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Доброе пожелание",
+            "body": "Сядь спокойно. Про себя пожелай себе быть в порядке, в безопасности, чуть легче. Потом представь одного человека, кто тебе небезразличен, и теми же короткими словами пожелай ему того же. Потом остановись. Не разбирай обиду и не обходи всех подряд."
+          },
+          "en": {
+            "title": "A kind wish",
+            "body": "Sit still. Silently wish yourself well — safe, at ease. Then bring to mind one person you care about and wish them the same in a few short phrases. Then stop. Do not work through a grievance, and do not move through a long list of people."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Пожелать добра",
+            "en": "Wish well"
+          }
+        }
+      }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.self_compassion.001",
+        "content_class": "meditation",
+        "type": "self_compassion",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.self_compassion"
+      },
+      "retrieval": {
+        "purpose": [
+          "emotional_awareness"
+        ],
+        "domain": [],
+        "input_state": [
+          "emotionally_heavy"
+        ],
+        "direction": [
+          "reflect"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime",
+          "evening"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Как к другу",
+            "body": "Сядь спокойно. Заметь, что сейчас трудно, или какую жёсткую фразу ты себе говоришь. Ответь коротко, как ответил бы другу: это тяжело, ты не обязан быть идеальным. Потом остановись. Не разбирай вину и не желай этого другому."
+          },
+          "en": {
+            "title": "As to a friend",
+            "body": "Sit still. Notice a hard moment now, or a harsh line you are saying to yourself. Answer it in a few short supporting phrases — as you would to a friend. Then stop. Do not work through blame, and do not send the wish to another person."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Поддержать себя",
+            "en": "Meet yourself kindly"
+          }
+        }
+      }
     }
   ]
 }

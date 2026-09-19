@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `meditation.loving_kindness`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 16/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `meditation.gratitude`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 18/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,6 +218,8 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-09-19 | **P1 `meditation.self_compassion` sourced.** `technique.self_compassion` accepted (KMPCT NHS stress handbook + SE Trust HSCNI Using Self Compassion + CCI WA Health Barriers to Self-Compassion). Brief supporting voice: notice a hard moment, answer as to a friend; not loving_kindness/acceptance/affirmation.compassion/journaling. Not full MSC curriculum, CFT, or treatment. `meditation.self_compassion.001` active. Coverage matrix: 151 items, 18/42 P1 sourced. Next: `meditation.gratitude`. |
+| 2026-09-19 | **P1 `meditation.loving_kindness` sourced.** `technique.loving_kindness` accepted (NHS Scotland Right Decisions actual practice + NHS Lothian Loving Kindness meditation + BSMHFT sending kind thoughts). Brief well-wishing: self then one person; not self_compassion/connection_action/meditation.gratitude. Not full MBSR four-circle protocol, CFT, or treatment. `meditation.loving_kindness.001` active. Coverage matrix: 150 items, 17/42 P1 sourced. Next: `meditation.self_compassion`. |
 | 2026-09-18 | **P1 `meditation.visualization` sourced.** `technique.visualization` accepted (NHS Inform Visualisation exercise + CUH NHS guided imagery + Oxford Health CAMHS Visualisation). Brief calm-place image; not practice.visualization/future_self/intention_setting. Not full clinical guided-imagery protocol/manifestation/treatment. `meditation.visualization.001` active. Coverage matrix: 149 items, 16/42 P1 sourced. Next: `meditation.loving_kindness`. |
 | 2026-09-17 | **P1 `practice.release_ritual` sourced.** `technique.release_ritual` accepted (ELFT NHS Dealing with Worry + MindWell Leeds Taking control of stress + University of Exeter CEDAR Problem Solving). Brief write-and-aside close; not transition_ritual/evening_ritual/meditation.letting_go. Not full worry-time protocol/fire rites/treatment. `practice.release_ritual.001` active. Coverage matrix: 148 items, 15/42 P1 sourced. Next: `meditation.visualization`. |
 | 2026-09-17 | **P1 `practice.music` sourced.** `technique.music` accepted (NHS Every Mind Matters low mood + sleep tips + Mind Relaxation Listen to music). Brief one-track listen; not drawing/creative_prompt/session accompaniment. Not music therapy/playlist programme/sleep protocol. `practice.music.001` active. Coverage matrix: 147 items, 14/42 P1 sourced. Next: `practice.release_ritual`. |

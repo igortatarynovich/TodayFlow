@@ -1786,6 +1786,70 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.loving_kindness",
+      "content_class": "meditation",
+      "type": "loving_kindness",
+      "canonical_description": "Sit still. Silently wish yourself well — safe, at ease — then bring to mind one person you care about and wish them the same in a few short phrases, then stop. The kernel is brief well-wishing toward self and one other, not meeting your own difficulty with a supporting voice, not a four-circle expansion (neutral / difficult / all beings), and not a therapy protocol. Distinct from self_compassion, connection_action, and meditation.gratitude. Not a full MBSR loving-kindness curriculum, not Compassion Focused Therapy, and not a treatment.",
+      "source_refs": [
+        {
+          "source": "NHS Scotland Right Decisions — The actual practice of loving kindness",
+          "url": "https://rightdecisions.scot.nhs.uk/health-improvement-staff-mindfulness-programme/mbsr/mbsr-handouts/week-7/10-the-actual-practice-of-loving-kindness/",
+          "locus": "We begin with developing loving kindness towards ourselves ... May I be well. May I be happy. May I be free from suffering. After a period of focusing loving kindness towards ourselves, we gradually let go of the image of ourselves and bring to mind someone in our lives whom we love dearly ... May you be well. May you be happy. May you be free from suffering.",
+          "note": "official_health / NHS Scotland staff mindfulness. Method confirmation for silent well-wishing to self then one dear person using short phrases. Full expanding-circle protocol, child-self imagery, and MBSR week-7 curriculum not imported."
+        },
+        {
+          "source": "NHS Lothian Right Decisions — Loving Kindness meditation",
+          "url": "https://www.rightdecisions.scot.nhs.uk/mindfulness-community/guided-practices/nhs-lothian/",
+          "locus": "Loving Kindness meditation (30m) Procter 2024. In this practice we first resource and nourish ourselves with gratitude and start to feel the awakening of qualities of kindness. We choose first a good friend and then someone whom we know is having a hard time. Being aware of what they need, we wish them well, bathing them in kindness. We then offer kindness and well-wishing to ourselves.",
+          "note": "official_health. Method confirmation for wishing a known person well, then offering the same to yourself. 30-minute dose, gratitude preamble, hard-time person, and radiation to the world not imported."
+        },
+        {
+          "source": "Birmingham and Solihull Mental Health NHS Foundation Trust — Mindfulness (sending kind thoughts)",
+          "url": "https://www.bsmhft.nhs.uk/wp-content/uploads/2023/08/Mindfulness-by-Liam.pdf",
+          "locus": "For about the next 10 minutes, we're going to practise loving kindness. Or 'sending kind thoughts'. We're going to explore what that's like to send them to ourselves and to others. ... send them kind wishes. You may wish them to be happy. You may wish them to be well. You may wish them to be safe. ... you will begin to send yourself some kind wishes… May I be happy…. may I be safe…",
+          "note": "official_health. Method confirmation for sending short kind wishes to another and to yourself. 10-minute script length, optional body scan, and group-reading packaging not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if wishing yourself or another well brings up strong distress, self-attack, or a flood of grievance; open your eyes and return to the room.",
+        "Not a treatment for depression, trauma, relationship conflict, or any mental health condition, and not a way to change another person's life."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
+      "technique_id": "technique.self_compassion",
+      "content_class": "meditation",
+      "type": "self_compassion",
+      "canonical_description": "Sit still. Notice a current hard moment or a harsh line you are saying to yourself. Answer it in a few short supporting phrases — as you would to a friend — then stop. The kernel is meeting your own difficulty with a supporting voice, not well-wishing to another person, not watching the feeling without answering, and not a one-line slogan. Distinct from loving_kindness, acceptance, affirmation.compassion, and journaling. Not a full Mindful Self-Compassion curriculum, not Compassion Focused Therapy, and not a treatment.",
+      "source_refs": [
+        {
+          "source": "Kent and Medway Primary Care Training Hub NHS — Stress management handbook for primary care receptionists",
+          "url": "https://kmpctraininghub.nhs.uk/wp-content/uploads/2025/06/Stress-management-handbook-for-primary-care-receptionists-Spring-2025.pdf",
+          "locus": "Being self-compassionate involves being supportive and kind to yourself when facing challenges or after making a mistake. Instead of thinking “just get on with it” … see if you can stop yourself and notice that you are going through a really difficult situation. … And lastly, see if you are able to show yourself some self-compassion, how can you comfort and care for yourself in this moment? You can try thinking “may I be kind to myself”, “may I forgive myself”, or “may I learn to accept myself just as I am”. The important thing is that you come up with a phrase that feels most authentic to you, as long as it is a supportive sentence that extends compassion towards yourself.",
+          "note": "official_health. Method confirmation for noticing a hard moment, then answering with a short supportive sentence toward yourself. Workplace stress programme, Neff exercise list, and treatment claims not imported."
+        },
+        {
+          "source": "South Eastern Health and Social Care Trust — Using Self Compassion",
+          "url": "https://setrust.hscni.net/wp-content/uploads/2023/05/SELF-COMPASSION-BOOK-APRIL-2023-smallest-file-size.pdf",
+          "locus": "Self-compassion involves treating and talking to yourself just like your friends or family. You are supportive and understanding toward yourself during a challenging time rather than being harsh and critical. … Imagine how you would talk to a friend. We can often extend kind words, hope and encouragement to friends or loved ones when going through a tough time. Consider how you might respond to a close friend if they were going through a similar situation and talk to yourself in that way.",
+          "note": "official_health / HSCNI. Method confirmation for answering your own difficulty as you would a friend. Eight-week claims, mirror practice, CFT imagery, and treatment framing not imported."
+        },
+        {
+          "source": "Centre for Clinical Interventions (WA Health) — Barriers to Self-Compassion",
+          "url": "https://www.cci.health.wa.gov.au/~/media/CCI/Consumer-Modules/Building-Self-Compassion/Building-Self-Compassion---02---Barriers-to-Self-Compassion.pdf",
+          "locus": "Speak to yourself like you would someone you cared about. Now, this is not about being unrealistically positive (e.g., “everything will be great”) or heaping yourself with praise (e.g., “I am awesome”), but instead being encouraging and kind in your words and tone of voice. … I will say things like “I know this is really hard, everyone struggles with this, just do the best you can and hang in there”, and I will have a soft warm tone to my voice.",
+          "note": "official_health. Method confirmation for kind, realistic supporting speech toward yourself in difficulty. Alternate-day experiment, workbook sequence, and CFT soothe-system claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if meeting the hard moment with kind words brings up strong distress, self-attack, or a flood of shame; open your eyes and return to the room.",
+        "Not a treatment for depression, trauma, self-harm, or any mental health condition, and not a way to make the difficulty go away."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

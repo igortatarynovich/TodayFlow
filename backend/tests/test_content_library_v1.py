@@ -526,6 +526,8 @@ def test_fill_unfrozen_provisional_probes() -> None:
         "practice.music.001": "technique.music",
         "practice.release_ritual.001": "technique.release_ritual",
         "meditation.visualization.001": "technique.visualization",
+        "meditation.loving_kindness.001": "technique.loving_kindness",
+        "meditation.self_compassion.001": "technique.self_compassion",
     }
     assert any(r.get("status") == "accepted" for r in techniques["techniques"])
 
@@ -1995,13 +1997,13 @@ def test_overlapping_state_does_not_close_other_cells() -> None:
 
 def test_coverage_counts() -> None:
     _vocab, library, coverage = _load()
-    assert coverage["counts"]["library_items"] == 149
+    assert coverage["counts"]["library_items"] == 151
     assert coverage["counts"]["need_cells_empty"] == 0
     assert coverage["counts"]["need_cells_seed"] == 0
     assert coverage["counts"]["need_cells_covered"] == 26
     assert library["status"] == "provisional"
     assert library["fill_frozen"] is False
-    assert len(library["items"]) == 149
+    assert len(library["items"]) == 151
 
 
 def test_p1_paced_breathing_sourced() -> None:
@@ -2326,6 +2328,46 @@ def test_p1_meditation_visualization_sourced() -> None:
     row = next(r for r in coverage["type_spine"] if r["content_class"] == "meditation" and r["type"] == "visualization")
     assert row["phase"] == "P1"
     assert "meditation.visualization.001" in row["item_ids"]
+
+
+def test_p1_meditation_loving_kindness_sourced() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == "meditation.loving_kindness.001")
+    assert item["identity"]["content_class"] == "meditation"
+    assert item["identity"]["type"] == "loving_kindness"
+    assert item["identity"]["status"] == "active"
+    assert item["identity"]["technique_id"] == "technique.loving_kindness"
+    assert "seed_cell" not in item["identity"]
+    assert item["retrieval"]["purpose"] == ["connection"]
+    assert item["retrieval"]["direction"] == ["connect"]
+    assert item["retrieval"]["intensity"] == "low"
+    assert item["payload"]["body_kind"] == "instruction"
+    assert str(item["payload"]["locales"]["en"]["title"]).strip()
+    assert str(item["payload"]["locales"]["ru"]["title"]).strip()
+    assert "loving_kindness" not in str(item["payload"]).lower()
+    row = next(r for r in coverage["type_spine"] if r["content_class"] == "meditation" and r["type"] == "loving_kindness")
+    assert row["phase"] == "P1"
+    assert "meditation.loving_kindness.001" in row["item_ids"]
+
+
+def test_p1_meditation_self_compassion_sourced() -> None:
+    _vocab, library, coverage = _load()
+    item = next(i for i in library["items"] if i["identity"]["item_id"] == "meditation.self_compassion.001")
+    assert item["identity"]["content_class"] == "meditation"
+    assert item["identity"]["type"] == "self_compassion"
+    assert item["identity"]["status"] == "active"
+    assert item["identity"]["technique_id"] == "technique.self_compassion"
+    assert "seed_cell" not in item["identity"]
+    assert item["retrieval"]["purpose"] == ["emotional_awareness"]
+    assert item["retrieval"]["direction"] == ["reflect"]
+    assert item["retrieval"]["intensity"] == "low"
+    assert item["payload"]["body_kind"] == "instruction"
+    assert str(item["payload"]["locales"]["en"]["title"]).strip()
+    assert str(item["payload"]["locales"]["ru"]["title"]).strip()
+    assert "self_compassion" not in str(item["payload"]).lower()
+    row = next(r for r in coverage["type_spine"] if r["content_class"] == "meditation" and r["type"] == "self_compassion")
+    assert row["phase"] == "P1"
+    assert "meditation.self_compassion.001" in row["item_ids"]
 
 
 def test_repo_paths_exist() -> None:

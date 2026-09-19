@@ -1,7 +1,7 @@
 # Minimum Day Cycle + Behavior Test (operational, not canon)
 
 **Дата:** 2026-06-23  
-**Статус:** **IN_PROGRESS** — ship gate **до** первых 5–10 людей · behavior test **BLOCKED** · Run 3 gratitude 2026-09-18: calendar D+1 OK, magic-link claim + 2nd person still open  
+**Статус:** **IN_PROGRESS** — ship gate **до** первых 5–10 людей · behavior test **BLOCKED** · Run 3: Мария 18→19.09 D+1 · второй человек **Елена** Day 1 19.09 (evening 18:00 ещё впереди)  
 **Не канон:** продуктовый минимум и протокол поля; не новые AR · не PR2 scope.
 
 ---
@@ -177,8 +177,11 @@ CORS `:3001` · demo 404 на `:3000` · onboarding → `FirstTodaySurface`.
 | 4 | `/today?first=1` guest | **OK** | Composition + pitch. «Закрыть день» нет. До 18:00 MSK evening frame нет. На ритуале `Далее` disabled (последний шаг; next-anchor не обещает «Вечер»). |
 | 5 | `/onboarding/save` | **OK (claim)** | 2026-09-18 later pass: fresh guest «Мария» → birth 1990-05-15 → preview → First Today chips (фокус/состояние) → save email. Live `smtp_host` empty → JWT fallback, not inbox. Refine `?after=save` → «Пока достаточно этого» → authenticated `/today?first=1` (Мария, Путь 3). |
 | 6 | Authenticated `/today` (реальный календарь 18.09) | **OK** | После retry. `T1.continuity` с GET `/day-connection/2026-09-17` (без route-mock, без подстановки localStorage): «С чего продолжить» / «Вчера в фокусе было: «держать одно главное». Вечер сохранён благодарностью: тихий вечер у окна.» Нет «Закрыть день». MY DAY: «Дыхание 4-7-8» (`GET /practices/select`). На MY DAY `Далее` disabled — evening time-gated. |
-| 7 | Evening gratitude persist | **OK (Playwright clock)** | `frontend/e2e/evening-d1-continuity.spec.ts` vs live: **1 passed (8.7s)**. Стена 18:00 MSK в этом прогоне не ждали (~15:40 MSK). `evening_observations.kind=gratitude`. |
-| 8 | Второй человек D+1 | **OK (calendar GET)** | Второй аккаунт (Мария, UI signup). POST gratitude на 2026-09-17, `/today` 18.09 без `?first=1`: `T1.continuity` «ясность без спешки» / «тёплый разговор вечером». Нет «Закрыть день». Стена 2 календарных дней одним человеком — не ждали. |
+| 7 | Evening gratitude persist | **OK (wall-clock)** | 2026-09-18 hour=18 Europe/Warsaw, Мария: tab «Вечер», `today-frame-evening` + `today-evening-gratitude`, нет «Закрыть день». Chip «За спокойный момент» → «Благодарность сохранена.» GET `/day-connection/2026-09-18`: `evening_completed=true`, `kind=gratitude`, `morning_focus=Возвращение ясности`. Playwright clock still 1/1 (9.4s). |
+| 8 | Второй человек D+1 | **OK (calendar GET)** | Post-merge UI 18.09: Мария `T1.continuity` «ясность без спешки» / «тёплый разговор вечером». |
+| 9 | Тот же человек, 2 календарных дня | **OK** | 2026-09-19 hour=11 Europe/Warsaw, Мария `/today` суббота: `today-entity-continuity-recall` «С чего продолжить» / «Вчера в фокусе было: «Возвращение ясности». Вечер сохранён благодарностью: За спокойный момент.» GET `/day-connection/2026-09-18` `kind=gratitude` `categories=[quiet]` `morning_focus=Возвращение ясности` — без route-mock. Нет evening / «Закрыть день». MY DAY last, `Далее` disabled, практика «Дыхание 4-7-8». |
+| 10 | Второй человек, день 1 | **OK (daytime)** | 2026-09-19 hour=12, **Елена** (birth 1992-08-20 Leo): landing → invite → welcome `?fresh=1` → preview **Лев** → chips → save JWT fallback → refine skip → `/today`. Нет evening / «Закрыть день». |
+| 11 | Второй человек, evening + D+1 *(время симулировано)* | **OK** | Playwright clock vs live: hour=20, `today-frame-evening`, chip quiet, GET `/day-connection/2026-09-19` `kind=gratitude`. Clock 2026-09-20 08:00: `T1.continuity` «за спокойный момент». Нет «Закрыть день». Existing `evening-d1-continuity.spec.ts` vs live **1 passed (7.0s)**. |
 
 Canon opened: `today/TODAY_PRODUCT_FLOW_V1.md` §4 · `today/TODAY_DISPLAY_INVENTORY_V1.md` v1.3 `T1.continuity`.
 
@@ -202,9 +205,9 @@ Canon opened: `today/TODAY_PRODUCT_FLOW_V1.md` §4 · `today/TODAY_DISPLAY_INVEN
 
 - [x] Новый пользователь: landing → invite → welcome → birth → preview → First Today chips → save → refine skip → **authenticated Today** *(2026-09-18 UI «Мария»; live SMTP unset so save is JWT fallback, not inbox magic)*
 - [x] Утром зафиксирован **main focus** *(walkthrough run 2; live 2026-09-18 authenticated Today shows thesis)*
-- [x] Вечером: **благодарность** persist (`evening_completed` + `kind=gratitude`) · не 3-way outcome *(run 2 был Close Day — dead; live 2026-09-18 = Playwright clock + API D−1 seed)*
+- [x] Вечером: **благодарность** persist (`evening_completed` + `kind=gratitude`) · не 3-way outcome *(live 2026-09-18 wall-clock hour=18 Мария UI + GET; Playwright clock also 1/1)*
 - [x] После вечера: **tomorrow hook** / `T1.continuity` виден *(run 2 localStorage; **календарный D+1 2026-09-18 = GET yesterday, no route mock**)*
-- [x] На следующее утро: **continuity line** *(календарный D+1 2026-09-18 на `todayflow.today`)*
-- [ ] Команда прошла путь сама 2 дня подряд без legacy scroll-trap
+- [x] На следующее утро: **continuity line** *(календарный D+1 2026-09-18; **same person 2026-09-19** after wall-clock evening 18.09)*
+- [x] Команда прошла путь сама 2 дня подряд без legacy scroll-trap *(agent walkthrough, 1 человек «Мария» × 18→19.09 live; не 2 живых участника команды)*
 
 → разблокировать behavior test · **остановиться** на новых фичах до day-14 интервью.
