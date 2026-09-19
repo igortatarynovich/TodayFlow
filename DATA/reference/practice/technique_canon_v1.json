@@ -1850,6 +1850,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.gratitude",
+      "content_class": "meditation",
+      "type": "gratitude",
+      "canonical_description": "Sit still. Bring to mind one ordinary thing from today you are thankful for — a taste, a small kindness, a bit of light. Stay with it for a few breaths, then stop. The kernel is directed attention to one thankful fact, not writing a named list, not well-wishing to another person, and not watching whatever arises. Distinct from practice.gratitude, loving_kindness, and mindfulness. Not a Three Good Things protocol, not a journal, and not a treatment.",
+      "source_refs": [
+        {
+          "source": "Greater Good in Action — Gratitude Meditation (Kemper / Ohio State)",
+          "url": "https://ggia.berkeley.edu/practice/gratitude_meditation",
+          "locus": "Sit upright in a comfortable, stable position where you feel fully supported… Now that our bodies, emotions, and thoughts are a little clearer, a bit more spacious and open, we can begin to focus on the events, experiences, people, pets, or possessions for which we feel grateful. … Now, take a moment to reflect on your own reasons for feeling grateful in this moment now.",
+          "note": "academic_description / university health. Method confirmation for sitting still and directing attention to what you are thankful for in this moment. 10-minute blessing inventory, resilience/mood claims, and journal add-on not imported."
+        },
+        {
+          "source": "Ohio State Wexner Medical Center Integrative Health — Heart-Centered Practices (Gratitude)",
+          "url": "https://wexnermedical.osu.edu/integrative-health/resources/heart-centered-practices",
+          "locus": "Counting our blessings reminds us that while life is sometimes difficult, it is a gift to be alive. Focusing on gratitude is empowering and helps us feel more accepting of the present and hopeful toward the future. Gratitude practice is an easy way to boost mood, enhance focus, and create happiness.",
+          "note": "official_health / university medical centre. Method confirmation for a sitting gratitude focus as distinct from a written list. Mood, resilience, and guided-audio length not imported."
+        },
+        {
+          "source": "Sussex Mindfulness Centre (Sussex Partnership NHS) — Being thankful for small things in life",
+          "url": "https://sussexmindfulnesscentre.nhs.uk/2023/11/22/being-thankful-for-small-things-in-life/",
+          "locus": "In mindfulness practice, we learn to pay attention to the small details: the taste of our cup of tea, the unexpectedly supportive email, the feeling of November sunshine, the smile of the person at the till in the shop. If we tune into this kind of thing, it doesn’t cost time or money…",
+          "note": "official_health. Method confirmation for directing attention to one ordinary thankful detail. Evening spoken round, retreat packaging, and mood claims not imported."
+        }
+      ],
+      "safety_notes": [
+        "Stop if searching for something to be thankful for makes the day feel worse; open your eyes and return to the room.",
+        "Not a treatment for low mood, grief, or any mental health condition, and not a happiness guarantee."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

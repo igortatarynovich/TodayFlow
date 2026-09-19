@@ -8631,6 +8631,60 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.gratitude.001",
+        "content_class": "meditation",
+        "type": "gratitude",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.gratitude"
+      },
+      "retrieval": {
+        "purpose": [
+          "presence"
+        ],
+        "domain": [],
+        "input_state": [
+          "disconnected"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime",
+          "evening"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Одно хорошее",
+            "body": "Сядь спокойно. Возьми одно обычное из сегодня — вкус чая, маленькую доброту, кусок света. Побудь с этим несколько дыханий. Потом остановись. Не составляй список и не желай этого другому."
+          },
+          "en": {
+            "title": "One small thanks",
+            "body": "Sit still. Bring to mind one ordinary thing from today you are thankful for — a taste, a small kindness, a bit of light. Stay with it for a few breaths. Then stop. Do not write a list, and do not send a wish to another person."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "Побудь с одним",
+            "en": "Stay with one"
+          }
+        }
+      }
     }
   ]
 }

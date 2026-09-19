@@ -67,7 +67,7 @@
 ## 5. Next (ordered)
 
 1. **G2 2.4:** second person × 2 days is closed **with simulated time** (Елена clock hour=20 persist + D+1 recall). Wall-clock 20.09 morning still available as extra confirmation, not a blocker. Behavior test cohort (5–10) stays owner-gated.
-2. **P1 fill next:** `meditation.gratitude`. G0 stays deferred (do not untrip `llm_spend.json`).
+2. **P1 fill next:** `meditation.walking_meditation`. G0 stays deferred (do not untrip `llm_spend.json`).
 3. Do not restore Close Day. Do not invent practice from `/practices?limit=1`.
 
 ---
