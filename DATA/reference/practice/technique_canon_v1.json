@@ -1926,6 +1926,18 @@
       "note": "A short source-check did not find a distinct sitting method whose kernel is absence of guidance. NHS Scotland MBSR choiceless awareness / 'just sitting' is open monitoring of whatever arises — already technique.open_awareness. NHS/MBSR 'practice without guidance' and Sussex 'mostly unguided sitting' are delivery of breath or sitting mindfulness, not a type. NHS 'sitting silently' still names breath, sounds, or body as the object — technique.mindfulness / technique.breath_awareness. Periods of not speaking (silent day, noble silence, retreat container) belong to discipline.silence, not this class. P1 type meditation.silence remains skipped_for_now. Return only if product requires a kernel that is not open_awareness, unguided delivery, or a communication-period rule."
     },
     {
+      "technique_id": "technique.self_identity",
+      "content_class": "affirmation",
+      "type": "self_identity",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "source_gap",
+      "note": "No authoritative clinical or educational source describing a brief spoken 'I can remain myself' affirmation as a standalone technique was found in this pass. Steele/Cohen self-affirmation is values-contact writing, not this type (and already used as provenance for agency/relationship). CCI/NHS self-esteem materials (positive qualities, accept who you are) are worth/esteem work, not remaining oneself. Repeating a slogan such as 'I'm a lovable person' is not a method (and can backfire). Capability and agency already cover coping and choice-point statements. P1 type affirmation.self_identity remains skipped_for_now. Return only if product requires a kernel that is not capability, agency, self_worth, values-writing, or a slogan."
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

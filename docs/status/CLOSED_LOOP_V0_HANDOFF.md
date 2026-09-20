@@ -68,7 +68,7 @@
 
 ## 5. Next (ordered)
 
-1. **Fill:** `docs/status/P1_LIBRARY_FILL_HANDOFF.md` — next type `affirmation.self_identity`.
+1. **Fill:** `docs/status/P1_LIBRARY_FILL_HANDOFF.md` — next type `affirmation.self_worth`.
 2. Behavior test cohort (5–10) stays owner-gated.
 3. Do not restore Close Day. Do not invent practice from `/practices?limit=1`. G0 stays deferred.
 

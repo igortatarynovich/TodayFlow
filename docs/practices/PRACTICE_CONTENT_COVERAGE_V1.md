@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `affirmation.self_identity`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 20/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`); `meditation.silence` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `affirmation.self_worth`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 20/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`); `meditation.silence` skipped (`family_collapse`); `affirmation.self_identity` skipped (`source_gap`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-09-20 | **P1 `affirmation.self_identity` skipped.** `technique.self_identity` `source_gap`: no brief spoken «remain myself» method. Steele/Cohen is values-writing; CCI/NHS self-esteem is worth/esteem; slogan is not a method. Coverage matrix: 153 items, 20/42 P1 sourced, 3 P1 skipped. Next: `affirmation.self_worth`. |
 | 2026-09-20 | **P1 `meditation.silence` skipped.** `technique.silence` `family_collapse`: NHS Scotland MBSR choiceless awareness / just sitting is open monitoring (`technique.open_awareness`); unguided sitting is delivery of breath/mindfulness; silent-day / noble silence is `discipline.silence`. No distinct meditation-class kernel. Coverage matrix: 153 items, 20/42 P1 sourced, 2 P1 skipped. Next: `affirmation.self_identity`. |
 | 2026-09-19 | **P1 `meditation.walking_meditation` sourced.** `technique.walking_meditation` accepted (Guy's and St Thomas' NHS MBSR walking mindfulness + Newcastle Hospitals NHS walking meditation + RUH Bath PHY051 Mindful Walking). Brief slow loop with attention on lift–move–land; not practice.walking/mindful_movement/sitting breath. Not a workout, nature walk, MBSR course, or treatment. `meditation.walking_meditation.001` active. Coverage matrix: 153 items, 20/42 P1 sourced. Next: `meditation.silence`. |
 | 2026-09-19 | **P1 `meditation.gratitude` sourced.** `technique.gratitude` accepted (GGIA Kemper / Ohio State Gratitude Meditation + OSU Wexner Heart-Centered Gratitude + Sussex Mindfulness Centre NHS small thankful details). Brief sit with one ordinary thankful fact; not practice.gratitude/loving_kindness/mindfulness. Not Three Good Things, journal, or treatment. `meditation.gratitude.001` active. Coverage matrix: 152 items, 19/42 P1 sourced. Next: `meditation.walking_meditation`. |

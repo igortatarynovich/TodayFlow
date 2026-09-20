@@ -9,9 +9,9 @@
 
 ## 0. First 15 minutes
 
-1. Read this file + `docs/practices/PRACTICE_LIBRARY_FILL_V1.md` §0–§2 + tracker NOW (`P1 MEDITATION SILENCE SKIP`).
-2. Checkout `cursor/p1-self-compassion-loop-notes` (includes walking_meditation and the `meditation.silence` skip). Do **not** start a parallel fill branch unless this one is merged or abandoned.
-3. Next type in ledger order: **`affirmation.self_identity`**. Taxonomy meaning: «I can remain myself». Distinct from `capability` (able to handle this), `agency` (I choose the next step), and skipped `self_trust`. Landscape family also lists self_worth / self_trust — skip if the kernel collapses into those or into a Steele values-affirmation writing protocol.
+1. Read this file + `docs/practices/PRACTICE_LIBRARY_FILL_V1.md` §0–§2 + tracker NOW (`P1 SELF IDENTITY SKIP`).
+2. Checkout `cursor/p1-self-compassion-loop-notes` (includes walking_meditation, the `meditation.silence` skip, and the `affirmation.self_identity` skip). Do **not** start a parallel fill branch unless this one is merged or abandoned.
+3. Next type in ledger order: **`affirmation.self_worth`**. Taxonomy meaning: «worth is not the result». Distinct from skipped `self_identity` («I can remain myself»), skipped `self_trust`, and sourced `capability` / `agency`. Landscape family `identity_worth` flags high slogan risk — skip if the kernel is a slogan, a self-esteem course, or Steele values-writing.
 4. G0 stays deferred. Do **not** untrip `DATA/ops/llm_spend.json`.
 
 ---
@@ -21,7 +21,7 @@
 | | |
 |---|---|
 | Branch | `cursor/p1-self-compassion-loop-notes` |
-| Tip | this skip commit (`meditation.silence` `family_collapse`) |
+| Tip | this skip commit (`affirmation.self_identity` `source_gap`) |
 | Remote | `origin/cursor/p1-self-compassion-loop-notes` (**no PR yet**) |
 | Base | `main` `254ad0bf` |
 | Live | compose still `254ad0bf` — this library fill is **not** on `todayflow.today` until merge + recreate |
@@ -34,7 +34,8 @@
 | `46dba113` | P1 `meditation.gratitude` (sit with one thankful fact) |
 | `eb0ca483` | Point next work at the P1 fill handoff |
 | `d570b0ab` | P1 `meditation.walking_meditation` (steps as the object; not `practice.walking`) |
-| HEAD | P1 `meditation.silence` skipped (`family_collapse`) |
+| `c7453c76` | P1 `meditation.silence` skipped (`family_collapse`) |
+| HEAD | P1 `affirmation.self_identity` skipped (`source_gap`) |
 
 ---
 
@@ -52,18 +53,18 @@
 - LLM is not a method source. Several quality sources confirm the method exists.
 - One technique record. Debate → `skipped` / `skipped_for_now`. Do not invent a type to save coverage.
 - `allowed_claims[]` empty. Meaning does not emit `item_id` / `technique_id`.
-- Payload must not contain the type code string (e.g. `self_identity`).
+- Payload must not contain the type code string (e.g. `self_worth`).
 - Public JSON unchanged by a type fill.
 
 ---
 
 ## 3. Coverage now
 
-- Library items: **153** (unchanged — silence was a skip)
+- Library items: **153** (unchanged — self_identity was a skip)
 - P1 types sourced: **20/42**
-- P1 skipped: `practice.body_scan` (`family_collapse`), `meditation.silence` (`family_collapse`)
+- P1 skipped: `practice.body_scan` (`family_collapse`), `meditation.silence` (`family_collapse`), `affirmation.self_identity` (`source_gap`)
 - P0 need cells: 26/26 sourced
-- Provenance: v1.70
+- Provenance: v1.71
 - Active items this branch: `meditation.loving_kindness.001`, `meditation.self_compassion.001`, `meditation.gratitude.001`, `meditation.walking_meditation.001`
 
 **This-train kernels (do not collapse the next type into these):**
@@ -76,20 +77,21 @@
 | `practice.walking` *(already on main)* | Stand; walk a short comfortable distance; stop | Walking as meditation object |
 | `meditation.walking_meditation` | Stand; slow short loop; attention on lift–move–land; return to the feet; stop | Sit-break locomotion, in-place mindful_movement, pressing soles while still |
 | `meditation.silence` *(skipped)* | — | Choiceless awareness / just sitting (`open_awareness`); unguided sitting (delivery); silent-day / noble silence (`discipline.silence`) |
-| `affirmation.capability` *(already sourced)* | Spoken «I can handle this» coping statement | Steele values writing, self_identity |
+| `affirmation.capability` *(already sourced)* | Spoken «I can handle this» coping statement | Steele values writing, self_identity, self_worth |
 | `affirmation.agency` *(already sourced)* | Spoken «I choose the next small step» | Self_identity, capability |
+| `affirmation.self_identity` *(skipped)* | — | Steele/Cohen values-writing; CCI/NHS self-esteem / worth; slogan («I'm lovable»); capability; agency |
 
 ---
 
-## 4. Next fill — `affirmation.self_identity`
+## 4. Next fill — `affirmation.self_worth`
 
-Taxonomy meaning: I can remain myself.
+Taxonomy meaning: worth is not the result.
 
-1. Confirm a normal technique exists (several official_health / educational sources). Kernel candidate: a brief first-person statement that one can remain oneself in this situation; speak once or twice; stop.
-2. If sources collapse into `capability`, `agency`, skipped `self_trust`, Steele/Cohen values self-affirmation (write a value, not «remain myself»), or a slogan without a method — **skip**, do not stretch. Next P1 after this row is `affirmation.self_worth`.
-3. If accepted: unique `technique.*` id + `affirmation.self_identity.001`. Retrieval must not copy `affirmation.capability.001` / `affirmation.agency.001`.
+1. Confirm a normal technique exists (several official_health / educational sources). Kernel candidate: a brief first-person statement that worth does not depend on this outcome; speak once or twice; stop.
+2. If sources collapse into skipped `self_identity` / `self_trust`, `capability`, Steele/Cohen values writing, a self-esteem course / thought-record protocol, or a slogan without a method («I'm enough», «I'm lovable») — **skip**, do not stretch. Next P1 after this row is `affirmation.permission`.
+3. If accepted: unique `technique.*` id + `affirmation.self_worth.001`. Retrieval must not copy `affirmation.capability.001` / `affirmation.agency.001`.
 4. Update: canon JSON + library + coverage counts **154 / 21/42** (if accepted) + tests (`test_coverage_counts`, sourced test, mapping dict) + fill/provenance/coverage/_INDEX/tracker.
-5. Tests: `backend/.venv/bin/pytest tests/test_content_library_v1.py::test_coverage_counts tests/test_content_library_v1.py::test_p1_affirmation_self_identity_sourced tests/test_content_library_selection_v1.py -q --tb=short --no-cov` (from `backend/`).
+5. Tests: `backend/.venv/bin/pytest tests/test_content_library_v1.py::test_coverage_counts tests/test_content_library_v1.py::test_p1_affirmation_self_worth_sourced tests/test_content_library_selection_v1.py -q --tb=short --no-cov` (from `backend/`).
 6. Do not commit / PR / deploy unless asked.
 
 ---
@@ -98,7 +100,7 @@ Taxonomy meaning: I can remain myself.
 
 - After `walking_meditation`: library validator + sourced + selection — passed
 - After `meditation.silence` skip: `test_coverage_counts` + `test_p1_meditation_silence_skipped` + `test_fill_unfrozen_provisional_probes` + `test_library_valid_against_taxonomy_and_ledger` + `test_technique_canon_lightweight_skip_box` + `test_content_library_selection_v1.py` — **19 passed** (`--no-cov`)
-- Do not claim CI green until GitHub checks on the SHA
+- After `affirmation.self_identity` skip: `test_coverage_counts` + `test_p1_affirmation_self_identity_skipped` + `test_p1_meditation_silence_skipped` + `test_fill_unfrozen_provisional_probes` + `test_library_valid_against_taxonomy_and_ledger` + `test_technique_canon_lightweight_skip_box` + `test_content_library_selection_v1.py` — **20 passed** (`--no-cov`)
 
 ---
 
@@ -122,5 +124,6 @@ Taxonomy meaning: I can remain myself.
 - Claim the fill is live — ledger ≠ server.
 - Invent a sitting «silence» method by stripping the object from `open_awareness` / `breath_awareness` / `mindfulness`.
 - Stretch `self_identity` into capability, agency, or a values-writing protocol to save coverage.
+- Stretch `self_worth` into a slogan, a self-esteem workbook, or the skipped remain-myself statement.
 
-Canon opened this train: `PRACTICE_LIBRARY_FILL_V1` · `PRACTICE_CONTENT_COVERAGE_V1` · `PRACTICE_TECHNIQUE_PROVENANCE_V1` v1.70 · tracker NOW.
+Canon opened this train: `PRACTICE_LIBRARY_FILL_V1` · `PRACTICE_CONTENT_COVERAGE_V1` · `PRACTICE_TECHNIQUE_PROVENANCE_V1` v1.71 · tracker NOW.
