@@ -1,8 +1,10 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-09-19
+Last updated: 2026-09-20
 Owner: Product + Engineering
 Status: Active working document
+
+**NOW (P1 MEDITATION SILENCE SKIP, 2026-09-20):** P1 type `meditation.silence` skipped (`family_collapse`). Choiceless awareness / just sitting is already `technique.open_awareness`; unguided sitting is delivery of breath/mindfulness; silent-day / noble silence is `discipline.silence`. No distinct meditation-class kernel. Coverage 153 items, 20/42 P1 sourced, 2 P1 skipped. Next: `affirmation.self_identity`. Handoff: `docs/status/P1_LIBRARY_FILL_HANDOFF.md`. G0 deferred. Closed loop LOCKED.
 
 **NOW (P1 WALKING MEDITATION, 2026-09-19):** P1 type `meditation.walking_meditation` sourced via `technique.walking_meditation` (Guy's and St Thomas' NHS MBSR walking mindfulness + Newcastle Hospitals NHS walking meditation + RUH Bath PHY051 Mindful Walking): stand, walk a slow short loop, attention on lift–move–land, return when the mind leaves the feet, stop. Distinct from practice.walking, mindful_movement, and sitting breath/body attention. Not a workout, nature walk, MBSR course, or treatment. `meditation.walking_meditation.001` active. Coverage 153 items, 20/42 P1 sourced. Next: `meditation.silence`. Handoff: `docs/status/P1_LIBRARY_FILL_HANDOFF.md`. G0 deferred. Closed loop LOCKED.
 
@@ -2854,6 +2856,7 @@ Ordered work (aligns with canon §7):
 Use format:
 - `YYYY-MM-DD` | `Area` | `Change` | `Status` | `Notes`
 
+- 2026-09-20 | Practices / Canon | **Library fill: meditation.silence skipped** | **SKIPPED** | P1 type `meditation.silence` `family_collapse`: choiceless awareness / just sitting is `technique.open_awareness`; unguided sitting is delivery of breath/mindfulness; silent-day / noble silence is `discipline.silence`. No distinct meditation-class kernel. Next = affirmation.self_identity. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-09-19 | Practices / Canon | **Library fill: meditation.walking_meditation sourced** | **ACCEPTED** | P1 type `meditation.walking_meditation` via `technique.walking_meditation` (Guy's and St Thomas' NHS MBSR walking mindfulness + Newcastle Hospitals NHS walking meditation + RUH Bath PHY051 Mindful Walking). Brief slow loop; footsteps as the object; not practice.walking/mindful_movement/sitting breath. Not a workout, nature walk, MBSR course, or treatment. `meditation.walking_meditation.001` active. Next = meditation.silence. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-09-19 | Practices / Canon | **Library fill: meditation.gratitude sourced** | **ACCEPTED** | P1 type `meditation.gratitude` via `technique.gratitude` (GGIA Kemper / Ohio State Gratitude Meditation + OSU Wexner Heart-Centered Gratitude + Sussex Mindfulness Centre NHS small thankful details). Brief sit with one ordinary thankful fact; not practice.gratitude/loving_kindness/mindfulness. Not Three Good Things, journal, or treatment. `meditation.gratitude.001` active. Next = meditation.walking_meditation. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-09-19 | Practices / Canon | **Library fill: meditation.self_compassion sourced** | **ACCEPTED** | P1 type `meditation.self_compassion` via `technique.self_compassion` (KMPCT NHS stress handbook + SE Trust HSCNI Using Self Compassion + CCI WA Health Barriers to Self-Compassion). Brief supporting voice toward yourself in difficulty; not loving_kindness/acceptance/affirmation.compassion/journaling. Not full MSC curriculum, CFT, or treatment. `meditation.self_compassion.001` active. Next = meditation.gratitude. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
