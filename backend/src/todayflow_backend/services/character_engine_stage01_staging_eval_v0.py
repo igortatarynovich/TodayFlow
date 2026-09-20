@@ -208,7 +208,11 @@ def evaluate_stage01_staging_v0() -> dict[str, Any]:
 
 def _is_occupancy_thesis(thesis: str) -> bool:
     token = str(thesis or "")
-    return token.startswith("planet_in_sign:") or token.startswith("planet_in_house:")
+    return (
+        token.startswith("planet_in_sign:")
+        or token.startswith("planet_in_house:")
+        or token.startswith("aspect_pair:")
+    )
 
 
 def _identity_theses(keys: list[Any]) -> list[str]:

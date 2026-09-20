@@ -7,7 +7,9 @@ describe("buildWhyFormationCards", () => {
         {
           id: "archetype_from_life_path",
           class: "selected_by",
-          label: "Архетип Исследователя — рассчитан из числа пути 7",
+          label: "Число пути 7 · Искатель",
+          contribution: "Семёрка — пауза и глубина: ответы приходят через наблюдение, не через давление.",
+          life_path: 7,
         },
         { id: "sun", class: "portrait_influenced_by", label: "Солнце в Деве" },
         { id: "element", class: "portrait_influenced_by", label: "Стихия — земля" },
@@ -31,7 +33,7 @@ describe("buildWhyFormationCards", () => {
     );
 
     expect(selected).toHaveLength(1);
-    expect(selected[0]?.meaning).toMatch(/глубин|смысл|понят/i);
+    expect(selected[0]?.meaning).toMatch(/глубин|наблюден/i);
     expect(selected[0]?.meaning).not.toMatch(/только из числа пути|берётся|механизм/i);
     expect(selected[0]?.meaning).not.toMatch(/Солнца.*выбира/i);
 

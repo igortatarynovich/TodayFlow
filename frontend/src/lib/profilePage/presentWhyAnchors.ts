@@ -20,9 +20,11 @@ export type WhyAnchorPresentation = {
    * title can be the fact (Forms: fact + meaning).
    */
   claimProse?: string | null;
+  contribution?: string | null;
+  life_path?: number | null;
 };
 
-const PRIMARY_ORDER = ["archetype_from_life_path", "sun", "moon", "asc"] as const;
+const PRIMARY_ORDER = ["life_path", "archetype_from_life_path", "sun", "moon", "asc"] as const;
 
 const EN_SIGNS = [
   "Aries",
@@ -119,7 +121,20 @@ export function presentWhyAnchors(rows: ProfileJourneyWhyRow[]): {
   primary: WhyAnchorPresentation[];
   secondary: WhyAnchorPresentation[];
 } {
-  const mapped: WhyAnchorPresentation[] = rows.map((row) => {
+  const mapped: WhyAnchorPresentation[] = rows
+    .filter((row) => {
+      const key = row.id.toLowerCase();
+      if (key.includes("planet_in_sign:") || key.includes("planet_in_house:")) return false;
+      if (
+        row.class === "selected_by" &&
+        key !== "life_path" &&
+        key !== "archetype_from_life_path"
+      ) {
+        return false;
+      }
+      return true;
+    })
+    .map((row) => {
     const role: WhyAnchorPresentation["role"] =
       row.class === "selected_by" ? "selected" : "influenced";
     const { title, detail, claimProse } = splitLabel(row.label, role);
@@ -129,6 +144,8 @@ export function presentWhyAnchors(rows: ProfileJourneyWhyRow[]): {
       title,
       detail,
       claimProse,
+      contribution: row.contribution ?? null,
+      life_path: row.life_path ?? null,
       role,
       tier: tierFor(row.id, role),
     };

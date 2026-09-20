@@ -9,7 +9,6 @@ import type { WhyAnchorPresentation } from "@/lib/profilePage/presentWhyAnchors"
 import { presentWhyAnchors } from "@/lib/profilePage/presentWhyAnchors";
 import type { CoreProfile } from "@/lib/types";
 import {
-  getLifePathEntry,
   getMoonInSignEntry,
   getRisingSignEntry,
   getSunInSignEntry,
@@ -68,26 +67,22 @@ function frameworkBody(cards: ProfileFrameworkCard[] | undefined, id: string): s
   return cards?.find((c) => c.id === id)?.body?.trim() || null;
 }
 
+function isK12SelectedId(id: string): boolean {
+  const key = id.toLowerCase();
+  return key === "life_path" || key === "archetype_from_life_path";
+}
+
 function meaningForSelected(
   row: WhyAnchorPresentation,
   core: CoreProfile | null | undefined,
 ): string {
-  const lp =
-    core?.portrait_why_v0?.selected_by?.find((r) => r.id === row.id)?.life_path ??
-    core?.numerology?.life_path ??
-    null;
-  const entry = lp != null ? getLifePathEntry(lp) : null;
-  const essence = entry?.essence?.trim();
-  if (essence) {
-    return essence.length > 180 ? clip(essence, 180) : essence;
-  }
-  if (row.claimProse && row.claimProse.trim().length >= 12) {
-    return clip(row.claimProse);
-  }
-  if (row.detail && !/^(солнце|луна|асцендент|середина|число пути)/i.test(row.detail)) {
-    return clip(`${row.detail[0]?.toUpperCase()}${row.detail.slice(1)}.`);
-  }
-  return clip(row.title || "Число пути — то, что выбрало имя в портрете.");
+  if (!isK12SelectedId(row.id)) return "";
+  const fromRow = String(row.contribution || "").trim();
+  const fromWhy = String(
+    core?.portrait_why_v0?.selected_by?.find((r) => r.id === row.id)?.contribution || "",
+  ).trim();
+  const contribution = fromRow || fromWhy;
+  return contribution ? clip(contribution, 120) : "";
 }
 
 function meaningForInfluenced(
@@ -261,12 +256,16 @@ export function buildWhyFormationCards(
       row.role === "selected"
         ? meaningForSelected(row, ctx.core)
         : meaningForInfluenced(row, ctx);
-    const meaning = applyAct2AntiDupeMeaning({
-      meaning: rawMeaning,
-      anchorId: row.id,
-      recognitionLine: ctx.recognitionLine,
-      identityCore: ctx.identityCore,
-    });
+    if (row.role === "selected" && !rawMeaning.trim()) continue;
+    const meaning =
+      row.role === "selected"
+        ? rawMeaning
+        : applyAct2AntiDupeMeaning({
+            meaning: rawMeaning,
+            anchorId: row.id,
+            recognitionLine: ctx.recognitionLine,
+            identityCore: ctx.identityCore,
+          });
     const card: WhyFormationCard = { ...row, meaning, tier: "primary" };
     if (row.role === "selected") selected.push(card);
     else influenced.push(card);

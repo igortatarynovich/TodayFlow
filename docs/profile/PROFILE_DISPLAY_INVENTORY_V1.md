@@ -298,18 +298,18 @@ Chrome. Titles: «Главное, что формирует тебя» · «Вы
 
 | | |
 |---|---|
-| one_question | **Что выбрало имя архетипа?** |
-| text_class | calc + chrome glue |
-| authority | numerology + baseline mapping |
-| semantic_source | `numerology.life_path` + seed |
-| display_source | why selected_by row |
-| allowed_inputs | life_path, seed, RU glue «Архетип X — из числа пути N» |
-| forbidden_inference | Солнце/стихия/ритм участвовали в выборе имени |
-| output | 1 строка факт + короткий смысл |
+| one_question | **Что Life Path вносит в этого человека?** |
+| text_class | calc |
+| authority | numerology F09 + `number_base_v1` |
+| semantic_source | `numerology.life_path` + `number_base_v1.base_meaning` |
+| display_source | why `selected_by` id `life_path` |
+| allowed_inputs | life_path number, grounded number_base contribution |
+| forbidden_inference | CE primary claim · Identity Core · birthday_number auto-mix · LLM/essay fallback |
+| output | 1 строка факт + короткий вклад |
 | budget | ≤120 chars |
-| required | да, если LP+seed |
-| empty_behavior | omit row (нет имени без LP) |
-| may_fe_transform | map_label |
+| required | да, если F09 + number_base meaning |
+| empty_behavior | omit (нет F09 или нет grounded contribution) |
+| may_fe_transform | clip |
 | may_llm_add_meaning | нет |
 | interaction | none |
 | why_here | Шаг 2 trust |
@@ -434,13 +434,13 @@ Max nodes first release: **1**.
 | one_question | **Какую закономерность / ловушку я раньше не называл?** |
 | text_class | generated |
 | authority | CE Acts III–IV |
-| semantic_source | `nodes[0].insight` |
-| allowed_inputs | ядро + contradiction + materials; living только как adjacent, не proof |
-| forbidden_inference | пересказ recognition_line; «регулярно» на birth_data_only; kitchen («механизм проявляется», zone ids) |
+| semantic_source | Stage 1 grounded hard `aspect_pair` `il_line` (F07 → IL-2); FE `nodes[0].insight` |
+| allowed_inputs | one A↔B from square/opposition compose (`what_a` ↔ `what_b` — `relation`) |
+| forbidden_inference | trap-bank / identity-thesis essay; Stage3 synthetic tension; one-sided trait; K06 secondaries; CE primary as tension |
 | output | 2–3 предложения |
 | budget | 30–55 слов · **≤360 chars на экране** (склад ≤900 kitchen) |
 | required | да для P3 |
-| empty_behavior | omit P3 |
+| empty_behavior | omit P3 without grounded hard F07 |
 | may_fe_transform | clip + scrub kitchen |
 | may_llm_add_meaning | нет сверх cascade |
 | persist_key | Snapshot |
@@ -702,6 +702,7 @@ Cut 2026-08-29: `ProfileCharacterScene` removed from path; P4 spheres cap 0–2;
 
 | Date | Change |
 |------|--------|
+| 2026-09-20 | `P3.insight` — PIC-K05 grounded hard F07 `aspect_pair` A↔B; omit without evidence; trap-bank forbidden |
 | 2026-09-20 | `P2.correspondence` · `P2.name_numerology` — PIC-K14/K13 compact Why facts, not journey acts |
 | 2026-08-31 | Live path frame (`emitProfileDisplayFrame`); Character/Explore stay off path |
 | 2026-08-30 | Grammar §9 scanner covers Profile path slots; catalog sync-tested against §2 |

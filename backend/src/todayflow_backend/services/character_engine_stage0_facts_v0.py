@@ -38,6 +38,30 @@ _FIRE = frozenset({"aries", "leo", "sagittarius"})
 _EARTH = frozenset({"taurus", "virgo", "capricorn"})
 _AIR = frozenset({"gemini", "libra", "aquarius"})
 
+# PIC F07 — 5 majors, Foundation v1 §2.4 orbs. Sun–Saturn only (outers withheld).
+_ASPECT_BODIES = frozenset({"sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"})
+_SIGN_LONGITUDE = {
+    "aries": 0.0,
+    "taurus": 30.0,
+    "gemini": 60.0,
+    "cancer": 90.0,
+    "leo": 120.0,
+    "libra": 180.0,
+    "virgo": 150.0,
+    "scorpio": 210.0,
+    "sagittarius": 240.0,
+    "capricorn": 270.0,
+    "aquarius": 300.0,
+    "pisces": 330.0,
+}
+_MAJOR_ASPECTS = (
+    ("conjunction", 0.0, 8.0),
+    ("sextile", 60.0, 4.0),
+    ("square", 90.0, 6.0),
+    ("trine", 120.0, 6.0),
+    ("opposition", 180.0, 8.0),
+)
+
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -206,6 +230,100 @@ def _from_swiss_positions(
                 computed_at=computed_at,
             )
         )
+    return out
+
+
+def _body_longitude(item: dict[str, Any]) -> float | None:
+    for key in ("longitude", "absolute_longitude", "lon"):
+        if key not in item:
+            continue
+        try:
+            return float(item[key]) % 360.0
+        except (TypeError, ValueError):
+            continue
+    sign = _norm_sign(item.get("sign"))
+    if not sign or sign not in _SIGN_LONGITUDE:
+        return None
+    raw_deg = item.get("degree")
+    if raw_deg is None:
+        raw_deg = item.get("deg")
+    try:
+        degree = float(raw_deg) if raw_deg is not None else 0.0
+    except (TypeError, ValueError):
+        degree = 0.0
+    return (_SIGN_LONGITUDE[sign] + degree) % 360.0
+
+
+def _angular_separation(left: float, right: float) -> float:
+    delta = abs(left - right) % 360.0
+    if delta > 180.0:
+        delta = 360.0 - delta
+    return delta
+
+
+def _match_major_aspect(separation: float) -> tuple[str, float, float] | None:
+    best: tuple[str, float, float] | None = None
+    for name, angle, orb in _MAJOR_ASPECTS:
+        delta = abs(separation - angle)
+        if delta > orb:
+            continue
+        if best is None or delta < best[2]:
+            best = (name, angle, delta)
+    return best
+
+
+def _from_swiss_aspects(
+    positions: list[Any],
+    *,
+    input_fingerprint: str,
+    computed_at: str,
+) -> list[dict[str, Any]]:
+    """PIC F07: 5-major aspects from Swiss/natal positions. Not a Stage 0 rewrite."""
+    longitudes: dict[str, float] = {}
+    for item in positions or []:
+        if not isinstance(item, dict):
+            continue
+        body = _norm_body(
+            item.get("body") or item.get("id") or item.get("planet") or item.get("name")
+        )
+        if not body or body not in _ASPECT_BODIES or body in longitudes:
+            continue
+        lon = _body_longitude(item)
+        if lon is None:
+            continue
+        longitudes[body] = lon
+    names = sorted(longitudes)
+    out: list[dict[str, Any]] = []
+    for i, body_a in enumerate(names):
+        for body_b in names[i + 1 :]:
+            sep = _angular_separation(longitudes[body_a], longitudes[body_b])
+            hit = _match_major_aspect(sep)
+            if not hit:
+                continue
+            aspect, angle, orb = hit
+            fact_type = f"aspect_pair:{body_a}:{body_b}:{aspect}"
+            out.append(
+                _candidate(
+                    fact_type=fact_type,
+                    normalized_key=f"{body_a}|{body_b}|{aspect}",
+                    value={
+                        "body_a": body_a,
+                        "body_b": body_b,
+                        "aspect": aspect,
+                        "angle": angle,
+                        "orb": round(orb, 2),
+                        "separation": round(sep, 2),
+                    },
+                    authority="swiss",
+                    calc_version=SWISS_CALC_VERSION,
+                    capability_required="date_only",
+                    confidence="high" if orb <= 3.0 else "medium",
+                    source_system="swiss",
+                    input_fingerprint=input_fingerprint,
+                    display_key=f"{body_a}_{body_b}_{aspect}",
+                    computed_at=computed_at,
+                )
+            )
     return out
 
 
@@ -525,6 +643,13 @@ def build_character_engine_facts_pack_v0(
                 input_fingerprint=fp,
                 computed_at=computed_at,
                 allow_angles=allow_angles,
+            )
+        )
+        candidates.extend(
+            _from_swiss_aspects(
+                positions,
+                input_fingerprint=fp,
+                computed_at=computed_at,
             )
         )
         if allow_angles:

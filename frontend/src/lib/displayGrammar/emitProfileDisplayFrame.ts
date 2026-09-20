@@ -75,16 +75,18 @@ function vm(
   });
 }
 
-function whySlotId(id: string, role: string): string {
+function whySlotId(id: string, _role: string): string | null {
   const key = id.toLowerCase();
-  if (role === "selected" || key === "life_path") return "P2.selected_life_path";
+  if (key.startsWith("planet_in_sign:") || key.startsWith("planet_in_house:")) return null;
+  if (key.includes("planet_in_sign:") || key.includes("planet_in_house:")) return null;
   if (key === "sun") return "P2.anchor.sun";
   if (key === "element") return "P2.anchor.element";
   if (key === "rhythm") return "P2.anchor.rhythm";
   if (key === "moon") return "P2.anchor.moon";
   if (key === "asc" || key === "rising") return "P2.anchor.asc";
   if (key === "mc") return "P2.anchor.mc";
-  return role === "selected" ? "P2.selected_life_path" : "P2.anchor.rhythm";
+  if (key === "life_path" || key === "archetype_from_life_path") return "P2.selected_life_path";
+  return null;
 }
 
 function insightForScroll(
@@ -162,11 +164,17 @@ export function emitProfileDisplayFrame(input: EmitProfileDisplayFrameInput): Di
     );
     for (const card of [...selected, ...influenced]) {
       const slot = whySlotId(card.id, card.role);
+      if (!slot) continue;
+      if (slot === "P2.selected_life_path" && !String(card.meaning || "").trim()) continue;
       const natalOk = slot !== "P2.selected_life_path" && slot !== "P2.anchor.rhythm";
+      const selectedText =
+        slot === "P2.selected_life_path"
+          ? [card.title, card.meaning].filter(Boolean).join(" · ")
+          : card.meaning || card.title;
       pushAtom(atoms, {
         slot_id: slot,
-        text: card.meaning || card.title,
-        origins: natalOk ? ["natal", "ce"] : ["ce"],
+        text: selectedText,
+        origins: natalOk ? ["natal", "ce"] : ["product"],
         text_class: "calc",
       });
     }

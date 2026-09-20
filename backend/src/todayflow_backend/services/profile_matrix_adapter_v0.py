@@ -36,6 +36,7 @@ ADAPTER_VERSION = "profile_matrix_adapter_v0.1"
 # PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
 PIC_K = ("K13", "K14")
 PIC_F = ("F10", "F12")
+# K13 bag keys written by core_profile: expression / soul_urge / personality.
 
 
 def resolve_access_tier(

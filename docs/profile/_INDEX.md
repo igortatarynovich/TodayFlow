@@ -4,9 +4,9 @@
 
 | Файл | Роль |
 |------|------|
+| [PROFILE_INFORMATION_CONTRACT_V1.md](./PROFILE_INFORMATION_CONTRACT_V1.md) | **Закрытое N Profile** — 6 вводов · 13 фактов · 18 allowed knowledge; code gate |
 | [PROFILE_EXPERIENCE_SCENARIO_V1.md](./PROFILE_EXPERIENCE_SCENARIO_V1.md) | **Character Engine SoT** — единая модель личности платформы · каскад · запрет независимых генераторов |
-| [PROFILE_INFORMATION_CONTRACT_V1.md](./PROFILE_INFORMATION_CONTRACT_V1.md) | **Закрытое N Profile** — 6 входов · 13 фактов · 18 `PIC-K*` · gate перед новым знанием |
-| [../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md](../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md) | Occupancy pass closed; next is Information Contract, not more IL frames |
+| [../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md](../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md) | K13+K02+K12+K05 COMPLETE; next K04 Internal Engine; N=18 gate |
 | [../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md) | Runtime inventory — contracts · prompts · jobs · FE/iOS · kill list |
 | [../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md) | **D1–D4 ACCEPTED** — Snapshot home · Evidence Graph · staged pipeline · adapters |
 | [../audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md](../audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md) | Schema DRAFT — identity/provenance · envelope · Evidence · Compass · adapters · shadow |

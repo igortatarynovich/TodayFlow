@@ -168,7 +168,7 @@ export const INVENTORY_SLOTS: InventorySlotRecord[] = [
   slot("P1.identity_core", "profile", "generated", ["identity_axis"], CE_OK, ["personal_day"], CLIP),
   chrome("P2.step_title", "profile"),
   chrome("P2.selected_section", "profile", ["why_not_hero"]),
-  slot("P2.selected_life_path", "profile", "calc", ["why_not_hero"], ["ce", "product"], ["personal_day"], NONE),
+  slot("P2.selected_life_path", "profile", "calc", ["why_not_hero"], ["ce", "product", "catalog"], ["personal_day"], CLIP),
   chrome("P2.influenced_section", "profile", ["why_not_hero"]),
   slot("P2.anchor.sun", "profile", "calc", ["why_not_hero"], ["natal", "ce"], ["personal_day"], NONE),
   slot("P2.anchor.element", "profile", "calc", ["why_not_hero"], ["natal", "ce"], ["personal_day"], NONE),

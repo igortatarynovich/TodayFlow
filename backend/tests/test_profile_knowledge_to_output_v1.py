@@ -36,8 +36,13 @@ from todayflow_backend.services.character_engine_stage2_identity_v0 import (
 from todayflow_backend.services.character_engine_stage2_identity_v0 import (
     build_character_engine_identity_core_v0,
 )
+from todayflow_backend.services.character_engine_profile_consumption_v0 import (
+    apply_character_engine_profile_consumption_v0,
+)
 from todayflow_backend.services.profile_information_contract_v1 import (
+    COVERAGE_STATUSES,
     KNOWLEDGE_TO_SLOT,
+    PIC_COVERAGE,
     PIC_KNOWLEDGE_IDS,
     PROFILE_MEANING_PRODUCERS,
 )
@@ -154,9 +159,27 @@ def test_pic_n18_is_closed() -> None:
     assert KNOWLEDGE_TO_SLOT["K14"] == ("P2.correspondence",)
 
 
+def test_pic_coverage_audit_covers_n18() -> None:
+    assert len(PIC_COVERAGE) == 18
+    assert tuple(row["pic_k"] for row in PIC_COVERAGE) == PIC_KNOWLEDGE_IDS
+    for row in PIC_COVERAGE:
+        assert row["status"] in COVERAGE_STATUSES
+    by_id = {str(row["pic_k"]): row for row in PIC_COVERAGE}
+    assert by_id["K02"]["status"] == "COMPLETE"
+    assert by_id["K08"]["status"] == "COMPLETE"
+    assert by_id["K11"]["status"] == "COMPLETE"
+    assert by_id["K12"]["status"] == "COMPLETE"
+    assert by_id["K13"]["status"] == "COMPLETE"
+    assert by_id["K14"]["status"] == "COMPLETE"
+    assert by_id["K17"]["status"] == "COMPLETE"
+    assert by_id["K18"]["status"] == "COMPLETE"
+    assert by_id["K05"]["status"] == "COMPLETE"
+    assert by_id["K06"]["status"] == "MISSING"
+
+
 def test_pic_gate_meaning_producers_cite_k_and_f() -> None:
-    assert STAGE1_PIC_K == ("K01", "K02")
-    assert STAGE1_PIC_F == ("F03", "F06")
+    assert STAGE1_PIC_K == ("K01", "K02", "K05")
+    assert STAGE1_PIC_F == ("F03", "F06", "F07")
     assert STAGE2_PIC_K == ("K01", "K02")
     assert STAGE2_PIC_F == ("F03", "F06")
     registered = {str(row["module"]) for row in PROFILE_MEANING_PRODUCERS}
@@ -197,6 +220,7 @@ def test_ce_may_import_il2_compose_only() -> None:
     stage1 = (CE_ROOT / "character_engine_stage1_evidence_v0.py").read_text(encoding="utf-8")
     assert "compose_planet_in_sign" in stage1
     assert "compose_planet_in_house" in stage1
+    assert "compose_aspect_pair" in stage1
 
 
 def test_il2_atoms_exist_for_mars_sign_and_house() -> None:
@@ -250,3 +274,68 @@ def test_k01_k02_preserve_f03_f06_mars_occupancy() -> None:
     registry = set(STAGE1_TO_IDENTITY_THESIS)
     assert set(hop_a["stage1_thesis_keys"]) & registry
     assert set(hop_b["stage1_thesis_keys"]) & registry
+
+
+def test_k05_f07_aspect_pair_wires_to_insight(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    facts = build_character_engine_facts_pack_v0(
+        profile_fingerprint="k05_e2e",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Virgo", "degree": 15.0, "longitude": 165.0},
+                {"body": "Mars", "sign": "Aries", "degree": 0.0, "longitude": 0.0},
+                {"body": "Saturn", "sign": "Cancer", "degree": 0.0, "longitude": 90.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 7},
+        capability={"natal_mode": "date_only", "has_name": True},
+        birth_date="1991-09-08",
+        input_fingerprint="k05_e2e",
+    )
+    evidence = build_character_engine_evidence_candidates_v0(facts)
+    identity = build_character_engine_identity_core_v0(
+        facts_pack=facts,
+        evidence=evidence,
+        deterministic_only=True,
+    )
+    tensions = [
+        c
+        for c in (evidence.get("claims") or [])
+        if isinstance(c, dict)
+        and c.get("claim_kind") == "tension"
+        and str(c.get("thesis_key") or "").startswith("aspect_pair:")
+    ]
+    assert len(tensions) == 1
+    payload = {
+        "diagnostics": {
+            "character_engine_stage2": {
+                "stage0": facts,
+                "stage1": evidence,
+                "stage2": identity,
+            }
+        },
+        "profile_contract_v1": {},
+        "numerology": {"life_path": 7},
+        "portrait_why_v0": {
+            "selected_by": [],
+            "portrait_influenced_by": [
+                {"id": "sun", "class": "portrait_influenced_by", "label": "Солнце в Деве"}
+            ],
+        },
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    insight = out["insight_nodes_v0"]["nodes"][0]["insight"]
+    assert "↔" in insight
+    assert "act" in insight
+    assert "limit" in insight
+    assert "дистанцию" not in insight
+    assert out["character_engine_consumption_v0"]["insight_source"] == "stage1_aspect_pair"
+    why = out["portrait_why_v0"]
+    assert [str(r.get("id")) for r in why.get("selected_by") or []] == ["life_path"]
+    hop_a = _ce_hop(CHART_A)
+    omit_tensions = [k for k in hop_a["stage1_thesis_keys"] if k.startswith("aspect_pair:")]
+    assert omit_tensions == []

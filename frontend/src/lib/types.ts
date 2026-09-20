@@ -318,6 +318,7 @@ export type CoreProfile = {
       class?: "selected_by" | string;
       life_path?: number | null;
       archetype_seed?: string | null;
+      contribution?: string | null;
       label?: string;
       fact_keys?: string[];
     }>;

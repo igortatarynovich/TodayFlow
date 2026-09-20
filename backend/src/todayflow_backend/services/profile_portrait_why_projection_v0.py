@@ -9,23 +9,20 @@ from __future__ import annotations
 
 from typing import Any
 
+from todayflow_backend.data.number_base_v1 import get_number_base
 from todayflow_backend.services.natal_chart_personalization import _sign_label_prepositional
 from todayflow_backend.services.profile_baseline_archetype_v0 import archetype_seed_from_life_path
 
-PROJECTION_VERSION = "profile_portrait_why_v0.1"
+PROJECTION_VERSION = "profile_portrait_why_v0.2"
 TITLE_RU = "Почему портрет звучит именно так"
 HONESTY_NO_TIME_RU = (
     "Без времени рождения пока не видны асцендент и дома — они покажут, "
     "как эти качества проявляются во внешнем поведении и отдельных сферах жизни."
 )
 
-_ARCHETYPE_LABEL_RU: dict[str, str] = {
-    "architect": "Архитектор",
-    "harmonizer": "Гармонизатор",
-    "explorer": "Исследователь",
-    "sage": "Мудрец",
-    "observer": "Наблюдатель",
-}
+# PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
+PIC_K = ("K12",)
+PIC_F = ("F09",)
 
 _ELEMENT_LABEL_RU: dict[str, str] = {
     "fire": "огонь",
@@ -35,9 +32,39 @@ _ELEMENT_LABEL_RU: dict[str, str] = {
 }
 
 
-def _archetype_label_ru(seed: str | None) -> str:
-    key = str(seed or "").strip().lower()
-    return _ARCHETYPE_LABEL_RU.get(key) or (str(seed).strip() if seed else "")
+def _as_int(value: Any) -> int | None:
+    try:
+        if value is None or isinstance(value, bool):
+            return None
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def life_path_k12_row(life_path: Any, *, birthday_number: Any = None) -> dict[str, Any] | None:
+    """PIC-K12: F09 life_path + number_base contribution. Birthday is not this slot."""
+    _ = birthday_number
+    value = _as_int(life_path)
+    if value is None:
+        return None
+    base = get_number_base(value)
+    contribution = str((base or {}).get("base_meaning") or "").strip()
+    if not contribution:
+        return None
+    archetype = str((base or {}).get("archetype") or "").strip()
+    label = f"Число пути {value}"
+    if archetype:
+        label = f"{label} · {archetype}"
+    return {
+        "id": "life_path",
+        "class": "selected_by",
+        "fact_keys": ["numerology.life_path", "number_base_v1"],
+        "life_path": value,
+        "archetype": archetype or None,
+        "contribution": contribution,
+        "label": label,
+        "source": "number_base_v1",
+    }
 
 
 def _element_label_ru(element: str | None) -> str | None:
@@ -101,18 +128,11 @@ def project_portrait_why_v0(
     if seed is None and life_path is not None:
         seed = archetype_seed_from_life_path(life_path)
 
-    if life_path is not None and seed:
-        label_ru = _archetype_label_ru(seed)
-        selected_by.append(
-            {
-                "id": "archetype_from_life_path",
-                "class": "selected_by",
-                "fact_keys": ["numerology.life_path", "baseline.archetype_seed"],
-                "life_path": life_path,
-                "archetype_seed": seed,
-                "label": f"Архетип {label_ru} — рассчитан из числа пути {life_path}",
-            }
-        )
+    k12 = life_path_k12_row(life_path, birthday_number=num.get("birthday_number"))
+    if k12:
+        if seed:
+            k12["archetype_seed"] = seed
+        selected_by.append(k12)
 
     sun = ast.get("sun_sign")
     if sun:

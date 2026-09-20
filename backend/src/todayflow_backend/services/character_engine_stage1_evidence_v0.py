@@ -10,6 +10,7 @@ from typing import Any
 
 from todayflow_backend.knowledge.il2_composition_v1 import (
     ComposedFrame,
+    compose_aspect_pair,
     compose_planet_in_house,
     compose_planet_in_sign,
     load_objects,
@@ -23,10 +24,11 @@ from todayflow_backend.services.character_engine_ids_v0 import make_claim_id, ma
 
 STAGE1_VERSION = "character_engine_stage1_evidence_v0"
 # PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
-PIC_K = ("K01", "K02")
-PIC_F = ("F03", "F06")
-# Occupancy only — not aspects, transits, or angles. Sun–Saturn: outers withheld.
+PIC_K = ("K01", "K02", "K05")
+PIC_F = ("F03", "F06", "F07")
+# Occupancy Sun–Saturn + one hard aspect_pair tension. Not transits, not K06 secondaries.
 _OCCUPANCY_BODIES = ("sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn")
+_HARD_ASPECTS = {"opposition": 0, "square": 1}
 
 
 def _now_iso() -> str:
@@ -207,6 +209,154 @@ def _mint_il_occupancy_claims(
     return claims, edges, excluded
 
 
+def _first_lemma(frame: ComposedFrame, job_name: str) -> str:
+    payload = frame.jobs.get(job_name)
+    if payload is None:
+        return ""
+    for lemma in payload.lemmas:
+        token = str(lemma).strip()
+        if token:
+            return token
+    return ""
+
+
+def _aspect_tension_line(frame: ComposedFrame) -> str:
+    """Keep both poles A↔B. Do not collapse into a one-sided trait."""
+    what_a = _first_lemma(frame, "what_a")
+    what_b = _first_lemma(frame, "what_b")
+    relation = _first_lemma(frame, "relation")
+    if not what_a or not what_b or not relation:
+        return ""
+    return f"{what_a} ↔ {what_b} — {relation}."
+
+
+def _parse_aspect_fact(row: dict[str, Any]) -> tuple[str, str, str, float] | None:
+    value = row.get("value") if isinstance(row.get("value"), dict) else {}
+    body_a = str(value.get("body_a") or "").strip().lower()
+    body_b = str(value.get("body_b") or "").strip().lower()
+    aspect = str(value.get("aspect") or "").strip().lower()
+    if not body_a or not body_b or aspect not in _HARD_ASPECTS:
+        return None
+    try:
+        orb = float(value.get("orb"))
+    except (TypeError, ValueError):
+        orb = 99.0
+    if body_a > body_b:
+        body_a, body_b = body_b, body_a
+    return body_a, body_b, aspect, orb
+
+
+def _mint_il_aspect_tension_claim(
+    *,
+    facts_by_type: dict[str, dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    """Exactly one primary K05 tension from grounded hard F07. Harmonics omitted, not secondary."""
+    catalog = load_objects()
+    ranked: list[tuple[int, float, str, dict[str, Any], tuple[str, str, str]]] = []
+    excluded: list[dict[str, Any]] = []
+    for fact_type, row in facts_by_type.items():
+        if not str(fact_type).startswith("aspect_pair:"):
+            continue
+        parsed = _parse_aspect_fact(row)
+        if parsed is None:
+            excluded.append(
+                {
+                    "rule_key": "il2_aspect_pair",
+                    "reason": "not_hard_aspect",
+                    "thesis_key": fact_type,
+                }
+            )
+            continue
+        body_a, body_b, aspect, orb = parsed
+        thesis = f"aspect_pair:{body_a}:{body_b}:{aspect}"
+        ranked.append(
+            (
+                _HARD_ASPECTS[aspect],
+                orb,
+                thesis,
+                row,
+                (body_a, body_b, aspect),
+            )
+        )
+    ranked.sort(key=lambda item: (item[0], item[1], item[2]))
+    for _rank, _orb, thesis, row, (body_a, body_b, aspect) in ranked:
+        supporting = [str(row["fact_id"])] if row.get("fact_id") else []
+        if not supporting:
+            excluded.append(
+                {
+                    "rule_key": "il2_aspect_pair",
+                    "reason": "supporting_facts_missing",
+                    "thesis_key": thesis,
+                }
+            )
+            continue
+        frame = compose_aspect_pair(
+            catalog,
+            f"astro.object.{body_a}",
+            f"astro.object.{body_b}",
+            f"astro.aspect.{aspect}",
+        )
+        if frame.status != "composed":
+            excluded.append(
+                {
+                    "rule_key": "il2_aspect_pair",
+                    "reason": frame.reason or "compose_refused",
+                    "thesis_key": thesis,
+                }
+            )
+            continue
+        line = _aspect_tension_line(frame)
+        if not line:
+            excluded.append(
+                {
+                    "rule_key": "il2_aspect_pair",
+                    "reason": "lemmas_empty",
+                    "thesis_key": thesis,
+                }
+            )
+            continue
+        claim_id = make_claim_id(
+            claim_kind="tension",
+            thesis_key=thesis,
+            primary_fact_ids=supporting,
+        )
+        claim = {
+            "claim_id": claim_id,
+            "claim_kind": "tension",
+            "thesis_key": thesis,
+            "cascade_role": "tension",
+            "supporting_fact_ids": supporting,
+            "confidence": str(row.get("confidence") or "medium"),
+            "capability_floor": "date_only",
+            "produced_by_stage": 1,
+            "evidence_status": "grounded",
+            "il_line": line,
+            "_rule_key": "il2_aspect_pair",
+        }
+        edges = [
+            {
+                "edge_id": make_edge_id(fact_id=fid, claim_id=claim_id, edge_type="supports"),
+                "fact_id": fid,
+                "claim_id": claim_id,
+                "edge_type": "supports",
+            }
+            for fid in supporting
+        ]
+        for leftover in ranked:
+            leftover_thesis = leftover[2]
+            if leftover_thesis == thesis:
+                continue
+            excluded.append(
+                {
+                    "rule_key": "il2_aspect_pair",
+                    "reason": "not_primary_k05",
+                    "thesis_key": leftover_thesis,
+                }
+            )
+        return [claim], edges, excluded
+    return [], [], excluded
+
+
 def _apply_rule(
     rule: EvidenceRule,
     *,
@@ -349,6 +499,13 @@ def build_character_engine_evidence_candidates_v0(
     edges.extend(il_edges)
     excluded.extend(il_excluded)
 
+    tension_claims, tension_edges, tension_excluded = _mint_il_aspect_tension_claim(
+        facts_by_type=facts_by_type,
+    )
+    claims.extend(tension_claims)
+    edges.extend(tension_edges)
+    excluded.extend(tension_excluded)
+
     # Stable ordering
     claims.sort(key=lambda c: (c["claim_kind"], c["thesis_key"], c["claim_id"]))
     edges.sort(key=lambda e: e["edge_id"])
@@ -388,6 +545,7 @@ def build_character_engine_evidence_candidates_v0(
             "claims_emitted": len(claims),
             "excluded": len(excluded),
             "il_occupancy_emitted": len(il_claims),
+            "il_aspect_tension_emitted": len(tension_claims),
             "rule_by_claim_id": rule_by_claim,
             "validation": validation,
         },

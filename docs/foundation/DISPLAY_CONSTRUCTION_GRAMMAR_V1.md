@@ -46,12 +46,22 @@
 - **Canon updated?** yes — this file §9 · Today Inventory §7 · Profile Inventory changelog · tracker.
 - **Backward compatible?** yes for API. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
 
+## Architecture impact — Profile Information Contract in the chain (2026-09-20)
+
+- **SoT before:** Grammar §1 started at расчёт → semantic authority. What Profile may know lived outside the construction chain.
+- **SoT after:** §1 inserts `allowed knowledge` from [PROFILE_INFORMATION_CONTRACT_V1](../profile/PROFILE_INFORMATION_CONTRACT_V1.md) before semantic authority. Inventory remains last authority before UI. N=18 is the Profile knowledge gate, not a new slot catalog.
+- **Public contract changed?** no JSON
+- **Migration required?** no
+- **Canon updated?** yes — this file §1 · Information Contract · tracker
+- **Backward compatible?** yes for API
+
 ---
 
 ## 1. Цепочка (LOCKED)
 
 ```text
 расчёт
+    → allowed knowledge           (Profile Information Contract N)
     → semantic authority          (кто решает смысл)
     → composition                 (какие атомы входят в кадр)
     → named slot                  (один id, один вопрос)

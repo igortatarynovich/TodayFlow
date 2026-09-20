@@ -214,7 +214,8 @@ def test_consumption_prefers_stage3_trap_and_decision(monkeypatch) -> None:
     out = apply_character_engine_profile_consumption_v0(payload)
     cons = out["character_engine_consumption_v0"]
     assert cons["applied"] is True
-    assert cons["trap_source"] == "stage3_primary_tension"
+    assert cons["insight_source"] == "omitted_no_grounded_aspect_tension"
     assert cons["decision_source"] == "stage3_internal_engine.decision"
-    assert "Stage3 trap" in out["insight_nodes_v0"]["nodes"][0]["insight"]
+    assert out["insight_nodes_v0"]["nodes"][0]["insight"] == ""
+    assert "Stage3 trap" not in (out["insight_nodes_v0"]["nodes"][0].get("insight") or "")
     assert "зоне decision" in out["profile_contract_v1"]["decision_style"]

@@ -8,11 +8,12 @@ not recognition title SoT.
 Owned when Stage 2 grounded + flag on:
   - recognition / identity_core
   - portrait_why
-  - insight trap (+ help) — Stage 3 primary_tension when grounded, else editorial bank
+  - insight — Stage 1 grounded aspect_pair (K05); omit without F07. Trap bank / Stage3 identity tension cannot fill.
+  - help — Stage 3 internal engine when grounded, else editorial bank
   - strengths / growth_zones / helps
   - decision_style — Stage 3 internal_engine.decision when grounded, else editorial bank
   - relationship_style / money_style
-  - recurring_patterns
+  - recurring_patterns — editorial / Stage5 (not K05)
   - clears living_changes day-rhythm leak
 
 Not owned yet: natal cusp/sign/degree facts stay Swiss.
@@ -26,8 +27,8 @@ from typing import Any
 from todayflow_backend.core.config import settings
 
 # PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
-PIC_K = ("K01", "K02", "K04", "K10")
-PIC_F = ("F03", "F06")
+PIC_K = ("K01", "K02", "K04", "K05", "K10", "K12")
+PIC_F = ("F01", "F03", "F04", "F05", "F06", "F07", "F09")
 
 PROJECTION_VERSION = "character_engine_profile_consumption_v0.9"
 # Soft ceilings only — clip_prose prefers sentence end; never mid-word stumps for UI.
@@ -597,6 +598,152 @@ def _fact_label(fact: dict[str, Any]) -> str | None:
     return None
 
 
+_NATAL_INFLUENCED_IDS = frozenset({"sun", "moon", "asc", "rising", "mc", "element", "rhythm"})
+
+
+def _occupancy_thesis(thesis: str) -> bool:
+    key = str(thesis or "").lower()
+    return (
+        key.startswith("planet_in_sign:")
+        or key.startswith("planet_in_house:")
+        or key.startswith("aspect_pair:")
+    )
+
+
+def _k05_insight(stage1: dict[str, Any]) -> tuple[str, str]:
+    """P3.insight = one grounded hard aspect_pair. Trap-bank / Stage3 cannot beat it; else omit."""
+    claims = stage1.get("claims") if isinstance(stage1.get("claims"), list) else []
+    grounded: list[dict[str, Any]] = []
+    for claim in claims:
+        if not isinstance(claim, dict):
+            continue
+        if str(claim.get("evidence_status") or "grounded") != "grounded":
+            continue
+        if str(claim.get("claim_kind") or "") != "tension":
+            continue
+        thesis = str(claim.get("thesis_key") or "")
+        if not thesis.startswith("aspect_pair:"):
+            continue
+        line = str(claim.get("il_line") or "").strip()
+        if "↔" not in line:
+            continue
+        grounded.append(claim)
+    if len(grounded) != 1:
+        return "", "omitted_no_grounded_aspect_tension"
+    line = str(grounded[0].get("il_line") or "").strip()
+    return line, "stage1_aspect_pair"
+
+
+def _why_row_id(row: dict[str, Any]) -> str:
+    rid = str(row.get("id") or "").strip()
+    if rid == "rising":
+        return "asc"
+    return rid
+
+
+def _natal_influenced_from_existing(existing: dict[str, Any] | None) -> dict[str, dict[str, Any]]:
+    out: dict[str, dict[str, Any]] = {}
+    if not isinstance(existing, dict):
+        return out
+    for row in existing.get("portrait_influenced_by") or []:
+        if not isinstance(row, dict):
+            continue
+        rid = _why_row_id(row)
+        if rid in _NATAL_INFLUENCED_IDS and rid not in out:
+            copied = dict(row)
+            copied["id"] = rid
+            out[rid] = copied
+    return out
+
+
+def _natal_influenced_from_facts(raw_facts: list[Any]) -> dict[str, dict[str, Any]]:
+    out: dict[str, dict[str, Any]] = {}
+    for fact in raw_facts:
+        if not isinstance(fact, dict):
+            continue
+        ft = str(fact.get("fact_type") or "")
+        label = _fact_label(fact)
+        if not label:
+            continue
+        value = fact.get("value")
+        sign = value.get("sign") if isinstance(value, dict) else None
+        if ft == "planet_sign:sun":
+            out.setdefault(
+                "sun",
+                {
+                    "id": "sun",
+                    "class": "portrait_influenced_by",
+                    "fact_keys": ["astro.sun_sign"],
+                    "value": sign,
+                    "label": label,
+                },
+            )
+        elif ft == "planet_sign:moon":
+            out.setdefault(
+                "moon",
+                {
+                    "id": "moon",
+                    "class": "portrait_influenced_by",
+                    "fact_keys": ["natal_summary.luminaries.moon"],
+                    "value": sign,
+                    "label": label,
+                },
+            )
+        elif ft == "angle_sign:ascendant":
+            out.setdefault(
+                "asc",
+                {
+                    "id": "asc",
+                    "class": "portrait_influenced_by",
+                    "fact_keys": ["natal_summary.angles.ascendant_sign"],
+                    "value": sign,
+                    "label": label,
+                },
+            )
+        elif ft == "angle_sign:midheaven":
+            out.setdefault(
+                "mc",
+                {
+                    "id": "mc",
+                    "class": "portrait_influenced_by",
+                    "fact_keys": ["natal_summary.angles.midheaven_sign"],
+                    "value": sign,
+                    "label": label,
+                },
+            )
+    return out
+
+
+def _life_path_anchor(
+    existing: dict[str, Any] | None,
+    raw_facts: list[Any],
+    *,
+    numerology: dict[str, Any] | None = None,
+) -> dict[str, Any] | None:
+    from todayflow_backend.services.profile_portrait_why_projection_v0 import life_path_k12_row
+
+    value: Any = None
+    birthday: Any = None
+    num = numerology if isinstance(numerology, dict) else {}
+    birthday = num.get("birthday_number")
+    if num.get("life_path") is not None:
+        value = num.get("life_path")
+    for fact in raw_facts:
+        if not isinstance(fact, dict):
+            continue
+        ft = str(fact.get("fact_type") or "")
+        if ft in {"life_path_number", "life_path"} and fact.get("value") is not None:
+            value = fact.get("value")
+        if ft in {"birthday_number", "birthday"} and fact.get("value") is not None:
+            birthday = fact.get("value")
+    if value is None and isinstance(existing, dict):
+        for row in existing.get("selected_by") or []:
+            if isinstance(row, dict) and row.get("life_path") is not None:
+                value = row.get("life_path")
+                break
+    return life_path_k12_row(value, birthday_number=birthday)
+
+
 def _stage2_artifact(payload: dict[str, Any]) -> dict[str, Any] | None:
     diagnostics = payload.get("diagnostics")
     if not isinstance(diagnostics, dict):
@@ -789,6 +936,8 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             trap = pt_text
             trap_source = "stage3_primary_tension"
     trap = _clip(trap, _MAX_TRAP)
+    insight, insight_source = _k05_insight(stage1)
+    insight = _clip(insight, _MAX_TRAP)
     essays = _essays_for(identity_thesis)
     strengths = [str(x).strip() for x in (essays.get("strengths") or []) if str(x).strip()][:4]
     growth = [str(x).strip() for x in (essays.get("growth_zones") or []) if str(x).strip()][:3]
@@ -893,6 +1042,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     strengths = _dedupe_list(strengths, trap, surface, *growth)[:4]
     growth = [_scrub_machine_thesis(g, identity_thesis) for g in growth]
     trap = _scrub_machine_thesis(trap, identity_thesis)
+    insight = _scrub_machine_thesis(insight, identity_thesis)
     decision = _scrub_machine_thesis(decision, identity_thesis)
     relationship = _scrub_machine_thesis(relationship, identity_thesis)
     money = _scrub_machine_thesis(money, identity_thesis)
@@ -912,6 +1062,8 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         if not isinstance(c, dict) or not c.get("thesis_key"):
             continue
         thesis = str(c.get("thesis_key"))
+        if _occupancy_thesis(thesis):
+            continue
         label = _CLAIM_WHY_LABEL.get(thesis) or thesis
         fact_bits: list[str] = []
         for fid in c.get("supporting_fact_ids") or []:
@@ -933,6 +1085,27 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             influenced_by.append(row)
 
     selected_by.sort(key=lambda r: 0 if r.get("claim_id") == primary_id else 1)
+
+    existing_why = payload.get("portrait_why_v0") if isinstance(payload.get("portrait_why_v0"), dict) else {}
+    raw_facts = [f for f in (stage0.get("raw_facts") or []) if isinstance(f, dict)]
+    natal_influenced = {
+        **_natal_influenced_from_facts(raw_facts),
+        **_natal_influenced_from_existing(existing_why),
+    }
+    life_path_row = _life_path_anchor(
+        existing_why,
+        raw_facts,
+        numerology=payload.get("numerology") if isinstance(payload.get("numerology"), dict) else None,
+    )
+    why_selected = [life_path_row] if life_path_row else []
+    why_influenced = list(natal_influenced.values())
+    seen_inf = {_why_row_id(r) for r in why_influenced}
+    for row in influenced_by:
+        rid = _why_row_id(row)
+        if rid in seen_inf or _occupancy_thesis(str(row.get("thesis_key") or "")):
+            continue
+        why_influenced.append(row)
+        seen_inf.add(rid)
 
     contract = payload.get("profile_contract_v1")
     if not isinstance(contract, dict):
@@ -961,9 +1134,14 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
 
     payload["portrait_why_v0"] = {
         "projection_version": f"{PROJECTION_VERSION}.why",
-        "selected_by": selected_by[:1],
-        "portrait_influenced_by": influenced_by[:5],
+        "selected_by": why_selected,
+        "portrait_influenced_by": why_influenced[:8],
         "source": "character_engine_stage2",
+        "rules": {
+            "natal_anchors_survive_ce": True,
+            "occupancy_not_why_slot": True,
+            "selected_life_path_is_f09_number_base": True,
+        },
     }
 
     grounded_on: list[dict[str, Any]] = []
@@ -1018,7 +1196,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "id": node_id,
         "kind": node_kind,
         "title": node_title,
-        "insight": trap,
+        "insight": insight,
         "grounded_on": grounded_on,
         "help": help_line,
         "source_fields": list(node_source_fields),
@@ -1033,6 +1211,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "rules": {
             "source": "character_engine_identity_core",
             "trap_source": trap_source,
+            "insight_source": insight_source,
             "forbids_living_day_rhythm_as_identity_trap": True,
             "living_evidence_is_adjacent_context_not_proof": True,
             "titles_follow_forms_case_a_c": True,
@@ -1047,6 +1226,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "recognition_label": _RECOGNITION_LABEL.get(identity_thesis) or "Ядро",
         "primary_claim_id": primary_id,
         "trap_source": trap_source,
+        "insight_source": insight_source,
         "decision_source": decision_source,
         "relationship_source": relationship_source,
         "money_source": money_source,

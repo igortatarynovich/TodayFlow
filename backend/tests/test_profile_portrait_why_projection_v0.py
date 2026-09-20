@@ -48,10 +48,14 @@ def test_case_a_pq001_selected_by_life_path_only() -> None:
     assert len(why["selected_by"]) == 1
     sel = why["selected_by"][0]
     assert sel["class"] == "selected_by"
+    assert sel["id"] == "life_path"
     assert sel["life_path"] == 1
-    assert sel["archetype_seed"] == "Architect"
-    assert "числа пути 1" in sel["label"]
+    assert sel["source"] == "number_base_v1"
+    assert sel["contribution"]
+    assert "Лидер" in (sel.get("archetype") or sel["label"])
+    assert "1" in sel["label"]
     assert "Овен" not in sel["label"]  # sun must not appear as selector cause
+    assert "birthday" not in str(sel).lower() or sel.get("birthday_number") is None
 
     ids = [row["id"] for row in why["portrait_influenced_by"]]
     assert ids == ["sun", "element", "rhythm"]
@@ -101,4 +105,26 @@ def test_attach_is_ephemeral_on_payload() -> None:
     }
     out = attach_portrait_why_v0(payload)
     assert "portrait_why_v0" in out
+    assert out["portrait_why_v0"]["selected_by"][0]["id"] == "life_path"
+    assert out["portrait_why_v0"]["selected_by"][0]["contribution"]
     assert out["portrait_why_v0"]["selected_by"][0]["archetype_seed"] == "Architect"
+
+
+def test_pic_k12_omits_without_number_base_and_ignores_birthday() -> None:
+    missing = project_portrait_why_v0(
+        numerology={"life_path": 99, "birthday_number": 5},
+        baseline={"archetype_seed": "Architect"},
+        astro={"sun_sign": "Aries", "sun_element": "fire", "time_unknown": True},
+    )
+    assert missing["selected_by"] == []
+
+    why = project_portrait_why_v0(
+        numerology={"life_path": 7, "birthday_number": 5},
+        baseline={"archetype_seed": "explorer"},
+        astro={"sun_sign": "Virgo", "sun_element": "earth", "time_unknown": True},
+    )
+    sel = why["selected_by"][0]
+    assert sel["life_path"] == 7
+    assert "5" not in sel["label"]
+    assert "birthday" not in sel["label"].lower()
+    assert "глубин" in sel["contribution"]

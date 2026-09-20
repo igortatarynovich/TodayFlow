@@ -191,6 +191,35 @@ describe("live Profile frames", () => {
     expect(scanDisplayGrammar(frame)).toEqual([]);
   });
 
+  it("emits compact K13/K14 header facts when Matrix revealed", () => {
+    const frame = emitProfileDisplayFrame({
+      core: {
+        ...journeyCore,
+        profile_matrix_v0: {
+          revealed_slots: {
+            cultural_catalog: {
+              color: "оливковый",
+              stones: [{ label: "сапфир" }],
+              traditions: [{ value: "год Металлической Лошади" }],
+            },
+            name_numerology: {
+              expression: 3,
+              soul_urge: 9,
+              personality: 5,
+            },
+          },
+        },
+      } as CoreProfile,
+    });
+    const correspondence = frame.atoms?.find((a) => a.slot_id === "P2.correspondence");
+    const name = frame.atoms?.find((a) => a.slot_id === "P2.name_numerology");
+    expect(correspondence?.text).toMatch(/оливковый/);
+    expect(correspondence?.text_class).toBe("catalog");
+    expect(name?.text).toMatch(/выражение 3/);
+    expect(name?.text_class).toBe("calc");
+    expect(scanDisplayGrammar(frame)).toEqual([]);
+  });
+
   it("does not paint identity_core as the recognition line", () => {
     const frame = emitProfileDisplayFrame({
       core: {
@@ -210,5 +239,64 @@ describe("live Profile frames", () => {
     expect(frame.atoms?.find((a) => a.slot_id === "P1.recognition_line")).toBeUndefined();
     expect(frame.atoms?.find((a) => a.slot_id === "P1.identity_core")?.text).toContain("Ядро");
     expect(scanDisplayGrammar(frame)).toEqual([]);
+  });
+
+  it("PIC-K02 natal anchors keep P2.anchor.* and occupancy does not dump to rhythm", () => {
+    const frame = emitProfileDisplayFrame({
+      core: {
+        ...journeyCore,
+        portrait_why_v0: {
+          title: "Почему портрет такой",
+          selected_by: [
+            {
+              id: "life_path",
+              class: "selected_by",
+              label: "Число пути 7 · Искатель",
+              contribution: "Семёрка — пауза и глубина: ответы приходят через наблюдение, не через давление.",
+              life_path: 7,
+            },
+            {
+              id: "ce_claim:builds_through_analysis",
+              class: "selected_by",
+              label: "Ты строишь через анализ",
+            },
+          ],
+          portrait_influenced_by: [
+            { id: "sun", class: "portrait_influenced_by", label: "Солнце в Деве" },
+            { id: "moon", class: "portrait_influenced_by", label: "Луна в Тельце" },
+            { id: "asc", class: "portrait_influenced_by", label: "Асцендент в Близнецах" },
+            {
+              id: "ce_claim:planet_in_sign:mars:cancer",
+              class: "portrait_influenced_by",
+              label: "Марс в Раке — qualifier",
+            },
+          ],
+        },
+      } as CoreProfile,
+    });
+    const ids = (frame.atoms ?? []).map((a) => a.slot_id);
+    expect(ids).toContain("P2.anchor.sun");
+    expect(ids).toContain("P2.anchor.moon");
+    expect(ids).toContain("P2.anchor.asc");
+    expect(ids).toContain("P2.selected_life_path");
+    const selected = frame.atoms?.find((a) => a.slot_id === "P2.selected_life_path");
+    expect(selected?.text).toMatch(/число пути 7/i);
+    expect(selected?.text).toMatch(/глубин|наблюден/i);
+    expect(selected?.text).not.toMatch(/строишь через анализ/i);
+    expect(frame.atoms?.find((a) => a.slot_id === "P2.anchor.rhythm")).toBeUndefined();
+    expect(scanDisplayGrammar(frame)).toEqual([]);
+  });
+
+  it("PIC-K12 omits selected_life_path without grounded number_base contribution", () => {
+    const frame = emitProfileDisplayFrame({
+      core: {
+        ...journeyCore,
+        portrait_why_v0: {
+          selected_by: [{ id: "life_path", class: "selected_by", label: "Число пути 7" }],
+          portrait_influenced_by: [],
+        },
+      } as CoreProfile,
+    });
+    expect(frame.atoms?.find((a) => a.slot_id === "P2.selected_life_path")).toBeUndefined();
   });
 });

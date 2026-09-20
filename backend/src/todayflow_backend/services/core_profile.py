@@ -222,6 +222,7 @@ class CoreProfileService:
         catalog = header_pack_to_matrix_catalog(header_pack)
 
         # Name numerology only when we have a display name (capability already gates reveal).
+        # PIC-K13 bag keys: expression / soul_urge / personality (not *_number).
         name_numerology = None
         if display_name and numerology.get("expression") is not None:
             name_numerology = {

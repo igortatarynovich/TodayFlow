@@ -117,7 +117,7 @@
 - [TODAY_CONTRACT_ASSEMBLER_MAPPING.md](./TODAY_CONTRACT_ASSEMBLER_MAPPING.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md)
 - [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) — указатели → pipeline
 - [DAY_SOURCE_REGISTRY.md](./DAY_SOURCE_REGISTRY.md) · [PROFILE_DAY_SOURCE_MATRIX.md](./profile/PROFILE_DAY_SOURCE_MATRIX.md)
-- [PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) · [profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (единая модель личности) · [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) — **конструкция экрана Profile** (блоки · provenance · лимиты) · [profile/PROFILE_NATAL_DECODE_DEPTH_V1.md](./profile/PROFILE_NATAL_DECODE_DEPTH_V1.md) — Natal Decode (opt-in depth)
+- [PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) · [profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (единая модель личности) · [profile/PROFILE_INFORMATION_CONTRACT_V1.md](./profile/PROFILE_INFORMATION_CONTRACT_V1.md) — **закрытое N Profile** · [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) — **конструкция экрана Profile** (блоки · provenance · лимиты) · [profile/PROFILE_NATAL_DECODE_DEPTH_V1.md](./profile/PROFILE_NATAL_DECODE_DEPTH_V1.md) — Natal Decode (opt-in depth)
 - [foundation/SCREEN_FLOW_V1.md](./foundation/SCREEN_FLOW_V1.md) — **ScreenFlow** pager (transform · landing excluded)
 - [foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) — **закон конструкции** экранов Profile / Today
 - [practices/PRACTICE_CONTENT_TAXONOMY_V1.md](./practices/PRACTICE_CONTENT_TAXONOMY_V1.md) — **библиотека практик** SoT: class → type → purpose/state/domain; Canonical Technique → Item
@@ -153,7 +153,8 @@
 3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — experience / product cycle (подчинены п.2 для смысла; нарезка экрана — PRODUCT_FLOW)
 3a. [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md) — слоты Сегодня (**последний authority перед UI**; грамматика — [DISPLAY_CONSTRUCTION_GRAMMAR_V1](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md))
 4. [profile/PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) — уровень UI Profile
-4a. [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) — слоты Profile (последний authority перед UI)
+4a. [profile/PROFILE_INFORMATION_CONTRACT_V1.md](./profile/PROFILE_INFORMATION_CONTRACT_V1.md) — закрытое N Profile (gate)
+4b. [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) — слоты Profile (последний authority перед UI)
 5. [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entity catalog / build order
 6. [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) — статус работ
 

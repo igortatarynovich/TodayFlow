@@ -477,3 +477,126 @@ def test_stage0_facts_match_machine_raw_fact_shape() -> None:
 def test_bridge_calc_version_constant() -> None:
     assert BRIDGE_CALC_VERSION.startswith("natal_facts_bridge")
     assert DATE_SUN_CALC_VERSION.startswith("sun_from_date")
+
+
+def _swiss_mars_saturn_square() -> dict:
+    return {
+        "positions": [
+            {"body": "Sun", "sign": "Virgo", "degree": 15.0, "longitude": 165.0},
+            {"body": "Mars", "sign": "Aries", "degree": 0.0, "longitude": 0.0},
+            {"body": "Saturn", "sign": "Cancer", "degree": 0.0, "longitude": 90.0},
+        ],
+        "houses": [],
+    }
+
+
+def test_stage0_mints_f07_major_aspects_from_longitudes() -> None:
+    pack = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_f07",
+        swiss_chart=_swiss_mars_saturn_square(),
+        numerology={"life_path": 7},
+        capability={"natal_mode": "date_only"},
+        birth_date="1991-09-08",
+        input_fingerprint="in_f07",
+    )
+    types = {f["fact_type"] for f in pack["raw_facts"]}
+    assert "aspect_pair:mars:saturn:square" in types
+    square = next(f for f in pack["raw_facts"] if f["fact_type"] == "aspect_pair:mars:saturn:square")
+    assert square["authority"] == "swiss"
+    assert square["value"]["orb"] == 0.0
+
+
+def test_stage0_omits_aspect_without_five_major() -> None:
+    pack = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_no_asp",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Virgo", "degree": 15.0, "longitude": 165.0},
+                {"body": "Mars", "sign": "Aries", "degree": 0.0, "longitude": 0.0},
+            ],
+            "houses": [],
+        },
+        capability={"natal_mode": "date_only"},
+        birth_date="1991-09-08",
+        input_fingerprint="in_no_asp",
+    )
+    types = {f["fact_type"] for f in pack["raw_facts"]}
+    assert not any(t.startswith("aspect_pair:") for t in types)
+
+
+def test_stage1_mints_one_hard_aspect_pair_tension() -> None:
+    facts = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_k05",
+        swiss_chart=_swiss_mars_saturn_square(),
+        numerology={"life_path": 7},
+        capability={"natal_mode": "date_only"},
+        birth_date="1991-09-08",
+        input_fingerprint="in_k05",
+    )
+    ev = build_character_engine_evidence_candidates_v0(facts)
+    tensions = [
+        c
+        for c in ev["claims"]
+        if c.get("claim_kind") == "tension" and str(c.get("thesis_key") or "").startswith("aspect_pair:")
+    ]
+    assert len(tensions) == 1
+    claim = tensions[0]
+    assert claim["thesis_key"] == "aspect_pair:mars:saturn:square"
+    assert "↔" in claim["il_line"]
+    assert "act" in claim["il_line"]
+    assert "limit" in claim["il_line"]
+    assert ev["diagnostics"]["il_aspect_tension_emitted"] == 1
+
+
+def test_stage1_omits_harmonic_aspect_as_k05() -> None:
+    facts = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_trine",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Aries", "degree": 0.0, "longitude": 0.0},
+                {"body": "Jupiter", "sign": "Leo", "degree": 0.0, "longitude": 120.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 7},
+        capability={"natal_mode": "date_only"},
+        birth_date="1990-04-01",
+        input_fingerprint="in_trine",
+    )
+    types = {f["fact_type"] for f in facts["raw_facts"]}
+    assert "aspect_pair:jupiter:sun:trine" in types
+    ev = build_character_engine_evidence_candidates_v0(facts)
+    tensions = [
+        c
+        for c in ev["claims"]
+        if c.get("claim_kind") == "tension" and str(c.get("thesis_key") or "").startswith("aspect_pair:")
+    ]
+    assert tensions == []
+    assert ev["diagnostics"]["il_aspect_tension_emitted"] == 0
+
+
+def test_stage1_picks_one_primary_when_two_hard_aspects() -> None:
+    facts = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_two",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Aries", "degree": 0.0, "longitude": 0.0},
+                {"body": "Moon", "sign": "Libra", "degree": 0.0, "longitude": 180.0},
+                {"body": "Mars", "sign": "Aries", "degree": 1.0, "longitude": 1.0},
+                {"body": "Saturn", "sign": "Cancer", "degree": 0.0, "longitude": 90.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 7},
+        capability={"natal_mode": "date_only"},
+        birth_date="1990-04-01",
+        input_fingerprint="in_two",
+    )
+    ev = build_character_engine_evidence_candidates_v0(facts)
+    tensions = [
+        c
+        for c in ev["claims"]
+        if c.get("claim_kind") == "tension" and str(c.get("thesis_key") or "").startswith("aspect_pair:")
+    ]
+    assert len(tensions) == 1
+    assert tensions[0]["thesis_key"] == "aspect_pair:moon:sun:opposition"

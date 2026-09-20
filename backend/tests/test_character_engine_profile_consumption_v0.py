@@ -26,7 +26,11 @@ def _payload(*, grounded: bool = True) -> dict:
         },
         "portrait_why_v0": {
             "selected_by": [{"label": "Архетип Мудрец по числу пути"}],
-            "portrait_influenced_by": [],
+            "portrait_influenced_by": [
+                {"id": "sun", "class": "portrait_influenced_by", "label": "Солнце в Водолее", "value": "Aquarius"},
+                {"id": "moon", "class": "portrait_influenced_by", "label": "Луна в Тельце", "value": "Taurus"},
+                {"id": "asc", "class": "portrait_influenced_by", "label": "Асцендент в Близнецах", "value": "Gemini"},
+            ],
         },
         "insight_nodes_v0": {
             "nodes": [
@@ -64,6 +68,16 @@ def _payload(*, grounded: bool = True) -> dict:
                         {
                             "claim_id": "c_air",
                             "thesis_key": "direction_through_air_mind",
+                            "supporting_fact_ids": ["f_sun"],
+                        },
+                        {
+                            "claim_id": "c_occ_sign",
+                            "thesis_key": "planet_in_sign:mars:cancer",
+                            "supporting_fact_ids": ["f_sun"],
+                        },
+                        {
+                            "claim_id": "c_occ_house",
+                            "thesis_key": "planet_in_house:mars:4",
                             "supporting_fact_ids": ["f_sun"],
                         },
                     ]
@@ -139,8 +153,17 @@ def test_consumption_overwrites_recognition_why_trap(monkeypatch) -> None:
     why = out["portrait_why_v0"]
     assert why["source"] == "character_engine_stage2"
     assert why["selected_by"]
-    assert "Автономия" in why["selected_by"][0]["label"]
-    assert "Мудрец" not in str(why)
+    sel_ids = [str(r.get("id")) for r in why.get("selected_by") or []]
+    inf_ids = [str(r.get("id")) for r in why.get("portrait_influenced_by") or []]
+    assert sel_ids == ["life_path"]
+    assert why["selected_by"][0]["life_path"] == 7
+    assert why["selected_by"][0]["contribution"]
+    assert "Автономия" not in str(why["selected_by"])
+    assert "Мудрец" not in str(why["selected_by"])
+    assert "sun" in inf_ids
+    assert "moon" in inf_ids
+    assert "asc" in inf_ids
+    assert not any("planet_in_sign" in i or "planet_in_house" in i for i in inf_ids + sel_ids)
 
     node = out["insight_nodes_v0"]["nodes"][0]
     assert "Ритм дня" not in node["insight"]
@@ -150,6 +173,43 @@ def test_consumption_overwrites_recognition_why_trap(monkeypatch) -> None:
     assert "сегодня" not in (node.get("help") or "").lower()
     assert out["insight_nodes_v0"]["rules"]["forbids_living_day_rhythm_as_identity_trap"] is True
     assert out["insight_nodes_v0"]["rules"]["titles_follow_forms_case_a_c"] is True
+
+
+def test_pic_k02_reconstructs_natal_anchors_when_why_empty(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    payload = _payload()
+    payload["portrait_why_v0"] = {"selected_by": [], "portrait_influenced_by": []}
+    payload["diagnostics"]["character_engine_stage2"]["stage0"]["raw_facts"].extend(
+        [
+            {
+                "fact_id": "f_moon",
+                "fact_type": "planet_sign:moon",
+                "value": {"sign": "Taurus"},
+            },
+            {
+                "fact_id": "f_asc",
+                "fact_type": "angle_sign:ascendant",
+                "value": {"sign": "Gemini"},
+            },
+        ]
+    )
+    out = apply_character_engine_profile_consumption_v0(payload)
+    why = out["portrait_why_v0"]
+    inf_ids = [str(r.get("id")) for r in why.get("portrait_influenced_by") or []]
+    sel_ids = [str(r.get("id")) for r in why.get("selected_by") or []]
+    assert "sun" in inf_ids
+    assert "moon" in inf_ids
+    assert "asc" in inf_ids
+    assert "life_path" in sel_ids
+    assert sel_ids[0] == "life_path"
+    assert "Автономия" not in str(why.get("selected_by"))
+    assert why["selected_by"][0].get("contribution")
+    blob = str(why)
+    assert "planet_in_sign:mars:cancer" not in blob
+    assert "planet_in_house:mars:4" not in blob
 
 
 def test_consumption_preserves_living_as_repeat_node(monkeypatch) -> None:
@@ -280,3 +340,54 @@ def test_consumption_applied_asc_and_occupied_house(monkeypatch) -> None:
     hows = [(h.get("how") or "") for h in houses.values()]
     assert sum("через автономию и собственную систему" in h.lower() for h in hows) <= 1
     assert all("здесь это звучит" not in h.lower() for h in hows)
+
+
+def test_k05_insight_from_grounded_aspect_pair_beats_trap_bank(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    payload = _payload()
+    payload["diagnostics"]["character_engine_stage2"]["stage1"]["claims"].append(
+        {
+            "claim_id": "c_k05",
+            "claim_kind": "tension",
+            "thesis_key": "aspect_pair:mars:saturn:square",
+            "evidence_status": "grounded",
+            "il_line": "act ↔ limit — friction.",
+            "supporting_fact_ids": ["f_asp"],
+        }
+    )
+    payload["diagnostics"]["character_engine_stage3"] = {
+        "stage3": {
+            "status": "grounded",
+            "primary_tension": {
+                "surface_text": "Пока ты держишь дистанцию, жизнь не двигается — Stage3 trap.",
+            },
+        }
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    node = out["insight_nodes_v0"]["nodes"][0]
+    assert node["insight"] == "act ↔ limit — friction."
+    assert "↔" in node["insight"]
+    assert "act" in node["insight"] and "limit" in node["insight"]
+    assert "дистанцию" not in node["insight"]
+    assert "Stage3 trap" not in node["insight"]
+    assert out["character_engine_consumption_v0"]["insight_source"] == "stage1_aspect_pair"
+    why = out["portrait_why_v0"]
+    blob = str(why)
+    assert "aspect_pair:mars:saturn:square" not in blob
+    assert [str(r.get("id")) for r in why.get("selected_by") or []] == ["life_path"]
+
+
+def test_k05_omits_insight_without_grounded_aspect_evidence(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    out = apply_character_engine_profile_consumption_v0(_payload())
+    node = out["insight_nodes_v0"]["nodes"][0]
+    assert node["insight"] == ""
+    assert out["character_engine_consumption_v0"]["insight_source"] == "omitted_no_grounded_aspect_tension"
+    trap = out["profile_contract_v1"]["recurring_patterns"][0]
+    assert "дистанцию" in trap or "анализ" in trap or "контроль" in trap

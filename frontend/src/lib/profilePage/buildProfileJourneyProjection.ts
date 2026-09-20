@@ -20,6 +20,8 @@ export type ProfileJourneyWhyRow = {
   id: string;
   class: "selected_by" | "portrait_influenced_by" | string;
   label: string;
+  contribution?: string | null;
+  life_path?: number | null;
 };
 
 export type ProfileJourneyNode = {
@@ -70,6 +72,8 @@ type WhyRowIn = {
   id?: string;
   class?: string;
   label?: string;
+  contribution?: string | null;
+  life_path?: number | null;
 };
 
 function titleCaseRu(value: string): string {
@@ -88,6 +92,8 @@ function mapWhyRows(rows: WhyRowIn[] | undefined | null): ProfileJourneyWhyRow[]
         id: String(row?.id || label),
         class: String(row?.class || ""),
         label,
+        contribution: String(row?.contribution || "").trim() || null,
+        life_path: typeof row?.life_path === "number" ? row.life_path : null,
       };
     })
     .filter((row): row is ProfileJourneyWhyRow => Boolean(row));

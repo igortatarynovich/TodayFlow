@@ -101,9 +101,9 @@ def _date_only_facts(*, reason: str) -> dict[str, Any]:
 
 def _name_pack() -> dict[str, Any]:
     return {
-        "expression_number": 5,
-        "soul_urge_number": 3,
-        "personality_number": 2,
+        "expression": 5,
+        "soul_urge": 3,
+        "personality": 2,
     }
 
 
@@ -205,6 +205,33 @@ def test_acceptance_date_only(access: str):
         assert SLOT_HELPS in proj["access_gated_slot_ids"]
     else:
         assert SLOT_HELPS in proj["revealed_slots"]
+
+
+def test_pic_k13_named_bag_omits_without_name_and_does_not_touch_identity():
+    """PIC-K13: live bag keys expression/soul_urge/personality; nameless omit + CTA; identity untouched."""
+    facts = _date_only_facts(reason="birth_time_missing")
+    named = _project(
+        access="free",
+        display_name="Анна",
+        time_unknown=True,
+        facts=facts,
+        name_numerology=_name_pack(),
+    )
+    bag = named["revealed_slots"][SLOT_NAME_NUMEROLOGY]
+    assert bag["expression"] == 5
+    assert bag["soul_urge"] == 3
+    assert bag["personality"] == 2
+    assert "expression_number" not in bag
+    identity = named["slots"].get(SLOT_IDENTITY)
+    assert identity != bag
+    assert "expression" not in str(identity or "")
+    assert "soul_urge" not in str(identity or "")
+
+    nameless = _project(access="free", time_unknown=True, facts=facts)
+    assert SLOT_NAME_NUMEROLOGY not in nameless["slots"]
+    assert SLOT_NAME_NUMEROLOGY not in nameless["revealed_slots"]
+    assert SLOT_NAME_NUMEROLOGY in nameless["capability"]["profile_slots"]["omitted"]
+    assert any(m["code"] == "need_name" for m in nameless["capability"]["user_messages"])
 
 
 @pytest.mark.parametrize("access", ["free", "trial"])

@@ -4,7 +4,15 @@ Last updated: 2026-09-20
 Owner: Product + Engineering
 Status: Active working document
 
-**NOW (PROFILE INFORMATION CONTRACT, 2026-09-20):** Closed Profile N is `docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md` (6 inputs · 13 facts · 18 `PIC-K*`). Occupancy stays sign/house, now IL-2 compose for Sun–Saturn; Identity thesis unchanged. K13/K14 header facts (`P2.name_numerology` / `P2.correspondence`) may render on Why when Matrix revealed. Do not wire remaining IL frames. P1 fill remains STOPPED. Occupancy harness still green. G0 deferred. Closed loop LOCKED.
+**NOW (PIC K05 COMPLETE, 2026-09-20):** `P3.insight` is one A↔B from Stage 0 F07 5-major facts → IL-2 `compose_aspect_pair` → one hard (square/opposition) tension. Trap-bank and Stage3 identity essays cannot beat grounded evidence; missing F07 omits. K01/K02/K12/K13 unchanged; K06 not this patch. PIC_COVERAGE K05 PARTIAL → COMPLETE (9 COMPLETE / 8 PARTIAL / 1 MISSING). Next = **K04** only. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (PIC K12 COMPLETE, 2026-09-20):** `P2.selected_life_path` is F09 life_path + `number_base_v1.base_meaning` only. CE primary claim cannot occupy the slot; missing contribution omits; birthday_number is not mixed in. PIC_COVERAGE K12 PARTIAL → COMPLETE (8 COMPLETE / 9 PARTIAL / 1 MISSING). Next = **K05** only (main tension from grounded/F07, not trap bank first). Not K04+. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (PIC K02 COMPLETE, 2026-09-20):** Natal Why anchors F01/F04/F05/F09 survive CE consumption; occupancy claims are omitted from Why and do not dump onto `P2.anchor.rhythm`. PIC_COVERAGE K02 PARTIAL → COMPLETE (7 COMPLETE / 10 PARTIAL / 1 MISSING). Next = **K12** only (`P2.selected_life_path` = life path, not primary CE claim). Not K05+. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (PIC K13 COMPLETE, 2026-09-20):** K13 wire/display aligned: Matrix bag = `expression` / `soul_urge` / `personality`; `P2.name_numerology` shows the three existing numbers when IN.name is present; omit + K17 `need_name` CTA without name; no Identity Core / natal leak. PIC_COVERAGE K13 PARTIAL → COMPLETE (6 COMPLETE / 11 PARTIAL / 1 MISSING). Next = **K02** only (natal F01/F04/F05/F09 anchors survive CE Why; occupancy not `P2.anchor.rhythm`). Not K12+. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (PIC COVERAGE AUDIT, 2026-09-20):** PIC drives Profile. Executable audit of K01–K18 is in `PROFILE_INFORMATION_CONTRACT_V1` §11: 5 COMPLETE (K08, K11 bridge, K14, K17, K18) · 12 PARTIAL · 1 MISSING (K06). Occupancy F03/F06→K01 qualifier closed; K01 thesis stays 13-key. Finite queue starts at K13 key mismatch, then K02 Why mapping, K12 selected_life_path. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server until this queue is worked. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (PROFILE OCCUPANCY PASS, 2026-09-20):** Same-Sun Virgo charts with Mars Cancer H4 vs Mars Libra H7 keep distinct IL occupancy through Stage 1 claims, Identity Core surface, and `P1.recognition_line`. Identity thesis stays `builds_through_analysis`. Occupancy constructions only (`planet_in_sign` / `planet_in_house`); catalog stays `draft`. Harness: `backend/tests/test_profile_knowledge_to_output_v1.py` (xfail inverted). Next: Profile Information Contract — closed list of what Profile may output. Do not wire remaining IL frames. P1 fill remains STOPPED (153 / 20/42 / 5 skipped). Handoff: `docs/status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md`. G0 deferred. Closed loop LOCKED.
 
@@ -84,19 +92,28 @@ Status: Active working document
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
 
+## Architecture impact — PIC-K12 selected_life_path (2026-09-20)
+
+- **SoT before:** `P2.selected_life_path` could render CE primary claim / archetype glue; FE meaning from `life_paths.json` with essay fallback.
+- **SoT after:** slot is F09 `life_path` + `number_base_v1.base_meaning` only. CE Identity Core stays on P1. Birthday number is not this slot. Missing contribution omits.
+- **Public contract changed?** no new JSON fields; `portrait_why_v0.selected_by[]` now carries `contribution` from number_base when present.
+- **Migration required?** no
+- **Canon updated?** yes — Information Contract §11 · Display Inventory `P2.selected_life_path` · this tracker
+- **Backward compatible?** yes for API. Old CE-selected Why rows are ignored for this slot.
+
 ## Architecture impact — Profile Information Contract (2026-09-20)
 
-- **SoT before:** Allowed Profile knowledge was scattered across Capability, Availability Matrix, Character Engine acts, Content Canon, Display Inventory, and Knowledge Core. Occupancy pass proved Mars sign/house can reach recognition without a closed N.
-- **SoT after:** `docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md` is the closed N: 6 inputs · 13 facts · 18 `PIC-K*`. Stage 1 occupancy compose is IL-2 `planet_in_sign` / `planet_in_house` for Sun–Saturn (omit if refuse). K13/K14 may show on Why via Inventory slots `P2.name_numerology` / `P2.correspondence`. Display Inventory remains last authority before UI. Do not invent PIC-K19. Do not wire remaining IL frames.
+- **SoT before:** Allowed Profile knowledge was scattered across Capability, Availability Matrix, Character Engine acts, Content Canon, Display Inventory, and Knowledge Core. Occupancy was wired as IL-3 rank + IL-4 voice into Stage 1.
+- **SoT after:** `docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md` is the closed N and a code gate: 6 inputs · 13 facts · 18 `PIC-K*`. Meaning producers cite `PIC_K` + `PIC_F`. K13/K14 stay in M; slots `P2.name_numerology` / `P2.correspondence` are compact Why facts. Coverage of `K01`/`K02` from `F03`/`F06` uses IL-2 compose from Stage 0 — not IL-3→Stage 1, not a new layer. Profile train closes when each of 18 PIC-K has an executable chain. Display Inventory remains last authority before UI. Do not invent PIC-K19. Do not start TODAY_INFORMATION_CONTRACT yet.
 - **Public contract changed?** no JSON fields. Additive display slots when Matrix revealed; omit if empty.
 - **Migration required?** no
-- **Canon updated?** yes — Information Contract · profile `_INDEX` · Display Inventory P2 rows · this tracker
-- **Backward compatible?** yes for API. Documentary + producer gate until more modules cite `PIC-K*`.
+- **Canon updated?** yes — Information Contract · profile `_INDEX` · Display Inventory P2 rows · this tracker · handoff · CALC_IL_WIRE
+- **Backward compatible?** yes for API.
 
 ## Architecture impact — IL occupancy on first-paint Identity Core (2026-09-20)
 
 - **SoT before:** CALC_IL_WIRE consumed draft occupancy at the library layer; Character Engine Stage 1 was a 13-key sun/moon/ASC registry and did not import IL. Same-Sun charts collapsed to one Identity Core template. Product surfaces ignored `draft`.
-- **SoT after:** Stage 1 mints IL-3 `planet_in_sign` / `planet_in_house` as existing `mechanism` claims from Stage 0 `planet_sign` rows. Identity thesis stays the 13-key registry. Occupancy IL-4 lemmas fill-empty onto Identity Core `surface_text` (copied to `P1.recognition_line`). Catalog stays `draft`. Aspects / transits / angles are not minted. Display, prompts, and new CE concepts are unchanged. Next SoT is a Profile Information Contract, not more IL frames.
+- **SoT after:** Stage 1 mints IL-2 `planet_in_sign` / `planet_in_house` as existing `mechanism` claims from Stage 0 `planet_sign` rows (Sun–Saturn; houses only on full natal; omit if compose refuses). Identity thesis stays the 13-key registry. Occupancy lemmas fill-empty onto Identity Core `surface_text` as qualifier (`source_roles.qualifier`). Catalog stays `draft`. Aspects / transits / angles are not minted. Not IL-3. Not IL-4. Not calc_il_wire inside CE.
 - **Public contract changed?** no new fields. `recognition_line` / Identity Core `surface_text` may now include occupancy lemmas when Stage 0 has planet sign/house.
 - **Migration required?** no. Catalog not promoted to `active`.
 - **Canon updated?** yes — this tracker · `docs/status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md` · `docs/astrology/CALC_IL_WIRE_V1.md`

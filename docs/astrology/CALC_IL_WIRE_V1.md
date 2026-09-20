@@ -4,9 +4,9 @@
 **Status:** **LOCKED** — library-layer wire from calc snapshots to IL-4 packs. **Not** Swiss in this module. **Not** Today prompts as meaning SoT. **Not** public JSON. **Not** `active`. **Not** pair catalog. **Not** freeze / IL-2 / IL-3 / IL-4 / scale reopen. **Not** a new “canonical v2.” **Not** user relevance.  
 **Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) Sequence · §6.64 · §6.65 · §7. Inventory: [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) step 39 · KC-C-WIRE. Scale: [LIBRARY_SCALE_V1.md](./LIBRARY_SCALE_V1.md) §4. Voice: [IL4_EXPRESSION_V1.md](./IL4_EXPRESSION_V1.md). Themes: [IL3_INTERPRETATION_ENGINE_V1.md](./IL3_INTERPRETATION_ENGINE_V1.md). Frames: [IL2_COMPOSITION_RULES_V1.md](./IL2_COMPOSITION_RULES_V1.md). Atoms: [KNOWLEDGE_CORE_V1_FREEZE.md](./KNOWLEDGE_CORE_V1_FREEZE.md). Boundary: [IL1_HANDOFF.md](./IL1_HANDOFF.md) §3 · §5. AGENTS.md Architecture impact.
 
-This pass answers: **how a calc snapshot becomes IL-4 packs at the library layer.** It does not attach those packs to Today / Compatibility UI. Profile first-paint Identity Core now reads occupancy constructions only — see Architecture impact 2026-09-20.
+This pass answers: **how a calc snapshot becomes IL-4 packs at the library layer.** It does not attach those packs to Today / Compatibility UI. Profile first-paint Identity Core reads occupancy via **IL-2 compose from Stage 0 facts** — not this wire — see Architecture impact 2026-09-20.
 
-Catalog **38 draft / 0 `active`**. Unchanged this pass. The wire consumes draft; it does not filter by `active`. Runtime product surfaces still ignore `draft` except Character Engine Stage 1 occupancy (`planet_in_sign` / `planet_in_house` only) on Identity Core / `P1.recognition_line` — see Architecture impact 2026-09-20 below. Aspects / transits / angles stay library-layer.
+Catalog **38 draft / 0 `active`**. Unchanged this pass. The wire consumes draft; it does not filter by `active`. Runtime product surfaces still ignore `draft` except Character Engine Stage 1 occupancy (`planet_in_sign` / `planet_in_house` via IL-2 compose) on Identity Core / `P1.recognition_line`, and one hard natal `aspect_pair` (K05) on `P3.insight`. Transits / angles stay library-layer.
 
 ---
 
@@ -21,12 +21,12 @@ Catalog **38 draft / 0 `active`**. Unchanged this pass. The wire consumes draft;
 
 ## Architecture impact — CE occupancy consume (2026-09-20)
 
-- **SoT before:** Wire live at library layer only. Character Engine did not import IL. First-paint Profile ignored `draft`.
-- **SoT after:** Character Engine Stage 1 reads draft occupancy constructions (`planet_in_sign`, `planet_in_house`) from Stage 0 facts and carries IL-4 lemmas onto Identity Core surface / `P1.recognition_line`. Catalog stays `draft`. Other constructions stay unattached. Not a pair catalog. Not `active`. Next: Profile Information Contract, not remaining IL frames.
-- **Public contract changed?** no new fields
+- **SoT before:** Wire live at library layer only. Character Engine Stage 1 was a 13-key sun/moon/ASC registry. First-paint Profile ignored `draft`. A later hop minted IL-3 ranked frames + IL-4 voice into Stage 1.
+- **SoT after:** Coverage defect `PIC-K01`/`PIC-K02` for `PIC-F03`/`PIC-F06`. Stage 0 `planet_sign` (sign + house) → IL-2 `compose_planet_in_sign` / `compose_planet_in_house` → Stage 1 occupancy claims → Stage 2 qualifier on Identity Core surface / `P1.recognition_line`. Thesis stays the 13-key registry. Catalog stays `draft`. Not IL-3 rank. Not IL-4 voice. Not calc_il_wire inside CE. Not a pair catalog. Not `active`. Not a new pipeline layer.
+- **Public contract changed?** no new fields. `recognition_line` / Identity Core `surface_text` may include occupancy lemmas when Stage 0 has planet sign/house.
 - **Migration required?** no
-- **Canon updated?** yes — this file · tracker · `docs/status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md`
-- **Backward compatible?** yes for JSON shape. Recognition prose can now differ when occupancy differs.
+- **Canon updated?** yes — this file · [PROFILE_INFORMATION_CONTRACT_V1](../profile/PROFILE_INFORMATION_CONTRACT_V1.md) · tracker · `docs/status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md`
+- **Backward compatible?** yes for JSON shape. Two same-Sun charts can differ on first-paint recognition when occupancy differs.
 
 ---
 

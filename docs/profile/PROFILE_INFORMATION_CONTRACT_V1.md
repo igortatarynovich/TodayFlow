@@ -109,16 +109,16 @@ Code Δ: Capability TARGET = LLM `natal_facts`; CODE = Swiss. Для этой т
 |----|-----------|-------|------------|------------|----|------|------|-------|-----|--------|
 | `K01` | Один наблюдаемый механизм личности (логлайн) | `F01`–`F04`, `F09`, full: `F05`; occupancy `F03`/`F06` | Planet `core_function` · Sign `manner` · (full) Angle `orientation` · IL-2 `planet_in_sign` / `planet_in_house` | CE Акт I: одна мысль из Evidence Graph. Occupancy — qualifier, **не** замена 13-key thesis. **Не** список черт, **не** sun-bucket сам по себе | IL 7 планет draft; CE Stage 1 = 13 sun/moon/ASC ключей **плюс** IL-2 occupancy claims | CE каскад есть; Stage 1 читает IL-2 compose (не IL-3 rank, не IL-4 voice) | **да:** два одинаковых Солнца + разный Mars×дом → разный K01 surface | **да** | `P1.recognition_line` · `P1.identity_core` · Matrix `identity_summary` | 1 предложение механизма + occupancy lemmas |
 | `K02` | Роль каждого факта в **этом** ядре | subset `F01`–`F10`, `F12`; occupancy `F03`/`F06` | те же атомы; каталог не энциклопедия | CE Акт II: «какую часть этой личности я сформировал». Occupancy = `source_roles.qualifier`. Тест: без имени планеты фраза про человека | атомы есть | правило есть | partial anchors + occupancy qualifier | **да** | `P2.anchor.sun/moon/asc/mc/element/rhythm` · `P2.selected_life_path` | 1 тезис на опору; пустое omit |
-| `K03` | Прикладной смысл углов и домов **этого** человека | `F05` `F06` (+ занятые `F03`) | Angle `orientation` · House `arena` · Planet×House compose | CE Act II applied: `how` + `do` на зону. Не «7-й дом = партнёрство» | 12 house packs + 2 angle packs stored; catalog `draft` | `character_engine_house_lines_v0` / `asc_v0` | есть how/do; IL occupancy в Stage 1 **не** входит | **да, full only** | P2 ASC/MC · Explore natal · Matrix «Структура карты» | `how` + `do`; незначимое omit |
+| `K03` | Прикладной смысл углов и домов **этого** человека | `F05` `F06` (+ занятые `F03`) | Angle `orientation` · House `arena` · Planet×House compose | CE Act II applied: `how` + `do` на зону. Не «7-й дом = партнёрство» | 12 house packs + 2 angle packs stored; catalog `draft` | `character_engine_house_lines_v0` / `asc_v0` | how/do отдельно от occupancy qualifier на K01 | **да, full only** | P2 ASC/MC · Explore natal · Matrix «Структура карты» | `how` + `do`; незначимое omit |
 | `K04` | Internal Engine: как решает / воспринимает / держит стресс / риск / восстановление / рост / выгорание | `F03` `F04` `F07` `F08` + ядро | Planet function · Aspect `relation` · IL-2 frames | CE Акт III: правила работы, не качества. Capability L2 `decision_style` / L3 perception — **алиасы**, не отдельные корни | IL-2 compose 616 cells; CE Stage 3 prompts существуют | правило канона есть | first-paint **не** держит оси отдельно от K01-шаблона | **да, свёрнуто** | `P3.insight` / node (не 7 виджетов) · Matrix «Решения» | механизм; пустая ось omit |
-| `K05` | Одно главное напряжение A↔B | hard `F07`, clash `F08`, конфликт ролей K02 | Aspect `relation` · IL-2 `aspect_pair` | CE Акт IV: ровно одно главное. Content `inner_tension` = alias | аспекты stored; Stage 1 имеет 1 tension-правило (`freedom_vs_stability`) | канон есть | **узко:** только одна ось из реестра, не IL-пара | **да** | внутри `P3.insight` | одна ось, не список |
+| `K05` | Одно главное напряжение A↔B | hard `F07`, clash `F08`, конфликт ролей K02 | Aspect `relation` · IL-2 `aspect_pair` | CE Акт IV: ровно одно главное. Content `inner_tension` = alias | Stage 0 mint 5 majors; Stage 1 ровно одна hard `aspect_pair` tension | канон есть | **закрыт:** grounded F07 → IL-2 → `P3.insight`; trap-bank не обгоняет; пустое omit | **да** | `P3.insight` | одна ось, не список |
 | `K06` | Вторичные напряжения (1–3), не конкурируют с K05 | то же | то же | CE Акт IV secondary | то же | канон есть | не отдельный слот Inventory | **да как материал узла** | `P3.*` / Explore | короткие оси |
 | `K07` | Как K01+K04+K05 проявляются в ситуациях | full усиливает домами `F06` | House `arena` для «где»; сцена ≠ корень | CE Акт V. Matrix «Эмоции / отношения / работа / деньги / дом» = **ярлыки сцен**, запрещены как generative roots | house packs есть | CE + life_spheres projector | сферы рисуются; корни `relationships/career/money` в TARGET запрещены | **да ≤2 сферы на пути** | `P4.sphere.*` · Matrix L2 styles | teaser + expand how/need/risk |
 | `K08` | Направление роста (не профессия) | K01+K04+K05 | — (derived) | CE Акт VI | нет отдельного KB | канон: из системы, не новый LLM-корень | `P4.effort_vector` проецируется из `help`, не из потенциала как поля | **да проекцией** | `P4.effort_vector` | 1 вектор поведения |
 | `K09` | Слепая зона / честная цена оси | K05 + K04 | — | CE Акт VII | нет отдельного KB | канон есть | нет отдельного слота; должно звучать в P3/P4 | **да внутри узла** | `P3.insight` · `P3.help` | 1 неудобная правда |
 | `K10` | Компас: strengths · helps · energy · red flags · practical takeaway | только уже построенные K01–K09 | — | CE Акт VIII **derived only**. Capability `core_strengths` / Matrix `helps[]` = проекции | — | запрет собственного промпта | L3 `helps` gated Trial+; strengths в Inventory не как акт пути | **да derived** | `P3.help` · `P4.effort_vector` · Matrix helps (Trial+) | список следствий; empty omit |
 | `K11` | Дуга пути личности (вообще, не сегодня) | K01+K05+K08 | `F09` как evidence, не заголовок | CE Финал | number_base для цифры; дуга — композиция | канон есть | `P5.bridge_line` = мост в Today из `node.kind`, **не** финальная дуга жизни | **частично** | `P5.bridge_line` | 1 предложение «почему открыть Today» |
-| `K12` | Что life path / birthday вносят в **этого** человека | `F09` | `number_base_v1` 1–9, 11/22/33 | вклад в K01/K02, не статья «число 7 означает» | **есть** JSON bank | lookup + CE evidence | `P2.selected_life_path` calc; смысл часто банк/LLM | **да** | P2 life_path · P1 visual seed | имя/число + вклад, не энциклопедия |
+| `K12` | Что life path вносит в **этого** человека | `F09` life_path (birthday — не этот слот) | `number_base_v1` 1–9, 11/22/33 | вклад в Why, не статья «число 7 означает» | **есть** JSON bank | lookup | `P2.selected_life_path` calc; CE primary не слот | **да** | P2 life_path · P1 visual seed отдельно | число + grounded contribution; omit без bank |
 | `K13` | Что имя-числа вносят в самопрезентацию | `F10` | тот же bank | Capability L1 `name_expression`; omit без имени | bank есть | канон: не влиять на натал | `P2.name_numerology` compact Why | **да** | Why header fact, не акт пути | omit + CTA без имени |
 | `K14` | Культурные соответствия знака/даты | `F12` | header pack · chinese/tibetan services · sign stones/colors | **lookup**, не LLM. Нет ключа → omit | цвета hardcoded; камни из sign catalog; год — сервисы | Matrix closed decision #10 | `P2.correspondence` compact Why | **да** | Why header fact, не акт пути | ключ+ярлык; без выдумки |
 | `K15` | Как карта объясняет уже известное ядро | весь natal pack + K01 (+ K05) | IL-4 phrase pack на decode | opt-in POST; не personality root; не Today/Compat SoT | IL-4 bind 1.3.123; catalog draft | [PROFILE_NATAL_DECODE_DEPTH_V1](./PROFILE_NATAL_DECODE_DEPTH_V1.md) | CTA + cache; GET не генерит | **да opt-in** | `P6.natal_decode` | история карты поверх fixed core |
@@ -138,15 +138,15 @@ Code Δ: Capability TARGET = LLM `natal_facts`; CODE = Swiss. Для этой т
 
 | Есть | Нет / дырка |
 |------|-------------|
-| Считать `F01`–`F11` (Swiss + numerology) | IL catalog **38 draft / 0 active**; product surfaces ignore `draft` |
+| Считать `F01`–`F11` (Swiss + numerology) | IL catalog **38 draft / 0 active**; product surfaces ignore `draft` besides PIC occupancy consume |
 | Planet Canon Sun–Saturn · Sign manner ×12 · House arena ×12 · Aspect relation ×5 · Angle ASC/MC | Uranus/Neptune/Pluto objects withheld · DSC/IC out of V1 · Mars psych `ACCESS_BLOCKED` · sign later-interpretive `DEFERRED_V1` |
-| IL-2/3 compose 616 cells на library layer | **CE не импортирует IL.** Occupancy дома на Stage 0 хранится и не матчится |
+| IL-2 compose 616 cells на library layer; CE Stage 1 читает occupancy compose **и** одну hard `aspect_pair` (K05) | IL-3 rank / IL-4 voice / calc_il_wire **не** являются проводкой first-paint. Transits / angles не в Stage 1 |
 | Number base 1–9 / 11/22/33 | Отдельный смысл personal_year vs life_path — только bridge, не вторая таблица (канон чисел) |
-| Header catalog цвет/камень/CN/TB | Растения / ведический ярлык как накопленный ключ — заявлено Matrix, единого pack нет |
-| Display Inventory путь из 5 актов | Имя-нумерология и соответствия шапки есть в Matrix 3.1 и **нет** как `slot_id` |
-| Natal Decode opt-in + IL-4 polish | First-paint `K01` = 13 шаблонов по солнцу/луне/ASC |
+| Header catalog цвет/камень/CN/TB · слоты `P2.correspondence` / `P2.name_numerology` | Растения / ведический ярлык как накопленный ключ — заявлено Matrix, единого pack нет |
+| Display Inventory путь из 5 актов + compact Why facts | Исполняемый статус каждой строки — **§11**, не эта сводка |
+| Natal Decode opt-in + IL-4 polish | First-paint `K01` thesis остаётся 13-key; occupancy — qualifier на surface |
 
-Главный дефект покрытия (уже измерен, 2026-09-20): два натала с одним Солнцем Девы и разным Марс×дом дают разные IL-2/3 кадры и **один** Identity Core. Это не недостаток «ещё одного слоя» — это `K01`/`K02` без правила, которое потребляет planet×sign×house.
+Покрытие `K01`/`K02` из `F03`/`F06` (2026-09-20): два натала с одним Солнцем Девы и разным Марс×дом дают разные IL-2 occupancy atoms, разные Stage 1 claims и разный Identity Core surface. Thesis остаётся `builds_through_analysis`. Это не IL-3→Stage 1 слой.
 
 ---
 
@@ -160,6 +160,7 @@ Code Δ: Capability TARGET = LLM `natal_facts`; CODE = Swiss. Для этой т
 |--------|--------|
 | `K01` | да — герой |
 | `K02` + calc `F01 F04 F05 F09` | да — Why anchors |
+| `K13` `K14` | да — compact Why header facts, **не** акты пути и **не** Identity Core |
 | `K04` `K05` `K09` | да — один узел Insight, не склад |
 | `K10` help | да — help узла → Effort vector |
 | `K07` | да — 0–2 сферы, «где», не второй вектор |
@@ -210,12 +211,12 @@ Chrome и failure (`«Нет соединения.»` / `«Не удалось �
 
 | Механизм | Что делает | Отношение к N |
 |----------|------------|----------------|
-| IL-2/3/4 + wire + attach + consume + polish | library → editorial voice | атомы для `K01`–`K03`/`K15`; first-paint CE их не читает |
-| CE Stage 1 13-key registry | mint thesis_key по солнцу/луне/ASC | **уже**, чем N; режет `K01` до ведра |
+| IL-2/3/4 + wire + attach + consume + polish | library → editorial voice | атомы для `K01`–`K03`/`K15`. First-paint CE читает **только** IL-2 occupancy compose |
+| CE Stage 1 13-key registry | mint thesis_key по солнцу/луне/ASC | thesis `K01`; occupancy не заменяет реестр |
 | Disclosure funnel identity→styles→patterns→spheres | legacy LLM корни | TARGET запрещает как SoT; CODE Δ |
 | Life spheres projector | сцена → карточка | presentation `K07`, не новый тип |
 | Profile meaning polish 1.3.123 | IL-4 на decode | только `K15` |
-| Knowledge-to-output harness | фиксирует схлопывание | диагностика, не контракт |
+| Knowledge-to-output harness | Mars Cancer H4 vs Libra H7 | acceptance `K01`/`K02`, не контракт N |
 | Day Sources / vedic / bazi в Profile×Day matrix | факты дня | **не** Profile N; Today/overlay |
 
 Документы, которые описывают **слоты, доступ или каскад**, но не заменяют эту таблицу: Display Inventory · Matrix 3.1 · Capability allowed_output · Content Canon §4 · CE Scenario.
@@ -229,7 +230,7 @@ Chrome и failure (`«Нет соединения.»` / `«Не удалось �
 | Конфликт | Стороны | Что делает этот файл |
 |----------|---------|----------------------|
 | Состав экрана | Matrix: шапка → структура → стили сфер. Inventory: 5 актов пути + Explore | N не выбирает IA. M пути = Inventory; Matrix 3.1 остаётся approved access/reveal |
-| Имя / камень в шапке | Matrix слоты есть; Inventory `slot_id` нет | знание `K13`/`K14` допустимо; **показ на пути не закрыт слотом** — дыра display, не новое знание |
+| Имя / камень в шапке | Matrix слоты есть; Inventory не имел `slot_id` | **закрыто:** `K13`/`K14` остаются в M; слоты `P2.name_numerology` / `P2.correspondence` — compact Why facts |
 | `sun_sign_meaning` как L1 поле | Capability vs CE «одна мысль» | схлопнуто в `K01`/`K02`. Отдельной статьи знака нет |
 | Chinese/Tibetan как evidence личности | CE Пролог vs Stage 1 rules | как **факт** `F12` и lookup `K14` — да. Как mint `K01` — в live реестре **нет** |
 
@@ -248,17 +249,72 @@ Owner может сузить M (убрать показ), не расширяя
 | Tarot | то же | card_base + question/spread; не закрытый N ответа |
 | Практики | taxonomy + coverage ledger | метод/item, не «знание о человеке» |
 
-Пока Profile N не является gate в коде, не начинать Today N «заодно».
+Пока Profile N не gate в коде **и** каждый отображаемый M не имеет исполняемой цепочки, не начинать Today N «заодно».
 
 ---
 
-## 10. Следующий шаг (не код смысла)
+## 10. Locked decisions (2026-09-20)
 
-1. Считать этот файл SoT информационного пространства Profile.  
-2. Любая генерация / слот / IL-wire в first-paint обязана указать `PIC-K*` + `PIC-F*`. Нет строки — нет работы.  
-3. Закрыть display-дыры `K13`/`K14` (Inventory row) **или** вычеркнуть их из M — отдельное продуктовое решение, не новое знание.  
-4. Чинить `K01` wire (IL planet×sign×house → CE claim) **только** как покрытие уже названного `K01`/`K02`, не как новый слой.  
-5. Today Information Contract — следующий раздел, той же формой таблицы, после того как Profile N принят как gate.
+1. **N = 18.** `K13`/`K14` остаются в M. Это compact secondary/header facts, не акты journey и не Identity Core. Вычёркивать их из-за дыры Inventory было бы подгонкой продукта под неполный каталог слотов.
+2. **N = 18 — обязательный code gate.** Любая meaning-producing работа в Profile обязана назвать минимум `PIC-K*` и зависимые `PIC-F*`. Не может указать — работа не начинается. Chrome и transport failure (`«Нет соединения.»` / `«Не удалось загрузить.»`) исключены. Модуль: `profile_information_contract_v1.py`.
+3. **Ближайший патч** — coverage defect `PIC-K01`/`PIC-K02` для фактов `PIC-F03`/`PIC-F06`, не «подключить IL к Character Engine». PIC говорит *что* обязано дойти; внутреннюю проводку выбирает минимальный путь в существующем коде.
+4. **Выбранный путь:** Stage 0 `planet_sign` (sign + house) → IL-2 `compose_planet_in_sign` / `compose_planet_in_house` → Stage 1 occupancy claims → Stage 2 qualifier на Identity Core surface. Не IL-3 frames → Stage 1. Не IL-4 voice. Не новый слой.
+5. **Acceptance:** Cancer Mars/4 vs Libra Mars/7 при одном Sun/Moon/ASC. Различие есть в F03/F06 → atoms существуют → IL-2 его сохраняет → CE использует при derivation K01/K02 → конечный K01 **не** схлопывается.
+6. **Критерий закрытия Profile train** (ещё не выполнен): для каждого из 18 `PIC-K` определено facts → KB → derivation → wire → M/omit → slot; для каждого отображаемого M цепочка реально выполняется кодом. Определение цепочек: §11. Исполнение отображаемого M: ещё нет. Тогда — `TODAY_INFORMATION_CONTRACT`. Не «IL подключён», не «xfail стал pass», не «Profile выглядит лучше».
+7. **K01 thesis** не обязан меняться при occupancy. Mars Cancer/H4 и Mars Libra/H7 конкретизируют один механизм (`builds_through_analysis`), а не создают двух разных людей.
+
+---
+
+## 11. Executable coverage audit (2026-09-20)
+
+Статусы — факт кода на ветке `cursor/profile-knowledge-to-output`, не желание канона.
+
+| Статус | Значит |
+|--------|--------|
+| `COMPLETE` | отображаемый M: facts → KB → derivation → wire → slot исполняется; пустое omit |
+| `PARTIAL` | hops есть, но схлопывание / не те F / слот мапится мимо / UI не рисует |
+| `MISSING` | знание в N, до слота hop нет |
+| `OMIT-BY-DESIGN` | PIC M это знание не показывает (или показывает другую проекцию); не дефект |
+
+Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **закрыт**. Он не делает весь `K01` COMPLETE: thesis mint остаётся 13-key.
+
+| ID | Status | F consumed | KB | Derivation | Wire | Slot | Defect |
+|----|--------|------------|----|------------|------|------|--------|
+| `K01` | **PARTIAL** | Stage0 `planet_sign:*` (F01/F03/F04; house=F06 full), `angle_sign:ascendant` (F05 presence), `life_path_number` (F09). Occupancy Sun–Saturn IL-2. F07 aspect facts mint, but not thesis | 13-key registry + IL-2 compose | Stage1 `_apply_rule` + `_mint_il_occupancy_claims`; Stage2 thesis 13-key, occupancy fill-empty qualifier | consumption → `recognition_line` / `identity_core` | `P1.recognition_line` · `P1.identity_core` (emit + Recognition) | Occupancy qualifier **COMPLETE**. Thesis mint не Act I из всего evidence |
+| `K02` | **COMPLETE** | natal F01/F04/F05/F09 + occupancy F03/F06 as qualifier | `_CLAIM_WHY_LABEL` + FE zodiac banks | fill-empty natal Why rows from projector/Stage0; occupancy claims not Why | consumption merges natal `sun/moon/asc/life_path`; skips `planet_in_*` | live `P2.anchor.sun/moon/asc`; unknown/occupancy omit (not `P2.anchor.rhythm`) | нет на измеренном hop; `P2.selected_life_path` = K12 |
+| `K03` | **PARTIAL** | `house_cusp_sign:*`, `angle_sign:asc/mc`, occupied planets (F05/F06+F03) | local how-strings, не live IL arena/orientation | `build_asc_applied_v0` / `build_house_person_lines_for_identity_v0` (`do`="") | `character_engine_asc_v0` / `house_lines_v0` | path ASC/MC только если Why ещё держит id; house how = Explore, не emit | applied cards есть; path редко; IL atoms не SoT |
+| `K04` | **PARTIAL** | identity thesis; F07 теперь в Stage0, но Internal Engine его не читает; F08 нет | `_ENGINE_BY_IDENTITY` / Stage3 prompt | `build_character_engine_internal_engine_v0` | decision→`decision_style`; growth/recovery→helps | path свёрнут в `P3.insight`/`P3.help`, не 7 виджетов | оси не из аспектов/баланса |
+| `K05` | **COMPLETE** | Stage0 `aspect_pair:*` (F07 5 majors, Foundation orbs); hard square/opposition only | IL-2 `compose_aspect_pair` (`what_a`/`what_b`/`relation`) | Stage1 ровно один tension claim; harmonics / empty compose → omit | consumption `nodes[0].insight`; trap-bank и Stage3 identity tension не обгоняют | `P3.insight` (emit + Insight; empty omit) | нет на измеренном hop; K06 secondary не этим патчем |
+| `K06` | **MISSING** | — | prompt schema only | Stage3 `secondary_tensions` (deterministic `[]`) | consumption **не копирует** | нет slot | в N есть, на экран hop нет |
+| `K07` | **PARTIAL** | не F06; ключ = identity thesis | `build_life_spheres_for_identity_v0` packs | thesis essays | `life_spheres` → Effort 0–2 | live `P4.sphere.*`; **emit не выпускает** | «где» не house arena |
+| `K08` | **COMPLETE** | derived from `nodes[0].help` | — | `project_effort_vector_v0` | `effort_vector_v0` | `P4.effort_vector` emit + Effort; omit empty | нет (качество help = K04/K10) |
+| `K09` | **PARTIAL** | Stage4 context; не отдельный F* | Stage4 `blind_spots` / LLM | `build_character_engine_life_bundle_v0` | consumption **не читает** `blind_spots` | intended inside `P3.insight`/`P3.help` | цена оси = trap essay |
+| `K10` | **PARTIAL** | derived Stage3/5; не F13 | compass assembler; essay fallback `_essays_for` | Stage5 compass + consumption helps | `P3.help` · Matrix `helps` Trial+ | help часто null, т.к. = effort | Compass не derived-only: essay fallback; strengths/red flags без path slot |
+| `K11` | **COMPLETE** (показанный M) | `nodes[0].kind` | `_BRIDGE_*_RU` | `project_bridge_line_v0` | `bridge_line_v0` | `P5.bridge_line` emit + Bridge; omit empty | дуга жизни **OMIT-BY-DESIGN**; M = мост в Today |
+| `K12` | **COMPLETE** | F09 `life_path` only (birthday не в этом слоте) | `number_base_v1` `base_meaning` | lookup; нет meaning → omit | projector + consumption `selected_by` = `life_path` row | `P2.selected_life_path` emit/Why; CE primary не слот | нет |
+| `K13` | **COMPLETE** | F10 `expression`/`soul_urge`/`personality` | numerology calc (unchanged) | compact format only | Matrix `name_numerology` bag `expression`/`soul_urge`/`personality` | `P2.name_numerology` emit + Why; omit without IN.name; CTA via K17 `need_name` | нет; не пишет в natal/Identity Core |
+| `K14` | **COMPLETE** | F12 header pack | `profile_header_knowledge_v0` | lookup `header_pack_to_matrix_catalog` | Matrix `cultural_catalog` | `P2.correspondence` emit + Why; omit empty | нет |
+| `K15` | **PARTIAL** | natal pack + fixed K01 | IL-4 draft + decode prompt | POST `generate_natal_decode_depth_v0`; GET не генерит | `natal_decode_depth_v0` | Inventory `P6.natal_decode`; panel на скролле; **emit нет** | opt-in есть; grammar/path vs Explore не закрыты |
+| `K16` | **PARTIAL** | identity thesis, не K07 how/need/risk | `_TIPS` в `profile_deep_themes_v0` | `tips_for_theme` Trial+ | `character_engine_deep_themes_v0`; matrix slot **не проецируется** | нет Inventory `slot_id`; chooser UI живой | tips не в цепочке PIC→Inventory |
+| `K17` | **COMPLETE** | capability gaps / forming | Matrix §1.1 copy | `resolve_capability` · forming helpers | `user_messages` / `forming_message` | `P-data.cta_text` · `P-forming.message` live; chrome-exempt emit | нет |
+| `K18` | **COMPLETE** | F13 `living.signals[].note` | — (quotes) | `_living_quotes`; omit if empty | `nodes[0].living_evidence` | `P3.living_evidence` emit + Insight | нет |
+
+Сводка: **COMPLETE 9** (`K02` `K05` `K08` `K11` `K12` `K13` `K14` `K17` `K18`) · **PARTIAL 8** · **MISSING 1** (`K06`) · **OMIT-BY-DESIGN** внутри `K11` (дуга жизни). Occupancy-подhop `K01` закрыт отдельно.
+
+### Очередь Profile (из аудита, не из архитектурного бэклога)
+
+Только PIC-дыры. Не IL-3. Не Today.
+
+1. **K04** — одна ось Internal Engine в `P3` из F07/F08; не семь виджетов. F07 уже в Stage 0 (K05); F08 нет; engine всё ещё читает identity thesis.
+2. **K09** — fill-empty одна `blind_spot` в insight/help, если не дубль trap.
+3. **K07** — ≤2 path spheres из occupied houses F06 + emit `P4.sphere.*`.
+4. **K10** — omit helps, если Stage3/5 пуст (запрет essay fallback); path = help→effort.
+5. **K06** — продуктово: вычеркнуть из M **или** ≤2 secondary в материалы узла (слот не плодить).
+6. **K15** — emit `P6.natal_decode` и/или оставить Explore; не first-paint root.
+7. **K16** — Inventory slot **или** временно убрать из M, пока нет `slot_id`.
+8. **K03** — ASC/MC `how` в `P2.anchor.asc/mc`; house how остаётся Explore.
+
+Не в очереди: менять 13-key thesis `K01`; IL aspects/transits/angles dump; `TODAY_INFORMATION_CONTRACT`.
 
 ---
 
@@ -266,4 +322,10 @@ Owner может сузить M (убрать показ), не расширяя
 
 | Date | Change |
 |------|--------|
+| 2026-09-20 | K05 COMPLETE: F07 5-major facts in Stage 0 → IL-2 `aspect_pair` → one hard A↔B → `P3.insight`; trap-bank cannot beat; omit without grounded evidence. Next = K04. |
+| 2026-09-20 | K12 COMPLETE: `P2.selected_life_path` = F09 life_path + number_base contribution; CE primary не слот; birthday не примешивается. Next = K05. |
+| 2026-09-20 | K02 COMPLETE: natal F01/F04/F05/F09 survive CE Why; occupancy not `P2.anchor.rhythm`. Next = K12. |
+| 2026-09-20 | K13 COMPLETE: Matrix/producer/consumer share `expression`/`soul_urge`/`personality`; omit without IN.name; no Identity Core leak. Next = K02. |
+| 2026-09-20 | §11 executable coverage: 5 COMPLETE · 12 PARTIAL · 1 MISSING. Finite Profile queue from PIC, not engine leftovers. |
+| 2026-09-20 | Owner lock: K13/K14 stay in M + slots; N=18 code gate; K01/K02 from F03/F06 via IL-2 compose (not IL-3). Completion = 18 executable chains. |
 | 2026-09-20 | v1 reconstruction: 6 inputs · 13 facts · **18 allowed knowledge**. Ничего не добавлено сверх существующих канонов. |

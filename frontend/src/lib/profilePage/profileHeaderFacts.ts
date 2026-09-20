@@ -1,6 +1,9 @@
 /**
  * Compact P2 header facts for PIC-K13 / PIC-K14.
  * Not journey acts. Not Identity Core. Lookup only.
+ *
+ * K13 Matrix bag (producer `core_profile`): `expression` · `soul_urge` · `personality`.
+ * `*_number` aliases are read-only fallbacks, not the live write shape.
  */
 import type { CoreProfile } from "@/lib/types";
 
@@ -44,13 +47,28 @@ function correspondenceLine(bag: unknown): string {
   return parts.join(" · ");
 }
 
+function pickNameNumber(bag: Record<string, unknown>, keys: string[]): string {
+  for (const key of keys) {
+    const raw = bag[key];
+    if (raw == null || raw === "") continue;
+    const n = Number(raw);
+    if (Number.isFinite(n)) return String(n);
+    const text = trim(raw);
+    if (text) return text;
+  }
+  return "";
+}
+
 function nameNumerologyLine(bag: unknown): string {
   if (!bag || typeof bag !== "object") return "";
   const o = bag as Record<string, unknown>;
   const bits: string[] = [];
-  if (o.expression_number != null) bits.push(`выражение ${o.expression_number}`);
-  if (o.soul_urge_number != null) bits.push(`душа ${o.soul_urge_number}`);
-  if (o.personality_number != null) bits.push(`образ ${o.personality_number}`);
+  const expression = pickNameNumber(o, ["expression", "expression_number"]);
+  const soul = pickNameNumber(o, ["soul_urge", "soul_urge_number"]);
+  const personality = pickNameNumber(o, ["personality", "personality_number"]);
+  if (expression) bits.push(`выражение ${expression}`);
+  if (soul) bits.push(`душа ${soul}`);
+  if (personality) bits.push(`образ ${personality}`);
   if (!bits.length) return "";
   return `Числа имени: ${bits.join(" · ")}`;
 }

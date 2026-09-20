@@ -7,6 +7,7 @@
 **Siblings (проекции / UI, не заменяют движок):**  
 - [PROFILE_PRODUCT_SURFACE_CANON.md](./PROFILE_PRODUCT_SURFACE_CANON.md) — *как* Profile-скролл раскрывает модель (Шаги 1–5)  
 - [PROFILE_DISPLAY_INVENTORY_V1.md](./PROFILE_DISPLAY_INVENTORY_V1.md) — *что именно* на экране (слоты · provenance · лимиты)  
+- [PROFILE_INFORMATION_CONTRACT_V1.md](./PROFILE_INFORMATION_CONTRACT_V1.md) — *что система имеет право знать* (N=18 · code gate)  
 - [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) — pipeline, Snapshot, `source_depth`, eval  
 - [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) — visual / layout  
 
