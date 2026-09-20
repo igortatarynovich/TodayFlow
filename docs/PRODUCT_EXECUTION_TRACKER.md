@@ -4,6 +4,8 @@ Last updated: 2026-09-20
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (PROFILE INFORMATION CONTRACT, 2026-09-20):** Closed Profile N is `docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md` (6 inputs · 13 facts · 18 `PIC-K*`). Occupancy stays sign/house, now IL-2 compose for Sun–Saturn; Identity thesis unchanged. K13/K14 header facts (`P2.name_numerology` / `P2.correspondence`) may render on Why when Matrix revealed. Do not wire remaining IL frames. P1 fill remains STOPPED. Occupancy harness still green. G0 deferred. Closed loop LOCKED.
+
 **NOW (PROFILE OCCUPANCY PASS, 2026-09-20):** Same-Sun Virgo charts with Mars Cancer H4 vs Mars Libra H7 keep distinct IL occupancy through Stage 1 claims, Identity Core surface, and `P1.recognition_line`. Identity thesis stays `builds_through_analysis`. Occupancy constructions only (`planet_in_sign` / `planet_in_house`); catalog stays `draft`. Harness: `backend/tests/test_profile_knowledge_to_output_v1.py` (xfail inverted). Next: Profile Information Contract — closed list of what Profile may output. Do not wire remaining IL frames. P1 fill remains STOPPED (153 / 20/42 / 5 skipped). Handoff: `docs/status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md`. G0 deferred. Closed loop LOCKED.
 
 **NOW (PROFILE KNOWLEDGE-TO-OUTPUT, 2026-09-20):** P1 library fill STOPPED at 153 items, 20/42 P1 sourced, 5 skipped. Remaining P1 waits on product demand — not a 42/42 gate. Next train: natal facts → IL → Character Engine → Profile output. Harness: `backend/tests/test_profile_knowledge_to_output_v1.py` (4 passed / 1 xfail). Same-Sun Virgo charts with Mars Cancer H4 vs Mars Libra H7 compose distinct IL frames and collapse to one Identity Core template. Handoff: `docs/status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md`. P1 branch parked: `cursor/p1-self-compassion-loop-notes` @ `f48a438d`. G0 deferred. Closed loop LOCKED.
@@ -81,6 +83,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — Profile Information Contract (2026-09-20)
+
+- **SoT before:** Allowed Profile knowledge was scattered across Capability, Availability Matrix, Character Engine acts, Content Canon, Display Inventory, and Knowledge Core. Occupancy pass proved Mars sign/house can reach recognition without a closed N.
+- **SoT after:** `docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md` is the closed N: 6 inputs · 13 facts · 18 `PIC-K*`. Stage 1 occupancy compose is IL-2 `planet_in_sign` / `planet_in_house` for Sun–Saturn (omit if refuse). K13/K14 may show on Why via Inventory slots `P2.name_numerology` / `P2.correspondence`. Display Inventory remains last authority before UI. Do not invent PIC-K19. Do not wire remaining IL frames.
+- **Public contract changed?** no JSON fields. Additive display slots when Matrix revealed; omit if empty.
+- **Migration required?** no
+- **Canon updated?** yes — Information Contract · profile `_INDEX` · Display Inventory P2 rows · this tracker
+- **Backward compatible?** yes for API. Documentary + producer gate until more modules cite `PIC-K*`.
 
 ## Architecture impact — IL occupancy on first-paint Identity Core (2026-09-20)
 

@@ -8,10 +8,12 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
-from todayflow_backend.knowledge.calc_il_wire_v1 import skyfacts_from_calc
-from todayflow_backend.knowledge.il2_composition_v1 import load_objects
-from todayflow_backend.knowledge.il3_interpretation_v1 import interpret
-from todayflow_backend.knowledge.il4_expression_v1 import express
+from todayflow_backend.knowledge.il2_composition_v1 import (
+    ComposedFrame,
+    compose_planet_in_house,
+    compose_planet_in_sign,
+    load_objects,
+)
 from todayflow_backend.services.character_engine_evidence_registry_v0 import (
     EVIDENCE_RULES_V0,
     FORBIDDEN_STAGE1_CLAIM_KINDS,
@@ -20,8 +22,11 @@ from todayflow_backend.services.character_engine_evidence_registry_v0 import (
 from todayflow_backend.services.character_engine_ids_v0 import make_claim_id, make_edge_id
 
 STAGE1_VERSION = "character_engine_stage1_evidence_v0"
-# Occupancy only — not aspects, transits, or angles.
-_IL_OCCUPANCY = frozenset({"planet_in_sign", "planet_in_house"})
+# PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
+PIC_K = ("K01", "K02")
+PIC_F = ("F03", "F06")
+# Occupancy only — not aspects, transits, or angles. Sun–Saturn: outers withheld.
+_OCCUPANCY_BODIES = ("sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn")
 
 
 def _now_iso() -> str:
@@ -72,127 +77,133 @@ def _collect_ids(
     return sorted(set(ids))
 
 
-def _snapshot_from_stage0(raw_facts: list[dict[str, Any]]) -> dict[str, Any]:
-    """Rebuild a calc snapshot from Stage 0 planet_sign rows. No longitudes → no aspects."""
-    positions: list[dict[str, Any]] = []
-    for row in raw_facts:
-        ft = str(row.get("fact_type") or "")
-        if not ft.startswith("planet_sign:"):
+def _occupancy_line(frame: ComposedFrame) -> str:
+    """Sign manner / house arena lemmas. Planet function is already in the 13-key thesis."""
+    bits: list[str] = []
+    for job_name in ("how", "where"):
+        payload = frame.jobs.get(job_name)
+        if payload is None:
             continue
-        value = row.get("value") if isinstance(row.get("value"), dict) else {}
-        body = str(value.get("body") or ft.split(":", 1)[-1]).strip().lower()
-        sign = str(value.get("sign") or "").strip().lower()
-        if not body or not sign:
-            continue
-        pos: dict[str, Any] = {"body": body, "sign": sign}
-        house = value.get("house")
-        if house is not None:
-            pos["house"] = house
-        positions.append(pos)
-    return {"positions": positions, "houses": {}}
+        bits.extend(str(lemma) for lemma in payload.lemmas if lemma)
+    return " ".join(bits)
 
 
-def _il_occupancy_thesis(construction: str, parts: tuple[str, ...]) -> str | None:
-    if construction == "planet_in_sign" and len(parts) >= 2:
-        planet = str(parts[0]).rsplit(".", 1)[-1]
-        sign = str(parts[1]).rsplit(".", 1)[-1]
-        return f"planet_in_sign:{planet}:{sign}"
-    if construction == "planet_in_house" and len(parts) >= 2:
-        planet = str(parts[0]).rsplit(".", 1)[-1]
-        house = str(parts[1]).rsplit(".", 1)[-1]
-        return f"planet_in_house:{planet}:{house}"
-    return None
+def _emit_occupancy_claim(
+    *,
+    construction: str,
+    thesis: str,
+    frame: ComposedFrame,
+    supporting: list[str],
+    capability_floor: str,
+) -> tuple[dict[str, Any] | None, dict[str, Any] | None, list[dict[str, Any]]]:
+    if frame.status != "composed":
+        return None, {
+            "rule_key": "il2_occupancy",
+            "reason": frame.reason or "compose_refused",
+            "thesis_key": thesis,
+            "construction": construction,
+        }, []
+    line = _occupancy_line(frame)
+    if not line:
+        return None, {
+            "rule_key": "il2_occupancy",
+            "reason": "lemmas_empty",
+            "thesis_key": thesis,
+        }, []
+    if not supporting:
+        return None, {
+            "rule_key": "il2_occupancy",
+            "reason": "supporting_facts_missing",
+            "thesis_key": thesis,
+        }, []
+    claim_id = make_claim_id(
+        claim_kind="mechanism",
+        thesis_key=thesis,
+        primary_fact_ids=supporting,
+    )
+    claim = {
+        "claim_id": claim_id,
+        "claim_kind": "mechanism",
+        "thesis_key": thesis,
+        "cascade_role": "mechanism",
+        "supporting_fact_ids": supporting,
+        "confidence": "medium",
+        "capability_floor": capability_floor,
+        "produced_by_stage": 1,
+        "evidence_status": "grounded",
+        "il_line": line,
+        "_rule_key": "il2_occupancy",
+    }
+    edges = [
+        {
+            "edge_id": make_edge_id(fact_id=fid, claim_id=claim_id, edge_type="supports"),
+            "fact_id": fid,
+            "claim_id": claim_id,
+            "edge_type": "supports",
+        }
+        for fid in supporting
+    ]
+    return claim, None, edges
 
 
 def _mint_il_occupancy_claims(
     *,
     facts_by_type: dict[str, dict[str, Any]],
-    raw_facts: list[dict[str, Any]],
     capability: dict[str, Any] | None,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
-    """IL-3 planet_in_sign / planet_in_house from Stage 0 facts. Omit if compose refuses."""
-    snapshot = _snapshot_from_stage0(raw_facts)
-    if not snapshot["positions"]:
-        return [], [], []
-    sky = tuple(
-        fact
-        for fact in skyfacts_from_calc(snapshot)
-        if fact.construction in _IL_OCCUPANCY
-    )
-    if not sky:
-        return [], [], []
+    """IL-2 planet_in_sign / planet_in_house from Stage 0 F03/F06. Omit if compose refuses."""
     catalog = load_objects()
-    themes = interpret(catalog, sky)
-    pack = express(themes, "profile")
+    natal_full = _capability_ok("full_natal", capability)
     claims: list[dict[str, Any]] = []
     edges: list[dict[str, Any]] = []
     excluded: list[dict[str, Any]] = []
-    by_rank = {theme.rank: theme for theme in themes.themes}
-    cap_floor = "full_natal" if _capability_ok("full_natal", capability) else "date_only"
-    for line in pack.lines:
-        if line.construction not in _IL_OCCUPANCY:
+    for body in _OCCUPANCY_BODIES:
+        row = facts_by_type.get(f"planet_sign:{body}")
+        if not row:
             continue
-        theme = by_rank.get(line.rank)
-        parts: tuple[str, ...] = ()
-        if theme is not None and theme.frame.construction == "planet_in_sign":
-            what = theme.frame.jobs.get("what")
-            how = theme.frame.jobs.get("how")
-            if what is not None and how is not None:
-                parts = (what.object_id, how.object_id)
-        elif theme is not None and theme.frame.construction == "planet_in_house":
-            what = theme.frame.jobs.get("what")
-            where = theme.frame.jobs.get("where")
-            if what is not None and where is not None:
-                parts = (what.object_id, where.object_id)
-        thesis = _il_occupancy_thesis(line.construction, parts)
-        if not thesis:
-            excluded.append(
-                {
-                    "rule_key": "il3_occupancy",
-                    "reason": "thesis_unmapped",
-                    "construction": line.construction,
-                }
+        value = row.get("value") if isinstance(row.get("value"), dict) else {}
+        supporting = _collect_ids(facts_by_type, (f"planet_sign:{body}",))
+        sign = str(value.get("sign") or "").strip().lower()
+        if sign:
+            frame = compose_planet_in_sign(
+                catalog, f"astro.object.{body}", f"astro.sign.{sign}"
             )
-            continue
-        planet = thesis.split(":")[1]
-        supporting = _collect_ids(facts_by_type, (f"planet_sign:{planet}",))
-        if not supporting:
-            excluded.append(
-                {
-                    "rule_key": "il3_occupancy",
-                    "reason": "supporting_facts_missing",
-                    "thesis_key": thesis,
-                }
+            claim, exclusion, claim_edges = _emit_occupancy_claim(
+                construction="planet_in_sign",
+                thesis=f"planet_in_sign:{body}:{sign}",
+                frame=frame,
+                supporting=supporting,
+                capability_floor="date_only",
             )
+            if exclusion:
+                excluded.append(exclusion)
+            elif claim:
+                claims.append(claim)
+                edges.extend(claim_edges)
+        if not natal_full:
             continue
-        claim_id = make_claim_id(
-            claim_kind="mechanism",
-            thesis_key=thesis,
-            primary_fact_ids=supporting,
+        try:
+            house_n = int(value.get("house"))
+        except (TypeError, ValueError):
+            continue
+        if not (1 <= house_n <= 12):
+            continue
+        house_id = f"{house_n:02d}"
+        frame = compose_planet_in_house(
+            catalog, f"astro.object.{body}", f"astro.house.{house_id}"
         )
-        claim = {
-            "claim_id": claim_id,
-            "claim_kind": "mechanism",
-            "thesis_key": thesis,
-            "cascade_role": "mechanism",
-            "supporting_fact_ids": supporting,
-            "confidence": "medium",
-            "capability_floor": cap_floor,
-            "produced_by_stage": 1,
-            "evidence_status": "grounded",
-            "il_line": line.text,
-            "_rule_key": "il3_occupancy",
-        }
-        claims.append(claim)
-        for fid in supporting:
-            edges.append(
-                {
-                    "edge_id": make_edge_id(fact_id=fid, claim_id=claim_id, edge_type="supports"),
-                    "fact_id": fid,
-                    "claim_id": claim_id,
-                    "edge_type": "supports",
-                }
-            )
+        claim, exclusion, claim_edges = _emit_occupancy_claim(
+            construction="planet_in_house",
+            thesis=f"planet_in_house:{body}:{house_id}",
+            frame=frame,
+            supporting=supporting,
+            capability_floor="full_natal",
+        )
+        if exclusion:
+            excluded.append(exclusion)
+        elif claim:
+            claims.append(claim)
+            edges.extend(claim_edges)
     return claims, edges, excluded
 
 
@@ -332,7 +343,6 @@ def build_character_engine_evidence_candidates_v0(
 
     il_claims, il_edges, il_excluded = _mint_il_occupancy_claims(
         facts_by_type=facts_by_type,
-        raw_facts=[f for f in raw_facts if isinstance(f, dict)],
         capability=capability,
     )
     claims.extend(il_claims)

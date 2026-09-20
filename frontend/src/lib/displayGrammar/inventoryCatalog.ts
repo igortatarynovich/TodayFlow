@@ -176,6 +176,8 @@ export const INVENTORY_SLOTS: InventorySlotRecord[] = [
   slot("P2.anchor.moon", "profile", "calc", ["why_not_hero"], ["natal", "ce"], ["personal_day"], NONE),
   slot("P2.anchor.asc", "profile", "calc", ["why_not_hero"], ["natal", "ce"], ["personal_day"], NONE),
   slot("P2.anchor.mc", "profile", "calc", ["why_not_hero"], ["natal", "ce"], ["personal_day"], NONE),
+  slot("P2.correspondence", "profile", "catalog", ["why_not_hero"], ["catalog"], ["personal_day", "ce"], NONE),
+  slot("P2.name_numerology", "profile", "calc", ["why_not_hero"], ["ce", "product"], ["personal_day"], NONE),
   chrome("P2.honesty_no_time", "profile"),
   chrome("P2.expand_hint", "profile"),
   chrome("P3.step_title", "profile"),

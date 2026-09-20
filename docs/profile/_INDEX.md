@@ -5,7 +5,8 @@
 | Файл | Роль |
 |------|------|
 | [PROFILE_EXPERIENCE_SCENARIO_V1.md](./PROFILE_EXPERIENCE_SCENARIO_V1.md) | **Character Engine SoT** — единая модель личности платформы · каскад · запрет независимых генераторов |
-| [../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md](../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md) | **NOW train** — carry natal IL through CE to Profile (not a new canon) |
+| [PROFILE_INFORMATION_CONTRACT_V1.md](./PROFILE_INFORMATION_CONTRACT_V1.md) | **Закрытое N Profile** — 6 входов · 13 фактов · 18 `PIC-K*` · gate перед новым знанием |
+| [../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md](../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md) | Occupancy pass closed; next is Information Contract, not more IL frames |
 | [../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md) | Runtime inventory — contracts · prompts · jobs · FE/iOS · kill list |
 | [../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md) | **D1–D4 ACCEPTED** — Snapshot home · Evidence Graph · staged pipeline · adapters |
 | [../audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md](../audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md) | Schema DRAFT — identity/provenance · envelope · Evidence · Compass · adapters · shadow |

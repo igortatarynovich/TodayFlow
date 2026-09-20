@@ -1,15 +1,17 @@
-"""Profile knowledge-to-output — natal occupancy through IL and Character Engine.
+"""Profile Information Contract — N=18 gate + K01/K02 occupancy coverage.
 
-Not a new SoT. Not a pair catalog. Not P1 library fill. Not aspects/transits/angles.
-Pass bound: Mars × sign × house stays distinguishable from calculated natal
-through IL-3 occupancy claims, Identity Core surface, and P1.recognition_line.
+SoT: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from todayflow_backend.knowledge.calc_il_wire_v1 import skyfacts_from_calc, wire_calc_to_il
+from todayflow_backend.knowledge.il2_composition_v1 import (
+    compose_planet_in_house,
+    compose_planet_in_sign,
+    load_objects,
+)
 from todayflow_backend.services.character_engine_identity_thesis_registry_v0 import (
     STAGE1_TO_IDENTITY_THESIS,
 )
@@ -17,10 +19,27 @@ from todayflow_backend.services.character_engine_stage0_facts_v0 import (
     build_character_engine_facts_pack_v0,
 )
 from todayflow_backend.services.character_engine_stage1_evidence_v0 import (
+    PIC_F as STAGE1_PIC_F,
+)
+from todayflow_backend.services.character_engine_stage1_evidence_v0 import (
+    PIC_K as STAGE1_PIC_K,
+)
+from todayflow_backend.services.character_engine_stage1_evidence_v0 import (
     build_character_engine_evidence_candidates_v0,
 )
 from todayflow_backend.services.character_engine_stage2_identity_v0 import (
+    PIC_F as STAGE2_PIC_F,
+)
+from todayflow_backend.services.character_engine_stage2_identity_v0 import (
+    PIC_K as STAGE2_PIC_K,
+)
+from todayflow_backend.services.character_engine_stage2_identity_v0 import (
     build_character_engine_identity_core_v0,
+)
+from todayflow_backend.services.profile_information_contract_v1 import (
+    KNOWLEDGE_TO_SLOT,
+    PIC_KNOWLEDGE_IDS,
+    PROFILE_MEANING_PRODUCERS,
 )
 
 CE_ROOT = Path(__file__).resolve().parents[1] / "src" / "todayflow_backend" / "services"
@@ -32,8 +51,6 @@ CAPABILITY = {
     "has_birth_place": True,
 }
 
-# Same Sun (Virgo) / Moon (Taurus) / ASC (Gemini). Only Mars sign + house differ.
-# Mars is not fire, so Stage 1 drive_through_fire_mars does not fire.
 CHART_A = {
     "id": "virgo_mars_cancer_h4",
     "mars_sign": "Cancer",
@@ -69,15 +86,6 @@ CHART_B = {
 }
 
 
-def _il_mars_keys(chart: dict) -> set[tuple[str, tuple[str, ...]]]:
-    keys: set[tuple[str, tuple[str, ...]]] = set()
-    for fact in skyfacts_from_calc(chart):
-        if "mars" not in " ".join(fact.parts).lower():
-            continue
-        keys.add((fact.construction, fact.parts))
-    return keys
-
-
 def _ce_hop(case: dict) -> dict:
     facts = build_character_engine_facts_pack_v0(
         profile_fingerprint=case["id"],
@@ -108,37 +116,101 @@ def _ce_hop(case: dict) -> dict:
         if isinstance(c, dict) and c.get("evidence_status") == "grounded"
     ]
     core = identity.get("identity_core") if isinstance(identity.get("identity_core"), dict) else {}
-    validation = identity.get("validation") if isinstance(identity.get("validation"), dict) else {}
-    surface = str(core.get("surface_text") or "")
-    # Stage 5 / consumption copy identity_core.surface_text → recognition_line.
+    roles = {
+        str(row.get("claim_id")): str(row.get("role"))
+        for row in (identity.get("source_roles") or [])
+        if isinstance(row, dict)
+    }
+    occupancy = [
+        c
+        for c in (evidence.get("claims") or [])
+        if isinstance(c, dict)
+        and str(c.get("thesis_key") or "").startswith(("planet_in_sign:mars:", "planet_in_house:mars:"))
+    ]
     return {
         "id": case["id"],
         "mars_fact_sign": (mars_value or {}).get("sign") if isinstance(mars_value, dict) else None,
         "mars_fact_house": (mars_value or {}).get("house") if isinstance(mars_value, dict) else None,
         "stage1_thesis_keys": sorted(claims),
         "identity_thesis": core.get("thesis_key"),
-        "identity_surface": surface,
-        "recognition_line": surface,
-        "deterministic": bool(validation.get("deterministic_fallback")),
+        "identity_surface": core.get("surface_text"),
+        "qualifying_claim_ids": list(core.get("qualifying_claim_ids") or []),
+        "occupancy_roles": [
+            roles.get(str(c.get("claim_id")))
+            for c in occupancy
+            if str(c.get("claim_id")) in roles
+        ],
+        "deterministic": bool((identity.get("validation") or {}).get("deterministic_fallback")),
     }
 
 
-def test_il_composes_distinct_mars_sign_and_house() -> None:
-    keys_a = _il_mars_keys(CHART_A["chart"])
-    keys_b = _il_mars_keys(CHART_B["chart"])
-    assert ("planet_in_sign", ("astro.object.mars", "astro.sign.cancer")) in keys_a
-    assert ("planet_in_house", ("astro.object.mars", "astro.house.04")) in keys_a
-    assert ("planet_in_sign", ("astro.object.mars", "astro.sign.libra")) in keys_b
-    assert ("planet_in_house", ("astro.object.mars", "astro.house.07")) in keys_b
-    assert keys_a != keys_b
+def test_pic_n18_is_closed() -> None:
+    assert PIC_KNOWLEDGE_IDS == tuple(f"K{i:02d}" for i in range(1, 19))
+    assert len(set(PIC_KNOWLEDGE_IDS)) == 18
+    for row in PROFILE_MEANING_PRODUCERS:
+        for kid in row["pic_k"]:  # type: ignore[index]
+            assert kid in PIC_KNOWLEDGE_IDS
+    assert KNOWLEDGE_TO_SLOT["K13"] == ("P2.name_numerology",)
+    assert KNOWLEDGE_TO_SLOT["K14"] == ("P2.correspondence",)
 
-    pack_a = wire_calc_to_il(CHART_A["chart"], surface="profile")
-    pack_b = wire_calc_to_il(CHART_B["chart"], surface="profile")
-    assert pack_a.meaning_source == "il3_themes"
-    assert pack_a.llm_chose_meaning is None
-    texts_a = {line.text for line in pack_a.lines}
-    texts_b = {line.text for line in pack_b.lines}
-    assert texts_a != texts_b
+
+def test_pic_gate_meaning_producers_cite_k_and_f() -> None:
+    assert STAGE1_PIC_K == ("K01", "K02")
+    assert STAGE1_PIC_F == ("F03", "F06")
+    assert STAGE2_PIC_K == ("K01", "K02")
+    assert STAGE2_PIC_F == ("F03", "F06")
+    registered = {str(row["module"]) for row in PROFILE_MEANING_PRODUCERS}
+    for row in PROFILE_MEANING_PRODUCERS:
+        module = str(row["module"])
+        kids = tuple(row["pic_k"])  # type: ignore[arg-type]
+        fids = tuple(row["pic_f"])  # type: ignore[arg-type]
+        assert kids, module
+        assert fids, module
+        for kid in kids:
+            assert kid in PIC_KNOWLEDGE_IDS
+        path = CE_ROOT / f"{module}.py"
+        text = path.read_text(encoding="utf-8")
+        assert "PIC_K =" in text, module
+        assert "PIC_F =" in text, module
+        assert module in registered
+    for path in sorted(CE_ROOT.glob("character_engine_stage[1-5]_*.py")):
+        if path.name.endswith("_shadow_v0.py") or "staging_eval" in path.name:
+            continue
+        assert path.stem in registered, path.name
+        text = path.read_text(encoding="utf-8")
+        assert "PIC_K =" in text, path.name
+        assert "PIC_F =" in text, path.name
+
+
+def test_ce_may_import_il2_compose_only() -> None:
+    forbidden = (
+        "todayflow_backend.knowledge.il3_interpretation",
+        "todayflow_backend.knowledge.il4_expression",
+        "todayflow_backend.knowledge.calc_il_wire",
+    )
+    offenders: list[str] = []
+    for path in sorted(CE_ROOT.glob("character_engine_*.py")):
+        text = path.read_text(encoding="utf-8")
+        if any(token in text for token in forbidden):
+            offenders.append(path.name)
+    assert offenders == []
+    stage1 = (CE_ROOT / "character_engine_stage1_evidence_v0.py").read_text(encoding="utf-8")
+    assert "compose_planet_in_sign" in stage1
+    assert "compose_planet_in_house" in stage1
+
+
+def test_il2_atoms_exist_for_mars_sign_and_house() -> None:
+    catalog = load_objects()
+    sign_a = compose_planet_in_sign(catalog, "astro.object.mars", "astro.sign.cancer")
+    house_a = compose_planet_in_house(catalog, "astro.object.mars", "astro.house.04")
+    sign_b = compose_planet_in_sign(catalog, "astro.object.mars", "astro.sign.libra")
+    house_b = compose_planet_in_house(catalog, "astro.object.mars", "astro.house.07")
+    assert sign_a.status == "composed"
+    assert house_a.status == "composed"
+    assert sign_b.status == "composed"
+    assert house_b.status == "composed"
+    assert sign_a.jobs["how"].lemmas != sign_b.jobs["how"].lemmas
+    assert house_a.jobs["where"].lemmas != house_b.jobs["where"].lemmas
 
 
 def test_ce_stage0_keeps_mars_sign_and_house_value() -> None:
@@ -150,52 +222,31 @@ def test_ce_stage0_keeps_mars_sign_and_house_value() -> None:
     assert hop_b["mars_fact_house"] == 7
 
 
-def test_only_stage1_imports_il_occupancy() -> None:
-    offenders: list[str] = []
-    for path in sorted(CE_ROOT.glob("character_engine_*.py")):
-        if path.name == "character_engine_stage1_evidence_v0.py":
-            continue
-        text = path.read_text(encoding="utf-8")
-        if "todayflow_backend.knowledge" in text or "il2_composition" in text or "calc_il_wire" in text:
-            offenders.append(path.name)
-    assert offenders == []
-    stage1 = (CE_ROOT / "character_engine_stage1_evidence_v0.py").read_text(encoding="utf-8")
-    assert "calc_il_wire_v1" in stage1
-    assert "il3_interpretation_v1" in stage1
-
-
-def test_same_sun_identity_thesis_stays_analysis() -> None:
+def test_k01_k02_preserve_f03_f06_mars_occupancy() -> None:
     hop_a = _ce_hop(CHART_A)
     hop_b = _ce_hop(CHART_B)
-    assert hop_a["identity_thesis"] == hop_b["identity_thesis"] == "builds_through_analysis"
-    assert hop_a["deterministic"] is True
-    assert hop_a["identity_surface"].startswith(
-        "Ты строишь через анализ до шага — сначала понять устройство, потом выбрать."
-    )
-
-
-def test_il_mars_occupancy_reaches_stage1_identity_and_recognition() -> None:
-    hop_a = _ce_hop(CHART_A)
-    hop_b = _ce_hop(CHART_B)
-    blob_a = " ".join(hop_a["stage1_thesis_keys"]).lower()
-    blob_b = " ".join(hop_b["stage1_thesis_keys"]).lower()
+    keys_a = " ".join(hop_a["stage1_thesis_keys"])
+    keys_b = " ".join(hop_b["stage1_thesis_keys"])
     assert "planet_in_sign:mars:cancer" in hop_a["stage1_thesis_keys"]
     assert "planet_in_house:mars:04" in hop_a["stage1_thesis_keys"]
     assert "planet_in_sign:mars:libra" in hop_b["stage1_thesis_keys"]
     assert "planet_in_house:mars:07" in hop_b["stage1_thesis_keys"]
     assert hop_a["stage1_thesis_keys"] != hop_b["stage1_thesis_keys"]
-    assert "cancer" in blob_a
-    assert "libra" in blob_b
-
     assert hop_a["identity_surface"] != hop_b["identity_surface"]
-    assert hop_a["recognition_line"] != hop_b["recognition_line"]
-    assert hop_a["recognition_line"] == hop_a["identity_surface"]
-    assert hop_b["recognition_line"] == hop_b["identity_surface"]
-    assert "close" in hop_a["recognition_line"]
-    assert "holding" in hop_a["recognition_line"]
-    assert "home" in hop_a["recognition_line"]
-    assert "balancing" in hop_b["recognition_line"]
-    assert "partnership" in hop_b["recognition_line"]
+    assert hop_a["identity_thesis"] == hop_b["identity_thesis"] == "builds_through_analysis"
+    assert hop_a["qualifying_claim_ids"]
+    assert hop_b["qualifying_claim_ids"]
+    assert hop_a["occupancy_roles"]
+    assert hop_b["occupancy_roles"]
+    assert all(role == "qualifier" for role in hop_a["occupancy_roles"])
+    assert all(role == "qualifier" for role in hop_b["occupancy_roles"])
+    surface_a = hop_a["identity_surface"] or ""
+    surface_b = hop_b["identity_surface"] or ""
+    assert "holding" in surface_a or "home" in surface_a
+    assert "close" in surface_a
+    assert "balancing" in surface_b or "partnership" in surface_b
+    assert keys_a != keys_b
+    assert hop_a["deterministic"] is True
     registry = set(STAGE1_TO_IDENTITY_THESIS)
     assert set(hop_a["stage1_thesis_keys"]) & registry
     assert set(hop_b["stage1_thesis_keys"]) & registry

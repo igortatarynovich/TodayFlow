@@ -17,6 +17,7 @@ import {
 import type { ProfileFrameworkCard } from "@/lib/profilePage/buildProfileQuickMapData";
 import { consumeProfileMotionOnce } from "@/lib/profile/profileMotionOnce";
 import type { CoreProfile } from "@/lib/types";
+import { profileHeaderFacts } from "@/lib/profilePage/profileHeaderFacts";
 import styles from "@/design-system/profile/dsProfileV2System.module.css";
 
 export type ProfileWhySceneProps = {
@@ -141,7 +142,8 @@ export function ProfileWhyScene({
     setSelectedOnce(true);
   }, [motion.className, selected.length]);
 
-  if (!selected.length && !influenced.length) return null;
+  const headerFacts = profileHeaderFacts(coreProfile);
+  if (!selected.length && !influenced.length && !headerFacts.length) return null;
 
   const copy = PROFILE_V2_COPY.zones.why;
 
@@ -182,6 +184,27 @@ export function ProfileWhyScene({
           <ul className={styles.whyProofGrid} data-testid="profile-v2-why-influenced-grid">
             {influenced.map((row, index) => (
               <WhyCard key={row.id} row={row} index={index} />
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {headerFacts.length ? (
+        <div className={styles.whyFormationBlock} data-testid="profile-v2-why-header-facts">
+          <ul className={styles.whyProofGrid}>
+            {headerFacts.map((fact) => (
+              <li
+                key={fact.slot_id}
+                className={styles.whyProofCard}
+                data-slot={fact.slot_id}
+                data-testid={
+                  fact.slot_id === "P2.correspondence"
+                    ? "profile-v2-why-correspondence"
+                    : "profile-v2-why-name-numerology"
+                }
+              >
+                <p className={styles.whyProofDetail}>{fact.text}</p>
+              </li>
             ))}
           </ul>
         </div>

@@ -10,6 +10,7 @@ import {
   type ProfileJourneyNode,
 } from "@/lib/profilePage/buildProfileJourneyProjection";
 import { buildWhyFormationCards } from "@/lib/profilePage/buildWhyFormationCards";
+import { profileHeaderFacts } from "@/lib/profilePage/profileHeaderFacts";
 import type { CoreProfile } from "@/lib/types";
 import type {
   DisplayAtom,
@@ -167,6 +168,14 @@ export function emitProfileDisplayFrame(input: EmitProfileDisplayFrameInput): Di
         text: card.meaning || card.title,
         origins: natalOk ? ["natal", "ce"] : ["ce"],
         text_class: "calc",
+      });
+    }
+    for (const fact of profileHeaderFacts(input.core)) {
+      pushAtom(atoms, {
+        slot_id: fact.slot_id,
+        text: fact.text,
+        origins: fact.slot_id === "P2.correspondence" ? ["catalog"] : ["ce", "product"],
+        text_class: fact.slot_id === "P2.correspondence" ? "catalog" : "calc",
       });
     }
   }

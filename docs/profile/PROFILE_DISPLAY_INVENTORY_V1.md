@@ -81,6 +81,8 @@ Conditional: `P-forming` · `P-data`.
 | `P2.anchor.moon` | Как Луна расширяет портрет? | calc+bank | natal moon |
 | `P2.anchor.asc` | Как ASC расширяет внешнее проявление? | calc+bank | rising |
 | `P2.anchor.mc` | Как MC расширяет направление? | calc+bank | MC |
+| `P2.correspondence` | Какие каталожные соответствия уже открыты? | catalog | Matrix cultural catalog |
+| `P2.name_numerology` | Какие числа имени уже открыты? | calc | Matrix name numerology |
 | `P2.honesty_no_time` | Чего ещё нет без времени? | chrome | product chrome |
 | `P2.expand_hint` | chrome tap | chrome | product chrome |
 | `P3.step_title` | chrome | chrome | product chrome |
