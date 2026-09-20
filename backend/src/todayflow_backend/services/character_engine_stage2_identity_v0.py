@@ -25,6 +25,7 @@ from todayflow_backend.services.character_engine_ids_v0 import make_claim_id
 from todayflow_backend.services.character_engine_identity_thesis_registry_v0 import (
     ALLOWED_IDENTITY_THESIS_KEYS,
     ALLOWED_SOURCE_ROLES,
+    STAGE1_TO_IDENTITY_THESIS,
     normalize_identity_thesis_key,
 )
 
@@ -99,6 +100,7 @@ def _pick_primary_grounded_claim(evidence: dict[str, Any]) -> dict[str, Any] | N
         and c.get("evidence_status") == "grounded"
         and c.get("claim_id")
         and c.get("thesis_key")
+        and str(c.get("thesis_key")) in STAGE1_TO_IDENTITY_THESIS
     ]
     if not grounded:
         return None
@@ -109,6 +111,35 @@ def _pick_primary_grounded_claim(evidence: dict[str, Any]) -> dict[str, Any] | N
         )
     )
     return grounded[0]
+
+
+def _il_occupancy_lines(evidence: dict[str, Any]) -> list[str]:
+    lines: list[str] = []
+    for claim in evidence.get("claims") or []:
+        if not isinstance(claim, dict) or claim.get("evidence_status") != "grounded":
+            continue
+        thesis = str(claim.get("thesis_key") or "")
+        if not (thesis.startswith("planet_in_sign:") or thesis.startswith("planet_in_house:")):
+            continue
+        text = str(claim.get("il_line") or "").strip()
+        if text and text not in lines:
+            lines.append(text)
+    return lines
+
+
+def _fill_surface_with_il_occupancy(out: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
+    """Fill-empty: occupancy lemmas on Identity Core / recognition source. Do not replace thesis."""
+    core = out.get("identity_core") if isinstance(out.get("identity_core"), dict) else None
+    if not core:
+        return out
+    extra = _il_occupancy_lines(evidence)
+    if not extra:
+        return out
+    surface = str(core.get("surface_text") or "").strip()
+    addon = " ".join(extra)
+    if addon and addon not in surface:
+        core["surface_text"] = f"{surface} {addon}".strip() if surface else addon
+    return out
 
 
 def build_deterministic_stage2_raw_v0(evidence: dict[str, Any]) -> dict[str, Any] | None:
@@ -201,6 +232,9 @@ def build_stage2_context_pack(
         for c in claims
         if isinstance(c, dict) and c.get("evidence_status") == "grounded" and c.get("claim_id")
     ]
+    identity_primaries = [
+        c for c in grounded if str(c.get("thesis_key") or "") in STAGE1_TO_IDENTITY_THESIS
+    ]
     fact_rows = [
         {
             "fact_id": f.get("fact_id"),
@@ -229,8 +263,10 @@ def build_stage2_context_pack(
         "raw_facts": fact_rows,
         "claims": grounded,
         "edges": edge_rows,
-        "allowed_primary_claim_ids": [c["claim_id"] for c in grounded],
-        "allowed_thesis_keys": sorted({str(c["thesis_key"]) for c in grounded if c.get("thesis_key")}),
+        "allowed_primary_claim_ids": [c["claim_id"] for c in identity_primaries],
+        "allowed_thesis_keys": sorted(
+            {str(c["thesis_key"]) for c in identity_primaries if c.get("thesis_key")}
+        ),
         # Explicitly absent — prompt must not reconstruct old portrait roots.
         "forbidden_inputs": [
             "profile_contract_v1",
@@ -465,40 +501,49 @@ def build_character_engine_identity_core_v0(
     context = build_stage2_context_pack(facts_pack=facts_pack, evidence=evidence)
     prompt_version = "0"
 
+    def _done(out: dict[str, Any]) -> dict[str, Any]:
+        return _fill_surface_with_il_occupancy(out, evidence)
+
     if llm_raw is not None:
-        return validate_stage2_identity_contract(
-            llm_raw,
-            facts_pack=facts_pack,
-            evidence=evidence,
-            prompt_version="test_inject",
+        return _done(
+            validate_stage2_identity_contract(
+                llm_raw,
+                facts_pack=facts_pack,
+                evidence=evidence,
+                prompt_version="test_inject",
+            )
         )
 
     if not context["allowed_primary_claim_ids"]:
-        return validate_stage2_identity_contract(
-            {
-                "status": "insufficient_identity_core",
-                "identity_core": None,
-                "source_roles": [],
-                "selection_rationale": "no_grounded_stage1_claims",
-            },
-            facts_pack=facts_pack,
-            evidence=evidence,
-            prompt_version="n/a",
+        return _done(
+            validate_stage2_identity_contract(
+                {
+                    "status": "insufficient_identity_core",
+                    "identity_core": None,
+                    "source_roles": [],
+                    "selection_rationale": "no_grounded_stage1_claims",
+                },
+                facts_pack=facts_pack,
+                evidence=evidence,
+                prompt_version="n/a",
+            )
         )
 
     def _deterministic(*, reason: str, prompt_ver: str) -> dict[str, Any]:
         raw = build_deterministic_stage2_raw_v0(evidence)
         if raw is None:
-            return validate_stage2_identity_contract(
-                {
-                    "status": "insufficient_identity_core",
-                    "identity_core": None,
-                    "source_roles": [],
-                    "selection_rationale": reason,
-                },
-                facts_pack=facts_pack,
-                evidence=evidence,
-                prompt_version=prompt_ver,
+            return _done(
+                validate_stage2_identity_contract(
+                    {
+                        "status": "insufficient_identity_core",
+                        "identity_core": None,
+                        "source_roles": [],
+                        "selection_rationale": reason,
+                    },
+                    facts_pack=facts_pack,
+                    evidence=evidence,
+                    prompt_version=prompt_ver,
+                )
             )
         logger.warning(
             "character_engine_stage2: using deterministic Identity Core (%s)",
@@ -516,7 +561,7 @@ def build_character_engine_identity_core_v0(
                 "deterministic_fallback": True,
                 "fallback_reason": reason,
             }
-        return out
+        return _done(out)
 
     if deterministic_only or not is_llm_chat_configured():
         reason = "deterministic_only_read_path" if deterministic_only else "llm_not_configured"
@@ -559,9 +604,11 @@ def build_character_engine_identity_core_v0(
     if not parsed:
         logger.warning("character_engine_stage2: empty/invalid LLM JSON — deterministic fallback")
         return _deterministic(reason="llm_json_invalid", prompt_ver=prompt_version)
-    return validate_stage2_identity_contract(
-        parsed,
-        facts_pack=facts_pack,
-        evidence=evidence,
-        prompt_version=prompt_version,
+    return _done(
+        validate_stage2_identity_contract(
+            parsed,
+            facts_pack=facts_pack,
+            evidence=evidence,
+            prompt_version=prompt_version,
+        )
     )

@@ -8,6 +8,10 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
+from todayflow_backend.knowledge.calc_il_wire_v1 import skyfacts_from_calc
+from todayflow_backend.knowledge.il2_composition_v1 import load_objects
+from todayflow_backend.knowledge.il3_interpretation_v1 import interpret
+from todayflow_backend.knowledge.il4_expression_v1 import express
 from todayflow_backend.services.character_engine_evidence_registry_v0 import (
     EVIDENCE_RULES_V0,
     FORBIDDEN_STAGE1_CLAIM_KINDS,
@@ -16,6 +20,8 @@ from todayflow_backend.services.character_engine_evidence_registry_v0 import (
 from todayflow_backend.services.character_engine_ids_v0 import make_claim_id, make_edge_id
 
 STAGE1_VERSION = "character_engine_stage1_evidence_v0"
+# Occupancy only — not aspects, transits, or angles.
+_IL_OCCUPANCY = frozenset({"planet_in_sign", "planet_in_house"})
 
 
 def _now_iso() -> str:
@@ -64,6 +70,130 @@ def _collect_ids(
             ids.append(str(row["fact_id"]))
     # Stable unique order
     return sorted(set(ids))
+
+
+def _snapshot_from_stage0(raw_facts: list[dict[str, Any]]) -> dict[str, Any]:
+    """Rebuild a calc snapshot from Stage 0 planet_sign rows. No longitudes → no aspects."""
+    positions: list[dict[str, Any]] = []
+    for row in raw_facts:
+        ft = str(row.get("fact_type") or "")
+        if not ft.startswith("planet_sign:"):
+            continue
+        value = row.get("value") if isinstance(row.get("value"), dict) else {}
+        body = str(value.get("body") or ft.split(":", 1)[-1]).strip().lower()
+        sign = str(value.get("sign") or "").strip().lower()
+        if not body or not sign:
+            continue
+        pos: dict[str, Any] = {"body": body, "sign": sign}
+        house = value.get("house")
+        if house is not None:
+            pos["house"] = house
+        positions.append(pos)
+    return {"positions": positions, "houses": {}}
+
+
+def _il_occupancy_thesis(construction: str, parts: tuple[str, ...]) -> str | None:
+    if construction == "planet_in_sign" and len(parts) >= 2:
+        planet = str(parts[0]).rsplit(".", 1)[-1]
+        sign = str(parts[1]).rsplit(".", 1)[-1]
+        return f"planet_in_sign:{planet}:{sign}"
+    if construction == "planet_in_house" and len(parts) >= 2:
+        planet = str(parts[0]).rsplit(".", 1)[-1]
+        house = str(parts[1]).rsplit(".", 1)[-1]
+        return f"planet_in_house:{planet}:{house}"
+    return None
+
+
+def _mint_il_occupancy_claims(
+    *,
+    facts_by_type: dict[str, dict[str, Any]],
+    raw_facts: list[dict[str, Any]],
+    capability: dict[str, Any] | None,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    """IL-3 planet_in_sign / planet_in_house from Stage 0 facts. Omit if compose refuses."""
+    snapshot = _snapshot_from_stage0(raw_facts)
+    if not snapshot["positions"]:
+        return [], [], []
+    sky = tuple(
+        fact
+        for fact in skyfacts_from_calc(snapshot)
+        if fact.construction in _IL_OCCUPANCY
+    )
+    if not sky:
+        return [], [], []
+    catalog = load_objects()
+    themes = interpret(catalog, sky)
+    pack = express(themes, "profile")
+    claims: list[dict[str, Any]] = []
+    edges: list[dict[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+    by_rank = {theme.rank: theme for theme in themes.themes}
+    cap_floor = "full_natal" if _capability_ok("full_natal", capability) else "date_only"
+    for line in pack.lines:
+        if line.construction not in _IL_OCCUPANCY:
+            continue
+        theme = by_rank.get(line.rank)
+        parts: tuple[str, ...] = ()
+        if theme is not None and theme.frame.construction == "planet_in_sign":
+            what = theme.frame.jobs.get("what")
+            how = theme.frame.jobs.get("how")
+            if what is not None and how is not None:
+                parts = (what.object_id, how.object_id)
+        elif theme is not None and theme.frame.construction == "planet_in_house":
+            what = theme.frame.jobs.get("what")
+            where = theme.frame.jobs.get("where")
+            if what is not None and where is not None:
+                parts = (what.object_id, where.object_id)
+        thesis = _il_occupancy_thesis(line.construction, parts)
+        if not thesis:
+            excluded.append(
+                {
+                    "rule_key": "il3_occupancy",
+                    "reason": "thesis_unmapped",
+                    "construction": line.construction,
+                }
+            )
+            continue
+        planet = thesis.split(":")[1]
+        supporting = _collect_ids(facts_by_type, (f"planet_sign:{planet}",))
+        if not supporting:
+            excluded.append(
+                {
+                    "rule_key": "il3_occupancy",
+                    "reason": "supporting_facts_missing",
+                    "thesis_key": thesis,
+                }
+            )
+            continue
+        claim_id = make_claim_id(
+            claim_kind="mechanism",
+            thesis_key=thesis,
+            primary_fact_ids=supporting,
+        )
+        claim = {
+            "claim_id": claim_id,
+            "claim_kind": "mechanism",
+            "thesis_key": thesis,
+            "cascade_role": "mechanism",
+            "supporting_fact_ids": supporting,
+            "confidence": "medium",
+            "capability_floor": cap_floor,
+            "produced_by_stage": 1,
+            "evidence_status": "grounded",
+            "il_line": line.text,
+            "_rule_key": "il3_occupancy",
+        }
+        claims.append(claim)
+        for fid in supporting:
+            edges.append(
+                {
+                    "edge_id": make_edge_id(fact_id=fid, claim_id=claim_id, edge_type="supports"),
+                    "fact_id": fid,
+                    "claim_id": claim_id,
+                    "edge_type": "supports",
+                }
+            )
+    return claims, edges, excluded
 
 
 def _apply_rule(
@@ -200,6 +330,15 @@ def build_character_engine_evidence_candidates_v0(
             # Track rule provenance outside public claim shape.
             claim["_rule_key"] = rule.rule_key
 
+    il_claims, il_edges, il_excluded = _mint_il_occupancy_claims(
+        facts_by_type=facts_by_type,
+        raw_facts=[f for f in raw_facts if isinstance(f, dict)],
+        capability=capability,
+    )
+    claims.extend(il_claims)
+    edges.extend(il_edges)
+    excluded.extend(il_excluded)
+
     # Stable ordering
     claims.sort(key=lambda c: (c["claim_kind"], c["thesis_key"], c["claim_id"]))
     edges.sort(key=lambda e: e["edge_id"])
@@ -238,6 +377,7 @@ def build_character_engine_evidence_candidates_v0(
             "rules_evaluated": len(EVIDENCE_RULES_V0),
             "claims_emitted": len(claims),
             "excluded": len(excluded),
+            "il_occupancy_emitted": len(il_claims),
             "rule_by_claim_id": rule_by_claim,
             "validation": validation,
         },

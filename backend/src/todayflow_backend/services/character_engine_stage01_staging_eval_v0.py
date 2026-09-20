@@ -143,7 +143,7 @@ def evaluate_stage01_staging_v0() -> dict[str, Any]:
         "negative_controls_clean": all(
             (
                 c.get("id") != "date_only"
-                or c.get("thesis_keys") == []
+                or _identity_theses(c.get("thesis_keys") or []) == []
             )
             and (
                 c.get("id") != "water_emotional"
@@ -188,7 +188,7 @@ def evaluate_stage01_staging_v0() -> dict[str, Any]:
         "stage1_to_identity_thesis_complete": _identity_map_covers_emitted(thesis_freq),
     }
 
-    empty_n = sum(1 for c in cases if not (c.get("thesis_keys") or []))
+    empty_n = sum(1 for c in cases if not _identity_theses(c.get("thesis_keys") or []))
     return {
         "eval_version": "character_engine_stage01_staging_eval_v1",
         "profile_count": len(cases),
@@ -204,12 +204,25 @@ def evaluate_stage01_staging_v0() -> dict[str, Any]:
     }
 
 
+def _is_occupancy_thesis(thesis: str) -> bool:
+    token = str(thesis or "")
+    return token.startswith("planet_in_sign:") or token.startswith("planet_in_house:")
+
+
+def _identity_theses(keys: list[Any]) -> list[str]:
+    return [str(t) for t in keys if not _is_occupancy_thesis(str(t))]
+
+
 def _identity_map_covers_emitted(thesis_freq: Counter) -> bool:
     from todayflow_backend.services.character_engine_identity_thesis_registry_v0 import (
         normalize_identity_thesis_key,
     )
 
-    return all(normalize_identity_thesis_key(t) for t in thesis_freq)
+    return all(
+        normalize_identity_thesis_key(t)
+        for t in thesis_freq
+        if not _is_occupancy_thesis(str(t))
+    )
 
 
 def main() -> int:

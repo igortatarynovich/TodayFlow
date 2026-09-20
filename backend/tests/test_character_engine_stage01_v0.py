@@ -386,7 +386,7 @@ def test_stage1_gemini_air_mind_and_taurus_stability() -> None:
     assert "analysis_before_action" not in t_claims
 
 
-def test_stage1_leo_negative_control_stays_empty() -> None:
+def test_stage1_leo_negative_control_has_no_identity_bucket() -> None:
     leo = build_character_engine_facts_pack_v0(
         profile_fingerprint="pf_leo",
         swiss_chart={
@@ -402,7 +402,13 @@ def test_stage1_leo_negative_control_stays_empty() -> None:
         capability={"natal_mode": "date_only"},
         input_fingerprint="in_leo",
     )
-    assert build_character_engine_evidence_candidates_v0(leo)["claims"] == []
+    claims = build_character_engine_evidence_candidates_v0(leo)["claims"]
+    from todayflow_backend.services.character_engine_identity_thesis_registry_v0 import (
+        STAGE1_TO_IDENTITY_THESIS,
+    )
+
+    # Occupancy IL claims may exist; the 13-key sun-bucket still must not mint for Leo.
+    assert not any(c["thesis_key"] in STAGE1_TO_IDENTITY_THESIS for c in claims)
 
 
 def test_stage1_surface_text_not_in_claim_id() -> None:

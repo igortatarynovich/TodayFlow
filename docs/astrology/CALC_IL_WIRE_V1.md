@@ -4,9 +4,9 @@
 **Status:** **LOCKED** — library-layer wire from calc snapshots to IL-4 packs. **Not** Swiss in this module. **Not** Today prompts as meaning SoT. **Not** public JSON. **Not** `active`. **Not** pair catalog. **Not** freeze / IL-2 / IL-3 / IL-4 / scale reopen. **Not** a new “canonical v2.” **Not** user relevance.  
 **Canon:** [INTERPRETATION_LIBRARY_V1.md](./INTERPRETATION_LIBRARY_V1.md) Sequence · §6.64 · §6.65 · §7. Inventory: [KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md](./KNOWLEDGE_CORE_V1_SEMANTIC_INVENTORY.md) step 39 · KC-C-WIRE. Scale: [LIBRARY_SCALE_V1.md](./LIBRARY_SCALE_V1.md) §4. Voice: [IL4_EXPRESSION_V1.md](./IL4_EXPRESSION_V1.md). Themes: [IL3_INTERPRETATION_ENGINE_V1.md](./IL3_INTERPRETATION_ENGINE_V1.md). Frames: [IL2_COMPOSITION_RULES_V1.md](./IL2_COMPOSITION_RULES_V1.md). Atoms: [KNOWLEDGE_CORE_V1_FREEZE.md](./KNOWLEDGE_CORE_V1_FREEZE.md). Boundary: [IL1_HANDOFF.md](./IL1_HANDOFF.md) §3 · §5. AGENTS.md Architecture impact.
 
-This pass answers: **how a calc snapshot becomes IL-4 packs at the library layer.** It does not attach those packs to Today / Profile / Compatibility UI. Product surfaces still do not read IL-4.
+This pass answers: **how a calc snapshot becomes IL-4 packs at the library layer.** It does not attach those packs to Today / Compatibility UI. Profile first-paint Identity Core now reads occupancy constructions only — see Architecture impact 2026-09-20.
 
-Catalog **38 draft / 0 `active`**. Unchanged this pass. The wire consumes draft; it does not filter by `active`. Runtime product surfaces still ignore `draft`.
+Catalog **38 draft / 0 `active`**. Unchanged this pass. The wire consumes draft; it does not filter by `active`. Runtime product surfaces still ignore `draft` except Character Engine Stage 1 occupancy (`planet_in_sign` / `planet_in_house` only) on Identity Core / `P1.recognition_line` — see Architecture impact 2026-09-20 below. Aspects / transits / angles stay library-layer.
 
 ---
 
@@ -18,6 +18,15 @@ Catalog **38 draft / 0 `active`**. Unchanged this pass. The wire consumes draft;
 - **Migration required?** no
 - **Canon updated?** yes — this file · IL §6.65 · inventory KC-C-WIRE + step 39 · ACM pointer · freeze §3 · handoff §3 · tracker NOW
 - **Backward compatible?** yes (`draft`). Deprecated as next: Today prompts as meaning SoT; set `active`; Swiss as a meaning source; pair catalog; occupancy = conjunction; House 1 = ASC; MC = career; Relevance / Prioritization as meaning engines.
+
+## Architecture impact — CE occupancy consume (2026-09-20)
+
+- **SoT before:** Wire live at library layer only. Character Engine did not import IL. First-paint Profile ignored `draft`.
+- **SoT after:** Character Engine Stage 1 reads draft occupancy constructions (`planet_in_sign`, `planet_in_house`) from Stage 0 facts and carries IL-4 lemmas onto Identity Core surface / `P1.recognition_line`. Catalog stays `draft`. Other constructions stay unattached. Not a pair catalog. Not `active`. Next: Profile Information Contract, not remaining IL frames.
+- **Public contract changed?** no new fields
+- **Migration required?** no
+- **Canon updated?** yes — this file · tracker · `docs/status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md`
+- **Backward compatible?** yes for JSON shape. Recognition prose can now differ when occupancy differs.
 
 ---
 

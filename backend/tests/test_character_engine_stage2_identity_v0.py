@@ -198,7 +198,16 @@ def test_stage2_insufficient_when_no_claims() -> None:
     )
     evidence = build_character_engine_evidence_candidates_v0(facts)
     identity = build_character_engine_identity_core_v0(facts_pack=facts, evidence=evidence)
-    assert evidence["claims"] == []
+    from todayflow_backend.services.character_engine_identity_thesis_registry_v0 import (
+        STAGE1_TO_IDENTITY_THESIS,
+    )
+
+    # Occupancy IL claims may exist; Leo still has no 13-key identity primary.
+    assert not any(
+        str(c.get("thesis_key")) in STAGE1_TO_IDENTITY_THESIS
+        for c in (evidence.get("claims") or [])
+        if isinstance(c, dict)
+    )
     assert identity["status"] == "insufficient_identity_core"
     assert identity["identity_core"] is None
 

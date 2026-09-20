@@ -1,25 +1,18 @@
-"""Profile knowledge-to-output — natal facts through IL and Character Engine.
+"""Profile knowledge-to-output — natal occupancy through IL and Character Engine.
 
-Not a new SoT. Not a pair catalog. Not P1 library fill.
-Pass bound: one real construction (Mars × sign × house) must remain distinguishable
-from calculated natal through IL composition and Character Engine evidence.
-
-Today this file records:
-- IL does compose distinct Mars frames.
-- Character Engine Stage 0 still holds the Mars sign/house in the fact value.
-- Stage 1 / Identity Core collapse same-Sun charts to the same thesis.
-- character_engine_* does not import IL.
-
-The xfail is the wire to invert: IL constructions in Stage 1 claims.
+Not a new SoT. Not a pair catalog. Not P1 library fill. Not aspects/transits/angles.
+Pass bound: Mars × sign × house stays distinguishable from calculated natal
+through IL-3 occupancy claims, Identity Core surface, and P1.recognition_line.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 from todayflow_backend.knowledge.calc_il_wire_v1 import skyfacts_from_calc, wire_calc_to_il
+from todayflow_backend.services.character_engine_identity_thesis_registry_v0 import (
+    STAGE1_TO_IDENTITY_THESIS,
+)
 from todayflow_backend.services.character_engine_stage0_facts_v0 import (
     build_character_engine_facts_pack_v0,
 )
@@ -116,13 +109,16 @@ def _ce_hop(case: dict) -> dict:
     ]
     core = identity.get("identity_core") if isinstance(identity.get("identity_core"), dict) else {}
     validation = identity.get("validation") if isinstance(identity.get("validation"), dict) else {}
+    surface = str(core.get("surface_text") or "")
+    # Stage 5 / consumption copy identity_core.surface_text → recognition_line.
     return {
         "id": case["id"],
         "mars_fact_sign": (mars_value or {}).get("sign") if isinstance(mars_value, dict) else None,
         "mars_fact_house": (mars_value or {}).get("house") if isinstance(mars_value, dict) else None,
         "stage1_thesis_keys": sorted(claims),
         "identity_thesis": core.get("thesis_key"),
-        "identity_surface": core.get("surface_text"),
+        "identity_surface": surface,
+        "recognition_line": surface,
         "deterministic": bool(validation.get("deterministic_fallback")),
     }
 
@@ -154,37 +150,52 @@ def test_ce_stage0_keeps_mars_sign_and_house_value() -> None:
     assert hop_b["mars_fact_house"] == 7
 
 
-def test_character_engine_modules_do_not_import_il() -> None:
+def test_only_stage1_imports_il_occupancy() -> None:
     offenders: list[str] = []
     for path in sorted(CE_ROOT.glob("character_engine_*.py")):
+        if path.name == "character_engine_stage1_evidence_v0.py":
+            continue
         text = path.read_text(encoding="utf-8")
         if "todayflow_backend.knowledge" in text or "il2_composition" in text or "calc_il_wire" in text:
             offenders.append(path.name)
     assert offenders == []
+    stage1 = (CE_ROOT / "character_engine_stage1_evidence_v0.py").read_text(encoding="utf-8")
+    assert "calc_il_wire_v1" in stage1
+    assert "il3_interpretation_v1" in stage1
 
 
-def test_same_sun_different_mars_identity_collapses() -> None:
+def test_same_sun_identity_thesis_stays_analysis() -> None:
     hop_a = _ce_hop(CHART_A)
     hop_b = _ce_hop(CHART_B)
-    assert hop_a["stage1_thesis_keys"] == hop_b["stage1_thesis_keys"]
-    assert hop_a["identity_thesis"] == hop_b["identity_thesis"]
-    assert hop_a["identity_surface"] == hop_b["identity_surface"]
-    assert hop_a["identity_thesis"] == "builds_through_analysis"
-    assert hop_a["identity_surface"] == (
+    assert hop_a["identity_thesis"] == hop_b["identity_thesis"] == "builds_through_analysis"
+    assert hop_a["deterministic"] is True
+    assert hop_a["identity_surface"].startswith(
         "Ты строишь через анализ до шага — сначала понять устройство, потом выбрать."
     )
-    assert hop_a["deterministic"] is True
-    assert "cancer" not in (hop_a["identity_surface"] or "").lower()
-    assert "libra" not in (hop_b["identity_surface"] or "").lower()
-    assert "mars" not in (hop_a["identity_surface"] or "").lower()
 
 
-@pytest.mark.xfail(strict=True, reason="Profile knowledge-to-output: IL constructions not in CE Stage 1 yet")
-def test_il_mars_constructions_reach_stage1_claims() -> None:
+def test_il_mars_occupancy_reaches_stage1_identity_and_recognition() -> None:
     hop_a = _ce_hop(CHART_A)
     hop_b = _ce_hop(CHART_B)
     blob_a = " ".join(hop_a["stage1_thesis_keys"]).lower()
     blob_b = " ".join(hop_b["stage1_thesis_keys"]).lower()
+    assert "planet_in_sign:mars:cancer" in hop_a["stage1_thesis_keys"]
+    assert "planet_in_house:mars:04" in hop_a["stage1_thesis_keys"]
+    assert "planet_in_sign:mars:libra" in hop_b["stage1_thesis_keys"]
+    assert "planet_in_house:mars:07" in hop_b["stage1_thesis_keys"]
     assert hop_a["stage1_thesis_keys"] != hop_b["stage1_thesis_keys"]
-    assert "cancer" in blob_a or "house.04" in blob_a or "mars" in blob_a
-    assert "libra" in blob_b or "house.07" in blob_b or "mars" in blob_b
+    assert "cancer" in blob_a
+    assert "libra" in blob_b
+
+    assert hop_a["identity_surface"] != hop_b["identity_surface"]
+    assert hop_a["recognition_line"] != hop_b["recognition_line"]
+    assert hop_a["recognition_line"] == hop_a["identity_surface"]
+    assert hop_b["recognition_line"] == hop_b["identity_surface"]
+    assert "close" in hop_a["recognition_line"]
+    assert "holding" in hop_a["recognition_line"]
+    assert "home" in hop_a["recognition_line"]
+    assert "balancing" in hop_b["recognition_line"]
+    assert "partnership" in hop_b["recognition_line"]
+    registry = set(STAGE1_TO_IDENTITY_THESIS)
+    assert set(hop_a["stage1_thesis_keys"]) & registry
+    assert set(hop_b["stage1_thesis_keys"]) & registry
