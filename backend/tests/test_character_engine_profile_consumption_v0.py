@@ -125,15 +125,15 @@ def test_consumption_overwrites_recognition_why_trap(monkeypatch) -> None:
     assert "Ритм дня" not in trap
     assert "неровно" not in trap
     assert contract["living_changes"] is None
-    assert any(
-        "систем" in s.lower() or "дистанц" in s.lower() or "независимо" in s.lower()
-        for s in contract["strengths"]
-    )
+    assert contract.get("strengths") in ([], None)
+    assert contract.get("growth_zones") in ([], None)
+    assert contract.get("helps") in ([], None)
+    help_line = out["insight_nodes_v0"]["nodes"][0].get("help")
+    assert not help_line
+    assert out["character_engine_consumption_v0"]["help_source"] == "omitted_no_grounded_compass"
     assert "Вы " not in contract["decision_style"]
     assert "ты " in contract["decision_style"].lower() or contract["decision_style"].startswith("Ты ")
     assert "Вы " not in contract["relationship_style"]
-    help_line = out["insight_nodes_v0"]["nodes"][0].get("help")
-    assert help_line
     spheres = contract.get("life_spheres") or {}
     assert spheres == {}
     assert out["character_engine_consumption_v0"]["sphere_source"] == "omitted_no_grounded_f06"
@@ -393,6 +393,62 @@ def test_k05_omits_insight_without_grounded_aspect_evidence(monkeypatch) -> None
     assert "дистанцию" in trap or "анализ" in trap or "контроль" in trap
 
 
+def test_k06_secondaries_do_not_wire_to_p3(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    payload = _payload()
+    payload["diagnostics"]["character_engine_stage2"]["stage1"]["claims"].append(
+        {
+            "claim_id": "c_k05",
+            "claim_kind": "tension",
+            "thesis_key": "aspect_pair:mars:saturn:square",
+            "evidence_status": "grounded",
+            "il_line": "act ↔ limit — friction.",
+            "supporting_fact_ids": ["f_asp"],
+        }
+    )
+    payload["diagnostics"]["character_engine_stage3"] = {
+        "stage3": {
+            "status": "grounded",
+            "internal_engine": {
+                "growth": {"surface_text": "Рост не должен стать secondary."},
+            },
+            "primary_tension": {
+                "surface_text": "Пока ты держишь дистанцию, жизнь не двигается — Stage3 trap.",
+            },
+            "secondary_tensions": [
+                {
+                    "thesis_key": "aspect_pair:sun:moon:opposition",
+                    "surface_text": "Вторичная ось LLM — не должна попасть в P3.",
+                    "expansion_because": "Это проявление autonomy.",
+                    "supporting_claim_ids": ["c_autonomy"],
+                },
+                {
+                    "thesis_key": "aspect_pair:venus:saturn:square",
+                    "surface_text": "Ещё одна secondary — тоже не слот.",
+                    "expansion_because": "Это проявление autonomy.",
+                    "supporting_claim_ids": ["c_autonomy"],
+                },
+            ],
+        }
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    node = out["insight_nodes_v0"]["nodes"][0]
+    contract = out["profile_contract_v1"]
+    cons = out["character_engine_consumption_v0"]
+    assert node["insight"] == "act ↔ limit — friction."
+    assert cons["insight_source"] == "stage1_aspect_pair"
+    assert cons["k06_source"] == "omit_by_design"
+    assert out["insight_nodes_v0"]["rules"]["k06_source"] == "omit_by_design"
+    blob = f"{node.get('insight') or ''} {node.get('help') or ''} {contract.get('helps')} {contract.get('life_spheres')}"
+    assert "Вторичная ось" not in blob
+    assert "Ещё одна secondary" not in blob
+    assert "не должна попасть" not in blob
+    assert len(out["insight_nodes_v0"]["nodes"]) == 1
+
+
 def test_k04_help_from_f08_beats_identity_engine(monkeypatch) -> None:
     monkeypatch.setattr(
         "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
@@ -465,6 +521,11 @@ def test_k04_help_from_f08_beats_identity_engine(monkeypatch) -> None:
     assert out["character_engine_consumption_v0"]["help_source"] == "stage0_element_balance"
     assert out["insight_nodes_v0"]["nodes"][0]["insight"] == ""
     assert out["character_engine_consumption_v0"]["cost_source"] == "omitted_no_grounded_honest_cost"
+    contract = out["profile_contract_v1"]
+    assert contract.get("helps") == [help_line]
+    assert "виджета" not in str(contract.get("helps"))
+    assert contract.get("strengths") in ([], None)
+    assert contract.get("growth_zones") in ([], None)
 
 
 def test_k09_appends_cost_without_displacing_k04_k05(monkeypatch) -> None:
@@ -548,3 +609,102 @@ def test_k09_appends_cost_without_displacing_k04_k05(monkeypatch) -> None:
     assert "slow-and-steady" in help_line or "steadfast" in help_line
     assert "immovable" not in help_line
     assert "LLM слепая зона" not in help_line
+    assert out["profile_contract_v1"].get("helps") == [help_line]
+
+
+def test_k10_omits_compass_without_k04_despite_widgets(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    payload = _payload()
+    payload["diagnostics"]["character_engine_stage3"] = {
+        "stage3": {
+            "status": "grounded",
+            "internal_engine": {
+                "decision": {"surface_text": "Ты решаешь только из ядра автономии."},
+                "growth": {"surface_text": "Рост виджета identity thesis."},
+                "recovery": {"surface_text": "Восстановление виджета."},
+            },
+        }
+    }
+    payload["diagnostics"]["character_engine_stage4"] = {
+        "stage4": {
+            "status": "grounded",
+            "potential": {"surface_text": "Потенциал Stage4 — не Compass."},
+        }
+    }
+    payload["diagnostics"]["character_engine_stage5"] = {
+        "stage5": {
+            "status": "grounded",
+            "legacy_map": {
+                "fields": {
+                    "helps": {"value": ["Stage5 adapter help — запрещён."]},
+                    "strengths": {"value": ["Stage5 adapter strength."]},
+                    "growth_zones": {"value": ["Stage5 adapter growth."]},
+                    "decision_style": {"value": "Stage5 intimacy decision."},
+                }
+            },
+        }
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    contract = out["profile_contract_v1"]
+    node = out["insight_nodes_v0"]["nodes"][0]
+    cons = out["character_engine_consumption_v0"]
+    assert not node.get("help")
+    assert contract.get("helps") in ([], None)
+    assert contract.get("strengths") in ([], None)
+    assert contract.get("growth_zones") in ([], None)
+    assert cons["help_source"] == "omitted_no_grounded_compass"
+    assert cons["growth_source"] == "omitted_no_grounded_compass"
+    assert "виджета" not in str(contract.get("helps"))
+    assert "Stage5 adapter help" not in str(contract.get("helps"))
+    assert "Потенциал Stage4" not in str(contract.get("growth_zones"))
+    assert "систем" not in str(contract.get("strengths")).lower()
+    assert cons["decision_source"] == "stage5_legacy_map.decision_style"
+
+
+def test_k10_does_not_mint_help_to_show_k07_spheres(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    payload = _payload()
+    stage2 = payload["diagnostics"]["character_engine_stage2"]
+    stage2["stage0"]["capability"] = {"natal_mode": "full"}
+    stage2["stage0"]["raw_facts"] = [
+        {
+            "fact_id": "f_sun",
+            "fact_type": "planet_sign:sun",
+            "value": {"sign": "Aquarius", "house": 4, "body": "sun"},
+        },
+        {
+            "fact_id": "f_mars",
+            "fact_type": "planet_sign:mars",
+            "value": {"sign": "Cancer", "house": 4, "body": "mars"},
+        },
+        {"fact_id": "f_lp", "fact_type": "life_path", "value": 7},
+    ]
+    payload["diagnostics"]["character_engine_stage3"] = {
+        "stage3": {
+            "status": "grounded",
+            "internal_engine": {
+                "growth": {"surface_text": "Искусственный help ради сфер."},
+                "recovery": {"surface_text": "Ещё один essay help."},
+            },
+        }
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    node = out["insight_nodes_v0"]["nodes"][0]
+    contract = out["profile_contract_v1"]
+    spheres = contract.get("life_spheres") or {}
+    cons = out["character_engine_consumption_v0"]
+    assert cons["sphere_source"] == "f06_house_arena"
+    assert spheres
+    assert not node.get("help")
+    assert contract.get("helps") in ([], None)
+    assert "Искусственный help" not in str(contract.get("helps"))
+    assert cons["help_source"] == "omitted_no_grounded_compass"
+    for row in spheres.values():
+        assert (row.get("need") or "") not in (node.get("help") or "")
+        assert (row.get("how") or "") not in (node.get("help") or "")

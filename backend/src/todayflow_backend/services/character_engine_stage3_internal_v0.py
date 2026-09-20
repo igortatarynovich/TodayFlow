@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 STAGE3_VERSION = "character_engine_stage3_internal_v0"
 STAGE3_PROMPT_ID = "profile.character_engine.stage3.v1"
 # PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
-PIC_K = ("K04", "K05", "K06")
+PIC_K = ("K04", "K05", "K06")  # K06 = N / Explore schema; path M is OMIT-BY-DESIGN
 PIC_F = ("F03", "F04", "F07", "F08")
 ENGINE_SLOTS = (
     "decision",

@@ -177,7 +177,10 @@ def test_pic_coverage_audit_covers_n18() -> None:
     assert by_id["K04"]["status"] == "COMPLETE"
     assert by_id["K09"]["status"] == "COMPLETE"
     assert by_id["K07"]["status"] == "COMPLETE"
-    assert by_id["K06"]["status"] == "MISSING"
+    assert by_id["K10"]["status"] == "COMPLETE"
+    assert by_id["K06"]["status"] == "OMIT-BY-DESIGN"
+    assert KNOWLEDGE_TO_SLOT["K06"] == ()
+    assert not any(row["status"] == "MISSING" for row in PIC_COVERAGE)
 
 
 def test_pic_gate_meaning_producers_cite_k_and_f() -> None:
@@ -344,6 +347,78 @@ def test_k05_f07_aspect_pair_wires_to_insight(monkeypatch) -> None:
     assert omit_tensions == []
 
 
+def test_k06_leftover_hard_aspects_stay_off_path(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    facts = build_character_engine_facts_pack_v0(
+        profile_fingerprint="k06_e2e",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Virgo", "degree": 15.0, "longitude": 165.0},
+                {"body": "Moon", "sign": "Pisces", "degree": 15.0, "longitude": 345.0},
+                {"body": "Mars", "sign": "Aries", "degree": 0.0, "longitude": 0.0},
+                {"body": "Saturn", "sign": "Cancer", "degree": 0.0, "longitude": 90.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 7},
+        capability={"natal_mode": "date_only", "has_name": True},
+        birth_date="1991-09-08",
+        input_fingerprint="k06_e2e",
+    )
+    evidence = build_character_engine_evidence_candidates_v0(facts)
+    identity = build_character_engine_identity_core_v0(
+        facts_pack=facts,
+        evidence=evidence,
+        deterministic_only=True,
+    )
+    tensions = [
+        c
+        for c in (evidence.get("claims") or [])
+        if isinstance(c, dict)
+        and c.get("claim_kind") == "tension"
+        and str(c.get("thesis_key") or "").startswith("aspect_pair:")
+    ]
+    assert len(tensions) == 1
+    payload = {
+        "diagnostics": {
+            "character_engine_stage2": {
+                "stage0": facts,
+                "stage1": evidence,
+                "stage2": identity,
+            },
+            "character_engine_stage3": {
+                "stage3": {
+                    "status": "grounded",
+                    "secondary_tensions": [
+                        {
+                            "surface_text": "Вторичная ось с оставшегося F07 — не путь.",
+                            "expansion_because": "Explore only.",
+                            "supporting_claim_ids": [
+                                str((identity.get("identity_core") or {}).get("primary_claim_id") or "")
+                            ],
+                        }
+                    ],
+                }
+            },
+        },
+        "profile_contract_v1": {},
+        "numerology": {"life_path": 7},
+        "portrait_why_v0": {"selected_by": [], "portrait_influenced_by": []},
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    node = out["insight_nodes_v0"]["nodes"][0]
+    cons = out["character_engine_consumption_v0"]
+    assert cons["k06_source"] == "omit_by_design"
+    assert "↔" in (node.get("insight") or "")
+    assert (node.get("insight") or "").count("↔") == 1
+    assert "Вторичная ось" not in (node.get("insight") or "")
+    assert "Вторичная ось" not in (node.get("help") or "")
+    assert len(out["insight_nodes_v0"]["nodes"]) == 1
+
+
 CHART_FIRE = {
     "id": "aries_fire_stack",
     "mars_sign": "Leo",
@@ -422,6 +497,30 @@ def test_k04_one_internal_engine_axis_from_f08(monkeypatch) -> None:
     balance = next(row for row in earth_facts if row.get("fact_type") == "element_balance")
     assert balance["value"]["dominant_element"] == "earth"
     assert not isinstance(earth["insight_nodes_v0"]["nodes"][0].get("help"), list)
+
+
+def test_k10_compass_helps_are_k04_or_omit(monkeypatch) -> None:
+    earth = _consume_chart(CHART_A, monkeypatch)
+    help_line = earth["insight_nodes_v0"]["nodes"][0]["help"]
+    contract = earth["profile_contract_v1"]
+    cons = earth["character_engine_consumption_v0"]
+    assert help_line
+    assert contract.get("helps") == [help_line]
+    assert cons["help_source"] == "stage0_element_balance"
+    assert cons["compass_source"] == "stage0_element_balance"
+    assert "Выбери один неполный" not in str(contract.get("helps"))
+    assert "Ограничь сбор данных" not in str(contract.get("helps"))
+    assert contract.get("strengths") in ([], None)
+    assert contract.get("growth_zones") in ([], None)
+    assert (contract.get("life_spheres") or {})
+    date_only = _consume_chart(CHART_K09, monkeypatch)
+    date_help = date_only["insight_nodes_v0"]["nodes"][0]["help"]
+    date_contract = date_only["profile_contract_v1"]
+    assert date_help
+    assert date_contract.get("helps") == [date_help]
+    assert "Выбери один неполный" not in str(date_contract.get("helps"))
+    assert date_contract.get("strengths") in ([], None)
+
 
 
 CHART_K09 = {

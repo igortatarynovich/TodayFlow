@@ -9,10 +9,11 @@ Owned when Stage 2 grounded + flag on:
   - recognition / identity_core
   - portrait_why
   - insight — Stage 1 grounded aspect_pair (K05); omit without F07. Trap bank / Stage3 identity tension cannot fill.
-  - help — PIC-K04 one Internal Engine axis from F08 / harmonic F07 when grounded; else editorial / Stage3. Not seven widgets.
+  - help — PIC-K04 one Internal Engine axis from F08 / harmonic F07 when grounded; else omit. Not seven widgets.
   - honest cost — PIC-K09 fill-empty into the same P3 node from K04+K05 excess; omit without grounded pair. No trap-bank / Stage4 LLM.
+  - K06 secondary tensions — PIC OMIT-BY-DESIGN on the path. Stay in N / Explore schema. Do not copy into insight, help, effort, or spheres.
   - path spheres — PIC-K07 ≤2 from grounded F06 house arena of K01/K04/K05 bodies; omit without full natal / link. Not a relationships/career/money root.
-  - strengths / growth_zones / helps
+  - Compass — PIC-K10 derived-only: `helps` = grounded K04 line or omit. No essay / Stage3 / Stage4 / Stage5 fill of emptiness. Strengths / growth / energy / red flags have no independent generative root. Do not mint help to keep K07 spheres visible.
   - decision_style — Stage 3 internal_engine.decision when grounded, else editorial bank
   - relationship_style / money_style
   - recurring_patterns — editorial / Stage5 (not K05)
@@ -29,10 +30,10 @@ from typing import Any
 from todayflow_backend.core.config import settings
 
 # PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
-PIC_K = ("K01", "K02", "K04", "K05", "K07", "K09", "K10", "K12")
+PIC_K = ("K01", "K02", "K04", "K05", "K06", "K07", "K09", "K10", "K12")
 PIC_F = ("F01", "F03", "F04", "F05", "F06", "F07", "F08", "F09")
 
-PROJECTION_VERSION = "character_engine_profile_consumption_v0.12"
+PROJECTION_VERSION = "character_engine_profile_consumption_v0.14"
 # Soft ceilings only — clip_prose prefers sentence end; never mid-word stumps for UI.
 _MAX_RECOGNITION = 900
 _MAX_CORE = 900
@@ -668,6 +669,18 @@ def _k04_help(
     return line, str(axis.get("source") or "stage0_element_balance")
 
 
+def _k10_compass_helps(k04_line: str, k04_source: str) -> tuple[list[str], str | None, str]:
+    """PIC-K10: Compass helps are the already-grounded K04 axis, or omit.
+
+    Stage3 widgets, Stage4 potential, Stage5 adapters, and identity essays
+    cannot fill emptiness. Do not mint a line so Inventory can show K07 spheres.
+    """
+    line = str(k04_line or "").strip()
+    if not line:
+        return [], None, "omitted_no_grounded_compass"
+    return [line], line, k04_source
+
+
 def _k09_honest_cost(
     *,
     axis: dict[str, Any] | None,
@@ -979,7 +992,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     decision_source = "editorial_bank"
     relationship_source = "editorial_bank"
     money_source = "editorial_bank"
-    growth_source = "editorial_bank"
+    growth_source = "omitted_no_grounded_compass"
     trap = _TRAP_BY_IDENTITY_THESIS.get(identity_thesis) or (
         "Пока ядро характера не переводится в выбор, сила уходит в удержание формы вместо движения."
     )
@@ -992,13 +1005,19 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     trap = _clip(trap, _MAX_TRAP)
     insight, insight_source = _k05_insight(stage1)
     insight = _clip(insight, _MAX_TRAP)
+    # PIC-K06: leftover F07 / Stage3 secondary_tensions stay N for Explore.
+    # Path M is OMIT-BY-DESIGN — P3 has no slot that can show them without
+    # overloading K05 insight, minting a second node, or leaking into help/effort/spheres.
+    k06_source = "omit_by_design"
     k04_axis = _k04_axis(stage0, stage3 if isinstance(stage3, dict) else None)
     k04_line, k04_source = _k04_help(stage0, stage3 if isinstance(stage3, dict) else None)
     k04_line = _clip(k04_line, _MAX_ESSAY)
     essays = _essays_for(identity_thesis)
-    strengths = [str(x).strip() for x in (essays.get("strengths") or []) if str(x).strip()][:4]
-    growth = [str(x).strip() for x in (essays.get("growth_zones") or []) if str(x).strip()][:3]
-    helps = [str(x).strip() for x in (essays.get("helps") or []) if str(x).strip()][:3]
+    # PIC-K10: Compass (strengths / growth / helps) is derived-only from grounded K04.
+    # Essays, Stage3 widgets, Stage4 potential, and Stage5 adapters cannot fill emptiness.
+    strengths: list[str] = []
+    growth: list[str] = []
+    helps, help_line, help_source = _k10_compass_helps(k04_line, k04_source)
     decision = _clip(str(essays.get("decision_style") or ""), _MAX_ESSAY)
     if isinstance(stage3, dict):
         engine = stage3.get("internal_engine") if isinstance(stage3.get("internal_engine"), dict) else {}
@@ -1007,17 +1026,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         if dec_text:
             decision = _clip(dec_text, _MAX_ESSAY)
             decision_source = "stage3_internal_engine.decision"
-        growth_slot = engine.get("growth") if isinstance(engine.get("growth"), dict) else None
-        recovery_slot = engine.get("recovery") if isinstance(engine.get("recovery"), dict) else None
-        stage3_helps: list[str] = []
-        for slot in (growth_slot, recovery_slot):
-            t = str((slot or {}).get("surface_text") or "").strip()
-            if t:
-                stage3_helps.append(_clip(t, _MAX_ESSAY))
-        if stage3_helps:
-            helps = stage3_helps[:3]
     essay_relationship = _clip(str(essays.get("relationship_style") or ""), _MAX_ESSAY)
-    essay_helps = list(helps)
     relationship = essay_relationship
     money = _clip(str(essays.get("money_style") or ""), _MAX_ESSAY)
     if isinstance(stage4, dict):
@@ -1029,14 +1038,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         if money_scene and not _is_near_dupe(money_scene, trap, surface):
             money = _clip(money_scene, _MAX_ESSAY)
             money_source = "stage4_scene.resource_proxy"
-        pot = stage4.get("potential") if isinstance(stage4.get("potential"), dict) else None
-        pot_text = str((pot or {}).get("surface_text") or "").strip()
-        if pot_text and not _is_near_dupe(pot_text, trap, surface):
-            pot_clean = _clip_person(pot_text, _MAX_ESSAY, identity_thesis=identity_thesis)
-            # Effort owns potential once — do not also stamp it into helps.
-            growth = [pot_clean, *growth][:3]
-            growth_source = "stage4_potential"
-    # Stage 5 adapters preferred; when character_engine_v1.status=ready, SoT is the envelope.
+    # Stage 5 adapters for Explore styles; Compass fields stay K10-derived.
     ce_root = payload.get("character_engine_v1") if isinstance(payload.get("character_engine_v1"), dict) else {}
     ce_sot = str(ce_root.get("status") or "") == "ready"
     if isinstance(stage5, dict):
@@ -1052,54 +1054,19 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         if isinstance(a_money, str) and a_money.strip() and not _is_near_dupe(a_money, trap, surface):
             money = _clip(a_money, _MAX_ESSAY)
             money_source = "stage5_legacy_map.money_patterns"
-        a_growth = _adapter_value(stage5, "growth_zones")
-        if isinstance(a_growth, list) and a_growth:
-            cleaned = [
-                _clip(str(x), _MAX_ESSAY)
-                for x in a_growth
-                if str(x).strip() and not _is_near_dupe(str(x), trap, surface)
-            ]
-            if cleaned:
-                growth = cleaned[:3]
-                growth_source = "stage5_legacy_map.growth_zones"
-        a_helps = _adapter_value(stage5, "helps")
-        if isinstance(a_helps, list) and a_helps:
-            cleaned_h = [
-                _clip(str(x), _MAX_ESSAY)
-                for x in a_helps
-                if str(x).strip() and not _is_near_dupe(str(x), trap, surface, *growth)
-            ]
-            if cleaned_h:
-                helps = cleaned_h[:3]
         a_trap = _adapter_value(stage5, "recurring_patterns")
         if isinstance(a_trap, list) and a_trap and str(a_trap[0]).strip():
             trap = _clip(str(a_trap[0]), _MAX_TRAP)
             trap_source = "stage5_legacy_map.recurring_patterns"
-        a_strengths = _adapter_value(stage5, "strengths")
-        if isinstance(a_strengths, list) and a_strengths:
-            cleaned_s = [
-                _clip(str(x), _MAX_ESSAY)
-                for x in a_strengths
-                if str(x).strip() and not _is_near_dupe(str(x), trap, surface)
-            ]
-            if cleaned_s:
-                strengths = cleaned_s[:4]
-            # else keep editorial essays — Stage5 must not empty strengths with identity dupe
     if _is_near_dupe(relationship, trap, surface):
         relationship = essay_relationship
         relationship_source = "editorial_bank"
-    helps = _dedupe_list(helps or essay_helps, trap, surface, *growth)[:3] or essay_helps[:3]
-    helps = [
-        scrubbed
-        for h in (_scrub_day_agenda_list(helps) or _scrub_day_agenda_list(essay_helps))
-        if (scrubbed := _scrub_day_agenda(_scrub_machine_thesis(h, identity_thesis)))
-    ]
-    help_line = helps[0] if helps else None
-    help_source = "stage3_internal_engine" if decision_source.startswith("stage3_") and help_line else "editorial_bank"
-    if k04_line:
-        help_line = k04_line
-        help_source = k04_source
-        helps = [k04_line, *[h for h in helps if h != k04_line]][:3]
+    if help_line:
+        scrubbed_help = _scrub_day_agenda(_scrub_machine_thesis(help_line, identity_thesis))
+        help_line = scrubbed_help or None
+        helps = [help_line] if help_line else []
+        if not help_line:
+            help_source = "omitted_no_grounded_compass"
     cost_line, cost_source = _k09_honest_cost(
         axis=k04_axis,
         insight=insight,
@@ -1108,17 +1075,11 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     if cost_line and insight:
         insight = f"{insight} {cost_line}".strip()
         insight = _clip(insight, _MAX_TRAP)
-    growth = _dedupe_list(growth, trap, surface, *strengths)[:3]
-    strengths = _dedupe_list(strengths, trap, surface, *growth)[:4]
-    growth = [_scrub_machine_thesis(g, identity_thesis) for g in growth]
     trap = _scrub_machine_thesis(trap, identity_thesis)
     insight = _scrub_machine_thesis(insight, identity_thesis)
-    if help_line:
-        help_line = _scrub_machine_thesis(help_line, identity_thesis)
     decision = _scrub_machine_thesis(decision, identity_thesis)
     relationship = _scrub_machine_thesis(relationship, identity_thesis)
     money = _scrub_machine_thesis(money, identity_thesis)
-    strengths = [_scrub_machine_thesis(s, identity_thesis) for s in strengths]
 
     claims = stage1.get("claims") if isinstance(stage1.get("claims"), list) else []
     facts_by_id = {
@@ -1297,6 +1258,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             "insight_source": insight_source,
             "help_source": help_source,
             "cost_source": cost_source,
+            "k06_source": k06_source,
             "forbids_living_day_rhythm_as_identity_trap": True,
             "living_evidence_is_adjacent_context_not_proof": True,
             "titles_follow_forms_case_a_c": True,
@@ -1314,7 +1276,9 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "insight_source": insight_source,
         "help_source": help_source,
         "cost_source": cost_source,
+        "k06_source": k06_source,
         "sphere_source": sphere_source,
+        "compass_source": help_source,
         "decision_source": decision_source,
         "relationship_source": relationship_source,
         "money_source": money_source,

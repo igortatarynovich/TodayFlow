@@ -1,8 +1,11 @@
-"""Character Engine Stage 5 — deterministic assembly (Compass + legacy adapters).
+"""Character Engine Stage 5 — deterministic assembly (Explore adapters).
 
 Canon: CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md §6–§7 · Architecture Impact Stage 5.
 No LLM. No new claims. Expand-only projection of Stage 2–4 artifacts.
 Never sets character_engine_v1 status=ready (that requires PUBLISH_READY cutover).
+
+PIC-K10 Compass (helps / strengths / energy / red flags / growth) is derived in
+consumption from already grounded K01–K09. Stage 5 must not fill those fields.
 """
 
 from __future__ import annotations
@@ -17,18 +20,14 @@ ADAPTER_VERSION = "character_engine_adapter_v1"
 ASSEMBLER_VERSION = "character_engine_compass_assembler_v0"
 COMPASS_SCHEMA = "compass_v1"
 # PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
-PIC_K = ("K10", "K11")
+PIC_K = ("K11",)
 PIC_F = ("F13",)
 
-# item_kind → (surface path in stage3 engine or stage4)
+# Explore adapters only. K10 Compass kinds (helps / strengths / energy / red flags /
+# growth) are not assembled here — consumption derives them from grounded K04 or omits.
 _ENGINE_TO_COMPASS: tuple[tuple[str, str], ...] = (
     ("decision", "work_style"),
     ("perception", "communication_style"),
-    ("recovery", "recovery"),
-    ("stress", "triggers"),
-    ("risk", "red_flags"),
-    ("growth", "growth_directions"),
-    ("burnout", "energy_sources"),
 )
 
 
@@ -112,8 +111,6 @@ def build_character_engine_assembly_v0(
 
     engine = stage3.get("internal_engine") if isinstance(stage3.get("internal_engine"), dict) else {}
     pt = stage3.get("primary_tension") if isinstance(stage3.get("primary_tension"), dict) else {}
-    potential = stage4.get("potential") if isinstance(stage4.get("potential"), dict) else {}
-    blind_spots = stage4.get("blind_spots") if isinstance(stage4.get("blind_spots"), list) else []
 
     compass_items: list[dict[str, Any]] = []
     all_scene_ids: list[str] = []
@@ -140,29 +137,8 @@ def build_character_engine_assembly_v0(
         )
         mechanism_slots_used.append(slot)
 
-    # Growth from Stage 4 potential (may reinforce growth_directions).
-    pot_text = str(potential.get("surface_text") or "").strip()
-    if pot_text:
-        refs = {
-            "claim_ids": list(potential.get("supporting_claim_ids") or support_claims[:1]),
-            "scene_ids": [],
-            "mechanism_slots": ["growth"],
-        }
-        item_id = make_compass_item_id(item_kind="growth_directions", source_refs=refs)
-        # Prefer potential as primary growth_directions if engine growth also present —
-        # keep both only if distinct item_ids (fingerprint differs by refs).
-        if not any(i["item_id"] == item_id for i in compass_items):
-            compass_items.append(
-                {
-                    "item_id": item_id,
-                    "item_kind": "growth_directions",
-                    "value": pot_text,
-                    "derived_from": refs,
-                }
-            )
-
-    # Strengths stay empty in Stage5 adapters — consumption essays own them.
-    # Do not reuse Identity Core surface as "strengths" (duplicates recognition).
+    # K10: do not copy Stage 4 potential into Compass growth / helps.
+    # Strengths / helps / growth / energy / red flags stay empty — consumption K10.
     core_surface = str(core.get("surface_text") or "").strip()
 
     intimacy = _scene_by_kind(stage4, "intimacy")
@@ -189,16 +165,10 @@ def build_character_engine_assembly_v0(
     perception_text = str((engine.get("perception") or {}).get("surface_text") or "").strip()
     stress_text = str((engine.get("stress") or {}).get("surface_text") or "").strip()
     emotional = perception_text or stress_text
-    recovery_text = str((engine.get("recovery") or {}).get("surface_text") or "").strip()
-    growth_text = pot_text or str((engine.get("growth") or {}).get("surface_text") or "").strip()
     trap_text = str(pt.get("surface_text") or "").strip()
     intimacy_text = str((intimacy or {}).get("surface_text") or "").strip()
     resource_text = str((resource or {}).get("surface_text") or "").strip()
-    blind_texts = [
-        str(b.get("surface_text") or "").strip()
-        for b in blind_spots
-        if isinstance(b, dict) and str(b.get("surface_text") or "").strip()
-    ][:4]
+    omit_compass = "omitted_no_grounded_k01_k09_derivative"
 
     legacy_fields: dict[str, Any] = {
         "identity_core": _adapter_out(core_surface, claim_ids=support_claims),
@@ -211,7 +181,7 @@ def build_character_engine_assembly_v0(
         "emotional_style": _adapter_out(
             emotional or None,
             claim_ids=support_claims[:1],
-            compass_item_ids=_compass_ids_for("communication_style", "triggers"),
+            compass_item_ids=_compass_ids_for("communication_style"),
         ),
         "relationship_style": _adapter_out(
             intimacy_text or None,
@@ -223,26 +193,10 @@ def build_character_engine_assembly_v0(
             claim_ids=list((resource or {}).get("supporting_claim_ids") or support_claims[:1]),
             scene_ids=[str(resource["scene_id"])] if resource and resource.get("scene_id") else [],
         ),
-        "strengths": _adapter_out(
-            None,
-            claim_ids=support_claims,
-            compass_item_ids=_compass_ids_for("strengths"),
-        ),
-        "growth_zones": _adapter_out(
-            [growth_text] if growth_text else None,
-            claim_ids=list(potential.get("supporting_claim_ids") or support_claims[:1]),
-            compass_item_ids=_compass_ids_for("growth_directions"),
-        ),
-        "blind_spots": _adapter_out(
-            blind_texts or None,
-            claim_ids=support_claims[:1],
-            compass_item_ids=_compass_ids_for("red_flags"),
-        ),
-        "helps": _adapter_out(
-            [t for t in (growth_text, recovery_text) if t] or None,
-            claim_ids=support_claims[:1],
-            compass_item_ids=_compass_ids_for("growth_directions", "recovery"),
-        ),
+        "strengths": _adapter_out(None, omit_reason=omit_compass),
+        "growth_zones": _adapter_out(None, omit_reason=omit_compass),
+        "blind_spots": _adapter_out(None, omit_reason=omit_compass),
+        "helps": _adapter_out(None, omit_reason=omit_compass),
         "recurring_patterns": _adapter_out(
             [trap_text] if trap_text else None,
             claim_ids=list(pt.get("supporting_claim_ids") or support_claims[:1]),

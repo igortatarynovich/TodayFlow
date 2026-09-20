@@ -270,6 +270,8 @@ def test_consumption_prefers_stage4_scenes(monkeypatch) -> None:
     assert cons["applied"] is True
     assert cons["relationship_source"] == "stage4_scene.intimacy"
     assert cons["money_source"] == "stage4_scene.resource_proxy"
-    assert cons["growth_source"] == "stage4_potential"
+    assert cons["growth_source"] == "omitted_no_grounded_compass"
     assert "Stage4 intimacy" in out["profile_contract_v1"]["relationship_style"]
-    assert "Потенциал Stage4" in out["profile_contract_v1"]["growth_zones"][0]
+    assert out["profile_contract_v1"].get("growth_zones") in ([], None)
+    assert "Потенциал Stage4" not in str(out["profile_contract_v1"].get("growth_zones"))
+    assert "Потенциал Stage4" not in str(out["profile_contract_v1"].get("helps"))

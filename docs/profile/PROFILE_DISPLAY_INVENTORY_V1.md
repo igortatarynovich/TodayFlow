@@ -436,7 +436,7 @@ Max nodes first release: **1**.
 | authority | CE Acts III–IV |
 | semantic_source | Stage 1 grounded hard `aspect_pair` `il_line` (F07 → IL-2); FE `nodes[0].insight` |
 | allowed_inputs | one A↔B from square/opposition compose (`what_a` ↔ `what_b` — `relation`); optional K09 honest cost (sign `excess` of grounded K04 axis) as fill-empty second beat |
-| forbidden_inference | trap-bank / identity-thesis essay; Stage3 synthetic tension; Stage4 LLM `blind_spots`; one-sided trait; K06 secondaries; CE primary as tension |
+| forbidden_inference | trap-bank / identity-thesis essay; Stage3 synthetic tension; Stage4 LLM `blind_spots`; one-sided trait; K06 secondaries (path M OMIT-BY-DESIGN); CE primary as tension |
 | output | 2–3 предложения |
 | budget | 30–55 слов · **≤360 chars на экране** (склад ≤900 kitchen) |
 | required | да для P3 |
@@ -469,10 +469,10 @@ Max nodes first release: **1**.
 |---|---|
 | one_question | Что помогает **внутри этой оси** (не совет дня)? |
 | text_class | generated |
-| authority | CE; patterns/helps LLM только если gate |
+| authority | CE K04 path axis; no LLM / essay fill |
 | semantic_source | Stage 3 `path_axis` / F08 `element_balance` `how` or harmonic F07; FE `nodes[0].help` |
-| allowed_inputs | one Internal Engine axis from unique F08 tilt or one harmonic F07; **не** seven Stage3 widgets |
-| forbidden_inference | identity-thesis engine dump; day agenda; kitchen insight-help; K06 secondaries |
+| allowed_inputs | one Internal Engine axis from unique F08 tilt or one harmonic F07; **не** seven Stage3 widgets; **не** `_essays_for` |
+| forbidden_inference | identity-thesis engine dump; day agenda; kitchen insight-help; K06 secondaries; Stage5 compass adapters; fake help to keep K07 spheres visible |
 | output | 1 предложение |
 | budget | 12–22 слов · ≤140 chars экрана (склад ≤360) |
 | required | нет |
@@ -520,7 +520,7 @@ Chrome: «Куда прикладывать усилия» · «Одно нап�
 | output | 1 предложение-действие |
 | budget | 12–22 слов · **8–140 chars** |
 | required | нет |
-| empty_behavior | **omit всего P4** (включая сферы на пути) |
+| empty_behavior | **omit всего P4** (включая сферы на пути). Это display-зависимость от K08 projection, не лицензия K10 минтить help ради уже grounded K07 сфер |
 | may_fe_transform | clip |
 | may_llm_add_meaning | нет |
 | interaction | none |
@@ -702,6 +702,8 @@ Cut 2026-08-29: `ProfileCharacterScene` removed from path; P4 spheres cap 0–2;
 
 | Date | Change |
 |------|--------|
+| 2026-09-20 | `P3.*` — PIC-K06 secondary tensions OMIT-BY-DESIGN on the path; no new slot; leftover F07 stay N/Explore |
+| 2026-09-20 | `P3.help` / `P4.effort_vector` — PIC-K10 Compass derived-only from grounded K04; empty omit; no essay/Stage3/5 fill; Inventory omit-whole-P4 without help stays a display dependency (do not mint help for K07) |
 | 2026-09-20 | `P4.sphere.*` — PIC-K07 ≤2 path spheres from grounded F06 house arena of K01/K04/K05; omit without full natal / link; not identity-thesis essays; K08 not from sphere |
 | 2026-09-20 | `P3.insight` — PIC-K09 fill-empty honest cost (sign excess of K04) after K05 A↔B; no trap-bank; K04 help unchanged |
 | 2026-09-20 | `P3.help` — PIC-K04 one Internal Engine axis from F08 / harmonic F07; not seven widgets; K05 keeps insight |

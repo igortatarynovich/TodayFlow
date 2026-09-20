@@ -112,11 +112,11 @@ Code Δ: Capability TARGET = LLM `natal_facts`; CODE = Swiss. Для этой т
 | `K03` | Прикладной смысл углов и домов **этого** человека | `F05` `F06` (+ занятые `F03`) | Angle `orientation` · House `arena` · Planet×House compose | CE Act II applied: `how` + `do` на зону. Не «7-й дом = партнёрство» | 12 house packs + 2 angle packs stored; catalog `draft` | `character_engine_house_lines_v0` / `asc_v0` | how/do отдельно от occupancy qualifier на K01 | **да, full only** | P2 ASC/MC · Explore natal · Matrix «Структура карты» | `how` + `do`; незначимое omit |
 | `K04` | Internal Engine: как решает / воспринимает / держит стресс / риск / восстановление / рост / выгорание | `F03` `F04` `F07` `F08` + ядро | Planet function · Aspect `relation` · IL-2 frames | CE Акт III: **одна** ось в `P3.help` из F08 / harmonic F07, не семь виджетов. Capability L2 `decision_style` — **алиас**, не отдельный корень | IL-2 `planet_in_sign` `how` · harmonic `relation` | Stage 0 F08 + `select_internal_engine_path_axis_v0` | **да:** уникальный перевес / одна гармоника → `P3.help`; пустое omit | **да, свёрнуто** | `P3.help` (не 7 виджетов) · K05 держит `P3.insight` | механизм; пустая ось omit |
 | `K05` | Одно главное напряжение A↔B | hard `F07`, clash `F08`, конфликт ролей K02 | Aspect `relation` · IL-2 `aspect_pair` | CE Акт IV: ровно одно главное. Content `inner_tension` = alias | Stage 0 mint 5 majors; Stage 1 ровно одна hard `aspect_pair` tension | канон есть | **закрыт:** grounded F07 → IL-2 → `P3.insight`; trap-bank не обгоняет; пустое omit | **да** | `P3.insight` | одна ось, не список |
-| `K06` | Вторичные напряжения (1–3), не конкурируют с K05 | то же | то же | CE Акт IV secondary | то же | канон есть | не отдельный слот Inventory | **да как материал узла** | `P3.*` / Explore | короткие оси |
+| `K06` | Вторичные напряжения (1–3), не конкурируют с K05 | то же | то же | CE Акт IV secondary | то же | канон есть | **OMIT-BY-DESIGN на пути:** P3 не имеет слота без перегрузки K05 insight / второго узла. N остаётся для Explore | **нет на пути** | Explore / Stage3 schema | короткие оси, если когда-нибудь покажем вне first-paint |
 | `K07` | Как K01+K04+K05 проявляются в ситуациях | full усиливает домами `F06` | House `arena` для «где»; сцена ≠ корень | CE Акт V. Matrix «Эмоции / отношения / работа / деньги / дом» = **ярлыки сцен**, запрещены как generative roots | house packs есть | CE consumption: occupied F06 of K01/K04/K05 bodies → IL-2 `planet_in_house` | **закрыт:** ≤2 сферы из grounded F06+arena; нет F06/связи → omit; identity-thesis / trap-bank / LLM не заполняют | **да ≤2 сферы на пути** | `P4.sphere.*` · Matrix L2 styles | teaser + expand how/need/risk |
 | `K08` | Направление роста (не профессия) | K01+K04+K05 | — (derived) | CE Акт VI | нет отдельного KB | канон: из системы, не новый LLM-корень | `P4.effort_vector` проецируется из `help`, не из потенциала как поля | **да проекцией** | `P4.effort_vector` | 1 вектор поведения |
 | `K09` | Слепая зона / честная цена оси | K05 + K04 | Sign `excess` того же тела, что дало K04 `how` | CE Акт VII: одна цена оси, **derived** из grounded K04+K05. Не отдельный LLM-корень | excess в IL-1 sign canon | правило: оба hop grounded, иначе omit | **да внутри узла:** fill-empty в `P3.insight` после A↔B; не вытесняет K04/K05 | **да внутри узла** | `P3.insight` · `P3.help` | 1 неудобная правда; пустое omit |
-| `K10` | Компас: strengths · helps · energy · red flags · practical takeaway | только уже построенные K01–K09 | — | CE Акт VIII **derived only**. Capability `core_strengths` / Matrix `helps[]` = проекции | — | запрет собственного промпта | L3 `helps` gated Trial+; strengths в Inventory не как акт пути | **да derived** | `P3.help` · `P4.effort_vector` · Matrix helps (Trial+) | список следствий; empty omit |
+| `K10` | Компас: strengths · helps · energy · red flags · practical takeaway | только уже построенные K01–K09 | — | CE Акт VIII **derived only**. Capability `core_strengths` / Matrix `helps[]` = проекции | — | запрет собственного промпта | **закрыт:** `helps` = grounded K04 или omit; Stage3/4/5 / essay не заполняют; strengths/energy/red flags без самостоятельного корня | **да derived** | `P3.help` · `P4.effort_vector` · Matrix helps (Trial+) | список следствий; empty omit |
 | `K11` | Дуга пути личности (вообще, не сегодня) | K01+K05+K08 | `F09` как evidence, не заголовок | CE Финал | number_base для цифры; дуга — композиция | канон есть | `P5.bridge_line` = мост в Today из `node.kind`, **не** финальная дуга жизни | **частично** | `P5.bridge_line` | 1 предложение «почему открыть Today» |
 | `K12` | Что life path вносит в **этого** человека | `F09` life_path (birthday — не этот слот) | `number_base_v1` 1–9, 11/22/33 | вклад в Why, не статья «число 7 означает» | **есть** JSON bank | lookup | `P2.selected_life_path` calc; CE primary не слот | **да** | P2 life_path · P1 visual seed отдельно | число + grounded contribution; omit без bank |
 | `K13` | Что имя-числа вносят в самопрезентацию | `F10` | тот же bank | Capability L1 `name_expression`; omit без имени | bank есть | канон: не влиять на натал | `P2.name_numerology` compact Why | **да** | Why header fact, не акт пути | omit + CTA без имени |
@@ -162,6 +162,7 @@ Code Δ: Capability TARGET = LLM `natal_facts`; CODE = Swiss. Для этой т
 | `K02` + calc `F01 F04 F05 F09` | да — Why anchors |
 | `K13` `K14` | да — compact Why header facts, **не** акты пути и **не** Identity Core |
 | `K04` `K05` `K09` | да — один узел Insight, не склад |
+| `K06` | **нет** — OMIT-BY-DESIGN на пути; N / Explore |
 | `K10` help | да — help узла → Effort vector |
 | `K07` | да — 0–2 сферы, «где», не второй вектор |
 | `K11` | только как мост в Today, не «миссия жизни» |
@@ -181,6 +182,7 @@ Code Δ: Capability TARGET = LLM `natal_facts`; CODE = Swiss. Для этой т
 - 616 IL-клеток списком
 - Compass отдельным промптом
 - второй логлайн в Natal Decode
+- `K06` secondary tensions на first-paint (нет слота P3 без перегрузки одного insight)
 
 ---
 
@@ -284,12 +286,12 @@ Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **з�
 | `K02` | **COMPLETE** | natal F01/F04/F05/F09 + occupancy F03/F06 as qualifier | `_CLAIM_WHY_LABEL` + FE zodiac banks | fill-empty natal Why rows from projector/Stage0; occupancy claims not Why | consumption merges natal `sun/moon/asc/life_path`; skips `planet_in_*` | live `P2.anchor.sun/moon/asc`; unknown/occupancy omit (not `P2.anchor.rhythm`) | нет на измеренном hop; `P2.selected_life_path` = K12 |
 | `K03` | **PARTIAL** | `house_cusp_sign:*`, `angle_sign:asc/mc`, occupied planets (F05/F06+F03) | local how-strings, не live IL arena/orientation | `build_asc_applied_v0` / `build_house_person_lines_for_identity_v0` (`do`="") | `character_engine_asc_v0` / `house_lines_v0` | path ASC/MC только если Why ещё держит id; house how = Explore, не emit | applied cards есть; path редко; IL atoms не SoT |
 | `K04` | **COMPLETE** | Stage0 `element_balance` (F08 from F03/F04 Sun–Saturn) + harmonic F07 (conjunction/trine/sextile). Hard square/opposition stay K05 | IL-2 `planet_in_sign` `how` · harmonic `relation` | `select_internal_engine_path_axis_v0`; identity thesis 7-slot engine cannot occupy the path axis | consumption `nodes[0].help`; omit without unique F08 tilt or harmonic | `P3.help` (Insight node, не 7 виджетов); K05 держит `P3.insight` | нет на измеренном hop; пустая ось omit; K06 не этим патчем |
-| `K05` | **COMPLETE** | Stage0 `aspect_pair:*` (F07 5 majors, Foundation orbs); hard square/opposition only | IL-2 `compose_aspect_pair` (`what_a`/`what_b`/`relation`) | Stage1 ровно один tension claim; harmonics / empty compose → omit | consumption `nodes[0].insight`; trap-bank и Stage3 identity tension не обгоняют | `P3.insight` (emit + Insight; empty omit) | нет на измеренном hop; K06 secondary не этим патчем |
-| `K06` | **MISSING** | — | prompt schema only | Stage3 `secondary_tensions` (deterministic `[]`) | consumption **не копирует** | нет slot | в N есть, на экран hop нет |
+| `K05` | **COMPLETE** | Stage0 `aspect_pair:*` (F07 5 majors, Foundation orbs); hard square/opposition only | IL-2 `compose_aspect_pair` (`what_a`/`what_b`/`relation`) | Stage1 ровно один tension claim; harmonics / empty compose → omit | consumption `nodes[0].insight`; trap-bank и Stage3 identity tension не обгоняют | `P3.insight` (emit + Insight; empty omit) | нет на измеренном hop; leftover F07 не становятся path M (K06 OMIT-BY-DESIGN) |
+| `K06` | **OMIT-BY-DESIGN** | leftover grounded F07 after K05 (N only) | IL-2 aspect `relation` | Stage1 не минтит secondaries; Stage3 schema 0–3; LLM/Stage4 не заполняют путь | consumption **не копирует** в insight/help/effort/spheres; `k06_source=omit_by_design` | нет Inventory slot; не второй node | не дефект: P3 = один insight (K05+K09) + help (K04); Explore может читать N позже |
 | `K07` | **COMPLETE** | Stage0 occupied `planet_sign:*`.house (F06 full natal) of K01 occupancy / K04 axis / K05 pair bodies | IL-2 `compose_planet_in_house` (`what` × house `arena`) | `build_k07_path_spheres_v0`; identity-thesis packs / Stage4 scenes / trap-bank не заполняют | consumption `life_spheres` ≤2; K08 effort не из сферы | `P4.sphere.*` emit + Effort 0–2; empty omit | нет на измеренном hop; без full F06/связи omit; K03 house how и K16 tips не этим патчем |
 | `K08` | **COMPLETE** | derived from `nodes[0].help` | — | `project_effort_vector_v0` | `effort_vector_v0` | `P4.effort_vector` emit + Effort; omit empty | нет (качество help = K04/K10) |
 | `K09` | **COMPLETE** | grounded K04 path_axis (F08 sign) + grounded K05 A↔B; не F* напрямую | sign `canon.excess` | `honest_cost_from_axis_v0`; trap-bank / Stage4 LLM `blind_spots` не заполняют | consumption append в `nodes[0].insight`; K04 `help` не меняет | `P3.insight` (дополнение) · `P3.help` остаётся K04 | нет на измеренном hop; без пары K04+K05 omit |
-| `K10` | **PARTIAL** | derived Stage3/5; не F13 | compass assembler; essay fallback `_essays_for` | Stage5 compass + consumption helps | `P3.help` · Matrix `helps` Trial+ | help часто null, т.к. = effort | Compass не derived-only: essay fallback; strengths/red flags без path slot |
+| `K10` | **COMPLETE** | derived from grounded K01–K09 (`P3.help` = K04); не F13 | — (no essay / compass prompt) | consumption `helps` = `[k04]` else omit; Stage3 widgets / Stage4 potential / Stage5 adapters / `_essays_for` cannot fill | `P3.help` · Matrix `helps` Trial+; K08 effort stays projection of that help | empty omit; Inventory still omits whole P4 without safe help — display dependency, not a K10 license to mint help | нет на измеренном hop; strengths/energy/red flags omit without derivative; K07 spheres не источник help |
 | `K11` | **COMPLETE** (показанный M) | `nodes[0].kind` | `_BRIDGE_*_RU` | `project_bridge_line_v0` | `bridge_line_v0` | `P5.bridge_line` emit + Bridge; omit empty | дуга жизни **OMIT-BY-DESIGN**; M = мост в Today |
 | `K12` | **COMPLETE** | F09 `life_path` only (birthday не в этом слоте) | `number_base_v1` `base_meaning` | lookup; нет meaning → omit | projector + consumption `selected_by` = `life_path` row | `P2.selected_life_path` emit/Why; CE primary не слот | нет |
 | `K13` | **COMPLETE** | F10 `expression`/`soul_urge`/`personality` | numerology calc (unchanged) | compact format only | Matrix `name_numerology` bag `expression`/`soul_urge`/`personality` | `P2.name_numerology` emit + Why; omit without IN.name; CTA via K17 `need_name` | нет; не пишет в natal/Identity Core |
@@ -299,17 +301,15 @@ Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **з�
 | `K17` | **COMPLETE** | capability gaps / forming | Matrix §1.1 copy | `resolve_capability` · forming helpers | `user_messages` / `forming_message` | `P-data.cta_text` · `P-forming.message` live; chrome-exempt emit | нет |
 | `K18` | **COMPLETE** | F13 `living.signals[].note` | — (quotes) | `_living_quotes`; omit if empty | `nodes[0].living_evidence` | `P3.living_evidence` emit + Insight | нет |
 
-Сводка: **COMPLETE 12** (`K02` `K04` `K05` `K07` `K08` `K09` `K11` `K12` `K13` `K14` `K17` `K18`) · **PARTIAL 5** · **MISSING 1** (`K06`) · **OMIT-BY-DESIGN** внутри `K11` (дуга жизни). Occupancy-подhop `K01` закрыт отдельно.
+Сводка: **COMPLETE 13** (`K02` `K04` `K05` `K07` `K08` `K09` `K10` `K11` `K12` `K13` `K14` `K17` `K18`) · **PARTIAL 4** (`K01` `K03` `K15` `K16`) · **MISSING 0** · **OMIT-BY-DESIGN** `K06` (path M) + внутри `K11` (дуга жизни). Occupancy-подhop `K01` закрыт отдельно.
 
 ### Очередь Profile (из аудита, не из архитектурного бэклога)
 
-Только PIC-дыры. Не IL-3. Не Today.
+Только PIC-дыры. Не IL-3. Не Today. Core first-paint закрыт кроме K01 thesis mint (не в очереди).
 
-1. **K10** — omit helps, если Stage3/5 пуст (запрет essay fallback); path = help→effort.
-2. **K06** — продуктово: вычеркнуть из M **или** ≤2 secondary в материалы узла (слот не плодить).
-3. **K15** — emit `P6.natal_decode` и/или оставить Explore; не first-paint root.
-4. **K16** — Inventory slot **или** временно убрать из M, пока нет `slot_id`.
-5. **K03** — ASC/MC `how` в `P2.anchor.asc/mc`; house how остаётся Explore.
+1. **K15** — emit `P6.natal_decode` и/или оставить Explore; не first-paint root.
+2. **K16** — Inventory slot **или** временно убрать из M, пока нет `slot_id`.
+3. **K03** — ASC/MC `how` в `P2.anchor.asc/mc`; house how остаётся Explore.
 
 Не в очереди: менять 13-key thesis `K01`; IL aspects/transits/angles dump; `TODAY_INFORMATION_CONTRACT`.
 
@@ -319,6 +319,8 @@ Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **з�
 
 | Date | Change |
 |------|--------|
+| 2026-09-20 | K06 OMIT-BY-DESIGN from path M: leftover F07 / Stage3 secondaries stay N for Explore; no new P3 slot; do not overload K05 insight. Next = K15. |
+| 2026-09-20 | K10 COMPLETE: Compass derived-only from grounded K01–K09 (`helps` = K04 or omit); essay/Stage3/Stage4/Stage5 cannot fill; no fake help for K07 spheres. Next = K06. |
 | 2026-09-20 | K07 COMPLETE: ≤2 path spheres from grounded F06 occupied houses of K01/K04/K05 via house `arena`; identity-thesis / LLM / trap-bank cannot fill; K08 not from sphere. Next = K10. |
 | 2026-09-20 | K09 COMPLETE: one honest cost from grounded K04 sign `excess` + K05 A↔B fill-empty into `P3.insight`; does not displace K04 help or K05 A↔B; trap-bank / Stage4 LLM omit. Next = K07. |
 | 2026-09-20 | K04 COMPLETE: one Internal Engine axis from Stage 0 F08 `element_balance` (or harmonic F07) → `P3.help`; not seven widgets; K05 keeps `P3.insight`. Identity-thesis engine cannot occupy the path axis. Next = K09. |

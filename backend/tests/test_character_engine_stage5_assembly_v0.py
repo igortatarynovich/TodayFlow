@@ -142,11 +142,19 @@ def test_stage5_grounded_assembly() -> None:
     )
     assert out["status"] == "grounded"
     assert out["compass"]["schema_version"] == COMPASS_SCHEMA
-    assert out["compass"]["items"]
+    kinds = {i.get("item_kind") for i in out["compass"]["items"]}
+    assert "red_flags" not in kinds
+    assert "energy_sources" not in kinds
+    assert "growth_directions" not in kinds
+    assert "recovery" not in kinds
     assert all(i.get("item_id") for i in out["compass"]["items"])
     assert out["legacy_map"]["adapter_version"] == ADAPTER_VERSION
     assert out["legacy_map"]["fields"]["decision_style"]["value"]
     assert out["legacy_map"]["fields"]["relationship_style"]["value"]
+    assert out["legacy_map"]["fields"]["helps"]["value"] is None
+    assert out["legacy_map"]["fields"]["strengths"]["value"] is None
+    assert out["legacy_map"]["fields"]["growth_zones"]["value"] is None
+    assert out["legacy_map"]["fields"]["blind_spots"]["value"] is None
     assert out["validation"]["deterministic"] is True
     assert out["validation"]["ready_publish_blocked"] is True
 
@@ -191,3 +199,16 @@ def test_consumption_prefers_stage5_adapters(monkeypatch) -> None:
     assert cons["decision_source"] == "stage5_legacy_map.decision_style"
     assert cons["relationship_source"] == "stage5_legacy_map.relationship_style"
     assert "Stage5 intimacy" in out["profile_contract_v1"]["relationship_style"]
+    help_line = out["insight_nodes_v0"]["nodes"][0].get("help")
+    assert out["profile_contract_v1"].get("helps") == ([help_line] if help_line else [])
+    assert out["profile_contract_v1"].get("strengths") in ([], None)
+    assert out["profile_contract_v1"].get("growth_zones") in ([], None)
+    assert "Потенциал Stage5" not in str(out["profile_contract_v1"].get("growth_zones"))
+    assert "Потенциал Stage5" not in str(out["profile_contract_v1"].get("helps"))
+    assert "Проявление ядра в зоне growth" not in str(out["profile_contract_v1"].get("helps"))
+    assert "Проявление ядра в зоне recovery" not in str(out["profile_contract_v1"].get("helps"))
+    if help_line:
+        assert cons["help_source"] in {"stage0_element_balance", "stage0_harmonic_aspect"}
+        assert "ease-with-participation" in help_line or "act" in help_line
+    else:
+        assert cons["help_source"] == "omitted_no_grounded_compass"
