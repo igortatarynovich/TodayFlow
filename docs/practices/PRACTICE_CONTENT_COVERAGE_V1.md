@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `affirmation.acceptance`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 20/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`); `meditation.silence` skipped (`family_collapse`); `affirmation.self_identity` skipped (`source_gap`); `affirmation.self_worth` skipped (`source_gap`); `affirmation.permission` skipped (`source_gap`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+**P1 fill STOPPED (2026-09-20).** Remaining P1 types wait on product demand (this file already allowed skipped-type reassessment). Freeze: 20/42 sourced; `practice.body_scan` skipped (`family_collapse`); `meditation.silence` skipped (`family_collapse`); `affirmation.self_identity` skipped (`source_gap`); `affirmation.self_worth` skipped (`source_gap`); `affirmation.permission` skipped (`source_gap`). Sourced 26/26 P0. Не продолжать `affirmation.acceptance` как product train. Не Safety Review. Не box / energizing-breath / abstinence research. Next product train: [PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md](../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md).
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-09-20 | **P1 fill STOPPED.** Coverage freeze 153 items / 20/42 P1 / 5 skipped. Remaining P1 types wait on product demand. Next product train is Profile knowledge-to-output, not `affirmation.acceptance`. |
 | 2026-09-20 | **P1 `affirmation.permission` skipped.** `technique.permission` `source_gap`: no brief spoken inner «I am allowed to X» method. Saying no / taking a break is `boundary_action` or a rest action; «deserve a break» is self_compassion; slogans and rights-lists are not a method. Coverage matrix: 153 items, 20/42 P1 sourced, 5 P1 skipped. Next: `affirmation.acceptance`. |
 | 2026-09-20 | **P1 `affirmation.self_worth` skipped.** `technique.self_worth` `source_gap`: no brief spoken «worth is not this result» method. CCI pie / self-esteem modules are workbooks; NHS is a five-item list and thought-challenge; Mind «I am enough» is a slogan. Coverage matrix: 153 items, 20/42 P1 sourced, 4 P1 skipped. Next: `affirmation.permission`. |
 | 2026-09-20 | **P1 `affirmation.self_identity` skipped.** `technique.self_identity` `source_gap`: no brief spoken «remain myself» method. Steele/Cohen is values-writing; CCI/NHS self-esteem is worth/esteem; slogan is not a method. Coverage matrix: 153 items, 20/42 P1 sourced, 3 P1 skipped. Next: `affirmation.self_worth`. |

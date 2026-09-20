@@ -4,6 +4,8 @@ Last updated: 2026-09-20
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (PROFILE KNOWLEDGE-TO-OUTPUT, 2026-09-20):** P1 library fill STOPPED at 153 items, 20/42 P1 sourced, 5 skipped. Remaining P1 waits on product demand — not a 42/42 gate. Next train: natal facts → IL → Character Engine → Profile output. Harness: `backend/tests/test_profile_knowledge_to_output_v1.py` (4 passed / 1 xfail). Same-Sun Virgo charts with Mars Cancer H4 vs Mars Libra H7 compose distinct IL frames and collapse to one Identity Core template. Handoff: `docs/status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md`. P1 branch parked: `cursor/p1-self-compassion-loop-notes` @ `f48a438d`. G0 deferred. Closed loop LOCKED.
+
 **NOW (P1 PERMISSION SKIP, 2026-09-20):** P1 type `affirmation.permission` skipped (`source_gap`). No brief spoken inner «I am allowed to X» method; saying no / taking a break is `boundary_action` or a rest action; «deserve a break» is already self_compassion; slogans and rights-lists are not a method. Coverage 153 items, 20/42 P1 sourced, 5 P1 skipped. Next: `affirmation.acceptance`. Handoff: `docs/status/P1_LIBRARY_FILL_HANDOFF.md`. G0 deferred. Closed loop LOCKED.
 
 **NOW (P1 SELF WORTH SKIP, 2026-09-20):** P1 type `affirmation.self_worth` skipped (`source_gap`). No brief spoken «worth is not this result» method; CCI/NHS are workbooks and lists; Mind «I am enough» is a slogan; kind voice is already self_compassion. Coverage 153 items, 20/42 P1 sourced, 4 P1 skipped. Next: `affirmation.permission`. Handoff: `docs/status/P1_LIBRARY_FILL_HANDOFF.md`. G0 deferred. Closed loop LOCKED.
@@ -77,6 +79,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — P1 fill STOP → Profile knowledge-to-output (2026-09-20)
+
+- **SoT before:** Tracker NOW was P1 type coverage in ledger order (`affirmation.acceptance` next). Character Engine Stage 1 is a 13-key sun/moon/ASC registry; IL wire exists at the library layer and is not imported by `character_engine_*`. First-paint Profile recognition is CE Identity Core (LLM-first, 13-template fallback).
+- **SoT after:** P1 fill parked (153 / 20/42 / 5 skipped). No library items deleted. Product work is to carry existing IL-2/3 natal compositions through Character Engine into Profile slots. No new product canon. Catalog stays `draft` until a named Architecture impact attaches it to first-paint Profile.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this tracker · `docs/status/P1_LIBRARY_FILL_HANDOFF.md` (STOPPED) · `docs/status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md` · fill/coverage/provenance pointers
+- **Backward compatible?** yes. Remaining P1 types are not a launch gate.
 
 ## Architecture impact — Closed loop v0: gratitude D+1 + catalog practice select (2026-09-18)
 
@@ -2862,6 +2873,7 @@ Ordered work (aligns with canon §7):
 Use format:
 - `YYYY-MM-DD` | `Area` | `Change` | `Status` | `Notes`
 
+- 2026-09-20 | Profile / Knowledge | **P1 fill STOP; Profile knowledge-to-output starts** | **IN PROGRESS** | Remaining P1 is not a 42/42 product gate. Harness shows IL composes distinct Mars × sign × house and CE Identity Core collapses same-Sun charts to one template. Next = invert Stage 1 xfail, then recognition slot. [PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md](./status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md).
 - 2026-09-20 | Practices / Canon | **Library fill: affirmation.permission skipped** | **SKIPPED** | P1 type `affirmation.permission` `source_gap`: no brief spoken inner-permission method. Saying no / taking a break is boundary_action or a rest action; «deserve a break» is self_compassion; slogans and rights-lists are not a method. Next = affirmation.acceptance. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-09-20 | Practices / Canon | **Library fill: affirmation.self_worth skipped** | **SKIPPED** | P1 type `affirmation.self_worth` `source_gap`: no brief spoken worth-not-result method. CCI/NHS are workbooks and lists; Mind «I am enough» is a slogan; kind voice is already self_compassion. Next = affirmation.permission. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
 - 2026-09-20 | Practices / Canon | **Library fill: affirmation.self_identity skipped** | **SKIPPED** | P1 type `affirmation.self_identity` `source_gap`: no brief spoken remain-myself method. Steele/Cohen is values-writing; CCI/NHS self-esteem is worth/esteem; slogan is not a method. Next = affirmation.self_worth. [PRACTICE_LIBRARY_FILL_V1](./practices/PRACTICE_LIBRARY_FILL_V1.md).
