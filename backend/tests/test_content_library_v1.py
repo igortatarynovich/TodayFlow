@@ -339,6 +339,8 @@ def test_fill_unfrozen_provisional_probes() -> None:
     assert "energizing_breath" in coverage["skipped_types"]
     assert "meditation.silence" in coverage["skipped_types"]
     assert "affirmation.self_identity" in coverage["skipped_types"]
+    assert "affirmation.self_worth" in coverage["skipped_types"]
+    assert "affirmation.permission" in coverage["skipped_types"]
     probes = library["architecture_probe_item_ids"]
     assert probes == [
         SEED_1_ID,
@@ -2447,6 +2449,38 @@ def test_p1_affirmation_self_identity_skipped() -> None:
     assert spine["item_ids"] == []
     assert not any(i["identity"].get("type") == "self_identity" for i in library["items"])
     assert not any(i["identity"].get("technique_id") == "technique.self_identity" for i in library["items"])
+
+
+def test_p1_affirmation_self_worth_skipped() -> None:
+    _vocab, library, coverage = _load()
+    techniques = _techniques()
+    row = next(t for t in techniques["techniques"] if t["technique_id"] == "technique.self_worth")
+    assert row["content_class"] == "affirmation"
+    assert row["type"] == "self_worth"
+    assert row["status"] == "skipped"
+    assert row["skip_reason"] == "source_gap"
+    assert "affirmation.self_worth" in coverage["skipped_types"]
+    spine = next(r for r in coverage["type_spine"] if r["content_class"] == "affirmation" and r["type"] == "self_worth")
+    assert spine["phase"] == "P1"
+    assert spine["item_ids"] == []
+    assert not any(i["identity"].get("type") == "self_worth" for i in library["items"])
+    assert not any(i["identity"].get("technique_id") == "technique.self_worth" for i in library["items"])
+
+
+def test_p1_affirmation_permission_skipped() -> None:
+    _vocab, library, coverage = _load()
+    techniques = _techniques()
+    row = next(t for t in techniques["techniques"] if t["technique_id"] == "technique.permission")
+    assert row["content_class"] == "affirmation"
+    assert row["type"] == "permission"
+    assert row["status"] == "skipped"
+    assert row["skip_reason"] == "source_gap"
+    assert "affirmation.permission" in coverage["skipped_types"]
+    spine = next(r for r in coverage["type_spine"] if r["content_class"] == "affirmation" and r["type"] == "permission")
+    assert spine["phase"] == "P1"
+    assert spine["item_ids"] == []
+    assert not any(i["identity"].get("type") == "permission" for i in library["items"])
+    assert not any(i["identity"].get("technique_id") == "technique.permission" for i in library["items"])
 
 
 def test_repo_paths_exist() -> None:

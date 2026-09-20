@@ -1938,6 +1938,30 @@
       "note": "No authoritative clinical or educational source describing a brief spoken 'I can remain myself' affirmation as a standalone technique was found in this pass. Steele/Cohen self-affirmation is values-contact writing, not this type (and already used as provenance for agency/relationship). CCI/NHS self-esteem materials (positive qualities, accept who you are) are worth/esteem work, not remaining oneself. Repeating a slogan such as 'I'm a lovable person' is not a method (and can backfire). Capability and agency already cover coping and choice-point statements. P1 type affirmation.self_identity remains skipped_for_now. Return only if product requires a kernel that is not capability, agency, self_worth, values-writing, or a slogan."
     },
     {
+      "technique_id": "technique.self_worth",
+      "content_class": "affirmation",
+      "type": "self_worth",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "source_gap",
+      "note": "No authoritative clinical or educational source describing a brief spoken 'worth is not this result' affirmation as a standalone technique was found in this pass. CCI perfectionism 'self-worth pie' and self-esteem modules (positive qualities, thought diaries) are multi-step workbooks, not a one- or two-line spoken method. NHS raise-self-esteem and NHS inform self-esteem guides are five-item lists, thought-challenge, and saying no — journal/CBT protocol. Mind 'I am enough' / 'I'm worth it' is a slogan. Ellis unconditional self-acceptance is a therapy doctrine, not a brief product method. Kind voice in difficulty is already technique.self_compassion; coping with the task is already technique.capability. P1 type affirmation.self_worth remains skipped_for_now. Return only if product requires a kernel that is not a workbook, slogan, self-compassion, capability, or values-writing."
+    },
+    {
+      "technique_id": "technique.permission",
+      "content_class": "affirmation",
+      "type": "permission",
+      "canonical_description": "",
+      "source_refs": [],
+      "safety_notes": [],
+      "allowed_claims": [],
+      "status": "skipped",
+      "skip_reason": "source_gap",
+      "note": "No authoritative clinical or educational source describing a brief spoken inner 'I am allowed to X' as a standalone technique was found in this pass. NHS Every Mind Matters / Mind / Leicestershire assertiveness treat permission as saying no or taking a break — already technique.boundary_action, or a rest action, or an assertiveness rights-list. CCI self-compassion modules ('you deserve a break', treat yourself as a friend) are already technique.self_compassion. CCI perfectionism 'it's OK to relax' is a workbook rule-rewrite plus a stop-work experiment, not a one-line spoken method. Mental Health Foundation 'give yourself permission to rest' names a rest behaviour, not a spoken kernel. Blog 'permission phrases' and slogans ('I am allowed to rest') are not a method. P1 type affirmation.permission remains skipped_for_now. Return only if product requires a kernel that is not boundary_action, self_compassion, agency, a rest action, or a slogan."
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",
