@@ -138,7 +138,7 @@
 | **L2** ASC, дома, structural styles (emotional, decision, relationship, work, money, home) | ✅ **если** date+time+place; иначе omit + CTA | ✅ при тех же данных |
 | **L3** deep helps, conflict patterns, practical «что делать», longitudinal, **selectable deep themes** (sex/money/love/work/body tips) | ❌ omit / soft CTA trial | ✅ |
 
-**Deep themes (L3, 2026-07-27):** подписчик выбирает 1 (Plus) или 2 (Pro) темы; получает `practical_tips[]` поверх **неизменной** базовой сферы (`how/need/risk` не переписываются). Смена выбора — не чаще раза в 7 дней. Wire: `character_engine_deep_themes_v0` · `GET/PUT /account/profile/deep-themes`.
+**Deep themes (L3, 2026-07-27):** подписчик выбирает 1 (Plus) или 2 (Pro) темы, которые уже есть как K07-сфера; получает 1–2 `practical_tips[]` из how/need/risk (не generic bank). Базовая сфера не переписывается. Нет matching сферы → omit. Смена выбора — не чаще раза в 7 дней. Wire: `character_engine_deep_themes_v0` · `GET/PUT /account/profile/deep-themes` · `P6.practical_tips`.
 
 ### Глубина: до регистрации → после аккаунта → после подписки
 

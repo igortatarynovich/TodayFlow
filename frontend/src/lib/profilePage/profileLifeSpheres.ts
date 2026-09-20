@@ -76,7 +76,6 @@ export type BuildProfileLifeSpheresFromChartInput = {
   family: string;
   /** Из `interpretation.life_areas` (core profile), если бэкенд отдал. */
   sex?: string;
-  sexPracticalTips?: string[];
   kids?: string;
   body?: string;
   friends?: string;
@@ -207,22 +206,8 @@ export function buildProfileLifeSpheresFromProfileData(
   }
   const fromContract = buildSpheresFromContractOnly(contractSpheres);
   // Partial synthesis OK (love/money/decisions slice). Never pad with FE DEFAULTS.
-  return mergeDeepThemeTips(fromContract, core?.character_engine_deep_themes_v0);
-}
-
-function mergeDeepThemeTips(
-  spheres: ProfileLifeSphere[],
-  deep: CoreProfile["character_engine_deep_themes_v0"] | null | undefined,
-): ProfileLifeSphere[] {
-  if (!deep || deep.gated || !deep.tips_by_theme) return spheres;
-  const tipsMap = deep.tips_by_theme;
-  return spheres.map((sphere) => {
-    const tips = tipsMap[sphere.id]?.tips;
-    if (!Array.isArray(tips) || !tips.length) return sphere;
-    const clean = tips.map((t) => String(t || "").trim()).filter(Boolean);
-    if (!clean.length) return sphere;
-    return { ...sphere, practicalTips: clean };
-  });
+  // K16 tips stay on Explore chooser — not merged onto path P4 spheres.
+  return fromContract;
 }
 
 /** @deprecated chart/template path kept for legacy tests only — not used by Profile V2. */
@@ -248,7 +233,6 @@ export function buildProfileLifeSpheresFromProfileDataLegacy(
     money: (contractSpheres?.money?.how || la?.money || "").trim(),
     family: (contractSpheres?.family?.how || la?.family || "").trim(),
     sex: contractSpheres?.sex?.how || la?.sex,
-    sexPracticalTips: core?.interpretation?.sex_practical_tips,
     kids: contractSpheres?.kids?.how || la?.kids,
     body: contractSpheres?.body?.how || la?.body,
     friends: contractSpheres?.friends?.how || la?.friends,
@@ -277,7 +261,6 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
     venusLine && marsLine ? `${venusLine} ${marsLine}`.trim() : venusLine || marsLine || "";
   const sexDefault = sexPlanetaryFallback || "";
   const sexCore = sphereHow(input.sex, sexDefault, sexChart, "sex");
-  const sexTips = (input.sexPracticalTips || []).filter((t) => t.trim());
 
   const loveHow = sphereHow(input.love, DEFAULTS.love, joinHow([h(7), venusLine, moonLine]), "love");
   const moneyHow = sphereHow(input.money, DEFAULTS.money, joinHow([h(2), h(8), jupiterLine, saturnLine]), "money");
@@ -319,14 +302,6 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
       turnsOn: "Глубина, внимание к телу, устойчивый интерес и уважение к «нет».",
       turnsOff: "Давление, обесценивание желания, непредсказуемость границ.",
       helps: "Короткие прямые фразы о том, чего хочешь сейчас; один безопасный шаг, а не игра в догадки.",
-      practicalTips:
-        sexTips.length > 0
-          ? sexTips
-          : [
-              "Если хочешь, но стесняешься — начни с одной прямой фразы о темпе, а не с «намека» телом без слов.",
-              "Поза на боку с зрительным контактом часто снижает давление, когда важны и страсть, и чувство безопасности.",
-              "После отказа партнёра не проверяй «ещё раз» в тот же вечер — спроси, когда вернуться к теме.",
-            ],
       inSystem: "Подсказки и Совместимость; на карте: 8 дом, Плутон, Венера, Марс.",
     },
     {

@@ -22,7 +22,8 @@ ROLE:
 
 INPUT (caller provides):
 - identity_core: { thesis_key, surface_text } — FIXED. Do not rewrite.
-- primary_tension_surface (optional)
+- k05_tension (optional): already-established A↔B insight + natal grounded_on.
+  Explain it; do not mint a new tension or Stage3 trap essay.
 - natal_pack: planets / angles / houses (facts)
 - numerology_pack: life path / expression / etc. when present (facts)
 
@@ -66,6 +67,8 @@ HARD RULES:
 9. When IL4_MEANING is present: phrase those lemmas; do not invent sky meaning
    from natal_pack beside the pack; do not voice dropped constructions.
    Identity Core stays Character Engine.
+10. If k05_tension is present, explain that A↔B via natal facts. Do not mint a
+    new tension, second logline, or Stage3 trap essay. If absent, explain K01 only.
 """
     else:
         body = """
@@ -79,7 +82,8 @@ HARD RULES:
 
 ВХОД (даёт код):
 - identity_core: { thesis_key, surface_text } — ФИКСИРОВАН. Не переписывай.
-- primary_tension_surface (опционально)
+- k05_tension (опционально): уже установленное A↔B + natal grounded_on.
+  Объясни его; не минти новое напряжение и не бери Stage3 trap-essay.
 - natal_pack: планеты / углы / дома (факты)
 - numerology_pack: число пути / выражение / др., если есть (факты)
 
@@ -123,5 +127,7 @@ HARD RULES:
 9. Если есть IL4_MEANING: формулируй эти леммы; не изобретай астрологию
    из natal_pack рядом с пакетом; не озвучивай dropped.
    Identity Core остаётся Character Engine.
+10. Если есть k05_tension — объясни это A↔B natal facts. Не минти новое
+    напряжение, второй логлайн или Stage3 trap-essay. Если нет — только K01.
 """
     return f"{voice}\n{body}".strip()

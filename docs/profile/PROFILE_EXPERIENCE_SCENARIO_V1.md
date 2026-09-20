@@ -238,7 +238,7 @@ Wire: `character_engine_asc_v0` · `character_engine_house_lines_v0` (`how`/`do`
 - Каждая строка decode обязана опираться на Identity Core (+ Evidence); тест: без имени планеты остаётся фраза про этого человека и то же ядро.  
 Canon: [PROFILE_NATAL_DECODE_DEPTH_V1.md](./PROFILE_NATAL_DECODE_DEPTH_V1.md). Wire: `natal_decode_depth_v0` · `POST /account/profile/natal-decode`.
 
-**Deep themes (L3, Paid/Trial):** подписчик выбирает 1–2 темы (sex/money/love/work/body) и получает `practical_tips[]` поверх **неизменной** базовой сферы (`how/need/risk` не переписываются). Смена выбора — не чаще раза в 7 дней. Wire: `character_engine_deep_themes_v0` · `GET/PUT /account/profile/deep-themes`. Free — soft CTA без tips body.
+**Deep themes (L3, Paid/Trial):** подписчик выбирает 1–2 темы (sex/money/love/work/body), которые **уже** есть как grounded K07-сфера, и получает 1–2 `practical_tips[]` из существующего `how`/`need`/`risk` (chrome wrap, не новый смысл). Базовая сфера не переписывается. Нет matching K07 row → tips omit, не generic self-help. Смена выбора — не чаще раза в 7 дней. Wire: `character_engine_deep_themes_v0` · `GET/PUT /account/profile/deep-themes` · Inventory `P6.practical_tips`. Free — soft CTA без tips body.
 
 ---
 

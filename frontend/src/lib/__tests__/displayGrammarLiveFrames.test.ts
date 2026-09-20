@@ -329,4 +329,41 @@ describe("live Profile frames", () => {
     expect(teasers.every((a) => a.text !== journeyCore.effort_vector_v0?.effort_vector)).toBe(true);
     expect(scanDisplayGrammar(frame)).toEqual([]);
   });
+
+  it("PIC-K15 emits P6.natal_decode on Explore, not as a path act", () => {
+    const path = emitProfileDisplayFrame({ core: journeyCore });
+    expect(path.atoms?.some((a) => a.slot_id === "P6.natal_decode")).toBe(false);
+    expect(path.atoms?.some((a) => a.slot_id?.startsWith("P6."))).toBe(false);
+
+    const explore = emitProfileDisplayFrame({
+      core: journeyCore,
+      natalDecode: {
+        patternThesis: "Карта объясняет уже известное ядро через квадрат.",
+        sections: [{ thesis: "Точность держится, пока не торопишь вывод." }],
+      },
+    });
+    const decode = explore.atoms?.find((a) => a.slot_id === "P6.natal_decode");
+    expect(decode?.surface).toBe("explore");
+    expect(decode?.text).toMatch(/уже известное ядро/);
+    expect(decode?.text_class).toBe("generated");
+    expect(scanDisplayGrammar(explore)).toEqual([]);
+  });
+
+  it("PIC-K16 emits P6.practical_tips on Explore, not as a path act", () => {
+    const path = emitProfileDisplayFrame({ core: journeyCore });
+    expect(path.atoms?.some((a) => a.slot_id === "P6.practical_tips")).toBe(false);
+
+    const explore = emitProfileDisplayFrame({
+      core: journeyCore,
+      practicalTips: [
+        "Сделай это так: act / pursue — possessions, money.",
+        "Один проверяемый шаг в этой зоне: possessions, money, personal-resources",
+      ],
+    });
+    const tips = explore.atoms?.find((a) => a.slot_id === "P6.practical_tips");
+    expect(tips?.surface).toBe("explore");
+    expect(tips?.text).toMatch(/possessions, money/);
+    expect(tips?.text_class).toBe("generated");
+    expect(scanDisplayGrammar(explore)).toEqual([]);
+  });
 });

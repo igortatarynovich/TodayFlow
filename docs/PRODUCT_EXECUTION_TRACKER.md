@@ -4,6 +4,10 @@ Last updated: 2026-09-20
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (PIC K16 COMPLETE, 2026-09-20):** Practical action for a selected K07 deep theme is 1–2 chrome-wrapped do-lines from that sphere's how/need/risk → Explore `P6.practical_tips`. Trial+ only. Identity-thesis / generic self-help / Stage4/5 / LLM are not the source. Missing K07 row omits. how/need/risk stay immutable. Chooser sits in Explore, not on the path. PIC_COVERAGE K16 PARTIAL → COMPLETE (15 COMPLETE / 2 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN). Next = **K03** only. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (PIC K15 COMPLETE, 2026-09-20):** Natal Decode explains already-established K01 (+ grounded K05) via natal facts into Explore `P6.natal_decode`. Not a first-paint root, not a second logline, not a CE write. GET `/account/profile/natal-decode` never LLM. Stage3 trap-bank is not Decode meaning. Missing K01/natal omits. Grammar emit is Explore-only; panel sits in Explore after the chart. K03 house how and K16 tips unchanged. PIC_COVERAGE K15 PARTIAL → COMPLETE (14 COMPLETE / 3 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN). Next = **K16** only. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
 **NOW (PIC K06 OMIT-BY-DESIGN, 2026-09-20):** Secondary tensions stay in N for Explore. Path M has no P3 slot that can show leftover F07 without overloading K05 insight or minting a second node. Consumption does not copy Stage3 `secondary_tensions` into insight/help/effort/spheres. No new UI. PIC_COVERAGE K06 MISSING → OMIT-BY-DESIGN (13 COMPLETE / 4 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN). Next = **K15** only. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (PIC K10 COMPLETE, 2026-09-20):** Compass is derived-only: `P3.help` / `contract.helps` = grounded K04 or omit. Essay / Stage3 widgets / Stage4 potential / Stage5 adapters cannot fill emptiness. Strengths / energy / red flags have no independent generative root. K08 stays a projection of existing help, not an LLM-root. Do not mint help to keep already-grounded K07 spheres visible (Inventory omit-whole-P4 without help is a display dependency). PIC_COVERAGE K10 PARTIAL → COMPLETE (13 COMPLETE / 4 PARTIAL / 1 MISSING). Next = **K06** only. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
@@ -101,6 +105,24 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — PIC-K16 practical tips (2026-09-20)
+
+- **SoT before:** Deep-theme endpoint and chooser existed, but PIC K16 was PARTIAL: tips came from identity-thesis / `_GENERIC_TIPS` banks (up to 4), no Inventory slot, chooser sat on the path, and FE merged tips onto P4 Effort spheres.
+- **SoT after:** Practical action is a child of an already selected K07 theme. Source = that sphere's how/need/risk with chrome wrap only (`derive_practical_tips_from_k07_sphere`). Max 1–2. Trial+. No rewrite of how/need/risk. No new personality meaning. No Stage4/5 / LLM / generic self-help. Missing grounded K07 row → omit. Explore `P6.practical_tips` + chooser in Explore. No reverse write to P1–P5.
+- **Public contract changed?** no new required JSON fields. Nest `character_engine_deep_themes_v0` now carries `k16_source` (`k07_how_need_risk` \| `omitted_no_grounded_k07`); `tips_by_theme` may be empty when selected theme has no K07 row.
+- **Migration required?** no — free still gated; Trial+ without matching sphere simply shows no tips
+- **Canon updated?** yes — Information Contract §3/§11 · Display Inventory `P6.practical_tips` · this tracker · handoff
+- **Backward compatible?** yes. Catalog ids unchanged (sex/money/love/work/body). Intersection with K07 (body/money/love/work/…) means sex often omits rather than inventing a mapping.
+
+## Architecture impact — PIC-K15 Natal Decode (2026-09-20)
+
+- **SoT before:** Decode POST/GET/cache and IL-4 polish existed, but PIC K15 was PARTIAL: no PIC producer cite, tension input was Stage3 trap-bank, `P6.natal_decode` was not emitted, and the panel sat on the path scroll between Effort and Bridge.
+- **SoT after:** Natal Decode is the opt-in explanation of already-established K01 (+ grounded K05 `insight_nodes[0]` when present) through compact natal/numerology facts. IL-4 still phrases, does not choose meaning. GET never generates. Stage3 trap-bank is not input. Explore emit + Explore panel. Not a sixth path act. Identity Core stays CE.
+- **Public contract changed?** no new JSON fields. Prompt `profile.natal_decode_depth.v1` **1.1.0** now names optional `k05_tension`; fingerprint unchanged (identity + natal + numerology).
+- **Migration required?** no — existing fingerprint cache still hits; K05 is optional explanatory input
+- **Canon updated?** yes — Information Contract §3/§11 · Display Inventory `P6.natal_decode` · Natal Decode Depth wire · this tracker · handoff
+- **Backward compatible?** yes. GET core-profile still does not generate Decode. Charts without K05 still decode K01 via natal.
 
 ## Architecture impact — PIC-K06 secondary tensions (2026-09-20)
 

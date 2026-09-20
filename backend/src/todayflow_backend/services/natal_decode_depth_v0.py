@@ -1,12 +1,14 @@
 """Natal Decode Depth v0 — one-shot chart story over fixed Character Engine Identity Core.
 
 Canon: docs/profile/PROFILE_NATAL_DECODE_DEPTH_V1.md
+PIC: K15 → P6.natal_decode (Explore / opt-in). Does not mint K01 or a second logline.
 
 Rules:
 - First explicit POST generates; thereafter GET/POST serve persisted artifact for fingerprint.
 - Never on core-profile GET / publish auto-path.
 - Does NOT write character_engine_v1 as personality SoT.
 - Not a personality SoT for Today / Compat / Tarot.
+- Explains existing K01 (+ grounded K05) via natal facts. Stage3 trap-bank is not Decode meaning.
 """
 
 from __future__ import annotations
@@ -31,6 +33,9 @@ from todayflow_backend.prompts.registry_v1 import get_prompt
 from todayflow_backend.services.prose_clip_v1 import clip_prose
 
 logger = logging.getLogger(__name__)
+
+PIC_K = ("K15",)
+PIC_F = ("F01", "F03", "F04", "F05", "F06", "F07", "F09")
 
 DECODE_VERSION = "natal_decode_depth_v0.3"  # expression/polish stamp — not a cache key
 NATAL_DECODE_SEMANTIC_VERSION = "natal-decode-semantic.v1"
@@ -91,25 +96,42 @@ def extract_identity_core_for_decode(payload: dict[str, Any] | None) -> dict[str
     }
 
 
-def extract_primary_tension_surface(payload: dict[str, Any] | None) -> str | None:
+def extract_k05_tension_for_decode(payload: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Grounded K05 A↔B already on the path (`insight_nodes[0]`). Not Stage3 trap-bank."""
     if not isinstance(payload, dict):
         return None
-    diagnostics = payload.get("diagnostics") if isinstance(payload.get("diagnostics"), dict) else {}
-    stage3 = diagnostics.get("character_engine_stage3")
-    if isinstance(stage3, dict):
-        nested = stage3.get("stage3") if isinstance(stage3.get("stage3"), dict) else stage3
-        pt = nested.get("primary_tension") if isinstance(nested, dict) else None
-        if isinstance(pt, dict):
-            text = _clip(pt.get("surface_text"), 400)
-            if text:
-                return text
-    ce = payload.get("character_engine_v1") if isinstance(payload.get("character_engine_v1"), dict) else {}
-    cascade = ce.get("cascade") if isinstance(ce.get("cascade"), dict) else {}
-    pt = cascade.get("primary_tension") if isinstance(cascade.get("primary_tension"), dict) else None
-    if isinstance(pt, dict):
-        text = _clip(pt.get("surface_text"), 400)
-        return text or None
-    return None
+    pack = payload.get("insight_nodes_v0") if isinstance(payload.get("insight_nodes_v0"), dict) else {}
+    nodes = pack.get("nodes") if isinstance(pack.get("nodes"), list) else []
+    if not nodes or not isinstance(nodes[0], dict):
+        return None
+    node = nodes[0]
+    insight = _clip(node.get("insight"), 400)
+    if not insight:
+        return None
+    grounded: list[str] = []
+    raw_grounded = node.get("grounded_on") if isinstance(node.get("grounded_on"), list) else []
+    for item in raw_grounded:
+        if isinstance(item, dict):
+            label = _clip(item.get("label"), 160)
+        else:
+            label = _clip(item, 160)
+        if label:
+            grounded.append(label)
+        if len(grounded) >= 4:
+            break
+    out: dict[str, Any] = {"insight": insight, "grounded_on": grounded}
+    title = _clip(node.get("title"), 120)
+    if title:
+        out["title"] = title
+    return out
+
+
+def extract_primary_tension_surface(payload: dict[str, Any] | None) -> str | None:
+    """K05 insight text when present. Stage3 identity-trap is not Decode meaning."""
+    pack = extract_k05_tension_for_decode(payload)
+    if not pack:
+        return None
+    return str(pack.get("insight") or "") or None
 
 
 def _compact_numerology_pack(payload: dict[str, Any] | None) -> dict[str, Any]:
@@ -589,7 +611,7 @@ def generate_natal_decode_depth_v0(
     identity, natal_pack, numerology_pack, natal_available, fingerprint = _inputs_for_payload(
         core_profile_payload, natal_summary
     )
-    tension = extract_primary_tension_surface(core_profile_payload)
+    k05_tension = extract_k05_tension_for_decode(core_profile_payload)
 
     if not identity:
         return {
@@ -673,14 +695,16 @@ def generate_natal_decode_depth_v0(
     meaning_prefix = protected_block(il4_pack, locale=locale) if pack_present(il4_pack) else ""
     user_payload = {
         "identity_core": identity,
-        "primary_tension_surface": tension,
+        "k05_tension": k05_tension,
+        "primary_tension_surface": (k05_tension or {}).get("insight"),
         "natal_pack": natal_pack,
         "numerology_pack": numerology_pack,
     }
     user_msg = (
         f"{meaning_prefix}"
-        "Собери Natal Decode Depth — целостную историю человека. "
-        "Identity Core фиксирован — не переписывай.\n"
+        "Собери Natal Decode Depth — как карта объясняет уже известное ядро. "
+        "Identity Core фиксирован — не переписывай и не создавай второй логлайн. "
+        "K05 (если есть) уже установлен — объясни его natal facts, не минти новое напряжение.\n"
         f"Данные:\n{json.dumps(user_payload, ensure_ascii=False)}"
     )
 

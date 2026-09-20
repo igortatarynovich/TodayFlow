@@ -51,13 +51,16 @@
 |-------|------|
 | Trigger | First `POST` when no cache; `GET` returns ready artifact when persisted |
 | Gate | CE Identity Core `grounded` + natal facts available; else status + CTA |
-| Input | Fixed identity_core · primary tension · natal pack · numerology pack |
+| Input | Fixed identity_core (K01) · optional grounded K05 `insight_nodes[0]` · natal pack · numerology pack. Stage3 trap-bank is **not** input. |
 | Output nest | `natal_decode_depth_v0` — additive; persisted in `generation_logs` by fingerprint |
 | Consumers | Profile Deep Sources / Personal Map UI only; `day_hooks` могут **информировать** Today как derived tips, не как personality SoT |
 | Non-consumers | Day Engine as character root · ExperienceSlice personality rewrite · Compat person root |
 
 ## Wire
 
-- Prompt id: `profile.natal_decode_depth.v1`  
-- Service: `services/natal_decode_depth_v0.py`  
-- Houses base layer: `character_engine_house_lines_v0` (thesis `how`/`do`)  
+- Prompt id: `profile.natal_decode_depth.v1` (1.1.0; input names optional `k05_tension`, not Stage3 trap)  
+- Service: `services/natal_decode_depth_v0.py` (`PIC_K = K15`)  
+- Houses base layer: `character_engine_house_lines_v0` (thesis `how`/`do`) — **K03**, not this Decode hop  
+- Display: Explore `P6.natal_decode` (`emitProfileDisplayFrame` + `ProfileExploreSection.decodeSlot`). Not a sixth path act.  
+
+**Trace:** grounded K01 (+ K05 `insight_nodes[0]` when present) → compact natal/numerology packs → IL-4 fill-empty theses only → POST generate → persist by fingerprint → GET ready / Explore slot. Missing K01 or natal → omit/blocked, not a generic astrology essay.

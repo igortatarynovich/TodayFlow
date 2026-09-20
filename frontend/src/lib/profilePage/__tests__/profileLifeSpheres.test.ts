@@ -144,5 +144,6 @@ describe("buildProfileLifeSpheresFromProfileDataLegacy", () => {
     const love = spheres.find((s) => s.id === "love");
     expect(love?.how).toMatch(/^В отношениях/i);
     expect(love?.how?.toLowerCase()).toContain("тепло и доверие");
+    expect(spheres.every((s) => !s.practicalTips?.length)).toBe(true);
   });
 });

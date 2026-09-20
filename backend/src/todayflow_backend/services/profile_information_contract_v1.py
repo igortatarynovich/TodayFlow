@@ -70,6 +70,18 @@ PROFILE_MEANING_PRODUCERS: Final[tuple[dict[str, object], ...]] = (
         "pic_f": ("F10", "F12"),
         "slot_id": "P2.name_numerology",
     },
+    {
+        "module": "natal_decode_depth_v0",
+        "pic_k": ("K15",),
+        "pic_f": ("F01", "F03", "F04", "F05", "F06", "F07", "F09"),
+        "slot_id": "P6.natal_decode",
+    },
+    {
+        "module": "profile_deep_themes_v0",
+        "pic_k": ("K16",),
+        "pic_f": ("F06",),
+        "slot_id": "P6.practical_tips",
+    },
 )
 
 KNOWLEDGE_TO_SLOT: Final[dict[str, tuple[str, ...]]] = {
@@ -88,7 +100,7 @@ KNOWLEDGE_TO_SLOT: Final[dict[str, tuple[str, ...]]] = {
     "K13": ("P2.name_numerology",),
     "K14": ("P2.correspondence",),
     "K15": ("P6.natal_decode",),
-    "K16": (),
+    "K16": ("P6.practical_tips",),
     "K17": ("P-data.cta_text", "P-forming.message"),
     "K18": ("P3.living_evidence",),
 }
@@ -113,8 +125,8 @@ PIC_COVERAGE: Final[tuple[dict[str, object], ...]] = (
     {"pic_k": "K12", "status": "COMPLETE", "slot_id": ("P2.selected_life_path",)},
     {"pic_k": "K13", "status": "COMPLETE", "slot_id": ("P2.name_numerology",)},
     {"pic_k": "K14", "status": "COMPLETE", "slot_id": ("P2.correspondence",)},
-    {"pic_k": "K15", "status": "PARTIAL", "slot_id": ("P6.natal_decode",)},
-    {"pic_k": "K16", "status": "PARTIAL", "slot_id": ()},
+    {"pic_k": "K15", "status": "COMPLETE", "slot_id": ("P6.natal_decode",)},
+    {"pic_k": "K16", "status": "COMPLETE", "slot_id": ("P6.practical_tips",)},
     {"pic_k": "K17", "status": "COMPLETE", "slot_id": ("P-data.cta_text", "P-forming.message")},
     {"pic_k": "K18", "status": "COMPLETE", "slot_id": ("P3.living_evidence",)},
 )

@@ -69,8 +69,7 @@ function SphereSwipeCard({
   const risk = sphere.risk?.trim() || "";
   const turnsOn = sphere.turnsOn?.trim() || "";
   const helps = sphere.helps?.trim() || "";
-  const tips = sphere.practicalTips?.filter((t) => t?.trim()) ?? [];
-  const hasDetail = Boolean(how || need || risk || turnsOn || helps || tips.length);
+  const hasDetail = Boolean(how || need || risk || turnsOn || helps);
 
   return (
     <li
@@ -141,16 +140,6 @@ function SphereSwipeCard({
                 <span className={styles.effortSphereMetaLabel}>{copy.sphereHelps}</span>
                 {helps}
               </p>
-            ) : null}
-            {tips.length ? (
-              <div className={styles.effortSphereTips}>
-                <p className={styles.effortSphereMetaLabel}>Практические шаги</p>
-                <ul className={styles.effortSphereTipsList}>
-                  {tips.map((tip) => (
-                    <li key={tip}>{tip}</li>
-                  ))}
-                </ul>
-              </div>
             ) : null}
           </div>
         ) : hasDetail ? (

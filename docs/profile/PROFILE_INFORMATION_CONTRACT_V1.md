@@ -121,8 +121,8 @@ Code Δ: Capability TARGET = LLM `natal_facts`; CODE = Swiss. Для этой т
 | `K12` | Что life path вносит в **этого** человека | `F09` life_path (birthday — не этот слот) | `number_base_v1` 1–9, 11/22/33 | вклад в Why, не статья «число 7 означает» | **есть** JSON bank | lookup | `P2.selected_life_path` calc; CE primary не слот | **да** | P2 life_path · P1 visual seed отдельно | число + grounded contribution; omit без bank |
 | `K13` | Что имя-числа вносят в самопрезентацию | `F10` | тот же bank | Capability L1 `name_expression`; omit без имени | bank есть | канон: не влиять на натал | `P2.name_numerology` compact Why | **да** | Why header fact, не акт пути | omit + CTA без имени |
 | `K14` | Культурные соответствия знака/даты | `F12` | header pack · chinese/tibetan services · sign stones/colors | **lookup**, не LLM. Нет ключа → omit | цвета hardcoded; камни из sign catalog; год — сервисы | Matrix closed decision #10 | `P2.correspondence` compact Why | **да** | Why header fact, не акт пути | ключ+ярлык; без выдумки |
-| `K15` | Как карта объясняет уже известное ядро | весь natal pack + K01 (+ K05) | IL-4 phrase pack на decode | opt-in POST; не personality root; не Today/Compat SoT | IL-4 bind 1.3.123; catalog draft | [PROFILE_NATAL_DECODE_DEPTH_V1](./PROFILE_NATAL_DECODE_DEPTH_V1.md) | CTA + cache; GET не генерит | **да opt-in** | `P6.natal_decode` | история карты поверх fixed core |
-| `K16` | Практические tips выбранной deep-темы | K07 база неизменна | — | L3 Paid/Trial: 1–2 темы, не переписывать how/need/risk | — | CE deep themes | endpoint есть | **да Trial+** | expand сферы / deep-themes | `practical_tips[]` |
+| `K15` | Как карта объясняет уже известное ядро | весь natal pack + K01 (+ K05) | IL-4 phrase pack на decode | opt-in POST; не personality root; не Today/Compat SoT | IL-4 bind 1.3.123; catalog draft | [PROFILE_NATAL_DECODE_DEPTH_V1](./PROFILE_NATAL_DECODE_DEPTH_V1.md) | POST `natal_decode_depth_v0`; GET не генерит; `insight_nodes[0]` = optional K05 | **да opt-in Explore** | `P6.natal_decode` | история карты поверх fixed core |
+| `K16` | Практические tips выбранной deep-темы | выбранная K07 сфера (`how`/`need`/`risk`) | chrome wrap 1–2 do-lines | L3 Trial+: только уже выбранная тема; не переписывать how/need/risk; нет grounded сферы → omit | — | CE deep themes | `derive_practical_tips_from_k07_sphere` (не LLM, не thesis bank) | **да Trial+ Explore** | `P6.practical_tips` | 1–2 шага или omit |
 | `K17` | Чего нет и что откроется | `unavailable` из Capability | — | всегда честность; не invent | — | Matrix §1.1 copy | `P-data.*` | **да** | `P-data.cta_text` · `P-forming.message` | CTA ввода / forming chrome |
 | `K18` | Как это уже проявлялось в отметках | `F13` | — | Content `source_depth`; запрет паттернов на `birth_data_only` | — | Content §3 | слот есть; пусто omit | **да если есть** | `P3.living_evidence` | «вы отметили», не диагноз |
 
@@ -296,20 +296,18 @@ Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **з�
 | `K12` | **COMPLETE** | F09 `life_path` only (birthday не в этом слоте) | `number_base_v1` `base_meaning` | lookup; нет meaning → omit | projector + consumption `selected_by` = `life_path` row | `P2.selected_life_path` emit/Why; CE primary не слот | нет |
 | `K13` | **COMPLETE** | F10 `expression`/`soul_urge`/`personality` | numerology calc (unchanged) | compact format only | Matrix `name_numerology` bag `expression`/`soul_urge`/`personality` | `P2.name_numerology` emit + Why; omit without IN.name; CTA via K17 `need_name` | нет; не пишет в natal/Identity Core |
 | `K14` | **COMPLETE** | F12 header pack | `profile_header_knowledge_v0` | lookup `header_pack_to_matrix_catalog` | Matrix `cultural_catalog` | `P2.correspondence` emit + Why; omit empty | нет |
-| `K15` | **PARTIAL** | natal pack + fixed K01 | IL-4 draft + decode prompt | POST `generate_natal_decode_depth_v0`; GET не генерит | `natal_decode_depth_v0` | Inventory `P6.natal_decode`; panel на скролле; **emit нет** | opt-in есть; grammar/path vs Explore не закрыты |
-| `K16` | **PARTIAL** | identity thesis, не K07 how/need/risk | `_TIPS` в `profile_deep_themes_v0` | `tips_for_theme` Trial+ | `character_engine_deep_themes_v0`; matrix slot **не проецируется** | нет Inventory `slot_id`; chooser UI живой | tips не в цепочке PIC→Inventory |
+| `K15` | **COMPLETE** | natal pack + fixed K01 (+ grounded K05 `insight_nodes[0]`) | IL-4 draft + decode prompt 1.1.0 | POST `generate_natal_decode_depth_v0`; GET `resolve_natal_decode_get` never LLM; Stage3 trap-bank не вход | `natal_decode_depth_v0` PIC_K15; emit `P6.natal_decode` surface=explore | Inventory Explore; panel in Explore after chart, not path | нет на измеренном hop; без K01/natal omit; K03 house how / K16 tips не этим патчем |
+| `K16` | **COMPLETE** | selected K07 `life_spheres[theme]` how/need/risk (F06 already in K07) | chrome prefixes only (`Сделай это так` / шаг / `Не пускай сюда`) | `derive_practical_tips_from_k07_sphere`; Trial+; identity-thesis / `_GENERIC` / Stage4/5 / LLM не источник | `character_engine_deep_themes_v0` `tips_by_theme`; emit `P6.practical_tips` surface=explore | Inventory Explore; chooser in Explore, not path; how/need/risk immutable | нет на измеренном hop; нет matching K07 row → empty omit; catalog∩K07 often misses sex/friends/family/decisions; K03/K01 не этим патчем |
 | `K17` | **COMPLETE** | capability gaps / forming | Matrix §1.1 copy | `resolve_capability` · forming helpers | `user_messages` / `forming_message` | `P-data.cta_text` · `P-forming.message` live; chrome-exempt emit | нет |
 | `K18` | **COMPLETE** | F13 `living.signals[].note` | — (quotes) | `_living_quotes`; omit if empty | `nodes[0].living_evidence` | `P3.living_evidence` emit + Insight | нет |
 
-Сводка: **COMPLETE 13** (`K02` `K04` `K05` `K07` `K08` `K09` `K10` `K11` `K12` `K13` `K14` `K17` `K18`) · **PARTIAL 4** (`K01` `K03` `K15` `K16`) · **MISSING 0** · **OMIT-BY-DESIGN** `K06` (path M) + внутри `K11` (дуга жизни). Occupancy-подhop `K01` закрыт отдельно.
+Сводка: **COMPLETE 15** (`K02` `K04` `K05` `K07` `K08` `K09` `K10` `K11` `K12` `K13` `K14` `K15` `K16` `K17` `K18`) · **PARTIAL 2** (`K01` `K03`) · **MISSING 0** · **OMIT-BY-DESIGN** `K06` (path M) + внутри `K11` (дуга жизни). Occupancy-подhop `K01` закрыт отдельно.
 
 ### Очередь Profile (из аудита, не из архитектурного бэклога)
 
 Только PIC-дыры. Не IL-3. Не Today. Core first-paint закрыт кроме K01 thesis mint (не в очереди).
 
-1. **K15** — emit `P6.natal_decode` и/или оставить Explore; не first-paint root.
-2. **K16** — Inventory slot **или** временно убрать из M, пока нет `slot_id`.
-3. **K03** — ASC/MC `how` в `P2.anchor.asc/mc`; house how остаётся Explore.
+1. **K03** — ASC/MC `how` в `P2.anchor.asc/mc`; house how остаётся Explore.
 
 Не в очереди: менять 13-key thesis `K01`; IL aspects/transits/angles dump; `TODAY_INFORMATION_CONTRACT`.
 
@@ -319,6 +317,8 @@ Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **з�
 
 | Date | Change |
 |------|--------|
+| 2026-09-20 | K16 COMPLETE: practical action = chrome wrap of selected K07 how/need/risk → Explore `P6.practical_tips`; Trial+; omit without grounded sphere; identity-thesis/Stage4/5/LLM not source; how/need/risk immutable. Next = K03. |
+| 2026-09-20 | K15 COMPLETE: Decode explains fixed K01 (+ grounded K05) via natal facts → Explore `P6.natal_decode`; GET never LLM; Stage3 trap-bank is not input; not a sixth path act. Next = K16. |
 | 2026-09-20 | K06 OMIT-BY-DESIGN from path M: leftover F07 / Stage3 secondaries stay N for Explore; no new P3 slot; do not overload K05 insight. Next = K15. |
 | 2026-09-20 | K10 COMPLETE: Compass derived-only from grounded K01–K09 (`helps` = K04 or omit); essay/Stage3/Stage4/Stage5 cannot fill; no fake help for K07 spheres. Next = K06. |
 | 2026-09-20 | K07 COMPLETE: ≤2 path spheres from grounded F06 occupied houses of K01/K04/K05 via house `arena`; identity-thesis / LLM / trap-bank cannot fill; K08 not from sphere. Next = K10. |

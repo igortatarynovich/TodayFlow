@@ -180,7 +180,20 @@ def test_pic_coverage_audit_covers_n18() -> None:
     assert by_id["K10"]["status"] == "COMPLETE"
     assert by_id["K06"]["status"] == "OMIT-BY-DESIGN"
     assert KNOWLEDGE_TO_SLOT["K06"] == ()
+    assert by_id["K15"]["status"] == "COMPLETE"
+    assert KNOWLEDGE_TO_SLOT["K15"] == ("P6.natal_decode",)
+    assert by_id["K16"]["status"] == "COMPLETE"
+    assert KNOWLEDGE_TO_SLOT["K16"] == ("P6.practical_tips",)
     assert not any(row["status"] == "MISSING" for row in PIC_COVERAGE)
+
+
+def test_k16_practical_action_is_grounded_k07_derivation() -> None:
+    src = (CE_ROOT / "profile_deep_themes_v0.py").read_text(encoding="utf-8")
+    assert "derive_practical_tips_from_k07_sphere" in src
+    assert "k07_how_need_risk" in src
+    assert "_GENERIC_TIPS" not in src
+    assert "character_engine_stage4" not in src
+    assert "character_engine_stage5" not in src
 
 
 def test_pic_gate_meaning_producers_cite_k_and_f() -> None:

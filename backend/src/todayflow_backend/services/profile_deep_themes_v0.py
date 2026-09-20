@@ -1,6 +1,12 @@
-"""Subscriber deep themes (L3) — selectable practical tips over immutable base spheres.
+"""Subscriber deep themes (L3) — practical tips derived from grounded K07 spheres.
+
+PIC: K16 → P6.practical_tips (Explore / Trial+). Child of selected K07 theme.
+Does not mint personality meaning. Does not rewrite how/need/risk.
 
 Product lock:
+- Tips only for an already grounded K07 sphere matching the selected theme.
+- Derived from that sphere's how/need/risk — not identity-thesis / Stage4/5 / generic self-help.
+- Max 1–2 tips. Missing K07 row → omit.
 - Base life_spheres how/need/risk/turns_* never rewritten.
 - Paid/Trial reveal practical_tips for selected themes only.
 - Catalog: sex · money · love · work · body
@@ -16,9 +22,17 @@ from typing import Any, Literal
 from sqlalchemy.orm import Session
 
 from todayflow_backend.db import models as db_models
+from todayflow_backend.services.prose_clip_v1 import clip_prose
 from todayflow_backend.services.subscription_level import BillingLevel, get_subscription_snapshot
 
-PROJECTION_VERSION = "character_engine_deep_themes_v0.2"
+PIC_K = ("K16",)
+PIC_F = ("F06",)
+
+PROJECTION_VERSION = "character_engine_deep_themes_v0.3"
+_MAX_TIPS = 2
+_TIP_NEED = "Один проверяемый шаг в этой зоне: "
+_TIP_HOW = "Сделай это так: "
+_TIP_RISK = "Не пускай сюда: "
 
 DEEP_THEME_CATALOG: tuple[str, ...] = ("sex", "money", "love", "work", "body")
 
@@ -34,106 +48,73 @@ CHANGE_WINDOW = timedelta(days=7)
 
 BillingCap = Literal[0, 1, 2]
 
-# Deterministic tip banks: identity_thesis → theme → direct person tips (not abstract coaching).
-_TIPS: dict[str, dict[str, list[str]]] = {
-    "builds_through_autonomy": {
-        "sex": [
-            "Перед сексом скажи вслух одно: «медленнее», «глубже», «не трогай пока», «держи взгляд» — без оправданий.",
-            "Если тело зажимается: ляг на спину, партнёр — язык/пальцы медленно по клитору или головке 3–5 минут без цели «довести».",
-            "Поза, которая часто заходит при дистанции: ты сверху или сбоку — контроль темпа у тебя, партнёр не давит.",
-            "Для оргазма с головой «в схеме»: выключи разговор на 10 минут, дыши животом, проси только касания — без анализа «как мы».",
-        ],
-        "money": [
-            "Зафиксируй один денежный приоритет на месяц и один счёт/конверт под него — без идеальной таблицы.",
-            "Сделай один видимый шаг: перевод, отказ от траты, договорённость о цене — вслух или письмом.",
-            "Где копишь схемы вместо выбора — выпиши ответ одной строкой и сделай его.",
-            "Назови одну трату или условие, которое не торгуешь — и держи его.",
-        ],
-        "love": [
-            "В одном разговоре назови границу: что оставляешь своим, что открываешь — коротко.",
-            "Дай один понятный жест близости без требования идеальных условий.",
-            "Если ждёшь полной ясности вместо шага — сделай маленький контактный шаг сейчас.",
-            "Спроси партнёра одно конкретное «как тебе лучше» — и услышь ответ без защиты.",
-        ],
-        "work": [
-            "Выбери один рабочий фронт и доведи до проверяемого «сделано» — до новых идей.",
-            "Сформулируй роль одним предложением: влияние без потери твоего метода.",
-            "Отложи чужую повестку на час — сначала свой контур задачи.",
-            "Покажи один результат видимо — не только внутреннюю схему.",
-        ],
-        "body": [
-            "Сон, еда или прогулка — один жест заботы о теле без героизма.",
-            "Поставь себе сигнал «хватит» раньше чужой нормы — заметь его в теле.",
-            "Согласуй нагрузку и паузу в одном блоке дня.",
-            "Перед решением проверь тело одной фразой: напряжение, голод, усталость.",
-        ],
-    },
-    "builds_through_air_mind": {
-        "sex": [
-            "Выключи «разбор полётов» в постели: 10 минут только тело — рот, руки, без вопросов «а что ты имел в виду».",
-            "Для возбуждения головы: партнёр говорит грязно и конкретно (что делает), ты отвечаешь одним словом — не лекцией.",
-            "Куни/минет без цели: ритм медленный → быстрее → пауза; спроси только «так?» — не строй схему оргазма.",
-            "Поза лицом к лицу + глазной контакт ломает уход в анализ лучше, чем «эффективные» позиции спиной.",
-        ],
-        "money": [
-            "Один денежный шаг вместо ещё одной таблицы: перевод, счёт, отказ.",
-            "Запиши, куда уходит контроль вместо выбора — одной строкой — и сделай выбор.",
-            "Отдели нужду от статуса: что реально держит опору.",
-            "Закрой один мелкий денежный хвост до конца дня.",
-        ],
-        "love": [
-            "Скажи одно честное «мне важно» без схемы всей связи.",
-            "Сделай жест тепла без условия «сразу идеально».",
-            "Заметь отсрочку разговором и замени её одним контактом.",
-            "Спроси и выслушай один ответ без защиты.",
-        ],
-        "work": [
-            "Закрой один конкретный рабочий результат — видимый.",
-            "Убери одну лишнюю задачу из списка — освободи фокус.",
-            "Попроси ясность рамки там, где хаос чужой повестки.",
-            "Покажи прогресс коротко — без перфекционизма схемы.",
-        ],
-        "body": [
-            "Один жест заботы о теле: сон, еда, движение.",
-            "Ложись / ешь / двигайся по своему сигналу, не по чужой норме.",
-            "Заметь усталость раньше срыва — сократи нагрузку на шаг.",
-            "Короткая пауза без экрана — телу, не голове.",
-        ],
-    },
-}
 
-_GENERIC_TIPS: dict[str, list[str]] = {
-    "sex": [
-        "Перед близостью назови одно желание или границу — коротко, без оправданий.",
-        "3–5 минут только касания (язык/пальцы) без цели «довести» — спроси «так?» один раз.",
-        "Попробуй позу, где тебе легче дышать и вести темп (сверху или сбоку).",
-        "Если голова мешает телу — тишина 10 минут, только дыхание и касания.",
-    ],
-    "money": [
-        "Один денежный шаг на эту неделю — видимый.",
-        "Куда уходит контроль вместо выбора — одной строкой, потом действие.",
-        "Отдели нужду от статуса: что реально держит опору.",
-        "Закрой один мелкий денежный хвост.",
-    ],
-    "love": [
-        "Одно честное «мне важно» в близкой связи.",
-        "Один жест тепла без условия взаимности «сразу идеально».",
-        "Заметь паттерн отсрочки и назови его себе.",
-        "Спроси и выслушай один ответ без защиты.",
-    ],
-    "work": [
-        "Один конкретный рабочий результат — доведи до «сделано».",
-        "Убери одну лишнюю задачу — освободи фокус.",
-        "Попроси ясность рамки там, где хаос чужой повестки.",
-        "Покажи прогресс коротко — без перфекционизма.",
-    ],
-    "body": [
-        "Один жест заботы о теле: сон, еда, движение.",
-        "Свой сигнал тела важнее чужой нормы нагрузки.",
-        "Усталость раньше срыва — сократи нагрузку на шаг.",
-        "Короткая пауза без экрана.",
-    ],
-}
+def _clip_tip(value: Any, limit: int) -> str:
+    return clip_prose(" ".join(str(value or "").split()).strip(), limit)
+
+
+def _same_line(a: str, b: str) -> bool:
+    return a.strip().lower() == b.strip().lower()
+
+
+def _tokens_overlap(left: str, *parts: str) -> bool:
+    hay = " ".join(parts).lower()
+    tokens = [tok for tok in left.lower().replace("—", " ").replace("–", " ").split() if len(tok) >= 4]
+    if not tokens:
+        return False
+    hits = sum(1 for tok in tokens if tok in hay)
+    return hits >= max(2, len(tokens) // 2)
+
+
+def _k07_sphere_for_theme(
+    life_spheres: dict[str, Any] | None,
+    theme_id: str,
+) -> dict[str, Any] | None:
+    if not isinstance(life_spheres, dict):
+        return None
+    row = life_spheres.get(theme_id)
+    if not isinstance(row, dict):
+        return None
+    how = _clip_tip(row.get("how"), 220)
+    need = _clip_tip(row.get("need"), 120)
+    if not how and not need:
+        return None
+    return row
+
+
+def derive_practical_tips_from_k07_sphere(sphere: dict[str, Any] | None) -> list[str]:
+    """1–2 do-lines from grounded K07 how/need/risk. Chrome wrap only — no new meaning."""
+    if not isinstance(sphere, dict):
+        return []
+    how = _clip_tip(sphere.get("how"), 180)
+    need = _clip_tip(sphere.get("need"), 120)
+    risk = _clip_tip(sphere.get("risk"), 180)
+    tips: list[str] = []
+    if how:
+        tips.append(_clip_tip(f"{_TIP_HOW}{how}", 280))
+    if need and not _same_line(need, how) and not (how and need in how):
+        if len(tips) < _MAX_TIPS:
+            tips.append(_clip_tip(f"{_TIP_NEED}{need}", 220))
+    if len(tips) < _MAX_TIPS and risk and not _tokens_overlap(risk, how, need):
+        tips.append(_clip_tip(f"{_TIP_RISK}{risk}", 280))
+    if not tips and need:
+        tips.append(_clip_tip(f"{_TIP_NEED}{need}", 220))
+    return tips[:_MAX_TIPS]
+
+
+def build_tips_by_theme(
+    selected: list[str],
+    life_spheres: dict[str, Any] | None,
+) -> dict[str, dict[str, list[str]]]:
+    out: dict[str, dict[str, list[str]]] = {}
+    for tid in selected:
+        if tid not in DEEP_THEME_CATALOG:
+            continue
+        sphere = _k07_sphere_for_theme(life_spheres, tid)
+        tips = derive_practical_tips_from_k07_sphere(sphere)
+        if tips:
+            out[tid] = {"tips": tips}
+    return out
 
 
 def theme_cap_for_billing(level: BillingLevel | str) -> int:
@@ -188,24 +169,6 @@ def read_preference_blob(settings: db_models.UserSettings | None) -> dict[str, A
         "selected": _normalize_selected(blob.get("selected")),
         "updated_at": blob.get("updated_at"),
     }
-
-
-def tips_for_theme(identity_thesis: str, theme_id: str) -> list[str]:
-    pack = _TIPS.get(identity_thesis) or {}
-    tips = pack.get(theme_id) or _GENERIC_TIPS.get(theme_id) or []
-    return [str(t).strip() for t in tips if str(t).strip()][:4]
-
-
-def build_tips_by_theme(
-    identity_thesis: str,
-    selected: list[str],
-) -> dict[str, dict[str, list[str]]]:
-    out: dict[str, dict[str, list[str]]] = {}
-    for tid in selected:
-        tips = tips_for_theme(identity_thesis, tid)
-        if tips:
-            out[tid] = {"tips": tips}
-    return out
 
 
 def next_change_at(updated_at: datetime | None, *, now: datetime | None = None) -> datetime | None:
@@ -331,12 +294,15 @@ def apply_deep_themes_to_payload(
         if isinstance(cons, dict):
             thesis = str(cons.get("identity_thesis") or "").strip()
     selected = list(pref["selected"]) if access_allows_reveal and not pref["gated"] else []
-    tips_by_theme = build_tips_by_theme(thesis, selected) if selected else {}
-    # Snapshot base spheres fingerprint for tests / honesty — do not write back.
     contract = payload.get("profile_contract_v1")
     spheres_before = None
+    life_spheres: dict[str, Any] | None = None
     if isinstance(contract, dict):
         spheres_before = contract.get("life_spheres")
+        if isinstance(spheres_before, dict):
+            life_spheres = spheres_before
+    tips_by_theme = build_tips_by_theme(selected, life_spheres) if selected else {}
+    k16_source = "k07_how_need_risk" if tips_by_theme else "omitted_no_grounded_k07"
 
     payload["character_engine_deep_themes_v0"] = {
         "projection_version": PROJECTION_VERSION,
@@ -351,7 +317,8 @@ def apply_deep_themes_to_payload(
         "next_change_at": pref["next_change_at"],
         "can_change": pref["can_change"],
         "tips_by_theme": tips_by_theme,
-        "note": "L3 practical tips only; base life_spheres remain immutable.",
+        "k16_source": k16_source,
+        "note": "L3 practical tips from grounded K07 how/need/risk; base life_spheres remain immutable.",
     }
     # Guard: never rewrite spheres
     if isinstance(contract, dict) and spheres_before is not None:

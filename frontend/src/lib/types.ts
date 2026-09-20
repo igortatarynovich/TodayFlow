@@ -426,6 +426,7 @@ export type CoreProfile = {
     next_change_at?: string | null;
     can_change?: boolean;
     tips_by_theme?: Record<string, { tips?: string[] }>;
+    k16_source?: string;
     note?: string;
   } | null;
   /**

@@ -206,6 +206,7 @@ export const INVENTORY_SLOTS: InventorySlotRecord[] = [
   slot("P6.detail", "explore", "generated", ["node_not_warehouse"], CE_OK, ["personal_day"], CLIP),
   slot("P6.style.*", "explore", "generated", ["node_not_warehouse"], CE_OK, ["personal_day"], CLIP),
   slot("P6.natal_decode", "explore", "generated", ["decode"], ["natal", "ce"], ["personal_day"], CLIP_HIDE),
+  slot("P6.practical_tips", "explore", "generated", ["deep_tips"], ["ce"], ["personal_day"], CLIP_HIDE),
 ];
 
 const BY_ID = new Map(INVENTORY_SLOTS.map((row) => [row.slot_id, row]));

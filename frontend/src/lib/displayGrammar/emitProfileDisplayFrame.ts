@@ -103,9 +103,27 @@ function insightForScroll(
   return node;
 }
 
+export type NatalDecodeEmitInput = {
+  patternThesis?: string | null;
+  sections?: Array<{ thesis?: string | null }>;
+};
+
 export type EmitProfileDisplayFrameInput = {
   core: CoreProfile | null | undefined;
+  /** Explore only. Path frame must omit P6 — Decode / K16 tips are not path acts. */
+  natalDecode?: NatalDecodeEmitInput | null;
+  practicalTips?: string[] | null;
 };
+
+export function natalDecodeSlotText(decode?: NatalDecodeEmitInput | null): string {
+  const thesis = trim(decode?.patternThesis);
+  if (thesis) return thesis;
+  for (const section of decode?.sections ?? []) {
+    const text = trim(section.thesis);
+    if (text) return text;
+  }
+  return "";
+}
 
 /**
  * Project the production Profile path into a Grammar §9 scan frame.
@@ -273,12 +291,39 @@ export function emitProfileDisplayFrame(input: EmitProfileDisplayFrameInput): Di
     json_field: "profile.bridge_line",
   });
 
+  const decodeText = natalDecodeSlotText(input.natalDecode);
+  pushAtom(atoms, {
+    slot_id: "P6.natal_decode",
+    surface: "explore",
+    text: decodeText,
+    origins: ["natal", "ce"],
+    text_class: "generated",
+    fe_transform: "clip",
+    json_field: "profile.natal_decode",
+  });
+  const tipText = (input.practicalTips ?? [])
+    .map((row) => trim(row))
+    .filter(Boolean)
+    .slice(0, 2)
+    .join(" ");
+  pushAtom(atoms, {
+    slot_id: "P6.practical_tips",
+    surface: "explore",
+    text: tipText,
+    origins: ["ce"],
+    text_class: "generated",
+    fe_transform: "clip",
+    json_field: "profile.practical_tips",
+  });
+
   vm(vm_fields, "profile.recognition_line", rawLine, "P1.recognition_line", Boolean(lineText));
   vm(vm_fields, "profile.identity_core", core, "P1.identity_core", Boolean(deeper));
   vm(vm_fields, "profile.insight", node?.insight, "P3.insight", Boolean(node?.insight));
   vm(vm_fields, "profile.help", node?.help, "P3.help", Boolean(node?.help));
   vm(vm_fields, "profile.effort_vector", journey.effortVector, "P4.effort_vector", Boolean(journey.effortVector));
   vm(vm_fields, "profile.bridge_line", journey.bridge?.line, "P5.bridge_line", Boolean(journey.bridge?.line));
+  vm(vm_fields, "profile.natal_decode", decodeText, "P6.natal_decode", Boolean(decodeText));
+  vm(vm_fields, "profile.practical_tips", tipText, "P6.practical_tips", Boolean(tipText));
 
   return {
     atoms,

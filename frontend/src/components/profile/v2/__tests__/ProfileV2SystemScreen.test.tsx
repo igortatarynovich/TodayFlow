@@ -9,6 +9,31 @@ import {
 import type { ProfileQuickMapViewModel } from "@/lib/profilePage/buildProfileQuickMapData";
 import { buildProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 
+jest.mock("@/lib/api", () => ({
+  getJson: jest.fn((path: string) => {
+    if (String(path).includes("deep-themes")) {
+      return Promise.resolve({
+        catalog: [
+          { id: "sex", label: "Секс" },
+          { id: "money", label: "Деньги" },
+          { id: "love", label: "Любовь" },
+          { id: "work", label: "Работа" },
+          { id: "body", label: "Тело" },
+        ],
+        selected: [],
+        cap: 0,
+        gated: true,
+      });
+    }
+    return Promise.resolve({
+      access: "offer",
+      can_generate: true,
+      cta: "Открыть расшифровку натальной карты",
+    });
+  }),
+  postJson: jest.fn(),
+}));
+
 const baseModel: ProfileQuickMapViewModel = {
   pageLabel: "Карта личности",
   archetype: "Исследователь",
@@ -55,6 +80,8 @@ const journeyCore = {
         id: "archetype_from_life_path",
         class: "selected_by",
         label: "Архетип Исследователя — рассчитан из числа пути 7",
+        contribution:
+          "Семёрка — пауза и глубина: ответы приходят через наблюдение, не через давление.",
       },
     ],
     portrait_influenced_by: [
@@ -393,6 +420,41 @@ describe("ProfileV2SystemScreen journey rewire", () => {
       "bridge-portal",
     );
     expect(screen.getByTestId("profile-v2-open-today")).toBeInTheDocument();
+  });
+
+  it("PIC-K16 keeps deep-theme tips in Explore, not between Effort and Bridge", async () => {
+    renderJourney();
+    const chooser = await screen.findByTestId("profile-deep-themes");
+    const explore = screen.getByTestId("profile-v2-explore");
+    expect(explore.contains(chooser)).toBe(true);
+    expect(screen.getByTestId("profile-v2-explore-deep-themes")).toBeInTheDocument();
+    expect(
+      Boolean(
+        screen.getByTestId("profile-v2-bridge").compareDocumentPosition(chooser) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ).toBe(true);
+  });
+
+  it("PIC-K15 keeps Natal Decode in Explore after the chart, not as a sixth path act", async () => {
+    renderJourney();
+    const decode = await screen.findByTestId("profile-natal-decode");
+    const explore = screen.getByTestId("profile-v2-explore");
+    expect(explore.contains(decode)).toBe(true);
+    expect(screen.getByTestId("profile-v2-explore-decode")).toBeInTheDocument();
+    expect(
+      Boolean(
+        screen.getByTestId("profile-v2-bridge").compareDocumentPosition(decode) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ).toBe(true);
+    expect(
+      Boolean(
+        screen.getByTestId("profile-v2-effort").compareDocumentPosition(
+          screen.getByTestId("profile-v2-bridge"),
+        ) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ).toBe(true);
   });
 });
 

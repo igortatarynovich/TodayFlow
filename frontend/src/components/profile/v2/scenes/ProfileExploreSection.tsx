@@ -24,6 +24,10 @@ export type ProfileExploreSectionProps = {
   characterSlot?: ReactNode;
   /** Mission already on Character scroll — skip duplicate in Explore. */
   hideMission?: boolean;
+  /** PIC-K15 Natal Decode — Explore/opt-in, not a sixth path act. */
+  decodeSlot?: ReactNode;
+  /** PIC-K16 practical tips chooser — Explore / Trial+, not a path act. */
+  deepThemesSlot?: ReactNode;
 };
 
 /**
@@ -39,6 +43,8 @@ export function ProfileExploreSection({
   deep,
   deepExpanded = false,
   hideMission = false,
+  decodeSlot,
+  deepThemesSlot,
 }: ProfileExploreSectionProps) {
   const warehouse = PROFILE_V2_COPY.zones.characterMore;
   const hasWarehouseStyles = Boolean(
@@ -51,7 +57,7 @@ export function ProfileExploreSection({
     (Boolean(model.lifeMission) && !hideMission) ||
     hasWarehouseStyles;
   const motion = useProfileMotionInView<HTMLElement>(60);
-  if (!hasNatal && !hasExtraDetails) return null;
+  if (!hasNatal && !hasExtraDetails && !decodeSlot && !deepThemesSlot) return null;
 
   const copy = PROFILE_V2_COPY.zones.explore;
 
@@ -97,6 +103,18 @@ export function ProfileExploreSection({
           {PROFILE_V2_COPY.zones.sources.lead}
         </p>
       )}
+
+      {decodeSlot ? (
+        <div className={styles.natalPaperBelow} data-testid="profile-v2-explore-decode">
+          {decodeSlot}
+        </div>
+      ) : null}
+
+      {deepThemesSlot ? (
+        <div className={styles.natalPaperBelow} data-testid="profile-v2-explore-deep-themes">
+          {deepThemesSlot}
+        </div>
+      ) : null}
 
       {hasExtraDetails ? (
         <div className={styles.natalPaperBelow}>
@@ -200,18 +218,6 @@ export function ProfileExploreSection({
                           <>
                             <p className={styles.sphereDetailLabel}>Помогает</p>
                             <p className={styles.sphereMeta}>{sphere.helps}</p>
-                          </>
-                        ) : null}
-                        {sphere.practicalTips?.length ? (
-                          <>
-                            <p className={styles.sphereDetailLabel}>Практические шаги</p>
-                            <ul className={styles.sphereTipsList}>
-                              {sphere.practicalTips.map((tip) => (
-                                <li key={tip} className={styles.sphereMeta}>
-                                  {tip}
-                                </li>
-                              ))}
-                            </ul>
                           </>
                         ) : null}
                       </div>

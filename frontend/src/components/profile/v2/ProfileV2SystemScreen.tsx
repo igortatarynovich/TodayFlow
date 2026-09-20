@@ -185,17 +185,6 @@ export function ProfileV2SystemScreen({
               </section>
             ) : null}
 
-            <section className={styles.zone} aria-label="Углубление тем">
-              <ProfileDeepThemesChooser
-                deepFromCore={coreProfile?.character_engine_deep_themes_v0}
-                onChanged={onDeepThemesChanged}
-              />
-            </section>
-
-            <section className={styles.zone} aria-label="Расшифровка натальной карты">
-              <ProfileNatalDecodePanel />
-            </section>
-
             <ProfileBridgeScene bridgeLine={journey.bridge?.line ?? null} />
 
             {hasExploreBody ? (
@@ -207,6 +196,13 @@ export function ProfileV2SystemScreen({
                 lifeSpheres={exploreSpheres}
                 deep={deep}
                 deepExpanded={deepExpanded}
+                decodeSlot={<ProfileNatalDecodePanel />}
+                deepThemesSlot={
+                  <ProfileDeepThemesChooser
+                    deepFromCore={coreProfile?.character_engine_deep_themes_v0}
+                    onChanged={onDeepThemesChanged}
+                  />
+                }
               />
             ) : null}
 
@@ -439,17 +435,6 @@ function LegacyFirstScreen({
         </section>
       ) : null}
 
-      <section className={styles.zone} aria-label="Углубление тем">
-        <ProfileDeepThemesChooser
-          deepFromCore={coreProfile?.character_engine_deep_themes_v0}
-          onChanged={onDeepThemesChanged}
-        />
-      </section>
-
-      <section className={styles.zone} aria-label="Расшифровка натальной карты">
-        <ProfileNatalDecodePanel />
-      </section>
-
       <ProfileBridgeScene bridgeLine={bridgeLine} />
 
       <ProfileV2MyDays />
@@ -463,6 +448,13 @@ function LegacyFirstScreen({
           lifeSpheres={hasDirection ? lifeSpheres : undefined}
           deep={deep}
           deepExpanded={deepExpanded}
+          decodeSlot={<ProfileNatalDecodePanel />}
+          deepThemesSlot={
+            <ProfileDeepThemesChooser
+              deepFromCore={coreProfile?.character_engine_deep_themes_v0}
+              onChanged={onDeepThemesChanged}
+            />
+          }
           characterSlot={
             showCharacterMore ? (
               <details className={styles.characterMore} data-testid="profile-v2-character-more">

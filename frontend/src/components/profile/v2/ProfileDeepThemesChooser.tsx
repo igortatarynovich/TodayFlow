@@ -150,8 +150,8 @@ export function ProfileDeepThemesChooser({ deepFromCore, onChanged }: ProfileDee
       <p className={styles.deepThemesTitle}>Углубить тему</p>
       <p className={styles.deepThemesLead}>
         {state.gated
-          ? "С подпиской можно выбрать тему и получить прямые подсказки под твой портрет."
-          : `Выбери до ${state.cap} тем${state.cap === 1 ? "ы" : ""} — появятся конкретные подсказки.`}
+          ? "С подпиской можно выбрать тему, которая уже есть в сферах портрета — и получить 1–2 практических шага."
+          : `Выбери до ${state.cap} тем${state.cap === 1 ? "ы" : ""} из сфер портрета — появятся 1–2 шага. Если такой сферы нет, подсказок не будет.`}
       </p>
       <div className={styles.deepThemesChips} role="group" aria-label="Темы глубины">
         {state.catalog.map((theme) => {

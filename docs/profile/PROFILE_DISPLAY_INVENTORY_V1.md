@@ -54,6 +54,8 @@ Conditional: `P-forming` · `P-data`.
 | `effort_not_mission` | `P4.effort_vector` · `life_mission` | mission не заменяет вектор |
 | `bridge_not_effort` | `P4.effort_vector` · `P5.bridge_line` | мост ≠ императив «что делать» |
 | `effort_where` | `P4.effort_vector` · `P4.sphere.*` | сфера = где, не второй вектор |
+| `decode` | `P6.natal_decode` | не второй логлайн; не путь |
+| `deep_tips` | `P6.practical_tips` | не how/need/risk сферы; не P4 |
 
 Проверка proposition: нормализовать строки; Jaccard ≥ 0.72 или substring ≥24 = дубль роли.
 
@@ -111,6 +113,7 @@ Conditional: `P-forming` · `P-data`.
 | `P6.detail` | Склад, не занятый узлом? | generated | progressiveDetails |
 | `P6.style.*` | Как решаю / близость / деньги? | generated | contract styles |
 | `P6.natal_decode` | Как карта объясняет уже известное ядро? | generated | opt-in decode |
+| `P6.practical_tips` | Какой 1–2 практических шага у выбранной grounded темы? | generated | K16 from K07 how/need/risk |
 | `TF.no_connection` | сеть | chrome | shared |
 | `TF.unavailable` | сервер flagged | chrome | shared |
 
@@ -625,14 +628,31 @@ Calc visuals/facts. one_question: как устроена карта / каки�
 | text_class | generated |
 | authority | Natal Decode (not CE overwrite) |
 | semantic_source | `natal_decode_depth_v0` after explicit POST |
-| allowed_inputs | fixed identity_core + tension + natal + numerology packs |
-| forbidden_inference | второй логлайн; write CE; feed Today as character root; auto GET generate |
+| allowed_inputs | fixed identity_core (K01) + optional grounded K05 `insight_nodes[0]` + natal + numerology packs |
+| forbidden_inference | второй логлайн; write CE; feed Today as character root; auto GET generate; Stage3 trap-bank as Decode meaning; path sixth act |
 | output | long-form only after CTA |
 | budget | base houses = 1–2 предл. how/do; essay only in decode |
 | required | нет |
 | empty_behavior | CTA until generated; then persist by fingerprint |
 | persist_key | decode fingerprint |
 | anti_dupe_group | `decode` |
+
+#### `P6.practical_tips`
+
+| | |
+|---|---|
+| one_question | Какой **1–2 практических шага** у уже выбранной K07-темы? |
+| text_class | generated |
+| authority | K16 child of K07 (`profile_deep_themes_v0`) |
+| semantic_source | selected `life_spheres[theme].how/need/risk` + chrome wrap |
+| allowed_inputs | Trial+ selected catalog id that already has a K07 sphere row |
+| forbidden_inference | new personality meaning; rewrite how/need/risk; identity-thesis bank; Stage4/5 essay; generic self-help without grounded theme; P4 path merge |
+| output | 1–2 do-lines in Explore chooser |
+| budget | ≤2 tips · clip ~220–280 |
+| required | нет |
+| empty_behavior | omit (`k16_source=omitted_no_grounded_k07`) |
+| persist_key | user deep-theme selection (7-day cadence) |
+| anti_dupe_group | `deep_tips` |
 
 **Forbidden chrome:** marketing `benefits[]` («Потенциалы и таланты»…) — нет `slot_id` → нет UI.
 
@@ -702,6 +722,8 @@ Cut 2026-08-29: `ProfileCharacterScene` removed from path; P4 spheres cap 0–2;
 
 | Date | Change |
 |------|--------|
+| 2026-09-20 | `P6.practical_tips` — PIC-K16 COMPLETE: Explore emit + chooser; 1–2 do-lines from selected K07 how/need/risk; omit without grounded sphere; not path/P4 |
+| 2026-09-20 | `P6.natal_decode` — PIC-K15 COMPLETE: Explore emit + panel after chart; explains K01 (+ K05) via natal facts; GET never generates; Stage3 trap-bank is not input |
 | 2026-09-20 | `P3.*` — PIC-K06 secondary tensions OMIT-BY-DESIGN on the path; no new slot; leftover F07 stay N/Explore |
 | 2026-09-20 | `P3.help` / `P4.effort_vector` — PIC-K10 Compass derived-only from grounded K04; empty omit; no essay/Stage3/5 fill; Inventory omit-whole-P4 without help stays a display dependency (do not mint help for K07) |
 | 2026-09-20 | `P4.sphere.*` — PIC-K07 ≤2 path spheres from grounded F06 house arena of K01/K04/K05; omit without full natal / link; not identity-thesis essays; K08 not from sphere |
