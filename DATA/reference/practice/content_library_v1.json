@@ -8685,6 +8685,60 @@
           }
         }
       }
+    },
+    {
+      "identity": {
+        "item_id": "meditation.walking_meditation.001",
+        "content_class": "meditation",
+        "type": "walking_meditation",
+        "status": "active",
+        "semantic_version": "content-taxonomy-v1.1",
+        "technique_id": "technique.walking_meditation"
+      },
+      "retrieval": {
+        "purpose": [
+          "presence"
+        ],
+        "domain": [],
+        "input_state": [
+          "scattered"
+        ],
+        "direction": [
+          "stabilize"
+        ],
+        "duration": 3,
+        "duration_unit": "minutes",
+        "intensity": "low",
+        "energy_effect": "neutral",
+        "context": [
+          "anytime",
+          "work"
+        ],
+        "delivery": [
+          "text",
+          "unguided"
+        ],
+        "contraindications": []
+      },
+      "payload": {
+        "body_kind": "instruction",
+        "locales": {
+          "ru": {
+            "title": "Медленный круг",
+            "body": "Встань. Пройди медленно по короткому кругу — не чтобы куда-то прийти. Держи внимание на стопах: отрыв, перенос, касание. Если мысль ушла, верни её к шагам. Потом остановись. Это не разминка и не просто встать с места."
+          },
+          "en": {
+            "title": "A slow loop",
+            "body": "Stand. Walk slowly in a short loop — not to get somewhere. Keep attention on the feet: lift, move, land. If the mind leaves, return it to the steps. Then stop. This is not a workout, and not just getting up from the chair."
+          }
+        },
+        "presentation": {
+          "outcome_label": {
+            "ru": "В шаге",
+            "en": "In the step"
+          }
+        }
+      }
     }
   ]
 }

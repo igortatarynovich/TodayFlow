@@ -1882,6 +1882,38 @@
       "status": "accepted"
     },
     {
+      "technique_id": "technique.walking_meditation",
+      "content_class": "meditation",
+      "type": "walking_meditation",
+      "canonical_description": "Stand. Walk slowly in a short loop — not to arrive anywhere. Keep attention on the steps: lift, move, land. When the mind leaves the feet, return. Then stop. The kernel is footsteps as the attention object while moving. Distinct from practice.walking (locomotion sit-break; footsteps are not the object), mindful_movement (in-place movement), sitting breath or body attention, and pressing the soles while still. Not a workout, nature walk, MBSR course, or treatment.",
+      "source_refs": [
+        {
+          "source": "Guy's and St Thomas' NHS — MBSR exercises (walking mindfulness)",
+          "url": "https://www.guysandstthomas.nhs.uk/health-information/mindfulness-based-stress-reduction-mbsr/mbsr-exercises",
+          "locus": "As a first step in walking mindfulness, finding a place where you can walk, without the intention of going anywhere, but simply to have some space to walk and to be aware of walking. … Bringing awareness to the sensations of your feet in contact with the ground. … allowing your right leg to lift, bringing awareness to the sensations of your right foot as it leaves the ground, moves forward, and makes contact with the ground. … bringing awareness to the sensations of each step as the weight shifts and the foot leaves the ground, moves forward, and makes contact with the floor again.",
+          "note": "official_health. Method confirmation for a slow loop with attention on lift–move–land. Full MBSR course length, video script, and stress-reduction claims not imported."
+        },
+        {
+          "source": "Newcastle Hospitals NHS — Mindfulness meditation (The walking meditation)",
+          "url": "https://www.newcastle-hospitals.nhs.uk/services/audiology/hearing-therapy/tinnitus/mindfulness-meditation/",
+          "locus": "If you do any period of undisturbed walking during the day — at least ten or fifteen minutes — then you can do a little walking mindfulness meditation. … At first, people often concentrate on the sensation of their feet touching the ground. … The key, though, is to develop a sort of relaxed attention. When your mind wanders away, bring it back gently, without judging yourself.",
+          "note": "official_health. Method confirmation for feet-as-object and return-when-the-mind-wanders. Tinnitus, relaxation, 10–15 minute duration, and nature-walk add-on not imported."
+        },
+        {
+          "source": "Royal United Hospitals Bath NHS — Mindfulness and Relaxation (PHY051), Mindful Walking",
+          "url": "https://www.ruh.nhs.uk/patients/patient_information/PHY051_Mindfulness_and_relaxation.pdf",
+          "locus": "Find Space. Mindful walking can be performed indoors, but also works well out in nature. Check-in. Before you begin moving, perform a quick check in with your body. Notice the sensation of the soles of your feet on the floor and how your weight is distributed. Notice. As you slowly begin to walk … primarily focus on the feeling of your gait (walking pattern). Much like the breath is an anchor in a seated breathing practice; your footsteps become the anchor in walking meditation.",
+          "note": "official_health. Method confirmation that footsteps are the object — different locus from the Move tip used for technique.mindful_movement. Mental/physical-benefit claims and nature packaging not imported."
+        }
+      ],
+      "safety_notes": [
+        "Walk somewhere you can see the ground. Watch your surroundings. Stop if you feel unsteady, it hurts, or the practice feels overwhelming.",
+        "Not a treatment for anxiety, trauma, or any mental or physical health condition, not an MBSR course, and not a workout."
+      ],
+      "allowed_claims": [],
+      "status": "accepted"
+    },
+    {
       "technique_id": "technique.self_trust",
       "content_class": "affirmation",
       "type": "self_trust",

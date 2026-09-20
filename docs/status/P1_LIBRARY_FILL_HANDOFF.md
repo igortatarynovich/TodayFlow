@@ -9,9 +9,9 @@
 
 ## 0. First 15 minutes
 
-1. Read this file + `docs/practices/PRACTICE_LIBRARY_FILL_V1.md` §0–§2 + tracker NOW (`P1 MEDITATION GRATITUDE`).
-2. Checkout `cursor/p1-self-compassion-loop-notes` (tip `46dba113`). Do **not** start a parallel fill branch unless this one is merged or abandoned.
-3. Next type in ledger order: **`meditation.walking_meditation`**. Distinct from already-accepted `practice.walking` (locomotion sit-break; footsteps are **not** the object).
+1. Read this file + `docs/practices/PRACTICE_LIBRARY_FILL_V1.md` §0–§2 + tracker NOW (`P1 WALKING MEDITATION`).
+2. Checkout `cursor/p1-self-compassion-loop-notes` (includes `meditation.walking_meditation`). Do **not** start a parallel fill branch unless this one is merged or abandoned.
+3. Next type in ledger order: **`meditation.silence`**. Distinct from `discipline.silence` (a period communication rule). Landscape warns the kernel may be absence of guidance rather than a method — skip if that debate starts.
 4. G0 stays deferred. Do **not** untrip `DATA/ops/llm_spend.json`.
 
 ---
@@ -21,8 +21,8 @@
 | | |
 |---|---|
 | Branch | `cursor/p1-self-compassion-loop-notes` |
-| Tip | `46dba113` |
-| Remote | `origin/cursor/p1-self-compassion-loop-notes` (pushed; **no PR yet**) |
+| Tip | this fill commit (`meditation.walking_meditation`) |
+| Remote | `origin/cursor/p1-self-compassion-loop-notes` (**no PR yet**) |
 | Base | `main` `254ad0bf` |
 | Live | compose still `254ad0bf` — this library fill is **not** on `todayflow.today` until merge + recreate |
 
@@ -32,6 +32,8 @@
 |-----|------|
 | `4a69a6a1` | P1 `loving_kindness` + `self_compassion`; Run 3 Elena clock-sim notes |
 | `46dba113` | P1 `meditation.gratitude` (sit with one thankful fact) |
+| `eb0ca483` | Point next work at the P1 fill handoff |
+| HEAD | P1 `meditation.walking_meditation` (steps as the object; not `practice.walking`) |
 
 ---
 
@@ -49,18 +51,18 @@
 - LLM is not a method source. Several quality sources confirm the method exists.
 - One technique record. Debate → `skipped` / `skipped_for_now`. Do not invent a type to save coverage.
 - `allowed_claims[]` empty. Meaning does not emit `item_id` / `technique_id`.
-- Payload must not contain the type code string (e.g. `walking_meditation`).
+- Payload must not contain the type code string (e.g. `silence` is the next type code — that word is forbidden in payload if accepted).
 - Public JSON unchanged by a type fill.
 
 ---
 
 ## 3. Coverage now
 
-- Library items: **152**
-- P1 types sourced: **19/42** (`practice.body_scan` skipped, `family_collapse`)
+- Library items: **153**
+- P1 types sourced: **20/42** (`practice.body_scan` skipped, `family_collapse`)
 - P0 need cells: 26/26 sourced
-- Provenance: v1.68
-- Active items this branch: `meditation.loving_kindness.001`, `meditation.self_compassion.001`, `meditation.gratitude.001`
+- Provenance: v1.69
+- Active items this branch: `meditation.loving_kindness.001`, `meditation.self_compassion.001`, `meditation.gratitude.001`, `meditation.walking_meditation.001`
 
 **This-train kernels (do not collapse the next type into these):**
 
@@ -70,18 +72,19 @@
 | `meditation.self_compassion` | Sit; notice a hard moment / harsh self-talk; answer as to a friend; stop | Loving-kindness to another, acceptance-without-answer, slogan |
 | `meditation.gratitude` | Sit; one ordinary thankful fact; a few breaths; stop | Written three-item list (`practice.gratitude`), well-wishing, open mindfulness |
 | `practice.walking` *(already on main)* | Stand; walk a short comfortable distance; stop | Walking as meditation object |
+| `meditation.walking_meditation` | Stand; slow short loop; attention on lift–move–land; return to the feet; stop | Sit-break locomotion, in-place mindful_movement, pressing soles while still |
 
 ---
 
-## 4. Next fill — `meditation.walking_meditation`
+## 4. Next fill — `meditation.silence`
 
-Taxonomy meaning: meditation in motion. Practice-class walking already says: *“walking_meditation (footsteps as the meditation object)”*.
+Taxonomy meaning: minimally guided practice. `discipline.silence` is a period communication rule — different class.
 
-1. Confirm a normal technique exists (several official_health / educational sources). Kernel in our words: slow walk, attention on the steps, return when the mind wanders, stop.
-2. If sources collapse into `practice.walking` (just get up and move) or `mindful_movement` (in-place) — **skip**, do not stretch. Next P1 after this row is `meditation.silence`.
-3. If accepted: `technique.walking_meditation` (or equivalent unique id) + `meditation.walking_meditation.001`. Retrieval must not copy `practice.walking.001` (that item is locomotion / sit-break).
-4. Update: canon JSON + library + coverage counts **153 / 20/42** + tests (`test_coverage_counts`, sourced test, mapping dict) + fill/provenance/coverage/_INDEX/tracker.
-5. Tests: `backend/.venv/bin/pytest tests/test_content_library_v1.py::test_coverage_counts tests/test_content_library_v1.py::test_p1_meditation_walking_meditation_sourced tests/test_content_library_selection_v1.py -q --tb=short`
+1. Confirm a normal technique exists (several official_health / educational sources). Kernel candidate: sit with little instruction; stay; stop.
+2. If sources collapse into delivery of another family (unguided sitting of breath_awareness / open_awareness / mindfulness) — **skip**, do not stretch. Next P1 after this row is `affirmation.self_identity`.
+3. If accepted: unique `technique.*` id + `meditation.silence.001`. Retrieval must not copy another sitting item.
+4. Update: canon JSON + library + coverage counts **154 / 21/42** (if accepted) + tests (`test_coverage_counts`, sourced test, mapping dict) + fill/provenance/coverage/_INDEX/tracker.
+5. Tests: `backend/.venv/bin/pytest tests/test_content_library_v1.py::test_coverage_counts tests/test_content_library_v1.py::test_p1_meditation_silence_sourced tests/test_content_library_selection_v1.py -q --tb=short`
 6. Do not commit / PR / deploy unless asked.
 
 ---
@@ -90,6 +93,7 @@ Taxonomy meaning: meditation in motion. Practice-class walking already says: *�
 
 - After `self_compassion`: library + selection **18 passed**
 - After `gratitude`: library + selection **19 passed** (`test_p1_meditation_gratitude_sourced` included)
+- After `walking_meditation`: `test_coverage_counts` + `test_p1_meditation_walking_meditation_sourced` + `test_fill_unfrozen_provisional_probes` + `test_library_valid_against_taxonomy_and_ledger` + `test_content_library_selection_v1.py` — **all passed** (`--no-cov`)
 - Do not claim CI green until GitHub checks on the SHA
 
 ---
@@ -112,5 +116,6 @@ Taxonomy meaning: meditation in motion. Practice-class walking already says: *�
 - Open Safety Review / box_breathing / energizing_breath / abstinence research.
 - Merge or recreate compose unless asked.
 - Claim the fill is live — ledger ≠ server.
+- Collapse `meditation.silence` into unguided breath / open awareness / mindfulness to save coverage.
 
-Canon opened this train: `PRACTICE_LIBRARY_FILL_V1` · `PRACTICE_CONTENT_COVERAGE_V1` · `PRACTICE_TECHNIQUE_PROVENANCE_V1` v1.68 · tracker NOW.
+Canon opened this train: `PRACTICE_LIBRARY_FILL_V1` · `PRACTICE_CONTENT_COVERAGE_V1` · `PRACTICE_TECHNIQUE_PROVENANCE_V1` v1.69 · tracker NOW.

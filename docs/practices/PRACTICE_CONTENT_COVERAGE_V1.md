@@ -210,7 +210,7 @@ Ledger JSON:
 - `type_spine[]`: `phase` = `P0` \| `P1` \| `deferred`
 - `gaps`: 0 P0 cells still `empty`; duration/delivery + EN + work/evening context density present. Content origin = `llm_provisional`.
 
-Следующий рабочий шаг: **P1 type coverage** (ledger order; next `meditation.walking_meditation`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 19/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
+Следующий рабочий шаг: **P1 type coverage** (ledger order; next `meditation.silence`) или skipped-type reassessment на явное решение product. Sourced 26/26 P0. All P0 cells covered. 20/42 P1 types sourced; `practice.body_scan` skipped (`family_collapse`). Не Safety Review. Не box / energizing-breath / abstinence research, если не взято явное решение.
 
 ---
 
@@ -218,6 +218,7 @@ Ledger JSON:
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-09-19 | **P1 `meditation.walking_meditation` sourced.** `technique.walking_meditation` accepted (Guy's and St Thomas' NHS MBSR walking mindfulness + Newcastle Hospitals NHS walking meditation + RUH Bath PHY051 Mindful Walking). Brief slow loop with attention on lift–move–land; not practice.walking/mindful_movement/sitting breath. Not a workout, nature walk, MBSR course, or treatment. `meditation.walking_meditation.001` active. Coverage matrix: 153 items, 20/42 P1 sourced. Next: `meditation.silence`. |
 | 2026-09-19 | **P1 `meditation.gratitude` sourced.** `technique.gratitude` accepted (GGIA Kemper / Ohio State Gratitude Meditation + OSU Wexner Heart-Centered Gratitude + Sussex Mindfulness Centre NHS small thankful details). Brief sit with one ordinary thankful fact; not practice.gratitude/loving_kindness/mindfulness. Not Three Good Things, journal, or treatment. `meditation.gratitude.001` active. Coverage matrix: 152 items, 19/42 P1 sourced. Next: `meditation.walking_meditation`. |
 | 2026-09-19 | **P1 `meditation.self_compassion` sourced.** `technique.self_compassion` accepted (KMPCT NHS stress handbook + SE Trust HSCNI Using Self Compassion + CCI WA Health Barriers to Self-Compassion). Brief supporting voice: notice a hard moment, answer as to a friend; not loving_kindness/acceptance/affirmation.compassion/journaling. Not full MSC curriculum, CFT, or treatment. `meditation.self_compassion.001` active. Coverage matrix: 151 items, 18/42 P1 sourced. Next: `meditation.gratitude`. |
 | 2026-09-19 | **P1 `meditation.loving_kindness` sourced.** `technique.loving_kindness` accepted (NHS Scotland Right Decisions actual practice + NHS Lothian Loving Kindness meditation + BSMHFT sending kind thoughts). Brief well-wishing: self then one person; not self_compassion/connection_action/meditation.gratitude. Not full MBSR four-circle protocol, CFT, or treatment. `meditation.loving_kindness.001` active. Coverage matrix: 150 items, 17/42 P1 sourced. Next: `meditation.self_compassion`. |
