@@ -34,6 +34,9 @@ logger = logging.getLogger(__name__)
 STAGE2_VERSION = "character_engine_stage2_identity_v0"
 STAGE2_PROMPT_ID = "profile.character_engine.stage2.v1"
 RECIPE_VERSION = "character_engine_recipe_v1"
+# PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
+PIC_K = ("K01", "K02")
+PIC_F = ("F03", "F06")
 
 # Editorial surface when LLM is down — Identity thesis → readable core (fill-empty, not overwrite of good LLM).
 _DETERMINISTIC_SURFACE_BY_IDENTITY: dict[str, str] = {
@@ -113,14 +116,25 @@ def _pick_primary_grounded_claim(evidence: dict[str, Any]) -> dict[str, Any] | N
     return grounded[0]
 
 
+def _is_occupancy_thesis(thesis: Any) -> bool:
+    token = str(thesis or "")
+    return token.startswith("planet_in_sign:") or token.startswith("planet_in_house:")
+
+
+def _occupancy_claims(evidence: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        c
+        for c in (evidence.get("claims") or [])
+        if isinstance(c, dict)
+        and c.get("evidence_status") == "grounded"
+        and c.get("claim_id")
+        and _is_occupancy_thesis(c.get("thesis_key"))
+    ]
+
+
 def _il_occupancy_lines(evidence: dict[str, Any]) -> list[str]:
     lines: list[str] = []
-    for claim in evidence.get("claims") or []:
-        if not isinstance(claim, dict) or claim.get("evidence_status") != "grounded":
-            continue
-        thesis = str(claim.get("thesis_key") or "")
-        if not (thesis.startswith("planet_in_sign:") or thesis.startswith("planet_in_house:")):
-            continue
+    for claim in _occupancy_claims(evidence):
         text = str(claim.get("il_line") or "").strip()
         if text and text not in lines:
             lines.append(text)
@@ -129,16 +143,38 @@ def _il_occupancy_lines(evidence: dict[str, Any]) -> list[str]:
 
 def _fill_surface_with_il_occupancy(out: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
     """Fill-empty: occupancy lemmas on Identity Core / recognition source. Do not replace thesis."""
+    occupancy = _occupancy_claims(evidence)
+    occupancy_ids = [str(c["claim_id"]) for c in occupancy]
+    roles = list(out.get("source_roles") or []) if isinstance(out.get("source_roles"), list) else []
+    have = {
+        str(row.get("claim_id"))
+        for row in roles
+        if isinstance(row, dict) and row.get("claim_id")
+    }
+    for cid in occupancy_ids:
+        if cid not in have:
+            roles.append({"claim_id": cid, "role": "qualifier"})
+            have.add(cid)
+    out["source_roles"] = roles
     core = out.get("identity_core") if isinstance(out.get("identity_core"), dict) else None
     if not core:
         return out
     extra = _il_occupancy_lines(evidence)
-    if not extra:
-        return out
-    surface = str(core.get("surface_text") or "").strip()
-    addon = " ".join(extra)
-    if addon and addon not in surface:
-        core["surface_text"] = f"{surface} {addon}".strip() if surface else addon
+    if extra:
+        surface = str(core.get("surface_text") or "").strip()
+        addon = " ".join(extra)
+        if addon and addon not in surface:
+            core["surface_text"] = f"{surface} {addon}".strip() if surface else addon
+    if occupancy_ids:
+        qualifying = [
+            str(cid)
+            for cid in (core.get("qualifying_claim_ids") or [])
+            if str(cid).strip()
+        ]
+        for cid in occupancy_ids:
+            if cid not in qualifying:
+                qualifying.append(cid)
+        core["qualifying_claim_ids"] = qualifying
     return out
 
 
@@ -155,6 +191,8 @@ def build_deterministic_stage2_raw_v0(evidence: dict[str, Any]) -> dict[str, Any
     if not surface:
         return None
     primary_id = str(primary.get("claim_id"))
+    occupancy_ids = [str(c["claim_id"]) for c in _occupancy_claims(evidence)]
+    occupancy_set = set(occupancy_ids)
     others = [
         str(c.get("claim_id"))
         for c in (evidence.get("claims") or [])
@@ -162,6 +200,7 @@ def build_deterministic_stage2_raw_v0(evidence: dict[str, Any]) -> dict[str, Any
         and c.get("evidence_status") == "grounded"
         and str(c.get("claim_id") or "") != primary_id
         and c.get("claim_id")
+        and str(c.get("claim_id")) not in occupancy_set
     ]
     return {
         "status": "grounded",
@@ -170,7 +209,7 @@ def build_deterministic_stage2_raw_v0(evidence: dict[str, Any]) -> dict[str, Any
             "thesis_key": stage1_thesis,
             "surface_text": surface,
             "supporting_claim_ids": [primary_id, *others[:2]],
-            "qualifying_claim_ids": others[2:3],
+            "qualifying_claim_ids": occupancy_ids or others[2:3],
             "contradicting_claim_ids": [],
             "confidence": str(primary.get("confidence") or "medium"),
         },
@@ -179,6 +218,10 @@ def build_deterministic_stage2_raw_v0(evidence: dict[str, Any]) -> dict[str, Any
             *[
                 {"claim_id": cid, "role": "supporting_claim"}
                 for cid in others[:2]
+            ],
+            *[
+                {"claim_id": cid, "role": "qualifier"}
+                for cid in occupancy_ids
             ],
         ],
         "selection_rationale": "deterministic_fallback_llm_unavailable",
@@ -228,6 +271,7 @@ def build_stage2_context_pack(
             "confidence": c.get("confidence"),
             "capability_floor": c.get("capability_floor"),
             "evidence_status": c.get("evidence_status"),
+            "il_line": c.get("il_line"),
         }
         for c in claims
         if isinstance(c, dict) and c.get("evidence_status") == "grounded" and c.get("claim_id")

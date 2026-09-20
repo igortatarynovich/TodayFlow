@@ -16,6 +16,9 @@ from todayflow_backend.services.chinese_horoscope import get_chinese_horoscope_s
 from todayflow_backend.services.tibetan_horoscope import get_tibetan_horoscope_service
 
 PACK_VERSION = "profile_header_knowledge_v0.1"
+# PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
+PIC_K = ("K14",)
+PIC_F = ("F12",)
 
 # Accumulated catalog: tropical sign → signature color (Profile шапка only — not «цвет дня»).
 _SIGN_COLORS_RU: dict[str, str] = {

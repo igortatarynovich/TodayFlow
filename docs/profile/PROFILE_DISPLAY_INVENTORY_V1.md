@@ -47,7 +47,7 @@ Conditional: `P-forming` · `P-data`.
 |-------|-------|---------|
 | `identity_axis` | `P1.recognition_line` · `P1.identity_core` | core = раскрытие той же оси; не новый тезис |
 | `path_new_value` | `P1.recognition_line` · `P3.insight` · `P4.effort_vector` · `P5.bridge_line` | **четыре разных вопроса**; перефраз = дефект. **Не** title узла, **не** help |
-| `why_not_hero` | `P1.*` · `P2.anchor.*` | факты карты не живут в герое |
+| `why_not_hero` | `P1.*` · `P2.anchor.*` · `P2.correspondence` · `P2.name_numerology` | факты карты / шапки не живут в герое |
 | `node_heading` | `P3.node_title` · `P3.insight` | title называет узел; insight = новая закономерность, не второй заголовок |
 | `node_help` | `P3.help` · `P3.insight` | help ≠ пересказ insight; Effort **может** проецироваться из help (тот же source, другой вопрос) |
 | `node_not_warehouse` | `P3.*` · (запрещённый Character act) · `P6.detail` | материалы узла не дублируются списком сил на скролле |
@@ -339,6 +339,52 @@ Chrome. Titles: «Главное, что формирует тебя» · «Вы
 | anti_dupe_group | `why_not_hero` |
 
 No bank text → meaning fallback chrome «расширяет портрет» (`empty` meaning, not invent).
+
+#### `P2.correspondence`
+
+Compact Why header fact. Not a journey act. Not Identity Core. Lookup only (`PIC-K14`).
+
+| | |
+|---|---|
+| one_question | Какие каталожные соответствия знака уже посчитаны для *этого* человека? |
+| text_class | catalog |
+| authority | `profile_header_knowledge_v0` → matrix `cultural_catalog` |
+| semantic_source | color · stone · tradition keys |
+| display_source | Why compact row |
+| allowed_inputs | revealed `cultural_catalog` |
+| forbidden_inference | LLM «подходящий камень»; энциклопедия знака; путь Identity Core |
+| output | 1 компактная строка ключ+ярлык |
+| budget | ≤120 chars |
+| required | нет |
+| empty_behavior | omit |
+| may_fe_transform | none |
+| may_llm_add_meaning | нет |
+| interaction | none |
+| persist_key | profile_hash |
+| anti_dupe_group | `why_not_hero` |
+
+#### `P2.name_numerology`
+
+Compact Why header fact. Not a journey act. Not Identity Core. Calc only (`PIC-K13`).
+
+| | |
+|---|---|
+| one_question | Что числа имени вносят в самопрезентацию? |
+| text_class | calc |
+| authority | numerology expression / soul urge / personality |
+| semantic_source | matrix `name_numerology` |
+| display_source | Why compact row |
+| allowed_inputs | revealed `name_numerology` |
+| forbidden_inference | влиять на натал; энциклопедия «число 7 означает» |
+| output | 1 компактная строка |
+| budget | ≤120 chars |
+| required | нет |
+| empty_behavior | omit (+ CTA без имени живёт в Matrix, не в этом слоте) |
+| may_fe_transform | none |
+| may_llm_add_meaning | нет |
+| interaction | none |
+| persist_key | profile_hash |
+| anti_dupe_group | `why_not_hero` |
 
 #### `P2.honesty_no_time`
 
@@ -635,7 +681,7 @@ Cut 2026-08-29: `ProfileCharacterScene` removed from path; P4 spheres cap 0–2;
 | `P1.visual` / `recognition_name` | PASS | имя только life_path; chrome «Твоя суть» не смысл |
 | `P1.recognition_line` | PASS | механизм; journey: «Я человек, который…» |
 | `P1.identity_core` | PASS | disclosure той же оси, не path_new_value |
-| `P2.selected_life_path` + anchors | PASS | факты не в герое; CE только phrase context |
+| `P2.selected_life_path` + anchors + `P2.correspondence` + `P2.name_numerology` | PASS | факты / шапка не в герое; K13/K14 compact Why rows |
 | `P2.honesty_no_time` | PASS | required без времени |
 | `P3.node_title` | **FIXED** | был в `path_new_value` → `node_heading` |
 | `P3.insight` | PASS | единственный new-value узла; journey: «Я раньше не замечал…» |
@@ -656,6 +702,7 @@ Cut 2026-08-29: `ProfileCharacterScene` removed from path; P4 spheres cap 0–2;
 
 | Date | Change |
 |------|--------|
+| 2026-09-20 | `P2.correspondence` · `P2.name_numerology` — PIC-K14/K13 compact Why facts, not journey acts |
 | 2026-08-31 | Live path frame (`emitProfileDisplayFrame`); Character/Explore stay off path |
 | 2026-08-30 | Grammar §9 scanner covers Profile path slots; catalog sync-tested against §2 |
 | 2026-08-29 | FE cutover — Character warehouse off path; P4 spheres 0–2 |

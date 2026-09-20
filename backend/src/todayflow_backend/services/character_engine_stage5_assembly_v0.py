@@ -16,6 +16,9 @@ STAGE5_VERSION = "character_engine_stage5_assembly_v0"
 ADAPTER_VERSION = "character_engine_adapter_v1"
 ASSEMBLER_VERSION = "character_engine_compass_assembler_v0"
 COMPASS_SCHEMA = "compass_v1"
+# PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
+PIC_K = ("K10", "K11")
+PIC_F = ("F13",)
 
 # item_kind → (surface path in stage3 engine or stage4)
 _ENGINE_TO_COMPASS: tuple[tuple[str, str], ...] = (

@@ -25,6 +25,10 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 
+# PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
+PIC_K = ("K01", "K02", "K04", "K10")
+PIC_F = ("F03", "F06")
+
 PROJECTION_VERSION = "character_engine_profile_consumption_v0.9"
 # Soft ceilings only — clip_prose prefers sentence end; never mid-word stumps for UI.
 _MAX_RECOGNITION = 900

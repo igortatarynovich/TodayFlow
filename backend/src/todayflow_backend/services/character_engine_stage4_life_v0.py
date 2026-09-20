@@ -27,6 +27,9 @@ logger = logging.getLogger(__name__)
 
 STAGE4_VERSION = "character_engine_stage4_life_v0"
 STAGE4_PROMPT_ID = "profile.character_engine.stage4.v1"
+# PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
+PIC_K = ("K07", "K08", "K09")
+PIC_F = ("F06",)
 
 SCENE_KINDS = frozenset(
     {

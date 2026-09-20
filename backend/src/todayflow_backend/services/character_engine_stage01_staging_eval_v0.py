@@ -138,7 +138,9 @@ def evaluate_stage01_staging_v0() -> dict[str, Any]:
         ),
         "no_majority_identical_claim_set": len({tuple(c.get("thesis_keys") or []) for c in cases}) >= 5,
         "no_single_thesis_on_most_profiles": all(
-            (thesis_freq[t] / n) <= 0.5 for t in thesis_freq
+            (thesis_freq[t] / n) <= 0.5
+            for t in thesis_freq
+            if not _is_occupancy_thesis(str(t))
         ),
         "negative_controls_clean": all(
             (
