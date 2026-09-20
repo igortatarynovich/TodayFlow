@@ -299,4 +299,34 @@ describe("live Profile frames", () => {
     });
     expect(frame.atoms?.find((a) => a.slot_id === "P2.selected_life_path")).toBeUndefined();
   });
+
+  it("PIC-K07 emits at most two path spheres from contract F06 projection", () => {
+    const frame = emitProfileDisplayFrame({
+      core: {
+        ...journeyCore,
+        profile_contract_v1: {
+          ...journeyCore.profile_contract_v1,
+          life_spheres: {
+            family: {
+              how: "act / pursue — home, family, roots.",
+              need: "home, family, roots, private-base",
+            },
+            money: {
+              how: "feel / respond — possessions, money.",
+              need: "possessions, money, personal-resources",
+            },
+          },
+        },
+      } as CoreProfile,
+    });
+    const titles = (frame.atoms ?? []).filter((a) => a.slot_id === "P4.sphere.title");
+    const teasers = (frame.atoms ?? []).filter((a) => a.slot_id === "P4.sphere.teaser");
+    const expands = (frame.atoms ?? []).filter((a) => a.slot_id === "P4.sphere.expand");
+    expect(titles.length).toBe(0);
+    expect(teasers.length).toBe(2);
+    expect(expands.length).toBe(2);
+    expect(teasers.some((a) => /home|family/.test(a.text || ""))).toBe(true);
+    expect(teasers.every((a) => a.text !== journeyCore.effort_vector_v0?.effort_vector)).toBe(true);
+    expect(scanDisplayGrammar(frame)).toEqual([]);
+  });
 });

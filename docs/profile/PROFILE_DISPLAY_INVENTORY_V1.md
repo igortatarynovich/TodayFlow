@@ -435,8 +435,8 @@ Max nodes first release: **1**.
 | text_class | generated |
 | authority | CE Acts III–IV |
 | semantic_source | Stage 1 grounded hard `aspect_pair` `il_line` (F07 → IL-2); FE `nodes[0].insight` |
-| allowed_inputs | one A↔B from square/opposition compose (`what_a` ↔ `what_b` — `relation`) |
-| forbidden_inference | trap-bank / identity-thesis essay; Stage3 synthetic tension; one-sided trait; K06 secondaries; CE primary as tension |
+| allowed_inputs | one A↔B from square/opposition compose (`what_a` ↔ `what_b` — `relation`); optional K09 honest cost (sign `excess` of grounded K04 axis) as fill-empty second beat |
+| forbidden_inference | trap-bank / identity-thesis essay; Stage3 synthetic tension; Stage4 LLM `blind_spots`; one-sided trait; K06 secondaries; CE primary as tension |
 | output | 2–3 предложения |
 | budget | 30–55 слов · **≤360 chars на экране** (склад ≤900 kitchen) |
 | required | да для P3 |
@@ -470,9 +470,9 @@ Max nodes first release: **1**.
 | one_question | Что помогает **внутри этой оси** (не совет дня)? |
 | text_class | generated |
 | authority | CE; patterns/helps LLM только если gate |
-| semantic_source | `nodes[0].help` else one strengths/practical line |
-| allowed_inputs | help/strengths; **не** Today, **не** invented living |
-| forbidden_inference | day agenda; kitchen insight-help |
+| semantic_source | Stage 3 `path_axis` / F08 `element_balance` `how` or harmonic F07; FE `nodes[0].help` |
+| allowed_inputs | one Internal Engine axis from unique F08 tilt or one harmonic F07; **не** seven Stage3 widgets |
+| forbidden_inference | identity-thesis engine dump; day agenda; kitchen insight-help; K06 secondaries |
 | output | 1 предложение |
 | budget | 12–22 слов · ≤140 chars экрана (склад ≤360) |
 | required | нет |
@@ -534,8 +534,8 @@ Chrome: «Куда прикладывать усилия» · «Одно нап�
 |---|---|---|---|
 | one_question | Где ярлык? | Где это сильнее (новая грань vs вектор)? | Как/нужно/риск здесь? |
 | text_class | chrome/catalog | generated | generated |
-| authority | life_spheres projector | CE derived | CE derived |
-| allowed_inputs | sphere id + fields that **add where** | same | how/need/risk/helps |
+| authority | catalog sphere id | CE K07 derived | CE K07 derived |
+| allowed_inputs | sphere id + F06 house `arena` (where) | same | how/need from `planet_in_house` what×arena; risk = K05 A↔B only if that body occupies the house |
 | forbidden_inference | пересказ effort_vector; day agenda; 8 сфер на пути | same | same |
 | budget | 1–2 слова | 1 предл. · ≤88 chars | 1 предл. на поле · ≤220 |
 | required | нет | нет | нет |
@@ -702,6 +702,9 @@ Cut 2026-08-29: `ProfileCharacterScene` removed from path; P4 spheres cap 0–2;
 
 | Date | Change |
 |------|--------|
+| 2026-09-20 | `P4.sphere.*` — PIC-K07 ≤2 path spheres from grounded F06 house arena of K01/K04/K05; omit without full natal / link; not identity-thesis essays; K08 not from sphere |
+| 2026-09-20 | `P3.insight` — PIC-K09 fill-empty honest cost (sign excess of K04) after K05 A↔B; no trap-bank; K04 help unchanged |
+| 2026-09-20 | `P3.help` — PIC-K04 one Internal Engine axis from F08 / harmonic F07; not seven widgets; K05 keeps insight |
 | 2026-09-20 | `P3.insight` — PIC-K05 grounded hard F07 `aspect_pair` A↔B; omit without evidence; trap-bank forbidden |
 | 2026-09-20 | `P2.correspondence` · `P2.name_numerology` — PIC-K14/K13 compact Why facts, not journey acts |
 | 2026-08-31 | Live path frame (`emitProfileDisplayFrame`); Character/Explore stay off path |

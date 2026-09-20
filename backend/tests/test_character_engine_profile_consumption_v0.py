@@ -135,8 +135,8 @@ def test_consumption_overwrites_recognition_why_trap(monkeypatch) -> None:
     help_line = out["insight_nodes_v0"]["nodes"][0].get("help")
     assert help_line
     spheres = contract.get("life_spheres") or {}
-    assert "love" in spheres and "how" in spheres["love"]
-    assert "Вы " not in spheres["love"]["how"]
+    assert spheres == {}
+    assert out["character_engine_consumption_v0"]["sphere_source"] == "omitted_no_grounded_f06"
     houses = (out.get("character_engine_house_lines_v0") or {}).get("houses") or {}
     h1 = (houses.get("1") or {}).get("how") or (houses.get("1") or {}).get("line") or ""
     assert "1" in houses and h1
@@ -391,3 +391,160 @@ def test_k05_omits_insight_without_grounded_aspect_evidence(monkeypatch) -> None
     assert out["character_engine_consumption_v0"]["insight_source"] == "omitted_no_grounded_aspect_tension"
     trap = out["profile_contract_v1"]["recurring_patterns"][0]
     assert "дистанцию" in trap or "анализ" in trap or "контроль" in trap
+
+
+def test_k04_help_from_f08_beats_identity_engine(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    payload = _payload()
+    payload["diagnostics"]["character_engine_stage2"]["stage0"]["raw_facts"] = [
+        {
+            "fact_id": "f_sun",
+            "fact_type": "planet_sign:sun",
+            "value": {"sign": "virgo", "body": "sun"},
+        },
+        {
+            "fact_id": "f_moon",
+            "fact_type": "planet_sign:moon",
+            "value": {"sign": "taurus", "body": "moon"},
+        },
+        {
+            "fact_id": "f_mercury",
+            "fact_type": "planet_sign:mercury",
+            "value": {"sign": "virgo", "body": "mercury"},
+        },
+        {
+            "fact_id": "f_mars",
+            "fact_type": "planet_sign:mars",
+            "value": {"sign": "cancer", "body": "mars"},
+        },
+        {
+            "fact_id": "f_bal",
+            "fact_type": "element_balance",
+            "value": {
+                "elements": {"fire": 0, "earth": 3, "air": 0, "water": 1},
+                "modalities": {"cardinal": 1, "fixed": 1, "mutable": 2},
+                "dominant_element": "earth",
+                "dominant_modality": "mutable",
+                "deficit_element": "fire",
+                "count": 4,
+                "bodies": {
+                    "sun": {"sign": "virgo", "element": "earth", "modality": "mutable"},
+                    "moon": {"sign": "taurus", "element": "earth", "modality": "fixed"},
+                    "mercury": {"sign": "virgo", "element": "earth", "modality": "mutable"},
+                    "mars": {"sign": "cancer", "element": "water", "modality": "cardinal"},
+                },
+            },
+        },
+        {
+            "fact_id": "f_lp",
+            "fact_type": "life_path",
+            "value": 7,
+        },
+    ]
+    payload["diagnostics"]["character_engine_stage3"] = {
+        "stage3": {
+            "status": "grounded",
+            "internal_engine": {
+                "decision": {"surface_text": "Ты решаешь только из ядра автономии."},
+                "growth": {"surface_text": "Рост виджета identity thesis."},
+                "recovery": {"surface_text": "Восстановление виджета."},
+            },
+            "primary_tension": {
+                "surface_text": "Пока ты держишь дистанцию, жизнь не двигается — Stage3 trap.",
+            },
+        }
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    help_line = out["insight_nodes_v0"]["nodes"][0]["help"]
+    assert "slow-and-steady" in help_line or "steadfast" in help_line or "patient" in help_line
+    assert "виджета" not in help_line
+    assert "дистанцию" not in help_line
+    assert out["character_engine_consumption_v0"]["help_source"] == "stage0_element_balance"
+    assert out["insight_nodes_v0"]["nodes"][0]["insight"] == ""
+    assert out["character_engine_consumption_v0"]["cost_source"] == "omitted_no_grounded_honest_cost"
+
+
+def test_k09_appends_cost_without_displacing_k04_k05(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    payload = _payload()
+    payload["diagnostics"]["character_engine_stage2"]["stage0"]["raw_facts"] = [
+        {
+            "fact_id": "f_sun",
+            "fact_type": "planet_sign:sun",
+            "value": {"sign": "virgo", "body": "sun"},
+        },
+        {
+            "fact_id": "f_moon",
+            "fact_type": "planet_sign:moon",
+            "value": {"sign": "taurus", "body": "moon"},
+        },
+        {
+            "fact_id": "f_mercury",
+            "fact_type": "planet_sign:mercury",
+            "value": {"sign": "virgo", "body": "mercury"},
+        },
+        {
+            "fact_id": "f_mars",
+            "fact_type": "planet_sign:mars",
+            "value": {"sign": "cancer", "body": "mars"},
+        },
+        {
+            "fact_id": "f_bal",
+            "fact_type": "element_balance",
+            "value": {
+                "elements": {"fire": 0, "earth": 3, "air": 0, "water": 1},
+                "modalities": {"cardinal": 1, "fixed": 1, "mutable": 2},
+                "dominant_element": "earth",
+                "dominant_modality": "mutable",
+                "deficit_element": "fire",
+                "count": 4,
+                "bodies": {
+                    "sun": {"sign": "virgo", "element": "earth", "modality": "mutable"},
+                    "moon": {"sign": "taurus", "element": "earth", "modality": "fixed"},
+                    "mercury": {"sign": "virgo", "element": "earth", "modality": "mutable"},
+                    "mars": {"sign": "cancer", "element": "water", "modality": "cardinal"},
+                },
+            },
+        },
+        {"fact_id": "f_lp", "fact_type": "life_path", "value": 7},
+    ]
+    payload["diagnostics"]["character_engine_stage2"]["stage1"]["claims"].append(
+        {
+            "claim_id": "c_k05",
+            "claim_kind": "tension",
+            "thesis_key": "aspect_pair:mars:saturn:square",
+            "evidence_status": "grounded",
+            "il_line": "act ↔ limit — friction.",
+            "supporting_fact_ids": ["f_asp"],
+        }
+    )
+    payload["diagnostics"]["character_engine_stage4"] = {
+        "stage4": {
+            "status": "grounded",
+            "blind_spots": [
+                {
+                    "surface_text": "LLM слепая зона из identity thesis — не должна заполнять P3.",
+                }
+            ],
+        }
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    node = out["insight_nodes_v0"]["nodes"][0]
+    insight = node["insight"]
+    help_line = node["help"]
+    cons = out["character_engine_consumption_v0"]
+    assert insight.startswith("act ↔ limit — friction.")
+    assert "immovable" in insight or "over-holding" in insight
+    assert "LLM слепая зона" not in insight
+    assert "дистанцию" not in insight
+    assert cons["insight_source"] == "stage1_aspect_pair"
+    assert cons["cost_source"] == "sign_excess_of_k04_axis"
+    assert "slow-and-steady" in help_line or "steadfast" in help_line
+    assert "immovable" not in help_line
+    assert "LLM слепая зона" not in help_line

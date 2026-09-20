@@ -4,6 +4,12 @@ Last updated: 2026-09-20
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (PIC K07 COMPLETE, 2026-09-20):** ≤2 `P4.sphere.*` from grounded F06 occupied houses of already built K01/K04/K05, via house `arena`. Sphere answers where that mechanism shows — not a relationships/career/money root. Missing full F06 or link omits. Identity-thesis packs / Stage4 / trap-bank cannot fill. K08 effort is not derived from the sphere. K03 house how and K16 tips unchanged. PIC_COVERAGE K07 PARTIAL → COMPLETE (12 COMPLETE / 5 PARTIAL / 1 MISSING). Next = **K10** only. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (PIC K09 COMPLETE, 2026-09-20):** One honest cost of the P3 axis: sign `excess` of grounded K04 F08 path, fill-empty after K05 A↔B in `P3.insight`. Does not displace K04 `P3.help` or K05 A↔B. Missing pair / dupe / harmonic-only K04 omits. Trap-bank and Stage4 LLM `blind_spots` cannot fill. PIC_COVERAGE K09 PARTIAL → COMPLETE (11 COMPLETE / 6 PARTIAL / 1 MISSING). Next = **K07** only. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (PIC K04 COMPLETE, 2026-09-20):** `P3.help` is one Internal Engine axis from Stage 0 F08 `element_balance` (F03/F04 tilt) or one harmonic F07; not seven widgets. Identity-thesis engine cannot occupy the path axis; missing tilt/harmonic omits. K05 keeps `P3.insight`. PIC_COVERAGE K04 PARTIAL → COMPLETE (10 COMPLETE / 7 PARTIAL / 1 MISSING). Next = **K09** only. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
 **NOW (PIC K05 COMPLETE, 2026-09-20):** `P3.insight` is one A↔B from Stage 0 F07 5-major facts → IL-2 `compose_aspect_pair` → one hard (square/opposition) tension. Trap-bank and Stage3 identity essays cannot beat grounded evidence; missing F07 omits. K01/K02/K12/K13 unchanged; K06 not this patch. PIC_COVERAGE K05 PARTIAL → COMPLETE (9 COMPLETE / 8 PARTIAL / 1 MISSING). Next = **K04** only. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (PIC K12 COMPLETE, 2026-09-20):** `P2.selected_life_path` is F09 life_path + `number_base_v1.base_meaning` only. CE primary claim cannot occupy the slot; missing contribution omits; birthday_number is not mixed in. PIC_COVERAGE K12 PARTIAL → COMPLETE (8 COMPLETE / 9 PARTIAL / 1 MISSING). Next = **K05** only (main tension from grounded/F07, not trap bank first). Not K04+. Not Today. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
@@ -91,6 +97,33 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — PIC-K07 path spheres (2026-09-20)
+
+- **SoT before:** `P4.sphere.*` came from identity-thesis life_spheres packs (love/money/work essays). F06 house arena was not the path selector. Grammar emit did not ship `P4.sphere.*`.
+- **SoT after:** ≤2 path spheres from grounded full-natal F06 occupied houses of already built K01 occupancy / K04 axis / K05 pair, composed with IL-2 house `arena`. Sphere is where that mechanism shows. No new personality root. Identity-thesis / Stage4 / trap-bank cannot fill empty. K08 stays `nodes[0].help` → effort_vector. Missing F06 or mechanism link omits.
+- **Public contract changed?** no new JSON fields; `profile_contract_v1.life_spheres` on the path is 0–2 F06 projections instead of 7 identity essays
+- **Migration required?** no
+- **Canon updated?** yes — Information Contract §3/§11 · Display Inventory `P4.sphere.*` · this tracker · handoff
+- **Backward compatible?** yes for API. Date-only / no occupied F06 keep empty path spheres (omit)
+
+## Architecture impact — PIC-K09 honest cost (2026-09-20)
+
+- **SoT before:** K09 was Stage4 `blind_spots` / identity-thesis trap essay; consumption did not read it. P3.insight = K05 only; P3.help = K04 only.
+- **SoT after:** One honest cost derived from grounded K04 F08 axis (sign `canon.excess`) plus grounded K05 A↔B. Fill-empty append onto `P3.insight`. K04 remains `P3.help`. K05 remains the A↔B owner. No trap-bank, no Stage4 LLM, no new slot. Harmonic-only K04 or missing pair omits.
+- **Public contract changed?** no new JSON fields; `nodes[0].insight` may include a second excess beat
+- **Migration required?** no
+- **Canon updated?** yes — Information Contract §3/§11 · Display Inventory `P3.insight` · this tracker · handoff
+- **Backward compatible?** yes for API. Charts without both hops keep previous insight/help.
+
+## Architecture impact — PIC-K04 Internal Engine axis (2026-09-20)
+
+- **SoT before:** Stage 3 Internal Engine filled seven identity-thesis slots; path help came from growth/recovery essays. F08 did not exist. F07 lived in Stage 0 for K05 only.
+- **SoT after:** Stage 0 mints `element_balance` (F08). One path axis from unique F08 tilt (IL-2 sign `how`) or one harmonic F07 (`relation`, not A↔B). Consumption writes that line to `P3.help`. Identity-thesis widgets cannot occupy the path axis. K05 keeps `P3.insight`. Empty omits.
+- **Public contract changed?** no new JSON fields; `nodes[0].help` source may now be F08/harmonic lemmas
+- **Migration required?** no
+- **Canon updated?** yes — Information Contract §3/§11 · Display Inventory `P3.help` · this tracker · handoff
+- **Backward compatible?** yes for API. Charts without unique F08/harmonic keep previous help fill (K10 still PARTIAL)
 
 ## Architecture impact — PIC-K12 selected_life_path (2026-09-20)
 

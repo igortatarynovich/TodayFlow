@@ -37,6 +37,10 @@ _WATER = frozenset({"cancer", "scorpio", "pisces"})
 _FIRE = frozenset({"aries", "leo", "sagittarius"})
 _EARTH = frozenset({"taurus", "virgo", "capricorn"})
 _AIR = frozenset({"gemini", "libra", "aquarius"})
+_CARDINAL = frozenset({"aries", "cancer", "libra", "capricorn"})
+_FIXED = frozenset({"taurus", "leo", "scorpio", "aquarius"})
+_MUTABLE = frozenset({"gemini", "virgo", "sagittarius", "pisces"})
+_BALANCE_BODIES = ("sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn")
 
 # PIC F07 — 5 majors, Foundation v1 §2.4 orbs. Sun–Saturn only (outers withheld).
 _ASPECT_BODIES = frozenset({"sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"})
@@ -325,6 +329,81 @@ def _from_swiss_aspects(
                 )
             )
     return out
+
+
+def _unique_max(counts: dict[str, int]) -> str | None:
+    if not counts:
+        return None
+    top = max(counts.values())
+    if top <= 0:
+        return None
+    winners = [key for key, value in counts.items() if value == top]
+    if len(winners) != 1:
+        return None
+    return winners[0]
+
+
+def _from_element_balance(
+    raw_facts: list[dict[str, Any]],
+    *,
+    input_fingerprint: str,
+    computed_at: str,
+) -> dict[str, Any] | None:
+    """PIC F08: element/modality tilt from F03+F04 Sun–Saturn signs. Not a Stage 0 rewrite."""
+    elements = {"fire": 0, "earth": 0, "air": 0, "water": 0}
+    modalities = {"cardinal": 0, "fixed": 0, "mutable": 0}
+    bodies: dict[str, dict[str, str]] = {}
+    authority = "catalog"
+    by_type = {
+        str(row.get("fact_type") or ""): row
+        for row in raw_facts
+        if isinstance(row, dict)
+    }
+    for body in _BALANCE_BODIES:
+        row = by_type.get(f"planet_sign:{body}")
+        if not isinstance(row, dict):
+            continue
+        value = row.get("value") if isinstance(row.get("value"), dict) else {}
+        sign = _norm_sign(value.get("sign"))
+        element = element_for_sign(sign)
+        modality = modality_for_sign(sign)
+        if not sign or not element or not modality:
+            continue
+        elements[element] += 1
+        modalities[modality] += 1
+        bodies[body] = {"sign": sign, "element": element, "modality": modality}
+        if str(row.get("authority") or "") == "swiss":
+            authority = "swiss"
+    if len(bodies) < 2:
+        return None
+    dominant_element = _unique_max(elements)
+    dominant_modality = _unique_max(modalities)
+    zeros = [key for key, value in elements.items() if value == 0]
+    deficit_element = zeros[0] if len(zeros) == 1 else None
+    parts = [f"{key}:{elements[key]}" for key in ("fire", "earth", "air", "water")]
+    parts.extend(f"{key}:{modalities[key]}" for key in ("cardinal", "fixed", "mutable"))
+    normalized_key = "|".join(parts)
+    return _candidate(
+        fact_type="element_balance",
+        normalized_key=normalized_key,
+        value={
+            "elements": elements,
+            "modalities": modalities,
+            "dominant_element": dominant_element,
+            "dominant_modality": dominant_modality,
+            "deficit_element": deficit_element,
+            "count": len(bodies),
+            "bodies": bodies,
+        },
+        authority=authority,
+        calc_version=SWISS_CALC_VERSION if authority == "swiss" else CATALOG_CALC_VERSION,
+        capability_required="date_only",
+        confidence="high",
+        source_system="element_balance",
+        input_fingerprint=input_fingerprint,
+        display_key="element_balance",
+        computed_at=computed_at,
+    )
 
 
 def _normalize_swiss_positions(positions: Any) -> list[Any]:
@@ -681,6 +760,11 @@ def build_character_engine_facts_pack_v0(
                 missing_inputs.append({"key": key, "reason": "capability_not_full_natal"})
 
     raw_facts, dedupe_diag = _merge_candidates(candidates)
+    balance = _from_element_balance(
+        raw_facts, input_fingerprint=fp, computed_at=computed_at
+    )
+    if balance is not None:
+        raw_facts = sorted([*raw_facts, balance], key=lambda row: str(row["slot_key"]))
 
     # Strip internal helper fields not in public RawFact schema (fact_key/normalized_key kept in diagnostics only).
     public_facts: list[dict[str, Any]] = []
@@ -749,4 +833,17 @@ def element_for_sign(sign: str | None) -> str | None:
         return "air"
     if s in _WATER:
         return "water"
+    return None
+
+
+def modality_for_sign(sign: str | None) -> str | None:
+    s = _norm_sign(sign)
+    if not s:
+        return None
+    if s in _CARDINAL:
+        return "cardinal"
+    if s in _FIXED:
+        return "fixed"
+    if s in _MUTABLE:
+        return "mutable"
     return None

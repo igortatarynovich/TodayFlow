@@ -9,7 +9,9 @@ Owned when Stage 2 grounded + flag on:
   - recognition / identity_core
   - portrait_why
   - insight — Stage 1 grounded aspect_pair (K05); omit without F07. Trap bank / Stage3 identity tension cannot fill.
-  - help — Stage 3 internal engine when grounded, else editorial bank
+  - help — PIC-K04 one Internal Engine axis from F08 / harmonic F07 when grounded; else editorial / Stage3. Not seven widgets.
+  - honest cost — PIC-K09 fill-empty into the same P3 node from K04+K05 excess; omit without grounded pair. No trap-bank / Stage4 LLM.
+  - path spheres — PIC-K07 ≤2 from grounded F06 house arena of K01/K04/K05 bodies; omit without full natal / link. Not a relationships/career/money root.
   - strengths / growth_zones / helps
   - decision_style — Stage 3 internal_engine.decision when grounded, else editorial bank
   - relationship_style / money_style
@@ -27,10 +29,10 @@ from typing import Any
 from todayflow_backend.core.config import settings
 
 # PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
-PIC_K = ("K01", "K02", "K04", "K05", "K10", "K12")
-PIC_F = ("F01", "F03", "F04", "F05", "F06", "F07", "F09")
+PIC_K = ("K01", "K02", "K04", "K05", "K07", "K09", "K10", "K12")
+PIC_F = ("F01", "F03", "F04", "F05", "F06", "F07", "F08", "F09")
 
-PROJECTION_VERSION = "character_engine_profile_consumption_v0.9"
+PROJECTION_VERSION = "character_engine_profile_consumption_v0.12"
 # Soft ceilings only — clip_prose prefers sentence end; never mid-word stumps for UI.
 _MAX_RECOGNITION = 900
 _MAX_CORE = 900
@@ -634,6 +636,58 @@ def _k05_insight(stage1: dict[str, Any]) -> tuple[str, str]:
     return line, "stage1_aspect_pair"
 
 
+def _k04_axis(
+    stage0: dict[str, Any],
+    stage3: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    if isinstance(stage3, dict):
+        axis = stage3.get("path_axis") if isinstance(stage3.get("path_axis"), dict) else None
+        if isinstance(axis, dict) and str(axis.get("surface_text") or "").strip():
+            return axis
+    from todayflow_backend.services.character_engine_stage3_internal_v0 import (
+        select_internal_engine_path_axis_v0,
+    )
+
+    axis = select_internal_engine_path_axis_v0(facts_pack=stage0)
+    if isinstance(axis, dict) and str(axis.get("surface_text") or "").strip():
+        return axis
+    return None
+
+
+def _k04_help(
+    stage0: dict[str, Any],
+    stage3: dict[str, Any] | None,
+) -> tuple[str, str]:
+    """P3.help = one Internal Engine axis from F08/harmonic F07. Identity thesis cannot beat it."""
+    axis = _k04_axis(stage0, stage3)
+    if not isinstance(axis, dict):
+        return "", "omitted_no_grounded_engine_axis"
+    line = str(axis.get("surface_text") or "").strip()
+    if not line:
+        return "", "omitted_no_grounded_engine_axis"
+    return line, str(axis.get("source") or "stage0_element_balance")
+
+
+def _k09_honest_cost(
+    *,
+    axis: dict[str, Any] | None,
+    insight: str,
+    help_line: str,
+) -> tuple[str, str]:
+    """One honest cost inside P3. Requires grounded K04+K05. No trap-bank / LLM fill."""
+    from todayflow_backend.services.character_engine_stage3_internal_v0 import (
+        honest_cost_from_axis_v0,
+    )
+
+    cost = honest_cost_from_axis_v0(axis=axis, insight=insight, help_line=help_line)
+    if not isinstance(cost, dict):
+        return "", "omitted_no_grounded_honest_cost"
+    line = str(cost.get("surface_text") or "").strip()
+    if not line:
+        return "", "omitted_no_grounded_honest_cost"
+    return line, str(cost.get("source") or "sign_excess_of_k04_axis")
+
+
 def _why_row_id(row: dict[str, Any]) -> str:
     rid = str(row.get("id") or "").strip()
     if rid == "rising":
@@ -938,6 +992,9 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     trap = _clip(trap, _MAX_TRAP)
     insight, insight_source = _k05_insight(stage1)
     insight = _clip(insight, _MAX_TRAP)
+    k04_axis = _k04_axis(stage0, stage3 if isinstance(stage3, dict) else None)
+    k04_line, k04_source = _k04_help(stage0, stage3 if isinstance(stage3, dict) else None)
+    k04_line = _clip(k04_line, _MAX_ESSAY)
     essays = _essays_for(identity_thesis)
     strengths = [str(x).strip() for x in (essays.get("strengths") or []) if str(x).strip()][:4]
     growth = [str(x).strip() for x in (essays.get("growth_zones") or []) if str(x).strip()][:3]
@@ -1038,11 +1095,26 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         if (scrubbed := _scrub_day_agenda(_scrub_machine_thesis(h, identity_thesis)))
     ]
     help_line = helps[0] if helps else None
+    help_source = "stage3_internal_engine" if decision_source.startswith("stage3_") and help_line else "editorial_bank"
+    if k04_line:
+        help_line = k04_line
+        help_source = k04_source
+        helps = [k04_line, *[h for h in helps if h != k04_line]][:3]
+    cost_line, cost_source = _k09_honest_cost(
+        axis=k04_axis,
+        insight=insight,
+        help_line=k04_line,
+    )
+    if cost_line and insight:
+        insight = f"{insight} {cost_line}".strip()
+        insight = _clip(insight, _MAX_TRAP)
     growth = _dedupe_list(growth, trap, surface, *strengths)[:3]
     strengths = _dedupe_list(strengths, trap, surface, *growth)[:4]
     growth = [_scrub_machine_thesis(g, identity_thesis) for g in growth]
     trap = _scrub_machine_thesis(trap, identity_thesis)
     insight = _scrub_machine_thesis(insight, identity_thesis)
+    if help_line:
+        help_line = _scrub_machine_thesis(help_line, identity_thesis)
     decision = _scrub_machine_thesis(decision, identity_thesis)
     relationship = _scrub_machine_thesis(relationship, identity_thesis)
     money = _scrub_machine_thesis(money, identity_thesis)
@@ -1128,9 +1200,20 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
 
     from todayflow_backend.services.character_engine_profile_consumption_spheres_houses_v0 import (
         apply_spheres_and_houses_to_payload,
+        build_k07_path_spheres_v0,
     )
 
     apply_spheres_and_houses_to_payload(payload, identity_thesis=identity_thesis)
+    spheres, sphere_source = build_k07_path_spheres_v0(
+        stage0=stage0 if isinstance(stage0, dict) else {},
+        stage1=stage1 if isinstance(stage1, dict) else {},
+        k04_axis=k04_axis,
+        k05_insight=insight,
+    )
+    contract = payload.get("profile_contract_v1")
+    if isinstance(contract, dict):
+        contract["life_spheres"] = spheres
+        payload["profile_contract_v1"] = contract
 
     payload["portrait_why_v0"] = {
         "projection_version": f"{PROJECTION_VERSION}.why",
@@ -1212,6 +1295,8 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             "source": "character_engine_identity_core",
             "trap_source": trap_source,
             "insight_source": insight_source,
+            "help_source": help_source,
+            "cost_source": cost_source,
             "forbids_living_day_rhythm_as_identity_trap": True,
             "living_evidence_is_adjacent_context_not_proof": True,
             "titles_follow_forms_case_a_c": True,
@@ -1227,6 +1312,9 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "primary_claim_id": primary_id,
         "trap_source": trap_source,
         "insight_source": insight_source,
+        "help_source": help_source,
+        "cost_source": cost_source,
+        "sphere_source": sphere_source,
         "decision_source": decision_source,
         "relationship_source": relationship_source,
         "money_source": money_source,

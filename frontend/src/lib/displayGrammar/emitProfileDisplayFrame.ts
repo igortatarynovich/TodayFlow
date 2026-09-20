@@ -11,6 +11,7 @@ import {
 } from "@/lib/profilePage/buildProfileJourneyProjection";
 import { buildWhyFormationCards } from "@/lib/profilePage/buildWhyFormationCards";
 import { profileHeaderFacts } from "@/lib/profilePage/profileHeaderFacts";
+import { buildProfileLifeSpheresFromProfileData } from "@/lib/profilePage/profileLifeSpheres";
 import type { CoreProfile } from "@/lib/types";
 import type {
   DisplayAtom,
@@ -239,6 +240,30 @@ export function emitProfileDisplayFrame(input: EmitProfileDisplayFrameInput): Di
     fe_transform: "clip",
     json_field: "profile.effort_vector",
   });
+  if (journey.effortVector) {
+    const pathSpheres = buildProfileLifeSpheresFromProfileData(null, input.core ?? null).slice(0, 2);
+    for (const sphere of pathSpheres) {
+      pushAtom(atoms, {
+        slot_id: "P4.sphere.teaser",
+        text: sphere.need || sphere.how,
+        origins: ["ce"],
+        text_class: "generated",
+        fe_transform: "clip",
+        json_field: "profile.life_spheres.need",
+      });
+      const expand = [sphere.how, sphere.risk].map((part) => trim(part)).filter(Boolean);
+      const expandText = expand.join(" ");
+      const teaser = trim(sphere.need || sphere.how);
+      pushAtom(atoms, {
+        slot_id: "P4.sphere.expand",
+        text: expandText && expandText !== teaser ? expandText : sphere.how,
+        origins: ["ce"],
+        text_class: "generated",
+        fe_transform: "clip",
+        json_field: "profile.life_spheres.how",
+      });
+    }
+  }
   pushAtom(atoms, {
     slot_id: "P5.bridge_line",
     text: journey.bridge?.line,

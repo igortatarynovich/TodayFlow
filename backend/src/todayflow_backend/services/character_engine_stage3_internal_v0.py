@@ -19,6 +19,12 @@ from todayflow_backend.core.llm_openai_compatible import (
     llm_call_context,
     resolve_complex_chat_model,
 )
+from todayflow_backend.knowledge.il2_composition_v1 import (
+    ComposedFrame,
+    compose_aspect_pair,
+    compose_planet_in_sign,
+    load_objects,
+)
 from todayflow_backend.prompts.registry_v1 import get_prompt
 
 logger = logging.getLogger(__name__)
@@ -37,6 +43,8 @@ ENGINE_SLOTS = (
     "growth",
     "burnout",
 )
+_OCCUPANCY_BODIES = ("sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn")
+_HARMONIC_ASPECTS = {"conjunction": 0, "trine": 1, "sextile": 2}
 
 # Deterministic expansion when LLM down — still rooted in identity thesis.
 _ENGINE_BY_IDENTITY: dict[str, dict[str, dict[str, str]]] = {
@@ -196,6 +204,216 @@ _PRIMARY_TENSION_BY_IDENTITY: dict[str, dict[str, str]] = {
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def _index_facts(raw_facts: list[Any]) -> dict[str, dict[str, Any]]:
+    by_type: dict[str, dict[str, Any]] = {}
+    for row in raw_facts:
+        if not isinstance(row, dict):
+            continue
+        ft = str(row.get("fact_type") or "").strip()
+        if ft and ft not in by_type:
+            by_type[ft] = row
+    return by_type
+
+
+def _first_lemma(frame: ComposedFrame, job_name: str) -> str:
+    payload = frame.jobs.get(job_name)
+    if payload is None:
+        return ""
+    for lemma in payload.lemmas:
+        token = str(lemma).strip()
+        if token:
+            return token
+    return ""
+
+
+def _how_line(frame: ComposedFrame) -> str:
+    payload = frame.jobs.get("how")
+    if payload is None:
+        return ""
+    bits = [str(lemma).strip() for lemma in payload.lemmas if str(lemma).strip()]
+    return " ".join(bits)
+
+
+def _manner_axis_for(
+    *,
+    catalog: dict[str, Any],
+    bodies: dict[str, dict[str, str]],
+    field: str,
+    expected: str,
+    supporting_id: str,
+) -> dict[str, Any] | None:
+    ordered = [body for body in _OCCUPANCY_BODIES if body in bodies]
+    preferred = [body for body in ordered if body != "sun"] or ordered
+    for body in preferred:
+        meta = bodies.get(body) or {}
+        if str(meta.get(field) or "") != expected:
+            continue
+        sign = str(meta.get("sign") or "").strip().lower()
+        if not sign:
+            continue
+        frame = compose_planet_in_sign(
+            catalog, f"astro.object.{body}", f"astro.sign.{sign}"
+        )
+        if frame.status != "composed":
+            continue
+        line = _how_line(frame)
+        if not line:
+            continue
+        return {
+            "slot": "decision",
+            "surface_text": line,
+            "source": "stage0_element_balance",
+            "thesis_key": f"element_balance:{expected}",
+            "body": body,
+            "sign": sign,
+            "supporting_fact_ids": [supporting_id] if supporting_id else [],
+        }
+    return None
+
+
+def _harmonic_axis(
+    *,
+    catalog: dict[str, Any],
+    facts_by_type: dict[str, dict[str, Any]],
+) -> dict[str, Any] | None:
+    ranked: list[tuple[int, float, str, dict[str, Any], tuple[str, str, str]]] = []
+    for fact_type, row in facts_by_type.items():
+        if not str(fact_type).startswith("aspect_pair:"):
+            continue
+        value = row.get("value") if isinstance(row.get("value"), dict) else {}
+        body_a = str(value.get("body_a") or "").strip().lower()
+        body_b = str(value.get("body_b") or "").strip().lower()
+        aspect = str(value.get("aspect") or "").strip().lower()
+        if not body_a or not body_b or aspect not in _HARMONIC_ASPECTS:
+            continue
+        try:
+            orb = float(value.get("orb"))
+        except (TypeError, ValueError):
+            orb = 99.0
+        if body_a > body_b:
+            body_a, body_b = body_b, body_a
+        thesis = f"aspect_pair:{body_a}:{body_b}:{aspect}"
+        ranked.append(
+            (_HARMONIC_ASPECTS[aspect], orb, thesis, row, (body_a, body_b, aspect))
+        )
+    ranked.sort(key=lambda item: (item[0], item[1], item[2]))
+    for _rank, _orb, thesis, row, (body_a, body_b, aspect) in ranked:
+        frame = compose_aspect_pair(
+            catalog,
+            f"astro.object.{body_a}",
+            f"astro.object.{body_b}",
+            f"astro.aspect.{aspect}",
+        )
+        if frame.status != "composed":
+            continue
+        what_a = _first_lemma(frame, "what_a")
+        what_b = _first_lemma(frame, "what_b")
+        relation = _first_lemma(frame, "relation")
+        if not what_a or not what_b or not relation:
+            continue
+        supporting = [str(row["fact_id"])] if row.get("fact_id") else []
+        return {
+            "slot": "decision",
+            "surface_text": f"{what_a} / {what_b} — {relation}.",
+            "source": "stage0_harmonic_aspect",
+            "thesis_key": thesis,
+            "supporting_fact_ids": supporting,
+        }
+    return None
+
+
+def select_internal_engine_path_axis_v0(
+    *,
+    facts_pack: dict[str, Any] | None = None,
+    raw_facts: list[Any] | None = None,
+) -> dict[str, Any] | None:
+    """PIC-K04: one Internal Engine axis from F08 / harmonic F07. Not seven widgets. Hard F07 is K05."""
+    facts = raw_facts
+    if facts is None and isinstance(facts_pack, dict):
+        facts = facts_pack.get("raw_facts")
+    if not isinstance(facts, list):
+        return None
+    facts_by_type = _index_facts(facts)
+    balance = facts_by_type.get("element_balance")
+    catalog = load_objects()
+    if isinstance(balance, dict):
+        value = balance.get("value") if isinstance(balance.get("value"), dict) else {}
+        bodies = value.get("bodies") if isinstance(value.get("bodies"), dict) else {}
+        supporting_id = str(balance.get("fact_id") or "")
+        dominant_element = str(value.get("dominant_element") or "").strip() or None
+        typed_bodies = {str(k): v for k, v in bodies.items() if isinstance(v, dict)}
+        if dominant_element:
+            axis = _manner_axis_for(
+                catalog=catalog,
+                bodies=typed_bodies,
+                field="element",
+                expected=dominant_element,
+                supporting_id=supporting_id,
+            )
+            if axis:
+                return axis
+        dominant_modality = str(value.get("dominant_modality") or "").strip() or None
+        if dominant_modality:
+            axis = _manner_axis_for(
+                catalog=catalog,
+                bodies=typed_bodies,
+                field="modality",
+                expected=dominant_modality,
+                supporting_id=supporting_id,
+            )
+            if axis:
+                return axis
+    return _harmonic_axis(catalog=catalog, facts_by_type=facts_by_type)
+
+
+def _lemma_tokens(text: str) -> set[str]:
+    return {token for token in re.findall(r"[a-z0-9-]+", str(text or "").lower()) if token}
+
+
+def honest_cost_from_axis_v0(
+    *,
+    axis: dict[str, Any] | None,
+    insight: str,
+    help_line: str,
+) -> dict[str, Any] | None:
+    """PIC-K09: one honest cost of grounded K04+K05. Omit if missing, dupe, or no excess atom."""
+    insight_line = str(insight or "").strip()
+    help_text = str(help_line or "").strip()
+    if not isinstance(axis, dict) or not insight_line or not help_text:
+        return None
+    if str(axis.get("source") or "") != "stage0_element_balance":
+        return None
+    sign = str(axis.get("sign") or "").strip().lower()
+    if not sign:
+        return None
+    catalog = load_objects()
+    obj = catalog.get(f"astro.sign.{sign}")
+    canon = obj.get("canon") if isinstance(obj, dict) else None
+    excess = canon.get("excess") if isinstance(canon, dict) else None
+    if not isinstance(excess, list):
+        return None
+    bits = [str(lemma).strip() for lemma in excess if str(lemma).strip()]
+    cost = " ".join(bits)
+    if not cost:
+        return None
+    if _lemma_tokens(cost) & (_lemma_tokens(insight_line) | _lemma_tokens(help_text)):
+        return None
+    return {
+        "surface_text": cost,
+        "source": "sign_excess_of_k04_axis",
+        "sign": sign,
+        "body": str(axis.get("body") or ""),
+    }
+
+
+def _with_path_axis(out: dict[str, Any], facts_pack: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(out, dict):
+        return out
+    attached = dict(out)
+    attached["path_axis"] = select_internal_engine_path_axis_v0(facts_pack=facts_pack)
+    return attached
 
 
 def _parse_json_object(raw: str) -> dict[str, Any] | None:
@@ -521,16 +739,22 @@ def build_character_engine_internal_engine_v0(
         facts_pack=facts_pack, evidence=evidence, identity=identity
     )
 
+    def _finish(out: dict[str, Any]) -> dict[str, Any]:
+        return _with_path_axis(out, facts_pack)
+
     if llm_raw is not None:
-        return validate_stage3_internal_contract(
-            llm_raw,
-            identity=identity,
-            evidence=evidence,
-            prompt_version="test_inject",
+        return _finish(
+            validate_stage3_internal_contract(
+                llm_raw,
+                identity=identity,
+                evidence=evidence,
+                prompt_version="test_inject",
+            )
         )
 
     if str(identity.get("status") or "") != "grounded":
-        return validate_stage3_internal_contract(
+        return _finish(
+            validate_stage3_internal_contract(
             {
                 "status": "insufficient_internal_engine",
                 "identity_thesis_echo": "",
@@ -542,6 +766,7 @@ def build_character_engine_internal_engine_v0(
             identity=identity if identity.get("status") else {"status": "insufficient_identity_core"},
             evidence=evidence,
             prompt_version="n/a",
+            )
         )
 
     core = identity.get("identity_core") if isinstance(identity.get("identity_core"), dict) else {}
@@ -549,14 +774,16 @@ def build_character_engine_internal_engine_v0(
     def _deterministic(*, reason: str, prompt_ver: str) -> dict[str, Any]:
         raw = build_deterministic_stage3_raw_v0(identity_core=core, evidence=evidence)
         if raw is None:
-            return validate_stage3_internal_contract(
-                {
-                    "status": "insufficient_internal_engine",
-                    "selection_rationale": reason,
-                },
-                identity=identity,
-                evidence=evidence,
-                prompt_version=prompt_ver,
+            return _finish(
+                validate_stage3_internal_contract(
+                    {
+                        "status": "insufficient_internal_engine",
+                        "selection_rationale": reason,
+                    },
+                    identity=identity,
+                    evidence=evidence,
+                    prompt_version=prompt_ver,
+                )
             )
         logger.warning("character_engine_stage3: deterministic Internal Engine (%s)", reason)
         out = validate_stage3_internal_contract(
@@ -568,7 +795,7 @@ def build_character_engine_internal_engine_v0(
                 "deterministic_fallback": True,
                 "fallback_reason": reason,
             }
-        return out
+        return _finish(out)
 
     if deterministic_only or not is_llm_chat_configured():
         reason = "deterministic_only_read_path" if deterministic_only else "llm_not_configured"
@@ -609,9 +836,11 @@ def build_character_engine_internal_engine_v0(
     # Force echo if model omitted but core known — still validated against rewrite.
     if not parsed.get("identity_thesis_echo"):
         parsed["identity_thesis_echo"] = core.get("thesis_key")
-    return validate_stage3_internal_contract(
-        parsed,
-        identity=identity,
-        evidence=evidence,
-        prompt_version=prompt_version,
+    return _finish(
+        validate_stage3_internal_contract(
+            parsed,
+            identity=identity,
+            evidence=evidence,
+            prompt_version=prompt_version,
+        )
     )

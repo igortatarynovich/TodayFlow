@@ -15,6 +15,7 @@ from todayflow_backend.services.character_engine_stage2_identity_v0 import (
 from todayflow_backend.services.character_engine_stage3_internal_v0 import (
     ENGINE_SLOTS,
     build_character_engine_internal_engine_v0,
+    honest_cost_from_axis_v0,
 )
 from todayflow_backend.services.character_engine_stage3_shadow_v0 import (
     run_character_engine_stage3_shadow_v0,
@@ -219,3 +220,63 @@ def test_consumption_prefers_stage3_trap_and_decision(monkeypatch) -> None:
     assert out["insight_nodes_v0"]["nodes"][0]["insight"] == ""
     assert "Stage3 trap" not in (out["insight_nodes_v0"]["nodes"][0].get("insight") or "")
     assert "зоне decision" in out["profile_contract_v1"]["decision_style"]
+
+
+def test_stage3_path_axis_from_f08_not_identity_widgets() -> None:
+    earth = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_k04",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Virgo", "degree": 15.0, "longitude": 165.0},
+                {"body": "Moon", "sign": "Taurus", "degree": 10.0, "longitude": 40.0},
+                {"body": "Mercury", "sign": "Virgo", "degree": 4.0, "longitude": 154.0},
+                {"body": "Mars", "sign": "Cancer", "degree": 12.0, "longitude": 102.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 7},
+        capability={"natal_mode": "date_only", "has_name": True},
+        birth_date="1991-09-08",
+        input_fingerprint="in_k04",
+    )
+    evidence = build_character_engine_evidence_candidates_v0(earth)
+    identity = build_character_engine_identity_core_v0(
+        facts_pack=earth,
+        evidence=evidence,
+        deterministic_only=True,
+    )
+    out = build_character_engine_internal_engine_v0(
+        facts_pack=earth,
+        evidence=evidence,
+        identity=identity,
+        deterministic_only=True,
+    )
+    assert out["status"] == "grounded"
+    assert set(out["internal_engine"].keys()) == set(ENGINE_SLOTS)
+    axis = out["path_axis"]
+    assert isinstance(axis, dict)
+    assert axis["source"] == "stage0_element_balance"
+    assert axis["thesis_key"] == "element_balance:earth"
+    assert axis["sign"] == "taurus"
+    assert axis["body"] == "moon"
+    assert "slow-and-steady" in axis["surface_text"] or "steadfast" in axis["surface_text"]
+    assert axis["slot"] == "decision"
+    cost = honest_cost_from_axis_v0(
+        axis=axis,
+        insight="act ↔ limit — friction.",
+        help_line=str(axis["surface_text"]),
+    )
+    assert cost is not None
+    assert "immovable" in cost["surface_text"] or "over-holding" in cost["surface_text"]
+    assert honest_cost_from_axis_v0(axis=axis, insight="", help_line=str(axis["surface_text"])) is None
+    assert honest_cost_from_axis_v0(axis=axis, insight="act ↔ limit — friction.", help_line="") is None
+    harmonic = {
+        "source": "stage0_harmonic_aspect",
+        "surface_text": "act / expand — easy-flow.",
+        "sign": "",
+    }
+    assert honest_cost_from_axis_v0(
+        axis=harmonic,
+        insight="act ↔ limit — friction.",
+        help_line="act / expand — easy-flow.",
+    ) is None

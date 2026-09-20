@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from todayflow_backend.knowledge.il2_composition_v1 import compose_planet_in_house, load_objects
+
 # Sphere IDs that Profile V2 contract builder accepts (full 6 fields required).
 _SPHERE_IDS = ("love", "money", "decisions", "work", "family", "friends", "body")
 
@@ -679,13 +681,181 @@ def apply_aspect_lines_to_payload(payload: dict[str, Any], *, identity_thesis: s
     }
 
 
+_K07_HOUSE_TO_SPHERE: dict[int, str] = {
+    1: "body",
+    2: "money",
+    3: "friends",
+    4: "family",
+    5: "love",
+    6: "work",
+    7: "love",
+    8: "money",
+    9: "decisions",
+    10: "work",
+    11: "friends",
+    12: "body",
+}
+_K07_OCCUPANCY_BODIES = ("sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn")
+_K07_OCCUPANCY_RANK = ("mars", "venus", "moon", "sun", "mercury", "jupiter", "saturn")
+_K07_NEED_MAX = 88
+_K07_HOW_MAX = 220
+
+
+def _k07_clip(text: str, limit: int) -> str:
+    compact = " ".join(str(text or "").split()).strip()
+    if len(compact) <= limit:
+        return compact
+    return compact[:limit].rsplit(" ", 1)[0].strip() or compact[:limit]
+
+
+def _k07_planet_houses(stage0: dict[str, Any]) -> dict[str, int]:
+    out: dict[str, int] = {}
+    facts = stage0.get("raw_facts") if isinstance(stage0.get("raw_facts"), list) else []
+    for row in facts:
+        if not isinstance(row, dict):
+            continue
+        ft = str(row.get("fact_type") or "").strip().lower()
+        if not ft.startswith("planet_sign:"):
+            continue
+        body = ft.split(":", 1)[1].strip().lower()
+        if body not in _K07_OCCUPANCY_BODIES:
+            continue
+        value = row.get("value") if isinstance(row.get("value"), dict) else {}
+        try:
+            house = int(value.get("house"))
+        except (TypeError, ValueError):
+            continue
+        if 1 <= house <= 12:
+            out[body] = house
+    return out
+
+
+def _k07_k05_bodies(stage1: dict[str, Any]) -> list[str]:
+    claims = stage1.get("claims") if isinstance(stage1.get("claims"), list) else []
+    for claim in claims:
+        if not isinstance(claim, dict):
+            continue
+        if claim.get("claim_kind") != "tension":
+            continue
+        if claim.get("evidence_status") != "grounded":
+            continue
+        key = str(claim.get("thesis_key") or "")
+        if not key.startswith("aspect_pair:"):
+            continue
+        parts = key.split(":")
+        if len(parts) >= 4:
+            return [parts[1].strip().lower(), parts[2].strip().lower()]
+    return []
+
+
+def _k07_first_lemmas(frame: Any, job_name: str, *, limit: int = 3) -> list[str]:
+    payload = frame.jobs.get(job_name) if frame is not None else None
+    if payload is None:
+        return []
+    out: list[str] = []
+    for lemma in payload.lemmas:
+        token = str(lemma).strip()
+        if token:
+            out.append(token)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def build_k07_path_spheres_v0(
+    *,
+    stage0: dict[str, Any] | None,
+    stage1: dict[str, Any] | None,
+    k04_axis: dict[str, Any] | None,
+    k05_insight: str,
+) -> tuple[dict[str, dict[str, str]], str]:
+    """PIC-K07: ≤2 path spheres from grounded F06 houses of K01/K04/K05 bodies.
+
+    Sphere answers where the already-known mechanism shows. Not a new root.
+    No identity-thesis / relationships-career-money essay bank. Empty omits.
+    """
+    omit = "omitted_no_grounded_f06"
+    if not isinstance(stage0, dict):
+        return {}, omit
+    capability = stage0.get("capability") if isinstance(stage0.get("capability"), dict) else {}
+    if str(capability.get("natal_mode") or "").strip().lower() != "full":
+        return {}, omit
+    houses = _k07_planet_houses(stage0)
+    if not houses:
+        return {}, omit
+
+    k05_bodies = _k07_k05_bodies(stage1 if isinstance(stage1, dict) else {})
+    k04_body = str((k04_axis or {}).get("body") or "").strip().lower() if isinstance(k04_axis, dict) else ""
+    ranked: list[tuple[int, int, str]] = []
+    seen: set[str] = set()
+
+    def _add(priority: int, body: str) -> None:
+        key = str(body or "").strip().lower()
+        if not key or key in seen or key not in houses:
+            return
+        seen.add(key)
+        rank = _K07_OCCUPANCY_RANK.index(key) if key in _K07_OCCUPANCY_RANK else 99
+        ranked.append((priority, rank, key))
+
+    for body in k05_bodies:
+        _add(0, body)
+    if k04_body:
+        _add(1, k04_body)
+    for body in _K07_OCCUPANCY_RANK:
+        _add(2, body)
+    ranked.sort()
+    if not ranked:
+        return {}, omit
+
+    catalog = load_objects()
+    insight = " ".join(str(k05_insight or "").split()).strip()
+    spheres: dict[str, dict[str, str]] = {}
+    used_ids: set[str] = set()
+    for _prio, _rank, body in ranked:
+        if len(spheres) >= 2:
+            break
+        house = houses[body]
+        sphere_id = _K07_HOUSE_TO_SPHERE.get(house)
+        if not sphere_id or sphere_id in used_ids:
+            continue
+        frame = compose_planet_in_house(
+            catalog, f"astro.object.{body}", f"astro.house.{house:02d}"
+        )
+        if frame.status != "composed":
+            continue
+        what = _k07_first_lemmas(frame, "what", limit=2)
+        where = _k07_first_lemmas(frame, "where", limit=4)
+        if not what or not where:
+            continue
+        need = _k07_clip(", ".join(where), _K07_NEED_MAX)
+        how = _k07_clip(f"{' / '.join(what)} — {need}.", _K07_HOW_MAX)
+        if not how or not need:
+            continue
+        row: dict[str, str] = {"how": how, "need": need}
+        if insight and body in k05_bodies and not _k07_tokens_overlap(insight, how, need):
+            row["risk"] = _k07_clip(insight, _K07_HOW_MAX)
+        spheres[sphere_id] = row
+        used_ids.add(sphere_id)
+    if not spheres:
+        return {}, omit
+    return spheres, "f06_house_arena"
+
+
+def _k07_tokens_overlap(insight: str, *parts: str) -> bool:
+    hay = " ".join(parts).lower()
+    tokens = [tok for tok in insight.lower().replace("↔", " ").replace("—", " ").split() if len(tok) >= 4]
+    if not tokens:
+        return False
+    hits = sum(1 for tok in tokens if tok in hay)
+    return hits >= max(2, len(tokens) // 2)
+
+
 def apply_spheres_and_houses_to_payload(
     payload: dict[str, Any],
     *,
     identity_thesis: str,
 ) -> None:
-    """Mutate payload: contract.life_spheres + applied ASC/houses + matrix + aspects."""
-    spheres = build_life_spheres_for_identity_v0(identity_thesis)
+    """Mutate payload: applied ASC/houses + matrix styles + aspects. Path spheres are PIC-K07."""
     anchors = extract_swiss_house_asc_anchors_v0(payload)
     houses = build_house_person_lines_for_identity_v0(
         identity_thesis,
@@ -696,7 +866,6 @@ def apply_spheres_and_houses_to_payload(
     contract = payload.get("profile_contract_v1")
     if isinstance(contract, dict):
         contract = dict(contract)
-        contract["life_spheres"] = spheres
         contract.update(styles)
         payload["profile_contract_v1"] = contract
     payload["character_engine_house_lines_v0"] = {

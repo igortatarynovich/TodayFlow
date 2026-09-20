@@ -154,7 +154,7 @@ function buildSpheresFromContractOnly(
     const turnsOn = (live.turns_on || "").trim();
     const turnsOff = (live.turns_off || "").trim();
     const helps = (live.helps || "").trim();
-    if (!how || !need || !risk || !turnsOn || !turnsOff || !helps) continue;
+    if (!how) continue;
     out.push({
       id,
       title: chrome.title,

@@ -600,3 +600,40 @@ def test_stage1_picks_one_primary_when_two_hard_aspects() -> None:
     ]
     assert len(tensions) == 1
     assert tensions[0]["thesis_key"] == "aspect_pair:moon:sun:opposition"
+
+
+def test_stage0_mints_f08_element_balance() -> None:
+    pack = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_f08",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Virgo", "degree": 15.0, "longitude": 165.0},
+                {"body": "Moon", "sign": "Taurus", "degree": 10.0, "longitude": 40.0},
+                {"body": "Mercury", "sign": "Virgo", "degree": 4.0, "longitude": 154.0},
+                {"body": "Mars", "sign": "Cancer", "degree": 12.0, "longitude": 102.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 7},
+        capability={"natal_mode": "date_only"},
+        birth_date="1991-09-08",
+        input_fingerprint="in_f08",
+    )
+    types = {f["fact_type"] for f in pack["raw_facts"]}
+    assert "element_balance" in types
+    balance = next(f for f in pack["raw_facts"] if f["fact_type"] == "element_balance")
+    assert balance["value"]["dominant_element"] == "earth"
+    assert balance["value"]["elements"]["earth"] == 3
+    assert balance["value"]["count"] == 4
+
+
+def test_stage0_omits_f08_with_single_planet() -> None:
+    pack = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_f08_one",
+        swiss_chart={"positions": [{"body": "Sun", "sign": "Virgo", "degree": 15.0}], "houses": []},
+        capability={"natal_mode": "date_only"},
+        birth_date="1991-09-08",
+        input_fingerprint="in_f08_one",
+    )
+    types = {f["fact_type"] for f in pack["raw_facts"]}
+    assert "element_balance" not in types
