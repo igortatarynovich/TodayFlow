@@ -47,7 +47,7 @@ This file stays **frozen**. Execution of the next gate is a **new branch**, not 
 
 **Selected (2026-09-21):** Full User Path **X3** — Theme / Focus / Step as readable spine on locked 4-surface. SoT: [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md) product-gate selection · [FULL_USER_PATH_CANON_V1](../audits/FULL_USER_PATH_CANON_V1.md) §13/§16.
 
-After X3 (not this freeze): X4 honest card reveal + X5 calendar-number copy · then P1 X11 legacy narrative · X14 progress / D2 continuity.
+After X3 (executed, not this freeze): joint **X4/X5 CLOSED / PASS**. Remaining P1: X11 leftover narrative · X14 progress / D2 continuity.
 
 Not selected: Compatibility Information Contract · TIC-K21 · IL · PIC.
 

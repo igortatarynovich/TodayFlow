@@ -71,14 +71,14 @@ export const TODAY_COMPOSITION_COPY = {
   instructionBridgeEyebrow: "Твой личный фокус сегодня",
   ritualTarotPendingTitle: "Давай вытащим карту дня",
   ritualTarotPendingBody:
-    "Не ответ на все вопросы — скорее зеркало. Выбери ту, к которой тянет: ещё один взгляд на уже собранный день.",
-  ritualTarotPickCta: "Выбрать карту",
+    "Не ответ на все вопросы — скорее зеркало. Открой карту: ещё один взгляд на уже собранный день.",
+  ritualTarotPickCta: "Открыть карту",
   ritualTarotOpenCta: "Открой свою карту дня",
   ritualNumberPendingTitle: "Теперь — число дня",
   ritualNumberPendingBody:
     "Число — ещё один символический слой поверх уже собранного дня. Откроем и посмотрим.",
-  ritualNumberPickCta: "Выбрать число",
-  ritualNumberOpenCta: "Открой своё число дня",
+  ritualNumberPickCta: "Открыть число дня",
+  ritualNumberOpenCta: "Открыть число дня",
   ritualIncompleteHint: "Карта и число — дополнительный слой поверх уже собранного дня.",
   strengthenTitle: "Что сегодня поможет именно тебе",
   promiseTitle: "Обещание дня",

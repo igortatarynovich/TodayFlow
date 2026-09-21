@@ -14,6 +14,15 @@
 
 ---
 
+## Architecture impact — X4/X5 honest reveal chrome (2026-09-21)
+
+- **SoT before:** `T2-gate.card_body` could paint a pick («выбери ту, к которой тянет»); `T2-gate.number_title` could paint «своё число».
+- **SoT after:** same slots. Card chrome is a reveal of prebake. Number chrome is the calendar day number. Gesture/formula unchanged.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this record · TODAY_PRODUCT_FLOW X4/X5 · tracker
+- **Backward compatible?** yes. Copy-only.
+
 ## Architecture impact
 
 - **SoT before:** v1.1 named Grammar records; headline vs focus anti-dupe existed; `T3.focus_title` was a short theme; `T3.action` duplicated Priority; compute vs display was implied.
@@ -456,7 +465,7 @@ Does not recompute Global/Personal.
 
 #### `T2-gate.card_title` / `.card_body` / `.number_title` / `.number_body` / `.step`
 
-Chrome. Card open CTA · 1–2 предл. ≤220 / ≤180. States A/B only. `one_question`: как войти в символ, не какой день.
+Chrome. Card open CTA · 1–2 предл. ≤220 / ≤180. States A/B only. `one_question`: как войти в символ, не какой день. **X4/X5:** `card_*` не изображает prebake как пользовательский выбор; `number_*` не изображает YYYYMMDD как личное «твоё/своё». Reveal verbs OK.
 
 #### `T2.card_face`
 

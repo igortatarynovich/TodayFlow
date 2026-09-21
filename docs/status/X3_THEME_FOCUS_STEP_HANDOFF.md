@@ -12,7 +12,7 @@ Not X4. Not X5. Not TIC-K21. Do not rebuild server until asked.
 
 X3 is **closed**. Live T2-gate copy is a symbolic lens over an already-counted day. Card and number do not own Theme, Focus, Step, or action timing.
 
-Selected next product gate (selection 2026-09-21): one joint Full User Path **X4/X5** honest reveal copy. Closing X3 does not implement or close that gate.
+Selected next product gate was executed on `cursor/x4-x5-honest-reveal-copy`: joint Full User Path **X4/X5** is now **CLOSED / PASS**. This freeze does not own that gate.
 
 ---
 
@@ -31,7 +31,7 @@ Gate: `todayX3Spine.test.tsx` · `todayX3GateCopy.test.ts`. TIC close-out unchan
 
 ## 2. Do not
 
-- Start X4/X5 paint from this freeze (new branch when execution starts). This file does not split them into two trains.
+- Start later Today remainder (X11 leftover / X14) from this freeze. X4/X5 is a separate closed gate.
 - Invent TIC-K21 or resume TIC hops.
 - Rebuild server. Merge/deploy only if asked.
 - Reopen Glance as a fifth act. Resume PIC / IL / Compatibility IC.

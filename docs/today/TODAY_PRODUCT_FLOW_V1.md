@@ -254,15 +254,15 @@ USER RESPONSE           →  GRATITUDE HISTORY
 |------|---------------------|--------|
 | 4-surface cutover / ritual-first funnel | **CLOSED** (Phase 2.2). `/today` opens on `today`, then `ritual` · `my_day` · `evening` | cycle already locked |
 | **X3 Theme / Focus / Step** | **CLOSED / PASS.** T1 Theme · T3 Focus · T3.priority Step. Live T2-gate copy is a lens over an already-counted day; card/number do not define Theme/Focus/Step or action timing | experience on closed N |
-| **X4/X5 honest reveal copy** | **OPEN — NEXT (joint).** Two §13 IDs, one executable PASS. X4: seed/prebake vs «выбери ту, к которой тянет». X5: calendar YYYYMMDD vs «твоё/своё число». Same T2 surface; card then number (A→B). Gesture stays theater; formula stays calendar | experience copy |
-| X4 (clause) | Card copy must not claim a real pick. Reveal verbs OK. Prebake + deck gesture unchanged | clause of X4/X5 |
-| X5 (clause) | Number copy must not claim a personal number. Target: «число сегодняшнего дня». YYYYMMDD + ring gesture unchanged | clause of X4/X5 |
+| **X4/X5 honest reveal copy** | **CLOSED / PASS (joint).** Two §13 IDs, one PASS. Locked `T2-gate.card_*` is a reveal, not a pick. Locked `T2-gate.number_*` is the calendar day number, not «своё». Gesture stays theater; formula stays calendar | experience copy |
+| X4 (clause) | **PASS.** Card copy does not claim a real pick. Reveal verbs OK. Prebake + deck gesture unchanged | clause of X4/X5 |
+| X5 (clause) | **PASS.** Number copy does not claim a personal number. Live CTA = «Открыть число дня». YYYYMMDD + ring gesture unchanged | clause of X4/X5 |
 | X11 legacy narrative | OPEN, P1. Glance leftover / stacked `?experience=1` / promise-trap copy. Не пятый акт | cleanup |
 | X14 progress + D2 continuity | OPEN, P1. `T1.continuity` и `T3.tracker` есть; completeness / placement не закрыты | experience |
 | Compatibility Information Contract | **не выбран.** Отдельная таблица (PIC §9). Не автоматическое продолжение TIC | other section N |
 | TIC-K21 / IL dump / PIC resume | **запрещены** этой сверкой | not a product gate |
 
-**Следующий executable gate (selection 2026-09-21):** **один** совместный **X4/X5**. Не два поезда. Не закрывать X4 без X5. Не расширять TIC. Не rebuild сервера. Не landing. Не X11 leftover. X3 не закрывает X4/X5. New branch only when paint starts.
+**X4/X5 CLOSED / PASS (2026-09-21).** Не два поезда. Не расширять TIC. Не rebuild сервера. Не landing. Не X11 leftover. Next Today remainder = P1 X11 legacy narrative, then X14.
 
 **Acceptance (joint PASS):**
 
@@ -271,7 +271,16 @@ USER RESPONSE           →  GRATITUDE HISTORY
 | **X4** | Locked `T2-gate.card_*` chrome must not claim the user chose the card («выбери ту, к которой тянет», «Выбрать карту» as a real pick). Reveal verbs OK («открой / вытяни / сними»). | Prebake / POST reveal / deck gesture / ScreenFlow A / Inventory / K13 lens |
 | **X5** | Locked `T2-gate.number_*` chrome must not claim a personal number («твоё/своё число»). Target wording: «число сегодняшнего дня» / «Открыть число дня» (already §2 state B). | YYYYMMDD formula / POST reveal / ring gesture / ScreenFlow B→C / Inventory / K14 lens |
 
-Both clauses required. Order of paint = card then number (existing A→B). Live overlay on locked path is already closer to honest («Открыть карту»; number ring `aria-label` «Открыть число дня»); leftover lie is mainly gate chrome in `todayCompositionCopy`. Legacy `todayRitualCopy` / `?full=1` / `?experience=1` = X11, not this gate. Landing number promise = §16.3 backlog, not this gate.
+Both clauses required. Order of paint = card then number (existing A→B). **Live after this hop:** locked card gate body is a reveal («Открой карту»), not «выбери ту, к которой тянет»; number gate title is «Открыть число дня», not «своё число». Overlay was already honest and stays theater. Unused pick CTAs in the same chrome bank neutralized. Legacy `todayRitualCopy` / `?full=1` / `?experience=1` = X11, not this gate. Landing number promise = §16.3 backlog, not this gate. «Открой свою карту дня» remains §2 state A reveal chrome (day-card, not a pick).
+
+### Architecture impact — X4/X5 honest reveal copy (2026-09-21)
+
+- **SoT before:** joint gate OPEN. Live locked `T2-gate.card_body` still said «выбери ту, к которой тянет»; live `T2-gate.number_title` still said «Открой своё число дня». Overlay already honest. Mechanic already locked.
+- **SoT after:** **X4/X5 CLOSED / PASS.** Same slots and A→B order. Card chrome is a reveal of a prebaked card. Number chrome is the calendar day number. Gesture stays theater. Formula stays YYYYMMDD.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this file · Display Inventory T2-gate · FULL_USER_PATH §0/§13/§16 · tracker · X4/X5 handoff
+- **Backward compatible?** yes. Copy-only on existing `T2-gate.*` chrome.
 
 ### Architecture impact — X4/X5 gate selection (2026-09-21)
 
