@@ -172,7 +172,18 @@ def test_projection_recovers_unavailable_with_scenario_editorial():
     assert projected["talisman"]["color"] == scenario["props"]["color"]["name"]
     assert projected["talisman"].get("origin_scene_id")
     assert projected["talisman"]["provenance"]["source_kind"] == "day_scenario_v1"
-    assert projected["practice_recommendation"]["kind"] == "affirmation"
+    rec_tool = projected.get("practice_recommendation")
+    assert rec_tool in (None, {}, {"kind": "none", "text": "", "reason": ""})
+    scene_affirms = [
+        str(a.get("text") or "").strip()
+        for a in (scenario.get("props") or {}).get("affirmations") or []
+        if isinstance(a, dict)
+    ]
+    rec_text = str((rec_tool or {}).get("text") or "").strip()
+    assert not rec_text
+    for line in scene_affirms:
+        if line:
+            assert line not in rec_text
     assert projected["day_scenario"]["runtime_sot"] is True
     assert projected["interpretive_chorus"]["day_card"]["named"]
     assert "Отшельник" in projected["interpretive_chorus"]["day_card"]["named"]

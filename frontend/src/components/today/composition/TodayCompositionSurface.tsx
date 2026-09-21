@@ -108,6 +108,7 @@ import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanc
 import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
 import { pickMyDayCautionLines, pickMyDayPriorityLines } from "@/lib/todayMyDayPriority";
 import { pickPersonalFocusAxisId, pickPersonalFocusAxisLabel } from "@/lib/todayPersonalFocusAxis";
+import { pickLockedAffirmationLine, pickLockedSupportSlot } from "@/lib/todaySupportXor";
 import { buildGlanceEnergyFromChorus } from "@/lib/todayGlanceEnergy";
 import { buildPlotConflictNarrative, buildPlotStoryBeats } from "@/lib/todayPlotNarrative";
 import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
@@ -575,30 +576,18 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const practiceRec = props.contract.day_story?.practice_recommendation;
-  const preferAffirmationSlot = useMemo(() => {
-    const key = dateISO || "0";
-    let h = 0;
-    for (let i = 0; i < key.length; i += 1) h = (h * 31 + key.charCodeAt(i)) >>> 0;
-    return h % 2 === 1;
-  }, [dateISO]);
-  const showAffirmationSupport = Boolean(
-    (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool,
+  const practiceReady = Boolean(
+    practiceTool || (practiceRec?.kind === "practice" && practiceRec.text),
   );
-  const showPracticeSupport = Boolean(practiceTool || (practiceRec?.kind === "practice" && practiceRec.text));
-  const supportSlot: "affirmation" | "practice" | null =
-    showAffirmationSupport && showPracticeSupport
-      ? preferAffirmationSlot
-        ? "affirmation"
-        : "practice"
-      : showAffirmationSupport
-        ? "affirmation"
-        : showPracticeSupport
-          ? "practice"
-          : null;
+  const supportSlot = pickLockedSupportSlot({
+    contract: props.contract,
+    practiceReady,
+  });
+  const personalAffirmation = pickLockedAffirmationLine(props.contract);
 
   const practiceFrameTitle =
     supportSlot === "affirmation"
-      ? (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool?.title || null
+      ? personalAffirmation || affirmationTool?.title || null
       : supportSlot === "practice"
         ? practiceTool?.title || (practiceRec?.kind === "practice" ? practiceRec.text : null) || null
         : null;
@@ -606,7 +595,7 @@ export function TodayCompositionSurface(props: Props) {
     supportSlot === "practice"
       ? practiceTool?.duration || (practiceRec?.kind === "practice" ? practiceRec.reason : null) || null
       : supportSlot === "affirmation"
-        ? (practiceRec?.kind === "affirmation" ? practiceRec.reason : null) || null
+        ? null
         : null;
   const practiceFrameCompleted =
     supportSlot === "affirmation" ? engagement.affirmationRead : engagement.practiceCompleted;
@@ -2114,14 +2103,8 @@ export function TodayCompositionSurface(props: Props) {
       supportSlot === "practice"
         ? practiceTool?.detail || (practiceRec?.kind === "practice" ? practiceRec.reason : null)
         : null,
-    affirmationTitle:
-      supportSlot === "affirmation"
-        ? (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool?.title || null
-        : null,
-    affirmationDetail:
-      supportSlot === "affirmation"
-        ? (practiceRec?.kind === "affirmation" ? practiceRec.reason : null) || null
-        : null,
+    affirmationTitle: supportSlot === "affirmation" ? personalAffirmation || affirmationTool?.title || null : null,
+    affirmationDetail: null,
     progressRows: displayProgressRows,
     maxToday: 2,
   });

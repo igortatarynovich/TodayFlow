@@ -55,6 +55,25 @@ describe("buildTodayDayTasks", () => {
     expect(result.daily.every((t) => t.cadence === "daily")).toBe(true);
   });
 
+  it("does not add scene affirmation when XOR omitted that branch", () => {
+    const result = buildTodayDayTasks({
+      contract: {
+        ...baseContract,
+        day_story: {
+          contract_version: "day_story_v1",
+          practice_recommendation: {
+            kind: "affirmation",
+            text: "Я справлюсь с тем, что прямо сейчас.",
+          },
+        },
+      },
+      practiceTitle: "Дыхание 3 минуты",
+    });
+    expect(result.today).toHaveLength(1);
+    expect(result.today[0].kind).toBe("practice");
+    expect(result.today.some((t) => t.kind === "affirmation")).toBe(false);
+  });
+
   it("does not duplicate practice gift and practice recommendation", () => {
     const result = buildTodayDayTasks({
       contract: {

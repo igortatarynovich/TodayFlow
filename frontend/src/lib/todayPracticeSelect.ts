@@ -46,6 +46,17 @@ export function needQueryFromFocusAxis(axis: string | null | undefined): {
   return PERSONAL_FOCUS_NEED[key];
 }
 
+/**
+ * Existing retrieval class for the F10 need cell (K16 already passes
+ * content_class=practice). K17 XOR uses this class; it does not re-rank
+ * practice vs affirmation catalog items.
+ */
+export function contentClassFromFocusAxis(
+  axis: string | null | undefined,
+): "practice" | null {
+  return needQueryFromFocusAxis(axis) ? "practice" : null;
+}
+
 export function catalogPracticeFromSelection(
   selection: ContentLibrarySelectResponse | null | undefined,
 ): PracticeResponse | null {

@@ -59,7 +59,10 @@ PROJECTION_MAP = {
     "domains.*": "scenes grouped by wire lens (overwrite)",
     "talisman.color": "props.color.name",
     "talisman.note": "props.color.link_to_conflict (+ avoid hint)",
-    "practice_recommendation": "props.affirmations[0] as kind=affirmation",
+    "practice_recommendation": (
+        "Personal verbal support only; not scene props.affirmations / trap / "
+        "recommended_action. XOR with T3.practice is K17, not a second selector"
+    ),
     "day_thesis / primary_conflict": "conflict.thesis / short_name",
     "events_lead": "foundation.ranked_drivers fact_ru",
     "interpretive_chorus": "chorus voices (card/number/astro/natal)",
@@ -127,6 +130,18 @@ def _personal_narrative_avoid_lines() -> list[str]:
     → omit. Not a second ranker. Not an inversion of K09 do[].
     """
     return []
+
+
+def _personal_narrative_practice_recommendation() -> dict[str, Any] | None:
+    """TIC-K17: Personal verbal support owns T3.affirmation.
+
+    Scene `props.affirmations` / trap / recommended_action are Global. Projector
+    does not choose practice vs affirmation and does not copy scene affirmation
+    as a competing branch. No Personal-owned affirmation field exists on the
+    locked overlay schema → omit. XOR with K16 is the existing F10 content
+    class, not a second selector.
+    """
+    return None
 
 
 def _origin_conflict_id(conflict: dict[str, Any]) -> str:
@@ -633,27 +648,8 @@ def project_day_scenario_onto_day_story_v1(
     else:
         base.pop("talisman", None)
 
-    affirms = _as_list(props.get("affirmations"))
-    if affirms and isinstance(affirms[0], dict) and affirms[0].get("text"):
-        a0 = affirms[0]
-        text = _clip(a0.get("text"), 200)
-        kind = str(a0.get("kind") or "affirmation").strip() or "affirmation"
-        # Prefer trap-compensation as reason; never repeat the affirmation text.
-        reason_raw = _clip(a0.get("compensates_trap"), 120) or _clip(a0.get("helps_action"), 160)
-        reason = reason_raw if reason_raw and reason_raw.lower() != text.lower() else ""
-        base["practice_recommendation"] = {
-            "kind": kind,
-            "text": text,
-            "reason": reason or None,
-            "origin_scene_id": a0.get("origin_scene_id"),
-            "provenance": _field_provenance(
-                origin_scene_id=str(a0.get("origin_scene_id") or None),
-                origin_conflict_id=origin_conflict,
-                evidence_refs=scene_evidence,
-            ),
-        }
-    else:
-        base["practice_recommendation"] = None
+    # TIC-K17: do not copy Global scene affirmations into T3.affirmation.
+    base["practice_recommendation"] = _personal_narrative_practice_recommendation()
 
     goals = _as_list(props.get("goals"))
     primary_goals = [

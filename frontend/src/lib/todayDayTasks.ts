@@ -99,6 +99,8 @@ export function buildTodayDayTasks(input: {
     const k = kindFromRec(action?.kind) || (action?.kind === "reflection" ? "practice" : null);
     const text = clean(action?.text);
     if (!k || !text) continue;
+    if (k === "affirmation" && !affirmationTitle) continue;
+    if (k === "practice" && !practiceTitle) continue;
     const already =
       (k === "practice" && practiceTitle) || (k === "affirmation" && affirmationTitle);
     if (already) continue;
@@ -112,18 +114,25 @@ export function buildTodayDayTasks(input: {
     });
   }
   if (recKind && recText) {
-    // Skip if already covered by gift practice/affirmation of same kind.
-    const already =
-      (recKind === "practice" && practiceTitle) || (recKind === "affirmation" && affirmationTitle);
-    if (!already) {
-      pushToday({
-        id: `today-rec-${recKind}`,
-        kind: recKind,
-        kindLabel: KIND_LABEL[recKind],
-        title: recText,
-        detail: clean(rec?.reason),
-        cadence: "today",
-      });
+    // TIC-K17: rec cannot open the XOR-rejected branch. Affirmation rec is not
+    // Personal verbal support. Practice rec cannot fill when practice omitted.
+    const selected =
+      (recKind === "practice" && Boolean(practiceTitle)) ||
+      (recKind === "affirmation" && Boolean(affirmationTitle)) ||
+      (recKind !== "practice" && recKind !== "affirmation");
+    if (selected) {
+      const already =
+        (recKind === "practice" && practiceTitle) || (recKind === "affirmation" && affirmationTitle);
+      if (!already) {
+        pushToday({
+          id: `today-rec-${recKind}`,
+          kind: recKind,
+          kindLabel: KIND_LABEL[recKind],
+          title: recText,
+          detail: clean(rec?.reason),
+          cadence: "today",
+        });
+      }
     }
   }
 

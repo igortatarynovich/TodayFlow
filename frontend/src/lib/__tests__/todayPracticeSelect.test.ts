@@ -1,5 +1,6 @@
 import {
   catalogPracticeFromSelection,
+  contentClassFromFocusAxis,
   fetchCatalogPracticeForFocusAxis,
   needQueryFromFocusAxis,
 } from "@/lib/todayPracticeSelect";
@@ -45,6 +46,9 @@ describe("todayPracticeSelect", () => {
     expect(needQueryFromFocusAxis("clarity")).toBeNull();
     expect(needQueryFromFocusAxis("radiance")).toBeNull();
     expect(needQueryFromFocusAxis(null)).toBeNull();
+    expect(contentClassFromFocusAxis("work")).toBe("practice");
+    expect(contentClassFromFocusAxis("relationships")).toBe("practice");
+    expect(contentClassFromFocusAxis("tension")).toBeNull();
   });
 
   it("omits unmatched catalog selections", () => {

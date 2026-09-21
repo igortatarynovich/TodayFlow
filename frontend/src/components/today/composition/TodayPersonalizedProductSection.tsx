@@ -35,6 +35,7 @@ import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import { domainIconForChapterId } from "@/lib/todayReadingDomainIcon";
 import { calloutLabelForChapterId } from "@/lib/todayReadingCallout";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
+import { pickLockedSupportSlot } from "@/lib/todaySupportXor";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
 import {
   isDayScenarioReadyForChapters,
@@ -228,28 +229,13 @@ export function TodayPersonalizedProductSection({
   const affirmationTool = strengthenTools.find((tool) => tool.id === "affirmation");
   const otherTools = strengthenTools.filter((tool) => tool.id !== "practice" && tool.id !== "affirmation");
 
-  /** v3.1: one support slot — practice XOR affirmation (rotate by local date). */
-  const preferAffirmationSlot = useMemo(() => {
-    const key = dateISO || "0";
-    let h = 0;
-    for (let i = 0; i < key.length; i += 1) h = (h * 31 + key.charCodeAt(i)) >>> 0;
-    return h % 2 === 1;
-  }, [dateISO]);
-
-  const showAffirmationSupport = Boolean(
-    (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool,
+  const practiceReady = Boolean(
+    practiceTool || (practiceRec?.kind === "practice" && practiceRec.text),
   );
-  const showPracticeSupport = Boolean(practiceTool || (practiceRec?.kind === "practice" && practiceRec.text));
-  const supportSlot: "affirmation" | "practice" | null =
-    showAffirmationSupport && showPracticeSupport
-      ? preferAffirmationSlot
-        ? "affirmation"
-        : "practice"
-      : showAffirmationSupport
-        ? "affirmation"
-        : showPracticeSupport
-          ? "practice"
-          : null;
+  const supportSlot = pickLockedSupportSlot({
+    contract,
+    practiceReady,
+  });
 
   const moveIfThen = useMemo(() => pickMoveIfThenFromContract(contract), [contract]);
 

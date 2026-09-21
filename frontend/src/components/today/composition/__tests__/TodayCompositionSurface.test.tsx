@@ -393,6 +393,7 @@ describe("TodayCompositionSurface", () => {
 
     const contractWithStory: TodayContractV1 = {
       ...sampleContract,
+      personal_day: { natal_overlay: { focus_axis: "work" } },
       day_story: {
         contract_version: "day_story_v1",
         theme: "Ясность",
