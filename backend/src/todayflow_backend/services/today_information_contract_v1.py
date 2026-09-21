@@ -97,7 +97,7 @@ TODAY_MEANING_PRODUCERS: Final[tuple[dict[str, object], ...]] = (
     {
         "module": "content_library_selection_v1",
         "tic_k": ("K16",),
-        "tic_f": ("F05",),
+        "tic_f": ("F10",),
         "slot_id": "T3.practice",
     },
     {
@@ -129,7 +129,7 @@ TIC_COVERAGE: Final[tuple[dict[str, object], ...]] = (
     {"tic_k": "K13", "status": "COMPLETE", "slot_id": ("T2.lens_card",)},
     {"tic_k": "K14", "status": "COMPLETE", "slot_id": ("T2.lens_number",)},
     {"tic_k": "K15", "status": "COMPLETE", "slot_id": ("T3.color.name", "T3.color.hex", "T3.color.lines")},
-    {"tic_k": "K16", "status": "PARTIAL", "slot_id": ("T3.practice",)},
+    {"tic_k": "K16", "status": "COMPLETE", "slot_id": ("T3.practice",)},
     {"tic_k": "K17", "status": "PARTIAL", "slot_id": ("T3.affirmation",)},
     {"tic_k": "K18", "status": "COMPLETE", "slot_id": ("T3.depth",)},
     {"tic_k": "K19", "status": "COMPLETE", "slot_id": ("T1.continuity",)},

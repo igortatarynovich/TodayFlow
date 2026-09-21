@@ -1,7 +1,7 @@
 import {
   catalogPracticeFromSelection,
-  fetchCatalogPracticeForEnergy,
-  needQueryFromPrimaryEnergy,
+  fetchCatalogPracticeForFocusAxis,
+  needQueryFromFocusAxis,
 } from "@/lib/todayPracticeSelect";
 import { getJson } from "@/lib/api";
 
@@ -20,16 +20,31 @@ describe("todayPracticeSelect", () => {
     getJsonMock.mockReset();
   });
 
-  it("maps the closed 8-set energy to a coverage need cell", () => {
-    expect(needQueryFromPrimaryEnergy("tension")).toEqual({
-      purpose: "calm",
-      direction: "downregulate",
+  it("maps the closed F10 4-set to a coverage need cell", () => {
+    expect(needQueryFromFocusAxis("work")).toEqual({
+      purpose: "decision_making",
+      direction: "focus",
+      context: "work",
     });
-    expect(needQueryFromPrimaryEnergy("clarity")).toEqual({
+    expect(needQueryFromFocusAxis("money")).toEqual({
       purpose: "clarity",
       direction: "reflect",
+      context: "money",
     });
-    expect(needQueryFromPrimaryEnergy("unknown")).toBeNull();
+    expect(needQueryFromFocusAxis("relationships")).toEqual({
+      purpose: "connection",
+      direction: "connect",
+      context: "relationships",
+    });
+    expect(needQueryFromFocusAxis("energy")).toEqual({
+      purpose: "grounding",
+      direction: "stabilize",
+      context: "body",
+    });
+    expect(needQueryFromFocusAxis("tension")).toBeNull();
+    expect(needQueryFromFocusAxis("clarity")).toBeNull();
+    expect(needQueryFromFocusAxis("radiance")).toBeNull();
+    expect(needQueryFromFocusAxis(null)).toBeNull();
   });
 
   it("omits unmatched catalog selections", () => {
@@ -46,26 +61,27 @@ describe("todayPracticeSelect", () => {
     ).toBeNull();
   });
 
-  it("fetches GET /practices/select and returns a catalog practice", async () => {
+  it("fetches GET /practices/select from Personal focus, not Global energy", async () => {
     getJsonMock.mockResolvedValue({
-      item_id: "practice.extended_exhale.001",
-      title: "Выдох длиннее вдоха",
-      body: "Сделать выдох длиннее вдоха.",
-      outcome_label: "Снять напряжение",
+      item_id: "practice.intention_setting.001",
+      title: "Намерение на час",
+      body: "Одно намерение.",
+      outcome_label: "Собрать внимание",
       duration: 3,
       matched: true,
-      reason: "purpose=calm",
+      reason: "purpose=decision_making",
     });
-    const practice = await fetchCatalogPracticeForEnergy("tension");
+    const practice = await fetchCatalogPracticeForFocusAxis("work");
     expect(getJsonMock).toHaveBeenCalledWith(
-      "/practices/select?purpose=calm&direction=downregulate&locale=ru",
+      "/practices/select?purpose=decision_making&direction=focus&context=work&content_class=practice&locale=ru",
     );
-    expect(practice?.id).toBe("practice.extended_exhale.001");
-    expect(practice?.title).toBe("Выдох длиннее вдоха");
+    expect(practice?.id).toBe("practice.intention_setting.001");
+    expect(practice?.title).toBe("Намерение на час");
   });
 
-  it("does not invent a practice when energy is missing", async () => {
-    await expect(fetchCatalogPracticeForEnergy(null)).resolves.toBeNull();
+  it("does not invent a practice when Personal focus_axis is missing", async () => {
+    await expect(fetchCatalogPracticeForFocusAxis(null)).resolves.toBeNull();
+    await expect(fetchCatalogPracticeForFocusAxis("momentum")).resolves.toBeNull();
     expect(getJsonMock).not.toHaveBeenCalled();
   });
 });

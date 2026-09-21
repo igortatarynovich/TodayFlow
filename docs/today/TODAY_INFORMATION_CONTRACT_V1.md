@@ -86,6 +86,15 @@ source input
 - **Canon updated?** yes — this file §3/§10/§11 · Display Inventory `T3.color.*` · tracker · handoff
 - **Backward compatible?** yes for API. MY DAY color omits when F05+F09 did not ground a pick, instead of filling scene tags or morning catalog.
 
+## Architecture impact — TIC-K16 practice (2026-09-21)
+
+- **SoT before:** `T3.practice` retrieved one catalog item via existing `GET /practices/select`, but the need cell came from Global `primary_energy` (K01 8-set) through `GLOBAL_ENERGY_NEED`. Personal `focus_axis` sat nearby and did not choose the technique.
+- **SoT after:** same slot and the same selector. Need is the closed F10 4-set `personal_day.natal_overlay.focus_axis` mapped to an existing purpose/direction/context cell with `content_class=practice`. Global `primary_energy` does not feed K16. Compensating Personal Risk is not a today_contract field — do not invent it from K10 prose or Global F06. No second selector. Guest / missing F10 / unavailable interpretation → omit. XOR leftover with affirmation is K17, not this hop.
+- **Public contract changed?** no JSON fields. Meaning still does not emit `item_id`. Semantics of `T3.practice` = catalog item from F10, or empty.
+- **Migration required?** no. Cached Global-energy picks omit until F10 is present on the contract.
+- **Canon updated?** yes — this file §3/§10/§11 · Display Inventory `T3.practice` · tracker · handoff
+- **Backward compatible?** yes for API. MY DAY practice omits when F10 did not ground a select, instead of filling Global energy.
+
 ## Architecture impact — TIC-K13 card lens (2026-09-21)
 
 - **SoT before:** `T2.lens_card` painted `card.hook_reveal.bridge_to_day` from Global `interpretive_chorus.day_card`. Persist gate existed; provenance was chorus, not Personal×card. `personal_angle` unused on attach.
@@ -203,7 +212,7 @@ Code Δ: Capability TARGET vs CODE для natal facts не меняет **наб
 | `K13` | Как карта окрашивает **уже persisted** Personal Day | K06–K10 × `F13` persist | catalog as color, not cause | шаг 9 Pipeline; Personal-owned lens after persist; не Global chorus `day_card` / `bridge_to_day`; не копия K06–K10; нет основания → omit; CE forbidden | lens | Pipeline §8–9 | `card.hook_reveal.personal_angle` empty unless Personal×card wrote it | **да только persist Personal** | `T2.lens_card` | 1–3 предл.; guest/general omit |
 | `K14` | Как число окрашивает **уже persisted** Personal Day | K06–K10 × `F11`/`F12` persist | catalog as color, not cause | шаг 9 Pipeline; Personal-owned lens after persist; не Global chorus `day_number` / `bridge_to_day` / tempo; не копия K06–K10; не копия K13; persist-gate ≠ coverage; нет основания → omit; CE forbidden | lens | Pipeline §8–9 | `number.hook_reveal.personal_angle` empty unless Personal×number wrote it | **да только persist Personal** | `T2.lens_number` | 1–3 предл.; guest/general omit |
 | `K15` | Какой один цвет как опора **этого** дня | `F14` (`F05`+`F09`) | color catalog | existing `score_color_for_needs` after energy + natal overlay; scene trap/sphere/mode **не** вход; LLM не выбирает цвет; scent/stone = **алиас**, не отдельный корень, слота нет → не показываем; нет F05+F09 → omit | color nest | Inventory `T3.color` | `color_guide` from `props.color` F14 pick only | **да, persist Personal** | `T3.color.*` | name+hex+lines; пустые lines не fill-empty |
-| `K16` | Какая одна готовая техника поддержки | Personal focus/risk → catalog item | practice technique canon | `GET /practices/select`; не LLM pick; ≠ `T3.priority` | library | Content Library | practice | **да, persist Personal** | `T3.practice` | 1 item; пусто omit |
+| `K16` | Какая одна готовая техника поддержки | `F10` (Personal focus) | practice technique canon | existing `GET /practices/select` from F10 4-set need cell; `content_class=practice`; не Global `primary_energy`; не LLM pick; ≠ `T3.priority`; compensating risk не invent из K10/F06; нет F10 → omit | library | Content Library | FE select after persist Personal | **да, persist Personal** | `T3.practice` | 1 item; пусто omit |
 | `K17` | Какая вербальная опора (не действие) | Personal affirmation field | — | Personal Narrative; ≠ CE identity; ≠ rewrite priority | field | Pipeline | affirmation | **да, persist Personal** | `T3.affirmation` | 1 предл.; пусто omit |
 | `K18` | Опциональное углубление **выбранной** темы | полный base day + topic | depth topic menu | Trial+ generate; Free = CTA; не второй сюжет дня | [TODAY_DEPTH_LAYER_V1](../TODAY_DEPTH_LAYER_V1.md) | Matrix 3.2 | `T3.depth` | **да поверх дня** | `T3.depth` | CTA или pack; omit если нет offer |
 | `K19` | Что вчерашний вечер оставил сегодняшнему утру | `F15` | — | user record; не invent смысла дня; не «получилось/нет» | gratitude | Inventory continuity | `T1.continuity` | **да D2+** | `T1.continuity` | 1–2 предл.; пусто omit |
@@ -340,7 +349,7 @@ Owner может сузить M (убрать показ), не расширяя
 5. **LLM формулирует после решения Engine/Overlay/catalog.** Не выбирает energy/drivers/windows/axis. Не заполняет пустое generic prose. Downstream не мутирует upstream.
 6. **Критерий закрытия Today train:** для каждого из 20 `TIC-K` определено facts → KB → derivation → wire → M/omit → slot; отображаемый M исполняется кодом. Тогда — не автоматически Compatibility N. Не «IL подключён», не «xfail стал pass», не «Today выглядит лучше».
 7. **PIC закрыт.** Не использовать Profile Information Contract как источник автоматически возникающей Today-работы. Не invent `TIC-K21`. Не включать planned Day Sources в N.
-8. **Не rebuild сервера** на coverage hops. Статусы §11 — факт кода, не желание канона. Очередь — только PARTIAL/MISSING из матрицы; первый remaining = K16.
+8. **Не rebuild сервера** на coverage hops. Статусы §11 — факт кода, не желание канона. Очередь — только PARTIAL/MISSING из матрицы; первый remaining = K17.
 9. **K01 presentation (2026-09-21).** `T1-hero.human_line` = closed formulation of Engine `primary_energy`. Greeting is chrome, not K01. Missing/unknown omit. Overlay does not rewrite the shared-day kind. Not a second energy selector.
 10. **K06 overlay thesis (2026-09-21).** `T3.headline` / `day_personal.summary_ru` = already-derived F09 natal_transit thesis (`personal_astrology.summary_ru`). HD / BaZi / Vedic / electional / name_numbers stay in the pack and do not feed K06. Missing overlay transit → omit. Not `why_personal`. Not T1 human_line. Not a new knowledge type.
 11. **K07 overlay axis (2026-09-21).** `T3.focus_title` / `personal_day.natal_overlay.focus_axis` = F10 closed domain of the already-chosen F09 natal_transit natal_point. Kitchen aliases / Global scene sphere / PIC / CE / chrome do not feed K07. Missing or unmapped → omit. Not a second ranker. Not a duplicate of K01 `human_line` or K06 headline.
@@ -349,6 +358,7 @@ Owner может сузить M (убрать показ), не расширяя
 14. **K13 card lens (2026-09-21).** `T2.lens_card` / `card.hook_reveal.personal_angle` = Personal Day × F13 after persist. Global chorus `day_card` / `bridge_to_day` stay on the Global contract and do not feed the slot. Missing Personal-owned card lens → omit. Not a second ranker. Not a copy of K06–K10. Not K14.
 15. **K14 number lens (2026-09-21).** `T2.lens_number` / `number.hook_reveal.personal_angle` = Personal Day × F11/F12 after persist. Global chorus `day_number` / `bridge_to_day` / tempo stay on the Global contract and do not feed the slot. Missing Personal-owned number lens → omit. Persist-gate is not coverage. Not a second ranker. Not a copy of K06–K10 or K13. Not K15+.
 16. **K15 color (2026-09-21).** `T3.color.*` / `color_guide` = existing `score_color_for_needs` on F05 8-set + F09 overlay domain (`DOMAIN_NATAL_POINTS`) after persist. Scene trap/sphere/mode do not feed the slot. No second scorer. Scent/stone aliases unused without a slot. Missing grounded F05+F09 → omit. Catalog/talisman leftover does not paint. Not K16+.
+17. **K16 practice (2026-09-21).** `T3.practice` = existing `GET /practices/select` from already-chosen F10 `focus_axis` (closed 4-set) after persist. Global `primary_energy` / K01 8-set do not feed the slot. No second selector. Compensating Personal Risk is not invented from K10 prose or Global F06. Guest / missing F10 / unavailable interpretation → omit. XOR leftover with affirmation is K17. Not K17/K20.
 
 ---
 
@@ -387,23 +397,22 @@ IN → TIC-F → TIC-K → derivation → product field → Inventory slot → l
 | `K13` | **COMPLETE** | F13 identity + already persisted Personal Day. Global `interpretive_chorus.day_card` / `bridge_to_day` **не** вход. K06–K10 not copied into the lens | catalog as color, not cause | attach leaves `personal_angle` omit without Personal-owned card lens; FE `pickRitualCardLens` omit chorus bridge, catalog, and omit-token; omit without persist | `card.hook_reveal.personal_angle` | `T2.lens_card` paint; omit without personal lens | нет на измеренном hop |
 | `K14` | **COMPLETE** | F11 or F12 identity + already persisted Personal Day. Global `interpretive_chorus.day_number` / `bridge_to_day` / tempo **не** вход. K06–K10/K13 not copied into the lens | catalog as color, not cause | attach leaves `personal_angle` omit without Personal-owned number lens; FE `pickRitualNumberLens` omit chorus bridge, tempo mash, catalog, and omit-token; omit without persist | `number.hook_reveal.personal_angle` | `T2.lens_number` paint; omit without personal lens | нет на измеренном hop |
 | `K15` | **COMPLETE** | Engine `primary_energy` (F05) + overlay natal_point via existing `DOMAIN_NATAL_POINTS` (F09) → existing `score_color_for_needs`. Scene trap/sphere/mode **не** вход. Scent/stone unused aliases | color catalog | `build_scenario_props_v1` needed-tags lookup; no second scorer; omit without grounded F05+F09; catalog/talisman leftover does not fill | `today_contract.color_guide` from `props.color` | `T3.color.*` paint on MY DAY from nest; omit without nest; morning catalog does not paint | нет на измеренном hop |
-| `K16` | **PARTIAL** | `global_day.primary_energy` → `GLOBAL_ENERGY_NEED` → `GET /practices/select`. **Не** Personal focus/risk | technique library | FE `fetchCatalogPracticeForEnergy` | FE tool; may XOR-lose to affirmation | `T3.practice` paint when `supportSlot==="practice"` | catalog retrieval есть; вход = Global energy |
+| `K16` | **COMPLETE** | F10 `personal_day.natal_overlay.focus_axis` (closed 4-set) → existing `GET /practices/select` (`content_class=practice`). Global `primary_energy` **не** вход. Compensating risk не invent | technique library | FE `fetchCatalogPracticeForFocusAxis`; no second selector; omit without F10 / guest / unavailable | catalog selection as tool | `T3.practice` paint when present; XOR leftover with affirmation is K17 | нет на измеренном hop |
 | `K17` | **PARTIAL** | scene `recommended_action` / trap → `props.affirmations[0]` → `practice_recommendation` | — | projector map; no Personal affirmation field | `day_story.practice_recommendation` kind=affirmation | `T3.affirmation` paint when XOR wins | часто rewrite/dupe do; не отдельная вербальная опора |
 | `K18` | **COMPLETE** | base day + topic id + billing | depth menu | `today_depth_layer_v1`; Free CTA; Trial+ generate | `today_contract.depth_layer` | `T3.depth` paint (`TodayDepthLayerSection`) | нет (не второй TODAY plot) |
 | `K19` | **COMPLETE** | F15 yesterday `evening_completed` + gratitude | user record | `loadYesterdayEveningClose` → `buildGratitudeMemorySlot`; empty omit; no invent on GET fail | client memory slot / day-connection | `T1.continuity` paint D2+ | нет |
 | `K20` | **PARTIAL** | capability + `interpretation_status` / transport | Matrix copy | guest `myDay:false`; unavailable `TODAY_UNAVAILABLE_COPY`; network `TODAY_NO_CONNECTION_COPY` | guest omit MY DAY; `TodayMyDayPane` unavailable card | `T3.unavailable` / `TF.*` paint | honesty copy есть; **`extraCards` (practice/affirmation) всё ещё монтируются на unavailable pane** |
 
-Сводка: **COMPLETE 17** (`K01` `K02` `K03` `K04` `K05` `K06` `K07` `K08` `K09` `K10` `K11` `K12` `K13` `K14` `K15` `K18` `K19`) · **PARTIAL 3** (`K16` `K17` `K20`) · **MISSING 0** · **OMIT-BY-DESIGN 0**.
+Сводка: **COMPLETE 18** (`K01` `K02` `K03` `K04` `K05` `K06` `K07` `K08` `K09` `K10` `K11` `K12` `K13` `K14` `K15` `K16` `K18` `K19`) · **PARTIAL 2** (`K17` `K20`) · **MISSING 0** · **OMIT-BY-DESIGN 0**.
 
 ### Очередь Today (только дефекты матрицы, порядок K)
 
-1. **K16** — practice от Global energy, не Personal focus/risk
-2. K17 — affirmation от `recommended_action`; XOR с practice
-3. K20 — leftover `extraCards` на unavailable MY DAY
+1. **K17** — affirmation от `recommended_action`; XOR с practice
+2. K20 — leftover `extraCards` на unavailable MY DAY
 
-**Следующий hop = K16 only.** Не IL. Не PIC. Не Compatibility N. Не rebuild.
+**Следующий hop = K17 only.** Не IL. Не PIC. Не Compatibility N. Не rebuild.
 
-Не в очереди: Glance как пятый акт · scent/stone generators (на locked path не рисуются) · emitTodayDisplayFrame rhythm scan gap. K01 closed. K06 closed. K07 closed. K09 closed. K10 closed. K13 closed. K14 closed. K15 closed.
+Не в очереди: Glance как пятый акт · scent/stone generators (на locked path не рисуются) · emitTodayDisplayFrame rhythm scan gap. K01 closed. K06 closed. K07 closed. K09 closed. K10 closed. K13 closed. K14 closed. K15 closed. K16 closed.
 
 ---
 
@@ -411,6 +420,7 @@ IN → TIC-F → TIC-K → derivation → product field → Inventory slot → l
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | §11 K16 COMPLETE: `T3.practice` = existing `GET /practices/select` from F10 `focus_axis`; Global `primary_energy` does not feed the slot; omit without F10. 18 COMPLETE · 2 PARTIAL. Next remaining = K17. |
 | 2026-09-21 | §11 K15 COMPLETE: `T3.color.*` / `color_guide` = existing `score_color_for_needs` on F05+F09 after persist; scene tags / catalog leftover do not feed the slot; omit without ground. 17 COMPLETE · 3 PARTIAL. Next remaining = K16. |
 | 2026-09-21 | §11 K14 COMPLETE: `T2.lens_number` = Personal Day × F11/F12 after persist; Global chorus `day_number` / tempo stays on hook and does not feed the slot; omit without personal lens. 16 COMPLETE · 4 PARTIAL. Next remaining = K15. |
 | 2026-09-21 | §11 K13 COMPLETE: `T2.lens_card` = Personal Day × F13 after persist; Global chorus `bridge_to_day` stays on scene and does not feed the slot; omit without personal lens. 15 COMPLETE · 5 PARTIAL. Next remaining = K14. |

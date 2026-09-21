@@ -7,7 +7,7 @@
 import type { TodayContractDomainId, TodayContractV1 } from "@/lib/todayContract";
 import { TODAY_CONTRACT_DOMAIN_LABEL_RU } from "@/lib/todayContract";
 
-function asClosedDomain(raw: unknown): TodayContractDomainId | null {
+export function asClosedDomain(raw: unknown): TodayContractDomainId | null {
   const key = String(raw ?? "")
     .trim()
     .toLowerCase()
@@ -35,11 +35,17 @@ function clipAxisLabel(label: string): string | null {
  * Project Natal Overlay's already-chosen closed domain to a 1–4 word label.
  * Does not score spheres, invent a title, or copy K01/K06 prose.
  */
+export function pickPersonalFocusAxisId(
+  contract: TodayContractV1 | null | undefined,
+): TodayContractDomainId | null {
+  if (!contract) return null;
+  return asClosedDomain(overlayFocusAxis(contract));
+}
+
 export function pickPersonalFocusAxisLabel(
   contract: TodayContractV1 | null | undefined,
 ): string | null {
-  if (!contract) return null;
-  const id = asClosedDomain(overlayFocusAxis(contract));
+  const id = pickPersonalFocusAxisId(contract);
   if (!id) return null;
   return clipAxisLabel(TODAY_CONTRACT_DOMAIN_LABEL_RU[id]);
 }

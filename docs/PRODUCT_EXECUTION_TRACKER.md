@@ -4,6 +4,8 @@ Last updated: 2026-09-21
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (TIC-K16 COMPLETE, 2026-09-21):** `T3.practice` is existing `GET /practices/select` from F10 `personal_day.natal_overlay.focus_axis` (closed 4-set) after persist. Global `primary_energy` / K01 8-set stay on the shared-day kind and do not feed K16. Compensating risk is not invented from K10 prose or Global F06. No second selector. Guest / missing F10 / unavailable omit. XOR leftover with affirmation is K17, not this hop. Glance leftover is not this hop. TIC_COVERAGE K16 PARTIAL → COMPLETE (**18 COMPLETE / 2 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K17** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
 **NOW (TIC-K15 COMPLETE, 2026-09-21):** `T3.color.*` / `color_guide` is existing `score_color_for_needs` on F05 `primary_energy` + F09 overlay domain after persist. Scene trap/sphere/mode stay on the scene and do not feed K15. Catalog / talisman leftover / scent / stone do not paint. Missing F05+F09 omit. Glance leftover is not this hop. TIC_COVERAGE K15 PARTIAL → COMPLETE (**17 COMPLETE / 3 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K16** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (TIC-K14 COMPLETE, 2026-09-21):** `T2.lens_number` / `number.hook_reveal.personal_angle` is Personal Day × F11/F12 after persist. Global chorus `day_number` / `bridge_to_day` / tempo stay on the Global hook and do not feed K14. Kitchen / PIC / CE / chrome / copied K06–K10 / copied K13 do not feed the slot. Persist-gate is not coverage. Missing personal lens omit. Glance leftover is not this hop. TIC_COVERAGE K14 PARTIAL → COMPLETE (**16 COMPLETE / 4 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K15** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
@@ -129,6 +131,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — TIC-K16 practice (2026-09-21)
+
+- **SoT before:** Catalog retrieval existed, but `T3.practice` need came from Global `primary_energy` → `GLOBAL_ENERGY_NEED` → `GET /practices/select`. Provenance was K01 energy, not Personal focus.
+- **SoT after:** same selector. Need is already-chosen F10 `focus_axis` (closed 4-set). Global energy does not feed K16. Missing F10 omit. No second selector. XOR leftover is K17. Not K20 extraCards.
+- **Public contract changed?** no JSON fields. Meaning still does not emit `item_id`.
+- **Migration required?** no. Cached Global-energy picks omit until F10 is on the contract.
+- **Canon updated?** yes — Information Contract §3/§10/§11 · Display Inventory `T3.practice` · this tracker · handoff
+- **Backward compatible?** yes for API. MY DAY practice omits without Personal focus.
 
 ## Architecture impact — TIC-K14 number lens (2026-09-21)
 

@@ -52,7 +52,7 @@ import {
   loadYesterdayEveningClose,
   type EveningCloseSnapshot,
 } from "@/lib/todayEveningGratitude";
-import { fetchCatalogPracticeForEnergy } from "@/lib/todayPracticeSelect";
+import { fetchCatalogPracticeForFocusAxis } from "@/lib/todayPracticeSelect";
 import {
   applyEngagementToViewModel,
   applyGuideNarrativeToCompositionViewModel,
@@ -107,7 +107,7 @@ import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
 import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
 import { pickMyDayCautionLines, pickMyDayPriorityLines } from "@/lib/todayMyDayPriority";
-import { pickPersonalFocusAxisLabel } from "@/lib/todayPersonalFocusAxis";
+import { pickPersonalFocusAxisId, pickPersonalFocusAxisLabel } from "@/lib/todayPersonalFocusAxis";
 import { buildGlanceEnergyFromChorus } from "@/lib/todayGlanceEnergy";
 import { buildPlotConflictNarrative, buildPlotStoryBeats } from "@/lib/todayPlotNarrative";
 import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
@@ -747,15 +747,17 @@ export function TodayCompositionSurface(props: Props) {
     };
   }, [hydrated, dateISO, isAuthenticated, isFirstToday]);
 
+  const personalFocusAxis = pickPersonalFocusAxisId(props.contract);
+  const practiceSelectBlocked = isTodayInterpretationUnavailable(props.contract);
+
   useEffect(() => {
     if (!hydrated) return;
-    if (!isAuthenticated) {
+    if (!isAuthenticated || practiceSelectBlocked) {
       setRecommendedPractice(null);
       return;
     }
     let cancelled = false;
-    const energy = props.contract.global_day?.primary_energy ?? null;
-    void fetchCatalogPracticeForEnergy(energy)
+    void fetchCatalogPracticeForFocusAxis(personalFocusAxis)
       .catch(() => null)
       .then((practice) => {
         if (cancelled) return;
@@ -764,7 +766,7 @@ export function TodayCompositionSurface(props: Props) {
     return () => {
       cancelled = true;
     };
-  }, [hydrated, dateISO, isAuthenticated, props.contract.global_day?.primary_energy]);
+  }, [hydrated, dateISO, isAuthenticated, personalFocusAxis, practiceSelectBlocked]);
 
   const refreshGrowthTrackers = useCallback(async () => {
     if (!isAuthenticated) {

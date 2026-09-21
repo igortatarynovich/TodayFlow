@@ -59,6 +59,15 @@
 - **Canon updated?** yes — this record · Information Contract §11 · tracker
 - **Backward compatible?** yes for API. Title omits without a mapped overlay natal point.
 
+## Architecture impact — TIC-K16 practice (2026-09-21)
+
+- **SoT before:** `T3.practice` retrieved via `GET /practices/select`, but the need cell came from Global `primary_energy`.
+- **SoT after:** same slot and the same selector. Need is F10 `focus_axis` (closed 4-set). Global energy does not feed the slot. Omit without F10. XOR leftover is K17.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this record · Information Contract §11 · tracker
+- **Backward compatible?** yes for API. MY DAY practice omits without Personal focus.
+
 ---
 
 ## 0. Поверхности
@@ -158,7 +167,7 @@ Proposition test: тот же, что Profile (Jaccard / substring).
 | `T3.rhythm_label` | chrome | chrome | product |
 | `T3.rhythm_row` | Когда по часам support/caution? | calc | natal×windows or Global windows |
 | `T3.color.*` | Какой цвет как опора дня? | catalog+fill | color scoring |
-| `T3.practice` | Какая одна практика-техника поддержки? | catalog | Personal focus/risk |
+| `T3.practice` | Какая одна практика-техника поддержки? | catalog | Personal F10 focus |
 | `T3.affirmation` | Какая вербальная опора дня? | generated | Personal |
 | `T3.tracker` | Что я уже веду? | user | habits |
 | `T3.tasks_empty` | chrome empty | chrome | product |
@@ -661,9 +670,10 @@ Chrome: «Мой ритм дня» если natal clocks; иначе «Ритм 
 |---|---|
 | one_question | Какая одна **готовая техника** поддержки? |
 | text_class | catalog |
-| authority | catalog retrieval from Personal focus/risk types |
-| allowed_inputs | Personal Focus or compensating Personal Risk → one catalog item |
-| forbidden_inference | LLM pick; paraphrase `T3.priority`; second practice |
+| authority | existing `GET /practices/select` from Personal F10 focus |
+| semantic_source | catalog item for the already-chosen closed 4-set `focus_axis` |
+| allowed_inputs | Personal Focus (`personal_day.natal_overlay.focus_axis`) → one catalog item |
+| forbidden_inference | LLM pick; paraphrase `T3.priority`; second practice; Global `primary_energy` / K01 8-set; invent compensating risk from K10 prose or Global F06 |
 | output | title + 1 why |
 | budget | title ≤48 · why 1 предл. ≤160 · **count 1** |
 | required | нет |
@@ -847,6 +857,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | `T3.practice` = existing `GET /practices/select` from F10 `focus_axis`; Global `primary_energy` does not feed the slot; omit without Personal focus |
 | 2026-09-21 | `T2.lens_number` = Personal Day × F11/F12 after persist; Global chorus `day_number` / tempo stay on hook and do not feed the slot; omit without personal lens |
 | 2026-09-21 | `T2.lens_card` = Personal Day × F13 after persist; Global chorus `bridge_to_day` stays on hook and does not feed the slot; omit without personal lens |
 | 2026-09-21 | `T3.caution` = Personal Narrative avoid after bind; Global `do_not` stays on scene and does not feed the slot; omit without personal avoid |

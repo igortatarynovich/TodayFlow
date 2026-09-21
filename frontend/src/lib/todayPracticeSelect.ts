@@ -1,22 +1,24 @@
 /**
  * Deterministic MY DAY practice from Content Library selection.
  * Canon: docs/practices/CONTENT_LIBRARY_SELECTION_V1.md · TODAY_DISPLAY_INVENTORY T3.practice
- * Meaning does not emit item_id. FE maps Global energy (closed 8-set) → need, then GET /practices/select.
+ * Meaning does not emit item_id. FE maps Personal F10 focus_axis (closed 4-set) → need,
+ * then GET /practices/select. Global primary_energy is not K16 input.
  * Honest miss → omit. Never invent from /practices?limit=1.
  */
 
 import { getJson } from "@/lib/api";
 import type { PracticeResponse } from "@/components/today/todayPageUtils";
+import type { TodayContractDomainId } from "@/lib/todayContract";
 
-export const GLOBAL_ENERGY_NEED: Record<string, { purpose: string; direction: string }> = {
-  grounded: { purpose: "grounding", direction: "stabilize" },
-  flow: { purpose: "calm", direction: "downregulate" },
-  radiance: { purpose: "energy", direction: "activate" },
-  momentum: { purpose: "motivation", direction: "activate" },
-  clarity: { purpose: "clarity", direction: "reflect" },
-  tension: { purpose: "calm", direction: "downregulate" },
-  renewal: { purpose: "recovery", direction: "recover" },
-  depth: { purpose: "self_connection", direction: "reflect" },
+/** Closed F10 4-set → existing selector purpose/direction/context. Not a second ranker. */
+export const PERSONAL_FOCUS_NEED: Record<
+  TodayContractDomainId,
+  { purpose: string; direction: string; context: string }
+> = {
+  work: { purpose: "decision_making", direction: "focus", context: "work" },
+  money: { purpose: "clarity", direction: "reflect", context: "money" },
+  relationships: { purpose: "connection", direction: "connect", context: "relationships" },
+  energy: { purpose: "grounding", direction: "stabilize", context: "body" },
 };
 
 export type ContentLibrarySelectResponse = {
@@ -29,13 +31,19 @@ export type ContentLibrarySelectResponse = {
   reason: string;
 };
 
-export function needQueryFromPrimaryEnergy(energy: string | null | undefined): {
+export function needQueryFromFocusAxis(axis: string | null | undefined): {
   purpose: string;
   direction: string;
+  context: string;
 } | null {
-  const key = String(energy || "").trim().toLowerCase();
-  if (!key) return null;
-  return GLOBAL_ENERGY_NEED[key] ?? null;
+  const key = String(axis || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+  if (key !== "work" && key !== "money" && key !== "relationships" && key !== "energy") {
+    return null;
+  }
+  return PERSONAL_FOCUS_NEED[key];
 }
 
 export function catalogPracticeFromSelection(
@@ -50,14 +58,16 @@ export function catalogPracticeFromSelection(
   };
 }
 
-export async function fetchCatalogPracticeForEnergy(
-  energy: string | null | undefined,
+export async function fetchCatalogPracticeForFocusAxis(
+  axis: string | null | undefined,
 ): Promise<PracticeResponse | null> {
-  const need = needQueryFromPrimaryEnergy(energy);
+  const need = needQueryFromFocusAxis(axis);
   if (!need) return null;
   const params = new URLSearchParams({
     purpose: need.purpose,
     direction: need.direction,
+    context: need.context,
+    content_class: "practice",
     locale: "ru",
   });
   const selection = await getJson<ContentLibrarySelectResponse>(`/practices/select?${params.toString()}`);

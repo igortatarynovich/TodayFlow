@@ -1,4 +1,4 @@
-import { pickPersonalFocusAxisLabel } from "@/lib/todayPersonalFocusAxis";
+import { pickPersonalFocusAxisId, pickPersonalFocusAxisLabel } from "@/lib/todayPersonalFocusAxis";
 import type { TodayContractV1 } from "@/lib/todayContract";
 
 const base: TodayContractV1 = {
@@ -12,6 +12,31 @@ const base: TodayContractV1 = {
     energy: { status: "s", opportunity: "o", risk: "r", action: "a" },
   },
 };
+
+describe("pickPersonalFocusAxisId", () => {
+  it("returns the closed F10 id and omits Global energy or kitchen aliases", () => {
+    expect(pickPersonalFocusAxisId(base)).toBeNull();
+    expect(
+      pickPersonalFocusAxisId({
+        ...base,
+        global_day: { primary_energy: "radiance" },
+        personal_day: { natal_overlay: { focus_axis: "work" } },
+      }),
+    ).toBe("work");
+    expect(
+      pickPersonalFocusAxisId({
+        ...base,
+        global_day: { primary_energy: "clarity" },
+      }),
+    ).toBeNull();
+    expect(
+      pickPersonalFocusAxisId({
+        ...base,
+        personal_day: { natal_overlay: { axis: "work", domain: "money" } },
+      }),
+    ).toBeNull();
+  });
+});
 
 describe("pickPersonalFocusAxisLabel", () => {
   it("maps overlay closed-set domain and omits when none", () => {

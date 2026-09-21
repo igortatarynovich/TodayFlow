@@ -117,3 +117,44 @@ class TestDeterministicSelector:
         q = NeedQuery(purpose="sleep", direction="prepare", locale="ru")
         s = select_content_item(q)
         assert s.technique_id
+
+    def test_personal_focus_4set_need_cells_match_practice_class(self) -> None:
+        """TIC-K16: existing selector, F10 closed 4-set → one practice each. Not a second ranker."""
+        cells = (
+            NeedQuery(
+                purpose="decision_making",
+                direction="focus",
+                context=["work"],
+                content_class="practice",
+                locale="ru",
+            ),
+            NeedQuery(
+                purpose="clarity",
+                direction="reflect",
+                context=["money"],
+                content_class="practice",
+                locale="ru",
+            ),
+            NeedQuery(
+                purpose="connection",
+                direction="connect",
+                context=["relationships"],
+                content_class="practice",
+                locale="ru",
+            ),
+            NeedQuery(
+                purpose="grounding",
+                direction="stabilize",
+                context=["body"],
+                content_class="practice",
+                locale="ru",
+            ),
+        )
+        seen: set[str] = set()
+        for q in cells:
+            s = select_content_item(q)
+            assert s.matched is True
+            assert s.item_id
+            assert s.content_class == "practice"
+            seen.add(s.item_id)
+        assert len(seen) == 4
