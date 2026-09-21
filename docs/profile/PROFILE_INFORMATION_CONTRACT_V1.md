@@ -107,7 +107,7 @@ Code Δ: Capability TARGET = LLM `natal_facts`; CODE = Swiss. Для этой т
 
 | ID | Что знаем | Факты | Atoms / KB | Derivation | KB | Rule | Wire | Show? | Где | Формат |
 |----|-----------|-------|------------|------------|----|------|------|-------|-----|--------|
-| `K01` | Один наблюдаемый механизм личности (логлайн) | `F01`–`F04`, `F09`, full: `F05`; occupancy `F03`/`F06` | Planet `core_function` · Sign `manner` · (full) Angle `orientation` · IL-2 `planet_in_sign` / `planet_in_house` | CE Акт I: одна мысль из Evidence Graph. Occupancy — qualifier, **не** замена 13-key thesis. **Не** список черт, **не** sun-bucket сам по себе | IL 7 планет draft; CE Stage 1 = 13 sun/moon/ASC ключей **плюс** IL-2 occupancy claims | CE каскад есть; Stage 1 читает IL-2 compose (не IL-3 rank, не IL-4 voice) | **да:** два одинаковых Солнца + разный Mars×дом → разный K01 surface | **да** | `P1.recognition_line` · `P1.identity_core` · Matrix `identity_summary` | 1 предложение механизма + occupancy lemmas |
+| `K01` | Один наблюдаемый механизм личности (логлайн) | `F01`–`F04`, `F09`, full: `F05`; occupancy `F03`/`F06` | Planet `core_function` · Sign `manner` · (full) Angle `orientation` · IL-2 `planet_in_sign` / `planet_in_house` | CE Акт I: одна мысль из разрешённых фактов. Occupancy — qualifier, **не** замена механизма. **Не** список черт, **не** 13-key bucket | IL 7 планет draft; Stage 1 occupancy claims + F05/F09 facts | `compose_k01_identity_v0`; 13-key bank только fallback если sun IL-2 не собирается | **закрыт:** F01–F04 → roles; нет atom → omit/меньше конкретности, не essay; occupancy конкретизирует | **да** | `P1.recognition_line` · `P1.identity_core` · Matrix `identity_summary` | 1 предложение механизма + grounded pieces |
 | `K02` | Роль каждого факта в **этом** ядре | subset `F01`–`F10`, `F12`; occupancy `F03`/`F06` | те же атомы; каталог не энциклопедия | CE Акт II: «какую часть этой личности я сформировал». Occupancy = `source_roles.qualifier`. Тест: без имени планеты фраза про человека | атомы есть | правило есть | partial anchors + occupancy qualifier | **да** | `P2.anchor.sun/moon/asc/mc/element/rhythm` · `P2.selected_life_path` | 1 тезис на опору; пустое omit |
 | `K03` | Прикладной смысл углов и домов **этого** человека | `F05` `F06` (+ занятые `F03`) | Angle `orientation` · House `arena` · IL-2 Planet×House | CE Act II applied: `how` + `do` на ASC/MC и занятые дома. Не энциклопедия 12 домов, не K07 sphere | 12 house + 2 angle packs stored; catalog `draft` | `derive_k03_*` в `character_engine_profile_consumption_spheres_houses_v0` | **закрыт:** full natal; нет occupancy/atom → omit; DSC/IC вне V1 | **да, full only, Explore/Map** | `P6.applied.asc/mc/house` | `how` + `do`; незначимое omit |
 | `K04` | Internal Engine: как решает / воспринимает / держит стресс / риск / восстановление / рост / выгорание | `F03` `F04` `F07` `F08` + ядро | Planet function · Aspect `relation` · IL-2 frames | CE Акт III: **одна** ось в `P3.help` из F08 / harmonic F07, не семь виджетов. Capability L2 `decision_style` — **алиас**, не отдельный корень | IL-2 `planet_in_sign` `how` · harmonic `relation` | Stage 0 F08 + `select_internal_engine_path_axis_v0` | **да:** уникальный перевес / одна гармоника → `P3.help`; пустое omit | **да, свёрнуто** | `P3.help` (не 7 виджетов) · K05 держит `P3.insight` | механизм; пустая ось omit |
@@ -144,9 +144,9 @@ Code Δ: Capability TARGET = LLM `natal_facts`; CODE = Swiss. Для этой т
 | Number base 1–9 / 11/22/33 | Отдельный смысл personal_year vs life_path — только bridge, не вторая таблица (канон чисел) |
 | Header catalog цвет/камень/CN/TB · слоты `P2.correspondence` / `P2.name_numerology` | Растения / ведический ярлык как накопленный ключ — заявлено Matrix, единого pack нет |
 | Display Inventory путь из 5 актов + compact Why facts | Исполняемый статус каждой строки — **§11**, не эта сводка |
-| Natal Decode opt-in + IL-4 polish | First-paint `K01` thesis остаётся 13-key; occupancy — qualifier на surface |
+| Natal Decode opt-in + IL-4 polish | First-paint `K01` — IL-2 roles; occupancy qualifier; 13-key не SoT |
 
-Покрытие `K01`/`K02` из `F03`/`F06` (2026-09-20): два натала с одним Солнцем Девы и разным Марс×дом дают разные IL-2 occupancy atoms, разные Stage 1 claims и разный Identity Core surface. Thesis остаётся `builds_through_analysis`. Это не IL-3→Stage 1 слой.
+Покрытие `K01`/`K02` из `F03`/`F06` (2026-09-20): два натала с одним Солнцем Девы и разным Марс×дом дают разные IL-2 occupancy atoms, разные Stage 1 claims и разный Identity Core surface. Механизм (sun×sign + moon + ASC) остаётся близким; recognition line **не** 13-key фраза. Это не IL-3→Stage 1 слой.
 
 ---
 
@@ -214,7 +214,7 @@ Chrome и failure (`«Нет соединения.»` / `«Не удалось �
 | Механизм | Что делает | Отношение к N |
 |----------|------------|----------------|
 | IL-2/3/4 + wire + attach + consume + polish | library → editorial voice | атомы для `K01`–`K03`/`K15`. First-paint CE читает **только** IL-2 occupancy compose |
-| CE Stage 1 13-key registry | mint thesis_key по солнцу/луне/ASC | thesis `K01`; occupancy не заменяет реестр |
+| CE Stage 1 13-key registry | mint thesis_key по солнцу/луне/ASC | **не** meaning SoT K01; fallback только если sun IL-2 не собирается |
 | Disclosure funnel identity→styles→patterns→spheres | legacy LLM корни | TARGET запрещает как SoT; CODE Δ |
 | Life spheres projector | сцена → карточка | presentation `K07`, не новый тип |
 | Profile meaning polish 1.3.123 | IL-4 на decode | только `K15` |
@@ -262,8 +262,8 @@ Owner может сузить M (убрать показ), не расширяя
 3. **Ближайший патч** — coverage defect `PIC-K01`/`PIC-K02` для фактов `PIC-F03`/`PIC-F06`, не «подключить IL к Character Engine». PIC говорит *что* обязано дойти; внутреннюю проводку выбирает минимальный путь в существующем коде.
 4. **Выбранный путь:** Stage 0 `planet_sign` (sign + house) → IL-2 `compose_planet_in_sign` / `compose_planet_in_house` → Stage 1 occupancy claims → Stage 2 qualifier на Identity Core surface. Не IL-3 frames → Stage 1. Не IL-4 voice. Не новый слой.
 5. **Acceptance:** Cancer Mars/4 vs Libra Mars/7 при одном Sun/Moon/ASC. Различие есть в F03/F06 → atoms существуют → IL-2 его сохраняет → CE использует при derivation K01/K02 → конечный K01 **не** схлопывается.
-6. **Критерий закрытия Profile train** (ещё не выполнен): для каждого из 18 `PIC-K` определено facts → KB → derivation → wire → M/omit → slot; для каждого отображаемого M цепочка реально выполняется кодом. Определение цепочек: §11. Исполнение отображаемого M: ещё нет. Тогда — `TODAY_INFORMATION_CONTRACT`. Не «IL подключён», не «xfail стал pass», не «Profile выглядит лучше».
-7. **K01 thesis** не обязан меняться при occupancy. Mars Cancer/H4 и Mars Libra/H7 конкретизируют один механизм (`builds_through_analysis`), а не создают двух разных людей.
+6. **Критерий закрытия Profile train** (исполнен 2026-09-21): для каждого из 18 `PIC-K` определено facts → KB → derivation → wire → M/omit → slot; отображаемый M исполняется кодом. `K06` = OMIT-BY-DESIGN. Тогда — `TODAY_INFORMATION_CONTRACT` отдельным стартом. Не «IL подключён», не «xfail стал pass», не «Profile выглядит лучше».
+7. **K01 thesis** не определяется bucket-key. Occupancy конкретизирует механизм, не создаёт двух разных людей: Mars Cancer/H4 и Mars Libra/H7 при одном Sun/Moon/ASC дают близкий механизм и **разную** recognition line, не 13-key фразу.
 
 ---
 
@@ -278,11 +278,11 @@ Owner может сузить M (убрать показ), не расширяя
 | `MISSING` | знание в N, до слота hop нет |
 | `OMIT-BY-DESIGN` | PIC M это знание не показывает (или показывает другую проекцию); не дефект |
 
-Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **закрыт**. Он не делает весь `K01` COMPLETE: thesis mint остаётся 13-key.
+Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **закрыт**. K01 meaning = `compose_k01_identity_v0` из разрешённых фактов; 13-key не SoT.
 
 | ID | Status | F consumed | KB | Derivation | Wire | Slot | Defect |
 |----|--------|------------|----|------------|------|------|--------|
-| `K01` | **PARTIAL** | Stage0 `planet_sign:*` (F01/F03/F04; house=F06 full), `angle_sign:ascendant` (F05 presence), `life_path_number` (F09). Occupancy Sun–Saturn IL-2. F07 aspect facts mint, but not thesis | 13-key registry + IL-2 compose | Stage1 `_apply_rule` + `_mint_il_occupancy_claims`; Stage2 thesis 13-key, occupancy fill-empty qualifier | consumption → `recognition_line` / `identity_core` | `P1.recognition_line` · `P1.identity_core` (emit + Recognition) | Occupancy qualifier **COMPLETE**. Thesis mint не Act I из всего evidence |
+| `K01` | **COMPLETE** | Stage0 `planet_sign:sun/moon` (F01/F03/F04), full `angle_sign:ascendant` (F05), `life_path_number` (F09); occupancy F03/F06 qualifier | Planet `core_function` · Sign `manner` · Angle `orientation` · IL-2 `planet_in_sign` / `planet_in_house` · number_base keyword | `compose_k01_identity_v0`; 13-key bank / LLM / Decode / tips не заполняют; нет atom → omit piece | Stage2 identity_core `k01_source=il2_composed_roles`; consumption `P1.recognition_line` / `P1.identity_core` | Inventory Recognition + disclosure | нет на измеренном hop; без sun IL-2 → 13-key fallback only; DSC/IC не V1 |
 | `K02` | **COMPLETE** | natal F01/F04/F05/F09 + occupancy F03/F06 as qualifier | `_CLAIM_WHY_LABEL` + FE zodiac banks | fill-empty natal Why rows from projector/Stage0; occupancy claims not Why | consumption merges natal `sun/moon/asc/life_path`; skips `planet_in_*` | live `P2.anchor.sun/moon/asc`; unknown/occupancy omit (not `P2.anchor.rhythm`) | нет на измеренном hop; `P2.selected_life_path` = K12 |
 | `K03` | **COMPLETE** | Stage0 `angle_sign:asc/mc` (F05) + occupied `planet_sign:*`.house (F06, Sun–Saturn) | IL-2 `compose_planet_in_house` (`what` × house `arena`); angle `orientation` × sign `manner` | `build_k03_applied_v0`; identity-thesis house bank / 12-house encyclopedia / K15 / K16 не заполняют | `character_engine_asc_v0` / `house_lines_v0`; emit `P6.applied.*` surface=explore | Inventory Explore/Map; not P1–P5; occupied houses only | нет на измеренном hop; без full natal / compose omit; DSC/IC не V1; K01 thesis не этим патчем |
 | `K04` | **COMPLETE** | Stage0 `element_balance` (F08 from F03/F04 Sun–Saturn) + harmonic F07 (conjunction/trine/sextile). Hard square/opposition stay K05 | IL-2 `planet_in_sign` `how` · harmonic `relation` | `select_internal_engine_path_axis_v0`; identity thesis 7-slot engine cannot occupy the path axis | consumption `nodes[0].help`; omit without unique F08 tilt or harmonic | `P3.help` (Insight node, не 7 виджетов); K05 держит `P3.insight` | нет на измеренном hop; пустая ось omit; K06 не этим патчем |
@@ -301,13 +301,13 @@ Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **з�
 | `K17` | **COMPLETE** | capability gaps / forming | Matrix §1.1 copy | `resolve_capability` · forming helpers | `user_messages` / `forming_message` | `P-data.cta_text` · `P-forming.message` live; chrome-exempt emit | нет |
 | `K18` | **COMPLETE** | F13 `living.signals[].note` | — (quotes) | `_living_quotes`; omit if empty | `nodes[0].living_evidence` | `P3.living_evidence` emit + Insight | нет |
 
-Сводка: **COMPLETE 16** (`K02` `K03` `K04` `K05` `K07` `K08` `K09` `K10` `K11` `K12` `K13` `K14` `K15` `K16` `K17` `K18`) · **PARTIAL 1** (`K01`) · **MISSING 0** · **OMIT-BY-DESIGN** `K06` (path M) + внутри `K11` (дуга жизни). Occupancy-подhop `K01` закрыт отдельно.
+Сводка: **COMPLETE 17** (`K01` `K02` `K03` `K04` `K05` `K07` `K08` `K09` `K10` `K11` `K12` `K13` `K14` `K15` `K16` `K17` `K18`) · **PARTIAL 0** · **MISSING 0** · **OMIT-BY-DESIGN** `K06` (path M) + внутри `K11` (дуга жизни). Occupancy-подhop `K01` закрыт внутри COMPLETE.
 
 ### Очередь Profile (из аудита, не из архитектурного бэклога)
 
-Только PIC-дыры. Не IL-3. Не Today. Core first-paint закрыт кроме K01 thesis mint.
+PIC N=18 исполнен кодом. Не IL-3. **Следующий контракт** — `TODAY_INFORMATION_CONTRACT` отдельным стартом, без переноса 13-key дефекта.
 
-1. **K01 thesis mint** — отдельное решение: закрыть 13-key mint или осознанно defer. Не стартовать `TODAY_INFORMATION_CONTRACT` до этого решения.
+1. **TODAY_INFORMATION_CONTRACT** — не начинать внутри этого hop; Profile train закрыт.
 
 Не в очереди: IL aspects/transits/angles dump.
 
@@ -317,6 +317,7 @@ Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **з�
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | K01 COMPLETE: Identity Core from F01–F04 + F05/F09 IL-2 roles → `P1.recognition_line` / `P1.identity_core`; occupancy qualifies; 13-key registry not meaning SoT. PIC N=18 executed (17 COMPLETE / 0 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN). |
 | 2026-09-20 | K03 COMPLETE: ASC/MC + occupied-house how/do from F05/F06 IL-2 → Explore `P6.applied.*`; not 12-house encyclopedia; not P1–P5; K01 thesis deferred as separate decision. |
 | 2026-09-20 | K16 COMPLETE: practical action = chrome wrap of selected K07 how/need/risk → Explore `P6.practical_tips`; Trial+; omit without grounded sphere; identity-thesis/Stage4/5/LLM not source; how/need/risk immutable. Next = K03. |
 | 2026-09-20 | K15 COMPLETE: Decode explains fixed K01 (+ grounded K05) via natal facts → Explore `P6.natal_decode`; GET never LLM; Stage3 trap-bank is not input; not a sixth path act. Next = K16. |

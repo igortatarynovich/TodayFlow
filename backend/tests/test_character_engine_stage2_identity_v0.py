@@ -202,14 +202,15 @@ def test_stage2_insufficient_when_no_claims() -> None:
         STAGE1_TO_IDENTITY_THESIS,
     )
 
-    # Occupancy IL claims may exist; Leo still has no 13-key identity primary.
+    # Occupancy IL claims exist; Leo has no 13-key bucket, but K01 composes from sun.
     assert not any(
         str(c.get("thesis_key")) in STAGE1_TO_IDENTITY_THESIS
         for c in (evidence.get("claims") or [])
         if isinstance(c, dict)
     )
-    assert identity["status"] == "insufficient_identity_core"
-    assert identity["identity_core"] is None
+    assert identity["status"] == "grounded"
+    assert identity["identity_core"]["thesis_key"] == "planet_in_sign:sun:leo"
+    assert identity["identity_core"]["k01_source"] == "il2_composed_roles"
 
 
 def test_stage2_model_insufficient_accepted() -> None:
@@ -257,6 +258,8 @@ def test_stage2_deterministic_fallback_when_llm_missing(monkeypatch) -> None:
     )
     identity = build_character_engine_identity_core_v0(facts_pack=facts, evidence=evidence)
     assert identity["status"] == "grounded"
-    assert identity["identity_core"]["thesis_key"] == "builds_through_autonomy"
-    assert "автоном" in identity["identity_core"]["surface_text"].lower()
+    assert identity["identity_core"]["thesis_key"] == "planet_in_sign:sun:aquarius"
+    assert "detached" in identity["identity_core"]["surface_text"].lower()
+    assert "собственную систему" not in identity["identity_core"]["surface_text"]
+    assert identity["identity_core"]["k01_source"] == "il2_composed_roles"
     assert identity["validation"].get("deterministic_fallback") is True

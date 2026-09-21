@@ -23,10 +23,16 @@ PROFILE_MEANING_PRODUCERS: Final[tuple[dict[str, object], ...]] = (
         "slot_id": None,
     },
     {
+        "module": "character_engine_k01_composition_v0",
+        "pic_k": ("K01",),
+        "pic_f": ("F01", "F03", "F04", "F05", "F06", "F09"),
+        "slot_id": "P1.recognition_line",
+    },
+    {
         "module": "character_engine_stage2_identity_v0",
         "pic_k": ("K01", "K02"),
-        "pic_f": ("F03", "F06"),
-        "slot_id": "P1.recognition_line",
+        "pic_f": ("F01", "F03", "F04", "F05", "F06", "F09"),
+        "slot_id": "P1.identity_core",
     },
     {
         "module": "character_engine_stage3_internal_v0",
@@ -117,7 +123,7 @@ COVERAGE_STATUSES: Final[frozenset[str]] = frozenset(
 
 # Executable coverage — SoT table: PROFILE_INFORMATION_CONTRACT_V1 §11.
 PIC_COVERAGE: Final[tuple[dict[str, object], ...]] = (
-    {"pic_k": "K01", "status": "PARTIAL", "slot_id": ("P1.recognition_line", "P1.identity_core")},
+    {"pic_k": "K01", "status": "COMPLETE", "slot_id": ("P1.recognition_line", "P1.identity_core")},
     {"pic_k": "K02", "status": "COMPLETE", "slot_id": ("P2.anchor.sun", "P2.anchor.moon", "P2.anchor.asc")},
     {"pic_k": "K03", "status": "COMPLETE", "slot_id": ("P6.applied.asc", "P6.applied.mc", "P6.applied.house")},
     {"pic_k": "K04", "status": "COMPLETE", "slot_id": ("P3.insight", "P3.help")},

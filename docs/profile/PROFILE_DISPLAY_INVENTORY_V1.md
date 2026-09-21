@@ -71,9 +71,9 @@ Conditional: `P-forming` · `P-data`.
 | `P-data.button` | Куда идти править факты? | chrome | product chrome |
 | `P1.visual` | Какой образ ядра? | catalog | life_path → seed → asset |
 | `P1.recognition_name` | Как называется ядро? | calc | life_path → archetype |
-| `P1.recognition_line` | Кто я как наблюдаемый механизм? | generated | Character Engine / identity funnel |
+| `P1.recognition_line` | Кто я как наблюдаемый механизм? | generated | PIC-K01 IL-2 roles |
 | `P1.signal` | Есть ли раскрытие той же оси? | chrome | product chrome |
-| `P1.identity_core` | Та же ось чуть шире (disclosure)? | generated | CE identity |
+| `P1.identity_core` | Та же ось чуть шире (disclosure)? | generated | PIC-K01 same axis |
 | `P2.step_title` | chrome шага | chrome | product chrome |
 | `P2.selected_section` | chrome | chrome | product chrome |
 | `P2.selected_life_path` | Что **выбрало имя**? | calc | numerology life_path |
@@ -247,11 +247,11 @@ Conditional: `P-forming` · `P-data`.
 |---|---|
 | one_question | **Кто я как наблюдаемый механизм?** |
 | text_class | generated |
-| authority | Character Engine / identity funnel |
-| semantic_source | `profile_contract_v1.recognition_line` |
+| authority | PIC-K01 (`compose_k01_identity_v0`) |
+| semantic_source | `profile_contract_v1.recognition_line` from F01–F04 IL-2 roles |
 | display_source | projection `journey.recognition.line` |
-| allowed_inputs | CE Act I (одна мысль) from allowed snapshot depth; birth+baseline; **не** day, **не** living-as-pattern unless depth allows |
-| forbidden_inference | совет на сегодня; имя архетипа в строке; список черт; day agenda; «всегда»; диагноз |
+| allowed_inputs | sun×sign mechanism, moon hold, full ASC doorway, occupancy qualifier, F09 contribution; **не** day, **не** 13-key bank as SoT |
+| forbidden_inference | совет на сегодня; имя архетипа в строке; список черт; day agenda; «всегда»; диагноз; generic personality essay when evidence missing |
 | output | 1 мысль |
 | budget | 1–2 строки · 12–18 слов · **16–120 chars** |
 | required | да на ready |
@@ -276,8 +276,8 @@ Chrome «Почему именно ты» / «Свернуть». Budget 2–3 �
 |---|---|
 | one_question | Та же ось, чуть шире? (disclosure, не новый акт) |
 | text_class | generated |
-| authority | CE identity |
-| semantic_source | `profile_contract_v1.identity_core` |
+| authority | PIC-K01 (`compose_k01_identity_v0`) |
+| semantic_source | `profile_contract_v1.identity_core` (same axis + occupancy/F09 pieces) |
 | display_source | behind signal |
 | allowed_inputs | тот же Act I; не P3 materials |
 | forbidden_inference | новый логлайн; day; encyclopedia natal |

@@ -1,8 +1,9 @@
-"""Character Engine Stage 2 — Identity Core (LLM-first, structural validation only).
+"""Character Engine Stage 2 — Identity Core.
 
-Quality of the logline and claim selection lives in prompt
-`profile.character_engine.stage2.v1`. Code checks JSON contract + provenance:
-existing claim_id / fact_id refs, no invented claims, required fields.
+PIC-K01 meaning is IL-2 role composition (`compose_k01_identity_v0`).
+Code checks JSON contract + provenance: existing claim_id / fact_id refs,
+no invented claims, required fields. LLM cannot overwrite a composed surface.
+The 13-key registry is fallback only when sun cannot compose.
 """
 
 from __future__ import annotations
@@ -25,8 +26,11 @@ from todayflow_backend.services.character_engine_ids_v0 import make_claim_id
 from todayflow_backend.services.character_engine_identity_thesis_registry_v0 import (
     ALLOWED_IDENTITY_THESIS_KEYS,
     ALLOWED_SOURCE_ROLES,
-    STAGE1_TO_IDENTITY_THESIS,
     normalize_identity_thesis_key,
+)
+from todayflow_backend.services.character_engine_k01_composition_v0 import (
+    compose_k01_identity_v0,
+    is_k01_identity_thesis,
 )
 
 logger = logging.getLogger(__name__)
@@ -36,7 +40,7 @@ STAGE2_PROMPT_ID = "profile.character_engine.stage2.v1"
 RECIPE_VERSION = "character_engine_recipe_v1"
 # PIC: docs/profile/PROFILE_INFORMATION_CONTRACT_V1.md
 PIC_K = ("K01", "K02")
-PIC_F = ("F03", "F06")
+PIC_F = ("F01", "F03", "F04", "F05", "F06", "F09")
 
 # Editorial surface when LLM is down — Identity thesis → readable core (fill-empty, not overwrite of good LLM).
 _DETERMINISTIC_SURFACE_BY_IDENTITY: dict[str, str] = {
@@ -102,17 +106,17 @@ def _pick_primary_grounded_claim(evidence: dict[str, Any]) -> dict[str, Any] | N
         if isinstance(c, dict)
         and c.get("evidence_status") == "grounded"
         and c.get("claim_id")
-        and c.get("thesis_key")
-        and str(c.get("thesis_key")) in STAGE1_TO_IDENTITY_THESIS
+        and is_k01_identity_thesis(str(c.get("thesis_key") or ""))
     ]
     if not grounded:
         return None
-    grounded.sort(
-        key=lambda c: (
-            _confidence_rank(c.get("confidence")),
-            str(c.get("claim_id")),
-        )
-    )
+
+    def _rank(claim: dict[str, Any]) -> tuple[int, int, str]:
+        thesis = str(claim.get("thesis_key") or "")
+        occupancy_sun = 0 if thesis.startswith("planet_in_sign:sun:") else 1
+        return (occupancy_sun, _confidence_rank(claim.get("confidence")), str(claim.get("claim_id")))
+
+    grounded.sort(key=_rank)
     return grounded[0]
 
 
@@ -132,17 +136,8 @@ def _occupancy_claims(evidence: dict[str, Any]) -> list[dict[str, Any]]:
     ]
 
 
-def _il_occupancy_lines(evidence: dict[str, Any]) -> list[str]:
-    lines: list[str] = []
-    for claim in _occupancy_claims(evidence):
-        text = str(claim.get("il_line") or "").strip()
-        if text and text not in lines:
-            lines.append(text)
-    return lines
-
-
 def _fill_surface_with_il_occupancy(out: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
-    """Fill-empty: occupancy lemmas on Identity Core / recognition source. Do not replace thesis."""
+    """Occupancy claim ids stay qualifiers. Surface meaning comes from K01 composition, not a lemma dump."""
     occupancy = _occupancy_claims(evidence)
     occupancy_ids = [str(c["claim_id"]) for c in occupancy]
     roles = list(out.get("source_roles") or []) if isinstance(out.get("source_roles"), list) else []
@@ -159,12 +154,6 @@ def _fill_surface_with_il_occupancy(out: dict[str, Any], evidence: dict[str, Any
     core = out.get("identity_core") if isinstance(out.get("identity_core"), dict) else None
     if not core:
         return out
-    extra = _il_occupancy_lines(evidence)
-    if extra:
-        surface = str(core.get("surface_text") or "").strip()
-        addon = " ".join(extra)
-        if addon and addon not in surface:
-            core["surface_text"] = f"{surface} {addon}".strip() if surface else addon
     if occupancy_ids:
         qualifying = [
             str(cid)
@@ -178,16 +167,41 @@ def _fill_surface_with_il_occupancy(out: dict[str, Any], evidence: dict[str, Any
     return out
 
 
-def build_deterministic_stage2_raw_v0(evidence: dict[str, Any]) -> dict[str, Any] | None:
-    """LLM-down Identity Core from Stage 1 primary claim + editorial surface bank."""
-    primary = _pick_primary_grounded_claim(evidence)
+def build_deterministic_stage2_raw_v0(
+    evidence: dict[str, Any],
+    *,
+    facts_pack: dict[str, Any] | None = None,
+) -> dict[str, Any] | None:
+    """K01 from IL-2 roles. 13-key surface bank is fallback only when sun cannot compose."""
+    composed = compose_k01_identity_v0(facts_pack=facts_pack or {}, evidence=evidence)
+    if composed.get("status") == "grounded":
+        primary_id = str(composed["primary_claim_id"])
+        return {
+            "status": "grounded",
+            "identity_core": {
+                "primary_claim_id": primary_id,
+                "thesis_key": str(composed.get("thesis_key") or ""),
+                "surface_text": str(composed.get("surface_text") or ""),
+                "recognition_line": str(composed.get("recognition_line") or ""),
+                "supporting_claim_ids": list(composed.get("supporting_claim_ids") or [primary_id]),
+                "qualifying_claim_ids": list(composed.get("qualifying_claim_ids") or []),
+                "contradicting_claim_ids": [],
+                "confidence": "medium",
+                "k01_source": composed.get("k01_source"),
+                "k01_pieces": list(composed.get("pieces") or []),
+            },
+            "source_roles": list(composed.get("source_roles") or []),
+            "selection_rationale": "k01_il2_composed_roles",
+        }
+    if composed.get("status") != "fallback":
+        return None
+    fallback_claim = composed.get("fallback_claim") if isinstance(composed.get("fallback_claim"), dict) else None
+    primary = fallback_claim or _pick_primary_grounded_claim(evidence)
     if not primary:
         return None
     stage1_thesis = str(primary.get("thesis_key") or "").strip()
     identity_thesis = normalize_identity_thesis_key(stage1_thesis)
-    if not identity_thesis:
-        return None
-    surface = _DETERMINISTIC_SURFACE_BY_IDENTITY.get(identity_thesis)
+    surface = _DETERMINISTIC_SURFACE_BY_IDENTITY.get(identity_thesis or "")
     if not surface:
         return None
     primary_id = str(primary.get("claim_id"))
@@ -212,6 +226,8 @@ def build_deterministic_stage2_raw_v0(evidence: dict[str, Any]) -> dict[str, Any
             "qualifying_claim_ids": occupancy_ids or others[2:3],
             "contradicting_claim_ids": [],
             "confidence": str(primary.get("confidence") or "medium"),
+            "k01_source": "fallback_13key_insufficient_il2",
+            "k01_pieces": [],
         },
         "source_roles": [
             {"claim_id": primary_id, "role": "dominant_mechanism"},
@@ -224,7 +240,7 @@ def build_deterministic_stage2_raw_v0(evidence: dict[str, Any]) -> dict[str, Any
                 for cid in occupancy_ids
             ],
         ],
-        "selection_rationale": "deterministic_fallback_llm_unavailable",
+        "selection_rationale": "fallback_13key_insufficient_il2",
     }
 
 
@@ -277,7 +293,7 @@ def build_stage2_context_pack(
         if isinstance(c, dict) and c.get("evidence_status") == "grounded" and c.get("claim_id")
     ]
     identity_primaries = [
-        c for c in grounded if str(c.get("thesis_key") or "") in STAGE1_TO_IDENTITY_THESIS
+        c for c in grounded if is_k01_identity_thesis(str(c.get("thesis_key") or ""))
     ]
     fact_rows = [
         {
@@ -430,7 +446,12 @@ def validate_stage2_identity_contract(
         )
 
     identity_thesis = normalize_identity_thesis_key(primary_thesis)
-    if identity_thesis is None or identity_thesis not in ALLOWED_IDENTITY_THESIS_KEYS:
+    if identity_thesis is None and primary_thesis.startswith("planet_in_sign:sun:"):
+        identity_thesis = primary_thesis
+    if identity_thesis is None or (
+        identity_thesis not in ALLOWED_IDENTITY_THESIS_KEYS
+        and not identity_thesis.startswith("planet_in_sign:sun:")
+    ):
         return _fail("thesis_not_normalizable", stage1_thesis_key=primary_thesis)
 
     def _claim_list(key: str) -> list[str] | None:
@@ -489,11 +510,21 @@ def validate_stage2_identity_contract(
         primary_fact_ids=supporting_facts,
     )
 
+    recognition_line = str(core_raw.get("recognition_line") or "").strip() or surface
+    k01_source = str(core_raw.get("k01_source") or "").strip() or None
+    k01_pieces = [
+        row
+        for row in (core_raw.get("k01_pieces") or [])
+        if isinstance(row, dict) and row.get("role") and row.get("text")
+    ]
     identity_core = {
         "claim_id": claim_id,
         "claim_kind": "identity_core",
         "thesis_key": identity_thesis,
         "surface_text": surface,
+        "recognition_line": recognition_line,
+        "k01_source": k01_source,
+        "k01_pieces": k01_pieces,
         "cascade_role": "identity_core",
         "primary_claim_id": primary_claim_id,
         "supporting_claim_ids": supporting_claim_ids,
@@ -538,15 +569,31 @@ def build_character_engine_identity_core_v0(
     Run Stage 2 Identity Core.
 
     Pass ``llm_raw`` in tests to inject a model response without calling the network.
-    When LLM is missing/empty/invalid and Stage 1 has grounded claims → deterministic
-    editorial surface (fill-empty resilience). LLM success remains preferred SoT for prose.
-    ``deterministic_only=True`` skips LLM (Profile GET fill-once; publish uses LLM).
+    Meaning SoT is IL-2 role composition (PIC-K01). LLM/13-key cannot overwrite a
+    composed surface. 13-key bank is fallback only when sun cannot compose.
+    ``deterministic_only=True`` skips LLM (Profile GET fill-once).
     """
     context = build_stage2_context_pack(facts_pack=facts_pack, evidence=evidence)
     prompt_version = "0"
 
+    def _apply_k01_meaning(out: dict[str, Any]) -> dict[str, Any]:
+        if str(out.get("status") or "") != "grounded":
+            return out
+        core = out.get("identity_core") if isinstance(out.get("identity_core"), dict) else None
+        if not core:
+            return out
+        composed = compose_k01_identity_v0(facts_pack=facts_pack, evidence=evidence)
+        if composed.get("k01_source") != "il2_composed_roles":
+            core.setdefault("k01_source", composed.get("k01_source") or "fallback_13key_insufficient_il2")
+            return out
+        core["surface_text"] = str(composed.get("surface_text") or core.get("surface_text") or "")
+        core["recognition_line"] = str(composed.get("recognition_line") or core["surface_text"])
+        core["k01_source"] = "il2_composed_roles"
+        core["k01_pieces"] = list(composed.get("pieces") or [])
+        return out
+
     def _done(out: dict[str, Any]) -> dict[str, Any]:
-        return _fill_surface_with_il_occupancy(out, evidence)
+        return _apply_k01_meaning(_fill_surface_with_il_occupancy(out, evidence))
 
     if llm_raw is not None:
         return _done(
@@ -574,7 +621,7 @@ def build_character_engine_identity_core_v0(
         )
 
     def _deterministic(*, reason: str, prompt_ver: str) -> dict[str, Any]:
-        raw = build_deterministic_stage2_raw_v0(evidence)
+        raw = build_deterministic_stage2_raw_v0(evidence, facts_pack=facts_pack)
         if raw is None:
             return _done(
                 validate_stage2_identity_contract(

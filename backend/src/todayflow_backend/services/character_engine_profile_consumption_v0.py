@@ -983,8 +983,9 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     if not surface or not identity_thesis:
         return payload
 
-    # One person story — recognition_line matches full identity_core (no short duplicate).
-    recognition = surface
+    recognition_raw = str(core.get("recognition_line") or "").strip()
+    recognition = _clip(recognition_raw or surface, _MAX_RECOGNITION)
+    k01_source = str(core.get("k01_source") or "").strip() or None
     stage3 = _stage3_internal(payload)
     stage4 = _stage4_life(payload)
     stage5 = _stage5_assembly(payload)
@@ -1270,6 +1271,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "projection_version": PROJECTION_VERSION,
         "applied": True,
         "identity_thesis": identity_thesis,
+        "k01_source": k01_source,
         "recognition_label": _RECOGNITION_LABEL.get(identity_thesis) or "Ядро",
         "primary_claim_id": primary_id,
         "trap_source": trap_source,

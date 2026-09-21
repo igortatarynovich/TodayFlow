@@ -139,6 +139,9 @@ def _ce_hop(case: dict) -> dict:
         "stage1_thesis_keys": sorted(claims),
         "identity_thesis": core.get("thesis_key"),
         "identity_surface": core.get("surface_text"),
+        "recognition_line": core.get("recognition_line"),
+        "k01_source": core.get("k01_source"),
+        "k01_pieces": list(core.get("k01_pieces") or []),
         "qualifying_claim_ids": list(core.get("qualifying_claim_ids") or []),
         "occupancy_roles": [
             roles.get(str(c.get("claim_id")))
@@ -186,6 +189,9 @@ def test_pic_coverage_audit_covers_n18() -> None:
     assert KNOWLEDGE_TO_SLOT["K16"] == ("P6.practical_tips",)
     assert by_id["K03"]["status"] == "COMPLETE"
     assert KNOWLEDGE_TO_SLOT["K03"] == ("P6.applied.asc", "P6.applied.mc", "P6.applied.house")
+    assert by_id["K01"]["status"] == "COMPLETE"
+    assert KNOWLEDGE_TO_SLOT["K01"] == ("P1.recognition_line", "P1.identity_core")
+    assert not any(row["status"] == "PARTIAL" for row in PIC_COVERAGE)
     assert not any(row["status"] == "MISSING" for row in PIC_COVERAGE)
 
 
@@ -198,7 +204,15 @@ def test_k16_practical_action_is_grounded_k07_derivation() -> None:
     assert "character_engine_stage5" not in src
 
 
-def test_k03_applied_how_do_is_il2_not_thesis_bank() -> None:
+def test_k01_composition_is_il2_roles_not_13key_bank() -> None:
+    src = (CE_ROOT / "character_engine_k01_composition_v0.py").read_text(encoding="utf-8")
+    assert "compose_k01_identity_v0" in src
+    assert "compose_planet_in_sign" in src
+    assert "fallback_13key_insufficient_il2" in src
+    assert "natal_decode" not in src
+    assert "profile_deep_themes" not in src
+    row = next(item for item in PIC_COVERAGE if item["pic_k"] == "K01")
+    assert row["status"] == "COMPLETE"
     src = (CE_ROOT / "character_engine_profile_consumption_spheres_houses_v0.py").read_text(
         encoding="utf-8"
     )
@@ -216,7 +230,7 @@ def test_pic_gate_meaning_producers_cite_k_and_f() -> None:
     assert STAGE1_PIC_K == ("K01", "K02", "K05")
     assert STAGE1_PIC_F == ("F03", "F06", "F07")
     assert STAGE2_PIC_K == ("K01", "K02")
-    assert STAGE2_PIC_F == ("F03", "F06")
+    assert STAGE2_PIC_F == ("F01", "F03", "F04", "F05", "F06", "F09")
     registered = {str(row["module"]) for row in PROFILE_MEANING_PRODUCERS}
     for row in PROFILE_MEANING_PRODUCERS:
         module = str(row["module"])
@@ -292,7 +306,8 @@ def test_k01_k02_preserve_f03_f06_mars_occupancy() -> None:
     assert "planet_in_house:mars:07" in hop_b["stage1_thesis_keys"]
     assert hop_a["stage1_thesis_keys"] != hop_b["stage1_thesis_keys"]
     assert hop_a["identity_surface"] != hop_b["identity_surface"]
-    assert hop_a["identity_thesis"] == hop_b["identity_thesis"] == "builds_through_analysis"
+    assert hop_a["identity_thesis"] == hop_b["identity_thesis"] == "planet_in_sign:sun:virgo"
+    assert hop_a["k01_source"] == hop_b["k01_source"] == "il2_composed_roles"
     assert hop_a["qualifying_claim_ids"]
     assert hop_b["qualifying_claim_ids"]
     assert hop_a["occupancy_roles"]
@@ -301,14 +316,137 @@ def test_k01_k02_preserve_f03_f06_mars_occupancy() -> None:
     assert all(role == "qualifier" for role in hop_b["occupancy_roles"])
     surface_a = hop_a["identity_surface"] or ""
     surface_b = hop_b["identity_surface"] or ""
-    assert "holding" in surface_a or "home" in surface_a
-    assert "close" in surface_a
+    assert "анализ до шага" not in surface_a.lower()
+    assert "анализ до шага" not in surface_b.lower()
+    assert "precise" in surface_a
+    assert "precise" in surface_b
+    assert "holding" in surface_a or "home" in surface_a or "family" in surface_a
     assert "balancing" in surface_b or "partnership" in surface_b
     assert keys_a != keys_b
     assert hop_a["deterministic"] is True
     registry = set(STAGE1_TO_IDENTITY_THESIS)
     assert set(hop_a["stage1_thesis_keys"]) & registry
     assert set(hop_b["stage1_thesis_keys"]) & registry
+
+
+_THIRTEEN_KEY_PHRASES = (
+    "анализ до шага",
+    "собственную систему",
+    "через идеи и связи",
+)
+
+
+def test_k01_is_composed_from_allowed_facts_not_bucket_key(monkeypatch) -> None:
+    hop = _ce_hop(CHART_A)
+    pieces = hop["k01_pieces"]
+    roles = [str(row.get("role")) for row in pieces]
+    assert "mechanism" in roles
+    assert "hold" in roles
+    assert "doorway" in roles
+    assert "qualifier" in roles
+    assert "contribution" in roles
+    for row in pieces:
+        assert row.get("text")
+        assert row.get("lemmas")
+        assert row.get("fact_types")
+        assert row.get("fact_ids") or row.get("claim_id")
+    surface = hop["identity_surface"] or ""
+    recognition = hop["recognition_line"] or ""
+    assert recognition
+    assert surface.startswith(recognition) or recognition in surface
+    for phrase in _THIRTEEN_KEY_PHRASES:
+        assert phrase not in surface.lower()
+        assert phrase not in recognition.lower()
+    out = _consume_chart(CHART_A, monkeypatch)
+    contract = out["profile_contract_v1"]
+    assert out["character_engine_consumption_v0"]["k01_source"] == "il2_composed_roles"
+    assert "precise" in (contract.get("recognition_line") or "")
+    assert "анализ до шага" not in (contract.get("recognition_line") or "").lower()
+    assert contract["identity_core"] != contract["recognition_line"]
+    assert "поиск смысла" in (contract.get("identity_core") or "") or "Вклад пути" in (
+        contract.get("identity_core") or ""
+    )
+
+
+def test_k01_missing_evidence_reduces_concreteness_not_essay() -> None:
+    date_only = {
+        "id": "virgo_date_only",
+        "chart": {
+            "positions": [
+                {"body": "Sun", "sign": "Virgo", "degree": 15.0, "longitude": 165.0},
+                {"body": "Moon", "sign": "Taurus", "degree": 10.0, "longitude": 40.0},
+                {"body": "Mars", "sign": "Cancer", "degree": 12.0, "longitude": 102.0},
+            ],
+            "houses": [],
+        },
+    }
+    facts = build_character_engine_facts_pack_v0(
+        profile_fingerprint=date_only["id"],
+        swiss_chart=date_only["chart"],
+        numerology={"life_path": 7},
+        capability={"natal_mode": "date_only", "has_name": True},
+        birth_date="1991-09-08",
+        input_fingerprint=date_only["id"],
+    )
+    evidence = build_character_engine_evidence_candidates_v0(facts)
+    identity = build_character_engine_identity_core_v0(
+        facts_pack=facts,
+        evidence=evidence,
+        deterministic_only=True,
+    )
+    core = identity["identity_core"]
+    surface = str(core.get("surface_text") or "")
+    roles = [str(row.get("role")) for row in (core.get("k01_pieces") or [])]
+    assert identity["status"] == "grounded"
+    assert core.get("k01_source") == "il2_composed_roles"
+    assert "mechanism" in roles
+    assert "hold" in roles
+    assert "doorway" not in roles
+    assert "home" not in surface
+    assert "family" not in surface
+    assert "partnership" not in surface
+    assert "doorway-meeting" not in surface
+    assert "анализ до шага" not in surface.lower()
+    full = _ce_hop(CHART_A)
+    assert "doorway-meeting" in (full["identity_surface"] or "")
+    assert len(surface) < len(full["identity_surface"] or "")
+
+
+def test_k01_sun_without_13key_bucket_still_grounds() -> None:
+    facts = build_character_engine_facts_pack_v0(
+        profile_fingerprint="leo_k01",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Leo", "degree": 1.0},
+                {"body": "Moon", "sign": "Aries", "degree": 2.0},
+                {"body": "Mars", "sign": "Virgo", "degree": 3.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 9},
+        birth_date="1988-08-15",
+        capability={"natal_mode": "date_only"},
+        input_fingerprint="leo_k01",
+    )
+    evidence = build_character_engine_evidence_candidates_v0(facts)
+    identity = build_character_engine_identity_core_v0(
+        facts_pack=facts, evidence=evidence, deterministic_only=True
+    )
+    from todayflow_backend.services.character_engine_identity_thesis_registry_v0 import (
+        STAGE1_TO_IDENTITY_THESIS,
+    )
+
+    assert not any(
+        str(c.get("thesis_key")) in STAGE1_TO_IDENTITY_THESIS
+        for c in (evidence.get("claims") or [])
+        if isinstance(c, dict)
+    )
+    assert identity["status"] == "grounded"
+    core = identity["identity_core"]
+    assert core["thesis_key"] == "planet_in_sign:sun:leo"
+    assert core["k01_source"] == "il2_composed_roles"
+    assert "central" in (core.get("surface_text") or "") or "warm" in (core.get("surface_text") or "")
+    assert "анализ до шага" not in (core.get("surface_text") or "").lower()
 
 
 def test_k05_f07_aspect_pair_wires_to_insight(monkeypatch) -> None:
