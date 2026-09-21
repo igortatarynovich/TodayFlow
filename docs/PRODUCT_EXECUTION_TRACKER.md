@@ -4,6 +4,8 @@ Last updated: 2026-09-21
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (X3 CLOSED / PASS, 2026-09-21):** Theme / Focus / Step is a readable spine on the locked 4-surface. T2-gate copy is a symbolic lens; card/number do not define the day or set when to act. Theatrical pick (X4) and «своё число» (X5) unchanged. TIC stays **CLOSED / PASS**. N = 20. No new slot. No new K. No producer change. No ScreenFlow reorder. Next = **X4/X5**. Branch `cursor/x3-theme-focus-step`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
 **NOW (TODAY PRODUCT-GATE SELECTION, 2026-09-21):** TIC stays **CLOSED / PASS**. Next executable Today gate is Full User Path **X3** (Theme/Focus/Step as readable spine on the locked 4-surface). Ritual-first funnel already closed (Phase 2.2). Not a new Information Contract. Not K21. Not IL. Not PIC. Compatibility IC was considered and **not selected**. Queue after X3: X4 honest card reveal + X5 calendar-number copy, then P1 X11 legacy narrative and X14 progress/D2 continuity. Selection only — no product paint. New branch only when X3 starts. Stay on `cursor/today-information-contract` until then. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (TIC CLOSE-OUT PASS, 2026-09-21):** TODAY_INFORMATION_CONTRACT: **CLOSED / PASS**. Independent four-block re-audit (20/20 executable · Inventory last-authority · forbidden-source regression · omit integrity). Coverage table COMPLETE was not accepted as proof. Glance leftover is out of TIC locked-surface scope. No new K. No product fix inside the gate. Frozen handoff. Next product gate is chosen from canon, not TIC inertia. Not K21. Not IL. Not PIC. Not Compatibility N automatically. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
@@ -139,6 +141,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — X3 Theme / Focus / Step (2026-09-21)
+
+- **SoT before:** X3 OPEN. Live T2-gate bodies claimed the card «говорит о сегодня» and the number «задаёт ритм» / when to act.
+- **SoT after:** X3 CLOSED / PASS. Same T1 Theme · T3 Focus · T3.priority. T2-gate copy is a lens over an already-counted day. X4 theatrical pick and X5 «своё число» unchanged.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — TODAY_PRODUCT_FLOW selection · FULL_USER_PATH §0/§13/§16 · this tracker · X3 handoff
+- **Backward compatible?** yes. Copy-only.
 
 ## Architecture impact — Today product-gate selection (2026-09-21)
 

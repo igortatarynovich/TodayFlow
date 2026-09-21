@@ -253,15 +253,24 @@ USER RESPONSE           →  GRATITUDE HISTORY
 | Gate | Статус после сверки | Класс |
 |------|---------------------|--------|
 | 4-surface cutover / ritual-first funnel | **CLOSED** (Phase 2.2). `/today` opens on `today`, then `ritual` · `my_day` · `evening` | cycle already locked |
-| **X3 Theme / Focus / Step** | **OPEN — NEXT.** Слоты есть (`T1` theme · `T3.focus_*` · `T3.priority`). Остаток: читаемый spine vs leftover ritual copy, который всё ещё звучит как начало дня | experience on closed N |
-| X4 honest card reveal | OPEN, очередь сразу после X3. Seed/prebake vs «выбери ту, к которой тянет» | experience copy |
+| **X3 Theme / Focus / Step** | **CLOSED / PASS.** T1 Theme · T3 Focus · T3.priority Step. Live T2-gate copy is a lens over an already-counted day; card/number do not define Theme/Focus/Step or action timing | experience on closed N |
+| X4 honest card reveal | **OPEN — NEXT.** Seed/prebake vs «выбери ту, к которой тянет» | experience copy |
 | X5 calendar number | OPEN, вместе с X4 (§16.1 п.4). Copy «твоё число» vs календарное число сегодняшнего дня | experience copy |
 | X11 legacy narrative | OPEN, P1. Glance leftover / stacked `?experience=1` / promise-trap copy. Не пятый акт | cleanup |
 | X14 progress + D2 continuity | OPEN, P1. `T1.continuity` и `T3.tracker` есть; completeness / placement не закрыты | experience |
 | Compatibility Information Contract | **не выбран.** Отдельная таблица (PIC §9). Не автоматическое продолжение TIC | other section N |
 | TIC-K21 / IL dump / PIC resume | **запрещены** этой сверкой | not a product gate |
 
-**Следующий executable gate:** X3 — Theme / Focus / Step как пользовательский spine поверх уже закрытого N. Не расширять TIC. Не rebuild сервера. Новую ветку открывать только под этот gate, не продолжать `cursor/today-information-contract` по инерции.
+**Следующий executable gate:** X4 honest card reveal + X5 calendar-number copy. Не расширять TIC. Не rebuild сервера. X3 не закрывает X4/X5.
+
+### Architecture impact — X3 Theme / Focus / Step (2026-09-21)
+
+- **SoT before:** 4-surface locked; T1 Theme · T3 Focus · T3.priority present. Live T2-gate bodies still claimed the card «говорит о сегодня» and the number «задаёт ритм» / when to act.
+- **SoT after:** same slots and order. T2-gate copy is a symbolic lens over an already-counted day. Card/number do not own Theme, Focus, Step, or action timing. Theatrical pick (X4) and «своё число» (X5) unchanged.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this file · FULL_USER_PATH §0/§13/§16 · tracker · X3 handoff
+- **Backward compatible?** yes. Copy-only on existing `T2-gate.*` chrome.
 
 ### Architecture impact — product-gate selection (2026-09-21)
 
