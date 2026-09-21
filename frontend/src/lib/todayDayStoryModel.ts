@@ -309,8 +309,7 @@ export function buildTodayDayStoryViewModel(input: {
 
   const sphereFocus = buildTodaySphereFocus(input.contract);
   const dayMap = buildTodayDayMap({ contract: input.contract });
-  const apiColor = input.morningRitualData?.celestial_events?.daily_symbols?.color;
-  const talisman = input.contract.day_story?.talisman;
+  const nest = input.contract.color_guide;
   const propsColor = input.contract.day_story?.day_scenario?.props?.color as
     | {
         name?: string | null;
@@ -322,27 +321,43 @@ export function buildTodayDayStoryViewModel(input: {
     | undefined;
   const colorGuide = isTodayInterpretationUnavailable(input.contract)
     ? null
-    : resolveTodayDayColorGuide({
-    // Scenario talisman / props color wins over morning catalog name (B4 / v3.1).
-    name: talisman?.color ?? propsColor?.name ?? input.colorLine ?? apiColor?.name,
-    api: apiColor,
-    scenario:
-      talisman?.color || propsColor?.name
-        ? {
-            name: talisman?.color ?? propsColor?.name ?? null,
-            note: talisman?.note ?? propsColor?.link_to_conflict ?? null,
-            // Prefer talisman.note when present — avoid joining identical link twice.
-            benefit: talisman?.note
-              ? null
-              : (propsColor?.link_to_conflict ?? null),
-            avoidColor: talisman?.avoid_color,
-            avoidWhy: talisman?.avoid_why,
-            intensity: propsColor?.intensity ?? null,
-            clothing: propsColor?.where_to_use?.clothing ?? null,
-            accessory: propsColor?.where_to_use?.accessory ?? null,
-          }
-        : null,
-  });
+    : nest?.name
+      ? resolveTodayDayColorGuide({
+          name: nest.name,
+          scenario: {
+            name: nest.name,
+            intensity: nest.intensity,
+            clothing: nest.clothing,
+            accessory: nest.accessory,
+            benefit: nest.intensity ?? null,
+            note: null,
+            avoidColor: nest.avoid,
+            avoidWhy: nest.avoid_why,
+          },
+          api: nest.amount
+            ? {
+                name: nest.name,
+                amount_ru: nest.amount,
+                clothing_ru: nest.clothing ?? undefined,
+                accessory_ru: nest.accessory ?? undefined,
+                avoid_color_ru: nest.avoid ?? undefined,
+                avoid_why_ru: nest.avoid_why ?? undefined,
+              }
+            : null,
+        })
+      : propsColor?.name
+        ? resolveTodayDayColorGuide({
+            name: propsColor.name,
+            scenario: {
+              name: propsColor.name,
+              benefit: propsColor.link_to_conflict ?? null,
+              note: null,
+              intensity: propsColor.intensity ?? null,
+              clothing: propsColor.where_to_use?.clothing ?? null,
+              accessory: propsColor.where_to_use?.accessory ?? null,
+            },
+          })
+        : null;
   const pulseLabel = "Пульс дня";
   const pulseFromMap = dayMap?.whatHappens?.trim() || null;
 

@@ -339,6 +339,11 @@ def build_scenario_foundation_v1(
         "ranked_drivers": drivers,
         "astronomy_facts": astronomy,
         "astrology_facts": astrology,
+        "primary_energy": _extract_primary_energy(
+            interpretation=interp,
+            day_events_pack=pack,
+            celestial_events=ce,
+        ),
         "personal_natal_activations": [a for a in natal_activations if a.get("text")],
         "tarot_card": {
             "name": card_name,
@@ -1075,73 +1080,113 @@ def empty_props_v1() -> dict[str, Any]:
     }
 
 
-def _needed_color_tags(*, trap: str, force_a: str, sphere: str, mode: str) -> set[str]:
-    blob = f"{trap} {force_a} {sphere} {mode}".lower()
-    tags: set[str] = set()
-    if any(k in blob for k in ("соглас", "угодить", "гармон", "please", "сглад")):
-        tags.update({"hold_distance", "boundaries", "slow_reply", "clarity"})
-    if any(k in blob for k in ("спеш", "импульс", "ускор", "rush", "срыв")):
-        tags.update({"calm_clarity", "pause_before_act", "depth"})
-    if any(k in blob for k in ("разговор", "сообщ", "контакт", "communication", "прям")):
-        tags.update({"soft_speech", "communication", "inner_honesty"})
-    if any(k in blob for k in ("устал", "восстанов", "тело", "сон", "energy")):
-        tags.update({"restore", "body", "tempo_gentle"})
-    if any(k in blob for k in ("давлен", "границ", "контрол", "pressure")):
-        tags.update({"boundaries", "ground", "focus"})
-    if any(k in blob for k in ("распыл", "сует", "шум")):
-        tags.update({"focus", "calm_clarity", "steady"})
-    # Layer B emotional range — verb/closure forms only (never bare «отпус»:
-    # that substring false-positives on «отпуск» / rest_travel).
-    if any(k in blob for k in ("страст", "влечен", "желан")):
-        tags.update({"passionate_assertion", "vital_courage"})
-    if any(
-        k in blob
-        for k in (
-            "конец",
-            "заверш",
-            "потер",
-            "отпустить",
-            "отпускать",
-            "отпустил",
-            "отпускаю",
-            "отпусти",
-        )
-    ):
-        tags.update({"gentle_closure", "honor_loss"})
-    if mode in {"recovery", "stability"}:
-        tags.update({"restore", "steady", "ground"})
-    if not tags:
-        tags.update({"calm_clarity", "hold_distance", "clarity"})
-    if sphere in {"relationships", "communication"}:
-        tags.add("communication")
-    if sphere in {"energy_body", "rest_travel"}:
-        tags.update({"restore", "body"})
-    if sphere in {"work_decisions", "money"}:
-        tags.update({"focus", "decision", "calm_clarity"})
-    # Layer B sphere clusters (additive — money keeps work focus above).
-    if sphere == "creativity":
-        tags.update({"creative_spark", "generous_warmth"})
-    if sphere == "home":
-        tags.update({"home_warmth", "belonging"})
-    if sphere == "money":
-        tags.update({"confident_abundance", "steady_growth"})
+# TIC-K15 / F14: closed F05 8-set → existing LIVE_NEEDED_COLOR_TAGS.
+# Not a second scorer — input vocabulary for score_color_for_needs.
+F05_ENERGY_TO_COLOR_TAGS: dict[str, frozenset[str]] = {
+    "grounded": frozenset({"ground", "steady", "calm_clarity"}),
+    "flow": frozenset({"tempo_gentle", "restore", "body"}),
+    "radiance": frozenset({"generous_warmth", "warm_contact", "warm_energy"}),
+    "momentum": frozenset({"focus", "decision", "vital_courage"}),
+    "clarity": frozenset({"calm_clarity", "clarity", "cool_mind"}),
+    "tension": frozenset({"pause_before_act", "boundaries", "hold_distance"}),
+    "renewal": frozenset({"restore", "growth", "creative_spark"}),
+    "depth": frozenset({"depth", "inner_honesty", "pause_before_act"}),
+}
+
+# TIC-K15 / F09: existing F10 4-set (DOMAIN_NATAL_POINTS) → existing needed tags.
+F09_DOMAIN_TO_COLOR_TAGS: dict[str, frozenset[str]] = {
+    "work": frozenset({"focus", "decision", "calm_clarity"}),
+    "money": frozenset({"focus", "decision", "calm_clarity", "confident_abundance", "steady_growth"}),
+    "relationships": frozenset({"communication", "soft_speech", "inner_honesty"}),
+    "energy": frozenset({"restore", "body", "tempo_gentle"}),
+}
+
+# Closed F05 8-set → existing LIVE_AVOID_AMPLIFY_TAGS. Scene trap is not K15 input.
+F05_ENERGY_TO_AMPLIFY: dict[str, frozenset[str]] = {
+    "grounded": frozenset({"pressure"}),
+    "flow": frozenset({"scatter", "noise"}),
+    "radiance": frozenset({"please", "harmony_at_any_cost", "soft_over_truth"}),
+    "momentum": frozenset({"rush", "impulse", "react_first"}),
+    "clarity": frozenset({"over_control"}),
+    "tension": frozenset({"pressure", "harsh", "all_or_nothing"}),
+    "renewal": frozenset({"scatter"}),
+    "depth": frozenset({"alarm"}),
+}
+
+
+def _extract_primary_energy(
+    *,
+    interpretation: dict[str, Any] | None = None,
+    day_events_pack: dict[str, Any] | None = None,
+    celestial_events: dict[str, Any] | None = None,
+) -> str | None:
+    """F05 already chosen by Engine. Read it; do not pick a second energy."""
+    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
+
+    interp = _as_dict(interpretation)
+    gd = _as_dict(interp.get("global_day"))
+    energy = normalize_visual_mode(gd.get("primary_energy") or interp.get("primary_energy"))
+    if energy:
+        return energy
+    pack = day_events_pack if isinstance(day_events_pack, dict) else _as_dict(interp.get("day_events_pack"))
+    sky = celestial_events if isinstance(celestial_events, dict) else _as_dict(interp.get("celestial_events"))
+    if not pack and not sky:
+        return None
+    from todayflow_backend.services.global_day_engine_v1 import build_global_day_profile_v1
+
+    profile = build_global_day_profile_v1(
+        day_events_pack=pack or None,
+        celestial_events=sky or None,
+    )
+    return normalize_visual_mode(profile.get("primary_energy"))
+
+
+def _f09_natal_point(act: dict[str, Any]) -> str:
+    return str(act.get("natal_point") or act.get("natal_planet") or "").strip()
+
+
+def _focus_axis_from_activations(activations: list[Any] | None) -> str | None:
+    """Reuse K07 mapper: first F09 natal_point that maps in DOMAIN_NATAL_POINTS."""
+    from todayflow_backend.services.today_domain_verdicts_v1 import overlay_focus_axis_from_natal_point
+
+    for act in activations or []:
+        if not isinstance(act, dict):
+            continue
+        axis = overlay_focus_axis_from_natal_point(_f09_natal_point(act) or None)
+        if axis:
+            return axis
+    return None
+
+
+def _has_grounded_f09(activations: list[Any] | None) -> bool:
+    return any(isinstance(a, dict) and _f09_natal_point(a) for a in (activations or []))
+
+
+def _needed_color_tags(
+    *,
+    primary_energy: str | None,
+    focus_axis: str | None = None,
+    day_favorable: bool = False,
+) -> set[str]:
+    """F05 8-set + F09 domain (+ day_favorable) → existing scorer tags. No scene blob."""
+    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
+
+    energy = normalize_visual_mode(primary_energy)
+    if not energy:
+        return set()
+    tags: set[str] = set(F05_ENERGY_TO_COLOR_TAGS.get(energy) or ())
+    axis = str(focus_axis or "").strip().lower()
+    tags.update(F09_DOMAIN_TO_COLOR_TAGS.get(axis) or ())
+    if day_favorable:
+        tags.update({"quiet_celebration", "light_gratitude"})
     return tags
 
 
-def _amplify_tags_for_trap(trap: str, force_a: str) -> set[str]:
-    blob = f"{trap} {force_a}".lower()
-    tags: set[str] = set()
-    if any(k in blob for k in ("соглас", "угодить", "гармон", "сглад", "please")):
-        tags.update({"please", "harmony_at_any_cost", "soft_over_truth"})
-    if any(k in blob for k in ("спеш", "импульс", "ускор", "реакц")):
-        tags.update({"rush", "react_first", "impulse", "alarm"})
-    if any(k in blob for k in ("распыл", "сует", "шум")):
-        tags.update({"scatter", "noise"})
-    if any(k in blob for k in ("давлен", "всё или", "контрол")):
-        tags.update({"pressure", "all_or_nothing", "over_control", "harsh"})
-    if not tags:
-        tags.update({"rush", "scatter", "please"})
-    return tags
+def _amplify_tags_for_energy(primary_energy: str | None) -> set[str]:
+    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
+
+    energy = normalize_visual_mode(primary_energy)
+    return set(F05_ENERGY_TO_AMPLIFY.get(energy or "") or ())
 
 
 def resolve_primary_scene_id_v1(
@@ -1232,14 +1277,20 @@ def build_scenario_props_v1(
     day_favorable: bool = False,
     target_month: int | None = None,
     primary_scene_id: Any = None,
+    primary_energy: str | None = None,
+    natal_activations: list[Any] | None = None,
 ) -> dict[str, Any]:
-    """Derive color/avoid/goals/affirmations/humor from scenes (B2).
+    """Derive color/avoid from F05+F09; goals/affirmations/humor still from scenes.
 
-    Color catalog = knowledge only. Selection + user-facing why come from conflict/scene.
+    Color catalog = knowledge only. K15 selection uses existing ``score_color_for_needs``
+    with tags from Engine ``primary_energy`` (F05) and natal overlay (F09).
+    Scene trap/sphere/mode are not the color meaning source.
+    Missing grounded F05+F09 → omit color (do not pick because the catalog exists).
     ``day_favorable`` (from domain_verdicts on the same natal activations) unlocks
     quiet_celebration / light_gratitude → Champagne when scoring wins.
     ``target_month`` selects warm/cold clothing + accessory copy.
     """
+    from todayflow_backend.services.day_atmosphere_v1 import normalize_visual_mode
     from todayflow_backend.services.day_color_catalog_v1 import (
         avoid_psychology_why,
         list_color_knowledge,
@@ -1252,104 +1303,95 @@ def build_scenario_props_v1(
         return empty_props_v1()
 
     trap = str(primary.get("trap") or "")
-    force = _as_dict(conflict.get("opposing_forces"))
-    force_a = str(force.get("a") or "")
-    force_b = str(force.get("b") or "")
-    thesis = _as_dict(conflict.get("thesis"))
-    mode = str(thesis.get("mode") or "")
-    sphere = str(primary.get("sphere") or "")
     scene_id = str(primary.get("scene_id") or "")
     label = _day_tone_anchor(str(conflict.get("short_name") or "сюжет дня"))
-    needed = _needed_color_tags(trap=trap, force_a=force_a, sphere=sphere, mode=mode)
-    if day_favorable:
-        needed.update({"quiet_celebration", "light_gratitude"})
-    amplify = _amplify_tags_for_trap(trap, force_a)
+    sphere_label = str(primary.get("sphere_label_ru") or "дня")
+    energy = normalize_visual_mode(primary_energy)
+    activations = [a for a in (natal_activations or []) if isinstance(a, dict)]
+    color_prop: dict[str, Any] | None = None
+    avoid_prop: dict[str, Any] | None = None
 
-    catalog = list_color_knowledge()
-    ranked = sorted(
-        catalog,
-        key=lambda e: score_color_for_needs(e, needed),
-        reverse=True,
-    )
-    chosen = ranked[0] if ranked else None
-    if not chosen:
-        return empty_props_v1()
-
-    # Prefer catalog avoid candidate that amplifies today's trap tags
-    avoid_pick = None
-    best_avoid_score = -1
-    for cand in chosen.get("avoid_candidates") or ():
-        if not isinstance(cand, dict):
-            continue
-        score = len(set(cand.get("amplifies") or ()) & amplify)
-        if score > best_avoid_score:
-            best_avoid_score = score
-            avoid_pick = cand
-    if avoid_pick is None:
-        # scan other entries' avoid candidates
-        for entry in catalog:
-            for cand in entry.get("avoid_candidates") or ():
+    if energy and _has_grounded_f09(activations):
+        focus_axis = _focus_axis_from_activations(activations)
+        needed = _needed_color_tags(
+            primary_energy=energy,
+            focus_axis=focus_axis,
+            day_favorable=day_favorable,
+        )
+        amplify = _amplify_tags_for_energy(energy)
+        catalog = list_color_knowledge()
+        ranked = sorted(
+            catalog,
+            key=lambda e: score_color_for_needs(e, needed),
+            reverse=True,
+        )
+        chosen = ranked[0] if ranked else None
+        if chosen and needed and score_color_for_needs(chosen, needed) > 0:
+            avoid_pick = None
+            best_avoid_score = -1
+            for cand in chosen.get("avoid_candidates") or ():
                 if not isinstance(cand, dict):
                     continue
                 score = len(set(cand.get("amplifies") or ()) & amplify)
                 if score > best_avoid_score:
                     best_avoid_score = score
                     avoid_pick = cand
+            if avoid_pick is None:
+                for entry in catalog:
+                    for cand in entry.get("avoid_candidates") or ():
+                        if not isinstance(cand, dict):
+                            continue
+                        score = len(set(cand.get("amplifies") or ()) & amplify)
+                        if score > best_avoid_score:
+                            best_avoid_score = score
+                            avoid_pick = cand
+            if avoid_pick is None:
+                candidates = list(chosen.get("avoid_candidates") or ())
+                first = candidates[0] if candidates and isinstance(candidates[0], dict) else None
+                avoid_pick = first
 
-    apply = resolve_seasonal_apply(_as_dict(chosen.get("apply")), month=target_month)
-    symbolic = str(chosen.get("symbolic_property") or chosen.get("name") or "цвет дня")
-    sphere_label = str(primary.get("sphere_label_ru") or "дня")
-    # One lived why once — do not paste symbolic into link + effect + note mash.
-    color_prop = {
-        "name": chosen.get("name"),
-        "origin_scene_id": scene_id,
-        "serves_conflict": label,
-        # v3.1: no force_a/force_b paste — color speaks from catalog + sphere, not Plot seed
-        "link_to_conflict": _clip(symbolic, 220),
-        "supports_or_compensates": _clip(
-            f"Компенсирует ловушку дня в зоне «{sphere_label}».",
-            160,
-        )
-        if trap
-        else _clip(f"Поддерживает тон дня в зоне «{sphere_label}».", 160),
-        "expected_effect_today": _clip(
-            f"Помогает удержать один жест в зоне «{sphere_label}».",
-            160,
-        ),
-        "where_to_use": {
-            "clothing": apply.get("clothing"),
-            "accessory": apply.get("accessory"),
-            "workspace": apply.get("workspace"),
-            "makeup": apply.get("makeup"),
-            "ui_or_bg": apply.get("ui_or_bg"),
-        },
-        "intensity": chosen.get("intensity_default"),
-        "catalog_knowledge_ref": chosen.get("name"),
-        "evidence_references": list(primary.get("evidence_references") or []),
-        "chorus_references": list(primary.get("chorus_references") or []),
-        "so_t_note": "scenario_scene_derived; catalog is knowledge only; v3.1 no force-seed",
-    }
+            apply = resolve_seasonal_apply(_as_dict(chosen.get("apply")), month=target_month)
+            symbolic = str(chosen.get("symbolic_property") or chosen.get("name") or "цвет дня")
+            color_prop = {
+                "name": chosen.get("name"),
+                "origin_scene_id": scene_id,
+                "serves_conflict": label,
+                "link_to_conflict": _clip(symbolic, 220),
+                "supports_or_compensates": _clip(symbolic, 160),
+                "expected_effect_today": _clip(str(chosen.get("intensity_default") or ""), 160),
+                "where_to_use": {
+                    "clothing": apply.get("clothing"),
+                    "accessory": apply.get("accessory"),
+                    "workspace": apply.get("workspace"),
+                    "makeup": apply.get("makeup"),
+                    "ui_or_bg": apply.get("ui_or_bg"),
+                },
+                "intensity": chosen.get("intensity_default"),
+                "catalog_knowledge_ref": chosen.get("name"),
+                "evidence_references": list(primary.get("evidence_references") or []),
+                "chorus_references": list(primary.get("chorus_references") or []),
+                "so_t_note": "f05_f09_scored; catalog is knowledge only; scene tags are not K15 input",
+            }
 
-    from todayflow_backend.services.day_color_catalog_v1 import sanitize_color_display_name
+            from todayflow_backend.services.day_color_catalog_v1 import sanitize_color_display_name
 
-    avoid_name = sanitize_color_display_name(
-        str((avoid_pick or {}).get("name") or "Кислотный неон")
-    ) or "Кислотный неон"
-    amplify_tags = sorted(set((avoid_pick or {}).get("amplifies") or ()) & amplify) or sorted(amplify)
-    # Color psychology SoT — never paste scenes[].trap into avoid why (P1.7).
-    avoid_prop = {
-        "name": avoid_name,
-        "origin_scene_id": scene_id,
-        "serves_conflict": label,
-        "amplifies_trap": _clip(", ".join(amplify_tags) or "rush", 120),
-        "why": _clip(avoid_psychology_why(avoid_pick if isinstance(avoid_pick, dict) else None), 280),
-        "where_especially_avoid": (
-            f"В одежде и на фоне разговора/решения в зоне «{sphere_label}»."
-        ),
-        "ok_as_tiny_accent": False,
-        "catalog_knowledge_ref": avoid_name,
-        "evidence_references": list(primary.get("evidence_references") or []),
-    }
+            avoid_name = sanitize_color_display_name(str((avoid_pick or {}).get("name") or ""))
+            amplify_tags = sorted(set((avoid_pick or {}).get("amplifies") or ()) & amplify) or sorted(amplify)
+            if avoid_name:
+                avoid_prop = {
+                    "name": avoid_name,
+                    "origin_scene_id": scene_id,
+                    "serves_conflict": label,
+                    "amplifies_trap": _clip(", ".join(amplify_tags), 120),
+                    "why": _clip(
+                        avoid_psychology_why(avoid_pick if isinstance(avoid_pick, dict) else None),
+                        280,
+                    ),
+                    "where_especially_avoid": None,
+                    "ok_as_tiny_accent": False,
+                    "catalog_knowledge_ref": avoid_name,
+                    "evidence_references": list(primary.get("evidence_references") or []),
+                }
 
     # Goals: 1 primary + up to 2 secondary from other scenes — not force_a/b paste (v3.1)
     goals: list[dict[str, Any]] = []
@@ -1542,6 +1584,8 @@ def build_day_scenario_v1(
         day_favorable=day_favorable,
         target_month=_month_from_ritual_or_today(ritual_context, foundation),
         primary_scene_id=primary_scene_id,
+        primary_energy=foundation.get("primary_energy"),
+        natal_activations=foundation.get("personal_natal_activations") or [],
     )
     ready = bool(scenes) and bool(conflict.get("short_name"))
     out = {

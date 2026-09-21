@@ -289,7 +289,18 @@ def test_native_maps_to_scenario_and_b5_projector():
         native,
         interpretation=interp,
         ritual_context=ritual,
-        celestial_events={"day_events_pack": pack},
+        celestial_events={
+            "day_events_pack": pack,
+            "natal_activations": [
+                {
+                    "id": "pt-sun",
+                    "transiting_planet": "mars",
+                    "aspect": "square",
+                    "natal_point": "sun",
+                    "text": "natal overlay",
+                }
+            ],
+        },
         day_thesis=thesis,
     )
     assert scenario["generation_source"] == GENERATION_SOURCE_NATIVE

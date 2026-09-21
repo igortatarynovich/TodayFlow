@@ -21,6 +21,13 @@ from todayflow_backend.services.day_story_v1 import (
 from todayflow_backend.services.day_thesis_v1 import build_day_thesis_v1
 
 
+def _k15_activations_from_foundation(foundation) -> list[dict]:
+    rows = list((foundation or {}).get("personal_natal_activations") or [])
+    if any(isinstance(a, dict) and a.get("natal_point") for a in rows):
+        return rows
+    return [{"id": "pt-sun", "natal_point": "sun", "text": "natal overlay"}]
+
+
 def _native_like_scenes(scenario: dict, *, person_name: str | None = None) -> list[dict]:
     """Stand-in for C1 native LLM scenes (deterministic bank retired from runtime)."""
     who = f"{person_name}, " if person_name else ""
@@ -72,6 +79,8 @@ def _with_native_scenes(scenario: dict, *, person_name: str | None = None) -> di
         scenes=scenes,
         chorus=out.get("chorus") or {},
         day_favorable=False,
+        primary_energy=(out.get("foundation") or {}).get("primary_energy") or "clarity",
+        natal_activations=_k15_activations_from_foundation(out.get("foundation")),
     )
     out["ready"] = True
     out["generation_source"] = "native_llm_c1_test_fixture"

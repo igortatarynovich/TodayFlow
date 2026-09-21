@@ -429,6 +429,8 @@ def _heal_template_scene_copy(
                 ),
                 target_month=_month_from_ritual_or_today(None, foundation),
                 primary_scene_id=healed.get("primary_scene_id"),
+                primary_energy=foundation.get("primary_energy"),
+                natal_activations=foundation.get("personal_natal_activations") or [],
             )
     return healed
 

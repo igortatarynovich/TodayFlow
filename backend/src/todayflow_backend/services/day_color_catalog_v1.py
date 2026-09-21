@@ -1,14 +1,12 @@
 """Day color catalog — knowledge source only (not user-facing SoT).
 
-Phase B2: scenario props pick a color from this catalog *because* a scene needs
-a quality; catalog copy is never shipped as the day's meaning without
-origin_scene_id + conflict link.
+K15 / F14: scenario props pick a color because F05 primary_energy + F09 overlay
+need a quality. Catalog copy is never shipped as the day's meaning without that
+grounded pick. Scene trap/sphere/mode are not the selection source.
 
 Color is NOT an independent daily draw (unlike card/number).
-Layer A reused existing `_needed_color_tags`. Layer B (creativity/home/money
-abundance/passion/closure) shipped only with matching generator branches —
-never catalog-only orphans. Champagne unlocks via ``day_favorable`` from
-domain_verdicts computed on the same natal activations at scenario generation.
+Tag generator is closed F05 8-set + F09 domain (+ day_favorable). Champagne
+unlocks via ``day_favorable`` from domain_verdicts on the same natal activations.
 
 Legacy `celestial_events_builder` presets remain a seed/index path until B3 wire
 projection replaces them.
@@ -19,7 +17,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-# Amplify tags that `_amplify_tags_for_trap` can actually emit (live scoring set).
+# Amplify tags that `_amplify_tags_for_energy` can actually emit (live scoring set).
 LIVE_AVOID_AMPLIFY_TAGS: frozenset[str] = frozenset(
     {
         "please",
@@ -599,8 +597,8 @@ def color_hook_base(name: str) -> dict[str, Any] | None:
 def score_color_for_needs(entry: dict[str, Any], needed_tags: set[str]) -> int:
     """Score catalog row against needed tags.
 
-    Layer-B primary tags are sparse sphere/keyword triggers. Without a specialty
-    bonus, broad core rows that only share default calm/clarity would always
+    Layer-B primary tags are sparse F05/F09 triggers. Without a specialty
+    bonus, broad core rows that only share calm/clarity would always
     win ties and leave Layer-B colors unreachable in practice.
     """
     tags = set(entry.get("tags") or ())

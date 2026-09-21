@@ -83,7 +83,7 @@ def test_color_guide_from_props_fill_empty_catalog():
     assert guide.get("accessory")
 
 
-def test_color_guide_talisman_fallback_and_null_without_name():
+def test_color_guide_omits_talisman_without_props_color():
     guide = build_color_guide_v1(
         day_story={
             "talisman": {
@@ -93,9 +93,7 @@ def test_color_guide_talisman_fallback_and_null_without_name():
             }
         }
     )
-    assert guide is not None
-    assert guide["name"] == "Янтарный"
-    assert guide["avoid"] == "Холодный стальной"
+    assert guide is None
     assert build_color_guide_v1(day_story={"talisman": {}}) is None
 
 

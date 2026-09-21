@@ -156,7 +156,7 @@ def build_color_guide_v1(
     day_story: dict[str, Any] | None = None,
     target_month: int | None = None,
 ) -> dict[str, Any] | None:
-    """color_guide nest — fill-empty from props.color / talisman / catalog. Null if no name."""
+    """color_guide nest — F14 pick on props.color; catalog fill-empty of apply copy. Null if no name."""
     from todayflow_backend.services.day_color_catalog_v1 import (
         get_color_entry,
         resolve_seasonal_apply,
@@ -171,9 +171,8 @@ def build_color_guide_v1(
     talisman = _as_dict(story.get("talisman"))
     where = _as_dict(color_prop.get("where_to_use"))
 
-    name = sanitize_color_display_name(
-        _clean(color_prop.get("name")) or _clean(talisman.get("color"))
-    )
+    # K15 product field = F14 pick on props.color. Talisman is a copy, not a catalog leftover.
+    name = sanitize_color_display_name(_clean(color_prop.get("name")))
     if not name:
         return None
 

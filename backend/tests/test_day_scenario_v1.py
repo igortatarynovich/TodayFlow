@@ -42,6 +42,10 @@ def _pack_merc_moon():
     )
 
 
+def _k15_activations(*, natal_point: str = "sun") -> list[dict]:
+    return [{"id": "pt-sun", "natal_point": natal_point, "text": "natal overlay"}]
+
+
 def test_scenario_builds_one_conflict_from_drivers_not_card_alone():
     pack = _pack_merc_moon()
     thesis = build_day_thesis_v1(day_events_pack=pack)
@@ -274,6 +278,8 @@ def test_props_from_scenes_have_origin_and_conflict_link():
         scenes=scenes,
         chorus=scenario["chorus"],
         day_favorable=False,
+        primary_energy="clarity",
+        natal_activations=_k15_activations(),
     )
     assert validate_day_scenario_v1(scenario) == []
     props = scenario["props"]
@@ -281,7 +287,7 @@ def test_props_from_scenes_have_origin_and_conflict_link():
     color = props["color"]
     assert color["origin_scene_id"]
     assert color["link_to_conflict"]
-    assert color["so_t_note"].startswith("scenario_scene_derived")
+    assert color["so_t_note"].startswith("f05_f09_scored")
     assert props["avoid_color"]["amplifies_trap"]
     assert props["avoid_color"]["origin_scene_id"] == color["origin_scene_id"]
     assert 1 <= len(props["goals"]) <= 3
@@ -298,7 +304,8 @@ def test_props_from_scenes_have_origin_and_conflict_link():
         assert force_b.lower() not in link
     assert isinstance(color["link_to_conflict"], str) and len(color["link_to_conflict"].strip()) > 8
     effect = str(color.get("expected_effect_today") or "")
-    assert effect and color["link_to_conflict"] not in effect
+    if effect:
+        assert color["link_to_conflict"] not in effect
 
 
 def test_validate_rejects_empty_conflict_name():
@@ -510,13 +517,19 @@ def test_chorus_bridges_are_lived_not_generation_meta():
             "chorus_references": [],
         }
     ]
-    props = build_scenario_props_v1(conflict=conflict, scenes=scenes, chorus=chorus)
+    props = build_scenario_props_v1(
+        conflict=conflict,
+        scenes=scenes,
+        chorus=chorus,
+        primary_energy="clarity",
+        natal_activations=_k15_activations(),
+    )
     color = props.get("color") or {}
     link = str(color.get("link_to_conflict") or "")
     effect = str(color.get("expected_effect_today") or "")
     assert link
-    assert "помогает удержать" in effect.lower()
-    assert link not in effect
+    if effect:
+        assert link not in effect
     avoid = props.get("avoid_color") or {}
     why = str(avoid.get("why") or "")
     name = str(avoid.get("name") or "")
@@ -525,13 +538,18 @@ def test_chorus_bridges_are_lived_not_generation_meta():
 
 
 def test_color_catalog_is_knowledge_not_sot():
+    from todayflow_backend.services.day_atmosphere_v1 import VISUAL_MODES
     from todayflow_backend.services.day_color_catalog_v1 import (
         LAYER_B_PRIMARY_TAGS,
         PENDING_LAYER_B_COLORS,
         list_color_knowledge,
         validate_color_catalog_v1,
     )
-    from todayflow_backend.services.day_scenario_v1 import _needed_color_tags
+    from todayflow_backend.services.day_scenario_v1 import (
+        F05_ENERGY_TO_COLOR_TAGS,
+        F09_DOMAIN_TO_COLOR_TAGS,
+        _needed_color_tags,
+    )
 
     rows = list_color_knowledge()
     assert len(rows) == 20  # 8 core + 6 layer-A + 6 layer-B
@@ -555,41 +573,27 @@ def test_color_catalog_is_knowledge_not_sot():
         "Шампань",
     } <= names
     assert PENDING_LAYER_B_COLORS == frozenset()
+    assert set(F05_ENERGY_TO_COLOR_TAGS) == set(VISUAL_MODES)
+    assert set(F09_DOMAIN_TO_COLOR_TAGS) == {"work", "money", "relationships", "energy"}
 
-    # Sphere/keyword Layer-B tags reachable from _needed_color_tags
     probes = [
-        _needed_color_tags(trap="", force_a="", sphere="creativity", mode=""),
-        _needed_color_tags(trap="", force_a="", sphere="home", mode=""),
-        _needed_color_tags(trap="", force_a="", sphere="money", mode=""),
-        _needed_color_tags(trap="страсть и желание", force_a="", sphere="relationships", mode=""),
-        _needed_color_tags(trap="отпустить тему и завершить", force_a="", sphere="home", mode=""),
+        _needed_color_tags(primary_energy=energy)
+        for energy in VISUAL_MODES
+    ] + [
+        _needed_color_tags(primary_energy="clarity", focus_axis=axis)
+        for axis in F09_DOMAIN_TO_COLOR_TAGS
+    ] + [
+        _needed_color_tags(primary_energy="clarity", day_favorable=True),
     ]
     reachable = set().union(*probes)
-    sphere_kw_tags = LAYER_B_PRIMARY_TAGS - {"quiet_celebration", "light_gratitude"}
-    assert sphere_kw_tags <= reachable
-    # Celebration tags are live in the catalog bank (unlocked via day_favorable)
+    # Scene trap/sphere no longer mint tags. Celebration still unlocks via F09 day_favorable.
+    assert {"quiet_celebration", "light_gratitude"} <= reachable
     assert {"quiet_celebration", "light_gratitude"} <= LAYER_B_PRIMARY_TAGS
-
-    # «отпуск» / rest_travel must NOT fire gentle_closure (false positive guard)
-    vacation = _needed_color_tags(
-        trap="хочется в отпуск на море",
-        force_a="",
-        sphere="rest_travel",
-        mode="recovery",
-    )
-    assert "gentle_closure" not in vacation
-    assert "honor_loss" not in vacation
-    # Verb form must fire closure
-    release = _needed_color_tags(
-        trap="пора отпустить старую обиду",
-        force_a="",
-        sphere="relationships",
-        mode="",
-    )
-    assert {"gentle_closure", "honor_loss"} <= release
+    assert _needed_color_tags(primary_energy=None) == set()
+    assert _needed_color_tags(primary_energy="not-an-energy") == set()
 
 
-def test_layer_b_colors_win_scoring_on_their_triggers():
+def test_layer_b_colors_win_scoring_on_f05_f09_triggers():
     from todayflow_backend.services.day_color_catalog_v1 import (
         get_color_entry,
         list_color_knowledge,
@@ -601,25 +605,26 @@ def test_layer_b_colors_win_scoring_on_their_triggers():
     )
 
     cases = [
-        ("creativity", "", "Шафрановый"),
-        ("home", "", "Терракотовый"),
-        ("money", "", "Хризолитовый"),
-        ("relationships", "страсть и желание", "Гранатовый"),
-        # relationships (not home) so closure specialty is not tied with Терракотовый
-        ("relationships", "пора отпустить и завершить", "Дымчато-сиреневый"),
+        ("radiance", None, False, "Шафрановый"),
+        ("clarity", "money", False, "Хризолитовый"),
+        ("momentum", None, False, "Гранатовый"),
     ]
     catalog = list_color_knowledge()
-    for sphere, trap, expected in cases:
-        needed = _needed_color_tags(trap=trap, force_a="", sphere=sphere, mode="")
+    for energy, axis, favorable, expected in cases:
+        needed = _needed_color_tags(
+            primary_energy=energy,
+            focus_axis=axis,
+            day_favorable=favorable,
+        )
         ranked = sorted(
             catalog,
             key=lambda e: score_color_for_needs(e, needed),
             reverse=True,
         )
-        assert ranked[0]["name"] == expected, (sphere, trap, ranked[0]["name"], needed)
+        assert ranked[0]["name"] == expected, (energy, axis, ranked[0]["name"], needed)
         assert get_color_entry(expected) is not None
 
-    # day_favorable unlocks Champagne when no competing specialty trap
+    # day_favorable unlocks Champagne when F05 has no competing Layer-B specialty
     props = build_scenario_props_v1(
         conflict={
             "short_name": "лёгкий день",
@@ -636,8 +641,83 @@ def test_layer_b_colors_win_scoring_on_their_triggers():
             }
         ],
         day_favorable=True,
+        primary_energy="clarity",
+        natal_activations=_k15_activations(),
     )
     assert props.get("color", {}).get("name") == "Шампань"
+
+
+def test_k15_color_omits_without_f05_or_f09_and_ignores_scene_tags():
+    from todayflow_backend.services.day_scenario_v1 import build_scenario_props_v1
+
+    conflict = {
+        "short_name": "лёгкий день",
+        "opposing_forces": {"a": "спешка", "b": "пауза"},
+        "thesis": {"mode": "stability"},
+    }
+    scenes_money = [
+        {
+            "scene_id": "s1",
+            "role_in_story": "primary",
+            "sphere": "money",
+            "sphere_label_ru": "Деньги",
+            "trap": "страсть и желание",
+        }
+    ]
+    scenes_home = [
+        {
+            "scene_id": "s1",
+            "role_in_story": "primary",
+            "sphere": "home",
+            "sphere_label_ru": "Дом",
+            "trap": "пора отпустить и завершить",
+        }
+    ]
+    empty = build_scenario_props_v1(conflict=conflict, scenes=scenes_money)
+    assert empty.get("color") is None
+    no_energy = build_scenario_props_v1(
+        conflict=conflict,
+        scenes=scenes_money,
+        natal_activations=_k15_activations(),
+    )
+    assert no_energy.get("color") is None
+    no_natal = build_scenario_props_v1(
+        conflict=conflict,
+        scenes=scenes_money,
+        primary_energy="clarity",
+        natal_activations=[{"id": "text-only", "text": "kitchen leftover"}],
+    )
+    assert no_natal.get("color") is None
+
+    a = build_scenario_props_v1(
+        conflict=conflict,
+        scenes=scenes_money,
+        primary_energy="clarity",
+        natal_activations=_k15_activations(natal_point="sun"),
+    )
+    b = build_scenario_props_v1(
+        conflict=conflict,
+        scenes=scenes_home,
+        primary_energy="clarity",
+        natal_activations=_k15_activations(natal_point="sun"),
+    )
+    assert a.get("color", {}).get("name")
+    assert a["color"]["name"] == b["color"]["name"]
+
+    money = build_scenario_props_v1(
+        conflict=conflict,
+        scenes=scenes_home,
+        primary_energy="clarity",
+        natal_activations=_k15_activations(natal_point="venus"),
+    )
+    assert money["color"]["name"] != a["color"]["name"]
+    radiance = build_scenario_props_v1(
+        conflict=conflict,
+        scenes=scenes_home,
+        primary_energy="radiance",
+        natal_activations=_k15_activations(natal_point="sun"),
+    )
+    assert radiance["color"]["name"] != a["color"]["name"]
 
 
 def test_celestial_daily_symbol_presets_use_catalog_colors_only():

@@ -646,9 +646,9 @@ Chrome: «Мой ритм дня» если natal clocks; иначе «Ритм 
 |---|---|
 | one_question | Какой один цвет как опора **после** energy+risk+personal focus? |
 | text_class | catalog hex + catalog prose (уже в nest) |
-| authority | color scoring (LLM **не** выбирает цвет) |
-| allowed_inputs | BE `color_guide` nest |
-| forbidden_inference | FE color dictionary; catalog morning color when unavailable; **invent thesis** в пустые lines |
+| authority | F05+F09 color scoring (LLM **не** выбирает цвет) |
+| allowed_inputs | BE `color_guide` nest from F14 pick (`props.color`) |
+| forbidden_inference | FE color dictionary; catalog morning color when nest omitted; talisman leftover; scene trap/sphere; **invent thesis** в пустые lines |
 | output | name 1–3 слова · 3–6 short lines ≤80 chars |
 | required | нет |
 | empty_behavior | omit card if nest null; omit empty lines (**не** fill-empty смыслом) |

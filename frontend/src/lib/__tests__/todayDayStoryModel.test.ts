@@ -235,4 +235,45 @@ describe("buildTodayDayStoryViewModel color on unavailable", () => {
     });
     expect(story.colorGuide).toBeNull();
   });
+
+  it("does not paint morning catalog color when color_guide nest is omitted", () => {
+    const contract: TodayContractV1 = {
+      ...sampleContract,
+      color_guide: null,
+      day_story: {
+        contract_version: "day_story_v1",
+        interpretation_status: "ok",
+        theme: "Ровный продуктивный ритм.",
+        day_scenario: { props: { color: null } },
+        talisman: { color: "Янтарный" },
+      },
+    };
+    const vm = buildTodayCompositionViewModel({
+      contract,
+      cardName: null,
+      cardMeaning: null,
+      numerologyValue: null,
+      numerologyMeaning: null,
+      morningRitualData: {
+        celestial_events: { daily_symbols: { color: { name: "Янтарный", benefit_ru: "тёплая поддержка" } } },
+      } as never,
+    });
+    const story = buildTodayDayStoryViewModel({
+      base: vm,
+      contract,
+      dateISO: "2026-08-18",
+      cardName: null,
+      cardMeaning: null,
+      numerologyValue: null,
+      numerologyMeaning: null,
+      morningRitualData: {
+        celestial_events: { daily_symbols: { color: { name: "Янтарный", benefit_ru: "тёплая поддержка" } } },
+      } as never,
+      yesterdayClosed: false,
+      todayOpened: true,
+      engagement: createEmptyDayEngagement(),
+      colorLine: "Янтарный",
+    });
+    expect(story.colorGuide).toBeNull();
+  });
 });

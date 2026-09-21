@@ -1199,6 +1199,8 @@ def native_llm_to_day_scenario_v1(
         day_favorable=day_favorable,
         target_month=_month_from_ritual_or_today(ritual_context, foundation),
         primary_scene_id=primary_scene_id,
+        primary_energy=foundation.get("primary_energy"),
+        natal_activations=foundation.get("personal_natal_activations") or [],
     )
     # Attach LLM prop_material as diagnostics only (not SoT for final color)
     props["prop_material_llm"] = norm.get("prop_material")

@@ -2,7 +2,7 @@
 
 **Status:** ACTIVE — **6 colors** (2026-08-03; Champagne wired)  
 **Catalog:** `day_color_catalog_v1.COLOR_CATALOG_V1` (20 rows = 8+A6+B6)  
-**Generator:** `day_scenario_v1._needed_color_tags` + `day_favorable` → celebration tags
+**Generator:** `day_scenario_v1._needed_color_tags` from F05 8-set + F09 domain + `day_favorable` → celebration tags
 
 ---
 
@@ -10,18 +10,18 @@
 
 | Color | Tags | Trigger |
 |--|--|--|
-| Шафрановый | `creative_spark`, `generous_warmth` | `sphere == "creativity"` |
-| Терракотовый | `home_warmth`, `belonging` | `sphere == "home"` |
-| Хризолитовый | `confident_abundance`, `steady_growth` | `sphere == "money"` (additive to work focus) |
-| Гранатовый | `passionate_assertion`, `vital_courage` | keywords: страст / влечен / желан |
-| Дымчато-сиреневый | `gentle_closure`, `honor_loss` | keywords: конец / заверш / потер / отпустить\|… |
-| Шампань | `quiet_celebration`, `light_gratitude` | `day_favorable` from domain_verdicts |
+| Шафрановый | `creative_spark`, `generous_warmth` | F05 `radiance` |
+| Терракотовый | `home_warmth`, `belonging` | catalog knowledge; not a scene-sphere trigger |
+| Хризолитовый | `confident_abundance`, `steady_growth` | F09 domain `money` |
+| Гранатовый | `passionate_assertion`, `vital_courage` | F05 `momentum` |
+| Дымчато-сиреневый | `gentle_closure`, `honor_loss` | catalog knowledge; not a trap-keyword trigger |
+| Шампань | `quiet_celebration`, `light_gratitude` | `day_favorable` from domain_verdicts on F09 activations |
 
-`money` keeps `{focus, decision, calm_clarity}` and **adds** abundance tags. `work_decisions` unchanged.
+`money` keeps `{focus, decision, calm_clarity}` and **adds** abundance tags. Scene `work_decisions` / trap text are not K15 input.
 
 ### Closure pattern vs `отпуск`
 
-Bare substring `отпус` false-positives on `отпуск`. Live code uses verb forms only. Covered by unit test.
+Bare substring `отпус` is retired with the scene-keyword generator. Live K15 tags come from F05/F09 closed lookups only.
 
 ---
 
@@ -45,4 +45,4 @@ Champagne is reachable via scoring specialty bonus, not a forced override.
 ## Anti-orphan
 
 - Catalog tags ⊆ `LIVE_NEEDED_COLOR_TAGS`; `PENDING_LAYER_B_COLORS` empty while all B rows are live.
-- Tests: layer-B primary tags reachable; Champagne wins scoring when `day_favorable` and no competing specialty trap.
+- Tests: F05 8-set + F09 4-set + `day_favorable` emit live tags; Champagne wins scoring when `day_favorable` and F05 has no competing Layer-B specialty.
