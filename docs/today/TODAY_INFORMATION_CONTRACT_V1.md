@@ -1,6 +1,6 @@
 # Today Information Contract v1
 
-**Status:** ACTIVE — закрытое информационное пространство Today  
+**Status:** CLOSED / PASS — close-out 2026-09-21. N=20 frozen.  
 **Date:** 2026-09-21  
 **Kind:** reconstruction. **Новых типов знаний нет.**  
 **Не заменяет:** [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md) (I0 · owner · порядок вычисления) · [DAY_SOURCES_CANON](../DAY_SOURCES_CANON.md) (расчёт фактов неба/чисел) · Display Inventory (слоты UI) · Availability Matrix (доступ / reveal)
@@ -31,6 +31,15 @@ source input
 - **Migration required?** no
 - **Canon updated?** yes — этот файл · `today/_INDEX.md` · `docs/README.md` · Grammar §1 · Display Inventory pointer · Pipeline pointer · PIC §9 · tracker · handoff
 - **Backward compatible?** yes for API. Gate живёт в `today_information_contract_v1.py`. Census существующих продюсеров — следующий hop, не этот start.
+
+## Architecture impact — TIC close-out (2026-09-21)
+
+- **SoT before:** §11 coverage table recorded 20 COMPLETE. That table is a hop ledger, not an independent close-out.
+- **SoT after:** this file is **CLOSED / PASS**. Close-out re-executed the assembled chain (four acceptance blocks) without inventing K21 and without product fixes inside the gate. Inventory remains last UI authority. Glance leftover is **out of TIC locked-surface scope**. Next product gate is chosen from canon, not from TIC inertia.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this file §10/§12 · tracker · frozen handoff
+- **Backward compatible?** yes. Gate: `evaluate_tic_closeout` in `today_information_contract_v1.py`. Coverage-table COMPLETE is not accepted as proof.
 
 ## Architecture impact — TIC-K01 human_line (2026-09-21)
 
@@ -354,7 +363,7 @@ Owner может сузить M (убрать показ), не расширяя
 | Tarot (вопрос, не карта дня) | нужен свой | card_base + question/spread; не этот N |
 | Практики (хаб, не `T3.practice`) | taxonomy + coverage | метод/item, не знание о дне |
 
-Не начинать Compatibility/Tarot N «заодно», пока Today N не gate в коде **и** каждый отображаемый M не имеет исполняемой цепочки.
+Today N **CLOSED / PASS**. Compatibility / Tarot Information Contract — отдельные таблицы, не автоматическое продолжение этого файла.
 
 ---
 
@@ -367,7 +376,7 @@ Owner может сузить M (убрать показ), не расширяя
 5. **LLM формулирует после решения Engine/Overlay/catalog.** Не выбирает energy/drivers/windows/axis. Не заполняет пустое generic prose. Downstream не мутирует upstream.
 6. **Критерий закрытия Today train:** для каждого из 20 `TIC-K` определено facts → KB → derivation → wire → M/omit → slot; отображаемый M исполняется кодом. Тогда — не автоматически Compatibility N. Не «IL подключён», не «xfail стал pass», не «Today выглядит лучше».
 7. **PIC закрыт.** Не использовать Profile Information Contract как источник автоматически возникающей Today-работы. Не invent `TIC-K21`. Не включать planned Day Sources в N.
-8. **Не rebuild сервера** на coverage hops. Статусы §11 — факт кода, не желание канона. Очередь из матрицы закрыта (0 PARTIAL / 0 MISSING). Следующее — **close-out TIC** (повторный executable audit 20/20), не K21.
+8. **Не rebuild сервера** на coverage hops. Статусы §11 — hop ledger, не close-out. Close-out = §12 (четыре acceptance-блока). Не K21.
 9. **K01 presentation (2026-09-21).** `T1-hero.human_line` = closed formulation of Engine `primary_energy`. Greeting is chrome, not K01. Missing/unknown omit. Overlay does not rewrite the shared-day kind. Not a second energy selector.
 10. **K06 overlay thesis (2026-09-21).** `T3.headline` / `day_personal.summary_ru` = already-derived F09 natal_transit thesis (`personal_astrology.summary_ru`). HD / BaZi / Vedic / electional / name_numbers stay in the pack and do not feed K06. Missing overlay transit → omit. Not `why_personal`. Not T1 human_line. Not a new knowledge type.
 11. **K07 overlay axis (2026-09-21).** `T3.focus_title` / `personal_day.natal_overlay.focus_axis` = F10 closed domain of the already-chosen F09 natal_transit natal_point. Kitchen aliases / Global scene sphere / PIC / CE / chrome do not feed K07. Missing or unmapped → omit. Not a second ranker. Not a duplicate of K01 `human_line` or K06 headline.
@@ -378,7 +387,8 @@ Owner может сузить M (убрать показ), не расширяя
 16. **K15 color (2026-09-21).** `T3.color.*` / `color_guide` = existing `score_color_for_needs` on F05 8-set + F09 overlay domain (`DOMAIN_NATAL_POINTS`) after persist. Scene trap/sphere/mode do not feed the slot. No second scorer. Scent/stone aliases unused without a slot. Missing grounded F05+F09 → omit. Catalog/talisman leftover does not paint. Not K16+.
 17. **K16 practice (2026-09-21).** `T3.practice` = existing `GET /practices/select` from already-chosen F10 `focus_axis` (closed 4-set) after persist. Global `primary_energy` / K01 8-set do not feed the slot. No second selector. Compensating Personal Risk is not invented from K10 prose or Global F06. Guest / missing F10 / unavailable interpretation → omit. XOR with affirmation is K17.
 18. **K17 XOR (2026-09-21).** Affirmation vs practice is one existing content mode, not a second selector. Mode = K16 `content_class` of the already-chosen F10 need cell (`practice`). Exactly one Inventory slot. Scene `props.affirmations` / trap / `recommended_action` do not feed `T3.affirmation`. Date-hash / availability / leftover catalog item do not choose the branch. Empty selected branch → omit, not switch. No Personal-owned affirmation field on the locked overlay → affirmation omit. K16 select query unchanged. Not K20 extraCards. Glance leftover is not this hop.
-19. **K20 honesty (2026-09-21).** `T3.unavailable` is the already-known capability / persist / transport gap. Unavailable MY DAY paints that chrome only. extraCards (practice/affirmation/tasks) omit. Global scene/kitchen/chorus and empty K16/K17 are not surrogate meaning. Not a new selector. Glance leftover is not this hop. Coverage queue is empty — next is TIC close-out, not K21.
+19. **K20 honesty (2026-09-21).** `T3.unavailable` is the already-known capability / persist / transport gap. Unavailable MY DAY paints that chrome only. extraCards (practice/affirmation/tasks) omit. Global scene/kitchen/chorus and empty K16/K17 are not surrogate meaning. Not a new selector. Glance leftover is out of locked-surface scope.
+20. **Close-out (2026-09-21).** Four acceptance blocks PASS. Train frozen. Next product gate is chosen from canon, not TIC inertia.
 
 ---
 
@@ -423,13 +433,34 @@ IN → TIC-F → TIC-K → derivation → product field → Inventory slot → l
 | `K19` | **COMPLETE** | F15 yesterday `evening_completed` + gratitude | user record | `loadYesterdayEveningClose` → `buildGratitudeMemorySlot`; empty omit; no invent on GET fail | client memory slot / day-connection | `T1.continuity` paint D2+ | нет |
 | `K20` | **COMPLETE** | capability + `interpretation_status` / transport | Matrix copy | guest `myDay:false`; unavailable `TODAY_UNAVAILABLE_COPY`; network `TODAY_NO_CONNECTION_COPY`; extraCards omit on unavailable pane | guest omit MY DAY; `TodayMyDayPane` unavailable card only | `T3.unavailable` / `TF.*` paint; extraCards/practice/affirmation not mounted | нет на измеренном hop |
 
-Сводка: **COMPLETE 20** (`K01`–`K20`) · **PARTIAL 0** · **MISSING 0** · **OMIT-BY-DESIGN 0**.
+Сводка: **COMPLETE 20** (`K01`–`K20`) · **PARTIAL 0** · **MISSING 0** · **OMIT-BY-DESIGN 0**. Hop ledger only. Close-out = §12.
 
 ### Очередь Today (только дефекты матрицы, порядок K)
 
-Нет. Матрица закрыта.
+Нет. Матрица закрыта. Close-out **PASS**. Не K21. Не IL. Не PIC. Не Compatibility N автоматически.
 
-**Следующее = TIC close-out** (повторный executable audit 20/20 + Inventory last-authority на locked surfaces). Не K21. Не IL. Не PIC. Не Compatibility N. Не rebuild. Не следующий Today train автоматически.
+---
+
+## 12. Close-out (2026-09-21)
+
+**TODAY_INFORMATION_CONTRACT: CLOSED / PASS**
+
+Не принимает `TIC_COVERAGE == 20 COMPLETE` как доказательство. Независимый re-audit уже собранной системы. Новых K нет. Продуктовых исправлений внутри gate нет.
+
+Locked surfaces = production 4-surface path: `TodayProductScreenFlow` ← `TodayDayBrief` · `TodayRitualLensPair` · `TodayMyDayPane` · evening. Не `?full=1` / `?experience=1` / legacy stacked.
+
+| Block | Verdict | Что измерено |
+|-------|---------|--------------|
+| **1. 20/20 executable re-audit** | **PASS** | Для каждого `TIC-K` снова исполнена цепочка input → fact → K → derivation → product field → Inventory slot → display/omit. Итог **20 COMPLETE / 0 PARTIAL / 0 MISSING**. Не чтение таблицы §11. |
+| **2. Inventory last-authority** | **PASS** | Locked paint идёт через Inventory `slot_id`. Текст в payload / scene / nest / chorus / catalog сам по себе не рисуется. |
+| **3. Forbidden-source scan** | **PASS** | Kitchen families, PIC/CE prose, Global→Personal подмена, scene leftovers, generic fallback и chrome-as-root не кормят locked meaning. Regression set K01/K06/K07/K09/K10/K13–K17/K20 PASS. |
+| **4. Omit integrity** | **PASS** | Нет overlay → personal slots omit. Нет Personal×card/number → lenses omit. Нет personal do/avoid → priority/caution omit. Пустая K17-ветка не подставляет другую. Unavailable → только `T3.unavailable`. |
+
+**Glance leftover:** **out of TIC locked-surface scope.** `TodayGlanceAct` не смонтирован. `glanceSection` не рендерится. Wave2 Daily Focus не пятый акт. Именованные helpers на locked path не являются Glance-as-act SoT: `T1-hero.sheet` `energyCause` = Inventory-authorized Global; `T3.priority` `glancePrioritize` = identity-check vs personal `today_move`. Если будущий re-audit найдёт `TodayGlanceAct` на 4-surface — этот freeze void, gate FAIL; чинить отдельным hop, не внутри аудита.
+
+Gate: `evaluate_tic_closeout` · `backend/tests/test_today_information_contract_closeout_v1.py` · `frontend/src/lib/__tests__/todayTicCloseout.test.ts`.
+
+**Следующий продуктовый gate** выбирается из канона (PIC §9 называет Compatibility Information Contract как отдельную таблицу). Это не продолжение TIC. Не invent `TIC-K21`. Не IL dump. Не PIC. Не rebuild.
 
 ---
 
@@ -437,6 +468,7 @@ IN → TIC-F → TIC-K → derivation → product field → Inventory slot → l
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | **§12 CLOSE-OUT PASS.** Independent four-block re-audit. TODAY_INFORMATION_CONTRACT: CLOSED / PASS. Glance leftover out of locked-surface scope. Frozen. Next product gate from canon, not TIC inertia. Not K21. |
 | 2026-09-21 | §11 K20 COMPLETE: unavailable MY DAY = `T3.unavailable` only; extraCards/practice/affirmation omit; not surrogate meaning. **20 COMPLETE · 0 PARTIAL**. Next = TIC close-out, not K21. |
 | 2026-09-21 | §11 K17 COMPLETE: XOR affirmation vs practice from existing F10 content class; scene rec/trap do not feed T3.affirmation; empty branch omits. 19 COMPLETE · 1 PARTIAL. Next remaining = K20. |
 | 2026-09-21 | §11 K16 COMPLETE: `T3.practice` = existing `GET /practices/select` from F10 `focus_axis`; Global `primary_energy` does not feed the slot; omit without F10. 18 COMPLETE · 2 PARTIAL. Next remaining = K17. |

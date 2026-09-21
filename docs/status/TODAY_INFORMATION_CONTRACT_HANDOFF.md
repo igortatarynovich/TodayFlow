@@ -1,9 +1,9 @@
-# Today Information Contract — next agent
+# Today Information Contract — FROZEN
 
 **Date:** 2026-09-21  
 **Branch:** `cursor/today-information-contract`  
 **Parked:** Profile train on `cursor/profile-knowledge-to-output` @ `744f73d5`. P1 library fill on `cursor/p1-self-compassion-loop-notes` @ `f48a438d`.  
-**Pass bound:** TIC N=20. Coverage: [TODAY_INFORMATION_CONTRACT_V1 §11](../today/TODAY_INFORMATION_CONTRACT_V1.md). **20 COMPLETE / 0 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN.**
+**Pass bound:** **TODAY_INFORMATION_CONTRACT: CLOSED / PASS.** Independent close-out §12. Coverage ledger §11 remains 20 COMPLETE / 0 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN and is **not** the close-out proof.
 
 Not PIC. Not IL dump. Not P1 fill. Do not rebuild server until asked.
 
@@ -11,43 +11,44 @@ Not PIC. Not IL dump. Not P1 fill. Do not rebuild server until asked.
 
 ## 0. Decision (locked)
 
-TIC coverage queue from §11 is **empty**. K20 = unavailable MY DAY paints existing honesty copy only; extraCards omit.
+TIC is **closed**. Do **not** invent TIC-K21. Do **not** continue this train by inertia.
 
-Do **not** start a new Today train. Do **not** invent TIC-K21.
+Glance leftover is **out of TIC locked-surface scope** (`TodayGlanceAct` unmounted; `glanceSection` unrendered). If a later audit finds it mounted on the 4-surface, the freeze is void and the gate fails — fix in a separate hop, not inside an audit.
 
 ---
 
 ## 1. First 15 minutes
 
-1. This file + tracker NOW (`TIC-K20 COMPLETE`) + Information Contract §11.
-2. Stay on `cursor/today-information-contract`. Profile remains parked.
-3. Run: `backend/.venv/bin/python -m pytest tests/test_today_information_contract_v1.py -q --tb=short --no-cov`
+1. This file + tracker NOW (`TIC CLOSE-OUT PASS`) + Information Contract §12.
+2. Do not start a new TIC-K. Next product gate is chosen from canon.
+3. Run (ledger only): `backend/.venv/bin/python -m pytest tests/test_today_information_contract_closeout_v1.py -q --tb=short --no-cov`
 4. G0 stays deferred. Do not compose-rebuild.
 
 ---
 
-## 2. Audit (closed)
+## 2. Close-out (PASS)
 
-Measured IN → F → K → derivation → field → Inventory → locked FE.
+Four blocks independently re-audited the assembled system:
 
-COMPLETE: K01–K20.  
-PARTIAL: none. MISSING: none. OMIT-BY-DESIGN: none.
+1. 20/20 executable re-audit — PASS  
+2. Inventory last-authority — PASS  
+3. Forbidden-source scan (regression K01/K06/K07/K09/K10/K13–K17/K20) — PASS  
+4. Omit integrity — PASS  
+
+Gate: `evaluate_tic_closeout`. FE: `todayTicCloseout.test.ts`.
 
 ---
 
 ## 3. Queue
 
-**TIC close-out (separate hop, not a K):** re-run executable audit of all 20; confirm Inventory is last UI authority; confirm forbidden sources (Global scene/kitchen/chorus/CE/PIC) do not leak onto locked surfaces.
-
-Not a new meaning train. Not Compatibility N. Not Glance.
+**Empty.** Next named product gate comes from canon (PIC §9 names Compatibility Information Contract as a separate table). Not this file. Not Glance unless a later audit puts it in locked-surface scope.
 
 ---
 
 ## 4. Do not
 
-- Start K21 or another Today meaning hop from this close.
+- Invent TIC-K21 or resume TIC hops.
+- Treat §11 COMPLETE as a reason to keep working Today meaning.
 - Resume PIC / carry CE prose / expand IL.
-- Invent TIC-K21 or planned Day Sources into N.
 - Rebuild server. Untrip billing. Merge/deploy only if asked.
-- Reopen K01–K20 inside the close-out unless the re-audit finds a new §11 defect.
-- Reopen Glance as a fifth act.
+- Reopen Glance as a fifth act from this freeze.

@@ -5,7 +5,7 @@
 **Parked:** P1 library fill on `cursor/p1-self-compassion-loop-notes` @ `f48a438d`  
 **Pass bound:** PIC N=18 executed. 17 COMPLETE / 0 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN (K06).
 
-**Do not continue this train.** Profile Information Contract is not a source of automatically arising work. Next agent: [TODAY_INFORMATION_CONTRACT_HANDOFF.md](./TODAY_INFORMATION_CONTRACT_HANDOFF.md).
+**Do not continue this train.** Profile Information Contract is not a source of automatically arising work. Today Information Contract is **CLOSED / PASS** — [TODAY_INFORMATION_CONTRACT_HANDOFF.md](./TODAY_INFORMATION_CONTRACT_HANDOFF.md). Next product gate is chosen from canon, not from this file.
 
 Coverage: [PROFILE_INFORMATION_CONTRACT_V1 §11](../profile/PROFILE_INFORMATION_CONTRACT_V1.md).
 

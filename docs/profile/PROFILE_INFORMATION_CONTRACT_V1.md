@@ -246,7 +246,7 @@ Owner может сузить M (убрать показ), не расширяя
 
 | Раздел | Контракт | Сейчас |
 |--------|----------|--------|
-| Today | [TODAY_INFORMATION_CONTRACT_V1](../today/TODAY_INFORMATION_CONTRACT_V1.md) | **стартован отдельно** (N=20). PIC не источник очереди |
+| Today | [TODAY_INFORMATION_CONTRACT_V1](../today/TODAY_INFORMATION_CONTRACT_V1.md) | **CLOSED / PASS** (N=20). PIC не источник очереди |
 | Compatibility | нужен свой Information Contract | два Profile N + pair derivation (не написано как конечное множество) |
 | Tarot | то же | card_base + question/spread; не закрытый N ответа |
 | Практики | taxonomy + coverage ledger | метод/item, не «знание о человеке» |
@@ -305,7 +305,7 @@ Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **з�
 
 ### Очередь Profile (из аудита, не из архитектурного бэклога)
 
-PIC N=18 исполнен кодом. Не IL-3. **Today N стартован отдельно** — [TODAY_INFORMATION_CONTRACT_V1](../today/TODAY_INFORMATION_CONTRACT_V1.md). Этот файл не очередь.
+PIC N=18 исполнен кодом. Не IL-3. **Today N CLOSED / PASS** — [TODAY_INFORMATION_CONTRACT_V1](../today/TODAY_INFORMATION_CONTRACT_V1.md) §12. Этот файл не очередь.
 
 Profile queue: **пуста.** Не invent PIC-K19.
 
