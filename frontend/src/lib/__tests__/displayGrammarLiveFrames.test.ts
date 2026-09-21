@@ -150,6 +150,47 @@ describe("live Today frames", () => {
     expect(scanDisplayGrammar(frame)).toEqual([]);
   });
 
+  it("omits T2.lens_number when only Global number chorus bridge is present", () => {
+    const frame = emitTodayDisplayFrame({
+      contract: persistContract,
+      capability: "light",
+      dateLabel: "31 августа 2026",
+      ritual: {
+        numberCatalog: "Семёрка — пауза перед решением.",
+        numberHook: {
+          bridge_to_day: "замедляет давление в этом конфликте",
+          base: { meaning: "Семёрка — пауза перед решением." },
+        },
+      },
+    });
+    expect(frame.atoms?.some((a) => a.slot_id === "T2.lens_number")).toBe(false);
+    expect(frame.atoms?.some((a) => a.slot_id === "T2.catalog_number")).toBe(true);
+    expect(scanDisplayGrammar(frame)).toEqual([]);
+  });
+
+  it("paints T2.lens_number from Personal×number angle, not chorus", () => {
+    const frame = emitTodayDisplayFrame({
+      contract: persistContract,
+      capability: "light",
+      dateLabel: "31 августа 2026",
+      ritual: {
+        numberCatalog: "Семёрка — пауза перед решением.",
+        numberHook: {
+          bridge_to_day: "замедляет давление в этом конфликте",
+          personal_angle: "Это число окрашивает уже собранный личный день.",
+          base: { meaning: "Семёрка — пауза перед решением." },
+        },
+      },
+    });
+    expect(frame.atoms?.find((a) => a.slot_id === "T2.lens_number")?.text).toBe(
+      "Это число окрашивает уже собранный личный день.",
+    );
+    expect(frame.atoms?.find((a) => a.slot_id === "T2.lens_number")?.json_field).toBe(
+      "number.hook_reveal.personal_angle",
+    );
+    expect(scanDisplayGrammar(frame)).toEqual([]);
+  });
+
   it("unavailable MY DAY emits T3.unavailable only", () => {
     const frame = emitTodayDisplayFrame({
       contract: {

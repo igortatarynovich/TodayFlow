@@ -4,7 +4,8 @@ Canon: docs/audits/DAY_SYMBOL_REVEAL_CANON_V1.md
 
 - base: static lookup (card_base / number_base / COLOR_CATALOG)
 - bridge_to_day: Global chorus / props.color (never explainer)
-- personal_angle: TIC-K13 Personal×card after persist; omit without Personal lens
+- personal_angle: TIC-K13 Personal×card / TIC-K14 Personal×number after persist;
+  omit without the matching Personal lens. Card and number are separate paths.
 - instruction / personal: optional overlays; never invent bridge on fail
 """
 
@@ -79,6 +80,17 @@ def _personal_card_lens_line() -> str | None:
     I0 locks `interpretive_chorus.day_card` as Global chorus. Personal stage
     must not mutate it, and the locked Personal overlay has no card-lens field
     → omit. Not a second ranker. Not a copy of K06–K10. Not K14.
+    """
+    return None
+
+
+def _personal_number_lens_line() -> str | None:
+    """TIC-K14: Personal Day × F11/F12 owns number `personal_angle`.
+
+    I0 locks `interpretive_chorus.day_number` (tempo / style / link) as Global
+    chorus. Personal overlay schema is natal / why_personal / scene
+    personalization — no number-lens field. Persist / profile_depth is not
+    coverage. Not a second ranker. Not a copy of K06–K10 or K13. Not K15+.
     """
     return None
 
@@ -192,10 +204,11 @@ def build_number_hook_reveal(
         elif tempo:
             bridge = tempo
     bridge_ok = bool(bridge)
-    personal = "omit"
-    if profile_depth == "deep" and bridge_ok:
-        pa = _clean(personal_angle)
-        personal = pa if pa else "omit"
+    # TIC-K14: personal_angle is Personal×number after persist, not chorus.
+    # Global chorus (including tempo mash) may still fill bridge_to_day.
+    # Missing Personal lens → omit. profile_depth is not coverage.
+    pa = _clean(personal_angle if personal_angle is not None else _personal_number_lens_line())
+    personal = pa if pa and pa.lower() != "omit" else "omit"
     instr = _clean(instruction) if bridge_ok else ""
     return {
         "kind": "number",
@@ -303,6 +316,7 @@ def attach_hooks_to_symbol_view(
         hook = build_number_hook_reveal(
             value=int(number.get("reduced_value") or number.get("value") or 0),
             chorus=chorus,
+            personal_angle=_personal_number_lens_line(),
             profile_depth=profile_depth,
         )
         if hook.get("base"):

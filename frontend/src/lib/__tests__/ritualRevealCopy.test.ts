@@ -2,7 +2,7 @@ import {
   formatRitualTarotPersonalToday,
   pickRitualCardLens,
   pickRitualHookLine,
-  pickRitualPersonalLens,
+  pickRitualNumberLens,
 } from "@/lib/ritualRevealCopy";
 import { ritualRevealCtaReady } from "@/lib/ritualRevealCascade";
 
@@ -39,15 +39,74 @@ describe("ritualRevealCopy", () => {
     expect(pickRitualHookLine(null, "fallback")).toBe("fallback");
   });
 
-  it("omits personal lens without Personal Day capability and never uses catalog as lens", () => {
+  it("omits number lens without Personal Day capability and never uses catalog as lens", () => {
     const hook = {
-      bridge_to_day: "якорь дня",
+      bridge_to_day: "замедляет давление в этом конфликте",
       personal_angle: "лично",
       base: { meaning: "база" },
     };
-    expect(pickRitualPersonalLens(hook, false)).toBeNull();
-    expect(pickRitualPersonalLens(hook, true)).toBe("якорь дня");
-    expect(pickRitualPersonalLens({ base: { meaning: "база" } }, true)).toBeNull();
+    expect(pickRitualNumberLens(hook, false)).toBeNull();
+    expect(pickRitualNumberLens({ base: { meaning: "база" } }, true)).toBeNull();
+  });
+
+  it("uses Personal×number angle for T2.lens_number and ignores Global chorus", () => {
+    expect(
+      pickRitualNumberLens(
+        {
+          bridge_to_day: "замедляет давление в этом конфликте",
+          personal_angle: "Это число окрашивает уже собранный личный день.",
+          base: { meaning: "Семёрка — пауза перед решением." },
+        },
+        true,
+      ),
+    ).toBe("Это число окрашивает уже собранный личный день.");
+  });
+
+  it("omits Global chorus packaged as number lens even with persist", () => {
+    const chorus = "замедляет давление в этом конфликте";
+    expect(
+      pickRitualNumberLens(
+        {
+          bridge_to_day: chorus,
+          personal_angle: chorus,
+          base: { meaning: "Семёрка — пауза перед решением." },
+        },
+        true,
+      ),
+    ).toBeNull();
+    expect(
+      pickRitualNumberLens(
+        {
+          bridge_to_day: chorus,
+          base: { meaning: "Семёрка — пауза перед решением." },
+        },
+        true,
+      ),
+    ).toBeNull();
+    expect(
+      pickRitualNumberLens(
+        {
+          bridge_to_day: "сначала понять; потом говорить",
+          personal_angle: "omit",
+          base: { meaning: "Семёрка — пауза перед решением." },
+        },
+        true,
+      ),
+    ).toBeNull();
+  });
+
+  it("does not invert catalog meaning or omit-token into a number lens", () => {
+    expect(
+      pickRitualNumberLens(
+        {
+          personal_angle: "Семёрка — пауза перед решением.",
+          base: { meaning: "Семёрка — пауза перед решением." },
+        },
+        true,
+      ),
+    ).toBeNull();
+    expect(pickRitualNumberLens({ personal_angle: "omit" }, true)).toBeNull();
+    expect(pickRitualNumberLens({ personal_angle: "лично" }, false)).toBeNull();
   });
 
   it("uses Personal×card angle for T2.lens_card and ignores Global chorus", () => {

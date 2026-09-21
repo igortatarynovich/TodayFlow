@@ -83,11 +83,11 @@ def test_tic_coverage_audit_covers_n20() -> None:
         "K11",
         "K12",
         "K13",
+        "K14",
         "K18",
         "K19",
     }
     assert partial == {
-        "K14",
         "K15",
         "K16",
         "K17",
@@ -96,19 +96,19 @@ def test_tic_coverage_audit_covers_n20() -> None:
     assert missing == set()
     assert omit == set()
     assert TIC_DEFECT_QUEUE == (
-        "K14",
         "K15",
         "K16",
         "K17",
         "K20",
     )
-    assert TIC_DEFECT_QUEUE[0] == "K14"
+    assert TIC_DEFECT_QUEUE[0] == "K15"
     assert by_id["K01"]["status"] == "COMPLETE"
     assert by_id["K06"]["status"] == "COMPLETE"
     assert by_id["K07"]["status"] == "COMPLETE"
     assert by_id["K09"]["status"] == "COMPLETE"
     assert by_id["K10"]["status"] == "COMPLETE"
     assert by_id["K13"]["status"] == "COMPLETE"
+    assert by_id["K14"]["status"] == "COMPLETE"
     assert "P1.recognition_line" not in by_id["K01"]["slot_id"]
 
 

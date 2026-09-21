@@ -23,6 +23,15 @@
 - **Canon updated?** yes — this file · Grammar · Pipeline · Product Flow · tracker.
 - **Backward compatible?** yes for API.
 
+## Architecture impact — TIC-K14 number lens (2026-09-21)
+
+- **SoT before:** `T2.lens_number` display_source mixed `bridge_to_day` / `personal_angle`; FE painted Global `day_number` chorus as the lens when persist was on.
+- **SoT after:** same slot. Semantic source is hook_reveal `personal_angle` from Personal Day × number. Global chorus / tempo do not feed the slot. Omit without a Personal×number line. Persist alone is not coverage.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this record · Information Contract §11 · tracker
+- **Backward compatible?** yes for API. Number «Для тебя сегодня» omits without Personal×number.
+
 ## Architecture impact — TIC-K01 human_line (2026-09-21)
 
 - **SoT before:** `T1-hero.human_line` display_source was greeting / theme / period / expect. Energy kind already lived on `energy_word`.
@@ -483,9 +492,9 @@ Numerology Engine identity. 1–2 digits / title. Same persist. Appear state B�
 | one_question | **Как число окрашивает уже посчитанный Personal Day?** |
 | text_class | generated |
 | authority | Personal Day × number (lens); **не** Ritual как day engine |
-| semantic_source | hook_reveal `bridge_to_day` / `personal_angle` |
-| allowed_inputs | persisted Personal Day meaning + this symbol identity + catalog as *color*, not cause |
-| forbidden_inference | «день такой потому что число»; mutate energy/drivers/windows; invent lens on empty persist; **CE prose**; rewrite Personal thesis |
+| semantic_source | hook_reveal `personal_angle` |
+| allowed_inputs | persisted Personal Day + this number identity + catalog as *color*, not cause |
+| forbidden_inference | «день такой потому что число»; mutate energy/drivers/windows; invent lens on empty persist; **Global chorus `day_number` / `bridge_to_day` / tempo**; copy K06–K10; copy K13 card lens; **CE prose**; rewrite Personal thesis; kitchen / PIC / chrome |
 | output | 1–3 предложения |
 | budget | 20–45 слов · ≤280 chars |
 | required | нет |
@@ -495,7 +504,7 @@ Numerology Engine identity. 1–2 digits / title. Same persist. Appear state B�
 | persist_key | PersonalDayKey + ritual identity |
 | anti_dupe_group | `symbol_layers` · `global_vs_personal` |
 | interaction | sheet section after catalog |
-| appear | **omit** unless Personal Day persisted. Guest **и** general: catalog only, lens нет |
+| appear | **omit** unless Personal Day persisted **and** Personal×number wrote the lens. Guest **и** general: catalog only, lens нет |
 
 ---
 
@@ -838,6 +847,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | `T2.lens_number` = Personal Day × F11/F12 after persist; Global chorus `day_number` / tempo stay on hook and do not feed the slot; omit without personal lens |
 | 2026-09-21 | `T2.lens_card` = Personal Day × F13 after persist; Global chorus `bridge_to_day` stays on hook and does not feed the slot; omit without personal lens |
 | 2026-09-21 | `T3.caution` = Personal Narrative avoid after bind; Global `do_not` stays on scene and does not feed the slot; omit without personal avoid |
 | 2026-09-21 | `T3.priority` = Personal Narrative do after bind; Global `recommended_action` / goals omit; glance leftover cannot treat scene action as personal `today_move` |

@@ -33,6 +33,7 @@ def test_number_hook_bridge_from_chorus_only():
     assert hook["base"]["meaning"]
     assert hook["bridge_status"] == "ok"
     assert hook["bridge_to_day"] == "замедляет давление в этом конфликте"
+    assert hook["personal_angle"] == "omit"
 
 
 def test_number_hook_bridge_fail_keeps_base():
@@ -40,6 +41,7 @@ def test_number_hook_bridge_fail_keeps_base():
     assert hook["base"]["meaning"]
     assert hook["bridge_status"] == "unavailable"
     assert hook["bridge_to_day"] is None
+    assert hook["personal_angle"] == "omit"
     assert "Не удалось раскрыть" in (hook.get("bridge_fail_copy") or "")
 
 
@@ -117,6 +119,55 @@ def test_k13_keeps_explicit_personal_angle_without_copying_chorus():
     )
     assert hook["personal_angle"] == angle
     assert hook["bridge_to_day"] != angle
+
+
+def test_k14_does_not_package_chorus_as_personal_number_lens():
+    chorus = {"day_number": {"link_to_conflict": "замедляет давление в этом конфликте"}}
+    hook = hooks.build_number_hook_reveal(
+        value=7,
+        chorus=chorus,
+        personal_angle=hooks._personal_number_lens_line(),
+        profile_depth="deep",
+    )
+    assert hook["bridge_status"] == "ok"
+    assert hook["bridge_to_day"] == "замедляет давление в этом конфликте"
+    assert hook["personal_angle"] == "omit"
+    attached = hooks.attach_hooks_to_symbol_view(
+        {"number": {"revealed": True, "reduced_value": 7}},
+        chorus=chorus,
+        profile_depth="deep",
+    )
+    lens = (attached.get("number") or {}).get("hook_reveal") or {}
+    assert lens.get("personal_angle") == "omit"
+    assert lens.get("bridge_to_day") == "замедляет давление в этом конфликте"
+
+
+def test_k14_keeps_explicit_personal_angle_without_copying_chorus_or_tempo():
+    angle = "Это число окрашивает уже собранный личный день, не хор."
+    hook = hooks.build_number_hook_reveal(
+        value=7,
+        chorus={
+            "day_number": {
+                "link_to_conflict": "замедляет давление в этом конфликте",
+                "tempo": "сначала понять",
+                "style": "потом говорить",
+            }
+        },
+        personal_angle=angle,
+        profile_depth="light",
+    )
+    assert hook["personal_angle"] == angle
+    assert hook["bridge_to_day"] != angle
+    tempo_only = hooks.build_number_hook_reveal(
+        value=7,
+        chorus={"day_number": {"tempo": "сначала понять", "style": "потом говорить"}},
+        profile_depth="deep",
+    )
+    assert tempo_only["bridge_to_day"] == "сначала понять; потом говорить"
+    assert tempo_only["personal_angle"] == "omit"
+
+
+def test_color_hook_bridge_from_props():
     hook = hooks.build_color_hook_reveal(
         color_name="Лазурь",
         props_color={

@@ -127,7 +127,7 @@ TIC_COVERAGE: Final[tuple[dict[str, object], ...]] = (
     {"tic_k": "K11", "status": "COMPLETE", "slot_id": ("T2.catalog_card", "T2.card_face")},
     {"tic_k": "K12", "status": "COMPLETE", "slot_id": ("T2.catalog_number", "T2.number_glyph")},
     {"tic_k": "K13", "status": "COMPLETE", "slot_id": ("T2.lens_card",)},
-    {"tic_k": "K14", "status": "PARTIAL", "slot_id": ("T2.lens_number",)},
+    {"tic_k": "K14", "status": "COMPLETE", "slot_id": ("T2.lens_number",)},
     {"tic_k": "K15", "status": "PARTIAL", "slot_id": ("T3.color.name", "T3.color.hex", "T3.color.lines")},
     {"tic_k": "K16", "status": "PARTIAL", "slot_id": ("T3.practice",)},
     {"tic_k": "K17", "status": "PARTIAL", "slot_id": ("T3.affirmation",)},

@@ -144,7 +144,7 @@ import {
 import { shiftDateISO } from "@/lib/moodMapModel";
 import { resolveTodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import { canOfferFocusDeepen, resolveFocusDeepenTarget } from "@/lib/todayFocusDeepen";
-import { pickRitualCardLens, pickRitualPersonalLens } from "@/lib/ritualRevealCopy";
+import { pickRitualCardLens, pickRitualNumberLens } from "@/lib/ritualRevealCopy";
 import { buildHandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 import { resolveWelcomeActivityTags } from "@/lib/todayWelcomeActivityTags";
 import {
@@ -1028,7 +1028,7 @@ export function TodayCompositionSurface(props: Props) {
       display,
       title: view.number?.title ?? null,
       meaning: view.number?.hook_reveal?.base?.meaning ?? view.number?.summary ?? props.numerologyMeaning ?? null,
-      support: pickRitualPersonalLens(view.number?.hook_reveal, allowRitualLens),
+      support: pickRitualNumberLens(view.number?.hook_reveal, allowRitualLens),
     };
   }, [
     dateISO,
@@ -1438,7 +1438,7 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const ritualNumberSupportText = useMemo(
-    () => pickRitualPersonalLens(symbolHooksView?.number?.hook_reveal, allowRitualLens),
+    () => pickRitualNumberLens(symbolHooksView?.number?.hook_reveal, allowRitualLens),
     [allowRitualLens, symbolHooksView?.number?.hook_reveal],
   );
 
