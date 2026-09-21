@@ -562,8 +562,8 @@ Chrome: «В приоритете» · «Осторожнее».
 | one_question | **Что конкретно сделать относительно сегодняшней ситуации?** |
 | text_class | generated |
 | authority | Personal Day `do[]` |
-| allowed_inputs | Personal do (action/object/moment) |
-| forbidden_inference | copy T1-strength chip labels; abstract noun-pairs; Global do |
+| allowed_inputs | Personal Narrative do after bind (action/object/moment) |
+| forbidden_inference | copy T1-strength chip labels; abstract noun-pairs; **Global `recommended_action` / `props.goals` / Global do**; kitchen / PIC / CE / chrome |
 | output | list items |
 | budget | **1–3** · each 8–16 слов · ≤200 chars |
 | required | нет |
@@ -572,7 +572,7 @@ Chrome: «В приоритете» · «Осторожнее».
 | persist_key | PersonalDayKey |
 | anti_dupe_group | `do_layers` · `focus_vs_priority` |
 
-Fallback to glance `prioritize` only if `do[]` empty **and** that string is personal (`today_move`), not Global chip / Global expect. Otherwise omit.
+Fallback to glance `prioritize` only if `do[]` empty **and** that string is personal (`today_move`), not Global chip / Global expect / Global scene `recommended_action`. Otherwise omit.
 
 #### `T3.caution`
 
@@ -817,6 +817,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | `T3.priority` = Personal Narrative do after bind; Global `recommended_action` / goals omit; glance leftover cannot treat scene action as personal `today_move` |
 | 2026-09-21 | `T3.focus_title` = F10 closed domain of first natal_transit natal_point; omit without `focus_axis`; not scene sphere, kitchen alias, K01 human_line, or K06 headline |
 | 2026-09-21 | `T3.headline` = F09 natal_transit overlay thesis; HD/BaZi/Vedic kitchen out of this slot |
 | 2026-09-21 | `T1-hero.human_line` = closed formulation of `primary_energy`; greeting is not this slot |

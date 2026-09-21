@@ -52,7 +52,7 @@ PROJECTION_VERSION = "day_scenario_project_v1.b5"
 PROJECTION_MAP = {
     "expect": "primary scene what_happens (fill-empty opportunity)",
     "trap": "primary scene.trap",
-    "do": "props.goals[0] or primary scene.recommended_action",
+    "do": "Personal Narrative after bind only; not Global recommended_action / props.goals",
     "avoid": "primary scene.do_not",
     "primary_action": "same as do[0]",
     "today_move": "same as do[0]",
@@ -107,6 +107,16 @@ def _primary_scene(scenes: list[Any], *, primary_scene_id: Any = None) -> dict[s
         if isinstance(sc, dict) and str(sc.get("scene_id") or "").strip() == sid:
             return sc
     return None
+
+
+def _personal_narrative_do_lines() -> list[str]:
+    """TIC-K09: Personal Narrative after bind owns `do[]`.
+
+    I0 locks `scenes[].recommended_action` as Global. Personal stage may not mutate
+    it, and `props.goals` are that same Global action. No Personal-owned do field
+    exists on the locked Personal overlay schema → omit. Not a second ranker.
+    """
+    return []
 
 
 def _origin_conflict_id(conflict: dict[str, Any]) -> str:
@@ -660,12 +670,8 @@ def project_day_scenario_onto_day_story_v1(
         400,
     )
 
-    do_list = [_clip(g.get("text"), 240) for g in primary_goals[:2]]
-    if not do_list:
-        rec = _clip(primary.get("recommended_action"), 240)
-        if rec:
-            do_list = [rec]
-    # No filler do-line invent when only one real action exists.
+    # TIC-K09: do[] is Personal Narrative after bind, not Global scene action.
+    do_list = _personal_narrative_do_lines()
     base["do"] = do_list
     base["today_move"] = _clip(do_list[0] if do_list else "", 200)
     base["primary_action"] = _clip(do_list[0] if do_list else "", 200)
@@ -698,17 +704,9 @@ def project_day_scenario_onto_day_story_v1(
             evidence_refs=scene_evidence,
         ),
         "do": _field_provenance(
-            origin_scene_id=str(
-                (
-                    primary_goals[0].get("origin_scene_id")
-                    if primary_goals
-                    else None
-                )
-                or scene_id
-                or None
-            ),
-            origin_conflict_id=origin_conflict,
-            evidence_refs=scene_evidence,
+            origin_scene_id=str(scene_id) if do_list and scene_id else None,
+            origin_conflict_id=origin_conflict if do_list else "",
+            evidence_refs=scene_evidence if do_list else [],
         ),
         "avoid": _field_provenance(
             origin_scene_id=scene_id or None,

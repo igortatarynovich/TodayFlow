@@ -1,7 +1,8 @@
 /**
- * T3.priority — Personal do[], glance prioritize only if that line is personal.
- * Not Global strength chips, not Global expect. Empty → omit.
- * Canon: TODAY_DISPLAY_INVENTORY_V1 T3.priority
+ * T3.priority — Personal Narrative do after bind.
+ * Not Global recommended_action / goals / strength chips / expect.
+ * Glance leftover only if that line is personal today_move. Empty → omit.
+ * Canon: TODAY_INFORMATION_CONTRACT_V1 K09 · TODAY_DISPLAY_INVENTORY_V1 T3.priority
  */
 
 import type { TodayContractV1 } from "@/lib/todayContract";
@@ -42,6 +43,31 @@ function isGlobalExpectOrPeriod(line: string, contract: TodayContractV1): boolea
   return Boolean(period) && norm(period) === n;
 }
 
+function globalSceneActionLines(contract: TodayContractV1): string[] {
+  const out: string[] = [];
+  const scenes = contract.day_story?.day_scenario?.scenes;
+  if (Array.isArray(scenes)) {
+    for (const sc of scenes) {
+      const rec = String(sc?.recommended_action ?? "").trim();
+      if (rec) out.push(rec);
+    }
+  }
+  const goals = contract.day_story?.day_scenario?.props?.goals;
+  if (Array.isArray(goals)) {
+    for (const g of goals) {
+      const text = String(g?.text ?? "").trim();
+      if (text) out.push(text);
+    }
+  }
+  return out;
+}
+
+function isGlobalSceneAction(line: string, contract: TodayContractV1): boolean {
+  const n = norm(line);
+  if (!n) return false;
+  return globalSceneActionLines(contract).some((item) => norm(item) === n);
+}
+
 /** Glance Daily Focus line may feed T3.priority only when it is the personal move. */
 export function isPersonalGlancePriorityFallback(
   line: string | null | undefined,
@@ -51,22 +77,30 @@ export function isPersonalGlancePriorityFallback(
   if (!text) return false;
   if (isGlobalChipLine(text, contract)) return false;
   if (isGlobalExpectOrPeriod(text, contract)) return false;
+  if (isGlobalSceneAction(text, contract)) return false;
   const move = String(contract.day_story?.today_move ?? "").trim();
-  return Boolean(move) && norm(move) === norm(text);
+  if (!move || isGlobalSceneAction(move, contract)) return false;
+  return norm(move) === norm(text);
 }
 
-/** T3.priority list: do[] first; glance prioritize only if personal, not Global. */
+/** T3.priority list: Personal do[] after bind; glance leftover only if personal. */
 export function pickMyDayPriorityLines(input: {
   contract: TodayContractV1;
   doItems: string[];
   glancePrioritize?: string | null;
 }): string[] {
   if (isTodayInterpretationUnavailable(input.contract)) return [];
-  const dos = input.doItems.map((item) => item.trim()).filter(Boolean).slice(0, 3);
+  if (!contractHasPersistedPersonalDay(input.contract)) return [];
+  const dos = input.doItems
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter((line) => !isGlobalChipLine(line, input.contract))
+    .filter((line) => !isGlobalExpectOrPeriod(line, input.contract))
+    .filter((line) => !isGlobalSceneAction(line, input.contract))
+    .slice(0, 3);
   if (dos.length) return dos;
   const glance = String(input.glancePrioritize ?? "").trim();
   if (!glance) return [];
-  if (!contractHasPersistedPersonalDay(input.contract)) return [];
   if (!isPersonalGlancePriorityFallback(glance, input.contract)) return [];
   return [clipCompassProse(glance, 200) || glance];
 }

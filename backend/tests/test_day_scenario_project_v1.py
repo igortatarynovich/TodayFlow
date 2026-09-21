@@ -149,7 +149,17 @@ def test_projection_recovers_unavailable_with_scenario_editorial():
     assert projected["interpretation_status"] == "ok"
     assert projected["expect"]
     assert projected["trap"]
-    assert projected["do"]
+    assert projected["do"] == []
+    rec = str(
+        next(
+            (sc.get("recommended_action") for sc in scenario["scenes"] if isinstance(sc, dict)),
+            "",
+        )
+        or ""
+    ).strip()
+    assert rec
+    assert rec not in projected["do"]
+    assert rec not in str(projected.get("today_move") or "")
     assert projected["talisman"]["color"] == scenario["props"]["color"]["name"]
     assert projected["talisman"].get("origin_scene_id")
     assert projected["talisman"]["provenance"]["source_kind"] == "day_scenario_v1"
@@ -188,7 +198,8 @@ def test_projection_overwrites_llm_expect():
     projected = project_day_scenario_onto_day_story_v1(story, scenario)
     assert not str(projected["expect"]).startswith("LLM expect")
     assert not str(projected["trap"]).startswith("LLM trap")
-    assert not str(projected["do"][0]).startswith("LLM do")
+    assert projected["do"] == []
+    assert "LLM do" not in " ".join(str(x) for x in projected["do"])
     assert projected["talisman"]["color"] == scenario["props"]["color"]["name"]
     rel = projected["domains"].get("relationships") or {}
     assert "LLM opportunity" not in str(rel.get("opportunity") or "")
@@ -363,3 +374,19 @@ def test_do_does_not_pull_second_scene_action():
     projected = project_day_scenario_onto_day_story_v1(story, scenario)
     assert projected["interpretation_status"] == "ok"
     assert second_action not in projected["do"]
+
+
+def test_k09_does_not_package_global_recommended_action_as_personal_do():
+    story, scenario, _ = _scenario_and_fallback()
+    primary = next(sc for sc in scenario["scenes"] if sc.get("role_in_story") == "primary")
+    rec = str(primary.get("recommended_action") or "").strip()
+    avoid = str(primary.get("do_not") or "").strip()
+    assert rec and avoid
+    projected = project_day_scenario_onto_day_story_v1(story, scenario)
+    assert projected["interpretation_status"] == "ok"
+    assert projected["do"] == []
+    assert rec not in projected["do"]
+    assert rec != str(projected.get("today_move") or "").strip()
+    assert rec != str(projected.get("primary_action") or "").strip()
+    # K10 is not this hop — Global avoid still projects.
+    assert avoid in (projected.get("avoid") or [])

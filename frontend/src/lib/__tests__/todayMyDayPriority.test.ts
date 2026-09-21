@@ -40,6 +40,44 @@ describe("pickMyDayPriorityLines", () => {
     ).toEqual(["Скажи одну конкретную просьбу."]);
   });
 
+  it("omits Global recommended_action packaged as do[] even with persist", () => {
+    const rec = "Назови одну вещь прямо.";
+    expect(
+      pickMyDayPriorityLines({
+        contract: {
+          ...base,
+          ...persisted,
+          day_story: {
+            contract_version: "day_story_v1",
+            do: [rec],
+            today_move: rec,
+            day_scenario: {
+              scenes: [{ scene_id: "s1", recommended_action: rec }],
+              props: { goals: [{ text: rec, origin_scene_id: "s1" }] },
+            },
+          },
+        },
+        doItems: [rec],
+        glancePrioritize: rec,
+      }),
+    ).toEqual([]);
+  });
+
+  it("omits Personal-looking do[] without persisted Personal Day", () => {
+    expect(
+      pickMyDayPriorityLines({
+        contract: {
+          ...base,
+          day_story: {
+            contract_version: "day_story_v1",
+            do: ["Скажи одну конкретную просьбу."],
+          },
+        },
+        doItems: ["Скажи одну конкретную просьбу."],
+      }),
+    ).toEqual([]);
+  });
+
   it("omits glance expect and strength chip when do[] is empty", () => {
     expect(
       pickMyDayPriorityLines({
