@@ -15,7 +15,7 @@ X11 is **closed**. Product `/today` always mounts `TodayCompositionSurface`. Que
 
 Leftover files (`TodayGlanceAct`, `TodayExperienceSurface`, `TodayRitualFlow`, `todayRitualCopy` bank) stay in the repo. Physical delete is out of gate.
 
-Selected next product remainder: Full User Path **X14** (progress + D2 continuity). Closing X11 does not implement or close that gate.
+Selected next product remainder: Full User Path **X14** progress + D2 continuity (selection 2026-09-21). Closing X11 does not implement or close that gate. New branch only when X14 execution starts.
 
 ---
 
@@ -44,7 +44,7 @@ Gate: `todayX11LeftoverNarrative.test.tsx` · `todayX11RouteSurfaces.test.ts`. X
 ## 3. Do not
 
 - Physical-delete leftover files from this freeze.
-- Start **X14** from this freeze (new branch when that gate starts).
+- Start **X14** from this freeze. Selection is documented; execution is a new branch. This freeze does not implement X14.
 - Invent TIC-K21 or resume TIC hops.
 - Rebuild server. Merge/deploy only if asked.
 - Reopen Glance as a fifth act. Resume PIC / IL / Compatibility IC.

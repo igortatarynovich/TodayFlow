@@ -460,7 +460,7 @@ Locked surfaces = production 4-surface path: `TodayProductScreenFlow` ← `Today
 
 Gate: `evaluate_tic_closeout` · `backend/tests/test_today_information_contract_closeout_v1.py` · `frontend/src/lib/__tests__/todayTicCloseout.test.ts`.
 
-**Следующий продуктовый remainder (after X11 CLOSED / PASS, 2026-09-21):** Full User Path **X14** progress + D2 continuity. SoT: [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) · [FULL_USER_PATH_CANON_V1](../audits/FULL_USER_PATH_CANON_V1.md) §13/§16. Не Compatibility Information Contract. Не invent `TIC-K21`. Не IL dump. Не PIC. Не rebuild.
+**Следующий продуктовый gate (selection 2026-09-21, after X11 CLOSED / PASS):** Full User Path **X14** progress + D2 continuity. SoT выбора: [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) product-gate selection · [FULL_USER_PATH_CANON_V1](../audits/FULL_USER_PATH_CANON_V1.md) §13/§16. Не Compatibility Information Contract. Не invent `TIC-K21`. Не IL dump. Не PIC. Не rebuild.
 
 ---
 
@@ -468,7 +468,7 @@ Gate: `evaluate_tic_closeout` · `backend/tests/test_today_information_contract_
 
 | Date | Change |
 |------|--------|
-| 2026-09-21 | X11 CLOSED / PASS (leftover narrative). TIC remains CLOSED / PASS. Next Today remainder = X14. Not Compatibility N. Not K21. |
+| 2026-09-21 | X14 gate selection (after X11 CLOSED / PASS): next = progress + D2 continuity. One PASS on existing `T1.continuity` + `T3.tracker`. Not Compatibility N. Not K21. TIC remains CLOSED / PASS. |
 | 2026-09-21 | X4/X5 CLOSED / PASS (joint honest reveal copy). TIC remains CLOSED / PASS. Next Today remainder = X11 then X14. Not Compatibility N. Not K21. |
 | 2026-09-21 | X4/X5 gate selection (after X3 CLOSED / PASS): next = one joint X4/X5 honest reveal copy. Not Compatibility N. Not K21. TIC remains CLOSED / PASS. |
 | 2026-09-21 | Product-gate selection: next = Full User Path X3 (Theme/Focus/Step spine). Not Compatibility N. Not K21. |

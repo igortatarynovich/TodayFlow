@@ -11,6 +11,6 @@
 | [../status/TODAY_INFORMATION_CONTRACT_HANDOFF.md](../status/TODAY_INFORMATION_CONTRACT_HANDOFF.md) | **FROZEN** — CLOSED / PASS |
 | [../status/X3_THEME_FOCUS_STEP_HANDOFF.md](../status/X3_THEME_FOCUS_STEP_HANDOFF.md) | **CLOSED / PASS** — Theme/Focus/Step spine |
 | [../status/X4_X5_HONEST_REVEAL_HANDOFF.md](../status/X4_X5_HONEST_REVEAL_HANDOFF.md) | **CLOSED / PASS** — joint honest reveal copy |
-| [../status/X11_LEFTOVER_NARRATIVE_HANDOFF.md](../status/X11_LEFTOVER_NARRATIVE_HANDOFF.md) | **CLOSED / PASS** — leftover narrative; selected next = X14 |
+| [../status/X11_LEFTOVER_NARRATIVE_HANDOFF.md](../status/X11_LEFTOVER_NARRATIVE_HANDOFF.md) | **CLOSED / PASS** — leftover narrative; selected next = X14 (selection hop) |
 | [TODAY_MEANING_POLISH_V1.md](./TODAY_MEANING_POLISH_V1.md) | IL-4 chorus bind — формулировка, не новый корень |
 | [TODAY_SCREEN_SCENARIO_V3.md](./TODAY_SCREEN_SCENARIO_V3.md) | **SUPERSEDED** как product map |

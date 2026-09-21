@@ -258,11 +258,29 @@ USER RESPONSE           →  GRATITUDE HISTORY
 | X4 (clause) | **PASS.** Card copy does not claim a real pick. Reveal verbs OK. Prebake + deck gesture unchanged | clause of X4/X5 |
 | X5 (clause) | **PASS.** Number copy does not claim a personal number. Live CTA = «Открыть число дня». YYYYMMDD + ring gesture unchanged | clause of X4/X5 |
 | **X11 legacy narrative** | **CLOSED / PASS.** Product `/today` mounts only the locked 4-surface. `?full=1` / `?experience=1` are no-ops. Glance-as-act not constructed. Evening is gratitude, not promise-trap. Leftover files stay | cleanup |
-| X14 progress + D2 continuity | OPEN, P1 **NEXT** after X11 CLOSED / PASS. `T1.continuity` и `T3.tracker` есть; completeness / placement не закрыты | experience |
+| **X14 progress + D2 continuity** | **OPEN — NEXT.** One executable experience gate. Two existing Inventory slots, one PASS. `T1.continuity` = D2 recall from yesterday gratitude. `T3.tracker` = habit micro-progress on MY DAY. Completeness / placement not closed. Не новые слоты. Не X11 leftover | experience |
 | Compatibility Information Contract | **не выбран.** Отдельная таблица (PIC §9). Не автоматическое продолжение TIC | other section N |
 | TIC-K21 / IL dump / PIC resume | **запрещены** этой сверкой | not a product gate |
 
-**Следующий executable gate (after X11 CLOSED / PASS, 2026-09-21):** **X14** progress + D2 continuity. Не этот freeze. Не расширять TIC. Не rebuild сервера. Не landing. X11 не закрывает X14.
+**Следующий executable gate (selection 2026-09-21, after X11 CLOSED / PASS):** **X14** progress + D2 continuity. Один PASS. Не два поезда. Не расширять TIC. Не rebuild сервера. Не landing. X11 не закрывает X14. Stay on `cursor/x11-leftover-narrative` until execution starts (then new branch).
+
+**Acceptance (X14 PASS):**
+
+| In | Out |
+|----|-----|
+| Locked TODAY paints `T1.continuity` when yesterday gratitude exists; omit empty; no invent on transport failure | New Inventory slot · promise-outcome evening · second day meaning |
+| Locked MY DAY paints `T3.tracker` from existing habit rows when present; omit empty; not a Priority surrogate | TIC-K21 · PIC · IL · Compatibility IC · leftover file delete · landing §16.3 · iOS parity |
+
+Both clauses required. Order of paint = TODAY continuity, then MY DAY tracker (existing 4-surface). Selection only — no product paint in this hop. Executable audit of exact live placement/completeness comes on the execution branch.
+
+### Architecture impact — X14 gate selection (2026-09-21)
+
+- **SoT before:** X11 CLOSED / PASS; next remainder named «X14» without hop shape. §13 one OPEN progress row; §16.1 п.8 already one P1 item covering progress + D2.
+- **SoT after:** next executable Today gate = **X14** only. PASS = both existing slots complete and placed on the locked 4-surface. Not two trains.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this file · FULL_USER_PATH §0/§13/§16 · tracker · X11 handoff pointer
+- **Backward compatible?** yes. Selection only; no product paint in this hop.
 
 **X11 close record (2026-09-21):**
 

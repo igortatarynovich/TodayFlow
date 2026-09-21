@@ -154,7 +154,7 @@
 1. [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md) — **канон продукта** (Personal Model, карта, законы, north star)
 2. **Today смысл / content:** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — I0 / owner; не DAY_SCENARIO_V1, не B5, не DayModel §10. Конечное N — [today/TODAY_INFORMATION_CONTRACT_V1.md](./today/TODAY_INFORMATION_CONTRACT_V1.md).
 2a. [today/TODAY_INFORMATION_CONTRACT_V1.md](./today/TODAY_INFORMATION_CONTRACT_V1.md) — закрытое N Today (**CLOSED / PASS**)
-3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — experience / product cycle (подчинены п.2 для смысла; нарезка экрана — PRODUCT_FLOW). **X3 CLOSED / PASS.** **X4/X5 CLOSED / PASS.** **X11 CLOSED / PASS.** Следующий Today remainder = **X14**; не Compatibility N.
+3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — experience / product cycle (подчинены п.2 для смысла; нарезка экрана — PRODUCT_FLOW). **X3 CLOSED / PASS.** **X4/X5 CLOSED / PASS.** **X11 CLOSED / PASS.** Следующий Today gate = **X14** progress + D2 continuity; не Compatibility N.
 3a. [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md) — слоты Сегодня (**последний authority перед UI**; грамматика — [DISPLAY_CONSTRUCTION_GRAMMAR_V1](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md))
 4. [profile/PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) — уровень UI Profile
 4a. [profile/PROFILE_INFORMATION_CONTRACT_V1.md](./profile/PROFILE_INFORMATION_CONTRACT_V1.md) — закрытое N Profile (gate)
