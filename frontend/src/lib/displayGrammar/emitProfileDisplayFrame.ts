@@ -113,6 +113,12 @@ export type EmitProfileDisplayFrameInput = {
   /** Explore only. Path frame must omit P6 — Decode / K16 tips are not path acts. */
   natalDecode?: NatalDecodeEmitInput | null;
   practicalTips?: string[] | null;
+  /** Explore only. PIC-K03 ASC/MC + occupied-house how/do. */
+  appliedHowDo?: {
+    asc?: { how?: string | null; do?: string | null } | null;
+    mc?: { how?: string | null; do?: string | null } | null;
+    houses?: Record<string, { how?: string | null; do?: string | null } | undefined> | null;
+  } | null;
 };
 
 export function natalDecodeSlotText(decode?: NatalDecodeEmitInput | null): string {
@@ -323,7 +329,56 @@ export function emitProfileDisplayFrame(input: EmitProfileDisplayFrameInput): Di
   vm(vm_fields, "profile.effort_vector", journey.effortVector, "P4.effort_vector", Boolean(journey.effortVector));
   vm(vm_fields, "profile.bridge_line", journey.bridge?.line, "P5.bridge_line", Boolean(journey.bridge?.line));
   vm(vm_fields, "profile.natal_decode", decodeText, "P6.natal_decode", Boolean(decodeText));
+  const applied = input.appliedHowDo;
+  const appliedAsc = [trim(applied?.asc?.how), trim(applied?.asc?.do)].filter(Boolean).join(" ");
+  pushAtom(atoms, {
+    slot_id: "P6.applied.asc",
+    surface: "explore",
+    text: appliedAsc,
+    origins: ["natal", "ce"],
+    text_class: "generated",
+    fe_transform: "clip",
+    json_field: "profile.applied.asc",
+  });
+  const appliedMc = [trim(applied?.mc?.how), trim(applied?.mc?.do)].filter(Boolean).join(" ");
+  pushAtom(atoms, {
+    slot_id: "P6.applied.mc",
+    surface: "explore",
+    text: appliedMc,
+    origins: ["natal", "ce"],
+    text_class: "generated",
+    fe_transform: "clip",
+    json_field: "profile.applied.mc",
+  });
+  const houseRows = Object.entries(applied?.houses ?? {})
+    .map(([id, row]) => {
+      const text = [trim(row?.how), trim(row?.do)].filter(Boolean).join(" ");
+      return { id, text };
+    })
+    .filter((row) => row.text)
+    .slice(0, 8);
+  for (const row of houseRows) {
+    pushAtom(atoms, {
+      slot_id: "P6.applied.house",
+      surface: "explore",
+      text: row.text,
+      origins: ["natal", "ce"],
+      text_class: "generated",
+      fe_transform: "clip",
+      json_field: "profile.applied.house",
+    });
+  }
+
   vm(vm_fields, "profile.practical_tips", tipText, "P6.practical_tips", Boolean(tipText));
+  vm(vm_fields, "profile.applied.asc", appliedAsc, "P6.applied.asc", Boolean(appliedAsc));
+  vm(vm_fields, "profile.applied.mc", appliedMc, "P6.applied.mc", Boolean(appliedMc));
+  vm(
+    vm_fields,
+    "profile.applied.house",
+    houseRows.map((row) => row.text).join(" "),
+    "P6.applied.house",
+    houseRows.length > 0,
+  );
 
   return {
     atoms,

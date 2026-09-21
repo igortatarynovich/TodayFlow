@@ -380,9 +380,10 @@ export type CoreProfile = {
         line?: string;
         how?: string;
         do?: string;
-        anchors?: { cusp_sign?: string; planets?: string[] };
+        anchors?: { cusp_sign?: string; planets?: string[]; planet?: string; house?: number };
       }
     >;
+    k03_source?: string;
     note?: string;
   } | null;
   /** CE applied ASC/MC first-contact / role cards. */
@@ -401,8 +402,9 @@ export type CoreProfile = {
       how?: string;
       do?: string;
       line?: string;
-      anchors?: { sign?: string };
+      anchors?: { sign?: string; angle?: string };
     } | null;
+    k03_source?: string;
     note?: string;
   } | null;
   /** CE person-voice aspect essays keyed for natal callout matching. */

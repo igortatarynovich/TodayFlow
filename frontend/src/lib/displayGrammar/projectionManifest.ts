@@ -32,6 +32,9 @@ export const PROJECTION_MANIFEST: Record<string, string> = {
   "profile.bridge_line": "P5.bridge_line",
   "profile.natal_decode": "P6.natal_decode",
   "profile.practical_tips": "P6.practical_tips",
+  "profile.applied.asc": "P6.applied.asc",
+  "profile.applied.mc": "P6.applied.mc",
+  "profile.applied.house": "P6.applied.house",
 };
 
 /** Legacy payload fields that must not render without a new Inventory row. */

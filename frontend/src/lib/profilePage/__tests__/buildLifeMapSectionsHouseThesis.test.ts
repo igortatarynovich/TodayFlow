@@ -1,5 +1,4 @@
 import { buildLifeMapSections } from "@/lib/profilePage/buildProfilePlanetaryData";
-import { HOUSE_FALLBACK } from "@/components/profile/profileHouseConstants";
 import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
 
 describe("buildLifeMapSections house theses", () => {
@@ -31,7 +30,7 @@ describe("buildLifeMapSections house theses", () => {
     expect(h7?.summary).not.toMatch(/энциклопедическ/i);
   });
 
-  it("falls back to short person thesis, not interpretation.description", () => {
+  it("omits unoccupied angular houses instead of encyclopedia fallback", () => {
     const natalPreview = {
       positions: {},
       houses: [],
@@ -47,9 +46,7 @@ describe("buildLifeMapSections house theses", () => {
     } as NatalChartPreview;
 
     const sections = buildLifeMapSections(natalPreview, null);
-    const h4 = sections.find((s) => s.house === 4);
-    expect(h4?.summary).toBe(HOUSE_FALLBACK[4]);
-    expect(h4?.summary).not.toMatch(/natal interpretation/i);
-    expect(h4?.summary.length).toBeLessThan(120);
+    expect(sections.find((s) => s.house === 4)).toBeUndefined();
+    expect(sections.every((s) => !/natal interpretation/i.test(s.summary))).toBe(true);
   });
 });

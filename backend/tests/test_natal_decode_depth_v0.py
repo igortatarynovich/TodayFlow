@@ -134,13 +134,9 @@ def test_normalize_keeps_ce_anchor_and_no_ce_write() -> None:
     assert out["sections"][0]["because_core"]
 
 
-def test_house_how_is_thesis_short() -> None:
+def test_house_how_omits_without_occupancy() -> None:
     houses = build_house_person_lines_for_identity_v0("builds_through_autonomy")
-    how1 = houses["1"]["how"]
-    assert "перв" in how1.lower() or "1 дом" in how1.lower()
-    # Thesis length — not encyclopedia paragraph
-    assert len(how1) < 220
-    assert "описывает стиль" not in how1.lower()
+    assert houses == {}
 
 
 def test_pic_k15_producer_cites_facts() -> None:

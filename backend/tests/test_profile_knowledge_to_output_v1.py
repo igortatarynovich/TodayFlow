@@ -184,6 +184,8 @@ def test_pic_coverage_audit_covers_n18() -> None:
     assert KNOWLEDGE_TO_SLOT["K15"] == ("P6.natal_decode",)
     assert by_id["K16"]["status"] == "COMPLETE"
     assert KNOWLEDGE_TO_SLOT["K16"] == ("P6.practical_tips",)
+    assert by_id["K03"]["status"] == "COMPLETE"
+    assert KNOWLEDGE_TO_SLOT["K03"] == ("P6.applied.asc", "P6.applied.mc", "P6.applied.house")
     assert not any(row["status"] == "MISSING" for row in PIC_COVERAGE)
 
 
@@ -194,6 +196,20 @@ def test_k16_practical_action_is_grounded_k07_derivation() -> None:
     assert "_GENERIC_TIPS" not in src
     assert "character_engine_stage4" not in src
     assert "character_engine_stage5" not in src
+
+
+def test_k03_applied_how_do_is_il2_not_thesis_bank() -> None:
+    src = (CE_ROOT / "character_engine_profile_consumption_spheres_houses_v0.py").read_text(
+        encoding="utf-8"
+    )
+    assert "derive_k03_house_card_v0" in src
+    assert "compose_planet_in_house" in src
+    assert "astro.object.asc" in src
+    assert "astro.object.dsc" not in src
+    assert "natal_decode" not in src
+    assert "profile_deep_themes" not in src
+    row = next(item for item in PIC_COVERAGE if item["pic_k"] == "K03")
+    assert row["status"] == "COMPLETE"
 
 
 def test_pic_gate_meaning_producers_cite_k_and_f() -> None:
@@ -609,5 +625,16 @@ def test_k07_path_spheres_from_f06_house_arena(monkeypatch) -> None:
     assert "love" in fire_spheres
     assert len(fire_spheres) <= 2
     houses = (home.get("character_engine_house_lines_v0") or {}).get("houses") or {}
-    assert "1" in houses
-    assert houses["1"].get("how")
+    assert "4" in houses
+    assert houses["4"].get("how")
+    assert houses["4"].get("do")
+    assert "1" not in houses
+    assert set(houses) <= {str(i) for i in range(1, 13)}
+    assert len(houses) <= 7
+    asc = (home.get("character_engine_asc_v0") or {}).get("asc") or {}
+    assert "doorway-meeting" in (asc.get("how") or "")
+    assert (home.get("character_engine_house_lines_v0") or {}).get("k03_source") == "il2_occupied_house_and_angles"
+    pair_houses = (pair.get("character_engine_house_lines_v0") or {}).get("houses") or {}
+    assert "7" in pair_houses
+    assert "love" not in pair_houses
+    assert pair_houses["7"].get("do")

@@ -1,10 +1,8 @@
-"""CE consumption — life_spheres + applied ASC/house cards by Identity thesis.
+"""CE consumption — K07 path spheres + PIC-K03 applied ASC/house how/do.
 
-Natal cusp/sign/degree stay Swiss. CE owns person-voice recognition theses.
-Rules:
-- Each house = one self-recognition sentence (house domain × cusp sign).
-- No mechanism tint, no day-agenda «do», no planet-label dump in how.
-- Emit ASC + MC + **all 12 houses**. Aspects keep Swiss/natal gists.
+Natal cusp/sign/degree stay Swiss.
+PIC-K03: F05/F06 → IL-2 (angle orientation / planet×house arena) → Explore how/do.
+Occupied houses + ASC/MC only. Not a 12-house encyclopedia. Not K01/K07/K15/K16.
 """
 
 from __future__ import annotations
@@ -12,6 +10,10 @@ from __future__ import annotations
 from typing import Any
 
 from todayflow_backend.knowledge.il2_composition_v1 import compose_planet_in_house, load_objects
+from todayflow_backend.services.prose_clip_v1 import clip_prose
+
+PIC_K = ("K03",)
+PIC_F = ("F05", "F06", "F03")
 
 # Sphere IDs that Profile V2 contract builder accepts (full 6 fields required).
 _SPHERE_IDS = ("love", "money", "decisions", "work", "family", "friends", "body")
@@ -316,18 +318,6 @@ def _sign_ru_prep(sign: str | None) -> str | None:
     return _SIGN_RU.get(sign)
 
 
-def _house_recognition_how(house: int, cusp_sign: str | None) -> str:
-    """One self-recognition sentence: house domain × cusp sign."""
-    if cusp_sign:
-        pack = _HOUSE_SIGN_THESIS.get(house) or {}
-        hit = pack.get(cusp_sign)
-        if hit:
-            return hit
-    return _HOUSE_FALLBACK_HOW.get(
-        house,
-        "Эта зона жизни читается по твоему куспиду — без общей энциклопедии дома.",
-    )
-
 def _card(how: str, do: str, *, anchors: dict[str, Any] | None = None) -> dict[str, Any]:
     how_c = " ".join(how.split()).strip()
     do_c = " ".join(do.split()).strip()
@@ -539,30 +529,153 @@ def extract_swiss_house_asc_anchors_v0(payload: dict[str, Any]) -> dict[str, Any
     }
 
 
+_K03_BODIES = ("sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn")
+_K03_RANK = _K03_BODIES
+_K03_HOW_MAX = 220
+_K03_DO_MAX = 180
+
+
+def _k03_clip(text: str, limit: int) -> str:
+    return clip_prose(" ".join(str(text or "").split()).strip(), limit)
+
+
+def _k03_lemmas(frame: Any, job_name: str, *, limit: int = 3) -> list[str]:
+    payload = frame.jobs.get(job_name) if frame is not None else None
+    if payload is None:
+        return []
+    out: list[str] = []
+    for lemma in payload.lemmas:
+        token = str(lemma).strip()
+        if token:
+            out.append(token)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _k03_object_lemmas(catalog: dict[str, Any], object_id: str, slot: str, *, limit: int = 3) -> list[str]:
+    obj = catalog.get(object_id)
+    if not isinstance(obj, dict):
+        return []
+    canon = obj.get("canon") if isinstance(obj.get("canon"), dict) else {}
+    raw = canon.get(slot)
+    if not isinstance(raw, list):
+        return []
+    out: list[str] = []
+    for item in raw:
+        token = str(item).strip()
+        if token:
+            out.append(token)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _stage0_from_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    diagnostics = payload.get("diagnostics") if isinstance(payload.get("diagnostics"), dict) else {}
+    stage2_art = diagnostics.get("character_engine_stage2") if isinstance(diagnostics, dict) else None
+    if isinstance(stage2_art, dict) and isinstance(stage2_art.get("stage0"), dict):
+        return stage2_art["stage0"]
+    return {}
+
+
+def _k03_natal_is_full(payload: dict[str, Any]) -> bool:
+    stage0 = _stage0_from_payload(payload)
+    capability = stage0.get("capability") if isinstance(stage0.get("capability"), dict) else {}
+    return str(capability.get("natal_mode") or "").strip().lower() == "full"
+
+
+def _k03_planet_houses(payload: dict[str, Any]) -> dict[str, int]:
+    """Occupied Sun–Saturn houses from Stage0 F06, then natal_summary fill."""
+    out: dict[str, int] = {}
+    stage0 = _stage0_from_payload(payload)
+    facts = stage0.get("raw_facts") if isinstance(stage0.get("raw_facts"), list) else []
+    for row in facts:
+        if not isinstance(row, dict):
+            continue
+        ft = str(row.get("fact_type") or "").strip().lower()
+        if not ft.startswith("planet_sign:"):
+            continue
+        body = ft.split(":", 1)[1].strip().lower()
+        if body not in _K03_BODIES:
+            continue
+        value = row.get("value") if isinstance(row.get("value"), dict) else {}
+        try:
+            house = int(value.get("house"))
+        except (TypeError, ValueError):
+            continue
+        if 1 <= house <= 12:
+            out[body] = house
+    anchors = extract_swiss_house_asc_anchors_v0(payload)
+    planets_by_house = anchors.get("planets_by_house") if isinstance(anchors, dict) else {}
+    if isinstance(planets_by_house, dict):
+        for house, names in planets_by_house.items():
+            try:
+                num = int(house)
+            except (TypeError, ValueError):
+                continue
+            if not isinstance(names, list):
+                continue
+            for name in names:
+                body = str(name or "").strip().lower()
+                if body in _K03_BODIES and body not in out and 1 <= num <= 12:
+                    out[body] = num
+    return out
+
+
+def derive_k03_house_card_v0(catalog: dict[str, Any], body: str, house: int) -> dict[str, Any] | None:
+    """IL-2 planet×house: how the function shows in that arena. Not a K07 sphere."""
+    frame = compose_planet_in_house(
+        catalog, f"astro.object.{body}", f"astro.house.{house:02d}"
+    )
+    if frame.status != "composed":
+        return None
+    what = _k03_lemmas(frame, "what", limit=2)
+    where = _k03_lemmas(frame, "where", limit=4)
+    if not what or not where:
+        return None
+    how = _k03_clip(f"{' / '.join(what)} — {', '.join(where)}.", _K03_HOW_MAX)
+    do = _k03_clip(f"В этой зоне учитывай: {', '.join(where[:3])}.", _K03_DO_MAX)
+    if not how or not do:
+        return None
+    return _card(how, do, anchors={"planet": body, "house": house})
+
+
+def derive_k03_angle_card_v0(
+    catalog: dict[str, Any],
+    *,
+    angle_id: str,
+    sign: str | None,
+) -> dict[str, Any] | None:
+    """F05 angle orientation × sign manner. Occupancy of house 1/10 is not this card."""
+    if not sign:
+        return None
+    orientation = _k03_object_lemmas(catalog, angle_id, "orientation", limit=3)
+    manner = _k03_object_lemmas(catalog, f"astro.sign.{sign}", "manner", limit=3)
+    if not orientation or not manner:
+        return None
+    how = _k03_clip(f"{' / '.join(orientation)} — {', '.join(manner)}.", _K03_HOW_MAX)
+    if angle_id.endswith(".asc"):
+        do = _k03_clip(f"В первом контакте учитывай: {', '.join(orientation[:2])}.", _K03_DO_MAX)
+    else:
+        do = _k03_clip(f"В видимом результате учитывай: {', '.join(orientation[:2])}.", _K03_DO_MAX)
+    if not how or not do:
+        return None
+    return {
+        "sign": sign,
+        **_card(how, do, anchors={"sign": sign, "angle": angle_id.split(".")[-1]}),
+    }
+
+
 def build_asc_applied_v0(
     identity_thesis: str,
     *,
     asc_sign: str | None,
 ) -> dict[str, Any] | None:
-    """Applied ASC card: concrete first-contact thesis. None when ASC unknown."""
-    if not asc_sign:
-        return None
-    modality = _SIGN_MODALITY.get(asc_sign, "свой темп")
-    if identity_thesis == "builds_through_autonomy":
-        how = (
-            f"В первом контакте — {modality}: сначала проверка, "
-            "что тебя не переформатируют, потом открытость."
-        )
-    else:
-        how = (
-            f"В первом контакте тебя считывают так: {modality} — "
-            "манера начинать, ещё не весь характер."
-        )
-    do = "В новом знакомстве зафиксируй первый жест: дистанция, шаг ближе или сразу правила."
-    return {
-        "sign": asc_sign,
-        **_card(how, do, anchors={"sign": asc_sign}),
-    }
+    """PIC-K03 ASC: orientation × sign manner. Identity thesis is not the source."""
+    del identity_thesis
+    catalog = load_objects()
+    return derive_k03_angle_card_v0(catalog, angle_id="astro.object.asc", sign=asc_sign)
 
 
 def build_mc_applied_v0(
@@ -570,33 +683,9 @@ def build_mc_applied_v0(
     *,
     mc_sign: str | None,
 ) -> dict[str, Any] | None:
-    if not mc_sign:
-        return None
-    modality = _SIGN_MODALITY.get(mc_sign, "свой критерий результата")
-    if identity_thesis == "builds_through_autonomy":
-        how = (
-            f"Публичная роль — {modality}: видимость без сдачи своего метода."
-        )
-    else:
-        how = f"Публичная роль и результат — {modality}."
-    do = "Выбери один видимый результат — маленький, но названный — и доведи до «сделано»."
-    return {
-        "sign": mc_sign,
-        **_card(how, do, anchors={"sign": mc_sign}),
-    }
-
-
-def _house_how_do(
-    house: int,
-    *,
-    identity_thesis: str,
-    cusp_sign: str | None,
-    planets: list[str],
-) -> tuple[str, str]:
-    """Recognition thesis only — no agenda «do», no mechanism tint, no planet dump."""
-    del identity_thesis, planets  # reserved; thesis is house×sign, not identity stamp
-    how = _house_recognition_how(house, cusp_sign)
-    return how, ""
+    del identity_thesis
+    catalog = load_objects()
+    return derive_k03_angle_card_v0(catalog, angle_id="astro.object.mc", sign=mc_sign)
 
 
 def build_house_person_lines_for_identity_v0(
@@ -605,33 +694,74 @@ def build_house_person_lines_for_identity_v0(
     cusp_signs: dict[int, str] | None = None,
     planets_by_house: dict[int, list[str]] | None = None,
 ) -> dict[str, dict[str, Any]]:
-    """Applied house cards for all 12 houses: domain + cusp modality + planet function when occupied."""
-    cusp_signs = cusp_signs or {}
+    """Occupied houses only. Thesis / empty occupancy → omit. Cusp encyclopedia is not K03."""
+    del identity_thesis, cusp_signs
     planets_by_house = planets_by_house or {}
+    catalog = load_objects()
+    seen_houses: set[int] = set()
     out: dict[str, dict[str, Any]] = {}
-    for house in range(1, 13):
-        planets = [p for p in planets_by_house.get(house, []) if p in _PERSONAL_PLANETS]
-        # Stable planet order
-        planets = [p for p in ("Sun", "Moon", "Mercury", "Venus", "Mars") if p in planets]
-        cusp = cusp_signs.get(house)
-        how, do = _house_how_do(
-            house,
-            identity_thesis=identity_thesis,
-            cusp_sign=cusp,
-            planets=planets,
-        )
-        anchors: dict[str, Any] = {}
-        if cusp:
-            anchors["cusp_sign"] = cusp
-        if planets:
-            anchors["planets"] = planets
-        out[str(house)] = _card(how, do, anchors=anchors or None)
+    for body in _K03_RANK:
+        houses = [
+            int(h)
+            for h, names in planets_by_house.items()
+            if isinstance(names, list) and any(str(n).lower() == body for n in names)
+        ]
+        if not houses:
+            continue
+        house = houses[0]
+        if house in seen_houses:
+            continue
+        card = derive_k03_house_card_v0(catalog, body, house)
+        if not card:
+            continue
+        out[str(house)] = card
+        seen_houses.add(house)
     return out
 
 
-# Back-compat name used by older tests / callers expecting angular-only map.
 def build_house_person_lines_angular_only_v0(identity_thesis: str) -> dict[str, dict[str, Any]]:
     return build_house_person_lines_for_identity_v0(identity_thesis)
+
+
+def build_k03_applied_v0(payload: dict[str, Any]) -> dict[str, Any]:
+    """Closed K03 pack: ASC/MC + occupied houses, or omit."""
+    empty = {
+        "houses": {},
+        "asc": None,
+        "mc": None,
+        "k03_source": "omitted_no_full_natal",
+    }
+    if not _k03_natal_is_full(payload):
+        return empty
+    catalog = load_objects()
+    anchors = extract_swiss_house_asc_anchors_v0(payload)
+    occupied = _k03_planet_houses(payload)
+    houses: dict[str, dict[str, Any]] = {}
+    used: set[int] = set()
+    for body in _K03_RANK:
+        house = occupied.get(body)
+        if house is None or house in used:
+            continue
+        card = derive_k03_house_card_v0(catalog, body, house)
+        if not card:
+            continue
+        houses[str(house)] = card
+        used.add(house)
+    asc = derive_k03_angle_card_v0(
+        catalog, angle_id="astro.object.asc", sign=anchors.get("asc_sign")
+    )
+    mc = derive_k03_angle_card_v0(
+        catalog, angle_id="astro.object.mc", sign=anchors.get("mc_sign")
+    )
+    if not houses and not asc and not mc:
+        empty["k03_source"] = "omitted_no_grounded_atom"
+        return empty
+    return {
+        "houses": houses,
+        "asc": asc,
+        "mc": mc,
+        "k03_source": "il2_occupied_house_and_angles",
+    }
 
 
 def matrix_style_fields_for_identity_v0(identity_thesis: str) -> dict[str, str]:
@@ -855,13 +985,8 @@ def apply_spheres_and_houses_to_payload(
     *,
     identity_thesis: str,
 ) -> None:
-    """Mutate payload: applied ASC/houses + matrix styles + aspects. Path spheres are PIC-K07."""
-    anchors = extract_swiss_house_asc_anchors_v0(payload)
-    houses = build_house_person_lines_for_identity_v0(
-        identity_thesis,
-        cusp_signs=anchors["cusp_signs"],
-        planets_by_house=anchors["planets_by_house"],
-    )
+    """Mutate payload: PIC-K03 applied ASC/houses + matrix styles + aspects. Path spheres are PIC-K07."""
+    k03 = build_k03_applied_v0(payload)
     styles = matrix_style_fields_for_identity_v0(identity_thesis)
     contract = payload.get("profile_contract_v1")
     if isinstance(contract, dict):
@@ -869,21 +994,21 @@ def apply_spheres_and_houses_to_payload(
         contract.update(styles)
         payload["profile_contract_v1"] = contract
     payload["character_engine_house_lines_v0"] = {
-        "projection_version": "character_engine_house_lines_v0.8",
+        "projection_version": "character_engine_house_lines_v0.9",
         "identity_thesis": identity_thesis,
-        "houses": houses,
+        "houses": k03["houses"],
+        "k03_source": k03["k03_source"],
         "note": (
-            "One recognition sentence per house (house × cusp sign). "
-            "No agenda do / no mechanism tint. Cusp/sign/degree remain Swiss."
+            "PIC-K03 occupied-house how/do from IL-2 planet×house. "
+            "Unoccupied houses omit. Cusp/sign/degree remain Swiss. Not K07 spheres."
         ),
     }
-    asc = build_asc_applied_v0(identity_thesis, asc_sign=anchors.get("asc_sign"))
-    mc = build_mc_applied_v0(identity_thesis, mc_sign=anchors.get("mc_sign"))
     payload["character_engine_asc_v0"] = {
-        "projection_version": "character_engine_asc_v0.1",
+        "projection_version": "character_engine_asc_v0.2",
         "identity_thesis": identity_thesis,
-        "asc": asc,
-        "mc": mc,
-        "note": "Applied first-contact / role cards; omit when angle unknown.",
+        "asc": k03["asc"],
+        "mc": k03["mc"],
+        "k03_source": k03["k03_source"],
+        "note": "PIC-K03 ASC/MC from F05 angle orientation × sign manner. House 1/10 occupancy is not this card.",
     }
     apply_aspect_lines_to_payload(payload, identity_thesis=identity_thesis)

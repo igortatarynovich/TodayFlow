@@ -246,19 +246,17 @@ export function buildLifeMapSections(
     const ce = houseLines?.[String(item.house)];
     const ceHow = ce?.how?.trim() || ce?.line?.trim() || null;
     const ceDo = ce?.do?.trim() || null;
-    // Prefer CE thesis; never natal-interpretation encyclopedia for Profile life map.
-    const summary = ceHow || HOUSE_FALLBACK[item.house] || "";
-
+    if (!ceHow) return null;
     return {
       house: item.house,
       title: item.title,
       routeTitle: item.routeTitle,
       href: item.href,
       accent: item.accent,
-      summary,
+      summary: ceHow,
       do: ceDo,
     };
-  });
+  }).filter((item): item is LifeMapSection => item != null);
 }
 
 export function getPlanetSignId(

@@ -366,4 +366,32 @@ describe("live Profile frames", () => {
     expect(tips?.text_class).toBe("generated");
     expect(scanDisplayGrammar(explore)).toEqual([]);
   });
+
+  it("PIC-K03 emits P6.applied.* on Explore, not as a path act", () => {
+    const path = emitProfileDisplayFrame({ core: journeyCore });
+    expect(path.atoms?.some((a) => String(a.slot_id).startsWith("P6.applied."))).toBe(false);
+
+    const explore = emitProfileDisplayFrame({
+      core: journeyCore,
+      appliedHowDo: {
+        asc: {
+          how: "doorway-meeting / how-met — questions, options.",
+          do: "В первом контакте учитывай: doorway-meeting, how-met.",
+        },
+        houses: {
+          "4": {
+            how: "act / pursue — home, family, roots.",
+            do: "В этой зоне учитывай: home, family, roots.",
+          },
+        },
+      },
+    });
+    const asc = explore.atoms?.find((a) => a.slot_id === "P6.applied.asc");
+    const house = explore.atoms?.find((a) => a.slot_id === "P6.applied.house");
+    expect(asc?.surface).toBe("explore");
+    expect(asc?.text).toMatch(/doorway-meeting/);
+    expect(house?.surface).toBe("explore");
+    expect(house?.text).toMatch(/home, family/);
+    expect(scanDisplayGrammar(explore)).toEqual([]);
+  });
 });

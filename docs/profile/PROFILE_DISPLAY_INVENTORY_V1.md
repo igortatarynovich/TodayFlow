@@ -56,6 +56,7 @@ Conditional: `P-forming` · `P-data`.
 | `effort_where` | `P4.effort_vector` · `P4.sphere.*` | сфера = где, не второй вектор |
 | `decode` | `P6.natal_decode` | не второй логлайн; не путь |
 | `deep_tips` | `P6.practical_tips` | не how/need/risk сферы; не P4 |
+| `applied_chart` | `P6.applied.*` | не K07 sphere; не путь P1–P5; не decode |
 
 Проверка proposition: нормализовать строки; Jaccard ≥ 0.72 или substring ≥24 = дубль роли.
 
@@ -114,6 +115,9 @@ Conditional: `P-forming` · `P-data`.
 | `P6.style.*` | Как решаю / близость / деньги? | generated | contract styles |
 | `P6.natal_decode` | Как карта объясняет уже известное ядро? | generated | opt-in decode |
 | `P6.practical_tips` | Какой 1–2 практических шага у выбранной grounded темы? | generated | K16 from K07 how/need/risk |
+| `P6.applied.asc` | Как ASC работает как край карты? | generated | K03 F05 orientation × sign |
+| `P6.applied.mc` | Как MC работает как край карты? | generated | K03 F05 orientation × sign |
+| `P6.applied.house` | Как занятый дом работает в своей зоне? | generated | K03 IL-2 planet×house |
 | `TF.no_connection` | сеть | chrome | shared |
 | `TF.unavailable` | сервер flagged | chrome | shared |
 
@@ -654,6 +658,22 @@ Calc visuals/facts. one_question: как устроена карта / каки�
 | persist_key | user deep-theme selection (7-day cadence) |
 | anti_dupe_group | `deep_tips` |
 
+#### `P6.applied.asc` / `P6.applied.mc` / `P6.applied.house`
+
+| | |
+|---|---|
+| one_question | Как **эта часть карты** работает в своей зоне — и что с этим учитывать? |
+| text_class | generated |
+| authority | PIC-K03 (`character_engine_house_lines_v0` / `character_engine_asc_v0`) |
+| semantic_source | F05 angle orientation × sign manner; occupied F06 `compose_planet_in_house` |
+| allowed_inputs | full natal; ASC/MC when F05 present; occupied Sun–Saturn houses with composed IL-2 |
+| forbidden_inference | 12-house encyclopedia; K01 thesis; K07 sphere ids; K15 Decode; K16 tips; DSC/IC; P1–P5 path acts |
+| output | how + do on Explore/Map |
+| budget | how ≤220 · do ≤180 · occupied houses only |
+| required | нет |
+| empty_behavior | omit (`k03_source=omitted_no_full_natal` / `omitted_no_grounded_atom`) |
+| anti_dupe_group | `applied_chart` |
+
 **Forbidden chrome:** marketing `benefits[]` («Потенциалы и таланты»…) — нет `slot_id` → нет UI.
 
 ---
@@ -722,6 +742,7 @@ Cut 2026-08-29: `ProfileCharacterScene` removed from path; P4 spheres cap 0–2;
 
 | Date | Change |
 |------|--------|
+| 2026-09-20 | `P6.applied.asc/mc/house` — PIC-K03 COMPLETE: Explore/Map how/do from F05/F06 IL-2; occupied houses + ASC/MC only; not path |
 | 2026-09-20 | `P6.practical_tips` — PIC-K16 COMPLETE: Explore emit + chooser; 1–2 do-lines from selected K07 how/need/risk; omit without grounded sphere; not path/P4 |
 | 2026-09-20 | `P6.natal_decode` — PIC-K15 COMPLETE: Explore emit + panel after chart; explains K01 (+ K05) via natal facts; GET never generates; Stage3 trap-bank is not input |
 | 2026-09-20 | `P3.*` — PIC-K06 secondary tensions OMIT-BY-DESIGN on the path; no new slot; leftover F07 stay N/Explore |

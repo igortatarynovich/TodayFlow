@@ -162,7 +162,6 @@ function meaningForInfluenced(
 
   if (id === "asc" || id === "rising") {
     const fromCard = frameworkBody(cards, "rising") || frameworkBody(cards, "asc");
-    const ascHow = ctx.core?.character_engine_asc_v0?.asc?.how?.trim();
     const ascValue = ctx.core?.portrait_why_v0?.portrait_influenced_by?.find((r) => r.id === "asc")
       ?.value;
     const signId = ascValue ? normalizeSignId(String(ascValue)) : null;
@@ -186,18 +185,14 @@ function meaningForInfluenced(
         fromKnowledge ||
         byElement ||
         fromCard ||
-        ascHow ||
         "В первом контакте тебя считывают по темпу и дистанции — до знакомства с ядром.",
     );
   }
 
   if (id === "mc" || id === "midheaven") {
     const fromCard = frameworkBody(cards, "mc");
-    const mcHow = ctx.core?.character_engine_asc_v0?.mc?.how?.trim();
     return clip(
-      fromCard ||
-        mcHow ||
-        "Публичная роль и след результата — то, по чему тебя судят снаружи.",
+      fromCard || "Публичная роль и след результата — то, по чему тебя судят снаружи.",
     );
   }
 

@@ -138,11 +138,9 @@ def test_consumption_overwrites_recognition_why_trap(monkeypatch) -> None:
     assert spheres == {}
     assert out["character_engine_consumption_v0"]["sphere_source"] == "omitted_no_grounded_f06"
     houses = (out.get("character_engine_house_lines_v0") or {}).get("houses") or {}
-    h1 = (houses.get("1") or {}).get("how") or (houses.get("1") or {}).get("line") or ""
-    assert "1" in houses and h1
-    assert "темп" in h1.lower() or "дистанц" in h1.lower() or "контакт" in h1.lower()
-    assert houses["1"].get("line") == houses["1"].get("how")
-    assert not (houses["1"].get("do") or "").strip()
+    assert houses == {}
+    assert (out.get("character_engine_house_lines_v0") or {}).get("k03_source") == "omitted_no_full_natal"
+    assert (out.get("character_engine_asc_v0") or {}).get("asc") in (None, {})
     assert "Вы " not in (contract.get("emotional_style") or "")
     assert "ты " in (contract.get("emotional_style") or "").lower() or (contract.get("emotional_style") or "").startswith(
         "Эмоции ты"
@@ -268,13 +266,7 @@ def test_consumption_does_not_stamp_aspect_gists(monkeypatch) -> None:
     aspects = (out.get("character_engine_aspect_lines_v0") or {}).get("aspects") or {}
     assert aspects == {}
     houses = (out.get("character_engine_house_lines_v0") or {}).get("houses") or {}
-    assert set(houses) == {str(i) for i in range(1, 13)}
-    assert not any("не энциклопедия" in (h.get("line") or h.get("how") or "").lower() for h in houses.values())
-    for h in houses.values():
-        assert h.get("how") or h.get("line")
-        assert not (h.get("do") or "").strip()
-        assert "здесь это звучит" not in (h.get("how") or "").lower()
-        assert "темп зоны" not in (h.get("how") or "").lower()
+    assert houses == {}
 
 
 def test_consumption_applied_asc_and_occupied_house(monkeypatch) -> None:
@@ -283,10 +275,16 @@ def test_consumption_applied_asc_and_occupied_house(monkeypatch) -> None:
         type("S", (), {"character_engine_profile_consumption": True})(),
     )
     payload = _payload()
-    # Cancer ASC + cusp facts + Sun in 8th (occupied non-angular).
     stage2 = payload["diagnostics"]["character_engine_stage2"]
+    stage2["stage0"]["capability"] = {"natal_mode": "full"}
+    # Cancer ASC + cusp facts + Sun in 8th (occupied non-angular).
     stage2["stage0"]["raw_facts"].extend(
         [
+            {
+                "fact_id": "f_sun_h",
+                "fact_type": "planet_sign:sun",
+                "value": {"sign": "Aquarius", "house": 8},
+            },
             {
                 "fact_id": "f_asc",
                 "fact_type": "angle_sign:ascendant",
@@ -320,26 +318,26 @@ def test_consumption_applied_asc_and_occupied_house(monkeypatch) -> None:
     asc = (out.get("character_engine_asc_v0") or {}).get("asc") or {}
     assert asc.get("sign") == "cancer"
     assert asc.get("how") and asc.get("do")
-    assert "своих" in asc["how"].lower() or "открыт" in asc["how"].lower() or "контакт" in asc["how"].lower()
+    assert "doorway-meeting" in asc["how"]
+    assert "close" in asc["how"] or "indirect" in asc["how"]
+    assert "своих" not in asc["how"].lower()
     assert "не энциклопедия" not in asc["how"].lower()
     mc = (out.get("character_engine_asc_v0") or {}).get("mc") or {}
     assert mc.get("sign") == "pisces" and mc.get("do")
+    assert "culmination" in (mc.get("how") or "") or "outer-mark" in (mc.get("how") or "")
 
     houses = (out.get("character_engine_house_lines_v0") or {}).get("houses") or {}
-    assert set(houses) == {str(i) for i in range(1, 13)}
-    assert "1" in houses and houses["1"].get("how")
-    # Cancer cusp on 1 → recognition about «своих» / open carefully.
-    assert "своих" in (houses["1"].get("how") or "").lower() or "открыва" in (houses["1"].get("how") or "").lower()
-    assert "8" in houses  # Aquarius cusp — method/distance in vulnerability
-    assert "метод" in (houses["8"].get("how") or "").lower() or "дистанц" in (houses["8"].get("how") or "").lower()
-    assert "солнце" not in (houses["8"].get("how") or "").lower()  # no planet-label dump
-    assert houses["2"].get("how")
-    assert houses["11"].get("how")
-    assert not (houses["2"].get("do") or "").strip()
-    # No mechanism stamp spam across every house.
-    hows = [(h.get("how") or "") for h in houses.values()]
-    assert sum("через автономию и собственную систему" in h.lower() for h in hows) <= 1
-    assert all("здесь это звучит" not in h.lower() for h in hows)
+    assert set(houses) == {"8"}
+    assert (out.get("character_engine_house_lines_v0") or {}).get("k03_source") == "il2_occupied_house_and_angles"
+    assert "shared-resources" in (houses["8"].get("how") or "") or "intimacy" in (houses["8"].get("how") or "")
+    assert houses["8"].get("do")
+    assert "солнце" not in (houses["8"].get("how") or "").lower()
+    assert "1" not in houses
+    assert "2" not in houses
+    assert "ясность своего контура" not in str(houses)
+    life_spheres = (out.get("profile_contract_v1") or {}).get("life_spheres") or {}
+    assert "8" not in life_spheres
+    assert not (out.get("character_engine_deep_themes_v0") or {}).get("tips_by_theme")
 
 
 def test_k05_insight_from_grounded_aspect_pair_beats_trap_bank(monkeypatch) -> None:

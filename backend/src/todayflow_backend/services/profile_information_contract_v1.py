@@ -82,12 +82,18 @@ PROFILE_MEANING_PRODUCERS: Final[tuple[dict[str, object], ...]] = (
         "pic_f": ("F06",),
         "slot_id": "P6.practical_tips",
     },
+    {
+        "module": "character_engine_profile_consumption_spheres_houses_v0",
+        "pic_k": ("K03",),
+        "pic_f": ("F05", "F06", "F03"),
+        "slot_id": "P6.applied.house",
+    },
 )
 
 KNOWLEDGE_TO_SLOT: Final[dict[str, tuple[str, ...]]] = {
     "K01": ("P1.recognition_line", "P1.identity_core"),
     "K02": ("P2.anchor.sun", "P2.anchor.moon", "P2.anchor.asc", "P2.anchor.mc", "P2.anchor.element"),
-    "K03": ("P2.anchor.asc", "P2.anchor.mc"),
+    "K03": ("P6.applied.asc", "P6.applied.mc", "P6.applied.house"),
     "K04": ("P3.insight", "P3.help"),
     "K05": ("P3.insight",),
     "K06": (),
@@ -113,7 +119,7 @@ COVERAGE_STATUSES: Final[frozenset[str]] = frozenset(
 PIC_COVERAGE: Final[tuple[dict[str, object], ...]] = (
     {"pic_k": "K01", "status": "PARTIAL", "slot_id": ("P1.recognition_line", "P1.identity_core")},
     {"pic_k": "K02", "status": "COMPLETE", "slot_id": ("P2.anchor.sun", "P2.anchor.moon", "P2.anchor.asc")},
-    {"pic_k": "K03", "status": "PARTIAL", "slot_id": ("P2.anchor.asc", "P2.anchor.mc")},
+    {"pic_k": "K03", "status": "COMPLETE", "slot_id": ("P6.applied.asc", "P6.applied.mc", "P6.applied.house")},
     {"pic_k": "K04", "status": "COMPLETE", "slot_id": ("P3.insight", "P3.help")},
     {"pic_k": "K05", "status": "COMPLETE", "slot_id": ("P3.insight",)},
     {"pic_k": "K06", "status": "OMIT-BY-DESIGN", "slot_id": ()},

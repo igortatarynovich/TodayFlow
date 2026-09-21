@@ -4,7 +4,6 @@ import type { AspectCallout } from "@/lib/types";
 import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import {
   ensureTwelveProfileHouses,
-  HOUSE_FALLBACK,
   HOUSE_LAYER,
 } from "@/components/profile/profileHouseConstants";
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
@@ -97,15 +96,14 @@ export function ProfileChartFullMap({
                   if (how) {
                     return (
                       <>
-                        <p className={styles.houseText}>{how}</p>
+                        <p className={styles.houseText} data-testid={`profile-k03-house-${house.house}`}>
+                          {how}
+                        </p>
                         {doLine ? <p className={styles.houseDo}>{doLine}</p> : null}
                       </>
                     );
                   }
-                  // No CE thesis: short person-facing fallback only — never natal encyclopedia.
-                  const short = HOUSE_FALLBACK[house.house] || null;
-                  if (!short) return null;
-                  return <p className={styles.houseText}>{short}</p>;
+                  return null;
                 })()}
               </article>
             );
