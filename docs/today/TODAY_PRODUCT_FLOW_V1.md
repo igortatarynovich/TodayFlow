@@ -244,6 +244,36 @@ USER RESPONSE           →  GRATITUDE HISTORY
 
 ---
 
+## Product-gate selection (2026-09-21)
+
+После **TODAY_INFORMATION_CONTRACT: CLOSED / PASS** следующий шаг — не новое информационное N и не Compatibility Information Contract.
+
+Сверка: этот файл (cycle) · [TODAY_DISPLAY_INVENTORY_V1](./TODAY_DISPLAY_INVENTORY_V1.md) (last UI authority) · [FULL_USER_PATH_CANON_V1](../audits/FULL_USER_PATH_CANON_V1.md) §13/§16.
+
+| Gate | Статус после сверки | Класс |
+|------|---------------------|--------|
+| 4-surface cutover / ritual-first funnel | **CLOSED** (Phase 2.2). `/today` opens on `today`, then `ritual` · `my_day` · `evening` | cycle already locked |
+| **X3 Theme / Focus / Step** | **OPEN — NEXT.** Слоты есть (`T1` theme · `T3.focus_*` · `T3.priority`). Остаток: читаемый spine vs leftover ritual copy, который всё ещё звучит как начало дня | experience on closed N |
+| X4 honest card reveal | OPEN, очередь сразу после X3. Seed/prebake vs «выбери ту, к которой тянет» | experience copy |
+| X5 calendar number | OPEN, вместе с X4 (§16.1 п.4). Copy «твоё число» vs календарное число сегодняшнего дня | experience copy |
+| X11 legacy narrative | OPEN, P1. Glance leftover / stacked `?experience=1` / promise-trap copy. Не пятый акт | cleanup |
+| X14 progress + D2 continuity | OPEN, P1. `T1.continuity` и `T3.tracker` есть; completeness / placement не закрыты | experience |
+| Compatibility Information Contract | **не выбран.** Отдельная таблица (PIC §9). Не автоматическое продолжение TIC | other section N |
+| TIC-K21 / IL dump / PIC resume | **запрещены** этой сверкой | not a product gate |
+
+**Следующий executable gate:** X3 — Theme / Focus / Step как пользовательский spine поверх уже закрытого N. Не расширять TIC. Не rebuild сервера. Новую ветку открывать только под этот gate, не продолжать `cursor/today-information-contract` по инерции.
+
+### Architecture impact — product-gate selection (2026-09-21)
+
+- **SoT before:** TIC CLOSED / PASS; next gate «from canon», unnamed. PIC §9 named Compatibility as a separate table, not a queue item.
+- **SoT after:** next Today product gate is Full User Path **X3** (Theme/Focus/Step experience). X4–X5 then X11/X14. Not a new Information Contract. Not Compatibility N.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this file · FULL_USER_PATH §0/§13/§16 · tracker · TIC §12/handoff
+- **Backward compatible?** yes. Selection only; no product paint in this hop.
+
+---
+
 ## Architecture impact — compute≠display · no CE · no action card (2026-08-29)
 
 - **SoT before:** four surfaces listed without stating that Personal Day persist can precede the MY DAY visit. Guest ritual did not split catalog vs personal lens. Optional MY DAY cards included a duplicate «действие».

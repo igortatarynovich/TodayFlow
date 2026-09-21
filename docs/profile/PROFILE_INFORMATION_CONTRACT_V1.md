@@ -247,7 +247,7 @@ Owner может сузить M (убрать показ), не расширяя
 | Раздел | Контракт | Сейчас |
 |--------|----------|--------|
 | Today | [TODAY_INFORMATION_CONTRACT_V1](../today/TODAY_INFORMATION_CONTRACT_V1.md) | **CLOSED / PASS** (N=20). PIC не источник очереди |
-| Compatibility | нужен свой Information Contract | два Profile N + pair derivation (не написано как конечное множество) |
+| Compatibility | нужен свой Information Contract | два Profile N + pair derivation (не написано как конечное множество). **Не выбран** как следующий gate после TIC (Today X3) |
 | Tarot | то же | card_base + question/spread; не закрытый N ответа |
 | Практики | taxonomy + coverage ledger | метод/item, не «знание о человеке» |
 

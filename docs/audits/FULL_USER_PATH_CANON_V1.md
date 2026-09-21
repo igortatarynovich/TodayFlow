@@ -1,6 +1,6 @@
 # TodayFlow — полный пользовательский путь и целевой канон v1
 
-**Статус:** LIVING SoT пользовательского пути (обновлён 2026-07-24 — walkthrough vs code)  
+**Статус:** LIVING SoT пользовательского пути (обновлён 2026-09-21 — product-gate selection after TIC CLOSED / PASS)  
 **Роль:** карта маршрута и решений «зачем / какие данные / какая польза» по экранам.  
 **Не заменяет:** Availability · Intake · Capability · Generation Contracts (они — следствия пути).  
 **Связанные:** [USER_JOURNEY_AUDIT_2026-07-20.md](./USER_JOURNEY_AUDIT_2026-07-20.md) · [PRODUCT_DATA_INTAKE.md](../PRODUCT_DATA_INTAKE.md) · [AUTH_SESSION_CONTRACT_V1.md](../AUTH_SESSION_CONTRACT_V1.md) · [PRODUCT_GENERATION_CONTRACTS.md](../PRODUCT_GENERATION_CONTRACTS.md) · [status/TODAY_CANON_VS_CODE_DIFF.md](../status/TODAY_CANON_VS_CODE_DIFF.md)
@@ -39,7 +39,7 @@ Landing → (1B | 1A) → Preview → Guest First Today → save-prompt → Save
 | Продуктовая идея | Ясна: Профиль = карта, Сегодня = гид дня |
 | Маршрут первого входа | **Закреплён:** Preview → Guest First Today → save-prompt → Save → Claim (value-first; см. §4.1) |
 | Лендинг | Primary «Построить мой профиль»; secondary Совместимость; login; guest trials |
-| «Сегодня» | Ritual-first в коде; Theme→Action→Progress в части канона — **открытый** UX-долг (не откатывает A–E) |
+| «Сегодня» | 4-surface Theme-first **locked** ([TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md)). N **CLOSED / PASS**. Остаток UX: **X3** Theme/Focus/Step как читаемый spine, затем X4–X5, затем continuity/progress и legacy cleanup. Не Compatibility N |
 | Время рождения | Не блокирует; без time/place — нет ASC/домов (`unavailable_facts`) |
 | Факты карты | MVP: LLM `natal_facts`; Swiss = legacy |
 | 1A | Dual durable drafts → email bind обоих; free до 3 профилей |
@@ -308,6 +308,8 @@ flowchart TD
 
 ### 6.3 Вечер
 
+Locked Today evening = [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md) §4 **благодарность** (не обещание/ловушка). Строки ниже — leftover vs X11; не SoT locked path.
+
 - Сравнение намерения и результата (`yes/partial/no`)  
 - 1 короткая рефлексия + observations  
 - Сохранение → seed Continuity на завтра  
@@ -315,9 +317,9 @@ flowchart TD
 
 ### 6.4 Факт (риски)
 
-- Ritual-first может прятать Theme/Action до pick (см. TODAY_CANON_VS_CODE_DIFF).  
+- Ritual-first funnel закрыт 4-surface cutover (2026-08-29). Остаток X3: Theme/Focus/Step как читаемый spine vs leftover ritual copy (см. §13).  
 - Spoilers morning в значительной мере закрыты через `day_symbol_states` (см. DAY_SYMBOL_REVEAL); держать регрессионные тесты.  
-- Progress strip и мосты в Profile/Compatibility — частичные.
+- Progress strip и мосты в Profile/Compatibility — частичные (X14 / P1).
 
 ---
 
@@ -534,9 +536,9 @@ flowchart LR
 |----|------|------|----------------|---------|--------|
 | X1 | First Day маршрут | auth→Today; guest Today до email | **Preview→Save→Claim→Profile**; First Today не gate | Value-first + Profile post-claim = SoT | **CLOSED A–E** |
 | X2 | Лендинг | Blueprint ≠ код | Primary «Построить мой профиль»; secondary Compat; login | Код лендинга = launch UX | **CLOSED A–E** (blueprint sync optional) |
-| X3 | Spine Today | Theme vs ritual | Ritual-first в коде | Гибрид Theme/Focus/Step | OPEN — экран Today |
-| X4 | Выбор карты | Theatrical | Seed reveal | Честный reveal copy | OPEN |
-| X5 | Число дня | «Персональное» | Календарное YYYYMMDD | Copy = «число сегодняшнего дня» | OPEN |
+| X3 | Spine Today | Theme vs ritual | 4-surface TODAY first (2026-08-29). Ritual-first funnel **закрыт**. Слоты Theme/Focus/Step есть. Leftover ritual copy всё ещё звучит как начало дня | Гибрид Theme/Focus/Step как читаемый spine | **OPEN — NEXT** (experience on closed N; не новое K) |
+| X4 | Выбор карты | Theatrical | Seed/prebake; copy на locked path ещё «выбери ту, к которой тянет» | Честный reveal copy | OPEN — сразу после X3 |
+| X5 | Число дня | «Персональное» | Календарное YYYYMMDD; copy «твоё число дня» | Copy = «число сегодняшнего дня» | OPEN — с X4 (§16.1 п.4) |
 | X6 | 35 дней | Путаница TTL | Habit Map 7×5 | Только maps | OPEN docs |
 | X7 | Фамилия | Optional last_name | VF без фамилии | Не собирать в основном пути | OPEN audit forms |
 | X8 | Profile jargon | «Живые тексты» | В UI | Voice-safe labels | OPEN |
@@ -602,12 +604,14 @@ flowchart LR
 
 **Done A–E (не откатывать без user bug):** Preview→Save→Claim→Profile · magic signup · dual 1A · `natal_facts` · `max_profiles=3`.
 
+**После TIC CLOSED / PASS (2026-09-21):** следующий executable Today gate = **X3** (п.3). Не Compatibility Information Contract. Не TIC-K21. Не IL. Не PIC. X16 / live Landing-path / X10 — другие поезда; эта сверка их не стартует.
+
 **P0 — сверка кода с этим каноном (экран за экраном)**
 
-0. **Personal Model code gaps (X16)** — compliance audit; не плодить принципы.  
-1. Прогнать живой путь Landing → … → Profile против §1.3; чинить только drift.  
-2. Residual claim chips (intent/reality/mood) — X10.  
-3. Theme/Focus/Step не прятать за полным ритуалом (X3).  
+0. **Personal Model code gaps (X16)** — compliance audit; не плодить принципы. Не этот hop.  
+1. Прогнать живой путь Landing → … → Profile против §1.3; чинить только drift. Не этот hop.  
+2. Residual claim chips (intent/reality/mood) — X10. Не этот hop.  
+3. Theme/Focus/Step не прятать за ритуальным copy (**X3 — NEXT**). Cutover 4-surface уже сделан; gate = читаемый spine.  
 4. Честный copy карты + календарное число дня (X4–X5).
 
 **P1 — ясность сущностей**
@@ -681,3 +685,4 @@ flowchart LR
 | 2026-07-21 | Первая версия полного аудита пути и целевого канона |
 | 2026-07-21 | §0− + X16 → code compliance audit; откат ошибочного «нового принципа» |
 | 2026-07-24 | §4.1 + шапка: путь к Save = Preview → Guest First Today → `guest-save-prompt` → `/onboarding/save` (не CTA Save на Preview); walkthrough web — путь цел |
+| 2026-09-21 | Product-gate selection after TIC CLOSED / PASS. X3 fact: ritual-first funnel closed; remainder = Theme/Focus/Step spine. Next executable Today gate = X3. Not Compatibility N. |

@@ -13,6 +13,8 @@ Not PIC. Not IL dump. Not P1 fill. Do not rebuild server until asked.
 
 TIC is **closed**. Do **not** invent TIC-K21. Do **not** continue this train by inertia.
 
+Selected next product gate (canon, 2026-09-21): Full User Path **X3**. Open a **new** branch only when that gate starts.
+
 Glance leftover is **out of TIC locked-surface scope** (`TodayGlanceAct` unmounted; `glanceSection` unrendered). If a later audit finds it mounted on the 4-surface, the freeze is void and the gate fails — fix in a separate hop, not inside an audit.
 
 ---
@@ -20,7 +22,7 @@ Glance leftover is **out of TIC locked-surface scope** (`TodayGlanceAct` unmount
 ## 1. First 15 minutes
 
 1. This file + tracker NOW (`TIC CLOSE-OUT PASS`) + Information Contract §12.
-2. Do not start a new TIC-K. Next product gate is chosen from canon.
+2. Do not start a new TIC-K. Selected next product gate is Full User Path **X3** (new branch when it starts).
 3. Run (ledger only): `backend/.venv/bin/python -m pytest tests/test_today_information_contract_closeout_v1.py -q --tb=short --no-cov`
 4. G0 stays deferred. Do not compose-rebuild.
 
@@ -41,7 +43,13 @@ Gate: `evaluate_tic_closeout`. FE: `todayTicCloseout.test.ts`.
 
 ## 3. Queue
 
-**Empty.** Next named product gate comes from canon (PIC §9 names Compatibility Information Contract as a separate table). Not this file. Not Glance unless a later audit puts it in locked-surface scope.
+This file stays **frozen**. Execution of the next gate is a **new branch**, not a continuation of this train.
+
+**Selected (2026-09-21):** Full User Path **X3** — Theme / Focus / Step as readable spine on locked 4-surface. SoT: [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md) product-gate selection · [FULL_USER_PATH_CANON_V1](../audits/FULL_USER_PATH_CANON_V1.md) §13/§16.
+
+After X3 (not this freeze): X4 honest card reveal + X5 calendar-number copy · then P1 X11 legacy narrative · X14 progress / D2 continuity.
+
+Not selected: Compatibility Information Contract · TIC-K21 · IL · PIC.
 
 ---
 
@@ -52,3 +60,4 @@ Gate: `evaluate_tic_closeout`. FE: `todayTicCloseout.test.ts`.
 - Resume PIC / carry CE prose / expand IL.
 - Rebuild server. Untrip billing. Merge/deploy only if asked.
 - Reopen Glance as a fifth act from this freeze.
+- Auto-start Compatibility Information Contract from this freeze.

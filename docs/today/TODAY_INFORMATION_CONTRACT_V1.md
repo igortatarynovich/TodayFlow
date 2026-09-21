@@ -359,7 +359,7 @@ Owner может сузить M (убрать показ), не расширяя
 | Раздел | Контракт | Сейчас |
 |--------|----------|--------|
 | Profile | [PROFILE_INFORMATION_CONTRACT_V1](../profile/PROFILE_INFORMATION_CONTRACT_V1.md) | **исполнен** (17 COMPLETE / 0 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN). Не очередь Today |
-| Compatibility | нужен свой Information Contract | два Profile N + pair derivation |
+| Compatibility | нужен свой Information Contract | два Profile N + pair derivation. **Не выбран** product-gate selection 2026-09-21 (следующий Today gate = Full User Path X3) |
 | Tarot (вопрос, не карта дня) | нужен свой | card_base + question/spread; не этот N |
 | Практики (хаб, не `T3.practice`) | taxonomy + coverage | метод/item, не знание о дне |
 
@@ -460,7 +460,7 @@ Locked surfaces = production 4-surface path: `TodayProductScreenFlow` ← `Today
 
 Gate: `evaluate_tic_closeout` · `backend/tests/test_today_information_contract_closeout_v1.py` · `frontend/src/lib/__tests__/todayTicCloseout.test.ts`.
 
-**Следующий продуктовый gate** выбирается из канона (PIC §9 называет Compatibility Information Contract как отдельную таблицу). Это не продолжение TIC. Не invent `TIC-K21`. Не IL dump. Не PIC. Не rebuild.
+**Следующий продуктовый gate (selection 2026-09-21):** Full User Path **X3** — Theme / Focus / Step как читаемый spine поверх закрытого N. SoT выбора: [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) · [TODAY_DISPLAY_INVENTORY_V1](./TODAY_DISPLAY_INVENTORY_V1.md) · [FULL_USER_PATH_CANON_V1](../audits/FULL_USER_PATH_CANON_V1.md) §13/§16. Не Compatibility Information Contract. Не invent `TIC-K21`. Не IL dump. Не PIC. Не rebuild.
 
 ---
 
@@ -468,6 +468,7 @@ Gate: `evaluate_tic_closeout` · `backend/tests/test_today_information_contract_
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | Product-gate selection: next = Full User Path X3 (Theme/Focus/Step spine). Not Compatibility N. Not K21. |
 | 2026-09-21 | **§12 CLOSE-OUT PASS.** Independent four-block re-audit. TODAY_INFORMATION_CONTRACT: CLOSED / PASS. Glance leftover out of locked-surface scope. Frozen. Next product gate from canon, not TIC inertia. Not K21. |
 | 2026-09-21 | §11 K20 COMPLETE: unavailable MY DAY = `T3.unavailable` only; extraCards/practice/affirmation omit; not surrogate meaning. **20 COMPLETE · 0 PARTIAL**. Next = TIC close-out, not K21. |
 | 2026-09-21 | §11 K17 COMPLETE: XOR affirmation vs practice from existing F10 content class; scene rec/trap do not feed T3.affirmation; empty branch omits. 19 COMPLETE · 1 PARTIAL. Next remaining = K20. |
