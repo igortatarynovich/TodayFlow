@@ -4,6 +4,8 @@ Last updated: 2026-09-21
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (TIC-K10 COMPLETE, 2026-09-21):** `T3.caution` / `day_story.avoid[]` is Personal Narrative after bind. Global scene `do_not` / `avoid_action` stay on the Global scene and do not feed K10. Kitchen / PIC / CE / chrome / inverted K09 `do[]` do not feed the slot. Missing personal avoid omit. Glance leftover is not this hop. TIC_COVERAGE K10 PARTIAL → COMPLETE (**14 COMPLETE / 6 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K13** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
 **NOW (TIC-K09 COMPLETE, 2026-09-21):** `T3.priority` / `day_story.do[]` is Personal Narrative after bind. Global scene `recommended_action` / `props.goals` do not feed the slot. Kitchen / PIC / CE / chrome do not feed K09. Missing personal do omit. Glance leftover is not this hop except rejecting Global scene action as `today_move`. TIC_COVERAGE K09 PARTIAL → COMPLETE (**13 COMPLETE / 7 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K10** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (TIC-K07 COMPLETE, 2026-09-21):** `T3.focus_title` / `personal_day.natal_overlay.focus_axis` is F10: closed 4-set domain of the already-chosen F09 natal_transit natal_point via existing `DOMAIN_NATAL_POINTS`. Kitchen / scene sphere / PIC / CE / chrome do not feed K07. Slot is the domain map_label, not K01 `human_line` or K06 headline. Missing/unmapped omit. TIC_COVERAGE K07 PARTIAL → COMPLETE (**12 COMPLETE / 8 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K09** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
@@ -121,6 +123,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — TIC-K10 personal avoid (2026-09-21)
+
+- **SoT before:** Global scene `do_not` packaged as personal `avoid[]`; FE painted `T3.caution`.
+- **SoT after:** `avoid[]` = Personal Narrative after bind only. I0-locked Global caution stays on the scene and does not feed K10. Missing personal avoid omit. Not a second ranker. Not an inversion of K09 do[]. Not K13+.
+- **Public contract changed?** yes — `avoid[]` may be empty on ok interpretation (omit). No new JSON fields.
+- **Migration required?** no. Cached Global-as-avoid omits on FE until rebuild.
+- **Canon updated?** yes — Information Contract §3/§11 · Display Inventory `T3.caution` · this tracker · handoff
+- **Backward compatible?** yes for API. Caution omits without Personal Narrative avoid.
 
 ## Architecture impact — TIC-K09 personal do (2026-09-21)
 

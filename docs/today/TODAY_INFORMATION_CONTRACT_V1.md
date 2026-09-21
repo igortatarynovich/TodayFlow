@@ -68,6 +68,15 @@ source input
 - **Canon updated?** yes — this file §3/§10/§11 · Display Inventory `T3.priority` · tracker · handoff
 - **Backward compatible?** yes for API. MY DAY priority omits when Personal Narrative did not write do, instead of filling Global action.
 
+## Architecture impact — TIC-K10 personal avoid (2026-09-21)
+
+- **SoT before:** `day_story.avoid[]` copied Global scene `do_not`. FE painted that list as `T3.caution`.
+- **SoT after:** same slot. `avoid[]` is Personal Narrative after bind only. I0-locked Global `do_not` / `avoid_action` stay on the Global scene contract and do not feed K10. No Personal-owned avoid field on the locked overlay schema → omit. Not a second ranker. Not an inversion of K09 `do[]`. Not kitchen / PIC / CE / chrome. Glance leftover is not this hop.
+- **Public contract changed?** yes — `day_story.avoid[]` may be empty on an ok interpretation (omit). No new JSON fields. Semantics = Personal Narrative avoid or empty.
+- **Migration required?** no. Cached packs whose `avoid[]` equals scene `do_not` omit the slot until rebuild.
+- **Canon updated?** yes — this file §3/§10/§11 · Display Inventory `T3.caution` · tracker · handoff
+- **Backward compatible?** yes for API. MY DAY caution omits when Personal Narrative did not write avoid, instead of filling Global do_not.
+
 ---
 
 ## 0. Откуда таблица (ничего не придумано)
@@ -161,7 +170,7 @@ Code Δ: Capability TARGET vs CODE для natal facts не меняет **наб
 | `K07` | Ось / область, где тезис проявляется | `F10` (`F09`) | closed 4-set `work\|money\|relationships\|energy` | first natal_transit natal_point → existing `DOMAIN_NATAL_POINTS` (DOMAINS order); LLM free title = drift; не scene sphere; не K01/K06 prose | domain ids | Overlay | `personal_day.natal_overlay.focus_axis` | **да, если ось выбрана** | `T3.focus_title` | 1 слово map_label; нет оси → omit |
 | `K08` | Как тезис проявляется на этой оси | overlay fields | — | `why_personal` first; не `development_point`; не CE | Personal nest | Pipeline | focus_body | **да, persist Personal** | `T3.focus_body` | 1–2 предл.; overlap headline drop |
 | `K09` | Что конкретно сделать в сегодняшней ситуации | Personal Narrative after bind (`F09` persist) | — | Personal-owned do after bind; не Global `recommended_action` / goals; glance leftover только personal `today_move` ≠ scene action; нет основания → omit | Personal Narrative | Pipeline §6–7 | `day_story.do[]` empty unless Personal Narrative wrote it | **да, persist Personal** | `T3.priority` | 1–3 пункта; пусто omit |
-| `K10` | Где персональный риск | Personal `avoid[]` | — | ≠ T1-risk chips; ≠ дубль priority | avoid[] | Pipeline | caution | **да, persist Personal** | `T3.caution` | 1–2 пункта; пусто omit |
+| `K10` | Где персональный риск | Personal Narrative after bind (`F09` persist) | — | Personal-owned avoid after bind; не Global `do_not` / `avoid_action`; не инверсия K09 `do[]`; нет основания → omit | Personal Narrative | Pipeline §6–7 | `day_story.avoid[]` empty unless Personal Narrative wrote it | **да, persist Personal** | `T3.caution` | 1–2 пункта; пусто omit |
 | `K11` | Что карта значит **в каталоге** | `F13` | tarot card_base | lookup; не «день такой из-за карты» | catalog | Ritual | catalog_card | **да** (guest catalog) | `T2.catalog_card` · `T2.card_face` | 2–4 предл. или omit |
 | `K12` | Что число значит **в каталоге** | `F11` или `F12` | number_base | Personal Day Number если birth, иначе Universal; не продуктовый Personal Day | bank | Ritual / numerology | catalog_number | **да** (guest catalog) | `T2.catalog_number` · `T2.number_glyph` | catalog или omit |
 | `K13` | Как карта окрашивает **уже persisted** Personal Day | K06–K10 × `F13` | catalog as color, not cause | шаг 9 Pipeline; нет persist → omit; CE forbidden | lens | Pipeline §8–9 | lens_card | **да только persist Personal** | `T2.lens_card` | 1–3 предл.; guest/general omit |
@@ -304,11 +313,12 @@ Owner может сузить M (убрать показ), не расширяя
 5. **LLM формулирует после решения Engine/Overlay/catalog.** Не выбирает energy/drivers/windows/axis. Не заполняет пустое generic prose. Downstream не мутирует upstream.
 6. **Критерий закрытия Today train:** для каждого из 20 `TIC-K` определено facts → KB → derivation → wire → M/omit → slot; отображаемый M исполняется кодом. Тогда — не автоматически Compatibility N. Не «IL подключён», не «xfail стал pass», не «Today выглядит лучше».
 7. **PIC закрыт.** Не использовать Profile Information Contract как источник автоматически возникающей Today-работы. Не invent `TIC-K21`. Не включать planned Day Sources в N.
-8. **Не rebuild сервера** на coverage hops. Статусы §11 — факт кода, не желание канона. Очередь — только PARTIAL/MISSING из матрицы; первый remaining = K10.
+8. **Не rebuild сервера** на coverage hops. Статусы §11 — факт кода, не желание канона. Очередь — только PARTIAL/MISSING из матрицы; первый remaining = K13.
 9. **K01 presentation (2026-09-21).** `T1-hero.human_line` = closed formulation of Engine `primary_energy`. Greeting is chrome, not K01. Missing/unknown omit. Overlay does not rewrite the shared-day kind. Not a second energy selector.
 10. **K06 overlay thesis (2026-09-21).** `T3.headline` / `day_personal.summary_ru` = already-derived F09 natal_transit thesis (`personal_astrology.summary_ru`). HD / BaZi / Vedic / electional / name_numbers stay in the pack and do not feed K06. Missing overlay transit → omit. Not `why_personal`. Not T1 human_line. Not a new knowledge type.
 11. **K07 overlay axis (2026-09-21).** `T3.focus_title` / `personal_day.natal_overlay.focus_axis` = F10 closed domain of the already-chosen F09 natal_transit natal_point. Kitchen aliases / Global scene sphere / PIC / CE / chrome do not feed K07. Missing or unmapped → omit. Not a second ranker. Not a duplicate of K01 `human_line` or K06 headline.
 12. **K09 personal do (2026-09-21).** `T3.priority` / `day_story.do[]` = Personal Narrative after bind. Global `recommended_action` / `props.goals` do not feed the slot. I0 personal stage must not mutate scene action. Missing Personal-owned do → omit. Not a second selector. Not K10 avoid. Glance leftover is not this hop except rejecting Global scene action as `today_move`.
+13. **K10 personal avoid (2026-09-21).** `T3.caution` / `day_story.avoid[]` = Personal Narrative after bind. Global `do_not` / `avoid_action` stay on the scene and do not feed the slot. Missing Personal-owned avoid → omit. Not a second ranker. Not an inversion of K09 `do[]`. Not K13+.
 
 ---
 
@@ -341,7 +351,7 @@ IN → TIC-F → TIC-K → derivation → product field → Inventory slot → l
 | `K07` | **COMPLETE** | F09 first `natal_transit` natal_point → existing `DOMAIN_NATAL_POINTS` (DOMAINS order) as F10. Kitchen beats / leftover overlay keys / scene sphere **не** вход | 4-set domain ids + `TODAY_CONTRACT_DOMAIN_LABEL_RU` | nest writer `build_personal_day_nest_v1`; FE `pickPersonalFocusAxisLabel` map_label only, omit without id | `personal_day.natal_overlay.focus_axis` | `T3.focus_title` paint; omit without axis | нет на измеренном hop |
 | `K08` | **COMPLETE** | `conflict.why_personal` → natal_transit beat → `personal_astrology.summary_ru` | overlay fields | `pickInstructionPersonalBridge`; не `development_point`; overlap headline drop | `day_story.day_scenario.conflict.why_personal` | `T3.focus_body` paint | нет на измеренном hop (guest omit = M) |
 | `K09` | **COMPLETE** | Personal Narrative after bind only. Global scene `recommended_action` / `props.goals` **не** вход (`_GLOBAL_SCENE_KEYS`; personal stage must not mutate) | — | projector leaves `do[]` / `today_move` empty without Personal-owned do; FE `pickMyDayPriorityLines` omit Global scene action and omit without persist | `day_story.do[]` | `T3.priority` paint; omit without personal do | нет на измеренном hop |
-| `K10` | **PARTIAL** | Global scene `do_not` ← `avoid_action` (тот же I0 lock) | — | projector → `avoid[]`; FE filter vs priority | `day_story.avoid[]` | `T3.caution` paint | семантика Global caution packaged as personal avoid |
+| `K10` | **COMPLETE** | Personal Narrative after bind only. Global scene `do_not` / `avoid_action` **не** вход (`_GLOBAL_SCENE_KEYS`; personal stage must not mutate) | — | projector leaves `avoid[]` empty without Personal-owned avoid; FE `pickMyDayCautionLines` omit Global scene caution, T1-risk chips, and K09 do inversion; omit without persist | `day_story.avoid[]` | `T3.caution` paint; omit without personal avoid | нет на измеренном hop |
 | `K11` | **COMPLETE** | F13 `DaySymbolState` card id+orientation | `card_base_v1.get_base_meaning` | catalog lookup; не причина дня | `card.hook_reveal.base.meaning` | `T2.catalog_card` / `card_face` paint | нет |
 | `K12` | **COMPLETE** | F12 if birth else F11 (`ritual_day_number`) | `number_base_v1.get_number_base` | catalog lookup | `number.hook_reveal.base.meaning` | `T2.catalog_number` / `number_glyph` paint | нет |
 | `K13` | **PARTIAL** | F13 + `interpretive_chorus.day_card`. **Не** K06–K10. `personal_angle` unused on attach | catalog as color intended | `build_card_hook_reveal` bridge = chorus voice | `card.hook_reveal.bridge_to_day` | `T2.lens_card` paint iff `todayAllowsRitualLens` (capability ∧ persist) | persist gate есть; derivation ≠ Personal×card |
@@ -353,21 +363,20 @@ IN → TIC-F → TIC-K → derivation → product field → Inventory slot → l
 | `K19` | **COMPLETE** | F15 yesterday `evening_completed` + gratitude | user record | `loadYesterdayEveningClose` → `buildGratitudeMemorySlot`; empty omit; no invent on GET fail | client memory slot / day-connection | `T1.continuity` paint D2+ | нет |
 | `K20` | **PARTIAL** | capability + `interpretation_status` / transport | Matrix copy | guest `myDay:false`; unavailable `TODAY_UNAVAILABLE_COPY`; network `TODAY_NO_CONNECTION_COPY` | guest omit MY DAY; `TodayMyDayPane` unavailable card | `T3.unavailable` / `TF.*` paint | honesty copy есть; **`extraCards` (practice/affirmation) всё ещё монтируются на unavailable pane** |
 
-Сводка: **COMPLETE 13** (`K01` `K02` `K03` `K04` `K05` `K06` `K07` `K08` `K09` `K11` `K12` `K18` `K19`) · **PARTIAL 7** (`K10` `K13` `K14` `K15` `K16` `K17` `K20`) · **MISSING 0** · **OMIT-BY-DESIGN 0**.
+Сводка: **COMPLETE 14** (`K01` `K02` `K03` `K04` `K05` `K06` `K07` `K08` `K09` `K10` `K11` `K12` `K18` `K19`) · **PARTIAL 6** (`K13` `K14` `K15` `K16` `K17` `K20`) · **MISSING 0** · **OMIT-BY-DESIGN 0**.
 
 ### Очередь Today (только дефекты матрицы, порядок K)
 
-1. **K10** — Global `do_not` как personal avoid
-2. K13 — chorus bridge, не Personal×card
-3. K14 — chorus bridge, не Personal×number
-4. K15 — color от scene tags, не F05+F09
-5. K16 — practice от Global energy, не Personal focus/risk
-6. K17 — affirmation от `recommended_action`; XOR с practice
-7. K20 — leftover `extraCards` на unavailable MY DAY
+1. **K13** — chorus bridge, не Personal×card
+2. K14 — chorus bridge, не Personal×number
+3. K15 — color от scene tags, не F05+F09
+4. K16 — practice от Global energy, не Personal focus/risk
+5. K17 — affirmation от `recommended_action`; XOR с practice
+6. K20 — leftover `extraCards` на unavailable MY DAY
 
-**Следующий hop = K10 only.** Не IL. Не PIC. Не Compatibility N. Не rebuild.
+**Следующий hop = K13 only.** Не IL. Не PIC. Не Compatibility N. Не rebuild.
 
-Не в очереди: Glance как пятый акт · scent/stone generators (на locked path не рисуются) · emitTodayDisplayFrame rhythm scan gap. K01 closed. K06 closed. K07 closed. K09 closed.
+Не в очереди: Glance как пятый акт · scent/stone generators (на locked path не рисуются) · emitTodayDisplayFrame rhythm scan gap. K01 closed. K06 closed. K07 closed. K09 closed. K10 closed.
 
 ---
 
@@ -375,6 +384,7 @@ IN → TIC-F → TIC-K → derivation → product field → Inventory slot → l
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | §11 K10 COMPLETE: `avoid[]` = Personal Narrative after bind; Global `do_not` stays on scene and does not feed T3.caution; omit without personal avoid. 14 COMPLETE · 6 PARTIAL. Next remaining = K13. |
 | 2026-09-21 | §11 K09 COMPLETE: `do[]` = Personal Narrative after bind; Global `recommended_action` / goals out of T3.priority; omit without personal do. 13 COMPLETE · 7 PARTIAL. Next remaining = K10. |
 | 2026-09-21 | §11 K07 COMPLETE: F10 = first natal_transit natal_point → existing 4-domain membership; FE omit without `focus_axis`; no scene/kitchen fill. 12 COMPLETE · 8 PARTIAL. Next remaining = K09. |
 | 2026-09-21 | §11 K06 COMPLETE: `summary_ru` = F09 natal_transit overlay thesis; kitchen families out of K06. 11 COMPLETE · 9 PARTIAL. Next remaining = K07. |

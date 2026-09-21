@@ -53,7 +53,7 @@ PROJECTION_MAP = {
     "expect": "primary scene what_happens (fill-empty opportunity)",
     "trap": "primary scene.trap",
     "do": "Personal Narrative after bind only; not Global recommended_action / props.goals",
-    "avoid": "primary scene.do_not",
+    "avoid": "Personal Narrative after bind only; not Global do_not / avoid_action",
     "primary_action": "same as do[0]",
     "today_move": "same as do[0]",
     "domains.*": "scenes grouped by wire lens (overwrite)",
@@ -115,6 +115,16 @@ def _personal_narrative_do_lines() -> list[str]:
     I0 locks `scenes[].recommended_action` as Global. Personal stage may not mutate
     it, and `props.goals` are that same Global action. No Personal-owned do field
     exists on the locked Personal overlay schema → omit. Not a second ranker.
+    """
+    return []
+
+
+def _personal_narrative_avoid_lines() -> list[str]:
+    """TIC-K10: Personal Narrative after bind owns `avoid[]`.
+
+    I0 locks `scenes[].avoid_action` as Global. `do_not` is that same Global
+    caution. No Personal-owned avoid field exists on the locked overlay schema
+    → omit. Not a second ranker. Not an inversion of K09 do[].
     """
     return []
 
@@ -676,12 +686,9 @@ def project_day_scenario_onto_day_story_v1(
     base["today_move"] = _clip(do_list[0] if do_list else "", 200)
     base["primary_action"] = _clip(do_list[0] if do_list else "", 200)
 
-    avoid_list: list[str] = []
-    avoid_text = _clip(primary.get("do_not"), 240)
-    if avoid_text:
-        avoid_list.append(avoid_text)
-    # Only scene-derived avoid — never invent a second autopilot line.
-    base["avoid"] = avoid_list[:3]
+    # TIC-K10: avoid[] is Personal Narrative after bind, not Global scene do_not.
+    avoid_list = _personal_narrative_avoid_lines()
+    base["avoid"] = avoid_list
 
     # evening_closure — only when scenario props carry it; never invent closure prose.
     base["evening_closure"] = ""
@@ -709,9 +716,9 @@ def project_day_scenario_onto_day_story_v1(
             evidence_refs=scene_evidence if do_list else [],
         ),
         "avoid": _field_provenance(
-            origin_scene_id=scene_id or None,
-            origin_conflict_id=origin_conflict,
-            evidence_refs=scene_evidence,
+            origin_scene_id=str(scene_id) if avoid_list and scene_id else None,
+            origin_conflict_id=origin_conflict if avoid_list else "",
+            evidence_refs=scene_evidence if avoid_list else [],
         ),
         "talisman": _field_provenance(
             origin_scene_id=str(color.get("origin_scene_id") or scene_id or None),

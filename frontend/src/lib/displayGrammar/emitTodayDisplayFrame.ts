@@ -18,7 +18,7 @@ import {
   type TodayContractV1,
 } from "@/lib/todayContract";
 import { omitIfOverlapsHeadline, pickInstructionPersonalBridge } from "@/lib/todayInstructionBridge";
-import { pickMyDayPriorityLines } from "@/lib/todayMyDayPriority";
+import { pickMyDayCautionLines, pickMyDayPriorityLines } from "@/lib/todayMyDayPriority";
 import { pickPersonalFocusAxisLabel } from "@/lib/todayPersonalFocusAxis";
 import {
   TODAY_SCREEN_FLOW_CAPABILITY,
@@ -356,9 +356,11 @@ function emitMyDay(
     doItems: model.doItems,
     glancePrioritize: input.glancePrioritize,
   });
-  const cautions = model.avoidItems
-    .filter((line) => !priorities.includes(line))
-    .slice(0, 2);
+  const cautions = pickMyDayCautionLines({
+    contract: input.contract,
+    avoidItems: model.avoidItems,
+    priorityLines: priorities,
+  });
 
   pushAtom(atoms, {
     slot_id: "T3.headline",

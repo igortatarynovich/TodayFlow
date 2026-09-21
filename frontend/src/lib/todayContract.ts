@@ -491,6 +491,7 @@ export type TodayContractDayStoryV1 = {
       trap?: string;
       recommended_action?: string;
       do_not?: string;
+      avoid_action?: string;
       domestic_example?: string;
     }>;
     props?: {

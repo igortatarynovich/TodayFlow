@@ -388,5 +388,22 @@ def test_k09_does_not_package_global_recommended_action_as_personal_do():
     assert rec not in projected["do"]
     assert rec != str(projected.get("today_move") or "").strip()
     assert rec != str(projected.get("primary_action") or "").strip()
-    # K10 is not this hop — Global avoid still projects.
-    assert avoid in (projected.get("avoid") or [])
+    assert projected["avoid"] == []
+    # Global do_not stays on the scene contract and does not feed K10.
+    assert avoid == str(primary.get("do_not") or "").strip()
+    assert avoid not in (projected.get("avoid") or [])
+
+
+def test_k10_does_not_package_global_do_not_as_personal_avoid():
+    story, scenario, _ = _scenario_and_fallback()
+    primary = next(sc for sc in scenario["scenes"] if sc.get("role_in_story") == "primary")
+    avoid = str(primary.get("do_not") or "").strip()
+    rec = str(primary.get("recommended_action") or "").strip()
+    assert avoid and rec
+    projected = project_day_scenario_onto_day_story_v1(story, scenario)
+    assert projected["interpretation_status"] == "ok"
+    assert projected["avoid"] == []
+    assert avoid not in (projected.get("avoid") or [])
+    assert rec not in (projected.get("avoid") or [])
+    assert str(primary.get("do_not") or "").strip() == avoid
+    assert validate_day_story_v1(projected) == []

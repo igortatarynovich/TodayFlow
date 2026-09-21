@@ -311,7 +311,7 @@ def validate_day_story_v1(payload: dict[str, Any]) -> list[str]:
             errors.append("unavailable_missing_message")
     else:
         # Full interpretation: editorial slots carry the plot; story is optional when expect+trap exist.
-        # TIC-K09: today_move / do[] may omit without Personal Narrative do.
+        # TIC-K09/K10: today_move / do[] / avoid[] may omit without Personal Narrative lines.
         required = ("theme", "direction", "advantage", "abstain", "global_period")
         for key in required:
             if not str(payload.get(key) or "").strip():
@@ -325,9 +325,9 @@ def validate_day_story_v1(payload: dict[str, Any]) -> list[str]:
         if not isinstance(do_items, list):
             errors.append("do must be list")
         avoid_items = payload.get("avoid")
-        # K10 not this hop: avoid still requires a scene-derived line when interpretation is ok.
-        if not isinstance(avoid_items, list) or len(avoid_items) < 1:
-            errors.append("avoid must be list with >=1 items")
+        # TIC-K10: avoid[] may omit without Personal Narrative avoid.
+        if not isinstance(avoid_items, list):
+            errors.append("avoid must be list")
 
     domains = payload.get("domains")
     if not isinstance(domains, dict):

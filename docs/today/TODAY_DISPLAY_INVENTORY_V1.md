@@ -581,8 +581,8 @@ Fallback to glance `prioritize` only if `do[]` empty **and** that string is pers
 | one_question | **Где персональный риск?** |
 | text_class | generated |
 | authority | Personal Day `avoid[]` |
-| allowed_inputs | Personal avoid |
-| forbidden_inference | copy T1-risk chips; exact duplicate of a priority item |
+| allowed_inputs | Personal Narrative avoid after bind |
+| forbidden_inference | copy T1-risk chips; exact duplicate of a priority item; **Global `do_not` / `avoid_action`**; invert K09 `do[]`; kitchen / PIC / CE / chrome |
 | output | list items |
 | budget | **1–2** · each 1 предл. · ≤180 chars |
 | required | нет |
@@ -817,6 +817,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | `T3.caution` = Personal Narrative avoid after bind; Global `do_not` stays on scene and does not feed the slot; omit without personal avoid |
 | 2026-09-21 | `T3.priority` = Personal Narrative do after bind; Global `recommended_action` / goals omit; glance leftover cannot treat scene action as personal `today_move` |
 | 2026-09-21 | `T3.focus_title` = F10 closed domain of first natal_transit natal_point; omit without `focus_axis`; not scene sphere, kitchen alias, K01 human_line, or K06 headline |
 | 2026-09-21 | `T3.headline` = F09 natal_transit overlay thesis; HD/BaZi/Vedic kitchen out of this slot |

@@ -1,5 +1,5 @@
 import type { TodayContractV1 } from "@/lib/todayContract";
-import { pickMyDayPriorityLines } from "@/lib/todayMyDayPriority";
+import { pickMyDayCautionLines, pickMyDayPriorityLines } from "@/lib/todayMyDayPriority";
 
 const base: TodayContractV1 = {
   contract_version: "today_contract_v1",
@@ -142,6 +142,81 @@ describe("pickMyDayPriorityLines", () => {
         },
         doItems: ["Скажи одну конкретную просьбу."],
         glancePrioritize: "Назови одну просьбу до вечера.",
+      }),
+    ).toEqual([]);
+  });
+});
+
+describe("pickMyDayCautionLines", () => {
+  it("uses Personal avoid[] and ignores Global do_not", () => {
+    expect(
+      pickMyDayCautionLines({
+        contract: {
+          ...base,
+          ...persisted,
+          day_story: {
+            contract_version: "day_story_v1",
+            avoid: ["Не обещай второе слово до вечера."],
+            day_scenario: {
+              scenes: [{ scene_id: "s1", do_not: "Не делай вид, что всё нормально." }],
+            },
+          },
+        },
+        avoidItems: ["Не обещай второе слово до вечера."],
+      }),
+    ).toEqual(["Не обещай второе слово до вечера."]);
+  });
+
+  it("omits Global do_not packaged as avoid[] even with persist", () => {
+    const caution = "Не делай вид, что всё нормально.";
+    expect(
+      pickMyDayCautionLines({
+        contract: {
+          ...base,
+          ...persisted,
+          day_story: {
+            contract_version: "day_story_v1",
+            avoid: [caution],
+            day_scenario: {
+              scenes: [{ scene_id: "s1", do_not: caution, avoid_action: caution }],
+            },
+          },
+        },
+        avoidItems: [caution],
+      }),
+    ).toEqual([]);
+  });
+
+  it("does not invert Personal do[] into a caution", () => {
+    const doLine = "Скажи одну конкретную просьбу.";
+    expect(
+      pickMyDayCautionLines({
+        contract: {
+          ...base,
+          ...persisted,
+          day_story: {
+            contract_version: "day_story_v1",
+            do: [doLine],
+            avoid: [doLine],
+          },
+        },
+        avoidItems: [doLine],
+        priorityLines: [doLine],
+      }),
+    ).toEqual([]);
+  });
+
+  it("omits Personal-looking avoid[] without persisted Personal Day", () => {
+    expect(
+      pickMyDayCautionLines({
+        contract: {
+          ...base,
+          day_story: {
+            contract_version: "day_story_v1",
+            avoid: ["Не обещай второе слово до вечера."],
+          },
+        },
+        avoidItems: ["Не обещай второе слово до вечера."],
       }),
     ).toEqual([]);
   });
