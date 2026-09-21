@@ -257,12 +257,33 @@ USER RESPONSE           →  GRATITUDE HISTORY
 | **X4/X5 honest reveal copy** | **CLOSED / PASS (joint).** Two §13 IDs, one PASS. Locked `T2-gate.card_*` is a reveal, not a pick. Locked `T2-gate.number_*` is the calendar day number, not «своё». Gesture stays theater; formula stays calendar | experience copy |
 | X4 (clause) | **PASS.** Card copy does not claim a real pick. Reveal verbs OK. Prebake + deck gesture unchanged | clause of X4/X5 |
 | X5 (clause) | **PASS.** Number copy does not claim a personal number. Live CTA = «Открыть число дня». YYYYMMDD + ring gesture unchanged | clause of X4/X5 |
-| X11 legacy narrative | OPEN, P1. Glance leftover / stacked `?experience=1` / promise-trap copy. Не пятый акт | cleanup |
-| X14 progress + D2 continuity | OPEN, P1. `T1.continuity` и `T3.tracker` есть; completeness / placement не закрыты | experience |
+| **X11 legacy narrative** | **OPEN — NEXT.** One executable cleanup gate. Production Today must not speak a parallel leftover story beside the locked 4-surface Inventory narrative. Named leftovers: Glance-as-act · stacked `?experience=1` / `?full=1` · promise-trap / duplicate `day_story` copy · deferred `todayRitualCopy` honesty. Не пятый акт. Не X14 | cleanup |
+| X14 progress + D2 continuity | OPEN, P1 **after X11**. `T1.continuity` и `T3.tracker` есть; completeness / placement не закрыты | experience |
 | Compatibility Information Contract | **не выбран.** Отдельная таблица (PIC §9). Не автоматическое продолжение TIC | other section N |
 | TIC-K21 / IL dump / PIC resume | **запрещены** этой сверкой | not a product gate |
 
-**X4/X5 CLOSED / PASS (2026-09-21).** Не два поезда. Не расширять TIC. Не rebuild сервера. Не landing. Не X11 leftover. Next Today remainder = P1 X11 legacy narrative, then X14.
+**Следующий executable gate (selection 2026-09-21, after X4/X5 CLOSED / PASS):** **X11** legacy narrative. Один PASS. Не X14 в этом hop. Не расширять TIC. Не rebuild сервера. Не landing. X4/X5 не закрывает X11. Stay on `cursor/x4-x5-honest-reveal-copy` until execution starts (then new branch).
+
+**Acceptance (X11 PASS):**
+
+| In | Out |
+|----|-----|
+| Production `/today` does not mount Glance-as-act, `TodayExperienceSurface`, or `TodayRitualFlow` as product Today | Physical delete of every leftover file if already unreachable — execution audit picks the smallest blast |
+| Locked 4-surface does not paint a second day story (stacked leftover, promise-trap evening drama, triple `day_story`) beside Inventory slots | X14 progress / D2 completeness · landing §16.3 · iOS parity |
+| Leftover copy banks deferred from X4/X5 (`todayRitualCopy` pick / «своё число») are unreachable on locked path or cleaned here | TIC-K21 · PIC · IL · Compatibility IC · new meaning K |
+
+Selection only — no product paint in this hop. Executable audit of exact live leftovers comes on the execution branch.
+
+### Architecture impact — X11 gate selection (2026-09-21)
+
+- **SoT before:** X4/X5 CLOSED / PASS; next remainder named «X11 then X14» without hop shape. §13 one OPEN row; §16.1 P1 items 7–8 adjacent.
+- **SoT after:** next executable Today gate = **X11** only. PASS = locked production Today has one Inventory narrative; leftover parallel surfaces/copy do not speak as Today. **X14 stays after X11.** Not two trains.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this file · FULL_USER_PATH §0/§13/§16 · tracker · X4/X5 handoff pointer
+- **Backward compatible?** yes. Selection only; no product paint in this hop.
+
+**X4/X5 close record (2026-09-21):**
 
 **Acceptance (joint PASS):**
 

@@ -1,6 +1,6 @@
 # TodayFlow — полный пользовательский путь и целевой канон v1
 
-**Статус:** LIVING SoT пользовательского пути (обновлён 2026-09-21 — X4/X5 CLOSED / PASS)  
+**Статус:** LIVING SoT пользовательского пути (обновлён 2026-09-21 — X11 gate selection after X4/X5 CLOSED / PASS)  
 **Роль:** карта маршрута и решений «зачем / какие данные / какая польза» по экранам.  
 **Не заменяет:** Availability · Intake · Capability · Generation Contracts (они — следствия пути).  
 **Связанные:** [USER_JOURNEY_AUDIT_2026-07-20.md](./USER_JOURNEY_AUDIT_2026-07-20.md) · [PRODUCT_DATA_INTAKE.md](../PRODUCT_DATA_INTAKE.md) · [AUTH_SESSION_CONTRACT_V1.md](../AUTH_SESSION_CONTRACT_V1.md) · [PRODUCT_GENERATION_CONTRACTS.md](../PRODUCT_GENERATION_CONTRACTS.md) · [status/TODAY_CANON_VS_CODE_DIFF.md](../status/TODAY_CANON_VS_CODE_DIFF.md)
@@ -39,7 +39,7 @@ Landing → (1B | 1A) → Preview → Guest First Today → save-prompt → Save
 | Продуктовая идея | Ясна: Профиль = карта, Сегодня = гид дня |
 | Маршрут первого входа | **Закреплён:** Preview → Guest First Today → save-prompt → Save → Claim (value-first; см. §4.1) |
 | Лендинг | Primary «Построить мой профиль»; secondary Совместимость; login; guest trials |
-| «Сегодня» | 4-surface Theme-first **locked** ([TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md)). N **CLOSED / PASS**. **X3 CLOSED / PASS.** **X4/X5 CLOSED / PASS.** Далее P1 continuity/progress и legacy cleanup. Не Compatibility N |
+| «Сегодня» | 4-surface Theme-first **locked** ([TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md)). N **CLOSED / PASS**. **X3 CLOSED / PASS.** **X4/X5 CLOSED / PASS.** Следующий executable gate = **X11** leftover narrative. **X14 после X11.** Не Compatibility N |
 | Время рождения | Не блокирует; без time/place — нет ASC/домов (`unavailable_facts`) |
 | Факты карты | MVP: LLM `natal_facts`; Swiss = legacy |
 | 1A | Dual durable drafts → email bind обоих; free до 3 профилей |
@@ -319,6 +319,7 @@ Locked Today evening = [TODAY_PRODUCT_FLOW_V1](../today/TODAY_PRODUCT_FLOW_V1.md
 
 - Ritual-first funnel закрыт 4-surface cutover (2026-08-29). **X3 CLOSED / PASS:** Theme/Focus/Step читаемый spine; T2-gate copy больше не звучит как начало дня / action authority (см. §13).  
 - **X4/X5 CLOSED / PASS:** locked T2-gate copy is a reveal of prebake + calendar number; механика DAY_SYMBOL не менялась.  
+- Остаток параллельного Today = **X11** leftover narrative (Glance / stacked experience / promise-trap / deferred ritual copy). **X14 после X11.**  
 - Spoilers morning в значительной мере закрыты через `day_symbol_states` (см. DAY_SYMBOL_REVEAL); держать регрессионные тесты.  
 - Progress strip и мосты в Profile/Compatibility — частичные (X14 / P1).
 
@@ -545,7 +546,7 @@ flowchart LR
 | X8 | Profile jargon | «Живые тексты» | В UI | Voice-safe labels | OPEN |
 | X9 | Dual signup | Magic vs password | Magic only; password = login | Один continue-path → Profile | **CLOSED A–E** |
 | X10 | Guest claim | Неполный перенос | Claim + dual 1A; chips residual | Дожать mood/intent + E2E | OPEN residual |
-| X11 | Legacy narratives | Дубли day_story | Параллель | Deprecate с Today | OPEN |
+| X11 | Legacy narratives | Дубли day_story | Параллель leftover (Glance / `?experience=1` / `?full=1` / promise-trap / deferred ritual copy) | Deprecate с Today; один голос на locked 4-surface | OPEN — **NEXT** (после X4/X5 CLOSED / PASS; не X14) |
 | X12 | iOS parity | Отставание | Web A–E ahead | Паритет после web | OPEN |
 | X13 | Birth time messaging | Тревога «неполная» | `unavailable_facts` + limitations CTA | Без блокировки разделов | PARTIAL A–E |
 | X14 | Progress блок | Часто нет | — | Микро-progress | OPEN Today |
@@ -605,7 +606,7 @@ flowchart LR
 
 **Done A–E (не откатывать без user bug):** Preview→Save→Claim→Profile · magic signup · dual 1A · `natal_facts` · `max_profiles=3`.
 
-**После X4/X5 CLOSED / PASS (2026-09-21):** следующий Today remainder = P1 **X11** leftover narrative, then **X14** progress/D2. Не Compatibility Information Contract. Не TIC-K21. Не IL. Не PIC. Не landing. X16 / live Landing-path / X10 — другие поезда; эта сверка их не стартует.
+**После X4/X5 CLOSED / PASS (2026-09-21):** следующий executable Today gate = **X11** leftover narrative (§16.1 п.7). Один PASS. **X14 после X11**, не в этом hop. Не Compatibility Information Contract. Не TIC-K21. Не IL. Не PIC. Не landing. X16 / live Landing-path / X10 — другие поезда; эта сверка их не стартует.
 
 **P0 — сверка кода с этим каноном (экран за экраном)**
 
@@ -619,8 +620,8 @@ flowchart LR
 
 5. Словарь: опоры / камень дня / precision без времени.  
 6. Убрать фамилию из основного UX.  
-7. Deprecate дубли day narrative на Today.  
-8. Progress + Continuity D2.  
+7. Deprecate дубли day narrative на Today (**X11 — NEXT**).  
+8. Progress + Continuity D2 (**X14 — after X11**).  
 9. Blueprint ↔ лендинг (optional).
 
 **P2 — глубина и паритет**
@@ -686,6 +687,7 @@ flowchart LR
 | 2026-07-21 | Первая версия полного аудита пути и целевого канона |
 | 2026-07-21 | §0− + X16 → code compliance audit; откат ошибочного «нового принципа» |
 | 2026-07-24 | §4.1 + шапка: путь к Save = Preview → Guest First Today → `guest-save-prompt` → `/onboarding/save` (не CTA Save на Preview); walkthrough web — путь цел |
+| 2026-09-21 | **X11 gate selection.** Next executable Today gate = leftover narrative cleanup. One PASS. X14 after X11. Not two trains. Not landing. Not TIC-K21. |
 | 2026-09-21 | **X4/X5 CLOSED / PASS.** Locked T2-gate card chrome is a reveal, not a pick; number chrome is calendar-day, not «своё». One PASS. Next remainder = X11 then X14. |
 | 2026-09-21 | **X4/X5 gate selection.** One joint executable gate (two §13 clauses, one PASS). Card then number on locked T2. Mechanic unchanged. Not two trains. Not landing. Not X11. |
 | 2026-09-21 | **X3 CLOSED / PASS.** T2-gate copy is a lens; card/number do not own Theme/Focus/Step or action timing. Next = X4/X5. Not Compatibility N. |

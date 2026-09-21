@@ -4,6 +4,8 @@ Last updated: 2026-09-21
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (X11 GATE SELECTION, 2026-09-21):** Next executable Today gate = Full User Path **X11 leftover narrative**. One PASS. Production locked Today must not speak a parallel leftover story. Named leftovers: Glance-as-act · `?experience=1` / `?full=1` · promise-trap / duplicate `day_story` · deferred `todayRitualCopy`. **X14 after X11.** Not two trains. Not TIC-K21. Not landing. Selection only — no product paint. Stay on `cursor/x4-x5-honest-reveal-copy` until execution starts (then new branch). TIC stays **CLOSED / PASS**. X3 stays **CLOSED / PASS**. X4/X5 stays **CLOSED / PASS**. N = 20. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
 **NOW (X4/X5 CLOSED / PASS, 2026-09-21):** Joint honest reveal copy on locked T2. Card chrome is a reveal, not a pick. Number chrome is calendar-day, not «своё». Overlay already honest; mechanic unchanged. One PASS for two §13 IDs. TIC stays **CLOSED / PASS**. X3 stays **CLOSED / PASS**. N = 20. Next remainder = P1 **X11** leftover, then **X14**. Not TIC-K21. Not landing. Branch `cursor/x4-x5-honest-reveal-copy`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (X4/X5 GATE SELECTION, 2026-09-21):** One joint executable Today gate — Full User Path **X4/X5 honest reveal copy**. Two §13 IDs, one PASS. X4 = card copy must not claim a real pick; X5 = number copy must not claim a personal number. Same T2 ritual surface; paint card then number (A→B). Mechanic already locked (DAY_SYMBOL prebake + theatrical gesture + YYYYMMDD). Not two trains. Not TIC-K21. Not landing. Not X11 leftover. Selection only — no product paint. Stay on `cursor/x3-theme-focus-step` until execution starts (then new branch). TIC stays **CLOSED / PASS**. N = 20. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
@@ -145,6 +147,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — X11 gate selection (2026-09-21)
+
+- **SoT before:** X4/X5 CLOSED / PASS; next named «X11 then X14» without hop shape.
+- **SoT after:** next executable Today gate = **X11** only. X14 stays after. Selection only; no leftover paint in this hop.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — TODAY_PRODUCT_FLOW selection · FULL_USER_PATH §0/§13/§16 · this tracker · X4/X5 handoff pointer
+- **Backward compatible?** yes. Selection only; no product paint.
 
 ## Architecture impact — X4/X5 honest reveal copy (2026-09-21)
 
