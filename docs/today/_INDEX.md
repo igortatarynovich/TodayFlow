@@ -8,6 +8,6 @@
 | [TODAY_CONTENT_PIPELINE_V1.md](./TODAY_CONTENT_PIPELINE_V1.md) | **Meaning SoT / I0** — Global Day · Natal Overlay · Personal Day · ritual lenses |
 | [TODAY_PRODUCT_FLOW_V1.md](./TODAY_PRODUCT_FLOW_V1.md) | Product cycle — TODAY → RITUAL → MY DAY → EVENING |
 | [TODAY_DISPLAY_INVENTORY_V1.md](./TODAY_DISPLAY_INVENTORY_V1.md) | **Последний authority перед UI** — `slot_id` · one_question · omit |
-| [../status/TODAY_INFORMATION_CONTRACT_HANDOFF.md](../status/TODAY_INFORMATION_CONTRACT_HANDOFF.md) | Next agent: coverage 14 COMPLETE / 6 PARTIAL; first remaining = K13 |
+| [../status/TODAY_INFORMATION_CONTRACT_HANDOFF.md](../status/TODAY_INFORMATION_CONTRACT_HANDOFF.md) | Next agent: coverage 15 COMPLETE / 5 PARTIAL; first remaining = K14 |
 | [TODAY_MEANING_POLISH_V1.md](./TODAY_MEANING_POLISH_V1.md) | IL-4 chorus bind — формулировка, не новый корень |
 | [TODAY_SCREEN_SCENARIO_V3.md](./TODAY_SCREEN_SCENARIO_V3.md) | **SUPERSEDED** как product map |

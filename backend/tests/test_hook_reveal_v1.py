@@ -84,7 +84,39 @@ def test_card_hook_rejects_conflict_id_slug_as_bridge():
     assert hook["base"]["meaning"]  # base still shown
 
 
-def test_color_hook_uses_props_link():
+def test_k13_does_not_package_chorus_as_personal_card_lens():
+    chorus = {"day_card": {"link_to_conflict": "архетип описывает сегодняшний конфликт"}}
+    hook = hooks.build_card_hook_reveal(
+        card_id=0,
+        orientation="upright",
+        chorus=chorus,
+        personal_angle=hooks._personal_card_lens_line(),
+        profile_depth="deep",
+    )
+    assert hook["bridge_status"] == "ok"
+    assert hook["bridge_to_day"] == "архетип описывает сегодняшний конфликт"
+    assert hook["personal_angle"] == "omit"
+    attached = hooks.attach_hooks_to_symbol_view(
+        {"card": {"revealed": True, "id": 0, "orientation": "upright"}},
+        chorus=chorus,
+        profile_depth="deep",
+    )
+    lens = (attached.get("card") or {}).get("hook_reveal") or {}
+    assert lens.get("personal_angle") == "omit"
+    assert lens.get("bridge_to_day") == "архетип описывает сегодняшний конфликт"
+
+
+def test_k13_keeps_explicit_personal_angle_without_copying_chorus():
+    angle = "Эта карта окрашивает уже собранный личный день, не хор."
+    hook = hooks.build_card_hook_reveal(
+        card_id=0,
+        orientation="upright",
+        chorus={"day_card": {"link_to_conflict": "архетип описывает сегодняшний конфликт"}},
+        personal_angle=angle,
+        profile_depth="light",
+    )
+    assert hook["personal_angle"] == angle
+    assert hook["bridge_to_day"] != angle
     hook = hooks.build_color_hook_reveal(
         color_name="Лазурь",
         props_color={

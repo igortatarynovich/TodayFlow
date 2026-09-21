@@ -127,7 +127,26 @@ describe("live Today frames", () => {
     expect(ids).toContain("T3.focus_body");
     expect(ids).toContain("T3.priority");
     expect(ids).toContain("T2.lens_card");
+    expect(frame.atoms?.find((a) => a.slot_id === "T2.lens_card")?.text).toBe("якорь дня");
     expect(frame.atoms?.find((a) => a.slot_id === "T3.focus_title")?.text).toMatch(/работ/i);
+    expect(scanDisplayGrammar(frame)).toEqual([]);
+  });
+
+  it("omits T2.lens_card when only Global chorus bridge is present", () => {
+    const frame = emitTodayDisplayFrame({
+      contract: persistContract,
+      capability: "light",
+      dateLabel: "31 августа 2026",
+      ritual: {
+        cardCatalog: "Сила — внутренняя опора.",
+        cardHook: {
+          bridge_to_day: "архетип описывает сегодняшний конфликт",
+          base: { meaning: "Сила — внутренняя опора." },
+        },
+      },
+    });
+    expect(frame.atoms?.some((a) => a.slot_id === "T2.lens_card")).toBe(false);
+    expect(frame.atoms?.some((a) => a.slot_id === "T2.catalog_card")).toBe(true);
     expect(scanDisplayGrammar(frame)).toEqual([]);
   });
 

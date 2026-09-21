@@ -144,7 +144,7 @@ import {
 import { shiftDateISO } from "@/lib/moodMapModel";
 import { resolveTodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import { canOfferFocusDeepen, resolveFocusDeepenTarget } from "@/lib/todayFocusDeepen";
-import { pickRitualPersonalLens } from "@/lib/ritualRevealCopy";
+import { pickRitualCardLens, pickRitualPersonalLens } from "@/lib/ritualRevealCopy";
 import { buildHandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
 import { resolveWelcomeActivityTags } from "@/lib/todayWelcomeActivityTags";
 import {
@@ -1418,7 +1418,7 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const ritualTarotPersonalText = useMemo(
-    () => pickRitualPersonalLens(symbolHooksView?.card?.hook_reveal, allowRitualLens),
+    () => pickRitualCardLens(symbolHooksView?.card?.hook_reveal, allowRitualLens),
     [allowRitualLens, symbolHooksView?.card?.hook_reveal],
   );
 

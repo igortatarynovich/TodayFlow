@@ -5,7 +5,7 @@
  */
 
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import { pickRitualPersonalLens } from "@/lib/ritualRevealCopy";
+import { pickRitualCardLens, pickRitualPersonalLens } from "@/lib/ritualRevealCopy";
 import {
   buildTodayDayBriefModel,
   clipCompassProse,
@@ -266,7 +266,7 @@ function emitRitual(
     trim(ritual?.cardCatalog) || trim(ritual?.cardHook?.base?.meaning) || null;
   const numberCatalog =
     trim(ritual?.numberCatalog) || trim(ritual?.numberHook?.base?.meaning) || null;
-  const cardLens = pickRitualPersonalLens(ritual?.cardHook, allowLens);
+  const cardLens = pickRitualCardLens(ritual?.cardHook, allowLens);
   const numberLens = pickRitualPersonalLens(ritual?.numberHook, allowLens);
 
   pushAtom(atoms, {
@@ -301,7 +301,7 @@ function emitRitual(
     origins: ["personal_day", "card"],
     text_class: "generated",
     fe_transform: "clip",
-    json_field: "ritual.card.lens",
+    json_field: "card.hook_reveal.personal_angle",
   });
   pushAtom(atoms, {
     slot_id: "T2.lens_number",

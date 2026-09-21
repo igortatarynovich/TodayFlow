@@ -1,5 +1,6 @@
 import {
   formatRitualTarotPersonalToday,
+  pickRitualCardLens,
   pickRitualHookLine,
   pickRitualPersonalLens,
 } from "@/lib/ritualRevealCopy";
@@ -47,6 +48,53 @@ describe("ritualRevealCopy", () => {
     expect(pickRitualPersonalLens(hook, false)).toBeNull();
     expect(pickRitualPersonalLens(hook, true)).toBe("якорь дня");
     expect(pickRitualPersonalLens({ base: { meaning: "база" } }, true)).toBeNull();
+  });
+
+  it("uses Personal×card angle for T2.lens_card and ignores Global chorus", () => {
+    expect(
+      pickRitualCardLens(
+        {
+          bridge_to_day: "архетип описывает сегодняшний конфликт",
+          personal_angle: "Эта карта окрашивает уже собранный личный день.",
+          base: { meaning: "Сила — внутренняя опора." },
+        },
+        true,
+      ),
+    ).toBe("Эта карта окрашивает уже собранный личный день.");
+  });
+
+  it("omits Global chorus packaged as card lens even with persist", () => {
+    const chorus = "архетип описывает сегодняшний конфликт";
+    expect(
+      pickRitualCardLens(
+        {
+          bridge_to_day: chorus,
+          personal_angle: chorus,
+          base: { meaning: "Сила — внутренняя опора." },
+        },
+        true,
+      ),
+    ).toBeNull();
+    expect(
+      pickRitualCardLens(
+        {
+          bridge_to_day: chorus,
+          base: { meaning: "Сила — внутренняя опора." },
+        },
+        true,
+      ),
+    ).toBeNull();
+  });
+
+  it("does not invert catalog meaning or omit-token into a card lens", () => {
+    expect(
+      pickRitualCardLens(
+        { personal_angle: "Сила — внутренняя опора.", base: { meaning: "Сила — внутренняя опора." } },
+        true,
+      ),
+    ).toBeNull();
+    expect(pickRitualCardLens({ personal_angle: "omit" }, true)).toBeNull();
+    expect(pickRitualCardLens({ personal_angle: "лично" }, false)).toBeNull();
   });
 });
 

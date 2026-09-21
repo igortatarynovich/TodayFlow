@@ -455,16 +455,37 @@ Numerology Engine identity. 1–2 digits / title. Same persist. Appear state B�
 | anti_dupe_group | `symbol_layers` |
 | interaction | sheet section «Значение» |
 
-#### `T2.lens_card` / `T2.lens_number`
+#### `T2.lens_card`
 
 | | |
 |---|---|
-| one_question | **Как символ окрашивает уже посчитанный Personal Day?** |
+| one_question | **Как карта окрашивает уже посчитанный Personal Day?** |
 | text_class | generated |
-| authority | Personal Day × symbol (lens); **не** Ritual как day engine |
+| authority | Personal Day × card (lens); **не** Ritual как day engine |
+| semantic_source | hook_reveal `personal_angle` |
+| allowed_inputs | persisted Personal Day + this card identity + catalog as *color*, not cause |
+| forbidden_inference | «день такой потому что карта»; mutate energy/drivers/windows; invent lens on empty persist; **Global chorus `day_card` / `bridge_to_day`**; copy K06–K10; **CE prose**; rewrite Personal thesis; kitchen / PIC / chrome |
+| output | 1–3 предложения |
+| budget | 20–45 слов · ≤280 chars |
+| required | нет |
+| empty_behavior | omit «Для тебя сегодня» |
+| may_fe_transform | clip |
+| may_llm_add_meaning | нет |
+| persist_key | PersonalDayKey + ritual identity |
+| anti_dupe_group | `symbol_layers` · `global_vs_personal` |
+| interaction | sheet section after catalog |
+| appear | **omit** unless Personal Day persisted **and** Personal×card wrote the lens. Guest **и** general: catalog only, lens нет |
+
+#### `T2.lens_number`
+
+| | |
+|---|---|
+| one_question | **Как число окрашивает уже посчитанный Personal Day?** |
+| text_class | generated |
+| authority | Personal Day × number (lens); **не** Ritual как day engine |
 | semantic_source | hook_reveal `bridge_to_day` / `personal_angle` |
 | allowed_inputs | persisted Personal Day meaning + this symbol identity + catalog as *color*, not cause |
-| forbidden_inference | «день такой потому что карта/число»; mutate energy/drivers/windows; invent lens on empty persist; **CE prose**; rewrite Personal thesis |
+| forbidden_inference | «день такой потому что число»; mutate energy/drivers/windows; invent lens on empty persist; **CE prose**; rewrite Personal thesis |
 | output | 1–3 предложения |
 | budget | 20–45 слов · ≤280 chars |
 | required | нет |
@@ -817,6 +838,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | `T2.lens_card` = Personal Day × F13 after persist; Global chorus `bridge_to_day` stays on hook and does not feed the slot; omit without personal lens |
 | 2026-09-21 | `T3.caution` = Personal Narrative avoid after bind; Global `do_not` stays on scene and does not feed the slot; omit without personal avoid |
 | 2026-09-21 | `T3.priority` = Personal Narrative do after bind; Global `recommended_action` / goals omit; glance leftover cannot treat scene action as personal `today_move` |
 | 2026-09-21 | `T3.focus_title` = F10 closed domain of first natal_transit natal_point; omit without `focus_axis`; not scene sphere, kitchen alias, K01 human_line, or K06 headline |

@@ -34,7 +34,11 @@ export function pickRitualHookLine(hook: RitualHook, fallback?: string | null): 
   return fb || null;
 }
 
-/** T2 lens — Personal Day × symbol. Guest/general omit. Catalog meaning is not a lens. */
+function normLens(s: string): string {
+  return s.replace(/\s+/g, " ").replace(/[.!?]+$/u, "").trim().toLowerCase();
+}
+
+/** T2.lens_number leftover until K14 — still chorus bridge. Do not use for card. */
 export function pickRitualPersonalLens(
   hook: RitualHook,
   allowPersonal: boolean,
@@ -44,4 +48,19 @@ export function pickRitualPersonalLens(
   if (bridge) return bridge;
   const angle = String(hook?.personal_angle ?? "").trim();
   return angle || null;
+}
+
+/** T2.lens_card — Personal Day × F13 after persist. Not Global chorus bridge. */
+export function pickRitualCardLens(
+  hook: RitualHook,
+  allowPersonal: boolean,
+): string | null {
+  if (!allowPersonal) return null;
+  const angle = String(hook?.personal_angle ?? "").trim();
+  if (!angle || angle.toLowerCase() === "omit") return null;
+  const catalog = String(hook?.base?.meaning ?? "").trim();
+  if (catalog && normLens(angle) === normLens(catalog)) return null;
+  const bridge = String(hook?.bridge_to_day ?? "").trim();
+  if (bridge && normLens(angle) === normLens(bridge)) return null;
+  return angle.length <= 280 ? angle : `${angle.slice(0, 280).trim()}`;
 }

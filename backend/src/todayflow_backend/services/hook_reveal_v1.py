@@ -3,7 +3,8 @@
 Canon: docs/audits/DAY_SYMBOL_REVEAL_CANON_V1.md
 
 - base: static lookup (card_base / number_base / COLOR_CATALOG)
-- bridge_to_day: sole SoT = interpretive_chorus / props.color (never explainer)
+- bridge_to_day: Global chorus / props.color (never explainer)
+- personal_angle: TIC-K13 Personal×card after persist; omit without Personal lens
 - instruction / personal: optional overlays; never invent bridge on fail
 """
 
@@ -72,6 +73,16 @@ def _format_where_to_use(value: Any) -> str:
 from todayflow_backend.services.prose_clip_v1 import heal_ellipsis_midword as _heal_ellipsis_midword
 
 
+def _personal_card_lens_line() -> str | None:
+    """TIC-K13: Personal Day × F13 owns `personal_angle`.
+
+    I0 locks `interpretive_chorus.day_card` as Global chorus. Personal stage
+    must not mutate it, and the locked Personal overlay has no card-lens field
+    → omit. Not a second ranker. Not a copy of K06–K10. Not K14.
+    """
+    return None
+
+
 def _bridge_from_voice(voice: dict[str, Any]) -> str:
     """Pick human bridge prose; never surface conflict_id / thesis variant slugs."""
     # Prefer lived meaning over role/link meta fields.
@@ -122,10 +133,10 @@ def build_card_hook_reveal(
     voice = _as_dict(chorus_d.get("day_card"))
     bridge = _bridge_from_voice(voice)
     bridge_ok = bool(bridge)
-    personal = "omit"
-    if profile_depth == "deep" and bridge_ok:
-        pa = _clean(personal_angle)
-        personal = pa if pa else "omit"
+    # TIC-K13: personal_angle is Personal×card after persist, not chorus.
+    # Global chorus may still fill bridge_to_day. Missing Personal lens → omit.
+    pa = _clean(personal_angle if personal_angle is not None else _personal_card_lens_line())
+    personal = pa if pa and pa.lower() != "omit" else "omit"
 
     instr = _clean(instruction) if bridge_ok else ""
     return {
@@ -274,6 +285,7 @@ def attach_hooks_to_symbol_view(
             card_id=int(card["id"]),
             orientation=str(card.get("orientation") or "upright"),
             chorus=chorus,
+            personal_angle=_personal_card_lens_line(),
             profile_depth=profile_depth,
         )
         # Prefer card_base meaning over EN deck string in public view
