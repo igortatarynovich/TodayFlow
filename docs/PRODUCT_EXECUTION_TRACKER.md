@@ -4,6 +4,8 @@ Last updated: 2026-09-21
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (TIC-K20 COMPLETE, 2026-09-21):** Unavailable MY DAY is existing honesty copy (`T3.unavailable`) only. extraCards / practice / affirmation omit — not Global/kitchen/chorus fill, not empty-K16/K17 surrogate. No new selector. Glance leftover is not this hop. TIC_COVERAGE K20 PARTIAL → COMPLETE (**20 COMPLETE / 0 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next = **TIC close-out** (re-audit 20/20), not K21, not a new Today train. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
 **NOW (TIC-K17 COMPLETE, 2026-09-21):** XOR affirmation vs practice is the existing F10 content class (K16 `content_class=practice`), not a new selector. Locked surface paints exactly one Inventory slot. Scene `props.affirmations` / trap / `recommended_action` do not feed `T3.affirmation`. Date-hash / availability / leftover catalog do not choose the branch. Empty selected branch omits. K16 select query unchanged. K20 extraCards/unavailable not this hop. Glance leftover is not this hop. TIC_COVERAGE K17 PARTIAL → COMPLETE (**19 COMPLETE / 1 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K20** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (TIC-K16 COMPLETE, 2026-09-21):** `T3.practice` is existing `GET /practices/select` from F10 `personal_day.natal_overlay.focus_axis` (closed 4-set) after persist. Global `primary_energy` / K01 8-set stay on the shared-day kind and do not feed K16. Compensating risk is not invented from K10 prose or Global F06. No second selector. Guest / missing F10 / unavailable omit. XOR leftover with affirmation is K17, not this hop. Glance leftover is not this hop. TIC_COVERAGE K16 PARTIAL → COMPLETE (**18 COMPLETE / 2 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K17** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
@@ -133,6 +135,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — TIC-K20 honesty (2026-09-21)
+
+- **SoT before:** honesty copy existed, but `extraCards` (practice/affirmation) still mounted on unavailable MY DAY.
+- **SoT after:** unavailable pane = `T3.unavailable` only. extraCards omit. Empty Personal is not a license to paint Global leftovers. Not a new meaning root. Glance leftover is not this hop.
+- **Public contract changed?** no JSON fields
+- **Migration required?** no
+- **Canon updated?** yes — Information Contract §3/§10/§11 · Display Inventory `T3.unavailable` · this tracker · handoff
+- **Backward compatible?** yes for API. Unavailable MY DAY no longer shows leftover support cards.
 
 ## Architecture impact — TIC-K17 XOR (2026-09-21)
 

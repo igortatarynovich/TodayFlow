@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { TodayCompositionSurface } from "@/components/today/composition/TodayCompositionSurface";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import { eveningGratitudeStorageKey } from "@/lib/todayEveningGratitude";
+import { TODAY_UNAVAILABLE_COPY } from "@/lib/todaySlotAvailability";
 
 jest.mock("@/hooks/useMeaningRuntime", () => ({
   useMeaningRuntime: () => ({ trackMeaningEvent: jest.fn() }),
@@ -423,6 +424,55 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-frame-my-day")).toBeInTheDocument();
     expect(within(screen.getByTestId("today-frame-my-day")).getByTestId("today-day-tasks")).toBeInTheDocument();
     expect(screen.getAllByText(/Закрыть одну задачу/i).length).toBeGreaterThan(0);
+  });
+
+  it("omits extraCards practice and affirmation when MY DAY meaning is unavailable", () => {
+    authState.isAuthenticated = true;
+    window.localStorage.setItem(
+      "todayflow.day_engagement.v1.2026-06-23",
+      JSON.stringify({
+        tarotPickedName: "Сила",
+        tarotPickedId: 8,
+        numberConfirmed: true,
+        dayGoal: null,
+        practiceStarted: false,
+        affirmationRead: false,
+        todayOpened: true,
+      }),
+    );
+
+    const unavailableContract: TodayContractV1 = {
+      ...sampleContract,
+      personal_day: { natal_overlay: { focus_axis: "work" } },
+      progress: { interpretation_status: "unavailable" },
+      day_story: {
+        contract_version: "day_story_v1",
+        interpretation_status: "unavailable",
+        theme: "Ясность",
+        story: "Сегодня день коротких договорённостей и спокойного темпа.",
+        practice_recommendation: {
+          kind: "practice",
+          text: "Закрыть одну задачу до обеда.",
+          reason: "Один результат важнее пяти начатых.",
+        },
+      },
+    };
+
+    render(
+      <TodayCompositionSurface
+        {...baseProps}
+        contract={unavailableContract}
+        variant="default"
+        coreProfile={{ astro: { birth_date: "1990-01-15" } } as never}
+      />,
+    );
+
+    const myDay = screen.getByTestId("today-frame-my-day");
+    expect(within(myDay).getByTestId("today-my-day-unavailable")).toHaveTextContent(TODAY_UNAVAILABLE_COPY);
+    expect(within(myDay).queryByTestId("today-day-tasks")).not.toBeInTheDocument();
+    expect(within(myDay).queryByTestId("today-task-affirmation-slot")).not.toBeInTheDocument();
+    expect(within(myDay).queryByText(/Закрыть одну задачу/i)).not.toBeInTheDocument();
+    expect(within(myDay).queryByText(/Я справлюсь с тем, что прямо сейчас/i)).not.toBeInTheDocument();
   });
 
   it("shows practice CTA when ritual complete", async () => {

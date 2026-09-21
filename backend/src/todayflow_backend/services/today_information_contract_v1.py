@@ -133,7 +133,7 @@ TIC_COVERAGE: Final[tuple[dict[str, object], ...]] = (
     {"tic_k": "K17", "status": "COMPLETE", "slot_id": ("T3.affirmation",)},
     {"tic_k": "K18", "status": "COMPLETE", "slot_id": ("T3.depth",)},
     {"tic_k": "K19", "status": "COMPLETE", "slot_id": ("T1.continuity",)},
-    {"tic_k": "K20", "status": "PARTIAL", "slot_id": ("T3.unavailable",)},
+    {"tic_k": "K20", "status": "COMPLETE", "slot_id": ("T3.unavailable",)},
 )
 
 TIC_DEFECT_QUEUE: Final[tuple[str, ...]] = tuple(

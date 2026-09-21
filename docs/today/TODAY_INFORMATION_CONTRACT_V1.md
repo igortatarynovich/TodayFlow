@@ -86,6 +86,15 @@ source input
 - **Canon updated?** yes — this file §3/§10/§11 · Display Inventory `T3.color.*` · tracker · handoff
 - **Backward compatible?** yes for API. MY DAY color omits when F05+F09 did not ground a pick, instead of filling scene tags or morning catalog.
 
+## Architecture impact — TIC-K20 honesty (2026-09-21)
+
+- **SoT before:** `T3.unavailable` painted honesty copy, but MY DAY still mounted `extraCards` (practice/affirmation/tasks) on the unavailable pane.
+- **SoT after:** same slot. Unavailable MY DAY is only `T3.unavailable`. extraCards omit. Global scene/kitchen/chorus and empty K16/K17 do not fill the pane. Not a new meaning root. Glance leftover is not this hop.
+- **Public contract changed?** no JSON fields. Semantics of unavailable MY DAY = honesty chrome only.
+- **Migration required?** no
+- **Canon updated?** yes — this file §3/§10/§11 · Display Inventory `T3.unavailable` · tracker · handoff
+- **Backward compatible?** yes for API. Unavailable MY DAY no longer shows leftover practice/affirmation cards.
+
 ## Architecture impact — TIC-K17 XOR (2026-09-21)
 
 - **SoT before:** `T3.affirmation` painted scene `props.affirmations[0]` / trap / `recommended_action` via `practice_recommendation`. Date-hash rotation picked practice vs affirmation when both existed. Catalog miss could leave the scene affirmation as fill.
@@ -225,7 +234,7 @@ Code Δ: Capability TARGET vs CODE для natal facts не меняет **наб
 | `K17` | XOR: вербальная опора **или** техника, не оба | F10 content class (existing K16 need cell) · Personal affirmation field | — | existing content mode = K16 `content_class` of the F10 cell; ровно одна ветка; scene `affirmations` / trap / `recommended_action` **не** вход; date-hash / availability / leftover catalog **не** выбирают ветку; пустая выбранная ветка → omit, не switch; ≠ CE identity; ≠ rewrite priority | field | Pipeline · K16 class | XOR slot | **да, persist Personal** | `T3.affirmation` xor `T3.practice` | 1 предл. или 1 item; пусто omit |
 | `K18` | Опциональное углубление **выбранной** темы | полный base day + topic | depth topic menu | Trial+ generate; Free = CTA; не второй сюжет дня | [TODAY_DEPTH_LAYER_V1](../TODAY_DEPTH_LAYER_V1.md) | Matrix 3.2 | `T3.depth` | **да поверх дня** | `T3.depth` | CTA или pack; omit если нет offer |
 | `K19` | Что вчерашний вечер оставил сегодняшнему утру | `F15` | — | user record; не invent смысла дня; не «получилось/нет» | gratitude | Inventory continuity | `T1.continuity` | **да D2+** | `T1.continuity` | 1–2 предл.; пусто omit |
-| `K20` | Чего нет и что откроется | capability / persist gaps | Matrix copy | честность: guest MY DAY omit; no natal → no K06–K10/K13–K17; transport ≠ fake calm | — | Matrix · Grammar §2 | `T3.unavailable` · guest omit | **да** | `T3.unavailable` · `TF.*` | «Не удалось загрузить.» / omit meaning |
+| `K20` | Чего нет и что откроется | capability / persist gaps | Matrix copy | честность: guest MY DAY omit; unavailable = только `T3.unavailable`; extraCards/practice/affirmation **не** surrogate; no natal → no K06–K10/K13–K17; transport ≠ fake calm | — | Matrix · Grammar §2 | `T3.unavailable` · guest omit · extraCards omit | **да** | `T3.unavailable` · `TF.*` | «Не удалось загрузить.» / omit meaning |
 
 **N = 20. Конец списка.**
 
@@ -358,7 +367,7 @@ Owner может сузить M (убрать показ), не расширяя
 5. **LLM формулирует после решения Engine/Overlay/catalog.** Не выбирает energy/drivers/windows/axis. Не заполняет пустое generic prose. Downstream не мутирует upstream.
 6. **Критерий закрытия Today train:** для каждого из 20 `TIC-K` определено facts → KB → derivation → wire → M/omit → slot; отображаемый M исполняется кодом. Тогда — не автоматически Compatibility N. Не «IL подключён», не «xfail стал pass», не «Today выглядит лучше».
 7. **PIC закрыт.** Не использовать Profile Information Contract как источник автоматически возникающей Today-работы. Не invent `TIC-K21`. Не включать planned Day Sources в N.
-8. **Не rebuild сервера** на coverage hops. Статусы §11 — факт кода, не желание канона. Очередь — только PARTIAL/MISSING из матрицы; первый remaining = K20.
+8. **Не rebuild сервера** на coverage hops. Статусы §11 — факт кода, не желание канона. Очередь из матрицы закрыта (0 PARTIAL / 0 MISSING). Следующее — **close-out TIC** (повторный executable audit 20/20), не K21.
 9. **K01 presentation (2026-09-21).** `T1-hero.human_line` = closed formulation of Engine `primary_energy`. Greeting is chrome, not K01. Missing/unknown omit. Overlay does not rewrite the shared-day kind. Not a second energy selector.
 10. **K06 overlay thesis (2026-09-21).** `T3.headline` / `day_personal.summary_ru` = already-derived F09 natal_transit thesis (`personal_astrology.summary_ru`). HD / BaZi / Vedic / electional / name_numbers stay in the pack and do not feed K06. Missing overlay transit → omit. Not `why_personal`. Not T1 human_line. Not a new knowledge type.
 11. **K07 overlay axis (2026-09-21).** `T3.focus_title` / `personal_day.natal_overlay.focus_axis` = F10 closed domain of the already-chosen F09 natal_transit natal_point. Kitchen aliases / Global scene sphere / PIC / CE / chrome do not feed K07. Missing or unmapped → omit. Not a second ranker. Not a duplicate of K01 `human_line` or K06 headline.
@@ -369,6 +378,7 @@ Owner может сузить M (убрать показ), не расширяя
 16. **K15 color (2026-09-21).** `T3.color.*` / `color_guide` = existing `score_color_for_needs` on F05 8-set + F09 overlay domain (`DOMAIN_NATAL_POINTS`) after persist. Scene trap/sphere/mode do not feed the slot. No second scorer. Scent/stone aliases unused without a slot. Missing grounded F05+F09 → omit. Catalog/talisman leftover does not paint. Not K16+.
 17. **K16 practice (2026-09-21).** `T3.practice` = existing `GET /practices/select` from already-chosen F10 `focus_axis` (closed 4-set) after persist. Global `primary_energy` / K01 8-set do not feed the slot. No second selector. Compensating Personal Risk is not invented from K10 prose or Global F06. Guest / missing F10 / unavailable interpretation → omit. XOR with affirmation is K17.
 18. **K17 XOR (2026-09-21).** Affirmation vs practice is one existing content mode, not a second selector. Mode = K16 `content_class` of the already-chosen F10 need cell (`practice`). Exactly one Inventory slot. Scene `props.affirmations` / trap / `recommended_action` do not feed `T3.affirmation`. Date-hash / availability / leftover catalog item do not choose the branch. Empty selected branch → omit, not switch. No Personal-owned affirmation field on the locked overlay → affirmation omit. K16 select query unchanged. Not K20 extraCards. Glance leftover is not this hop.
+19. **K20 honesty (2026-09-21).** `T3.unavailable` is the already-known capability / persist / transport gap. Unavailable MY DAY paints that chrome only. extraCards (practice/affirmation/tasks) omit. Global scene/kitchen/chorus and empty K16/K17 are not surrogate meaning. Not a new selector. Glance leftover is not this hop. Coverage queue is empty — next is TIC close-out, not K21.
 
 ---
 
@@ -411,17 +421,15 @@ IN → TIC-F → TIC-K → derivation → product field → Inventory slot → l
 | `K17` | **COMPLETE** | existing K16 F10 need-cell `content_class` (practice). Scene `props.affirmations` / trap / `recommended_action` **не** вход. No Personal-owned affirmation field on locked overlay | existing content mode; not a second ranker | FE `pickLockedSupportSlot`; projector omits scene rec; empty selected branch does not switch; date-hash gone | XOR one of `T3.practice` / `T3.affirmation` | paint selected Inventory slot; omit both when the branch is empty | нет на измеренном hop |
 | `K18` | **COMPLETE** | base day + topic id + billing | depth menu | `today_depth_layer_v1`; Free CTA; Trial+ generate | `today_contract.depth_layer` | `T3.depth` paint (`TodayDepthLayerSection`) | нет (не второй TODAY plot) |
 | `K19` | **COMPLETE** | F15 yesterday `evening_completed` + gratitude | user record | `loadYesterdayEveningClose` → `buildGratitudeMemorySlot`; empty omit; no invent on GET fail | client memory slot / day-connection | `T1.continuity` paint D2+ | нет |
-| `K20` | **PARTIAL** | capability + `interpretation_status` / transport | Matrix copy | guest `myDay:false`; unavailable `TODAY_UNAVAILABLE_COPY`; network `TODAY_NO_CONNECTION_COPY` | guest omit MY DAY; `TodayMyDayPane` unavailable card | `T3.unavailable` / `TF.*` paint | honesty copy есть; **`extraCards` (practice/affirmation) всё ещё монтируются на unavailable pane** |
+| `K20` | **COMPLETE** | capability + `interpretation_status` / transport | Matrix copy | guest `myDay:false`; unavailable `TODAY_UNAVAILABLE_COPY`; network `TODAY_NO_CONNECTION_COPY`; extraCards omit on unavailable pane | guest omit MY DAY; `TodayMyDayPane` unavailable card only | `T3.unavailable` / `TF.*` paint; extraCards/practice/affirmation not mounted | нет на измеренном hop |
 
-Сводка: **COMPLETE 19** (`K01` `K02` `K03` `K04` `K05` `K06` `K07` `K08` `K09` `K10` `K11` `K12` `K13` `K14` `K15` `K16` `K17` `K18` `K19`) · **PARTIAL 1** (`K20`) · **MISSING 0** · **OMIT-BY-DESIGN 0**.
+Сводка: **COMPLETE 20** (`K01`–`K20`) · **PARTIAL 0** · **MISSING 0** · **OMIT-BY-DESIGN 0**.
 
 ### Очередь Today (только дефекты матрицы, порядок K)
 
-1. **K20** — leftover `extraCards` на unavailable MY DAY
+Нет. Матрица закрыта.
 
-**Следующий hop = K20 only.** Не IL. Не PIC. Не Compatibility N. Не rebuild.
-
-Не в очереди: Glance как пятый акт · scent/stone generators (на locked path не рисуются) · emitTodayDisplayFrame rhythm scan gap. K01 closed. K06 closed. K07 closed. K09 closed. K10 closed. K13 closed. K14 closed. K15 closed. K16 closed. K17 closed.
+**Следующее = TIC close-out** (повторный executable audit 20/20 + Inventory last-authority на locked surfaces). Не K21. Не IL. Не PIC. Не Compatibility N. Не rebuild. Не следующий Today train автоматически.
 
 ---
 
@@ -429,6 +437,7 @@ IN → TIC-F → TIC-K → derivation → product field → Inventory slot → l
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | §11 K20 COMPLETE: unavailable MY DAY = `T3.unavailable` only; extraCards/practice/affirmation omit; not surrogate meaning. **20 COMPLETE · 0 PARTIAL**. Next = TIC close-out, not K21. |
 | 2026-09-21 | §11 K17 COMPLETE: XOR affirmation vs practice from existing F10 content class; scene rec/trap do not feed T3.affirmation; empty branch omits. 19 COMPLETE · 1 PARTIAL. Next remaining = K20. |
 | 2026-09-21 | §11 K16 COMPLETE: `T3.practice` = existing `GET /practices/select` from F10 `focus_axis`; Global `primary_energy` does not feed the slot; omit without F10. 18 COMPLETE · 2 PARTIAL. Next remaining = K17. |
 | 2026-09-21 | §11 K15 COMPLETE: `T3.color.*` / `color_guide` = existing `score_color_for_needs` on F05+F09 after persist; scene tags / catalog leftover do not feed the slot; omit without ground. 17 COMPLETE · 3 PARTIAL. Next remaining = K16. |

@@ -59,6 +59,15 @@
 - **Canon updated?** yes — this record · Information Contract §11 · tracker
 - **Backward compatible?** yes for API. Title omits without a mapped overlay natal point.
 
+## Architecture impact — TIC-K20 honesty (2026-09-21)
+
+- **SoT before:** unavailable MY DAY painted honesty copy and still mounted extraCards (practice/affirmation).
+- **SoT after:** same slot. Only `T3.unavailable`. extraCards omit. Empty Personal / Global leftovers do not fill the pane.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this record · Information Contract §11 · tracker
+- **Backward compatible?** yes for API. Unavailable MY DAY no longer shows leftover support cards.
+
 ## Architecture impact — TIC-K17 XOR (2026-09-21)
 
 - **SoT before:** `T3.affirmation` could paint with `T3.practice` via date-hash rotation; scene rec/trap could fill the slot.
@@ -210,11 +219,13 @@ Proposition test: тот же, что Profile (Jaccard / substring).
 | empty_behavior | этот слот **вместо** T3 meaning |
 | may_fe_transform | none |
 | forbidden | leftover conflict.short_name, catalog color, independent day_facts clock |
-| omit_also | T3.headline…depth, T3.color, natal rhythm |
+| omit_also | T3.headline…depth, T3.color, natal rhythm, extraCards / T3.practice / T3.affirmation |
 | persist_key | n/a |
 | anti_dupe_group | `failure` |
 
 T1 Global Engine profile **может** остаться на TODAY.
+
+unavailable → **не** extraCards · **не** T3.practice · **не** T3.affirmation. Пустой Personal не заполняется Global scene/kitchen/chorus.
 
 ---
 
@@ -682,11 +693,11 @@ Chrome: «Мой ритм дня» если natal clocks; иначе «Ритм 
 | authority | existing `GET /practices/select` from Personal F10 focus |
 | semantic_source | catalog item for the already-chosen closed 4-set `focus_axis` |
 | allowed_inputs | Personal Focus (`personal_day.natal_overlay.focus_axis`) → one catalog item |
-| forbidden_inference | LLM pick; paraphrase `T3.priority`; second practice; Global `primary_energy` / K01 8-set; invent compensating risk from K10 prose or Global F06; paint beside `T3.affirmation` |
+| forbidden_inference | LLM pick; paraphrase `T3.priority`; second practice; Global `primary_energy` / K01 8-set; invent compensating risk from K10 prose or Global F06; paint beside `T3.affirmation`; paint on `T3.unavailable` / extraCards when Personal is missing |
 | output | title + 1 why |
 | budget | title ≤48 · why 1 предл. ≤160 · **count 1** |
 | required | нет |
-| empty_behavior | omit |
+| empty_behavior | omit; omit on unavailable MY DAY (not Global/kitchen fill) |
 | may_llm_add_meaning | нет |
 | persist_key | PersonalDayKey + catalog id |
 | anti_dupe_group | `enrichment` · `do_layers` |
@@ -699,11 +710,11 @@ Chrome: «Мой ритм дня» если natal clocks; иначе «Ритм 
 | text_class | generated |
 | authority | XOR with `T3.practice` from existing F10 content class |
 | allowed_inputs | Personal affirmation field only, and only when content mode is affirmation |
-| forbidden_inference | CE identity line; rewrite `T3.priority` as «я сделаю…»; Global energy sermon; scene `props.affirmations` / trap / `recommended_action`; date-hash rotation; fill from leftover catalog when the practice branch is empty |
+| forbidden_inference | CE identity line; rewrite `T3.priority` as «я сделаю…»; Global energy sermon; scene `props.affirmations` / trap / `recommended_action`; date-hash rotation; fill from leftover catalog when the practice branch is empty; paint on `T3.unavailable` / extraCards when Personal is missing |
 | output | 1 предложение |
 | budget | ≤140 chars |
 | required | нет |
-| empty_behavior | omit |
+| empty_behavior | omit; omit on unavailable MY DAY (not scene/catalog fill) |
 | may_llm_add_meaning | нет |
 | persist_key | PersonalDayKey |
 | anti_dupe_group | `do_layers` · `enrichment` |
@@ -866,6 +877,7 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | `T3.unavailable` only on unavailable MY DAY; extraCards / practice / affirmation omit; not surrogate meaning |
 | 2026-09-21 | `T3.affirmation` XOR `T3.practice` from existing F10 content class; scene rec/trap do not feed the slot; empty branch omits |
 | 2026-09-21 | `T3.practice` = existing `GET /practices/select` from F10 `focus_axis`; Global `primary_energy` does not feed the slot; omit without Personal focus |
 | 2026-09-21 | `T2.lens_number` = Personal Day × F11/F12 after persist; Global chorus `day_number` / tempo stay on hook and do not feed the slot; omit without personal lens |

@@ -2178,7 +2178,7 @@ export function TodayCompositionSurface(props: Props) {
         ) : null
       }
       colorCard={myDayMeaningUnavailable ? null : handoffColorBody}
-      extraCards={handoffTasksBody}
+      extraCards={myDayMeaningUnavailable ? null : handoffTasksBody}
       depthLayer={
         !myDayMeaningUnavailable && todayDepthLayerForFocus ? (
           <TodayDepthLayerSection

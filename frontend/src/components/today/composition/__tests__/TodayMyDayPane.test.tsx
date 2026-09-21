@@ -3,7 +3,7 @@ import { TodayMyDayPane } from "@/components/today/composition/TodayMyDayPane";
 import { TODAY_UNAVAILABLE_COPY } from "@/lib/todaySlotAvailability";
 
 describe("TodayMyDayPane", () => {
-  it("omits leftover focus, timeline and color when meaning is unavailable", () => {
+  it("omits leftover focus, timeline, color and extraCards when meaning is unavailable", () => {
     render(
       <TodayMyDayPane
         meaningUnavailable
@@ -13,13 +13,22 @@ describe("TodayMyDayPane", () => {
         priorities={["Не удалось загрузить."]}
         timeline={<div data-testid="today-my-day-rhythm">таймлайн</div>}
         colorCard={<div data-testid="today-zone-color-guide">Янтарный</div>}
+        extraCards={
+          <div data-testid="today-day-tasks">
+            <p>Практика дня</p>
+            <p>Я справлюсь с тем, что прямо сейчас.</p>
+          </div>
+        }
       />,
     );
     expect(screen.getByTestId("today-my-day-unavailable")).toHaveTextContent(TODAY_UNAVAILABLE_COPY);
     expect(screen.queryByTestId("today-handoff-focus")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-my-day-rhythm")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-color-guide")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-day-tasks")).not.toBeInTheDocument();
     expect(screen.queryByText("Ровный продуктивный ритм.")).not.toBeInTheDocument();
     expect(screen.queryByText("Янтарный")).not.toBeInTheDocument();
+    expect(screen.queryByText("Практика дня")).not.toBeInTheDocument();
+    expect(screen.queryByText("Я справлюсь с тем, что прямо сейчас.")).not.toBeInTheDocument();
   });
 });

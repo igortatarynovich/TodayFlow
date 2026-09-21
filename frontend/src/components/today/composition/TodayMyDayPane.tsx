@@ -22,13 +22,14 @@ type Props = {
   colorCard?: ReactNode;
   extraCards?: ReactNode;
   depthLayer?: ReactNode;
-  /** Personal Day meaning missing — one honest status, no leftover color/timeline/focus. */
+  /** Personal Day meaning missing — one honest status, no leftover color/timeline/focus/extraCards. */
   meaningUnavailable?: boolean;
 };
 
 /**
  * MY DAY — personal headline · focus · priority · cautions · timeline · optional cards.
  * Canon: docs/today/TODAY_PRODUCT_FLOW_V1.md §3. Kit only. Honest omit.
+ * TIC-K20: unavailable paints T3.unavailable only — extraCards are not surrogate meaning.
  */
 export function TodayMyDayPane({
   headline = null,
@@ -50,7 +51,6 @@ export function TodayMyDayPane({
           testId="today-my-day-unavailable"
           title={TODAY_UNAVAILABLE_COPY}
         />
-        {extraCards}
       </div>
     );
   }
