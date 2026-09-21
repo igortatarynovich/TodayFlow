@@ -254,14 +254,33 @@ USER RESPONSE           →  GRATITUDE HISTORY
 |------|---------------------|--------|
 | 4-surface cutover / ritual-first funnel | **CLOSED** (Phase 2.2). `/today` opens on `today`, then `ritual` · `my_day` · `evening` | cycle already locked |
 | **X3 Theme / Focus / Step** | **CLOSED / PASS.** T1 Theme · T3 Focus · T3.priority Step. Live T2-gate copy is a lens over an already-counted day; card/number do not define Theme/Focus/Step or action timing | experience on closed N |
-| X4 honest card reveal | **OPEN — NEXT.** Seed/prebake vs «выбери ту, к которой тянет» | experience copy |
-| X5 calendar number | OPEN, вместе с X4 (§16.1 п.4). Copy «твоё число» vs календарное число сегодняшнего дня | experience copy |
+| **X4/X5 honest reveal copy** | **OPEN — NEXT (joint).** Two §13 IDs, one executable PASS. X4: seed/prebake vs «выбери ту, к которой тянет». X5: calendar YYYYMMDD vs «твоё/своё число». Same T2 surface; card then number (A→B). Gesture stays theater; formula stays calendar | experience copy |
+| X4 (clause) | Card copy must not claim a real pick. Reveal verbs OK. Prebake + deck gesture unchanged | clause of X4/X5 |
+| X5 (clause) | Number copy must not claim a personal number. Target: «число сегодняшнего дня». YYYYMMDD + ring gesture unchanged | clause of X4/X5 |
 | X11 legacy narrative | OPEN, P1. Glance leftover / stacked `?experience=1` / promise-trap copy. Не пятый акт | cleanup |
 | X14 progress + D2 continuity | OPEN, P1. `T1.continuity` и `T3.tracker` есть; completeness / placement не закрыты | experience |
 | Compatibility Information Contract | **не выбран.** Отдельная таблица (PIC §9). Не автоматическое продолжение TIC | other section N |
 | TIC-K21 / IL dump / PIC resume | **запрещены** этой сверкой | not a product gate |
 
-**Следующий executable gate:** X4 honest card reveal + X5 calendar-number copy. Не расширять TIC. Не rebuild сервера. X3 не закрывает X4/X5.
+**Следующий executable gate (selection 2026-09-21):** **один** совместный **X4/X5**. Не два поезда. Не закрывать X4 без X5. Не расширять TIC. Не rebuild сервера. Не landing. Не X11 leftover. X3 не закрывает X4/X5. New branch only when paint starts.
+
+**Acceptance (joint PASS):**
+
+| Clause | In | Out |
+|--------|----|-----|
+| **X4** | Locked `T2-gate.card_*` chrome must not claim the user chose the card («выбери ту, к которой тянет», «Выбрать карту» as a real pick). Reveal verbs OK («открой / вытяни / сними»). | Prebake / POST reveal / deck gesture / ScreenFlow A / Inventory / K13 lens |
+| **X5** | Locked `T2-gate.number_*` chrome must not claim a personal number («твоё/своё число»). Target wording: «число сегодняшнего дня» / «Открыть число дня» (already §2 state B). | YYYYMMDD formula / POST reveal / ring gesture / ScreenFlow B→C / Inventory / K14 lens |
+
+Both clauses required. Order of paint = card then number (existing A→B). Live overlay on locked path is already closer to honest («Открыть карту»; number ring `aria-label` «Открыть число дня»); leftover lie is mainly gate chrome in `todayCompositionCopy`. Legacy `todayRitualCopy` / `?full=1` / `?experience=1` = X11, not this gate. Landing number promise = §16.3 backlog, not this gate.
+
+### Architecture impact — X4/X5 gate selection (2026-09-21)
+
+- **SoT before:** X3 CLOSED / PASS; next = «X4/X5» without hop shape. §13 two rows; §16.1 п.4 one item.
+- **SoT after:** one joint executable gate. PASS = both honesty clauses on locked `T2-gate.*` chrome. Order = existing ritual A→B (card then number). Mechanic SoT remains [DAY_SYMBOL_REVEAL_CANON_V1](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md) (prebake; client pick is theater; number = local-date reduce).
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this file · FULL_USER_PATH §0/§13/§16 · tracker · X3 handoff pointer
+- **Backward compatible?** yes. Selection only; no product paint in this hop.
 
 ### Architecture impact — X3 Theme / Focus / Step (2026-09-21)
 
