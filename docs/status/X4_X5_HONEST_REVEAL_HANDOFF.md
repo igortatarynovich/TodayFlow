@@ -13,7 +13,7 @@ Not two trains. Not TIC-K21. Not landing. Not X11 leftover. Do not rebuild serve
 
 X4 and X5 close **together**. Live locked `T2-gate.card_*` no longer paints a prebaked card as a user choice. Live locked `T2-gate.number_*` no longer paints YYYYMMDD as a personal number. Overlay gesture was already honest and stays theater. Mechanic (DAY_SYMBOL prebake + POST reveal + YYYYMMDD) unchanged.
 
-Selected next product gate (selection 2026-09-21): Full User Path **X11** leftover narrative. Closing X4/X5 does not implement or close that gate. **X14 after X11.**
+Selected next product remainder: Full User Path **X14**. Closing X4/X5 does not implement or close that gate. **X11 leftover narrative is CLOSED / PASS** on `cursor/x11-leftover-narrative`.
 
 ---
 
@@ -45,5 +45,5 @@ Gate: `todayX4X5HonestReveal.test.tsx` · `todayX4X5GateCopy.test.ts`. X3 gates 
 - Split X4 from X5 after this freeze.
 - Invent TIC-K21 or resume TIC hops.
 - Rebuild server. Merge/deploy only if asked.
-- Start later Today remainder (**X14**) from this freeze. Selected next is X11 leftover narrative (new branch when that gate starts). This freeze does not implement X11.
+- Start later Today remainder (**X14**) from this freeze. X11 leftover narrative is a separate closed gate.
 - Reopen Glance as a fifth act. Resume PIC / IL / Compatibility IC.

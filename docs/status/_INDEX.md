@@ -9,7 +9,8 @@ Active status, execution, and audit documents for TodayFlow.
 | [PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md](./PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md) | Natal → IL → Character Engine → Profile | **PARKED** — PIC executed |
 | [TODAY_INFORMATION_CONTRACT_HANDOFF.md](./TODAY_INFORMATION_CONTRACT_HANDOFF.md) | Today Information Contract | **FROZEN** — CLOSED / PASS; selected next was X3 (executed on `cursor/x3-theme-focus-step`) |
 | [X3_THEME_FOCUS_STEP_HANDOFF.md](./X3_THEME_FOCUS_STEP_HANDOFF.md) | Full User Path X3 Theme/Focus/Step | **CLOSED / PASS**; next joint X4/X5 executed on `cursor/x4-x5-honest-reveal-copy` |
-| [X4_X5_HONEST_REVEAL_HANDOFF.md](./X4_X5_HONEST_REVEAL_HANDOFF.md) | Full User Path X4/X5 honest reveal copy | **CLOSED / PASS**; selected next = X11 |
+| [X4_X5_HONEST_REVEAL_HANDOFF.md](./X4_X5_HONEST_REVEAL_HANDOFF.md) | Full User Path X4/X5 honest reveal copy | **CLOSED / PASS**; X11 executed after |
+| [X11_LEFTOVER_NARRATIVE_HANDOFF.md](./X11_LEFTOVER_NARRATIVE_HANDOFF.md) | Full User Path X11 leftover narrative | **CLOSED / PASS**; selected next = X14 |
 | [CLOSED_LOOP_V0_HANDOFF.md](./CLOSED_LOOP_V0_HANDOFF.md) | Closed loop v0 (gratitude D+1 + practice select) | **LOCKED** |
 | [BEHAVIOR_CHANGE_TEST_V0.md](./BEHAVIOR_CHANGE_TEST_V0.md) | Minimum Day Cycle ship gate + behavior test protocol | IN_PROGRESS / BLOCKED until ship gate |
 | [IOS_TODAYFLOW_STATUS.md](./IOS_TODAYFLOW_STATUS.md) | iOS parity snapshot | IN_PROGRESS |

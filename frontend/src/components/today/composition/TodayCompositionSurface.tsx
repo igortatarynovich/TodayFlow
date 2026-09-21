@@ -1550,11 +1550,6 @@ export function TodayCompositionSurface(props: Props) {
     ) : null;
 
   const greetingParts = splitSalutation(story.greeting.salutation);
-  // Glance expect/trap only when personalized narrative is not showing the same slots.
-  const showGlance =
-    zones.glance &&
-    (story.glance.supported.length > 0 || story.glance.helpful.length > 0) &&
-    !(useProductFoundation && story.personalizedReady);
 
   const greetingSection = zones.greeting ? (
     <section className={styles.greeting} data-testid="today-zone-greeting">
@@ -1597,33 +1592,6 @@ export function TodayCompositionSurface(props: Props) {
         <p className={styles.ritualUnlockHint}>{story.ritualUnlockHint}</p>
       ) : null}
     </TodayScreenBlock>
-  ) : null;
-
-  const glanceSection = showGlance ? (
-    <section className={styles.glanceSection} data-testid="today-zone-glance">
-      <div className={styles.glanceCardGrid}>
-        {story.glance.supported.map((card) => (
-          <article key={card.id} className={styles.glanceColCard} data-testid={`today-glance-${card.id}`}>
-            <p className={styles.glanceColTitleStrong}>{copy.glanceStrongTitle}</p>
-            <p className={styles.glanceSphereLabel}>
-              <span className={styles.glanceDotStrong} aria-hidden />
-              {card.sphere}
-            </p>
-            <p className={styles.glanceSphereComment}>{card.comment}</p>
-          </article>
-        ))}
-        {story.glance.helpful.map((card) => (
-          <article key={card.id} className={styles.glanceColCard} data-testid={`today-glance-${card.id}`}>
-            <p className={styles.glanceColTitleHelpful}>{copy.glanceWeakTitle}</p>
-            <p className={styles.glanceSphereLabel}>
-              <span className={styles.glanceDotWeak} aria-hidden />
-              {card.sphere}
-            </p>
-            <p className={styles.glanceSphereComment}>{card.comment}</p>
-          </article>
-        ))}
-      </div>
-    </section>
   ) : null;
 
   const heroTheme =

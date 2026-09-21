@@ -22,7 +22,6 @@ import {
   type NarrativeDepthLevel,
   effectiveNarrativeDepth,
 } from "@/lib/todayNarrativeDepthUi";
-import { TodayNarrativeDepthControl } from "@/components/today/TodayNarrativeDepthControl";
 import { TodayWebDashboard } from "@/components/product-ui/TodayWebDashboard";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
 import { DsButton } from "@/design-system";
@@ -40,16 +39,13 @@ import {
   buildTodayWebWeeklyActivity,
 } from "@/lib/buildTodayWebDashboardData";
 import { TodayCompositionSurface } from "@/components/today/composition/TodayCompositionSurface";
-import { TodayExperienceSurface } from "@/components/today/experience/TodayExperienceSurface";
 import { TODAY_CONTRACT_COPY } from "@/components/today/contract/todayContractCopy";
-import { TodayRitualFlow } from "@/components/today/TodayRitualFlow";
 import { EntityCreateWizard } from "@/app/tracking/calendar/EntityCreateWizard";
 import {
   buildDailyNudge,
   buildDayEnergySummary,
   buildNextAction,
   buildTodayActionPlan,
-  getWeekStart,
   inferPreferredSection,
   mergeFullTodayCycleLayers,
   normalizeTodayPayload,
@@ -123,11 +119,7 @@ export default function TodayPage() {
   // Mood/atmosphere first-day signal (FOUNDATION_UI §8) — same resolver as
   // SectionAtmosphereBridge, so shell + dashboard don't diverge from html.
   const isFirstDayMood = resolveIsFirstDay("/today", searchParams);
-  // Launch surface cut: legacy ritual (?full=1) / experience (?experience=1) surfaces
-  // are reachable only in local development; users always get the composition path.
-  const allowLegacyTodaySurfaces = process.env.NODE_ENV === "development";
-  const todayExperienceMode = allowLegacyTodaySurfaces ? searchParams.get("full") !== "1" : true;
-  const ritualExperienceMode = allowLegacyTodaySurfaces ? searchParams.get("experience") === "1" : false;
+  // X11: product /today is the locked 4-surface only. `?full=1` / `?experience=1` are no-ops.
   const toast = useToast();
   const { trackMeaningEvent } = useMeaningRuntime();
   const { refetchToday, cycle, todayHeavyLayersPending } = useTodayCycle();
@@ -439,7 +431,6 @@ export default function TodayPage() {
             setDayRevealDone(true);
           }
 
-          const experienceMode = allowLegacyTodaySurfaces ? searchParams.get("full") !== "1" : true;
           // First paint must not wait on morning-ritual narrative (can be 30s+ on timeout).
           // Use fast_mode; apply ritual when ready without blocking contract/cycle paint.
           const ritualUrl =
@@ -555,43 +546,6 @@ export default function TodayPage() {
             }
           });
 
-          if (!experienceMode) {
-            const weekStart = getWeekStart(todayIso);
-            const monthStart = `${todayIso.slice(0, 7)}-01`;
-            setSupplementaryLoading(true);
-            Promise.all([
-              getJson<FusionResponse>(`/tracking/fusion/${todayIso}`).catch(() => null),
-              getJson<PracticeResponse>("/practices/current")
-                .catch(async () => {
-                  const fallback = await getJson<PracticeResponse[]>("/practices?limit=1").catch(() => []);
-                  return fallback.length ? fallback[0] : null;
-                }),
-              getJson<WeeklyGoal[]>(`/tracking/weekly-goals?week_start=${weekStart}&scope=week`).catch(() => []),
-              getJson<WeeklyGoal[]>(`/tracking/weekly-goals?week_start=${monthStart}&scope=month`).catch(() => []),
-            ])
-              .then(([fusion, practice, weekGoals, monthGoals]) => {
-                setFusionData(fusion);
-                setQuickPractice(practice);
-                const wg = Array.isArray(weekGoals) ? weekGoals : [];
-                const mg = Array.isArray(monthGoals) ? monthGoals : [];
-                const merged = [...wg, ...mg];
-                const byId = new Map(merged.map((g) => [g.id, g]));
-                setWeeklyGoals(Array.from(byId.values()));
-                if (practice?.duration_minutes && practice.duration_minutes > 0) {
-                  setTimerSeconds(practice.duration_minutes * 60);
-                } else {
-                  setTimerSeconds(300);
-                }
-                setTimerRunning(false);
-                setPracticeCompleted(false);
-              })
-              .catch((err) => {
-                console.warn("Supplementary today data failed to load", err);
-              })
-              .finally(() => {
-                setSupplementaryLoading(false);
-              });
-          }
       } catch (err: any) {
         console.error("Error loading today:", err);
         const transport =
@@ -621,7 +575,7 @@ export default function TodayPage() {
         }
       }
     },
-    [refetchToday, searchParams, todayIso],
+    [refetchToday, todayIso],
   );
 
   loadTodayRef.current = loadToday;
@@ -921,44 +875,6 @@ export default function TodayPage() {
       cancelled = true;
     };
   }, [isAuthenticated, todayData?.date, guideNarrativeLoading, guideGenerationId, dayStorySingleVoice, narrativeDepthForRequest]);
-
-  useEffect(() => {
-    // Launch cut: Evening = gratitude only (TODAY_PRODUCT_FLOW_V1 §4) — no evening
-    // narrative generation in the product path; kept for the dev-only legacy surface.
-    if (!allowLegacyTodaySurfaces) return;
-    if (!isAuthenticated || !todayData?.date) return;
-    if (dayStorySingleVoice) return;
-    if (guideNarrativeLoading) return;
-    let cancelled = false;
-    setEveningLoading(true);
-    void fetchTodayNarrativeCached({
-      target_date: todayData.date,
-      surface: "evening",
-      parent_generation_id: guideGenerationId ?? undefined,
-      ritual_context: lastRitualNarrativeContextRef.current ?? undefined,
-      ...(narrativeDepthForRequest ? { depth_level: narrativeDepthForRequest } : {}),
-    })
-      .then((r) => {
-        if (!cancelled) {
-          setEveningGenerationId(r.generation_id);
-          eveningProfileSelectorRef.current = narrativeProfileSelectorPayload(r.profile_selector);
-          setEveningPayload(r.payload);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setEveningGenerationId(null);
-          eveningProfileSelectorRef.current = null;
-          setEveningPayload(null);
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setEveningLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [allowLegacyTodaySurfaces, isAuthenticated, todayData?.date, guideNarrativeLoading, guideGenerationId, dayStorySingleVoice, narrativeDepthForRequest]);
 
   useEffect(() => {
     if (!todayData) return;
@@ -1488,7 +1404,7 @@ export default function TodayPage() {
     return `${m}:${String(s).padStart(2, "0")}`;
   };
 
-  const todayDashboardLayout = todayExperienceMode ? "composition" : "ritual";
+  const todayDashboardLayout = "composition";
 
   return (
     <>
@@ -1524,20 +1440,7 @@ export default function TodayPage() {
         layout={todayDashboardLayout}
         coreProfile={coreProfile}
       >
-        {supplementaryLoading && !todayExperienceMode ? (
-          <p className="orbit-body-xs" style={{ margin: 0, color: "#7a623d" }}>
-            {RITUAL_COPY.todaySupplementaryLoadingHint}
-          </p>
-        ) : null}
-        {narrativeDepthLoaded && !loading && !todayExperienceMode ? (
-          <TodayNarrativeDepthControl
-            value={narrativeDepthLevel}
-            saving={narrativeDepthSaving}
-            canPickDeep={insightDepthFromProfile(accountMe) !== "free"}
-            onChange={(next) => void saveNarrativeDepthFromToday(next)}
-          />
-        ) : null}
-        {todayExperienceMode && todayContract && !ritualExperienceMode ? (
+        {todayContract ? (
           <TodayCompositionSurface
             embeddedInWebDashboard
             variant={firstTodayMode ? "firstToday" : "default"}
@@ -1567,85 +1470,6 @@ export default function TodayPage() {
             dayStoryUpdating={dayStoryUpdating}
             onSymbolRevealResult={onSymbolRevealResult}
             onVisible={firstTodayMode ? onFirstTodayVisible : onExperienceSurfaceVisible}
-          />
-        ) : todayExperienceMode && todayContract ? (
-          <TodayExperienceSurface
-            dateISO={todayData.date}
-            displayDate={formatDate(todayData.date)}
-            firstName={firstNameRitual}
-            todayData={todayData}
-            morningRitualData={morningRitualData}
-            contract={todayContract}
-            fusion={fusionData}
-            cardName={cardNameRitual}
-            cardMeaning={cardMeaningRitual}
-            numerologyValue={numerologyValueRitual}
-            numerologyMeaning={numerologyMeaningRitual}
-            guideNarrativeLoading={guideNarrativeLoading}
-            guideNarrativePayload={guideNarrativePayload}
-            guideGenerationId={guideGenerationId}
-            onRitualSpineComplete={onRitualSpineComplete}
-            onVisible={onExperienceSurfaceVisible}
-          />
-        ) : !todayExperienceMode ? (
-          <TodayRitualFlow
-            firstName={firstNameRitual}
-            profileGender={coreProfile?.person?.gender ?? null}
-            displayDate={formatDate(todayData.date)}
-            todayData={todayData}
-            morningRitualData={morningRitualData}
-            fusion={fusionData}
-            meaningRings={meaningRingsData}
-            energyScore={energyScore}
-            energyScoreIsPlaceholder={energyScoreIsPlaceholder}
-            dayLabel={dayLabelRitual}
-            subtitle={subtitleMerged}
-            cardName={cardNameRitual}
-            cardMeaning={cardMeaningRitual}
-            numerologyValue={numerologyValueRitual}
-            numerologyMeaning={numerologyMeaningRitual}
-            numerologyLucky={numerologyLucky}
-            cardNumberBridge={cardNumberBridgeRitual}
-            summaryTitle={summaryTitleMerged}
-            possible={possibleRitual}
-            avoid={avoidRitual}
-            support={supportRitual}
-            whyMoon={whyMoonRitual}
-            whyLunar={whyLunarRitual}
-            actionItems={actionItemsRitual}
-            weeklyGoals={weeklyGoals}
-            onOpenHabit={openEntityWizard}
-            onStartFocus20Minutes={startTodayFocus20}
-            onTrackMood={() => undefined}
-            guideNarrativeLoading={guideNarrativeLoading}
-            guideNarrativePayload={guideNarrativePayload}
-            spheresNarrativePayload={spheresPayload}
-            dayLayerNarrativePayload={dayLayerPayload}
-            dayLayerNarrativeLoading={dayLayerLoading}
-            eveningPayload={eveningPayload}
-            eveningNarrativeLoading={eveningLoading}
-            eveningCustomPhrase={eveningCustomPhrase}
-            eveningMarkedDone={eveningMarkedDone}
-            eveningObservations={eveningObservations}
-            eveningReflectionInput={eveningReflectionInput}
-            eveningSaving={eveningSaving}
-            onEveningCustomPhraseChange={setEveningCustomPhrase}
-            onEveningMarkedDoneChange={setEveningMarkedDone}
-            onEveningObservationChange={(field, value) => setEveningObservations((prev) => ({ ...prev, [field]: value }))}
-            onEveningReflectionChange={setEveningReflectionInput}
-            onSaveEvening={saveEveningRitualInline}
-            onRefreshToday={() => void loadToday({ force: true })}
-            onEveningPhaseSaved={() => void loadToday({ force: true })}
-            onRitualSpineComplete={onRitualSpineComplete}
-            todayContract={todayContract}
-            dayStoryUpdating={dayStoryUpdating}
-            onSymbolRevealResult={onSymbolRevealResult}
-            narrativeGenerationIds={{
-              guide: guideGenerationId,
-              day_layer: dayLayerGenerationId,
-              spheres: spheresGenerationId,
-              evening: eveningGenerationId,
-            }}
           />
         ) : null}
       </TodayWebDashboard>

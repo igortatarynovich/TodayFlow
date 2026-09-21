@@ -359,7 +359,7 @@ Owner может сузить M (убрать показ), не расширяя
 | Раздел | Контракт | Сейчас |
 |--------|----------|--------|
 | Profile | [PROFILE_INFORMATION_CONTRACT_V1](../profile/PROFILE_INFORMATION_CONTRACT_V1.md) | **исполнен** (17 COMPLETE / 0 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN). Не очередь Today |
-| Compatibility | нужен свой Information Contract | два Profile N + pair derivation. **Не выбран** (2026-09-21). Следующий Today gate = X11; X14 после него |
+| Compatibility | нужен свой Information Contract | два Profile N + pair derivation. **Не выбран** (2026-09-21). Следующий Today remainder = X14 |
 | Tarot (вопрос, не карта дня) | нужен свой | card_base + question/spread; не этот N |
 | Практики (хаб, не `T3.practice`) | taxonomy + coverage | метод/item, не знание о дне |
 
@@ -456,11 +456,11 @@ Locked surfaces = production 4-surface path: `TodayProductScreenFlow` ← `Today
 | **3. Forbidden-source scan** | **PASS** | Kitchen families, PIC/CE prose, Global→Personal подмена, scene leftovers, generic fallback и chrome-as-root не кормят locked meaning. Regression set K01/K06/K07/K09/K10/K13–K17/K20 PASS. |
 | **4. Omit integrity** | **PASS** | Нет overlay → personal slots omit. Нет Personal×card/number → lenses omit. Нет personal do/avoid → priority/caution omit. Пустая K17-ветка не подставляет другую. Unavailable → только `T3.unavailable`. |
 
-**Glance leftover:** **out of TIC locked-surface scope.** `TodayGlanceAct` не смонтирован. `glanceSection` не рендерится. Wave2 Daily Focus не пятый акт. Именованные helpers на locked path не являются Glance-as-act SoT: `T1-hero.sheet` `energyCause` = Inventory-authorized Global; `T3.priority` `glancePrioritize` = identity-check vs personal `today_move`. Если будущий re-audit найдёт `TodayGlanceAct` на 4-surface — этот freeze void, gate FAIL; чинить отдельным hop, не внутри аудита.
+**Glance leftover:** **out of TIC locked-surface scope.** `TodayGlanceAct` не смонтирован. `glanceSection` не конструируется на locked surface (X11). Wave2 Daily Focus не пятый акт. Именованные helpers на locked path не являются Glance-as-act SoT: `T1-hero.sheet` `energyCause` = Inventory-authorized Global; `T3.priority` `glancePrioritize` = identity-check vs personal `today_move`. Если будущий re-audit найдёт `TodayGlanceAct` на 4-surface — этот freeze void, gate FAIL; чинить отдельным hop, не внутри аудита.
 
 Gate: `evaluate_tic_closeout` · `backend/tests/test_today_information_contract_closeout_v1.py` · `frontend/src/lib/__tests__/todayTicCloseout.test.ts`.
 
-**Следующий продуктовый gate (selection 2026-09-21, after X4/X5 CLOSED / PASS):** Full User Path **X11** leftover narrative. **X14 after X11.** SoT выбора: [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) product-gate selection · [FULL_USER_PATH_CANON_V1](../audits/FULL_USER_PATH_CANON_V1.md) §13/§16. Не Compatibility Information Contract. Не invent `TIC-K21`. Не IL dump. Не PIC. Не rebuild.
+**Следующий продуктовый remainder (after X11 CLOSED / PASS, 2026-09-21):** Full User Path **X14** progress + D2 continuity. SoT: [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) · [FULL_USER_PATH_CANON_V1](../audits/FULL_USER_PATH_CANON_V1.md) §13/§16. Не Compatibility Information Contract. Не invent `TIC-K21`. Не IL dump. Не PIC. Не rebuild.
 
 ---
 
@@ -468,7 +468,7 @@ Gate: `evaluate_tic_closeout` · `backend/tests/test_today_information_contract_
 
 | Date | Change |
 |------|--------|
-| 2026-09-21 | X11 gate selection (after X4/X5 CLOSED / PASS): next = leftover narrative cleanup. X14 after X11. Not Compatibility N. Not K21. TIC remains CLOSED / PASS. |
+| 2026-09-21 | X11 CLOSED / PASS (leftover narrative). TIC remains CLOSED / PASS. Next Today remainder = X14. Not Compatibility N. Not K21. |
 | 2026-09-21 | X4/X5 CLOSED / PASS (joint honest reveal copy). TIC remains CLOSED / PASS. Next Today remainder = X11 then X14. Not Compatibility N. Not K21. |
 | 2026-09-21 | X4/X5 gate selection (after X3 CLOSED / PASS): next = one joint X4/X5 honest reveal copy. Not Compatibility N. Not K21. TIC remains CLOSED / PASS. |
 | 2026-09-21 | Product-gate selection: next = Full User Path X3 (Theme/Focus/Step spine). Not Compatibility N. Not K21. |

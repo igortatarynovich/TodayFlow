@@ -257,22 +257,33 @@ USER RESPONSE           →  GRATITUDE HISTORY
 | **X4/X5 honest reveal copy** | **CLOSED / PASS (joint).** Two §13 IDs, one PASS. Locked `T2-gate.card_*` is a reveal, not a pick. Locked `T2-gate.number_*` is the calendar day number, not «своё». Gesture stays theater; formula stays calendar | experience copy |
 | X4 (clause) | **PASS.** Card copy does not claim a real pick. Reveal verbs OK. Prebake + deck gesture unchanged | clause of X4/X5 |
 | X5 (clause) | **PASS.** Number copy does not claim a personal number. Live CTA = «Открыть число дня». YYYYMMDD + ring gesture unchanged | clause of X4/X5 |
-| **X11 legacy narrative** | **OPEN — NEXT.** One executable cleanup gate. Production Today must not speak a parallel leftover story beside the locked 4-surface Inventory narrative. Named leftovers: Glance-as-act · stacked `?experience=1` / `?full=1` · promise-trap / duplicate `day_story` copy · deferred `todayRitualCopy` honesty. Не пятый акт. Не X14 | cleanup |
-| X14 progress + D2 continuity | OPEN, P1 **after X11**. `T1.continuity` и `T3.tracker` есть; completeness / placement не закрыты | experience |
+| **X11 legacy narrative** | **CLOSED / PASS.** Product `/today` mounts only the locked 4-surface. `?full=1` / `?experience=1` are no-ops. Glance-as-act not constructed. Evening is gratitude, not promise-trap. Leftover files stay | cleanup |
+| X14 progress + D2 continuity | OPEN, P1 **NEXT** after X11 CLOSED / PASS. `T1.continuity` и `T3.tracker` есть; completeness / placement не закрыты | experience |
 | Compatibility Information Contract | **не выбран.** Отдельная таблица (PIC §9). Не автоматическое продолжение TIC | other section N |
 | TIC-K21 / IL dump / PIC resume | **запрещены** этой сверкой | not a product gate |
 
-**Следующий executable gate (selection 2026-09-21, after X4/X5 CLOSED / PASS):** **X11** legacy narrative. Один PASS. Не X14 в этом hop. Не расширять TIC. Не rebuild сервера. Не landing. X4/X5 не закрывает X11. Stay on `cursor/x4-x5-honest-reveal-copy` until execution starts (then new branch).
+**Следующий executable gate (after X11 CLOSED / PASS, 2026-09-21):** **X14** progress + D2 continuity. Не этот freeze. Не расширять TIC. Не rebuild сервера. Не landing. X11 не закрывает X14.
 
-**Acceptance (X11 PASS):**
+**X11 close record (2026-09-21):**
+
+**Acceptance (PASS):**
 
 | In | Out |
 |----|-----|
-| Production `/today` does not mount Glance-as-act, `TodayExperienceSurface`, or `TodayRitualFlow` as product Today | Physical delete of every leftover file if already unreachable — execution audit picks the smallest blast |
+| Production `/today` does not mount Glance-as-act, `TodayExperienceSurface`, or `TodayRitualFlow` as product Today | Physical delete of leftover files |
 | Locked 4-surface does not paint a second day story (stacked leftover, promise-trap evening drama, triple `day_story`) beside Inventory slots | X14 progress / D2 completeness · landing §16.3 · iOS parity |
 | Leftover copy banks deferred from X4/X5 (`todayRitualCopy` pick / «своё число») are unreachable on locked path or cleaned here | TIC-K21 · PIC · IL · Compatibility IC · new meaning K |
 
-Selection only — no product paint in this hop. Executable audit of exact live leftovers comes on the execution branch.
+**Live after this hop:** product `/today` always mounts `TodayCompositionSurface`. `?full=1` / `?experience=1` cannot switch leftover surfaces. `glanceSection` is not constructed. Evening remains gratitude. Leftover files remain in the repo.
+
+### Architecture impact — X11 leftover narrative (2026-09-21)
+
+- **SoT before:** X11 OPEN. Production already no-op'd leftover query params via `NODE_ENV`; the same `/today` route still imported leftover surfaces for development. Dead `glanceSection` still constructed on the locked surface.
+- **SoT after:** **X11 CLOSED / PASS.** Product `/today` has one Inventory narrative. Query params are no-ops in the route. Glance leftover is not constructed there. **X14 stays after.** Not two trains.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this file · FULL_USER_PATH §0/§13/§16 · tracker · X11 handoff
+- **Backward compatible?** yes. Production query params were already no-ops; the route no longer keeps a parallel mount.
 
 ### Architecture impact — X11 gate selection (2026-09-21)
 
@@ -292,7 +303,7 @@ Selection only — no product paint in this hop. Executable audit of exact live 
 | **X4** | Locked `T2-gate.card_*` chrome must not claim the user chose the card («выбери ту, к которой тянет», «Выбрать карту» as a real pick). Reveal verbs OK («открой / вытяни / сними»). | Prebake / POST reveal / deck gesture / ScreenFlow A / Inventory / K13 lens |
 | **X5** | Locked `T2-gate.number_*` chrome must not claim a personal number («твоё/своё число»). Target wording: «число сегодняшнего дня» / «Открыть число дня» (already §2 state B). | YYYYMMDD formula / POST reveal / ring gesture / ScreenFlow B→C / Inventory / K14 lens |
 
-Both clauses required. Order of paint = card then number (existing A→B). **Live after this hop:** locked card gate body is a reveal («Открой карту»), not «выбери ту, к которой тянет»; number gate title is «Открыть число дня», not «своё число». Overlay was already honest and stays theater. Unused pick CTAs in the same chrome bank neutralized. Legacy `todayRitualCopy` / `?full=1` / `?experience=1` = X11, not this gate. Landing number promise = §16.3 backlog, not this gate. «Открой свою карту дня» remains §2 state A reveal chrome (day-card, not a pick).
+Both clauses required. Order of paint = card then number (existing A→B). **Live after this hop:** locked card gate body is a reveal («Открой карту»), not «выбери ту, к которой тянет»; number gate title is «Открыть число дня», not «своё число». Overlay was already honest and stays theater. Unused pick CTAs in the same chrome bank neutralized. Legacy `todayRitualCopy` / `?full=1` / `?experience=1` were X11 (now **CLOSED / PASS**). Landing number promise = §16.3 backlog, not this gate. «Открой свою карту дня» remains §2 state A reveal chrome (day-card, not a pick).
 
 ### Architecture impact — X4/X5 honest reveal copy (2026-09-21)
 
