@@ -4,21 +4,19 @@
  */
 
 export const PROJECTION_MANIFEST: Record<string, string> = {
-  "global_context.period": "T1-hero.human_line",
   "global_day.primary_energy": "T1-hero.energy_word",
   "global_day.energy_scores": "T1-hero.energy_pct",
   "global_day.windows": "T1-clock.range",
   "global_day.drivers": "T1-clock.transit",
   "global_day.strength": "T1-strength.chip",
   "global_day.risk": "T1-risk.chip",
-  "day_story.expect": "T1-hero.human_line",
   "day_story.day_personal.summary_ru": "T3.headline",
   "day_story.day_scenario.conflict.why_personal": "T3.focus_body",
   "day_story.day_personal.personal_astrology.summary_ru": "T3.focus_body",
   "day_story.do": "T3.priority",
   "day_story.today_move": "T3.priority",
   "day_story.avoid": "T3.caution",
-  "personal_day.natal_overlay": "T3.focus_title",
+  "personal_day.natal_overlay.focus_axis": "T3.focus_title",
   "ritual.card.catalog": "T2.catalog_card",
   "ritual.number.catalog": "T2.catalog_number",
   "ritual.card.lens": "T2.lens_card",

@@ -4,9 +4,9 @@
 
 | Файл | Роль |
 |------|------|
-| [PROFILE_INFORMATION_CONTRACT_V1.md](./PROFILE_INFORMATION_CONTRACT_V1.md) | **Закрытое N Profile** — 6 вводов · 13 фактов · 18 allowed knowledge; code gate |
+| [PROFILE_INFORMATION_CONTRACT_V1.md](./PROFILE_INFORMATION_CONTRACT_V1.md) | **Закрытое N Profile** — исполнен (17 COMPLETE / 0 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN). Не источник Today-работы |
 | [PROFILE_EXPERIENCE_SCENARIO_V1.md](./PROFILE_EXPERIENCE_SCENARIO_V1.md) | **Character Engine SoT** — единая модель личности платформы · каскад · запрет независимых генераторов |
-| [../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md](../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md) | PIC N=18 executed (K01 COMPLETE); K06 OMIT-BY-DESIGN; next = TODAY_INFORMATION_CONTRACT |
+| [../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md](../status/PROFILE_KNOWLEDGE_TO_OUTPUT_HANDOFF.md) | **PARKED** — PIC N=18 executed; Profile train closed |
 | [../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md) | Runtime inventory — contracts · prompts · jobs · FE/iOS · kill list |
 | [../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md) | **D1–D4 ACCEPTED** — Snapshot home · Evidence Graph · staged pipeline · adapters |
 | [../audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md](../audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md) | Schema DRAFT — identity/provenance · envelope · Evidence · Compass · adapters · shadow |

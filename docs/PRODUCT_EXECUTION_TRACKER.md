@@ -1,8 +1,18 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-09-20
+Last updated: 2026-09-21
 Owner: Product + Engineering
 Status: Active working document
+
+**NOW (TIC-K07 COMPLETE, 2026-09-21):** `T3.focus_title` / `personal_day.natal_overlay.focus_axis` is F10: closed 4-set domain of the already-chosen F09 natal_transit natal_point via existing `DOMAIN_NATAL_POINTS`. Kitchen / scene sphere / PIC / CE / chrome do not feed K07. Slot is the domain map_label, not K01 `human_line` or K06 headline. Missing/unmapped omit. TIC_COVERAGE K07 PARTIAL → COMPLETE (**12 COMPLETE / 8 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K09** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (TIC-K06 COMPLETE, 2026-09-21):** `T3.headline` / `day_personal.summary_ru` is the already-derived F09 natal_transit overlay thesis. HD/BaZi/Vedic/electional/name_numbers stay in the pack and do not feed K06. Missing overlay omit. TIC_COVERAGE K06 PARTIAL → COMPLETE (**11 COMPLETE / 9 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K07** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (TIC-K01 COMPLETE, 2026-09-21):** `T1-hero.human_line` formulates already-chosen `global_day.primary_energy` (closed 8-set). Greeting stays chrome. Missing/unknown omit. Overlay does not change the shared-day kind. TIC_COVERAGE K01 PARTIAL → COMPLETE (**10 COMPLETE / 10 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN**). Next remaining = **K06** only. Not IL. Not PIC. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (TIC COVERAGE AUDIT, 2026-09-21):** Executable audit of TIC-K01…K20 from live chain (not canon wish). 9 COMPLETE / 11 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN. JSON presence ≠ coverage: `human_line` is greeting; `T3.rhythm` is Engine windows display; scent/stone unused on locked path. Queue from defects only; **first = K01** (`T1-hero.human_line` ≠ formulation of `primary_energy`). No product fix in this hop. Profile parked. Not IL. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
+**NOW (TIC START, 2026-09-21):** Today Information Contract is a separate train. Closed N reconstructed: 8 inputs · 16 facts · 20 `TIC-K*`. Pipeline stays I0/owner; Inventory stays last UI authority; TIC is what Today may know. `TIC-K01` = shared-day energy, not PIC Identity Core. 13-key / CE prose are out. PIC is executed and is **not** a source of Today work. Next = **coverage audit** of the 20, not a K patch, not IL dump. Branch `cursor/today-information-contract`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (PIC K01 COMPLETE, 2026-09-21):** Identity Core is one observable mechanism from F01–F04 (+ F05 full, F09 contribution) via IL-2 roles into `P1.recognition_line` / `P1.identity_core`. Occupancy concretizes, does not replace. Missing evidence drops a piece; 13-key registry is not meaning SoT (fallback only if sun cannot compose). Same Virgo/Taurus/Gemini + Mars Cancer H4 vs Libra H7 keep a close mechanism and different recognition lines — not the 13-key phrase. PIC_COVERAGE K01 PARTIAL → COMPLETE (17 COMPLETE / 0 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN). Profile Information Contract is executed in code. Next = **TODAY_INFORMATION_CONTRACT** as a separate start. Not more IL. Branch `cursor/profile-knowledge-to-output`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
@@ -109,6 +119,51 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — TIC-K07 overlay axis (2026-09-21)
+
+- **SoT before:** F10 named but not written; FE filled `T3.focus_title` from Global scene sphere / kitchen overlay aliases.
+- **SoT after:** `focus_axis` = existing 4-domain membership of the already-chosen F09 natal_transit natal_point. FE map_label that id only; omit without it. Not a second ranker. Not K01/K06 prose.
+- **Public contract changed?** yes — `personal_day.natal_overlay.focus_axis` produced as F10 closed domain.
+- **Migration required?** no. Cached packs without the writer omit the title until rebuild.
+- **Canon updated?** yes — Information Contract §3/§11 · Display Inventory `T3.focus_title` · this tracker · handoff
+- **Backward compatible?** yes for API. Focus title omits when overlay transit has no mapped natal point.
+
+## Architecture impact — TIC-K06 overlay thesis (2026-09-21)
+
+- **SoT before:** `day_personal.summary_ru` concatenated overlay + HD + BaZi + Vedic + electional + name_numbers; T3.headline painted the mash.
+- **SoT after:** `summary_ru` copies existing F09 natal_transit thesis from `personal_astrology.summary_ru`. OUT families do not feed K06. Omit without overlay transit.
+- **Public contract changed?** no new JSON fields. `summary_ru` semantics = overlay thesis.
+- **Migration required?** no. Cached packages may keep old mash until rebuild.
+- **Canon updated?** yes — Information Contract §3/§11 · Display Inventory `T3.headline` · this tracker · handoff
+- **Backward compatible?** yes for API. Headline omits when overlay transit is missing.
+
+## Architecture impact — TIC-K01 human_line (2026-09-21)
+
+- **SoT before:** Engine already picked `primary_energy`; `T1-hero.human_line` painted warm greeting / theme / period / expect.
+- **SoT after:** `human_line` is a closed 8-set formulation of that energy. Greeting is chrome. Missing/unknown omit. No second selector. Overlay does not change the shared-day kind.
+- **Public contract changed?** no JSON fields
+- **Migration required?** no
+- **Canon updated?** yes — Information Contract §3/§11 · Display Inventory `T1-hero.human_line` · this tracker · handoff
+- **Backward compatible?** yes for API. Hero body wording changes from greeting to the chosen energy.
+
+## Architecture impact — TIC coverage audit (2026-09-21)
+
+- **SoT before:** TIC N=20 reconstructed; coverage statuses not claimed.
+- **SoT after:** §11 is the executable coverage table (9 COMPLETE / 11 PARTIAL / 0 MISSING / 0 OMIT-BY-DESIGN). Queue = PARTIAL/MISSING in K order; first defect = K01. No meaning producer changed. No public JSON change.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — Information Contract §11 · this tracker · handoff · `TIC_COVERAGE` gate
+- **Backward compatible?** yes
+
+## Architecture impact — Today Information Contract (2026-09-21)
+
+- **SoT before:** «что Today имеет право знать» жило между Pipeline ownership, Day Sources, Display Inventory, Matrix 3.2 и leftover native C1 — без конечного N.
+- **SoT after:** `docs/today/TODAY_INFORMATION_CONTRACT_V1.md` is the closed N and a code gate: 8 inputs · 16 facts · 20 `TIC-K*`. Pipeline remains I0 / non-mutation / owner. Inventory remains last authority before UI. `TIC-K*` is not `PIC-K*`. CE / 13-key / Identity Core are not Today inputs. New Today meaning work must cite `TIC_K` + `TIC_F`. Coverage statuses are not claimed on this start.
+- **Public contract changed?** no JSON
+- **Migration required?** no
+- **Canon updated?** yes — Information Contract · today `_INDEX` · Grammar §1 · Pipeline/Inventory pointers · PIC §9 · this tracker · handoff
+- **Backward compatible?** yes for API. Gate: `today_information_contract_v1.py`. Producer cite stamps = next hop.
 
 ## Architecture impact — PIC-K01 Identity Core (2026-09-21)
 

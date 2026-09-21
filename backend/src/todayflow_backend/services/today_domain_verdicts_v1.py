@@ -169,6 +169,17 @@ def natal_point_in_domain(natal_point: str, domain: str) -> bool:
     return _norm(natal_point) in DOMAIN_NATAL_POINTS.get(domain, frozenset())
 
 
+def overlay_focus_axis_from_natal_point(natal_point: str | None) -> str | None:
+    """F10: closed-set domain of an already-chosen overlay natal point. No new ranker."""
+    n = _norm(natal_point)
+    if not n:
+        return None
+    for domain in DOMAINS:
+        if natal_point_in_domain(n, domain):
+            return domain
+    return None
+
+
 def compute_domain_verdicts(
     activations: Iterable[dict[str, Any]],
 ) -> list[dict[str, Any]]:

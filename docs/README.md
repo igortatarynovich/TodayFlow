@@ -95,13 +95,16 @@
 
 ## Today · Profile (experience)
 
-**Today Meaning SoT (один):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. Step 2 lookup = [astrology/INTERPRETATION_LIBRARY_V1.md](./astrology/INTERPRETATION_LIBRARY_V1.md) (не второй канон дня).  
+**Today Meaning SoT (I0 / owner):** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — Небо → Global Day → Natal Overlay → Ritual → Personal → Presentation. Step 2 lookup = [astrology/INTERPRETATION_LIBRARY_V1.md](./astrology/INTERPRETATION_LIBRARY_V1.md) (не второй канон дня).  
+**Today closed N:** [today/TODAY_INFORMATION_CONTRACT_V1.md](./today/TODAY_INFORMATION_CONTRACT_V1.md) — 8 вводов · 16 фактов · 20 allowed knowledge (gate). Не второй I0.  
 **Today product cycle (экраны):** [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — TODAY → RITUAL → MY DAY → EVENING. Не плодить второй канон смысла.  
 **Display contracts (последний authority перед UI):** [foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) (закон) · [profile/PROFILE_DISPLAY_INVENTORY_V1.md](./profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md). Слот вне Inventory = нет в продукте. Новый слот только через запись + Architecture impact.
 
-- [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный канон смысла / content pipeline Today**
+- [today/TODAY_INFORMATION_CONTRACT_V1.md](./today/TODAY_INFORMATION_CONTRACT_V1.md) — **закрытое N Today** (gate)
+- [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный канон смысла / content pipeline Today** (I0 · owner)
 - [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — **единственный канон продуктового цикла / ScreenFlow Today**
 - [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md) — **слоты Сегодня** (последний authority перед UI)
+- [today/_INDEX.md](./today/_INDEX.md) — индекс пакета Today
 - [foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md) — **закон конструкции** (цепочка · 5 ограничений · FE не invent)
 - [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) — SoT **расчёта фактов** (не сюжет); питает Global Day
 - [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — **SUPERSEDED** как product map; current-code until cutover
@@ -149,7 +152,8 @@
 
 0. [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — **путь пользователя** (после A–E)
 1. [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md) — **канон продукта** (Personal Model, карта, законы, north star)
-2. **Today смысл / content:** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — **единственный**; не DAY_SCENARIO_V1, не B5, не DayModel §10
+2. **Today смысл / content:** [today/TODAY_CONTENT_PIPELINE_V1.md](./today/TODAY_CONTENT_PIPELINE_V1.md) — I0 / owner; не DAY_SCENARIO_V1, не B5, не DayModel §10. Конечное N — [today/TODAY_INFORMATION_CONTRACT_V1.md](./today/TODAY_INFORMATION_CONTRACT_V1.md).
+2a. [today/TODAY_INFORMATION_CONTRACT_V1.md](./today/TODAY_INFORMATION_CONTRACT_V1.md) — закрытое N Today (gate)
 3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [today/TODAY_PRODUCT_FLOW_V1.md](./today/TODAY_PRODUCT_FLOW_V1.md) — experience / product cycle (подчинены п.2 для смысла; нарезка экрана — PRODUCT_FLOW)
 3a. [today/TODAY_DISPLAY_INVENTORY_V1.md](./today/TODAY_DISPLAY_INVENTORY_V1.md) — слоты Сегодня (**последний authority перед UI**; грамматика — [DISPLAY_CONSTRUCTION_GRAMMAR_V1](./foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md))
 4. [profile/PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) — уровень UI Profile
@@ -159,7 +163,7 @@
 6. [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) — статус работ
 
 Screen-level и PIM-слой (`pim/`, `today-language/`, `explainability/`) — уточняют unified, не заменяют его.  
-**Не плодить** второй «канон дня» / «Meaning SoT» рядом с `TODAY_CONTENT_PIPELINE_V1`.
+**Не плодить** второй «канон I0 / Meaning SoT» рядом с `TODAY_CONTENT_PIPELINE_V1`. Closed N дня — `TODAY_INFORMATION_CONTRACT_V1`, не второй pipeline.
 
 **Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §2 ten-layer language + **§2.7 Moon = live object (no stars)** + **§18 motion budget** (landing 7/10 · app 2–3/10 · share 5/10) + §11–§15 (Day Atmosphere · DS). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
 

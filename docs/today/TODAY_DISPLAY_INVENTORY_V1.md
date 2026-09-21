@@ -3,7 +3,8 @@
 **Status:** ACTIVE — **последний authority перед UI** на Сегодня  
 **Version:** 1.3 (2026-09-18)  
 **Грамматика (закон):** [DISPLAY_CONSTRUCTION_GRAMMAR_V1](../foundation/DISPLAY_CONSTRUCTION_GRAMMAR_V1.md)  
-**Meaning SoT:** [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md)  
+**Meaning SoT:** [TODAY_CONTENT_PIPELINE_V1](./TODAY_CONTENT_PIPELINE_V1.md) (I0 · owner)  
+**Closed N:** [TODAY_INFORMATION_CONTRACT_V1](./TODAY_INFORMATION_CONTRACT_V1.md)  
 **Cycle SoT:** [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md)  
 **Пара:** [PROFILE_DISPLAY_INVENTORY_V1](../profile/PROFILE_DISPLAY_INVENTORY_V1.md)
 
@@ -21,6 +22,33 @@
 - **Migration required?** no. UI cutover: Profile Character warehouse off path; MY DAY headline ≠ `why_personal`; focus_title = overlay axis or omit; ritual lens omit unless Personal Day **persisted** (capability alone is not enough).
 - **Canon updated?** yes — this file · Grammar · Pipeline · Product Flow · tracker.
 - **Backward compatible?** yes for API.
+
+## Architecture impact — TIC-K01 human_line (2026-09-21)
+
+- **SoT before:** `T1-hero.human_line` display_source was greeting / theme / period / expect. Energy kind already lived on `energy_word`.
+- **SoT after:** `human_line` is a closed 8-set sentence of already-chosen `global_day.primary_energy`. Greeting remains chrome. Unknown/missing omit. Not a new slot.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this record · Information Contract §11 · tracker
+- **Backward compatible?** yes for API. Hero body text changes.
+
+## Architecture impact — TIC-K06 overlay thesis (2026-09-21)
+
+- **SoT before:** `T3.headline` displayed `day_personal.summary_ru` even when that string was a kitchen mash of HD/BaZi/Vedic/electional/name_numbers.
+- **SoT after:** same slot. `summary_ru` is the F09 natal_transit overlay thesis. Missing overlay omit. Kitchen families are not this slot.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this record · Information Contract §11 · tracker
+- **Backward compatible?** yes for API. Headline omits without overlay transit.
+
+## Architecture impact — TIC-K07 overlay axis (2026-09-21)
+
+- **SoT before:** `T3.focus_title` mapped overlay axis or omit in Inventory, but FE filled from Global scene sphere / kitchen aliases because `focus_axis` was not written.
+- **SoT after:** same slot. Title is the map_label of F10 `personal_day.natal_overlay.focus_axis`. Omit without that closed id. Not a paraphrase of T3.headline or T1-hero.human_line.
+- **Public contract changed?** yes — `focus_axis` is produced as the 4-set domain.
+- **Migration required?** no
+- **Canon updated?** yes — this record · Information Contract §11 · tracker
+- **Backward compatible?** yes for API. Title omits without a mapped overlay natal point.
 
 ---
 
@@ -71,7 +99,7 @@ Personal Day **не** включает Character Engine. `PersonalDayKey` не �
 
 Proposition test: тот же, что Profile (Jaccard / substring).
 
-**Source exclusivity:** `why_personal` → максимум одна роль из `{T3.headline, T3.focus_body}`. Замок: `why_personal` = вход **только** `T3.focus_body`. Headline = `day_personal.summary_ru` или personal conflict thesis — **не** `why_personal`.
+**Source exclusivity:** `why_personal` → максимум одна роль из `{T3.headline, T3.focus_body}`. Замок: `why_personal` = вход **только** `T3.focus_body`. Headline = F09 natal_transit overlay thesis in `day_personal.summary_ru` — **не** `why_personal`, **не** kitchen mash.
 
 ---
 
@@ -87,7 +115,7 @@ Proposition test: тот же, что Profile (Jaccard / substring).
 | `T1-hero.energy_word` | Какая главная энергия дня (8-set)? | calc | Global Day Engine |
 | `T1-hero.energy_pct` | Какая интенсивность этой энергии? | calc | energy_scores |
 | `T1-hero.mood` | Какое настроение (тот же 8-set, другая метрика)? | calc | Engine mood / visual_mode |
-| `T1-hero.human_line` | Каков уже выбранный общий день по-человечески? | generated | Global narrative |
+| `T1-hero.human_line` | Каков уже выбранный общий день по-человечески? | generated | Global Day Engine (`primary_energy`) |
 | `T1-hero.sheet` | Тот же смысл глубже | projected | same as human_line + expect |
 | `T1-clock.label` | chrome | chrome | product |
 | `T1-clock.range` | Какое окно дня по часам? | calc | windows[] |
@@ -110,7 +138,7 @@ Proposition test: тот же, что Profile (Jaccard / substring).
 | `T2.lens_card` | Как карта окрашивает уже посчитанный Personal Day? | generated | Personal × card |
 | `T2.lens_number` | Как число окрашивает уже посчитанный Personal Day? | generated | Personal × number |
 | `T3.unavailable` | Meaning не загрузился? | chrome | product |
-| `T3.headline` | Каков главный персональный **тезис** дня? | generated | Personal Day |
+| `T3.headline` | Каков главный персональный **тезис** дня? | generated | Personal Day (F09 overlay thesis) |
 | `T3.focus_label` | chrome | chrome | product |
 | `T3.focus_title` | В какой **области / оси** тезис проявляется сильнее? | projected | Natal Overlay axis |
 | `T3.focus_body` | Как именно он там проявляется и куда направить внимание? | generated | Personal (why_personal first) |
@@ -267,11 +295,11 @@ Chrome «Энергия дня».
 |---|---|
 | one_question | **Каков уже выбранный общий день на человеческом языке?** |
 | text_class | generated |
-| authority | Global Day (Engine decided energy/drivers; LLM формулирует) |
-| semantic_source | persisted Global prose (atmosphere / essence / expect — **одна** линия после composition) |
-| display_source | `atmosphereLine` / hero body |
-| allowed_inputs | `primary_energy`, ranked driver **facts** (not natal), moon phase/sign as climate, windows as **time facts** |
-| forbidden_inference | natal · CE · card · number · goals · **do/avoid advice** («избегай разговоров») · personal overlay · sphere horoscope · новая энергия |
+| authority | Global Day Engine (`primary_energy` already chosen) |
+| semantic_source | closed 8-set formulation of `global_day.primary_energy` |
+| display_source | `formulateSharedDayHumanLine` → `atmosphereLine` → hero body |
+| allowed_inputs | `primary_energy` only (the already chosen 8-set member) |
+| forbidden_inference | natal · CE · card · number · goals · **do/avoid advice** · personal overlay · sphere horoscope · новая энергия · **greeting / theme / period / expect as the line** |
 | output | 1 предложение |
 | budget | 12–22 слов · **≤160 chars** |
 | required | нет |
@@ -281,7 +309,7 @@ Chrome «Энергия дня».
 | interaction | tap → `T1-hero.sheet` (тот же вопрос) |
 | forbidden | см. inference |
 | why_here | Recognition общего дня |
-| persist_key | GlobalDayKey + global narrative version |
+| persist_key | GlobalDayKey |
 | anti_dupe_group | `day_kind` · `global_vs_personal` |
 
 #### `T1-hero.sheet`
@@ -460,11 +488,11 @@ Capability: light/deep. Guest/general: **no T3 meaning slots**.
 |---|---|
 | one_question | **Каков главный персональный тезис дня?** |
 | text_class | generated |
-| authority | Personal Day |
-| semantic_source | `day_personal.summary_ru` **или** personal conflict thesis |
-| display_source | `TodayMyDayPane` headline |
-| allowed_inputs | Personal overlay over **locked** Global (natal activations + Global frame). **Не** CE |
-| forbidden_inference | `why_personal` (это `T3.focus_body`); Global expect as «моё»; card/number as cause; copy of `T1-hero.human_line`; CE recognition/insight |
+| authority | Personal Day = Global × Natal Overlay |
+| semantic_source | `day_personal.summary_ru` = F09 natal_transit overlay thesis (`personal_astrology.summary_ru`) |
+| display_source | `TodayMyDayPane` headline (`personalLine`) |
+| allowed_inputs | locked Global + F09 natal overlay transit (already chosen). **Не** CE |
+| forbidden_inference | `why_personal` (это `T3.focus_body`); Global expect as «моё»; card/number as cause; copy of `T1-hero.human_line`; CE recognition/insight; **HD / BaZi / Vedic / electional / name_numbers kitchen mash**; progressions / solar return as thesis |
 | output | 1 мысль |
 | budget | 12–20 слов · ≤180 chars |
 | required | нет |
@@ -487,10 +515,10 @@ Chrome callout.
 | one_question | **В какой области или оси этот тезис проявляется сильнее всего?** |
 | text_class | **projected** (`map_label`) |
 | authority | Natal Overlay — already chosen closed-set axis |
-| semantic_source | overlay domain id (house-topic / activation domain already selected in bind) |
-| display_source | focus callout title |
-| allowed_inputs | that axis id only |
-| forbidden_inference | LLM free title; paraphrase of `T3.headline`; kitchen `short_name`; Global energy word as title |
+| semantic_source | first F09 natal_transit natal_point → existing `DOMAIN_NATAL_POINTS` (DOMAINS order) as F10 |
+| display_source | `personal_day.natal_overlay.focus_axis` map_label |
+| allowed_inputs | that axis id only (`work\|money\|relationships\|energy`) |
+| forbidden_inference | LLM free title; paraphrase of `T3.headline`; T1-hero.human_line; kitchen `short_name` / overlay `sphere`/`axis`/`domain`; Global `scenes[primary].sphere`; Global energy word as title |
 | output | 1–4 слова (label оси) |
 | budget | ≤72 chars |
 | required | нет |
@@ -789,7 +817,10 @@ Cut 2026-08-29: `development_point` out of focus_body; headline = `day_personal.
 
 | Date | Change |
 |------|--------|
-| 2026-08-31 | Grammar §9 live frames on the production path; Glance still out of harness |
+| 2026-09-21 | `T3.focus_title` = F10 closed domain of first natal_transit natal_point; omit without `focus_axis`; not scene sphere, kitchen alias, K01 human_line, or K06 headline |
+| 2026-09-21 | `T3.headline` = F09 natal_transit overlay thesis; HD/BaZi/Vedic kitchen out of this slot |
+| 2026-09-21 | `T1-hero.human_line` = closed formulation of `primary_energy`; greeting is not this slot |
+| 2026-09-21 | Closed N pointer: [TODAY_INFORMATION_CONTRACT_V1](./TODAY_INFORMATION_CONTRACT_V1.md). Inventory remains last UI authority; TIC does not add slots. |
 | 2026-08-30 | Grammar §9 scanner (findings 1–19); Glance composition still out of harness |
 | 2026-08-30 | T3.priority: glance `prioritize` fallback only if personal `today_move`, not Global |
 | 2026-08-29 | hero tagline: no CE / canned invent; Grammar §9 #7 unit subset |

@@ -6,7 +6,7 @@
 **Роль:** одинаковые правила для любых поверхностей. Не каталог слотов — каталоги: [PROFILE_DISPLAY_INVENTORY_V1](../profile/PROFILE_DISPLAY_INVENTORY_V1.md) · [TODAY_DISPLAY_INVENTORY_V1](../today/TODAY_DISPLAY_INVENTORY_V1.md).  
 **Верхний продуктовый путь (закрыт):** §5. Не Meaning SoT.
 
-**Не заменяет:** Character Engine · TODAY_CONTENT_PIPELINE · Product Flow · ScreenFlow mechanics · visual SoT.
+**Не заменяет:** Character Engine · TODAY_CONTENT_PIPELINE · TODAY_INFORMATION_CONTRACT · Product Flow · ScreenFlow mechanics · visual SoT.
 
 ---
 
@@ -46,6 +46,15 @@
 - **Canon updated?** yes — this file §9 · Today Inventory §7 · Profile Inventory changelog · tracker.
 - **Backward compatible?** yes for API. Meaning SoT unchanged (Character Engine · TODAY_CONTENT_PIPELINE).
 
+## Architecture impact — Today Information Contract in the chain (2026-09-21)
+
+- **SoT before:** Grammar §1 named only Profile Information Contract as allowed knowledge. Today still jumped from расчёт to Pipeline ownership without a closed N.
+- **SoT after:** §1 allowed knowledge is PIC N on Profile and [TODAY_INFORMATION_CONTRACT_V1](../today/TODAY_INFORMATION_CONTRACT_V1.md) N on Today. Inventory remains last authority before UI. TIC N=20 is the Today knowledge gate, not a new slot catalog and not a second I0.
+- **Public contract changed?** no JSON
+- **Migration required?** no
+- **Canon updated?** yes — this file §1 · Today Information Contract · tracker
+- **Backward compatible?** yes for API
+
 ## Architecture impact — Profile Information Contract in the chain (2026-09-20)
 
 - **SoT before:** Grammar §1 started at расчёт → semantic authority. What Profile may know lived outside the construction chain.
@@ -61,7 +70,7 @@
 
 ```text
 расчёт
-    → allowed knowledge           (Profile Information Contract N)
+    → allowed knowledge           (PIC N on Profile · TIC N on Today)
     → semantic authority          (кто решает смысл)
     → composition                 (какие атомы входят в кадр)
     → named slot                  (один id, один вопрос)
@@ -80,7 +89,7 @@ Frontend **не** решает: что важно · какой смысл вы�
 
 Frontend получает **разрешённые слоты** из Inventory и отображает их. Clip — защита длины. Hide — только по `empty_behavior` / capability / time gate, уже записанным в слоте.
 
-Projector / ScreenFlow / FE **не** semantic authority. Pipeline Ownership остаётся для смысла дня; Character Engine — для личности. Inventory не invent смысла — раскладывает уже решённое.
+Projector / ScreenFlow / FE **не** semantic authority. Pipeline Ownership остаётся для смысла дня; Today Information Contract — закрытое N дня; Character Engine — для личности. Inventory не invent смысла — раскладывает уже решённое.
 
 ---
 

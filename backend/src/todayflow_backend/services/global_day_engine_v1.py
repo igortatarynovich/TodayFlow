@@ -448,6 +448,24 @@ _PERSONAL_MUTATION_KEYS = frozenset(
 DAILY_ACTION_KINDS = frozenset({"practice", "affirmation", "reflection", "goal"})
 
 
+def _overlay_focus_axis_from_personal(raw: dict[str, Any]) -> str | None:
+    """TIC-K07 / F10 writer: domain of the already-chosen F09 natal_transit. Not kitchen."""
+    from todayflow_backend.services.today_domain_verdicts_v1 import overlay_focus_axis_from_natal_point
+
+    astro = raw.get("personal_astrology")
+    if not isinstance(astro, dict):
+        return None
+    beats = astro.get("beats") if isinstance(astro.get("beats"), list) else []
+    for beat in beats:
+        if not isinstance(beat, dict):
+            continue
+        if str(beat.get("kind") or "") != "natal_transit":
+            continue
+        natal = beat.get("natal_planet") or beat.get("natal_point")
+        return overlay_focus_axis_from_natal_point(str(natal or "") or None)
+    return None
+
+
 def build_personal_day_nest_v1(story: dict[str, Any] | None) -> dict[str, Any] | None:
     """Natal overlay / personal bind. Omits energy/windows. Guest → None."""
     st = _as_dict(story)
@@ -458,6 +476,11 @@ def build_personal_day_nest_v1(story: dict[str, Any] | None) -> dict[str, Any] |
     if not isinstance(raw, dict) or not raw:
         return None
     overlay = {k: v for k, v in raw.items() if k not in _PERSONAL_MUTATION_KEYS}
+    axis = _overlay_focus_axis_from_personal(raw)
+    if axis:
+        overlay["focus_axis"] = axis
+    else:
+        overlay.pop("focus_axis", None)
     if not overlay:
         return None
     return {

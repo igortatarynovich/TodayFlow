@@ -115,6 +115,43 @@ def test_personal_nest_strips_energy_and_omits_when_empty():
     assert "primary_energy" not in nest["natal_overlay"]
     assert "windows" not in nest["natal_overlay"]
     assert nest["natal_overlay"]["activations"]
+    assert "focus_axis" not in nest["natal_overlay"]
+
+
+def test_personal_nest_writes_focus_axis_from_first_natal_transit() -> None:
+    nest = build_personal_day_nest_v1(
+        {
+            "day_personal": {
+                "focus_axis": "work",
+                "sphere": "work",
+                "personal_astrology": {
+                    "beats": [
+                        {"kind": "human_design", "natal_planet": "Sun"},
+                        {"kind": "natal_transit", "natal_planet": "Moon"},
+                    ]
+                },
+            }
+        }
+    )
+    assert nest is not None
+    assert nest["natal_overlay"]["focus_axis"] == "relationships"
+
+
+def test_personal_nest_omits_focus_axis_without_natal_transit() -> None:
+    nest = build_personal_day_nest_v1(
+        {
+            "day_personal": {
+                "focus_axis": "work",
+                "sphere": "work",
+                "personal_astrology": {
+                    "beats": [{"kind": "human_design", "natal_planet": "Sun"}]
+                },
+            }
+        }
+    )
+    assert nest is not None
+    assert "focus_axis" not in nest["natal_overlay"]
+    assert nest["natal_overlay"]["sphere"] == "work"
 
 
 def test_daily_actions_typed_from_rec_and_primary_goals():

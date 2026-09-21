@@ -10,7 +10,8 @@
 
 | Вопрос | Ответ живёт здесь | Другие файлы |
 |--------|-------------------|--------------|
-| Почему пользователю показали *это*? | **этот файл** | — |
+| Почему пользователю показали *это*? | **этот файл** (I0 · owner · порядок) | конечное N — [TODAY_INFORMATION_CONTRACT_V1](./TODAY_INFORMATION_CONTRACT_V1.md) |
+| Что система имеет право знать про день? | → [TODAY_INFORMATION_CONTRACT_V1](./TODAY_INFORMATION_CONTRACT_V1.md) | закрытое N; не второй I0 |
 | Как считаются сырые факты неба/числа? | → [DAY_SOURCES_CANON](../DAY_SOURCES_CANON.md) | подчинён: только facts, не сюжет |
 | Что означает астрологический факт системы (Saturn, square, 7th…)? | → [INTERPRETATION_LIBRARY_V1](../astrology/INTERPRETATION_LIBRARY_V1.md) | step 2 lookup; не канон дня |
 | Как нарезан экран (какие шаги видит человек)? | → [TODAY_PRODUCT_FLOW_V1](./TODAY_PRODUCT_FLOW_V1.md) | product cycle; не смысл |
@@ -398,6 +399,15 @@ manifest:
 12. **Interpretation Library** — Sequence LOCKED IL-0…IL-4. **IL-0 done.** Next: IL-1 ~100 surface-neutral objects keyed to calc output. Swiss is the runtime ephemeris input; **license** is a parallel legal gate (not a research blocker). Scale library only after IL-4.
 
 ---
+
+## Architecture impact — Today Information Contract (2026-09-21)
+
+- **SoT before:** this file was the only Today meaning document; closed N «что можно знать» did not exist.
+- **SoT after:** this file remains I0 / owner / non-mutation. Closed N is [TODAY_INFORMATION_CONTRACT_V1](./TODAY_INFORMATION_CONTRACT_V1.md). Not a second pipeline. CE still forbidden in Personal Day bind.
+- **Public contract changed?** no JSON
+- **Migration required?** no
+- **Canon updated?** yes — this file table · Information Contract · Grammar §1 · tracker
+- **Backward compatible?** yes
 
 ## Architecture impact — Personal Day formula + compute≠display (2026-08-29)
 

@@ -60,8 +60,8 @@ describe("buildTodayDayBriefModel", () => {
       energyCause: "Трин Луны и Плутона",
     });
 
-    expect(model.atmosphereLine).toBe("Стратегическая пауза");
-    expect(model.vibe).toBe("Стратегическая пауза");
+    expect(model.atmosphereLine).toBeNull();
+    expect(model.vibe).toBeNull();
     expect(model.atmosphereNote).toContain("Серп гаснет");
     expect(model.expect).toContain("Обострённая интуиция");
     expect(model.trap).toContain("Поиск подвоха");
@@ -175,7 +175,7 @@ describe("buildTodayDayBriefModel", () => {
         activityTags: [],
       },
     });
-    expect(model.atmosphereLine).toBe("Один тон");
+    expect(model.atmosphereLine).toBeNull();
     expect(model.atmosphereNote).toBeNull();
     expect(model.expect).toBe("Один тон");
     expect(model.vibeClosing).toBeNull();
@@ -350,7 +350,7 @@ describe("buildTodayDayBriefModel", () => {
       salutation: "Привет",
     });
     expect(model.personalLine).toBeNull();
-    expect(model.atmosphereLine).toBe("Ровный продуктивный ритм.");
+    expect(model.atmosphereLine).toBeNull();
     expect(model.doItems).toEqual([]);
   });
 
@@ -391,6 +391,8 @@ describe("buildTodayDayBriefModel", () => {
     expect(model.visualMode).toBe("clarity");
     expect(model.energyPct).toBe(78);
     expect(model.modeLabel).toBe("Ясность");
+    expect(model.atmosphereLine).toMatch(/ясност/i);
+    expect(model.atmosphereLine).not.toBe("Период спокойной ясности");
     expect(model.mainDriver?.title).toContain("Луна вошла в Деву");
     expect(model.mainDriver?.body).toBe("Смена знака");
     expect(model.mainDriver?.planets).toEqual(["moon"]);
@@ -491,5 +493,84 @@ describe("buildTodayDayBriefModel", () => {
       salutation: "Привет",
     });
     expect(model.personalLine).toBe("Солнце — biquintile — Венера");
+  });
+
+  it("formulates human_line from primary_energy so the same greeting cannot hide K01", () => {
+    const greeting = "Доброе утро — тихий вход в день.";
+    const sharedStory = {
+      contract_version: "day_story_v1" as const,
+      theme: "Стратегическая пауза",
+      expect: "Обострённая интуиция.",
+      day_personal: { summary_ru: "Ты уже чувствуешь, где лишний шум." },
+    };
+    const clarity = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_day: { primary_energy: "clarity" },
+        day_atmosphere: {
+          visual_mode: "flow",
+          intensity: 0.5,
+          warmth: 0.5,
+          motion: "low",
+          contrast: "medium",
+          decor_variant: "default",
+          time_phase: "day",
+        },
+        day_story: sharedStory,
+      },
+      dateLabel: "21 сентября",
+      salutation: "Привет",
+      headline: greeting,
+    });
+    const depth = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_day: { primary_energy: "depth" },
+        day_story: sharedStory,
+      },
+      dateLabel: "21 сентября",
+      salutation: "Привет",
+      headline: greeting,
+    });
+    expect(clarity.atmosphereLine).toMatch(/ясност/i);
+    expect(depth.atmosphereLine).toMatch(/глубин/i);
+    expect(clarity.atmosphereLine).not.toBe(depth.atmosphereLine);
+    expect(clarity.atmosphereLine).not.toBe(greeting);
+    expect(clarity.atmosphereLine).not.toBe("Стратегическая пауза");
+    expect(clarity.atmosphereLine).not.toContain("лишний шум");
+    expect(clarity.modeLabel).toBe("Ясность");
+  });
+
+  it("omits human_line when primary_energy is missing or unknown", () => {
+    const missing = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        day_story: { contract_version: "day_story_v1", theme: "Ровный продуктивный ритм." },
+      },
+      dateLabel: "21 сентября",
+      salutation: "Привет",
+      headline: "Доброе утро — тихий вход в день.",
+    });
+    const unknown = buildTodayDayBriefModel({
+      contract: {
+        ...baseContract,
+        global_day: { primary_energy: "serenity" },
+        day_atmosphere: {
+          visual_mode: "flow",
+          intensity: 0.5,
+          warmth: 0.5,
+          motion: "low",
+          contrast: "medium",
+          decor_variant: "default",
+          time_phase: "day",
+        },
+      },
+      dateLabel: "21 сентября",
+      salutation: "Привет",
+      headline: "Доброе утро — тихий вход в день.",
+    });
+    expect(missing.atmosphereLine).toBeNull();
+    expect(unknown.atmosphereLine).toBeNull();
+    expect(unknown.modeLabel).toBe("Поток");
   });
 });

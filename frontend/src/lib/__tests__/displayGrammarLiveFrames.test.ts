@@ -104,6 +104,10 @@ describe("live Today frames", () => {
     expect(frame.atoms?.some((a) => a.slot_id?.startsWith("T3.") && a.text_class !== "chrome")).toBe(false);
     expect(frame.atoms?.some((a) => a.slot_id?.startsWith("T2.lens_"))).toBe(false);
     expect(frame.atoms?.some((a) => a.slot_id === "T2.catalog_card")).toBe(true);
+    const humanLine = frame.atoms?.find((a) => a.slot_id === "T1-hero.human_line");
+    expect(humanLine?.text).toMatch(/заземлен/i);
+    expect(humanLine?.text).not.toMatch(/не спешить/);
+    expect(humanLine?.json_field).toBeUndefined();
     expect(scanDisplayGrammar(frame)).toEqual([]);
   });
 

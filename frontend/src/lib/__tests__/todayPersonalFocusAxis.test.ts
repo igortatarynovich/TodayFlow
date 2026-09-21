@@ -39,7 +39,7 @@ describe("pickPersonalFocusAxisLabel", () => {
     ).toBeNull();
   });
 
-  it("projects primary scene sphere when it is a closed domain id", () => {
+  it("omits Global scene sphere instead of filling T3.focus_title", () => {
     expect(
       pickPersonalFocusAxisLabel({
         ...base,
@@ -51,6 +51,54 @@ describe("pickPersonalFocusAxisLabel", () => {
           },
         },
       }),
-    ).toBe("Работа");
+    ).toBeNull();
+  });
+
+  it("does not take meaning from kitchen overlay aliases", () => {
+    expect(
+      pickPersonalFocusAxisLabel({
+        ...base,
+        personal_day: {
+          natal_overlay: {
+            axis: "work",
+            domain: "money",
+            sphere: "relationships",
+            primary_sphere: "energy",
+            short_name: "Солнечный возврат",
+          },
+        },
+      }),
+    ).toBeNull();
+  });
+
+  it("does not duplicate K01 human_line or K06 headline", () => {
+    expect(
+      pickPersonalFocusAxisLabel({
+        ...base,
+        global_day: { primary_energy: "radiance" },
+        day_story: {
+          contract_version: "day_story_v1",
+          day_personal: {
+            summary_ru: "Транзит к Луне держит разговор в теле, а не в тексте.",
+          },
+        },
+        personal_day: {
+          natal_overlay: {
+            focus_axis: "Сияние",
+            summary_ru: "Транзит к Луне держит разговор в теле, а не в тексте.",
+          },
+        },
+      }),
+    ).toBeNull();
+  });
+
+  it("maps energy domain as the 4-set label, not a K01 energy sentence", () => {
+    expect(
+      pickPersonalFocusAxisLabel({
+        ...base,
+        global_day: { primary_energy: "radiance" },
+        personal_day: { natal_overlay: { focus_axis: "energy" } },
+      }),
+    ).toBe("Энергия");
   });
 });

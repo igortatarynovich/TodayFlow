@@ -166,7 +166,7 @@ function TodayDayDashboard({
   const showMoon = typeof moonPhase === "number" && Number.isFinite(moonPhase);
   const energyWord = modeLabel;
   const heroTitle = loading ? copy.loadingDay : energyWord || "Сегодня";
-  const heroBody = clipCompassProse(line || expect, 160) || undefined;
+  const heroBody = loading ? undefined : clipCompassProse(line, 160) || undefined;
   // Inventory: mood is a distinct 8-set metric — omit when it would substitute energy_word.
   const moodWord = modeLabel && energyWord && modeLabel !== energyWord ? modeLabel : null;
   const showPulse = energyPct !== null || Boolean(moodWord);

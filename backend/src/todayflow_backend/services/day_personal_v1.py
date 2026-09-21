@@ -78,28 +78,22 @@ def build_day_personal_v1(
         # Keep unavailable pack for honesty, but UI only uses ok.
         pass
 
-    summary_parts = [
-        str((personal_astro or {}).get("summary_ru") or "").strip(),
-        str((human_design or {}).get("summary_ru") or "").strip(),
-        str((bazi or {}).get("summary_ru") or "").strip(),
-        str((vedic_personal or {}).get("summary_ru") or "").strip(),
-    ]
-    if electional:
-        summary_parts.append(str(electional.get("summary_ru") or "").strip())
-    if isinstance(name_numbers, dict) and name_numbers.get("status") == "ok":
-        summary_parts.append(str(name_numbers.get("summary_ru") or "").strip())
+    # TIC-K06: product field is overlay thesis only (F09 natal_transit).
+    # HD / BaZi / Vedic / electional / name_numbers stay in the pack, not in summary_ru.
     from todayflow_backend.services.day_story_value_gate_v1 import is_kitchen_mechanism_prose
 
-    summary = _clip(
-        " ".join(p for p in summary_parts if p and not is_kitchen_mechanism_prose(p)),
-        480,
+    overlay_thesis = str((personal_astro or {}).get("summary_ru") or "").strip()
+    summary = (
+        _clip(overlay_thesis, 180)
+        if overlay_thesis and not is_kitchen_mechanism_prose(overlay_thesis)
+        else ""
     )
 
     electional_row = sources.get("electional_horary") if isinstance(sources, dict) else None
 
     return {
         "contract_version": "day_personal_v1",
-        "calculation_version": "day-personal-v1.7",
+        "calculation_version": "day-personal-v1.8",
         "personal_astrology": personal_astro,
         "human_design": human_design,
         "bazi": bazi,

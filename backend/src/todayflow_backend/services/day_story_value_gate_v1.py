@@ -239,7 +239,7 @@ def apply_day_story_value_gate(story: dict[str, Any]) -> dict[str, Any]:
                 thesis_out[lab_key] = lab
         out["day_thesis"] = thesis_out
 
-    # day_personal.summary_ru is a kitchen mash (profections/progressions/SR) — never ambassador copy.
+    # TIC-K06: summary_ru is overlay thesis; leftover kitchen mash must not reach T3.headline.
     personal = out.get("day_personal")
     if isinstance(personal, dict):
         personal_out = dict(personal)

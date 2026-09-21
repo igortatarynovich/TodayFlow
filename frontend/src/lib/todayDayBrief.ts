@@ -12,6 +12,7 @@ import { DAY_MODE_LABELS_RU, DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 import { resolveCelestialMoonPhase } from "@/lib/celestialMoonPhase";
 import type { TodayContractGlobalDayWindowV1, TodayContractV1 } from "@/lib/todayContract";
 import type { HandoffWelcomeGlass } from "@/lib/todayHandoffWelcome";
+import { formulateSharedDayHumanLine } from "@/lib/todayK01HumanLine";
 import { buildTodaySkyStripModel, inSign, type TodaySkyStripModel } from "@/lib/todaySkyToday";
 import { isHonestUnavailableCopy } from "@/lib/todaySlotAvailability";
 
@@ -72,7 +73,7 @@ export type TodayDayMoonCard = {
 export type TodayDayBriefModel = {
   dateLabel: string;
   salutation: string;
-  /** Atmosphere headline (not a separate «вайб» product label). */
+  /** TIC-K01: formulation of already-chosen `global_day.primary_energy`. Not greeting. */
   atmosphereLine: string | null;
   /** @deprecated alias — same as atmosphereLine */
   vibe: string | null;
@@ -845,7 +846,9 @@ export function buildTodayDayBriefModel(input: {
   const glass = input.welcomeGlass;
   const visualMode = resolveVisualMode(input.contract);
 
-  const atmosphereLine =
+  const atmosphereLine = formulateSharedDayHumanLine(input.contract.global_day?.primary_energy);
+
+  const moonContextFallback =
     productLine(input.headline) ||
     productLine(story?.headline_anchor) ||
     productLine(story?.theme) ||
@@ -899,7 +902,7 @@ export function buildTodayDayBriefModel(input: {
         input.lunarHint,
         skyStrip,
         lunarCaption,
-        clipCompassProse(atmosphereLine, 160) || energyLabel,
+        clipCompassProse(moonContextFallback, 160) || energyLabel,
       );
 
   return {

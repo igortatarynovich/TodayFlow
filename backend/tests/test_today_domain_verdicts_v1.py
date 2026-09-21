@@ -187,3 +187,11 @@ def test_is_day_favorable_heuristic():
             },
         ]
     )
+
+
+def test_overlay_focus_axis_is_existing_membership_not_a_ranker() -> None:
+    assert verdicts.overlay_focus_axis_from_natal_point("Moon") == "relationships"
+    assert verdicts.overlay_focus_axis_from_natal_point("Sun") == "work"
+    assert verdicts.overlay_focus_axis_from_natal_point("Venus") == "money"
+    assert verdicts.overlay_focus_axis_from_natal_point("Uranus") is None
+    assert verdicts.overlay_focus_axis_from_natal_point(None) is None

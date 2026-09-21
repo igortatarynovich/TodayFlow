@@ -339,3 +339,50 @@ def test_soft_caps_reach_claims_before_transit_flood():
     # Natal transits capped so soft caps are not crowded out.
     transit_claims = [c for c in claims if "pt-" in c["id"] or "Транзит" in c["text"]]
     assert len(transit_claims) <= 1
+
+
+def test_k06_summary_is_overlay_thesis_not_kitchen_mash() -> None:
+    overlay = "Личная энергия давит на самопрезентацию."
+    personal = build_day_personal_v1(
+        _sample_ce_with_transits(),
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+        birth_name="Игорь",
+    )
+    assert personal["source_inputs"]["has_personal_astrology"] is True
+    assert personal["source_inputs"]["has_human_design"] is True
+    assert personal["source_inputs"]["has_name_numbers"] is True
+    assert personal["summary_ru"] == overlay
+    assert personal["summary_ru"] == personal["personal_astrology"]["summary_ru"]
+    hd = str((personal.get("human_design") or {}).get("summary_ru") or "")
+    names = str((personal.get("name_numbers") or {}).get("summary_ru") or "")
+    if hd:
+        assert hd not in personal["summary_ru"]
+    if names:
+        assert names not in personal["summary_ru"]
+    blob = personal["summary_ru"].lower()
+    assert "генератор" not in blob
+    assert "ба-цзы" not in blob and "bazi" not in blob
+    assert "профекц" not in blob
+    assert "firdaria" not in blob
+
+
+def test_k06_summary_omits_when_overlay_transit_is_missing() -> None:
+    personal = build_day_personal_v1(
+        {},
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+        birth_name="Игорь",
+    )
+    assert personal["source_inputs"]["has_human_design"] is True
+    assert personal["source_inputs"]["has_name_numbers"] is True
+    assert personal["summary_ru"] == ""
+    astro = personal.get("personal_astrology") or {}
+    kinds = {str(b.get("kind") or "") for b in (astro.get("beats") or []) if isinstance(b, dict)}
+    assert "natal_transit" not in kinds

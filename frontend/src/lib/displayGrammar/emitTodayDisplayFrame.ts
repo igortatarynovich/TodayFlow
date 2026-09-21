@@ -125,7 +125,7 @@ function emitTodaySurface(model: TodayDayBriefModel, atoms: DisplayAtom[]): stri
   });
 
   const energyWord = model.modeLabel;
-  const humanLine = clipCompassProse(model.atmosphereLine ?? model.vibe ?? model.expect, 160);
+  const humanLine = clipCompassProse(model.atmosphereLine, 160);
   if (energyWord) {
     pushAtom(atoms, {
       slot_id: "T1-hero.energy_word",
@@ -154,7 +154,6 @@ function emitTodaySurface(model: TodayDayBriefModel, atoms: DisplayAtom[]): stri
     origins: ["global"],
     text_class: "generated",
     fe_transform: "clip",
-    json_field: model.atmosphereLine ? "global_context.period" : "day_story.expect",
   });
 
   const sheetBits = [model.atmosphereNote, model.energyCause].map(trim).filter(Boolean);
@@ -387,7 +386,7 @@ function emitMyDay(
     origins: ["natal"],
     text_class: "projected",
     fe_transform: "map_label",
-    json_field: "personal_day.natal_overlay",
+    json_field: "personal_day.natal_overlay.focus_axis",
   });
   pushAtom(atoms, {
     slot_id: "T3.focus_body",
@@ -500,7 +499,6 @@ export function emitTodayDisplayFrame(input: EmitTodayDisplayFrameInput): Displa
   const myDay = emitMyDay(input, model, atoms);
   emitEvening(input, atoms);
 
-  vm(vm_fields, "global_context.period", input.contract.global_context?.period, "T1-hero.human_line", Boolean(humanLine));
   vm(vm_fields, "global_day.primary_energy", input.contract.global_day?.primary_energy, "T1-hero.energy_word", Boolean(model.modeLabel));
   vm(vm_fields, "day_story.day_personal.summary_ru", input.contract.day_story?.day_personal?.summary_ru, "T3.headline", Boolean(myDay.headline));
   vm(
@@ -510,7 +508,7 @@ export function emitTodayDisplayFrame(input: EmitTodayDisplayFrameInput): Displa
     "T3.focus_body",
     Boolean(myDay.focusBody),
   );
-  vm(vm_fields, "personal_day.natal_overlay", input.contract.personal_day?.natal_overlay, "T3.focus_title", Boolean(myDay.focusTitle));
+  vm(vm_fields, "personal_day.natal_overlay.focus_axis", input.contract.personal_day?.natal_overlay?.focus_axis, "T3.focus_title", Boolean(myDay.focusTitle));
   vm(vm_fields, "day_story.do", input.contract.day_story?.do, "T3.priority", myDay.priorities.length > 0);
   vm(vm_fields, "personal_growth.development_point", input.contract.personal_growth?.development_point, undefined, false);
   vm(vm_fields, "primary_action", input.contract.primary_action, undefined, false);

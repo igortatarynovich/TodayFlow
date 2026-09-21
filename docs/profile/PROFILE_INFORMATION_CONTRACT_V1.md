@@ -244,14 +244,14 @@ Owner может сузить M (убрать показ), не расширяя
 
 Тот же закон, другие таблицы. **Этим файлом не заполняются.**
 
-| Раздел | Контракт (ещё не этот жанр) | Сейчас вместо N |
-|--------|-----------------------------|-----------------|
-| Today | нужен `TODAY_INFORMATION_CONTRACT` | pipeline + Display Inventory слоты — механизмы и показ без закрытого N «что можно знать из неба×натала» |
-| Compatibility | то же | два Profile N + pair derivation (не написано как конечное множество) |
+| Раздел | Контракт | Сейчас |
+|--------|----------|--------|
+| Today | [TODAY_INFORMATION_CONTRACT_V1](../today/TODAY_INFORMATION_CONTRACT_V1.md) | **стартован отдельно** (N=20). PIC не источник очереди |
+| Compatibility | нужен свой Information Contract | два Profile N + pair derivation (не написано как конечное множество) |
 | Tarot | то же | card_base + question/spread; не закрытый N ответа |
 | Практики | taxonomy + coverage ledger | метод/item, не «знание о человеке» |
 
-Пока Profile N не gate в коде **и** каждый отображаемый M не имеет исполняемой цепочки, не начинать Today N «заодно».
+Profile train закрыт. Today N живёт в своём контракте. Этот файл больше **не** порождает Today-работу.
 
 ---
 
@@ -305,9 +305,9 @@ Occupancy hop `F03`/`F06` → IL-2 → Stage 1 claim → Stage 2 qualifier **з�
 
 ### Очередь Profile (из аудита, не из архитектурного бэклога)
 
-PIC N=18 исполнен кодом. Не IL-3. **Следующий контракт** — `TODAY_INFORMATION_CONTRACT` отдельным стартом, без переноса 13-key дефекта.
+PIC N=18 исполнен кодом. Не IL-3. **Today N стартован отдельно** — [TODAY_INFORMATION_CONTRACT_V1](../today/TODAY_INFORMATION_CONTRACT_V1.md). Этот файл не очередь.
 
-1. **TODAY_INFORMATION_CONTRACT** — не начинать внутри этого hop; Profile train закрыт.
+Profile queue: **пуста.** Не invent PIC-K19.
 
 Не в очереди: IL aspects/transits/angles dump.
 
@@ -317,6 +317,7 @@ PIC N=18 исполнен кодом. Не IL-3. **Следующий контр
 
 | Date | Change |
 |------|--------|
+| 2026-09-21 | Today Information Contract стартован отдельно (N=20). PIC queue пуста; этот файл не источник Today-работы. |
 | 2026-09-21 | K01 COMPLETE: Identity Core from F01–F04 + F05/F09 IL-2 roles → `P1.recognition_line` / `P1.identity_core`; occupancy qualifies; 13-key registry not meaning SoT. PIC N=18 executed (17 COMPLETE / 0 PARTIAL / 0 MISSING / 1 OMIT-BY-DESIGN). |
 | 2026-09-20 | K03 COMPLETE: ASC/MC + occupied-house how/do from F05/F06 IL-2 → Explore `P6.applied.*`; not 12-house encyclopedia; not P1–P5; K01 thesis deferred as separate decision. |
 | 2026-09-20 | K16 COMPLETE: practical action = chrome wrap of selected K07 how/need/risk → Explore `P6.practical_tips`; Trial+; omit without grounded sphere; identity-thesis/Stage4/5/LLM not source; how/need/risk immutable. Next = K03. |
