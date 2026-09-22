@@ -141,6 +141,18 @@ describe("TodayCompositionSurface", () => {
     expect(memory.compareDocumentPosition(day) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
+  it("X14: continuity recall sits outside TODAY ScreenFlowStep", () => {
+    seedPreviousEveningGratitude("2026-06-22", "Разговор с командой");
+
+    render(<TodayCompositionSurface {...baseProps} variant="default" />);
+
+    const flow = screen.getByTestId("today-screen-flow");
+    const day = screen.getByTestId("today-frame-day");
+    const memory = screen.getByTestId("today-zone-memory");
+    expect(day.contains(memory)).toBe(false);
+    expect(flow.contains(memory)).toBe(false);
+  });
+
   it("hides memory stub when yesterday was not closed", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
     expect(screen.queryByTestId("today-entity-memory-stub")).not.toBeInTheDocument();
