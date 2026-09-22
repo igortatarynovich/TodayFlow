@@ -138,10 +138,12 @@ describe("TodayCompositionSurface", () => {
     const surface = screen.getByTestId("today-composition-surface");
     const memory = within(surface).getByTestId("today-zone-memory");
     const day = within(surface).getByTestId("today-frame-day");
-    expect(memory.compareDocumentPosition(day) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const brief = within(day).getByTestId("today-day-brief");
+    expect(day.contains(memory)).toBe(true);
+    expect(memory.compareDocumentPosition(brief) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  it("X14: continuity recall sits outside TODAY ScreenFlowStep", () => {
+  it("X14: continuity recall sits inside TODAY ScreenFlowStep", () => {
     seedPreviousEveningGratitude("2026-06-22", "Разговор с командой");
 
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
@@ -149,8 +151,8 @@ describe("TodayCompositionSurface", () => {
     const flow = screen.getByTestId("today-screen-flow");
     const day = screen.getByTestId("today-frame-day");
     const memory = screen.getByTestId("today-zone-memory");
-    expect(day.contains(memory)).toBe(false);
-    expect(flow.contains(memory)).toBe(false);
+    expect(day.contains(memory)).toBe(true);
+    expect(flow.contains(memory)).toBe(true);
   });
 
   it("hides memory stub when yesterday was not closed", () => {

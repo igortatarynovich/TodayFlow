@@ -5,7 +5,10 @@
 
 import { ApiError, getJson, isTransportFailure, postJson } from "@/lib/api";
 import { previousDateISO } from "@/lib/todayDayContinuity";
-import type { TodaySlotLoadFailure } from "@/lib/todaySlotAvailability";
+import {
+  todaySlotFailureFromError,
+  type TodaySlotLoadFailure,
+} from "@/lib/todaySlotAvailability";
 
 export const EVENING_GRATITUDE_CATEGORIES = [
   { id: "people", label: "За человека рядом" },
@@ -129,26 +132,39 @@ export function loadLocalYesterdayEveningClose(todayISO: string): EveningCloseSn
   return snapshotFromLocal(loadEveningGratitude(previousDateISO(dateISO)));
 }
 
-/** Server yesterday close first; same-device local gratitude if the GET is empty. */
+/** D+1 yesterday close: filled snapshot, honest empty, or transport chrome. Never invent. */
+export type YesterdayEveningCloseLoad = {
+  snapshot: EveningCloseSnapshot | null;
+  failure: TodaySlotLoadFailure | null;
+};
+
+const EMPTY_YESTERDAY: YesterdayEveningCloseLoad = { snapshot: null, failure: null };
+
+/** Server yesterday close first; same-device local if GET is empty. GET fail ≠ «no yesterday». */
 export async function loadYesterdayEveningClose(
   todayISO: string,
   options?: { authenticated?: boolean },
-): Promise<EveningCloseSnapshot | null> {
+): Promise<YesterdayEveningCloseLoad> {
   const dateISO = String(todayISO || "").trim();
-  if (!dateISO) return null;
+  if (!dateISO) return EMPTY_YESTERDAY;
   const yesterday = previousDateISO(dateISO);
+  const local = snapshotFromLocal(loadEveningGratitude(yesterday));
   if (options?.authenticated) {
     try {
       const payload = await getJson<DayConnectionPayload | null>(
         `/day-connection/${encodeURIComponent(yesterday)}`,
       );
       const fromServer = snapshotFromConnection(yesterday, payload);
-      if (fromServer) return fromServer;
-    } catch {
-      /* transport / auth — fall through to local, never invent */
+      if (fromServer) return { snapshot: fromServer, failure: null };
+      return { snapshot: local, failure: null };
+    } catch (error) {
+      if (local) return { snapshot: local, failure: null };
+      const kind = todaySlotFailureFromError(error);
+      if (!kind) return EMPTY_YESTERDAY;
+      return { snapshot: null, failure: kind };
     }
   }
-  return snapshotFromLocal(loadEveningGratitude(yesterday));
+  return { snapshot: local, failure: null };
 }
 
 export function eveningGratitudeStorageKey(dateISO: string): string {

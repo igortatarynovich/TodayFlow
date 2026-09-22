@@ -2,6 +2,7 @@ import {
   buildTodayProgressDayDots,
   buildTodayProgressRows,
   formatTodayProgressStreakLabel,
+  habitTrackerRows,
 } from "@/lib/todayGrowthTrackers";
 
 describe("todayGrowthTrackers progress model", () => {
@@ -35,5 +36,21 @@ describe("todayGrowthTrackers progress model", () => {
     expect(rows.map((r) => r.kind)).toEqual(["habit", "ascetic"]);
     expect(rows[0].kindLabel).toBe("Привычка");
     expect(rows[0].days).toHaveLength(7);
+  });
+
+  it("T3.tracker keeps habit rows only", () => {
+    const rows = buildTodayProgressRows({
+      todayISO: "2026-09-22",
+      habit: { id: 1, name: "Стакан воды" },
+      habitStreakDays: 3,
+      habitCompletedDates: ["2026-09-22"],
+      ascetic: { id: 2, title: "Без сахара" },
+      asceticStreakDays: 1,
+      asceticCompletedDates: ["2026-09-22"],
+      practiceName: "Дыхание 4-7-8",
+      practiceStreakDays: 2,
+      practiceCompletedDates: ["2026-09-22"],
+    });
+    expect(habitTrackerRows(rows).map((r) => r.kind)).toEqual(["habit"]);
   });
 });

@@ -6,12 +6,12 @@
 |------|------|
 | [TODAY_INFORMATION_CONTRACT_V1.md](./TODAY_INFORMATION_CONTRACT_V1.md) | **Закрытое N Today — CLOSED / PASS** — 8 вводов · 16 фактов · 20 allowed knowledge; close-out §12 |
 | [TODAY_CONTENT_PIPELINE_V1.md](./TODAY_CONTENT_PIPELINE_V1.md) | **Meaning SoT / I0** — Global Day · Natal Overlay · Personal Day · ritual lenses |
-| [TODAY_PRODUCT_FLOW_V1.md](./TODAY_PRODUCT_FLOW_V1.md) | Product cycle — TODAY → RITUAL → MY DAY → EVENING. **X3 CLOSED / PASS.** **X4/X5 CLOSED / PASS.** **X11 CLOSED / PASS.** **X14 OPEN — AUDIT** |
+| [TODAY_PRODUCT_FLOW_V1.md](./TODAY_PRODUCT_FLOW_V1.md) | Product cycle — TODAY → RITUAL → MY DAY → EVENING. **X3 CLOSED / PASS.** **X4/X5 CLOSED / PASS.** **X11 CLOSED / PASS.** **X14 CLOSED / PASS** |
 | [TODAY_DISPLAY_INVENTORY_V1.md](./TODAY_DISPLAY_INVENTORY_V1.md) | **Последний authority перед UI** — `slot_id` · one_question · omit |
 | [../status/TODAY_INFORMATION_CONTRACT_HANDOFF.md](../status/TODAY_INFORMATION_CONTRACT_HANDOFF.md) | **FROZEN** — CLOSED / PASS |
 | [../status/X3_THEME_FOCUS_STEP_HANDOFF.md](../status/X3_THEME_FOCUS_STEP_HANDOFF.md) | **CLOSED / PASS** — Theme/Focus/Step spine |
 | [../status/X4_X5_HONEST_REVEAL_HANDOFF.md](../status/X4_X5_HONEST_REVEAL_HANDOFF.md) | **CLOSED / PASS** — joint honest reveal copy |
 | [../status/X11_LEFTOVER_NARRATIVE_HANDOFF.md](../status/X11_LEFTOVER_NARRATIVE_HANDOFF.md) | **CLOSED / PASS** — leftover narrative |
-| [../status/X14_PROGRESS_D2_CONTINUITY_HANDOFF.md](../status/X14_PROGRESS_D2_CONTINUITY_HANDOFF.md) | **OPEN — AUDIT** — X14 progress + D2 continuity |
+| [../status/X14_PROGRESS_D2_CONTINUITY_HANDOFF.md](../status/X14_PROGRESS_D2_CONTINUITY_HANDOFF.md) | **CLOSED / PASS** — X14 progress + D2 continuity |
 | [TODAY_MEANING_POLISH_V1.md](./TODAY_MEANING_POLISH_V1.md) | IL-4 chorus bind — формулировка, не новый корень |
 | [TODAY_SCREEN_SCENARIO_V3.md](./TODAY_SCREEN_SCENARIO_V3.md) | **SUPERSEDED** как product map |

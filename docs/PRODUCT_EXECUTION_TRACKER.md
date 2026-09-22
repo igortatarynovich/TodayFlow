@@ -4,6 +4,8 @@ Last updated: 2026-09-22
 Owner: Product + Engineering
 Status: Active working document
 
+**NOW (X14 CLOSED / PASS, 2026-09-22):** One PASS on existing slots. `T1.continuity` sits inside TODAY `today-frame-day`; GET fail is TF chrome, not empty-yesterday. `T3.tracker` is habit rows on MY DAY, outside extraCards, and survives `T3.unavailable`. No new slot. No new K. TIC stays **CLOSED / PASS**. X3 stays **CLOSED / PASS**. X4/X5 stays **CLOSED / PASS**. X11 stays **CLOSED / PASS**. N = 20. Branch `cursor/x14-progress-d2-continuity`. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
+
 **NOW (X14 AUDIT, 2026-09-22):** X14 execution started on `cursor/x14-progress-d2-continuity` from `1d7efc65`. One PASS still both existing slots. Executable audit: `T1.continuity` **PARTIAL** (paints, not inside TODAY ScreenFlowStep). `T3.tracker` **PARTIAL** (extraCards host; mixed habit/ascetic/practice; grammar never emits; unavailable drops user rows). No product paint in this hop. Not two trains. Not TIC-K21. Not landing. TIC stays **CLOSED / PASS**. X3 stays **CLOSED / PASS**. X4/X5 stays **CLOSED / PASS**. X11 stays **CLOSED / PASS**. N = 20. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
 
 **NOW (X14 GATE SELECTION, 2026-09-21):** Next executable Today gate = Full User Path **X14 progress + D2 continuity**. One PASS. Two existing Inventory slots: `T1.continuity` on TODAY · `T3.tracker` on MY DAY. Completeness / placement not closed. Not two trains. Not TIC-K21. Not landing. Not leftover cleanup. Selection only — no product paint. Stay on `cursor/x11-leftover-narrative` until execution starts (then new branch). TIC stays **CLOSED / PASS**. X3 stays **CLOSED / PASS**. X4/X5 stays **CLOSED / PASS**. X11 stays **CLOSED / PASS**. N = 20. Do not rebuild server. P1 fill STOPPED. G0 deferred. Closed loop LOCKED.
@@ -153,6 +155,15 @@ Status: Active working document
 **NOW (RELEASE PLANNING, 2026-08-29):** **Release Plan v1** is active at `docs/status/RELEASE_PLAN_V1.md` — path to soft launch, gates, success criteria, immediate next steps. `docs/status/WEB_LAUNCH_EXECUTION_PLAN.md` is **SUPERSEDED** for execution and kept as historical decision log. `docs/status/_INDEX.md` created. README updated. Phase 4.2 deploy runbook is now in place. Next: G0 — unblock Token Factory billing, run 4-step COGS baseline, assign owner for end-to-end walkthrough Run 3 in `BEHAVIOR_CHANGE_TEST_V0.md`; or pick another non-LLM launch-readiness item (e.g., Phase 2.1/2.3 cutover, Maps cleanup, Practice Library fill).
 
 **NOW (ARCH / LLM, 2026-08-25):** **Personal Day lifecycle** — code + deploy closed (`8a2a8167`); **live not closed**. Acceptance never reached the provider: Token Factory chat still **402**. `llm_spend.json` is a **latch** after morning `billing_suspended` (not real $5 spend). Do not untrip until paid `chat/completions` = 200. After top-up, **only this order:** (1) paid chat 200, not `/models`; (2) reset latch for current UTC date `tripped=false, spent_usd=0`; (3) same 4-step on **2026-08-26**; (4) reconcile `llm_usage.jsonl` + `generation_logs`. **Pass iff:** Global accepted = 1; Personal product accepted = 2; reopen user 1 = 0 LLM; user 2 Global = 0 LLM; force user 1 = 1 Personal engineering; first `force_rebuild=True` with no ready artifact = `ledger=product`; retries stay in the same generation row; `id=1150` fallback stays non-reusable. On pass: **first** record actual USD of that four-step as the clean COGS baseline (no prewarm junk / old lifecycle). **Then** Profile Selection audit — not a 5–8 cut. Do not add `behavior_version`. Cost guard stands. Do not degrade K3 on Profile.
+
+## Architecture impact — X14 progress + D2 continuity (2026-09-22)
+
+- **SoT before:** X14 OPEN — AUDIT. `T1.continuity` PARTIAL (outside TODAY step; GET fail = empty omit). `T3.tracker` PARTIAL (extraCards; mixed kinds; no grammar emit; dropped on unavailable).
+- **SoT after:** **X14 CLOSED / PASS.** `T1.continuity` is on TODAY `today-frame-day`. Transport fail ≠ no-yesterday. `T3.tracker` is habit rows on MY DAY and survives `T3.unavailable`. Empty omit unchanged. No new slot / K.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — TODAY_PRODUCT_FLOW · Inventory `T3.tracker` appear · FULL_USER_PATH §0/§13/§16 · this tracker · X14 handoff
+- **Backward compatible?** yes. Placement/completeness of existing user slots. Cached days unchanged.
 
 ## Architecture impact — X14 audit (2026-09-22)
 

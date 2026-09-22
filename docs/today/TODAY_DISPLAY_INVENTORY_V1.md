@@ -735,8 +735,9 @@ Chrome: «Мой ритм дня» если natal clocks; иначе «Ритм 
 | one_question | Что я **уже веду** (привычки), не смысл дня? |
 | text_class | user |
 | allowed_inputs | habit rows |
-| forbidden_inference | feed energy/drivers/Personal bind |
+| forbidden_inference | feed energy/drivers/Personal bind · mix practice/ascetic into this slot |
 | empty_behavior | omit if no rows |
+| appear | MY DAY when habit rows exist; stays on `T3.unavailable` (user state, not day meaning) |
 | anti_dupe_group | `tasks_not_priority` |
 
 #### `T3.tasks_empty`

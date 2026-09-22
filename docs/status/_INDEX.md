@@ -11,7 +11,7 @@ Active status, execution, and audit documents for TodayFlow.
 | [X3_THEME_FOCUS_STEP_HANDOFF.md](./X3_THEME_FOCUS_STEP_HANDOFF.md) | Full User Path X3 Theme/Focus/Step | **CLOSED / PASS**; next joint X4/X5 executed on `cursor/x4-x5-honest-reveal-copy` |
 | [X4_X5_HONEST_REVEAL_HANDOFF.md](./X4_X5_HONEST_REVEAL_HANDOFF.md) | Full User Path X4/X5 honest reveal copy | **CLOSED / PASS**; X11 executed after |
 | [X11_LEFTOVER_NARRATIVE_HANDOFF.md](./X11_LEFTOVER_NARRATIVE_HANDOFF.md) | Full User Path X11 leftover narrative | **CLOSED / PASS**; X14 execution started |
-| [X14_PROGRESS_D2_CONTINUITY_HANDOFF.md](./X14_PROGRESS_D2_CONTINUITY_HANDOFF.md) | Full User Path X14 progress + D2 continuity | **OPEN — AUDIT**; no product paint |
+| [X14_PROGRESS_D2_CONTINUITY_HANDOFF.md](./X14_PROGRESS_D2_CONTINUITY_HANDOFF.md) | Full User Path X14 progress + D2 continuity | **CLOSED / PASS** |
 | [CLOSED_LOOP_V0_HANDOFF.md](./CLOSED_LOOP_V0_HANDOFF.md) | Closed loop v0 (gratitude D+1 + practice select) | **LOCKED** |
 | [BEHAVIOR_CHANGE_TEST_V0.md](./BEHAVIOR_CHANGE_TEST_V0.md) | Minimum Day Cycle ship gate + behavior test protocol | IN_PROGRESS / BLOCKED until ship gate |
 | [IOS_TODAYFLOW_STATUS.md](./IOS_TODAYFLOW_STATUS.md) | iOS parity snapshot | IN_PROGRESS |

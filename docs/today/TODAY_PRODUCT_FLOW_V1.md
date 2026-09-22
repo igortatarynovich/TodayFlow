@@ -258,11 +258,11 @@ USER RESPONSE           →  GRATITUDE HISTORY
 | X4 (clause) | **PASS.** Card copy does not claim a real pick. Reveal verbs OK. Prebake + deck gesture unchanged | clause of X4/X5 |
 | X5 (clause) | **PASS.** Number copy does not claim a personal number. Live CTA = «Открыть число дня». YYYYMMDD + ring gesture unchanged | clause of X4/X5 |
 | **X11 legacy narrative** | **CLOSED / PASS.** Product `/today` mounts only the locked 4-surface. `?full=1` / `?experience=1` are no-ops. Glance-as-act not constructed. Evening is gratitude, not promise-trap. Leftover files stay | cleanup |
-| **X14 progress + D2 continuity** | **OPEN — AUDIT.** Execution on `cursor/x14-progress-d2-continuity`. `T1.continuity` PARTIAL (paints outside TODAY step). `T3.tracker` PARTIAL (extraCards; mixed kinds; no grammar emit). One PASS still both slots complete and placed. Не новые слоты. Не X11 leftover | experience |
+| **X14 progress + D2 continuity** | **CLOSED / PASS.** `T1.continuity` inside TODAY step; GET fail is TF chrome. `T3.tracker` = habit rows on MY DAY, not extraCards, survives unavailable. Не новые слоты. Не X11 leftover | experience |
 | Compatibility Information Contract | **не выбран.** Отдельная таблица (PIC §9). Не автоматическое продолжение TIC | other section N |
 | TIC-K21 / IL dump / PIC resume | **запрещены** этой сверкой | not a product gate |
 
-**Следующий executable gate (execution 2026-09-22, after selection `1d7efc65`):** **X14** progress + D2 continuity. Audit hop on `cursor/x14-progress-d2-continuity`. Один PASS. Не два поезда. Не расширять TIC. Не rebuild сервера. Не landing. X11 не закрывает X14. No product paint in this hop.
+**Следующий executable gate:** none on this Today remainder. **X14 CLOSED / PASS** on `cursor/x14-progress-d2-continuity`. Не расширять TIC. Не rebuild сервера. Не landing.
 
 **Acceptance (X14 PASS):**
 
@@ -271,7 +271,16 @@ USER RESPONSE           →  GRATITUDE HISTORY
 | Locked TODAY paints `T1.continuity` when yesterday gratitude exists; omit empty; no invent on transport failure | New Inventory slot · promise-outcome evening · second day meaning |
 | Locked MY DAY paints `T3.tracker` from existing habit rows when present; omit empty; not a Priority surrogate | TIC-K21 · PIC · IL · Compatibility IC · leftover file delete · landing §16.3 · iOS parity |
 
-Both clauses required. Order of paint = TODAY continuity, then MY DAY tracker (existing 4-surface). Audit 2026-09-22: neither clause PASS. Next hop = minimal implementation against the two PARTIAL rows.
+Both clauses required. Order of paint = TODAY continuity, then MY DAY tracker (existing 4-surface). **CLOSED / PASS 2026-09-22.**
+
+### Architecture impact — X14 close (2026-09-22)
+
+- **SoT before:** X14 OPEN — AUDIT. Continuity outside TODAY step. Tracker in extraCards; mixed kinds; no emit; dropped on unavailable.
+- **SoT after:** **X14 CLOSED / PASS.** Continuity in `today-frame-day`. Tracker = habit rows on MY DAY, survives unavailable. Empty omit unchanged.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — this file · Inventory `T3.tracker` · FULL_USER_PATH · tracker · X14 handoff
+- **Backward compatible?** yes
 
 ### Architecture impact — X14 audit (2026-09-22)
 

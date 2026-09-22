@@ -21,6 +21,8 @@ type Props = {
   timeline?: ReactNode;
   colorCard?: ReactNode;
   extraCards?: ReactNode;
+  /** Inventory `T3.tracker` — user habit rows. Survives meaning unavailable. */
+  tracker?: ReactNode;
   depthLayer?: ReactNode;
   /** Personal Day meaning missing — one honest status, no leftover color/timeline/focus/extraCards. */
   meaningUnavailable?: boolean;
@@ -29,7 +31,8 @@ type Props = {
 /**
  * MY DAY — personal headline · focus · priority · cautions · timeline · optional cards.
  * Canon: docs/today/TODAY_PRODUCT_FLOW_V1.md §3. Kit only. Honest omit.
- * TIC-K20: unavailable paints T3.unavailable only — extraCards are not surrogate meaning.
+ * TIC-K20: unavailable paints T3.unavailable — extraCards are not surrogate meaning.
+ * X14: `T3.tracker` is user habit state and stays on the pane.
  */
 export function TodayMyDayPane({
   headline = null,
@@ -40,6 +43,7 @@ export function TodayMyDayPane({
   timeline = null,
   colorCard = null,
   extraCards = null,
+  tracker = null,
   depthLayer = null,
   meaningUnavailable = false,
 }: Props) {
@@ -51,6 +55,7 @@ export function TodayMyDayPane({
           testId="today-my-day-unavailable"
           title={TODAY_UNAVAILABLE_COPY}
         />
+        {tracker}
       </div>
     );
   }
@@ -100,6 +105,7 @@ export function TodayMyDayPane({
       {timeline}
 
       {colorCard}
+      {tracker}
       {extraCards}
       {depthLayer}
     </div>

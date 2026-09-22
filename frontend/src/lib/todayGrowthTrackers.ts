@@ -72,6 +72,11 @@ const KIND_LABEL: Record<TodayProgressKind, string> = {
   practice: "Практика",
 };
 
+/** Inventory `T3.tracker` — user habit rows only. Ascetic / practice are other slots. */
+export function habitTrackerRows(rows: TodayProgressRow[] | null | undefined): TodayProgressRow[] {
+  return (rows ?? []).filter((row) => row.kind === "habit");
+}
+
 export function formatTodayProgressStreakLabel(streakDays: number): string {
   const n = Math.max(0, Math.floor(streakDays));
   if (n <= 0) return "Без серии";

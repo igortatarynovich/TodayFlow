@@ -118,7 +118,14 @@ describe("yesterday evening close for D+1", () => {
     });
     const snap = await loadYesterdayEveningClose("2026-08-16", { authenticated: true });
     expect(getJsonMock).toHaveBeenCalledWith("/day-connection/2026-08-15");
-    expect(snap?.text).toBe("сервер");
-    expect(snap?.morningFocus).toBe("Фокус дня");
+    expect(snap.failure).toBeNull();
+    expect(snap.snapshot?.text).toBe("сервер");
+    expect(snap.snapshot?.morningFocus).toBe("Фокус дня");
+  });
+
+  it("GET failure with no local is transport chrome, not empty yesterday", async () => {
+    getJsonMock.mockRejectedValue(new TypeError("Failed to fetch"));
+    const load = await loadYesterdayEveningClose("2026-08-16", { authenticated: true });
+    expect(load).toEqual({ snapshot: null, failure: "no_connection" });
   });
 });

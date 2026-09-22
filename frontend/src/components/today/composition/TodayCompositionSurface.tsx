@@ -11,6 +11,7 @@ import { TodayDayContinuityEveningClose } from "@/components/today/experience/To
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayDayBrief } from "@/components/today/composition/TodayDayBrief";
+import { TodayContinuityRecall } from "@/components/today/composition/TodayContinuityRecall";
 import { buildTodayDayBriefModel } from "@/lib/todayDayBrief";
 import { TodayMyDayRhythm } from "@/components/today/composition/TodayMyDayRhythm";
 import { TodayRitualLensPair } from "@/components/today/composition/TodayRitualLensPair";
@@ -47,7 +48,6 @@ import {
   type DayFocusOutcome,
 } from "@/lib/todayDayContinuity";
 import {
-  buildGratitudeMemorySlot,
   loadLocalYesterdayEveningClose,
   loadYesterdayEveningClose,
   type EveningCloseSnapshot,
@@ -111,7 +111,7 @@ import { pickPersonalFocusAxisId, pickPersonalFocusAxisLabel } from "@/lib/today
 import { pickLockedAffirmationLine, pickLockedSupportSlot } from "@/lib/todaySupportXor";
 import { buildGlanceEnergyFromChorus } from "@/lib/todayGlanceEnergy";
 import { buildPlotConflictNarrative, buildPlotStoryBeats } from "@/lib/todayPlotNarrative";
-import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
+import { TODAY_NO_CONNECTION_COPY, type TodaySlotLoadFailure } from "@/lib/todaySlotAvailability";
 import { TodayDepthLayerSection } from "@/components/today/composition/TodayDepthLayerSection";
 import { buildTodayPromiseSuggestions, focusTopicLabel, isLowEnergyMood, shouldAskMorningFocus, shouldAskMorningMood } from "@/lib/todayDayDialogue";
 import {
@@ -137,6 +137,7 @@ import { PersonalizationDegradedBadge } from "@/components/product-ui/Personaliz
 import { buildDayEventsForNarrative } from "@/components/today/todayPageUtils";
 import type { TodayRitualNarrativePayload } from "@/lib/todayNarrativeApi";
 import {
+  habitTrackerRows,
   loadTodayGrowthTrackers,
   markAsceticCompletedToday,
   markHabitCompletedToday,
@@ -249,6 +250,7 @@ export function TodayCompositionSurface(props: Props) {
   const [continuityRecord, setContinuityRecord] = useState<DayContinuityRecord | null>(null);
   const [continuitySaving, setContinuitySaving] = useState(false);
   const [serverYesterdayEvening, setServerYesterdayEvening] = useState<EveningCloseSnapshot | null>(null);
+  const [yesterdayEveningFailure, setYesterdayEveningFailure] = useState<TodaySlotLoadFailure | null>(null);
   const [engagement, setEngagement] = useState(createEmptyDayEngagement);
   const [symbolHooksView, setSymbolHooksView] = useState<DaySymbolPublicView | null>(null);
   const [tarotPendingId, setTarotPendingId] = useState<number | null>(null);
@@ -340,7 +342,9 @@ export function TodayCompositionSurface(props: Props) {
     if (!hydrated || isFirstToday) return null;
     return loadLocalYesterdayEveningClose(dateISO);
   }, [hydrated, dateISO, isFirstToday]);
-  const yesterdayEvening = serverYesterdayEvening ?? localYesterdayEvening;
+  const yesterdayEvening = yesterdayEveningFailure
+    ? null
+    : serverYesterdayEvening ?? localYesterdayEvening;
   const yesterdayClosed = Boolean(yesterdayEvening?.eveningCompleted);
 
   const story = useMemo(() => {
@@ -612,9 +616,7 @@ export function TodayCompositionSurface(props: Props) {
     if (!hydrated) return null;
     return loadPreviousDayContinuity(dateISO);
   }, [hydrated, dateISO]);
-  const memorySlot = useMemo(() => buildGratitudeMemorySlot(yesterdayEvening), [yesterdayEvening]);
-    /** Only filled yesterday recall — never ship developer stub copy. */
-  const showMemorySlot = hydrated && !isFirstToday && memorySlot.state === "filled";
+  const showContinuity = hydrated && !isFirstToday;
 
   const mainFocusText = story.focusTitle;
 
@@ -725,11 +727,14 @@ export function TodayCompositionSurface(props: Props) {
   useEffect(() => {
     if (!hydrated || isFirstToday) {
       setServerYesterdayEvening(null);
+      setYesterdayEveningFailure(null);
       return;
     }
     let cancelled = false;
-    void loadYesterdayEveningClose(dateISO, { authenticated: isAuthenticated }).then((snap) => {
-      if (!cancelled) setServerYesterdayEvening(snap);
+    void loadYesterdayEveningClose(dateISO, { authenticated: isAuthenticated }).then((load) => {
+      if (cancelled) return;
+      setServerYesterdayEvening(load.snapshot);
+      setYesterdayEveningFailure(load.failure);
     });
     return () => {
       cancelled = true;
@@ -1798,6 +1803,7 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const displayProgressRows = progressRowsFromContract ?? progressRows;
+  const habitTrackerRowsForSlot = habitTrackerRows(displayProgressRows);
 
   const handoffMakeYoursBody = (
     <TodayMakeYoursBlock
@@ -2053,12 +2059,17 @@ export function TodayCompositionSurface(props: Props) {
   });
 
   const dayStoryBrief = (
-    <TodayDayBrief
-      loading={themeLoading}
-      pane="atmosphere"
-      model={dayBriefModel}
-      onContinue={goToNextFromToday}
-    />
+    <>
+      {showContinuity ? (
+        <TodayContinuityRecall snapshot={yesterdayEvening} failure={yesterdayEveningFailure} />
+      ) : null}
+      <TodayDayBrief
+        loading={themeLoading}
+        pane="atmosphere"
+        model={dayBriefModel}
+        onContinue={goToNextFromToday}
+      />
+    </>
   );
 
   const dayTasksModel = buildTodayDayTasks({
@@ -2097,11 +2108,15 @@ export function TodayCompositionSurface(props: Props) {
   const handoffTasksBody = (
     <TodayDayTasksBlock
       todayTasks={dayTasksModel.today}
-      progressRows={displayProgressRows}
       practiceSlot={handoffPracticeBody}
       affirmationSlot={affirmationTaskSlot}
     />
   );
+
+  const habitTrackerBody =
+    habitTrackerRowsForSlot.length > 0 ? (
+      <TodayProgressTracker rows={habitTrackerRowsForSlot} title={copy.tasksDailyLabel} />
+    ) : null;
 
   const myDayMeaningUnavailable =
     isTodayInterpretationUnavailable(props.contract) &&
@@ -2147,6 +2162,7 @@ export function TodayCompositionSurface(props: Props) {
       }
       colorCard={myDayMeaningUnavailable ? null : handoffColorBody}
       extraCards={myDayMeaningUnavailable ? null : handoffTasksBody}
+      tracker={habitTrackerBody}
       depthLayer={
         !myDayMeaningUnavailable && todayDepthLayerForFocus ? (
           <TodayDepthLayerSection
@@ -2289,32 +2305,6 @@ export function TodayCompositionSurface(props: Props) {
         data-testid={isFirstToday ? "today-composition-first-today" : "today-composition-surface"}
         className={`${styles.root} ${embeddedInWebDashboard ? styles.rootWebEmbed : ""}`}
       >
-        {showMemorySlot ? (
-          <div className={styles.continuityWrap} data-testid="today-zone-memory" data-memory-state={memorySlot.state}>
-            <section
-              className={styles.continuityPill}
-              data-testid={
-                memorySlot.state === "filled"
-                  ? "today-entity-continuity-recall"
-                  : "today-entity-memory-stub"
-              }
-            >
-              <div className={styles.continuityInner}>
-                <span className={styles.continuityAccent} aria-hidden />
-                <div>
-                  <p className={styles.continuityEyebrow}>{memorySlot.eyebrow}</p>
-                  <p className={styles.continuityBody}>{memorySlot.body}</p>
-                </div>
-              </div>
-              {memorySlot.state === "filled" ? (
-                <span className={styles.continuityChevron} aria-hidden>
-                  ›
-                </span>
-              ) : null}
-            </section>
-          </div>
-        ) : null}
-
         {dayStoryFoundation}
 
         {useLegacyStackedPath && useProductPersonalized ? (

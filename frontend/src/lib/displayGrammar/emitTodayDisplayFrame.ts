@@ -25,7 +25,11 @@ import {
   todayAllowsRitualLens,
   type TodayCapabilityDepth,
 } from "@/lib/todayScreenFlowCapability";
-import { TODAY_UNAVAILABLE_COPY } from "@/lib/todaySlotAvailability";
+import {
+  TODAY_NO_CONNECTION_COPY,
+  TODAY_UNAVAILABLE_COPY,
+  type TodaySlotLoadFailure,
+} from "@/lib/todaySlotAvailability";
 import type {
   DisplayAtom,
   DisplayScanInput,
@@ -61,6 +65,10 @@ export type EmitTodayDisplayFrameInput = {
   gratitudeText?: string | null;
   /** Yesterday gratitude recall on TODAY. Empty omit — never invent. */
   continuityBody?: string | null;
+  /** GET fail with no local fallback — TF chrome, not an empty-yesterday omit. */
+  continuityFailure?: TodaySlotLoadFailure | null;
+  /** User habit names for `T3.tracker`. Empty omit. */
+  habitTrackerNames?: string[] | null;
   glancePrioritize?: string | null;
 };
 
@@ -446,6 +454,28 @@ function emitMyDay(
 }
 
 function emitContinuity(input: EmitTodayDisplayFrameInput, atoms: DisplayAtom[]): void {
+  if (input.continuityFailure === "no_connection") {
+    pushAtom(atoms, {
+      slot_id: "TF.no_connection",
+      surface: "today",
+      text: TODAY_NO_CONNECTION_COPY,
+      origins: ["chrome"],
+      text_class: "chrome",
+      copy_key: "no_connection",
+    });
+    return;
+  }
+  if (input.continuityFailure === "unavailable") {
+    pushAtom(atoms, {
+      slot_id: "TF.unavailable",
+      surface: "today",
+      text: TODAY_UNAVAILABLE_COPY,
+      origins: ["chrome"],
+      text_class: "chrome",
+      copy_key: "unavailable",
+    });
+    return;
+  }
   const text = trim(input.continuityBody);
   if (!text) return;
   pushAtom(atoms, {
@@ -457,6 +487,31 @@ function emitContinuity(input: EmitTodayDisplayFrameInput, atoms: DisplayAtom[])
     fe_transform: "clip",
     json_field: "day_connection.evening_observations",
   });
+}
+
+function habitTrackerNames(input: EmitTodayDisplayFrameInput): string[] {
+  if (input.habitTrackerNames) {
+    return input.habitTrackerNames.map(trim).filter(Boolean);
+  }
+  const rows = input.contract.today_progress?.rows;
+  if (!Array.isArray(rows)) return [];
+  return rows
+    .filter((row) => String(row.kind || "") === "habit")
+    .map((row) => trim(row.name))
+    .filter(Boolean);
+}
+
+function emitTracker(input: EmitTodayDisplayFrameInput, atoms: DisplayAtom[]): void {
+  for (const name of habitTrackerNames(input)) {
+    pushAtom(atoms, {
+      slot_id: "T3.tracker",
+      surface: "my_day",
+      text: name,
+      origins: ["user"],
+      text_class: "user",
+      json_field: "today_progress.rows",
+    });
+  }
 }
 
 function emitEvening(input: EmitTodayDisplayFrameInput, atoms: DisplayAtom[]): void {
@@ -499,6 +554,7 @@ export function emitTodayDisplayFrame(input: EmitTodayDisplayFrameInput): Displa
   emitContinuity(input, atoms);
   const { cardLens, numberLens } = emitRitual(input, atoms);
   const myDay = emitMyDay(input, model, atoms);
+  emitTracker(input, atoms);
   emitEvening(input, atoms);
 
   vm(vm_fields, "global_day.primary_energy", input.contract.global_day?.primary_energy, "T1-hero.energy_word", Boolean(model.modeLabel));

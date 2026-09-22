@@ -200,7 +200,7 @@ describe("live Today frames", () => {
       capability: "light",
     });
     const meaning = (frame.atoms ?? []).filter(
-      (a) => a.slot_id?.startsWith("T3.") && a.slot_id !== "T3.unavailable",
+      (a) => a.slot_id?.startsWith("T3.") && a.slot_id !== "T3.unavailable" && a.slot_id !== "T3.tracker",
     );
     expect(frame.atoms?.some((a) => a.slot_id === "T3.unavailable")).toBe(true);
     expect(meaning).toEqual([]);
@@ -223,6 +223,62 @@ describe("live Today frames", () => {
       capability: "light",
     });
     expect(empty.atoms?.some((a) => a.slot_id === "T1.continuity")).toBe(false);
+  });
+
+  it("continuity GET failure emits TF chrome instead of T1.continuity", () => {
+    const frame = emitTodayDisplayFrame({
+      contract: persistContract,
+      capability: "light",
+      continuityBody: "Вчера ты отметил(а) благодарность: за спокойный момент.",
+      continuityFailure: "no_connection",
+    });
+    expect(frame.atoms?.some((a) => a.slot_id === "T1.continuity")).toBe(false);
+    expect(frame.atoms?.some((a) => a.slot_id === "TF.no_connection")).toBe(true);
+    expect(scanDisplayGrammar(frame)).toEqual([]);
+  });
+
+  it("emits T3.tracker from habit rows only and keeps it on unavailable MY DAY", () => {
+    const withHabits: TodayContractV1 = {
+      ...persistContract,
+      today_progress: {
+        rows: [
+          {
+            id: "habit:1",
+            kind: "habit",
+            kind_label: "Привычка",
+            name: "Стакан воды",
+            streak_days: 3,
+            days_bool: [false, false, false, false, false, false, true],
+          },
+          {
+            id: "practice",
+            kind: "practice",
+            kind_label: "Практика",
+            name: "Дыхание 4-7-8",
+            streak_days: 1,
+            days_bool: [false, false, false, false, false, false, true],
+          },
+        ],
+      },
+    };
+    const frame = emitTodayDisplayFrame({
+      contract: withHabits,
+      capability: "light",
+    });
+    const trackers = (frame.atoms ?? []).filter((a) => a.slot_id === "T3.tracker");
+    expect(trackers.map((a) => a.text)).toEqual(["Стакан воды"]);
+    expect(scanDisplayGrammar(frame)).toEqual([]);
+
+    const unavailable = emitTodayDisplayFrame({
+      contract: {
+        ...withHabits,
+        day_story: { contract_version: "day_story_v1", interpretation_status: "unavailable" },
+      },
+      capability: "light",
+    });
+    expect(unavailable.atoms?.some((a) => a.slot_id === "T3.unavailable")).toBe(true);
+    expect(unavailable.atoms?.find((a) => a.slot_id === "T3.tracker")?.text).toBe("Стакан воды");
+    expect(unavailable.atoms?.some((a) => a.slot_id === "T3.headline")).toBe(false);
   });
 
   it("unknown filled would_render field on a live frame is still finding 2", () => {

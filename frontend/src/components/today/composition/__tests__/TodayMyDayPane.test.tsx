@@ -31,4 +31,17 @@ describe("TodayMyDayPane", () => {
     expect(screen.queryByText("Практика дня")).not.toBeInTheDocument();
     expect(screen.queryByText("Я справлюсь с тем, что прямо сейчас.")).not.toBeInTheDocument();
   });
+
+  it("keeps user habit tracker when meaning is unavailable", () => {
+    render(
+      <TodayMyDayPane
+        meaningUnavailable
+        extraCards={<div data-testid="today-day-tasks">Практика дня</div>}
+        tracker={<div data-testid="today-zone-progress">Стакан воды</div>}
+      />,
+    );
+    expect(screen.getByTestId("today-my-day-unavailable")).toHaveTextContent(TODAY_UNAVAILABLE_COPY);
+    expect(screen.getByTestId("today-zone-progress")).toHaveTextContent("Стакан воды");
+    expect(screen.queryByTestId("today-day-tasks")).not.toBeInTheDocument();
+  });
 });
